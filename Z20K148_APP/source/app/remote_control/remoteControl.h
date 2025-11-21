@@ -45,6 +45,7 @@ typedef enum
 #define CMD_AC_TIME_SET_E           (10U)
 #define CMD_AC_FRAG_ST_E            (11U)
 #define CMD_AC_ONE_KEY_CLEAR_E      (12U)   
+#define CMD_AC_TEMP_AUTO_SET_E      (13U)
 // HVSM commands
 #define CMD_M_SEAT_HEAT_SET_E       (1U)
 #define CMD_M_SEAT_VENTILATE_E      (2U)

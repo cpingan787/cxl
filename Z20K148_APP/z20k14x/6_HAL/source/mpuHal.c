@@ -70,7 +70,7 @@
 
 #if (UART_DMA_ENABLE == 1)
 #define UART_DMA_TX_TIMEOUT_MS              5000
-#define MPU_HAL_UART_DMA_IDLE_TIMER_MS      5
+#define MPU_HAL_UART_DMA_IDLE_TIMER_MS      3
 /* uart dma tx config */
 #define UART_DMA_TX_CHANNEL                 DMA_CHANNEL12
 #define UART_DMA_TX_IRQ                     DMA_Ch12_IRQn
@@ -518,6 +518,7 @@ static MpuQueueTxBuffer_t g_mpuTxBuf[MPU_HAL_TX_MODE_MAX];
 
 /****************************** Function Declarations *************************/
 static void MpuHalGpioInit(void);
+static void MpuHalGpioSetMode(uint8_t mode);
 static void MpuHalMainUartInit(void);
 static void MpuHalMainUartSleep(void);
 static void MpuHalSetPowerkey(uint8_t flag);
@@ -634,6 +635,36 @@ static void MpuHalGpioInit(void)
 }
 
 /*************************************************
+ Function: MpuHalGpioSetMode
+ Description: Set the GPIO mode for MPU
+ Input: void
+ Output: void
+ Return:void
+ Others:
+*************************************************/
+static void MpuHalGpioSetMode(uint8_t mode)
+{
+    if(mode == 1)
+    {
+        // gps en 
+        // GPIO_WritePinOutput(PORT_D, GPIO_0, GPIO_HIGH);
+        // ECALL LED
+        GPIO_WritePinOutput(PORT_D, GPIO_5, GPIO_HIGH);
+        // BCALL LED
+        GPIO_WritePinOutput(PORT_D, GPIO_12, GPIO_HIGH);
+    }
+    else
+    {
+        // gps en
+        // GPIO_WritePinOutput(PORT_D, GPIO_0, GPIO_LOW);
+        // ECALL LED
+        GPIO_WritePinOutput(PORT_D, GPIO_5, GPIO_LOW);
+        // BCALL LED
+        GPIO_WritePinOutput(PORT_D, GPIO_12, GPIO_LOW);
+    }
+}
+
+/*************************************************
  Function: MpuHalMainUartInit
  Description: Initialize the main UART interface for MPU communication
  Input: void
@@ -649,9 +680,9 @@ static void MpuHalMainUartInit(void)
     PORT_PinmuxConfig(MPU_HAL_UART_TX_PORT, MPU_HAL_UART_TX_PIN, MPU_HAL_UART_TX_GPIO);
 
     SYSCTRL_DisableModule(MPU_HAL_UART_SYSCTRL);
-    SYSCTRL_ResetModule(MPU_HAL_UART_SYSCTRL);
     CLK_ModuleSrc(MPU_HAL_UART_CLK, CLK_SRC_PLL); 
-    CLK_SetClkDivider(MPU_HAL_UART_CLK, CLK_DIV_3); 
+    CLK_SetClkDivider(MPU_HAL_UART_CLK, CLK_DIV_3);
+    SYSCTRL_ResetModule(MPU_HAL_UART_SYSCTRL);
     SYSCTRL_EnableModule(MPU_HAL_UART_SYSCTRL);
 
     // Wait for UART module to be ready after reset (prevent init failure)
@@ -1341,11 +1372,15 @@ void MpuHalSetMode(uint8_t wakeMode)
 {
     if (MPU_HAL_WAKE_MODE_POWER_OFF == wakeMode)
     {
+        MpuUartHandleTypeDef *huart = &g_mpuUartRingBuf;
+        huart->init_success = 0;
+        spi_ready = spi_ready & 1;
         MpuHalMainDmaSleep();
         MpuHalMainUartSleep();
 #if (SPI_DMA_ENABLE == 1)
         MpuHalMainSpiSleep();
 #endif
+        MpuHalGpioSetMode(0u);
         /*Vbus off**/
         MpuHalSetVbus(0);
         g_mpuManage.wakeMode = wakeMode;
@@ -1358,6 +1393,7 @@ void MpuHalSetMode(uint8_t wakeMode)
         MpuHal_SpiInit();
 #endif
         DMA_ChannelEnable(UART_DMA_RX_CHANNEL);
+        MpuHalGpioSetMode(1u);
         /*Vbus on***/
         MpuHalSetVbus(1);
         /*wake up mpu*/
@@ -1735,7 +1771,10 @@ static void MpuHalMainUartSleep(void)
     MpuUartHandleTypeDef *huart = &g_mpuUartRingBuf;
     huart->init_success = 0;
     UART_IntMask(MPU_HAL_UART_ID, UART_INT_ALL, MASK);
+    INT_ClearPendingIRQ(MPU_HAL_UART_IRQ);
+    INT_EnableIRQ(MPU_HAL_UART_IRQ);
     SYSCTRL_DisableModule(SYSCTRL_UART0);
+
     PORT_PinmuxConfig(PORT_C, GPIO_2, PTC2_GPIO);
     GPIO_SetPinDir(PORT_C, GPIO_2, GPIO_INPUT);
     PORT_PinmuxConfig(PORT_C, GPIO_3, PTC3_GPIO);
@@ -1755,11 +1794,30 @@ static void MpuHalMainDmaSleep(void)
 {
     g_uartDmaRxBuf.dmaBufStatus = DMA_BUF_STATE_UNKNOWN;
     g_uartDmaTxBuf.dmaBufStatus = DMA_BUF_STATE_UNKNOWN;
-    INT_DisableIRQ(UART_DMA_RX_IRQ);
-    INT_DisableIRQ(UART_DMA_TX_IRQ);
+    DMA_ChannelRequestDisable(UART_DMA_RX_CHANNEL);
+    DMA_ChannelRequestDisable(UART_DMA_TX_CHANNEL);
+
+    DMA_IntMask(UART_DMA_RX_CHANNEL, DMA_INT_ALL, MASK);
+    DMA_IntMask(UART_DMA_TX_CHANNEL, DMA_INT_ALL, MASK);
+
+    INT_ClearPendingIRQ(UART_DMA_RX_IRQ);
+    INT_ClearPendingIRQ(UART_DMA_TX_IRQ);
+
+    INT_EnableIRQ(UART_DMA_RX_IRQ);
+    INT_EnableIRQ(UART_DMA_TX_IRQ);
+
 #if (SPI_DMA_ENABLE == 1)
-    INT_DisableIRQ(SPI_DMA_RX_IRQ);
-    INT_DisableIRQ(SPI_DMA_TX_IRQ);
+    DMA_ChannelRequestDisable(SPI_DMA_RX_CHANNEL);
+    DMA_ChannelRequestDisable(SPI_DMA_TX_CHANNEL);
+
+    DMA_IntMask(SPI_DMA_RX_CHANNEL, DMA_INT_ALL, MASK);
+    DMA_IntMask(SPI_DMA_TX_CHANNEL, DMA_INT_ALL, MASK);
+
+    INT_ClearPendingIRQ(SPI_DMA_RX_IRQ);
+    INT_ClearPendingIRQ(SPI_DMA_TX_IRQ);
+
+    INT_EnableIRQ(SPI_DMA_RX_IRQ);
+    INT_EnableIRQ(SPI_DMA_TX_IRQ);
 #endif
     SYSCTRL_DisableModule(SYSCTRL_DMA);
     SYSCTRL_DisableModule(SYSCTRL_DMAMUX);
@@ -1904,6 +1962,9 @@ static ResultStatus_t MpuHal_UartDmaSendPacket(const uint8_t* pTxData, uint16_t 
 {
     if (txLength == 0u || (pTxData == NULL)) {
         return ERR;     
+    }
+    if (g_uartDmaTxBuf.dmaBufStatus == DMA_BUF_STATE_UNKNOWN) {
+        return ERR; 
     }
     memcpy(g_uartDmaTxBuf.Buffer, pTxData, txLength);
     g_uartDmaTxBuf.BufferLen = txLength;
@@ -2304,12 +2365,13 @@ static void MpuHal_SpiInit(void)
     MpuUartHandleTypeDef *huart = &g_mpuSpiRingBuf;
     huart->init_success = 0;
     SYSCTRL_DisableModule(MPU_HAL_SPI_SYSCTRL);
-    SYSCTRL_ResetModule(MPU_HAL_SPI_SYSCTRL);
     ret =  CLK_ModuleSrc(MPU_HAL_SPI_CLK, CLK_SRC_PLL);
     if (ret != SUCC) {
+        TBOX_PRINT("MPU Spi CLK Config FAIL\n");
         return;
     }
     CLK_SetClkDivider(MPU_HAL_SPI_CLK, CLK_DIV_3);
+    SYSCTRL_ResetModule(MPU_HAL_SPI_SYSCTRL);
     SYSCTRL_EnableModule(MPU_HAL_SPI_SYSCTRL);
 
     MpuHal_SpiGpioInit();
@@ -2548,13 +2610,17 @@ static void MpuHalMainSpiSleep(void)
     huart->init_success = 0;
     spi_ready = spi_ready & 1;
     SPI_Disable(MPU_HAL_SPI_ID);
-    /* SPI pin deinit */
-    PORT_PinmuxConfig(MPU_HAL_SPI_CLK_PORT, MPU_HAL_SPI_CLK_PORT_PIN, MPU_HAL_SPI_CLK_PORT_DEINIT);
-    PORT_PinmuxConfig(MPU_HAL_SPI_MISO_PORT, MPU_HAL_SPI_MISO_PORT_PIN, MPU_HAL_SPI_MISO_PORT_DEINIT);
-    PORT_PinmuxConfig(MPU_HAL_SPI_MOSI_PORT, MPU_HAL_SPI_MOSI_PORT_PIN, MPU_HAL_SPI_MOSI_PORT_DEINIT);
-    PORT_PinmuxConfig(MPU_HAL_SPI_CS_PORT, MPU_HAL_SPI_CS_PORT_PIN, MPU_HAL_SPI_CS_PORT_DEINIT);
-    PORT_PinIntConfig(MPU_HAL_SPI_REQ_PORT, MPU_HAL_SPI_REQ_PORT_PIN, PORT_ISF_DISABLED);
     SYSCTRL_DisableModule(MPU_HAL_SPI_SYSCTRL);
+    /* SPI pin deinit */
+    PORT_PinIntConfig(MPU_HAL_SPI_REQ_PORT, MPU_HAL_SPI_REQ_PORT_PIN, PORT_ISF_DISABLED);
+    PORT_PinmuxConfig(MPU_HAL_SPI_CLK_PORT, MPU_HAL_SPI_CLK_PORT_PIN, MPU_HAL_SPI_CLK_PORT_DEINIT);
+    GPIO_SetPinDir(MPU_HAL_SPI_CLK_PORT, MPU_HAL_SPI_CLK_PORT_PIN, GPIO_INPUT);
+    PORT_PinmuxConfig(MPU_HAL_SPI_MISO_PORT, MPU_HAL_SPI_MISO_PORT_PIN, MPU_HAL_SPI_MISO_PORT_DEINIT);
+    GPIO_SetPinDir(MPU_HAL_SPI_MISO_PORT, MPU_HAL_SPI_MISO_PORT_PIN, GPIO_INPUT);
+    PORT_PinmuxConfig(MPU_HAL_SPI_MOSI_PORT, MPU_HAL_SPI_MOSI_PORT_PIN, MPU_HAL_SPI_MOSI_PORT_DEINIT);
+    GPIO_SetPinDir(MPU_HAL_SPI_MOSI_PORT, MPU_HAL_SPI_MOSI_PORT_PIN, GPIO_INPUT);
+    PORT_PinmuxConfig(MPU_HAL_SPI_CS_PORT, MPU_HAL_SPI_CS_PORT_PIN, MPU_HAL_SPI_CS_PORT_DEINIT);
+    GPIO_SetPinDir(MPU_HAL_SPI_CS_PORT, MPU_HAL_SPI_CS_PORT_PIN, GPIO_INPUT);
 }
 
 

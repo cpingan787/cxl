@@ -78,6 +78,8 @@ typedef struct
     SignalConfig_t TEL_PLGMCloseReqVD;
     SignalConfig_t TEL_EngForceStartVD;
     SignalConfig_t TEL_EngForceStart;
+    SignalConfig_t TEL_PowerOnTimerReq;
+    SignalConfig_t TEL_AllHazardLightOffReq;
 } RemoteControlReqSignal047_t;
 
 typedef struct
@@ -905,7 +907,7 @@ static RemoteControlReqSignal047_t g_047Configure =
         .msgBufferPointer = NULL,
         .canBufferIdIndex = 0,
         .dataType = (uint16_t)0,
-        .startBit = (uint16_t)48,
+        .startBit = (uint16_t)50,
         .bitLength = (uint16_t)1,
         .resulotion = (float)1.0,
         .offset = (float)0.0,
@@ -916,36 +918,6 @@ static RemoteControlReqSignal047_t g_047Configure =
     .TEL_PLGMOpenReqVD =
     {
       .reqId = TEL_PLGMOpenReqVD,
-      .signalInfo = {
-        .msgBufferPointer = NULL,
-        .canBufferIdIndex = 0,
-        .dataType = (uint16_t)0,
-        .startBit = (uint16_t)49,
-        .bitLength = (uint16_t)1,
-        .resulotion = (float)1.0,
-        .offset = (float)0.0,
-        .useInvalidFlag = 1,
-        .InvalidData = 0,
-      },
-    },
-    .TEL_PLGMCloseReq =
-    {
-      .reqId = TEL_PLGMCloseReq,
-      .signalInfo = {
-        .msgBufferPointer = NULL,
-        .canBufferIdIndex = 0,
-        .dataType = (uint16_t)0,
-        .startBit = (uint16_t)50,
-        .bitLength = (uint16_t)1,
-        .resulotion = (float)1.0,
-        .offset = (float)0.0,
-        .useInvalidFlag = 1,
-        .InvalidData = 0,
-      },
-    },
-    .TEL_PLGMCloseReqVD =
-    {
-      .reqId = TEL_PLGMCloseReqVD,
       .signalInfo = {
         .msgBufferPointer = NULL,
         .canBufferIdIndex = 0,
@@ -1011,6 +983,36 @@ static RemoteControlReqSignal047_t g_047Configure =
         .canBufferIdIndex = 0,
         .dataType = (uint16_t)0,
         .startBit = (uint16_t)55,
+        .bitLength = (uint16_t)1,
+        .resulotion = (float)1.0,
+        .offset = (float)0.0,
+        .useInvalidFlag = 1,
+        .InvalidData = 0,
+      },
+    },
+    .TEL_PowerOnTimerReq =
+    {
+      .reqId = TEL_PowerOnTimerReq,
+      .signalInfo = {
+        .msgBufferPointer = NULL,
+        .canBufferIdIndex = 0,
+        .dataType = (uint16_t)0,
+        .startBit = (uint16_t)56,
+        .bitLength = (uint16_t)6,
+        .resulotion = (float)1.0,
+        .offset = (float)0.0,
+        .useInvalidFlag = 1,
+        .InvalidData = 0,
+      },
+    },
+    .TEL_AllHazardLightOffReq =
+    {
+      .reqId = TEL_AllHazardLightOffReq,
+      .signalInfo = {
+        .msgBufferPointer = NULL,
+        .canBufferIdIndex = 0,
+        .dataType = (uint16_t)0,
+        .startBit = (uint16_t)62,
         .bitLength = (uint16_t)1,
         .resulotion = (float)1.0,
         .offset = (float)0.0,
@@ -1660,6 +1662,8 @@ void RemoteControlGetSignalValue(RemoteControlStatusSignalInfo_t *stRemoteCtrlSi
     CanParseSdkReadSignal(g_CanSignalFormat, &pCan0SignalConfigure->HVACF_IonMode, &dataVaule);
     stRemoteCtrlSignalValTemp->HVACF_IonMode = (uint8_t)dataVaule;
 
+    CanParseSdkReadSignal(g_CanSignalFormat, &pCan0SignalConfigure->HVACF_TempSelectAuto, &dataVaule);
+    stRemoteCtrlSignalValTemp->HVACF_TempSelectAuto = (uint8_t)dataVaule;
     /* BCM / BCS */
     CanParseSdkReadSignal(g_CanSignalFormat, &pCan0SignalConfigure->BCM_TEL_IMMOCode0, &dataVaule);
     stRemoteCtrlSignalValTemp->BCM_TEL_IMMOCode0 = (uint8_t)dataVaule;

@@ -306,7 +306,7 @@ void EolConfigureInit(void);
 void VinInit(void);
 void CheckVinCyleProcess(void);
 
-void EskkeyCheckInit(void);
+// void EskkeyCheckInit(void);
 // void CheckEskValidtateDtc(void);
 
 /*====================Great Wall=================*/

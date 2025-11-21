@@ -96,6 +96,133 @@ static void System_Init(void);
  *		7，在切换时钟源之前，必须先设置适配 FLASH 的时钟。
  *		8，SCC_IRQn 的中断优先级必须设置为0(最高)，其他模块的中断优先级必须大于0，确保第一时间进入时钟中断。
 ****************************************************************************/
+#if 0
+/* Low Power */
+void CLOCK_Init(void)
+{
+    ResultStatus_t retVal = SUCC;
+	uint32_t delayCnt = 0u;
+    
+    /* 设置内核时钟和总线时钟分频系数 */
+    CLK_SetClkDivider(CLK_CORE, CLK_DIV_1);   /* 内核时钟1分频 */
+    CLK_SetClkDivider(CLK_BUS, CLK_DIV_2);    /* 总线时钟2分频 */
+
+    /* 
+     * 使能外部晶振
+     * 当外部晶振频率 大于等于24M时 第一个参数传 CLK_OSC_FREQ_MODE_HIGH
+     * 当外部晶振频率小于24M时第一个参数传CLK_OSC_FREQ_MODE_LOW
+     */
+	for (uint8_t i = 0u; i < 3u; i++) {
+		retVal = CLK_OSC40MEnable(CLK_OSC_FREQ_MODE_LOW, DISABLE, CLK_OSC_XTAL);
+		if (SUCC == retVal) {
+			break;
+		}
+	}
+    
+    if(SUCC == retVal)
+    {
+        CLK_PLLConfig(&CLK_PLL_Cfg_HSOSC);       /* 初始化PLL配置 */
+        while(ERR == CLK_PLLEnable(DISABLE))    /* 使能PLL */
+        {
+            delayCnt++;
+			if (delayCnt >= 50u) {
+				break;
+			}
+        }
+              
+        /* 设置FLASH 等待状态时间 详细配置说明请参考FLASH_FCTRL寄存器描述 */
+        FLASH_SetWaitState(4);
+              
+        /* 等待系统时钟源切换为PLL */
+		delayCnt = 0u;
+        while(ERR == CLK_SysClkSrc(CLK_SYS_PLL))  /* 内核选择PLL时钟 */
+        {
+            delayCnt++;
+			if (delayCnt >= 50u) {
+				break;
+			}
+        }
+
+        /* 
+         * FLASH 擦写时钟必须设置为 8M 
+         * MCU进入stop模式前需将 FLASH 时钟源切换为 SLOW clock
+         */
+        SYSCTRL_DisableModule(SYSCTRL_FLASH);      /* 切换FLASH 控制器功能时钟之前，需要先关闭FLASH模块，否则时钟切换无效 */
+        CLK_SetClkDivider(CLK_SLOW, CLK_DIV_3);    /* CLK_SLOW = 160M / 3 = 40M，CLK_SLOW由内核时钟直接分配过来 */
+		delayCnt = 0u;
+        while(ERR == CLK_ModuleSrc(CLK_FLASH, CLK_SRC_SLOW))  /* 选择SLOW时钟作为FLASH时钟源 */
+        {
+            delayCnt++;
+			if (delayCnt >= 50u) {
+				break;
+			}
+        }
+        CLK_SetClkDivider(CLK_FLASH, CLK_DIV_5);   /* FLASH时钟源5分频，设置FLASH擦写时钟为 8M。(8M = 40M / 5) */
+        SYSCTRL_EnableModule(SYSCTRL_FLASH);       /* 使能 FLASH 控制器模块时钟 */
+		delayCnt = 0u;
+        while(ERR == FLASH_Init())       /* 初始化FLASH模块 */
+        {
+            delayCnt++;
+			if (delayCnt >= 50u) {
+				break;
+			}
+        }
+    }
+    else
+    {
+        CLK_SetClkDivider(CLK_SLOW, CLK_DIV_8);    /* SLOW clock 时钟8分频 */
+        
+        /* 使能MCU内部 64M RC振荡器时钟 */
+		delayCnt = 0u;
+        while(ERR == CLK_FIRC64MEnable(ENABLE))
+        {
+            delayCnt++;
+			if (delayCnt >= 50u) {
+				break;
+			}
+        }
+        
+        /* 设置FLASH 等待状态时间 详细配置说明请参考FLASH_FCTRL寄存器描述 */
+        FLASH_SetWaitState(1);
+        
+        /* 等待系统时钟切换为内部 64M RC振荡器时钟 */
+		delayCnt = 0u;
+        while(ERR == CLK_SysClkSrc(CLK_SYS_FIRC64M))
+        {
+            delayCnt++;
+			if (delayCnt >= 50u) {
+				break;
+			}
+        }
+
+        /* 
+         * FLASH 擦写时钟必须设置为 8M 
+         * MCU进入stop模式前需将 FLASH 时钟源切换为 SLOW clock
+         */
+        SYSCTRL_DisableModule(SYSCTRL_FLASH);      /* 切换FLASH 控制器功能时钟之前，需要先关闭FLASH模块，否则时钟切换无效 */
+		delayCnt = 0u;
+        while(ERR == CLK_ModuleSrc(CLK_FLASH, CLK_SRC_FIRC64M))   /* 选择内部64M RC振荡器时钟作为FLASH时钟源 */
+        {
+            delayCnt++;
+			if (delayCnt >= 50u) {
+				break;
+			}
+        }
+
+        CLK_SetClkDivider(CLK_FLASH, CLK_DIV_8);    /* FLASH时钟源8分频，设置FLASH擦写时钟为8M。(8M = 64M / 8) */
+        SYSCTRL_EnableModule(SYSCTRL_FLASH);        /* 使能 FLASH 控制器模块时钟 */
+		delayCnt = 0u;
+        while(ERR == FLASH_Init())                  /* 初始化FLASH模块 */
+        {
+            delayCnt++;
+			if (delayCnt >= 50u) {
+				break;
+			}
+        }
+    }
+
+}
+#else
 void CLOCK_Init(void)
 {	
 	ResultStatus_t ret;
@@ -176,6 +303,7 @@ void CLOCK_Init(void)
 	
 	//启动模块，模块开始运行
 }
+#endif
 
 /*************************************************
    Function:        vApplicationGetIdleTaskMemory
@@ -403,26 +531,31 @@ static void CLOCK_HSOSCLOC_ISR(void)
 static void PORT_Init(void)
 {
 	/* ***** 初始化PORT模块 ***** */
+	SYSCTRL_DisableModule(SYSCTRL_PORTA);
 	CLK_ModuleSrc(CLK_PORTA, CLK_SRC_FIRC64M);	//选择PORTA模块的时钟源
 	CLK_SetClkDivider(CLK_PORTA, CLK_DIV_4);	//设置PORTA时钟的分频器。模块的时钟不能高于CPU的总线时钟
 	SYSCTRL_ResetModule(SYSCTRL_PORTA);			//在系统控制模块中，复位PORTA模块
     SYSCTRL_EnableModule(SYSCTRL_PORTA);		//在PARCC中，使能PORTA模块
 
+	SYSCTRL_DisableModule(SYSCTRL_PORTB);
 	CLK_ModuleSrc(CLK_PORTB, CLK_SRC_FIRC64M);	//选择PORTB模块的时钟源
 	CLK_SetClkDivider(CLK_PORTB, CLK_DIV_4);	//设置PORTB时钟的分频器。模块的时钟不能高于CPU的总线时钟
 	SYSCTRL_ResetModule(SYSCTRL_PORTB);			//在系统控制模块中，复位PORTB模块
     SYSCTRL_EnableModule(SYSCTRL_PORTB);		//在PARCC中，使能PORTB模块
 
+	SYSCTRL_DisableModule(SYSCTRL_PORTC);
 	CLK_ModuleSrc(CLK_PORTC, CLK_SRC_FIRC64M);	//选择PORTC模块的时钟源
 	CLK_SetClkDivider(CLK_PORTC, CLK_DIV_4);	//设置PORTC时钟的分频器。模块的时钟不能高于CPU的总线时钟
 	SYSCTRL_ResetModule(SYSCTRL_PORTC);			//在系统控制模块中，复位PORTC模块
     SYSCTRL_EnableModule(SYSCTRL_PORTC);		//在PARCC中，使能PORTC模块
-	
+
+	SYSCTRL_DisableModule(SYSCTRL_PORTD);
 	CLK_ModuleSrc(CLK_PORTD, CLK_SRC_FIRC64M);	//选择PORTD模块的时钟源
 	CLK_SetClkDivider(CLK_PORTD, CLK_DIV_4);	//设置PORTD时钟的分频器。模块的时钟不能高于CPU的总线时钟
 	SYSCTRL_ResetModule(SYSCTRL_PORTD);			//在系统控制模块中，复位PORTD模块
     SYSCTRL_EnableModule(SYSCTRL_PORTD);		//在PARCC中，使能PORTD模块
 	
+	SYSCTRL_DisableModule(SYSCTRL_PORTE);
 	CLK_ModuleSrc(CLK_PORTE, CLK_SRC_FIRC64M);	//选择PORTE模块的时钟源
 	CLK_SetClkDivider(CLK_PORTE, CLK_DIV_4);	//设置PORTE时钟的分频器。模块的时钟不能高于CPU的总线时钟
 	SYSCTRL_ResetModule(SYSCTRL_PORTE);			//在系统控制模块中，复位PORTE模块
@@ -434,24 +567,6 @@ static void PORT_Init(void)
 	PORT_ClearPinsInt(PORT_C, 0xFFFFFFFF);		//清除PORTC所有的中断标志
 	PORT_ClearPinsInt(PORT_D, 0xFFFFFFFF);		//清除PORTD所有的中断标志
 	PORT_ClearPinsInt(PORT_E, 0xFFFFFFFF);		//清除PORTE所有的中断标志
-		
-	//PORT_InstallCallBackFunc(&PORT_ISR);	//加载中断处理函数
-	
-	INT_SetPriority(PORTA_IRQn, 15);	//设置 PORTA_IRQn 的中断优先级。(高)0--15(低)
-	INT_DisableIRQ(PORTA_IRQn);		//禁止 PORTA_IRQn 中断
-	
-	INT_SetPriority(PORTB_IRQn, 15);	//设置 PORTB_IRQn 的中断优先级。(高)0--15(低)
-	INT_DisableIRQ(PORTB_IRQn);		//禁止 PORTB_IRQn 中断
-	
-	INT_SetPriority(PORTC_IRQn, 15);	//设置 PORTC_IRQn 的中断优先级。(高)0--15(低)
-	INT_DisableIRQ(PORTC_IRQn);		//禁止 PORTC_IRQn 中断
-	
-	INT_SetPriority(PORTD_IRQn, 15);	//设置 PORTD_IRQn 的中断优先级。(高)0--15(低)
-	INT_DisableIRQ(PORTD_IRQn);		//禁止 PORTD_IRQn 中断
-	
-	INT_SetPriority(PORTE_IRQn, 3);	//设置 PORTE_IRQn 的中断优先级。(高)0--15(低)
-	INT_DisableIRQ(PORTE_IRQn);		//禁止 PORTE_IRQn 中断	
-
 }
 
 /*****************************************************************************

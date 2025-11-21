@@ -3266,7 +3266,7 @@ void TaskEcuDiagnostic(void *pvParameters)
   //  EolConfigureInit();
   //  //DiagCanReportValueInit();
   //  VinInit();
-  EskkeyCheckInit();
+  //  //EskkeyCheckInit();
 
   // CopyMcuAppSoftWareVersionToFlash();// save app software version
   // CopyMcuAppSoftWareNumberToFlash(); // save app software Number

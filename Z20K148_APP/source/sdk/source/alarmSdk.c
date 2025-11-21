@@ -151,7 +151,7 @@ int16_t AlarmSdkInit(void)
 *************************************************/
 void AlarmSdkCycleProcess(void)
 {
-    uint8_t ret;
+    uint8_t ret = 0U;
     //接收数据
     ret = MpuHalReceive(g_mpuHandle,&g_dataPack,0);
     if(ret == MPU_HAL_STATUS_OK)    //接收到数据
@@ -200,7 +200,9 @@ void AlarmSdkCycleProcess(void)
             }
             else if((g_dataPack.subcommand&0x7F) == 0x03)
             {
+                #ifdef IIC_ENABLE
                 ret = EcallHalSetAmpControlStatus(g_dataPack.pDataBuffer[0]);
+                #endif
                 AlarmSdkSetAmpGainResponse(ret);
             }
             else

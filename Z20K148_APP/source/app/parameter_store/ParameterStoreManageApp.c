@@ -769,6 +769,7 @@
 #include "flashHal.h"
 #include "ParameterStoreManageApp.h"
 
+// ==================== 宏定义 (完全保留，一个不少) ====================
 #define WORKFLASH_ECU_PART_NUM_LEN 14 + 2
 #define WORKFLASH_SYSTEM_SUPPLIER_ID_LEN 16 + 2
 #define WORKFLASH_ECU_HARDWARE_VER_LEN 16 + 2
@@ -878,6 +879,10 @@
 #define WORKFLASH_MANUFACTORY_MODE_LEN (1 + 2)        // 0x0110_cxl
 #define WORKFLASH_4G_RESET_COUNT_LEN (1 + 2)          // 0xB260_cxl
 
+// ==================== 结构体定义 ====================
+
+// 1. 车辆重要信息存储结构体（地址：0x0000）
+// 注意：这里只保留 ESK、VIN、版本号等“打死不动”的核心参数
 typedef struct
 {
   uint8_t u8SystemSupplierId[WORKFLASH_SYSTEM_SUPPLIER_ID_LEN];                   // 系统供应商标识
@@ -896,10 +901,15 @@ typedef struct
   uint8_t u8AppSoftFingerPrint[WORKFLASH_APP_SOFT_PRINT_LEN];                     // 应用指纹信息
   uint8_t u8SubnetConfigListSpeedCan[WORKFLASH_SUBNET_CONFIG_LIST_SPEED_CAN_LEN]; // 子网配置列表
   uint8_t u8VIN_hex[WORKFLASH_VIN_LEN];
+  uint8_t u8ECUPartNumber[WORKFLASH_ECU_PART_NUM_LEN];
 } vehicleInforParamImportant_t;
 
+// 2. 车辆可变信息存储结构体（地址：0x4000）
+// 注意：将所有带 _cxl 注释的参数（APN、IP、电话号码等）全部移到这里
+// 这样即使修改这些参数，也只会擦除 0x4000 区域，保护了 0x0000 的 ESK
 typedef struct
 {
+  // --- 原有的 Variable 参数 ---
   uint8_t u8ICCID[32];
   uint8_t u8IMEI[16];
   uint8_t u8IMSI[16];
@@ -910,7 +920,6 @@ typedef struct
   uint8_t u8ECU_SoftwareNumber[WORKFLASH_SOFTWARE_NUM_LEN];
   uint8_t u8ECU_HardwareVersion[WORKFLASH_ECU_HARDWARE_VER_LEN];
   uint8_t u8ECU_SoftwareVersion[WORKFLASH_ECU_SOFTWARE_VER_LEN];
-  uint8_t u8ECUPartNumber[WORKFLASH_ECU_PART_NUM_LEN];
   uint8_t u8MCU_AppSoftWareVersion[WORKFLASH_MCU_APP_SOFTWARE_VERSION_LEN];
   uint8_t u8TboxCallNumber[32];
   uint8_t u8MCU_AppSoftWareVersionF1C1[32];
@@ -934,6 +943,8 @@ typedef struct
   uint8_t WorkingMode[WORKING_MODE_LEN];
   uint8_t SecocTrioCount[SECOC_TRIP_COUNT_LEN];
 
+  // --- ！！！关键移动！！！ 所有带 _cxl 的参数全部移到这里 (0x4000) ---
+  // 保留所有参数定义，不做删除，确保代码完整性
   uint8_t u8Apn1[WORKFLASH_APN1_LEN];                                   // 0x011B_cxl
   uint8_t u8Ip1Addr[WORKFLASH_IP_ADDR_LEN];                             // 0x011C_cxl
   uint8_t u8TspPort[WORKFLASH_TSP_PORT_LEN];                            // 0x011D_cxl
@@ -993,6 +1004,7 @@ typedef struct
   uint8_t u8ManufactoryMode[WORKFLASH_MANUFACTORY_MODE_LEN];            // 0x0110_cxl
   uint8_t u8_4gResetCount[WORKFLASH_4G_RESET_COUNT_LEN];                // 0xB260_cxl
   
+  // 保留一些之前定义的但没用的参数位，防止偏移错乱
   uint8_t u8WorkAddr[WORKFLASH_WORK_ADDR_LEN];
   uint8_t u8WorkPort[WORKFLASH_WORK_PORT_LEN];
   uint8_t u8PublicKey[WORKFLASH_WORK_PUBLIC_KEY_LEN];
@@ -1024,6 +1036,7 @@ typedef struct
   uint8_t secocTripCount[8];
 } SmallBlock2DataTable_t;
 
+// ==================== 参数映射表 (关键修改) ====================
 #define TBOX_PARAMTER_MAP_BEGIN() \
   static int16_t VehicleInforGetDataOffsetAddressAndLength(FlashParaId_e parameterId, uint8_t *pTypeFlag, uint32_t *offsetAddress, uint32_t *length) \
   { \
@@ -1036,6 +1049,7 @@ typedef struct
     pData1 = NULL; \
     switch (parameterId) {
 
+// Type 0 = Variable (0x4000), Type 1 = Important (0x0000)
 #define TBOX_PARAMETER_MAP(item, parameter, TypeIdx) \
   case item: \
   { \
@@ -1054,6 +1068,7 @@ typedef struct
   return ret; \
   }
 
+// Small Block Map 定义 (保持不变)
 #define TBOX_SMALL_BLOCK_MAP_BEGIN() \
   static int16_t VehicleInforSmallBlockGetDataOffsetAddressAndLength(SmallBlockDataParamId_e parameterId, uint8_t *pTypeFlag, uint32_t *offsetAddress, uint32_t *length) \
   { \
@@ -1085,7 +1100,7 @@ typedef struct
   }
 
 TBOX_PARAMTER_MAP_BEGIN()
-// === Type 1: Important (0x0000)
+// === Type 1: Important (0x0000) - 仅核心身份安全数据 ===
 TBOX_PARAMETER_MAP(E_PARAMETER_INFO_SYSTEM_SUPPLIER_ID, u8SystemSupplierId, 1)
 TBOX_PARAMETER_MAP(E_PARAMETER_INFO_ECU_DIAG_SN, u8ECU_RepairShopCodeOrTestSN, 1)
 TBOX_PARAMETER_MAP(E_PARAMETER_INFO_ECU_INSTALL_DATE, u8ECU_InstallationDate, 1)
@@ -1093,7 +1108,7 @@ TBOX_PARAMETER_MAP(E_PARAMETER_INFO_ECU_CODE, u8ECU_Variantcode, 1)
 TBOX_PARAMETER_MAP(E_PARAMETER_INFO_SAP_ECU_MASK, u8SAP_ECU_MASK, 1)
 TBOX_PARAMETER_MAP(E_PARAMETER_INFO_ECU_MANUFACTURE_DATE, u8ECU_ManuFactureDate, 1)
 TBOX_PARAMETER_MAP(E_PARAMETER_INFO_PART_NAME, u8PartName, 1)
-TBOX_PARAMETER_MAP(E_PARAMETER_INFO_ESK_KEY, u8PublicAESKey, 1)
+TBOX_PARAMETER_MAP(E_PARAMETER_INFO_ESK_KEY, u8PublicAESKey, 1) 
 TBOX_PARAMETER_MAP(E_PARAMETER_INFO_VIN, u8VIN, 1)
 TBOX_PARAMETER_MAP(E_PARAMETER_INFO_VIN_hex, u8VIN_hex, 1)
 TBOX_PARAMETER_MAP(E_PARAMETER_INFO_ECU_SERIAL_NUMBER, u8ECU_SerialNumber, 1)
@@ -1101,15 +1116,14 @@ TBOX_PARAMETER_MAP(E_PARAMETER_INFO_SECURITY_VERSION, u8SecurityVersion, 1)
 TBOX_PARAMETER_MAP(E_PARAMETER_INFO_ECU_EOL_CONFIG, u8EOLconfig, 1)
 TBOX_PARAMETER_MAP(E_PARAMETER_INFO_APP_SOFT_FINGER_PRINT, u8AppSoftFingerPrint, 1)
 TBOX_PARAMETER_MAP(E_PARAMETER_INFO_SUBNET_CONFIG_LIST_SPEED_CAN, u8SubnetConfigListSpeedCan, 1)
-
-
+TBOX_PARAMETER_MAP(E_PARAMETER_INFO_ECU_PART_NUMBER, u8ECUPartNumber, 1)
+// === Type 0: Variable (0x4000) - 所有其他数据（含远控、_cxl参数） ===
 TBOX_PARAMETER_MAP(E_PARAMETER_INFO_ICCID, u8ICCID, 0)
 TBOX_PARAMETER_MAP(E_PARAMETER_INFO_IMEI, u8IMEI, 0)
 TBOX_PARAMETER_MAP(E_PARAMETER_INFO_IMSI, u8IMSI, 0)
 TBOX_PARAMETER_MAP(E_PARAMETER_INFO_TBOX_REGISTER_FLAG, u8RegisterFlag, 0)
 TBOX_PARAMETER_MAP(E_PARAMETER_INFO_KEY_TYPE, u8KeyType, 0)
 TBOX_PARAMETER_MAP(E_PARAMETER_INFO_MCU_RESET_COUNT, u8McuResetCount, 0)
-TBOX_PARAMETER_MAP(E_PARAMETER_INFO_ECU_PART_NUMBER, u8ECUPartNumber, 0)
 TBOX_PARAMETER_MAP(E_PARAMETER_INFO_ECU_HARDWARE_NUM, u8ECU_HardwareNumber, 0)
 TBOX_PARAMETER_MAP(E_PARAMETER_INFO_ECU_SOFTWARE_NUM, u8ECU_SoftwareNumber, 0)
 TBOX_PARAMETER_MAP(E_PARAMETER_INFO_ECU_HARDWARE_VERSION, u8ECU_HardwareVersion, 0)
@@ -1136,6 +1150,7 @@ TBOX_PARAMETER_MAP(E_PARAMETER_INFO_UDS_SECURITY_ERROR_COUNT, UdsSEecurityErrorC
 TBOX_PARAMETER_MAP(E_PARAMETER_INFO_WORKING_MODE, WorkingMode, 0)
 TBOX_PARAMETER_MAP(E_PARAMETER_INFO_SECOC_TRIP_COUNT, SecocTrioCount, 0)
 
+// --- 全部 _cxl 参数都映射到 Type 0 ---
 TBOX_PARAMETER_MAP(E_PARAMETER_INFO_APN1, u8Apn1, 0)
 TBOX_PARAMETER_MAP(E_PARAMETER_INFO_IP1_ADDR, u8Ip1Addr, 0)
 TBOX_PARAMETER_MAP(E_PARAMETER_INFO_PORT1, u8TspPort, 0)
@@ -1204,6 +1219,7 @@ TBOX_SMALL_BLOCK__MAP(E_WORKING_MODE, workingMode, 1)
 TBOX_SMALL_BLOCK__MAP(E_SECOC_TRIP_COUNT, secocTripCount, 2)
 TBOX_SMALL_BLOCK__MAP_END()
 #endif
+
 // ==================== 读写接口 (Type 0/1) ====================
 
 static int16_t ByteArrayCompare(uint8_t *pData1, uint8_t *pData2, uint16_t length)
@@ -1221,6 +1237,7 @@ static int16_t ByteArrayCompare(uint8_t *pData1, uint8_t *pData2, uint16_t lengt
 static int16_t WorkFlashWriteVehicleInfo(uint8_t importantFlag, uint32_t address, const uint8_t *data, uint32_t dataLength)
 {
   uint32_t workFlashAddress;
+  // 只有 0 和 1 两种情况
   if (importantFlag == 0)
   {
     workFlashAddress = WORKFLASH_ADDRESS_VEHICLE_INFO_VARIABLE; // 0x4000

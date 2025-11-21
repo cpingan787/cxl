@@ -33,6 +33,7 @@ typedef struct
     uint8_t HVACF_ACSt;
     uint8_t HVACF_AutoSt;
     uint8_t HVACF_IonMode;
+    uint8_t HVACF_TempSelectAuto;
     //BCM
     uint8_t BCM_TEL_IMMOCode0;
     uint8_t BCM_TEL_IMMOCode1;
@@ -148,6 +149,8 @@ typedef enum
     TEL_PLGMCloseReqVD,
     TEL_EngForceStartVD,
     TEL_EngForceStart,
+    TEL_PowerOnTimerReq,
+    TEL_AllHazardLightOffReq,
     TEL_FLHeatingLevelReq,
     TEL_FLVentilatingLevelReq,
     TEL_FLHVSMAutoModeReq,

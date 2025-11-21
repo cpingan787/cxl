@@ -13,7 +13,39 @@
 #include <stdint.h>
 
 /****************************** Macro Definitions *****************************/
+//#define IIC_ENABLE
+#define ECALL_LED_R_PORT                PORT_D
+#define ECALL_LED_R_PIN                 GPIO_5
+#define ECALL_LED_R_PIN_MUX             PTD5_GPIO
 
+#define ECALL_LED_G_PORT                PORT_D
+#define ECALL_LED_G_PIN                 GPIO_12
+#define ECALL_LED_G_PIN_MUX             PTD12_GPIO
+
+#define VEHICLE_MUTE_PORT               PORT_D
+#define VEHICLE_MUTE_PIN                GPIO_9
+#define VEHICLE_MUTE_PIN_MUX            PTD9_GPIO
+
+#define AMP_STB_PORT                    PORT_E
+#define AMP_STB_PIN                     GPIO_14
+#define AMP_STB_PIN_MUX                 PTE14_GPIO
+
+#define AMP_MUTE_PORT                   PORT_E
+#define AMP_MUTE_PIN                    GPIO_0
+#define AMP_MUTE_PIN_MUX                PTE0_GPIO
+
+#define FAULTZ_DET_PORT                 PORT_C
+#define FAULTZ_DET_PIN                  GPIO_10
+#define FAULTZ_DET_PIN_MUX              PTC10_GPIO
+
+#define SRS_EN_PORT                     PORT_D
+#define SRS_EN_PIN                      GPIO_7
+#define SRS_EN_PIN_MUX                  PTD7_GPIO
+
+#define SRS_STATE_PORT                  PORT_D
+#define SRS_STATE_PIN                   GPIO_6
+#define SRS_STATE_PIN_MUX               PTD6_GPIO
+#define SRS_STATE_PIN_IRQ               PORTD_IRQn
 /****************************** Type Definitions ******************************/
 typedef enum
 {
@@ -36,9 +68,8 @@ typedef enum
 }SosLledState_e;
 
 /****************************** Function Declarations *************************/
-void EcallHalSetSosLed1State(uint8_t flag);
-void EcallHalSetSosLed2State(uint8_t flag);
-void EcallHalSetSosLed3State(uint8_t flag);
+void EcallHalSetSosLedRedState(uint8_t flag);
+void EcallHalSetSosLedGreenState(uint8_t flag);
 void EcallHalSetVehicleMute(uint8_t flag);
 uint8_t EcallHalGetSosButtonStatus(void);
 uint8_t EcallHalGetSosButtonConnectStatus(void);
@@ -57,6 +88,5 @@ void EcallHalSetSosLedMode(EcallLedMode_e mode , uint16_t onTime , uint16_t offT
 uint32_t EcallHalSosLedControlReceive( SosLledState_e *msg, uint32_t time_out );
 uint32_t EcallHalSosLedControlSend( SosLledState_e flash );
 void EcallHalSetMode(uint8_t wakeMode);
-void EcallHalTestMain(void);
 
 #endif  // _ECALLHAL_H

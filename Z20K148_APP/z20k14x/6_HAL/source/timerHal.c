@@ -122,7 +122,9 @@ static void DelayRLTUnderFlowCallback(void)
     adTimeCount++;
     if (adTimeCount >= AD_CONVERT_CYCLE_TIME)
     {
+        COMMON_DISABLE_INTERRUPTS();
         PeripheralHalAdcStart(g_adChannelCount);
+        COMMON_ENABLE_INTERRUPTS();
         g_adChannelCount++;
         if (g_adChannelCount >= 2)
         {
@@ -189,6 +191,7 @@ static void Timer0Handler(void)
 void TIM0_Init(void)
 {
     // 初始化TIM0模块
+    SYSCTRL_DisableModule(SYSCTRL_TIM0);
     CLK_ModuleSrc(CLK_TIM0, CLK_SRC_PLL);        //TIM0模块的时钟源选择 HSOSC
     CLK_SetClkDivider(CLK_TIM0, CLK_DIV_12);        //设置TIM0时钟的分频器，不能高于内核时钟的1/4
     SYSCTRL_ResetModule(SYSCTRL_TIM0);            //在系统控制模块中，复位TIM0模块
@@ -197,35 +200,15 @@ void TIM0_Init(void)
     TIM_CountingModeConfig(TIM0_ID, TIM_COUNTING_UP);    //计数器向上计数模式
     TIM_InitCounter(TIM0_ID, 0x0000, 10000);    //设置计数器的初始值和模值
 
-    //TIM_ChannelMatchTriggerCmd(TIM0_ID, TIM_CHANNEL_0, ENABLE);    //使能通道0匹配时，产生触发信号
-    //TIM_InitTriggerCmd(TIM0_ID, ENABLE);    //使能 TIM0 计数寄存器达到初始值时，产生触发信号
-
     //初始化中断
     TIM_IntMask(TIM0_ID, TIM_INT_ALL, MASK);    //关闭模块所有的中断
     TIM_IntClear(TIM0_ID, TIM_INT_ALL);            //清除模块所有的中断标志位
 
-    //TIM_InstallCallBackFunc(TIM0_ID, TIM_INT_CH0, TIM0_CH0_ISR);    //加载TIM0_CH0中断函数
-    //TIM_IntMask(TIM0_ID, TIM_INT_CH0, UNMASK);                    //使能TIM0_CH0中断
-    //TIM_InstallCallBackFunc(TIM0_ID, TIM_INT_CH1, TIM0_CH1_ISR);    //加载TIM0_CH1中断函数
-    //TIM_IntMask(TIM0_ID, TIM_INT_CH1, UNMASK);                    //使能TIM0_CH1中断
     TIM_InstallCallBackFunc(TIM0_ID, TIM_INT_TO, Timer0Handler);    //加载TIM_INT_TO中断函数
     TIM_IntMask(TIM0_ID, TIM_INT_TO, UNMASK);                    //使能TIM_INT_TO中断
-    //TIM_InstallCallBackFunc(TIM0_ID, TIM_INT_FAULT, TIM0_FAULT_ISR);//加载TIM0_FAULT中断函数
-    //TIM_IntMask(TIM0_ID, TIM_INT_FAULT, UNMASK);                    //使能TIM0_FAULT中断
-
-    INT_SetPriority(TIM0_Ch_IRQn, 0x3);    //设置 TIM0_Ch_IRQn 的中断优先级。(高)0--15(低)
-    //INT_EnableIRQ(TIM0_Ch_IRQn);            //使能 TIM0_Ch_IRQn 中断
-    INT_DisableIRQ(TIM0_Ch_IRQn);            //禁止 TIM0_Ch_IRQn 中断
-
-    INT_SetPriority(TIM0_Fault_IRQn, 0x7);    //设置 TIM0_Fault_IRQn 的中断优先级。(高)0--15(低)
-    INT_DisableIRQ(TIM0_Fault_IRQn);        //禁止 TIM0_Fault_IRQn 中断
 
     INT_SetPriority(TIM0_Overflow_IRQn, 0x7);//设置 TIM0_Oveflow_IRQn 的中断优先级。(高)0--15(低)
     INT_EnableIRQ(TIM0_Overflow_IRQn);        //使能 TIM0_Oveflow_IRQn 中断
-    //INT_DisableIRQ(TIM0_Overflow_IRQn);        //禁止 TIM0_Oveflow_IRQn 中断
-
-    INT_SetPriority(TIM0_Rlfl_IRQn, 0x7);    //设置 TIM0_Rlfl_IRQn 的中断优先级。(高)0--15(低)
-    INT_DisableIRQ(TIM0_Rlfl_IRQn);        //禁止 TIM0_Rlfl_IRQn 中断
 
     //启动模块，模块开始运行
     TIM_StartCounter(TIM0_ID, TIM_CLK_SOURCE_FUNCTION, TIM_CLK_DIVIDE_1);
@@ -274,7 +257,7 @@ void TIM0_FAULT_ISR(void)
 void TimerHalInit(void)
 {
     TIM0_Init();    //初始化TIM0模块
-    TimerHal_RTCInit();    //初始化RTC模块
+    //TimerHal_RTCInit();    //初始化RTC模块
 }
 
 /*************************************************
@@ -471,27 +454,19 @@ void TimerHalGetRtcTime(uint32_t *pUtc)
 
 void TimerHalSetMode(uint8_t mode)
 {
-    if(mode!=0)
+    if (mode != 0)
     {
         TimerHal_RtcIrqEnable();
-#if 1
         TIM0_Init();
-#else
-        // CLK_ModuleSrc(CLK_TIM0, CLK_SRC_PLL);        //TIM0模块的时钟源选择 HSOSC
-        // CLK_SetClkDivider(CLK_TIM0, CLK_DIV_12);        //设置TIM0时钟的分频器，不能高于内核时钟的1/4
-        // SYSCTRL_ResetModule(SYSCTRL_TIM0);            //在系统控制模块中，复位TIM0模块
-        SYSCTRL_EnableModule(SYSCTRL_TIM0);            //在系统控制模块中，使能TIM0模块
-
-        TIM_IntMask(TIM0_ID, TIM_INT_TO, UNMASK);                    //使能TIM_INT_TO中断
-
-        TIM_StartCounter(TIM0_ID, TIM_CLK_SOURCE_FUNCTION, TIM_CLK_DIVIDE_1);
-#endif
     }
     else
     {
         TimerHal_RtcIrqDisable();
-        TIM_IntClear(TIM0_ID, TIM_INT_ALL);            //清除模块所有的中断标志位
-        SYSCTRL_DisableModule(SYSCTRL_TIM0);            //在系统控制模块中，使能TIM0模块
+        TIM_IntMask(TIM0_ID, TIM_INT_ALL, MASK); // 关闭模块所有的中断
+        TIM_IntClear(TIM0_ID, TIM_INT_ALL);  // 清除模块所有的中断标志位
+        INT_ClearPendingIRQ(TIM0_Overflow_IRQn);
+        INT_EnableIRQ(TIM0_Overflow_IRQn);
+        SYSCTRL_DisableModule(SYSCTRL_TIM0); // 在系统控制模块中，使能TIM0模块
     }        
 }
 

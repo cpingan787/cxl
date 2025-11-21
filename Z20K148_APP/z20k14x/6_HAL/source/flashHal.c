@@ -60,11 +60,10 @@ static ResultStatus_t FlashHalIsMetaDataValid(const FlashHalMetaDataInfo_t *pMet
 /****************************** Public Function Implementations ***************/
 static uint8_t GetNewSectorNum(uint32_t FirstSectorAddress,uint8_t *newSectorFlag)
 {
-  scm_reg_t *scmRegPtr = (scm_reg_t *) SCM_BASE_ADDR;
-    // 这里的具体寄存器位需对照手册，通常是 CCACHE_CLR
+    scm_reg_t *scmRegPtr = (scm_reg_t *) SCM_BASE_ADDR;
     scmRegPtr->SCM_MISCCTL1.CCACHE_CLR = 1U; 
     scmRegPtr->SCM_MISCCTL1.CCACHE_CLR = 0U;
-    COMMON_DSB(); // 确保指令执行完毕
+    COMMON_DSB();
     uint8_t selectSectorNum;
     uint8_t sector0Flag;
     uint8_t sector1Flag;
@@ -210,8 +209,8 @@ int16_t FlashHalDataBlockWrite(uint32_t blockAddress,uint32_t writeOffset,const 
 
     xSemaphoreTake( g_workFlashMutexHandle, portMAX_DELAY );
     
-    //sectorBaseAddress = (blockAddress&0xC000)+WORKFLASH_PARAMETER_ADDRESS_OFFSET;//first sector address
-    sectorBaseAddress = (blockAddress & 0xFFFFC000) + WORKFLASH_PARAMETER_ADDRESS_OFFSET;
+    sectorBaseAddress = (blockAddress&0xC000)+WORKFLASH_PARAMETER_ADDRESS_OFFSET;//first sector address
+    
     sectorNum = GetNewSectorNum(sectorBaseAddress,&newSectorFlag);
     
     alternativeAddress = sectorBaseAddress+WORKFLASH_BASE_ADDRESS+(uint32_t)sectorNum*0x2000; 

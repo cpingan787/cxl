@@ -28,6 +28,16 @@ typedef struct
 	uint8_t hardFault;
 }SosButtonClickMsg_t;
 
+typedef enum
+{
+    AIRBAG_PWM_UNKNOWN = 0,   /* 尚未稳定识别 */
+    AIRBAG_PWM_NORMAL,        /* 正常 66.7% */
+    AIRBAG_PWM_CRASH          /* 碰撞 33.3% */
+} AirbagPwmState_e;
+
+/* 中断回调（每次上升沿/下降沿调用一次） */
+void AirbagPwmIsrHandler(uint8_t level);
+
 void TaskEcallProcess( void *pvParameters );
 
 #endif    //_TASK_APP_ECALL_PROCESS_H

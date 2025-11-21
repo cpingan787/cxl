@@ -416,6 +416,7 @@ void CAN0_Init(uint8_t canIndex, uint8_t canfdFlag, CanBaudType_e idBandrate, Ca
         GPIO_WritePinOutput(CAN1FD_STB_PORT, CAN1FD_STB_PIN, GPIO_HIGH);        // 设置 输出高电平，STB 设为高电平，JA1042 为 Standby 状态
 
         // 初始化CAN0模块的时钟源
+        SYSCTRL_DisableModule(SYSCTRL_CAN0);
         CLK_ModuleSrc(CLK_CAN0, CLK_SRC_PLL);   // 选择CAN模块的功能时钟源
         CLK_SetClkDivider(CLK_CAN0, CLK_DIV_6); // 设置CAN模块的时钟分频系数
         SYSCTRL_ResetModule(SYSCTRL_CAN0);      // 在系统控制模块中，复位CAN0模块
@@ -554,6 +555,7 @@ void CAN0_Init(uint8_t canIndex, uint8_t canfdFlag, CanBaudType_e idBandrate, Ca
         GPIO_WritePinOutput(CAN1FD_STB_PORT, CAN1FD_STB_PIN, GPIO_HIGH);        // 设置 PTA14 输出高电平，STB 设为高电平，JA1042 为 Standby 状态
 
         // 初始化CAN1模块的时钟源
+        SYSCTRL_DisableModule(SYSCTRL_CAN1);
         CLK_ModuleSrc(CLK_CAN1, CLK_SRC_PLL);   // 选择CAN模块的功能时钟源
         CLK_SetClkDivider(CLK_CAN1, CLK_DIV_6); // 设置CAN模块的时钟分频系数
         SYSCTRL_ResetModule(SYSCTRL_CAN1);      // 在系统控制模块中，复位CAN1模块
@@ -692,6 +694,7 @@ void CAN0_Init(uint8_t canIndex, uint8_t canfdFlag, CanBaudType_e idBandrate, Ca
         GPIO_WritePinOutput(CAN2FD_STB_PORT, CAN2FD_STB_PIN, GPIO_HIGH);        // 设置 输出高电平，STB 设为高电平，JA1042 为 Standby 状态
 
         // 初始化CAN2模块的时钟源
+        SYSCTRL_DisableModule(SYSCTRL_CAN2);
         CLK_ModuleSrc(CLK_CAN2, CLK_SRC_PLL);   // 选择CAN模块的功能时钟源
         CLK_SetClkDivider(CLK_CAN2, CLK_DIV_6); // 设置CAN模块的时钟分频系数
         SYSCTRL_ResetModule(SYSCTRL_CAN2);      // 在系统控制模块中，复位CAN2模块
@@ -1829,12 +1832,11 @@ int16_t CanHalSetMode(uint8_t mode)
     }
     else if (mode == 1)
     {
-        CanHalSetSleep(1);
         for (; i < CAN_CHANNEL_NUMBER_MAX; i++)
         {
             SetCanControllerStart(i);
         }
-
+        CanHalSetSleep(1);
         return 0;
     }
     else

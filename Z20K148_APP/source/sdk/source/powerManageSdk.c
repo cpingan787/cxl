@@ -843,11 +843,6 @@ static void PmStateMcuSleepProcess(uint32_t cycleTime)
     PowerManageSdkSetMpuWakeUpFlag(0x00);
     /*MPU进入低功耗*/
     MpuHalSetMode(0);
-    /*If GSENSOR Wake up is set, the wake up threshold is set*/
-    // if(GSensorHalGetWakeupFlag())
-    // {
-    //   GSensorHalSetThreshold(0x0A);
-    // }
     /*设置peripheral模块进入低功耗*/
     PeripheralHalSetMode(0);
     /*设置蓝牙进入低功耗*/

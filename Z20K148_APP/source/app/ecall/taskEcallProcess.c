@@ -1,18 +1,15 @@
+/****************************** include ***************************************/
 #include "taskEcallProcess.h"
 #include "taskPowerManage.h"
 #include "vehicleSignalApp.h"
-#include "ecuNodeMissingCheck.h"
-
 #include "FreeRTOS.h"
 #include "semphr.h"
 #include "queue.h"
 #include "task.h"
 #include "string.h"
-
 #include "logHal.h"
 #include "mpuHal.h"
 #include "peripheralHal.h"
-
 #include "alarmSdk.h"
 #include "batterySdk.h"
 #include "autosarNmSdk.h"
@@ -20,25 +17,70 @@
 #include "canParseSdk.h"
 #include "stateSyncSdk.h"
 #include "taskDtcProcess.h"
-// ecall process cycle definition
-#define ECALL_PROCESS_CYCLE_TIME          10 //ms
+#include "task.h"
+#include "ecuNodeMissingCheck.h"
 
-#define	SOS_LED_TRIG_MSG_QUEUE_DEPTH	( 5 )
+/****************************** Macro Definitions ******************************/
+#define ECALL_PROCESS_CYCLE_TIME            10 //ms
+#define	SOS_LED_TRIG_MSG_QUEUE_DEPTH	    ( 5 )
+#define SOS_KEY_DEBANCE_TIME                ( 100 )                         /*按键消除去抖动的时间*/
+#define SOS_KEY_PRESS_MIN_TIME              ( 500 )                         /*按键被按下最短时间*/
+#define SOS_KEY_PRESS_MAX_TIME              ( 4000 )                        /*按键被按下最长时间*/
+#define SOS_KEY_RELEASED_TIME               ( 4000 )                        /*按键被释放的时间*/
+#define SOS_KEY_ECALL_TEST_TIME             ( 10000 )                       /*按键ECALL测试模式的时间*/
+#define SOS_KEY_RESET_TBOX_TIME             ( 20000 )                       /*按键复位TBOX的时间*/    
+#define SOS_KEY_HARD_FAULT_TIME             ( 30000 )                       /*按键硬件故障的时间*/    
 
-#define SOS_KEY_DEBANCE_TIME    ( 100 )                         /*按键消除去抖动的时间*/
-#define SOS_KEY_PRESS_MIN_TIME  ( 500 )                         /*按键被按下最短时间*/
-#define SOS_KEY_PRESS_MAX_TIME  ( 4000 )                        /*按键被按下最长时间*/
-#define SOS_KEY_RELEASED_TIME   ( 4000 )                        /*按键被释放的时间*/
+#define RULE_NORMAL                         0
+#define RULE_CRASH                          1
+#define SYSTEM_CHECK_RUN_TIME	            ( 80 * 1000 )	    /*硬件上电后连续60秒钟*/
+/****************************** Type Definitions ******************************/
+typedef struct
+{
+    uint16_t minHigh;
+    uint16_t maxHigh;
+    uint16_t minLow;
+    uint16_t maxLow;
+    uint8_t  needCycles;
+} PwmRule_t;
 
-#define SOS_KEY_ECALL_TEST_TIME ( 10000 )                       /*按键ECALL测试模式的时间*/
-#define SOS_KEY_RESET_TBOX_TIME ( 20000 )                       /*按键复位TBOX的时间*/    
-#define SOS_KEY_HARD_FAULT_TIME ( 30000 )                       /*按键硬件故障的时间*/    
+typedef struct
+{
+    uint32_t lastTick;
+    uint16_t lastHigh;
+    uint16_t lastLow;
+    uint8_t  okCount[2];    /* normal / crash 分别计数 */
+    AirbagPwmState_e stableState;
+    uint8_t lastLevel;
+} PwmRuntime_t;
 
-static SosLledState_e g_SosLedState;        /*SOS LED灯闪烁状态*/
-static SosButtonClickMsg_t g_SosButtonClickMsg;      /*按键时间*/
+/****************************** Global Variables ******************************/
+static SosLledState_e g_SosLedState;        
+static SosButtonClickMsg_t g_SosButtonClickMsg;
+#ifdef IIC_ENABLE
 static uint8_t selfCheckStatusPrintFlag = 0;
+#endif
 static const uint8_t g_CanSignalFormat = VEHICLE_CAN_UNPACK_FORMAT_MOTO_LSB;
 
+static const PwmRule_t g_pwmRules[] =
+{
+    /* 规则0：正常 66.7% (高 20ms±2, 低 10ms±2) */
+    { .minHigh = 18u, .maxHigh = 22u,
+      .minLow  = 8u,  .maxLow  = 12u,
+      .needCycles = 3u },
+
+    /* 规则1：碰撞 33.3% (高 10ms±2, 低 20ms±2) */
+    { .minHigh = 8u,  .maxHigh = 12u,
+      .minLow  = 18u, .maxLow  = 22u,
+      .needCycles = 3u },
+};
+static volatile PwmRuntime_t g_pwm;
+
+/****************************** Function Declarations *************************/
+static void AirbagPwmInit(void);
+static AirbagPwmState_e AirbagPwmGetState(void);
+
+/****************************** Public Function Implementations ***************/
 /** ****************************************************************************
 * @remarks       static void SetSosLedState( ecall_led_flash_e st )
 * @brief         设置SOS led灯显示的状态
@@ -304,7 +346,7 @@ static void SosButtonDetection( void )
         }
     }
 }
-
+#ifdef IIC_ENABLE
 /** ****************************************************************************
 * @remarks       static uint32_t HardwareSelfcheckResult( void )
 * @brief         系统硬件状态自检
@@ -504,7 +546,6 @@ static uint32_t HardwareSelfcheckResult( void )
 *******************************************************************************/
 static void SelfcheckCycleProcess( void )
 {
-    #define SYSTEM_CHECK_RUN_TIME	( 80 * 1000 )	    /*硬件上电后连续60秒钟*/
     static uint32_t startTime = 0;
     static uint32_t currTime = 0;
 
@@ -564,52 +605,71 @@ static void SelfcheckCycleProcess( void )
             break;
     }
 }
+#endif
 
 void AirbagSingleProcess(void)
 {
     double dataVaule = 0;
     uint8_t airbagSingal = 0;
-    static uint8_t triggerFlag = 0;
+    AirbagPwmState_e airBagState = AIRBAG_PWM_UNKNOWN;
+    static uint8_t airbagCanFlag = 0;
+    static uint8_t airbagHardwareFlag = 0;
     const can0_signal_configure_t *pCan0SignalConfigure = NULL;    
     //const can1_signal_configure_t *pCan1SignalConfigure = NULL;
 
     pCan0SignalConfigure = GetCan0SignalConfigure();
     CanParseSdkReadSignal(g_CanSignalFormat,&pCan0SignalConfigure->SRS_CrashOutputSt,&dataVaule);   
+    airBagState = AirbagPwmGetState();
 
-    
     airbagSingal = (uint8_t)dataVaule;
     if(airbagSingal != 0)
     {
-        if(triggerFlag == 0)
+        if(airbagCanFlag == 0)
         {
             AlarmSdkEcallTriger(E_ECALL_TRIGGER_CAN_AUTO);
             EcallHalSetVehicleMute(1);
-            TBOX_PRINT("Airbag triggers ECALL, signal = %02x\r\n", airbagSingal);
-            triggerFlag = 1;
+            TBOX_PRINT("Airbag can triggers ECALL, signal = %02x\r\n", airbagSingal);
+            airbagCanFlag = 1;
         }
     }
     else
     {
-        if(triggerFlag == 1)
+        if(airbagCanFlag == 1)
         {
-            TBOX_PRINT("Airbag recover normal\r\n");
-            triggerFlag = 0;
+            TBOX_PRINT("Airbag can recover normal\r\n");
+            airbagCanFlag = 0;
         }
+    }
+
+    if(airBagState == AIRBAG_PWM_CRASH)
+    {
+        if(airbagHardwareFlag == 0)
+        {
+          AlarmSdkEcallTriger(E_ECALL_TRIGGER_SRS_AUTO);
+          EcallHalSetVehicleMute(1);
+          TBOX_PRINT("Airbag srs triggers ECALL, signal = %02x\r\n", airbagSingal);
+          airbagHardwareFlag = 1;
+        }
+      }
+    else if(airBagState == AIRBAG_PWM_NORMAL)
+    {
+        TBOX_PRINT("Airbag srs recover normal\r\n");
+        airbagHardwareFlag = 0;
+        EcallHalSetVehicleMute(0);
     }
 }
 
 void TaskEcallProcess( void *pvParameters )
 {
     uint16_t cycleTimeCount = 0;
-    //e-call服务初始化
     AlarmSdkInit();
+    AirbagPwmInit();
     SetSosLedState(E_SOS_LED_STATE_INIT);
     AlarmSdkSetSelfcheckState(E_SELFCHECK_RUN_INIT);
     memset( (uint8_t *)&g_SosButtonClickMsg, 0x00, sizeof( SosButtonClickMsg_t ));
 
     while(1)
     {
-#if 1
         /* 按键处理 */
         SosButtonDetection();
         /* 顶灯处理 */
@@ -624,32 +684,117 @@ void TaskEcallProcess( void *pvParameters )
         {
             if(AlarmSdkGetEcallTriggerType() == 0)
             {
+                #ifdef IIC_ENABLE
                 EcallHalRestartAmpDiagnostic();
+                #endif
             }
         }
         if(cycleTimeCount >= (1000 / ECALL_PROCESS_CYCLE_TIME))
         {
             cycleTimeCount = 0;
+            #ifdef IIC_ENABLE
             EcallHalGetAmpFaultStatus();
             EcallHalGetAmpDiagnosticStatus();
-
+    
             /* 上电自检 */
             SelfcheckCycleProcess();
             AlarmSdkSelfchackPeriSend();
-
             EcallHalRestartAmpClose();
+            #endif
         }
-        // if(cycleTimeCount >= (1000 / ECALL_PROCESS_CYCLE_TIME))
-        // {
-        //     cycleTimeCount = 0;
-        //     /* 上电自检 */
-        //     SelfcheckCycleProcess();
-        //     AlarmSdkSelfchackPeriSend();
-        // }
-
         vTaskDelay(ECALL_PROCESS_CYCLE_TIME);
-#else
-    EcallHalTestMain();
-#endif
     }
+}
+
+static void AirbagPwmInit(void)
+{
+    g_pwm.lastTick  = 0;
+    g_pwm.lastHigh  = 0;
+    g_pwm.lastLow   = 0;
+    g_pwm.okCount[0] = 0;
+    g_pwm.okCount[1] = 0;
+    g_pwm.stableState = AIRBAG_PWM_UNKNOWN;
+    g_pwm.lastLevel = 0;
+}
+
+void AirbagPwmIsrHandler(uint8_t level)
+{
+    uint32_t now;
+    uint32_t dt;
+
+    /* 只有电平变化时才视为真正的边沿 */
+    if (level != g_pwm.lastLevel)
+    {
+        now = xTaskGetTickCountFromISR();
+        //now = xTaskGetTickCount();
+        dt  = now - g_pwm.lastTick;
+        g_pwm.lastTick = now;
+
+        if (level != 0u)
+        {
+            /* 上升沿：低电平结束 → 记录低电平时间 */
+            g_pwm.lastLow = (uint16_t)dt;
+        }
+        else
+        {
+            /* 下降沿：高电平结束 → 记录高电平时间 */
+            g_pwm.lastHigh = (uint16_t)dt;
+        }
+
+        g_pwm.lastLevel = level;
+
+        /* 必须已经采到一段高、一段低，才有完整一个周期 */
+        if ((g_pwm.lastHigh > 0u) && (g_pwm.lastLow > 0u))
+        {
+            uint8_t i;
+
+            for (i = 0u; i < 2u; i++)
+            {
+                const PwmRule_t *r = &g_pwmRules[i];
+
+                if ((g_pwm.lastHigh >= r->minHigh) && (g_pwm.lastHigh <= r->maxHigh) &&
+                    (g_pwm.lastLow  >= r->minLow)  && (g_pwm.lastLow  <= r->maxLow))
+                {
+                    if (g_pwm.okCount[i] < 255u)
+                    {
+                        g_pwm.okCount[i]++;
+                    }
+                    else
+                    {
+                        /* already at max, do nothing */
+                    }
+                }
+                else
+                {
+                    g_pwm.okCount[i] = 0u;
+                }
+            }
+
+            if (g_pwm.okCount[RULE_CRASH] >= g_pwmRules[RULE_CRASH].needCycles)
+            {
+                g_pwm.stableState = AIRBAG_PWM_CRASH;
+            }
+            else if (g_pwm.okCount[RULE_NORMAL] >= g_pwmRules[RULE_NORMAL].needCycles)
+            {
+                g_pwm.stableState = AIRBAG_PWM_NORMAL;
+            }
+            else
+            {
+                g_pwm.stableState = AIRBAG_PWM_UNKNOWN;
+            }
+        }
+        else
+        {
+            /* 尚未获得完整一个高低周期：不做判定 */
+        }
+    }
+    else
+    {
+        /* 同一电平的重复中断：忽略 */
+    }
+}
+
+static AirbagPwmState_e AirbagPwmGetState(void)
+{
+    return g_pwm.stableState;
 }

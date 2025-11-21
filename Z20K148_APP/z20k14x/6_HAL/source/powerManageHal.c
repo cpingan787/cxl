@@ -50,19 +50,14 @@ static void PmKernelIntoSleepSet(void)
     FLASH_IntClear(FLASH_INT_ALL);            //清除FLASH 控制器的所有中断标志位
 
     PORT_ClearPinsInt(PORT_A, 0xFFFFFFFF);    //清除PORTA的所有中断标志
-    // SYSCTRL_DisableModule(SYSCTRL_PORTA);    //在系统控制模块中，禁止模块
 
     PORT_ClearPinsInt(PORT_B, 0xFFFFFFFF);    //清除PORTB的所有中断标志
-    // SYSCTRL_DisableModule(SYSCTRL_PORTB);    //在系统控制模块中，禁止模块
 
     PORT_ClearPinsInt(PORT_C, 0xFFFFFFFF);    //清除PORTC的所有中断标志
-    // SYSCTRL_DisableModule(SYSCTRL_PORTC);    //在系统控制模块中，禁止模块
 
     PORT_ClearPinsInt(PORT_D, 0xFFFFFFFF);    //清除PORTD的所有中断标志
-    // SYSCTRL_DisableModule(SYSCTRL_PORTD);    //在系统控制模块中，禁止模块
 
     PORT_ClearPinsInt(PORT_E, 0xFFFFFFFF);    //清除PORTE的所有中断标志
-    // SYSCTRL_DisableModule(SYSCTRL_PORTE);    //在系统控制模块中，禁止模块
 
     SYSCTRL_DisableModule(SYSCTRL_TMU);        //在系统控制模块中，禁止模块
 
@@ -89,18 +84,11 @@ static void PmKernelIntoWakeupSet(void)
     CLK_ModuleSrc(CLK_FLASH, CLK_SRC_FIRC64M);  //设置FLASH控制器的时钟源
     CLK_SetClkDivider(CLK_FLASH, CLK_DIV_8); //设置FLASH控制器时钟的分频器。FLASH控制器时钟的典型值是8Mhz
 
-      // CLK_ModuleSrc(CLK_PORTA, CLK_SRC_OSC40M);
     SYSCTRL_EnableModule(SYSCTRL_PORTA);
-    // CLK_ModuleSrc(CLK_PORTB, CLK_SRC_OSC40M);
     SYSCTRL_EnableModule(SYSCTRL_PORTB);
-    // CLK_ModuleSrc(CLK_PORTC, CLK_SRC_OSC40M);
     SYSCTRL_EnableModule(SYSCTRL_PORTC);
-    // CLK_ModuleSrc(CLK_PORTD, CLK_SRC_OSC40M);
     SYSCTRL_EnableModule(SYSCTRL_PORTD);
-      // CLK_ModuleSrc(CLK_PORTE, CLK_SRC_OSC40M);
     SYSCTRL_EnableModule(SYSCTRL_PORTE);
-
-    // SYSCTRL_EnableModule(SYSCTRL_GPIO);
 }
 
 static void PowerManageHalWakeupSourceChangeFun(uint8_t source)
@@ -172,24 +160,24 @@ void PowerManageHalSleep(void)
 {
     //清空唤醒源
     g_mcuWakeUpSoureFlag = PM_HAL_WAKEUP_SOURCE_NONE;
-    if(g_sleepmode == 1)
+    if (g_sleepmode == 1)
     {
-      while(1)
-      {
-        RtcWakeupInit(g_sleeptime);
-        PmKernelIntoSleepSet();
-        PmKernelIntoWakeupSet();
-        if(PowerManageHalGetWakeupSource() == PM_HAL_WAKEUP_SOURCE_MCURTC)
+        while(1)
         {
-          if(RtcWakeUpProcess(g_maxvoltage,g_minvoltage))
-          {
-            break;
-          }
-        }
-        else
-        {
-          break;
-        }
+            RtcWakeupInit(g_sleeptime);
+            PmKernelIntoSleepSet();
+            PmKernelIntoWakeupSet();
+            if (PowerManageHalGetWakeupSource() == PM_HAL_WAKEUP_SOURCE_MCURTC)
+            {
+                if (RtcWakeUpProcess(g_maxvoltage,g_minvoltage))
+                {
+                    break;
+                }
+            }
+            else
+            {
+                break;
+            }
       }
     }
     else

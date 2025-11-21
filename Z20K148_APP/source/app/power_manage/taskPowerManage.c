@@ -546,7 +546,7 @@ void PmDebugPrint(void)
     uint8_t pmState, wakeupSource;
     static uint8_t lastPmStat = 0;
     static uint8_t lastWakeupSource = 0;
-    static uint8_t lastWakeupCount = 0;
+    static uint32_t lastWakeupCount = 0;
 
     count++;
     PowerManageSdkGetPowerInfo(&pmState, &wakeupSource, &wakeCount);

@@ -24,6 +24,7 @@
 #include "mpuHal.h"
 #include "powerManageSdk.h"
 #include "scm_drv.h"
+#include "taskEcallProcess.h"
 /****************************** Macro Definitions ******************************/
 #define WAKEUP_SOURCE_NONE            (0U)     
 #define WAKEUP_SOURCE_CAN1            (1U)     
@@ -76,10 +77,6 @@
 #define BTN_IRQ_PIN_MUX               PTD3_GPIO
 #define BTN_IRQ_IRQN                  PORTD_IRQn
 
-#define SRS_IRQ_PORT                  PORT_D                       
-#define SRS_IRQ_PIN                   GPIO_0
-#define SRS_IRQ_PIN_MUX               PTD0_GPIO
-#define SRS_IRQ_IRQN                  PORTD_IRQn
 
 #define Gsensor_IRQ_PORT              PORT_B
 #define Gsensor_IRQ_PIN               GPIO_11
@@ -89,18 +86,6 @@
 #define SYS_ON_PORT                   PORT_D
 #define SYS_ON_PIN                    GPIO_10
 #define SYS_ON_PIN_MUX                PTD10_GPIO
-
-#define AMP_STB_PORT                  PORT_E
-#define AMP_STB_PIN                   GPIO_14
-#define AMP_STB_PIN_MUX               PTE14_GPIO
-
-#define AMP_MUTE_PORT                 PORT_E
-#define AMP_MUTE_PIN                  GPIO_0
-#define AMP_MUTE_PIN_MUX              PTE0_GPIO
-
-#define FAULTZ_DET_PORT               PORT_C
-#define FAULTZ_DET_PIN                GPIO_10
-#define FAULTZ_DET_PIN_MUX            PTC10_GPIO
 
 #define ADC_KL30_PORT                 PORT_B
 #define ADC_KL30_PIN                  GPIO_3
@@ -427,7 +412,15 @@ void PORTC_IRQHandler(void)
 *************************************************/
 void PORTD_IRQHandler(void)
 {
-
+    uint8_t srsIrqLevel = 0;
+    uint32_t intStatus;
+    intStatus = PORT_GetIntStatus(SRS_STATE_PORT, SRS_STATE_PIN);
+    if (intStatus != 0ul)
+    {
+        PORT_ClearPinInt(SRS_STATE_PORT, SRS_STATE_PIN);
+        srsIrqLevel = GPIO_ReadPinLevel(SRS_STATE_PORT,SRS_STATE_PIN);
+        AirbagPwmIsrHandler(srsIrqLevel);
+    }
 }
 
 /*************************************************
@@ -884,17 +877,16 @@ void PeripheralHal1msTimerProcess(void)
 void TIM1_Init(void)
 {
     SYSCTRL_DisableModule(PERIPHERAL_TIMER_SYS); 
-    CLK_ModuleSrc(PERIPHERAL_TIMER_CLK, CLK_SRC_PLL);        						//Select HSOSC as clock source for TIM module
-    CLK_SetClkDivider(PERIPHERAL_TIMER_CLK, CLK_DIV_12);        					//Set TIM clock prescaler, cannot be higher than 1/4 of core clock
-    SYSCTRL_ResetModule(PERIPHERAL_TIMER_SYS);            							//Reset TIM module in system control module
-    SYSCTRL_EnableModule(PERIPHERAL_TIMER_SYS);            							//Enable TIM module in system control module
+    CLK_ModuleSrc(PERIPHERAL_TIMER_CLK, CLK_SRC_PLL);
+    CLK_SetClkDivider(PERIPHERAL_TIMER_CLK, CLK_DIV_12);
+    SYSCTRL_ResetModule(PERIPHERAL_TIMER_SYS);
+    SYSCTRL_EnableModule(PERIPHERAL_TIMER_SYS);
 
     TIM_CountingModeConfig(PERIPHERAL_TIMER_INDEX, TIM_COUNTING_UP);    			//Counter counting up mode
     TIM_InitCounter(PERIPHERAL_TIMER_INDEX, 0x0000, 10000);    						//Set counter initial value and modulus
 
     TIM_IntMask(PERIPHERAL_TIMER_INDEX, TIM_INT_ALL, MASK);    						//Disable all interrupts of the module
     TIM_IntClear(PERIPHERAL_TIMER_INDEX, TIM_INT_ALL);            					//Clear all interrupt flags of the module
-
 	TIM_InstallCallBackFunc(PERIPHERAL_TIMER_INDEX, TIM_INT_TO, Timer1Handler);    	//Load TIM_INT_TO interrupt function
     TIM_IntMask(PERIPHERAL_TIMER_INDEX, TIM_INT_TO, UNMASK);                    	//Enable TIM_INT_TO interrupt
 
@@ -1655,7 +1647,7 @@ static void IrqPinInit(void)
 	PORT_PinmuxConfig(GSM_IRQ_PORT, GSM_IRQ_PIN, GSM_IRQ_PIN_MUX);
 	GPIO_SetPinDir(GSM_IRQ_PORT, GSM_IRQ_PIN, GPIO_INPUT);
 	// PORT_PullConfig(GSM_IRQ_PORT, GSM_IRQ_PIN, PORT_PULL_DOWN);
-	PORT_PinIntConfig(GSM_IRQ_PORT, GSM_IRQ_PIN, PORT_ISF_INT_RISING_EDGE);
+	PORT_PinIntConfig(GSM_IRQ_PORT, GSM_IRQ_PIN, PORT_ISF_INT_BOTH_EDGE);
 	INT_SetPriority(GSM_IRQ_IRQN, 0x3);
 	INT_EnableIRQ(GSM_IRQ_IRQN);
 	// PORT_InstallCallbackFunc();

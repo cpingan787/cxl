@@ -269,7 +269,7 @@ static void stack_backtrace(uint32_t *sp)
     uint32_t current_sp = (uint32_t)sp;
     // 第一层返回地址是LR（当前函数返回至上一层的地址）
     uint32_t ret_addr = lr;
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 3; i++) {
         TBOX_PRINT("  Frame %d: Return Addr = 0x%08X\r\n", i, ret_addr);
 
         // 2. 计算下一层栈指针（SP = 当前SP + 已使用的栈空间）

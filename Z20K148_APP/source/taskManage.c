@@ -572,7 +572,7 @@ static void CreateAppTasks(void)
     xTaskCreateStatic(TaskEcuDiagnostic, "diagnostic_task", TASK_DIAGNOSTIC_STATIC_SIZE, NULL, UDS_DIG_TASK_PRIORITY, m_diagnosticTaskStack,&m_diagnosticTaskBuffer);
     xTaskCreateStatic(canPeriodTaskMain, "canPeriod_task", TASK_CAN_PERIOD_STATIC_SIZE, NULL, CAN_TX_CYCLE_TASK_PRIORITY, m_canPeriodTaskStack,&m_canPeriodTaskBuffer);
     xTaskCreateStatic(TaskDtcProcess, "dtc_task", TASK_DIAGNOSTIC_DTC_STATIC_SIZE, NULL, UDS_DIG_TASK_PRIORITY, m_dtcTaskStack,&m_dtcTaskBuffer);  
-    //xTaskCreateStatic(TaskEcallProcess, "ecall_task", TASK_ECALL_STATIC_SIZE, NULL, UDS_DIG_TASK_PRIORITY, m_ecallTaskStack,&m_ecallTaskBuffer);
+    xTaskCreateStatic(TaskEcallProcess, "ecall_task", TASK_ECALL_STATIC_SIZE, NULL, UDS_DIG_TASK_PRIORITY, m_ecallTaskStack,&m_ecallTaskBuffer);
     xTaskCreateStatic(RemoteDiagnosticTaskMain, "remoteDiagnostic_task",TASK_REMOTE_DIAGNOSTIC_STATIC_SIZE,NULL,REMOTE_CONTROL_TASK_PRIORITY,m_remoteDiagnostic1TaskStack,&m_remoteDiagnostic1TaskBuffer);
     xTaskCreateStatic(TaskAppVehicleRemoteControl, "remoteControl_task",TASK_REMOTE_CONTROL_STATIC_SIZE,NULL,REMOTE_CONTROL_TASK_PRIORITY,m_remoteControlTaskStack,&m_remoteControlTaskBuffer);
 }
@@ -595,7 +595,7 @@ static int16_t  TasksManageInit(void)
     CanHalInit(g_globalCanfdConfig,sizeof(g_globalCanfdConfig)/sizeof(g_globalCanfdConfig[0]));    
     //BatteryHalInit();
     //BleHalInit();
-    //EcallHalInit();
+    EcallHalInit();
     MpuHalInit();
     TimerHalInit(); 
     //HsmHalInit();

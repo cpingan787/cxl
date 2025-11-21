@@ -80,10 +80,11 @@ void SPIx_Init(void)
 
 
     /* ***** 初始化SPI模块 ***** */
-    SYSCTRL_ResetModule(HSE_SPI_TYPE);            //在系统控制模块中，复位SPIx模块
+    SYSCTRL_DisableModule(HSE_SPI_TYPE);
     CLK_ModuleSrc(HSE_SPI_PCLK, CLK_SRC_OSC40M);        //SPIx模块的时钟源选择外部高速晶振
     CLK_SetClkDivider(HSE_SPI_PCLK, CLK_DIV_1);        //设置SPIx时钟的预分频器。模块的时钟不能高于CPU的总线时钟
-    SYSCTRL_EnableModule(HSE_SPI_TYPE);            //在系统控制模块中，使能SPIx模块
+    SYSCTRL_ResetModule(HSE_SPI_TYPE);
+    SYSCTRL_EnableModule(HSE_SPI_TYPE);
 
     // 配置 SPIx模块
     SPI_Init(HSE_SPI_INDEX, &SPI_MasterConfig);        //把SPI配置参数写入SPIx的寄存器
