@@ -193,7 +193,7 @@ typedef enum
 {
     E_BookMode_NotBooking = 0x00,        /* 0x0 = Not booking */
     E_BookMode_Cycle_NotStarted = 0x01,  /* 0x1 = Not started in cycle mode */
-    E_BookMode_Cycle_InTime = 0x02,      /* 0x2 = In the time of cycle mode */
+    E_BookMode_Cycle_InTime = 0x00,      /* 0x2 = In the time of cycle mode */
     E_BookMode_Signal_NotStarted = 0x03, /* 0x3 = Not started in signal mode */
     E_BookMode_Signal_InTime = 0x04,     /* 0x4 = In the time of signal mode */
     E_BookMode_Single_End = 0x05,        /* 0x5 = End in single mode */
@@ -484,26 +484,38 @@ static int16_t CanPeriodMessage3C5(uint8_t *pCanData)
     if (pCanData != NULL)
     {
         memset(pCanData, 0x00, 8);
-        // Get for interface
         const ftyCircleDataToMcu_t *ftyData = StateSyncGetFtyData();
+        
         if (ftyData != NULL)
         {
-            g_tbox11Message.DetailInfo.TEL_NaviPstVD = 1U;
-
             const GpsPosition_t *gpsPos = &ftyData->gpsPosition;
 
-            g_tbox11Message.DetailInfo.TEL_Latitude = gpsPos->latitude;
-            g_tbox11Message.DetailInfo.TEL_Longitude = gpsPos->longitude;
+            if (gpsPos->fixState > 0)
+            {
+                g_tbox11Message.DetailInfo.TEL_NaviPstVD = 1U;
+            }
+            else
+            {
+                g_tbox11Message.DetailInfo.TEL_NaviPstVD = 0U;
+            }
+
+            uint32_t lat_abs_1e6 = gpsPos->latitude / 10;
+            uint32_t lon_abs_1e6 = gpsPos->longitude / 10;
+
+            int32_t lat_signed = (gpsPos->northSouth == 0) ? (int32_t)lat_abs_1e6 : -(int32_t)lat_abs_1e6;
+            int32_t lon_signed = (gpsPos->eastWest == 0)   ? (int32_t)lon_abs_1e6 : -(int32_t)lon_abs_1e6;
+
+            g_tbox11Message.DetailInfo.TEL_Latitude  = (uint32_t)lat_signed & 0x0FFFFFFFU;
+            g_tbox11Message.DetailInfo.TEL_Longitude = (uint32_t)lon_signed & 0x0FFFFFFFU;
         }
         else
         {
+
             g_tbox11Message.DetailInfo.TEL_NaviPstVD = 0U;
-            g_tbox11Message.DetailInfo.TEL_Latitude = 0U;
+            g_tbox11Message.DetailInfo.TEL_Latitude  = 0U;
             g_tbox11Message.DetailInfo.TEL_Longitude = 0U;
         }
-        // g_tbox11Message.DetailInfo.TEL_Latitude = 1U;
-        // g_tbox11Message.DetailInfo.TEL_Longitude = 1U;
-        // g_tbox11Message.DetailInfo.TEL_NaviPstVD = 1U;
+
         memcpy(pCanData, &g_tbox11Message.data[0], sizeof(g_tbox11Message.data));
     }
     else

@@ -55,7 +55,9 @@ typedef struct
 } PwmRuntime_t;
 
 /****************************** Global Variables ******************************/
+#if(0)
 static SosLledState_e g_SosLedState;        
+#endif
 static SosButtonClickMsg_t g_SosButtonClickMsg;
 #ifdef IIC_ENABLE
 static uint8_t selfCheckStatusPrintFlag = 0;
@@ -81,6 +83,7 @@ static void AirbagPwmInit(void);
 static AirbagPwmState_e AirbagPwmGetState(void);
 
 /****************************** Public Function Implementations ***************/
+#if(0)
 /** ****************************************************************************
 * @remarks       static void SetSosLedState( ecall_led_flash_e st )
 * @brief         设置SOS led灯显示的状态
@@ -346,6 +349,7 @@ static void SosButtonDetection( void )
         }
     }
 }
+#endif
 #ifdef IIC_ENABLE
 /** ****************************************************************************
 * @remarks       static uint32_t HardwareSelfcheckResult( void )
@@ -636,7 +640,7 @@ void AirbagSingleProcess(void)
     {
         if(airbagCanFlag == 1)
         {
-            TBOX_PRINT("Airbag can recover normal\r\n");
+            //TBOX_PRINT("Airbag can recover normal\r\n");
             airbagCanFlag = 0;
         }
     }
@@ -653,9 +657,8 @@ void AirbagSingleProcess(void)
       }
     else if(airBagState == AIRBAG_PWM_NORMAL)
     {
-        TBOX_PRINT("Airbag srs recover normal\r\n");
+        //TBOX_PRINT("Airbag srs recover normal\r\n");
         airbagHardwareFlag = 0;
-        EcallHalSetVehicleMute(0);
     }
 }
 
@@ -664,16 +667,18 @@ void TaskEcallProcess( void *pvParameters )
     uint16_t cycleTimeCount = 0;
     AlarmSdkInit();
     AirbagPwmInit();
+#if(0)
     SetSosLedState(E_SOS_LED_STATE_INIT);
+#endif
     AlarmSdkSetSelfcheckState(E_SELFCHECK_RUN_INIT);
     memset( (uint8_t *)&g_SosButtonClickMsg, 0x00, sizeof( SosButtonClickMsg_t ));
 
     while(1)
     {
         /* 按键处理 */
-        SosButtonDetection();
+        // SosButtonDetection();
         /* 顶灯处理 */
-        SosLedControlProcess();
+        //SosLedControlProcess();
         /* ecall */
         AlarmSdkCycleProcess();
         /* 气囊信号处理 */
@@ -772,11 +777,11 @@ void AirbagPwmIsrHandler(uint8_t level)
 
             if (g_pwm.okCount[RULE_CRASH] >= g_pwmRules[RULE_CRASH].needCycles)
             {
-                g_pwm.stableState = AIRBAG_PWM_CRASH;
+                g_pwm.stableState = AIRBAG_PWM_NORMAL;
             }
             else if (g_pwm.okCount[RULE_NORMAL] >= g_pwmRules[RULE_NORMAL].needCycles)
             {
-                g_pwm.stableState = AIRBAG_PWM_NORMAL;
+                g_pwm.stableState = AIRBAG_PWM_CRASH;
             }
             else
             {

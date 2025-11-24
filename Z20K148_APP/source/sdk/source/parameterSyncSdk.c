@@ -263,7 +263,10 @@ static int16_t ParameterSyncResponseGetParamPackage(MpuHalDataPack_t *recvDataPa
         case E_ParamId_SW_Version: // C100
             ProjectConfigSiRunSwVersion_C100(pWrite + 2, &paramLenth);
             break;
-
+        
+        case E_ParamId_ParatNumber: // F187_cxl
+            ProjectConfigGetGacEcuPartNumber_F187(pWrite + 2, &paramLenth);
+            break;
         default:
             if (g_mcuParameterReadCbFunc != NULL)
             {

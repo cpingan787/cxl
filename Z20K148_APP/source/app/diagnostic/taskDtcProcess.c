@@ -144,7 +144,7 @@ const static DtcConfig_t g_dtcList[] =
         {0xB20B08, 0xB320B08, (10 / DTC_PROCESS_CYCLE_TIME), 1, -1, 40, NULL, E_DTC_GROUP_KL15_DEDECT}, // E_DTC_ITEM_MPU_ETH_COMM_FAULT         // B320B08: 以太网通信错误 (MPU)
         {0xB21296, 0xB321296, (10 / DTC_PROCESS_CYCLE_TIME), 1, -1, 40, NULL, E_DTC_GROUP_KL15_DEDECT}, // E_DTC_ITEM_MPU_DDR_FAULT              // B321296: 模组 DDR 故障 (MPU)
 
-        {0xB21198, 0xB321198, (10 / DTC_PROCESS_CYCLE_TIME), 1, -1, 40, NULL, E_DTC_GROUP_KL15_DEDECT}, // E_DTC_ITEM_MCU_OVER_TEMPERATURE       // B321198: MCU 过温
+        //{0xB21198, 0xB321198, (10 / DTC_PROCESS_CYCLE_TIME), 1, -1, 40, NULL, E_DTC_GROUP_KL15_DEDECT}, // E_DTC_ITEM_MCU_OVER_TEMPERATURE       // B321198: MCU 过温
         {0xB20707, 0xB320707, (10 / DTC_PROCESS_CYCLE_TIME), 1, -1, 40, NULL, E_DTC_GROUP_KL15_DEDECT}, // E_DTC_ITEM_MPU_BCALL_KEY_STUCK        // B320707: B-Call 按键卡滞 (MPU)
         {0xB20807, 0xB320807, (10 / DTC_PROCESS_CYCLE_TIME), 1, -1, 40, NULL, E_DTC_GROUP_KL15_DEDECT}, // E_DTC_ITEM_MPU_ECALL_KEY_STUCK        // B320807: E-Call 按键卡滞 (MPU)
 
@@ -688,92 +688,161 @@ static void DtcNormalProcess(void)
 static void DtcInitialize(void)
 {
   uint32_t i;
-  // DtcStore_t dtcTem;
   DtcStatusBit_t *pStatusBit;
   uint32_t itemNum = sizeof(g_dtcList) / sizeof(g_dtcList[0]);
+  uint8_t needSave = 0; // 标记是否需要写Flash
 
   FlashDtcRead((uint8_t *)g_dtcState, sizeof(g_dtcState));
-  // TBOX_PRINT("DTC buffer size is %d\r\n",sizeof(g_dtcState));
+
   for (i = 0; i < itemNum; i++)
   {
-    // WorkFlashWriteVehicleDTCReadByIndex(i,1,&dtcTem);
-
+    // 1. 驾驶循环计数 +1
     g_dtcState[i].currentOperationCycle++;
-    // g_dtcState[i].DTCAgingCounter = dtcTem.AgingCounter;
 
-    // g_dtcState[i].confirmStage = (DtcConfirmStage_e)dtcTem.confirmStage;
-    // g_dtcState[i].failedOperationCycle = dtcTem.faildOperationCycle;
+    pStatusBit = (DtcStatusBit_t *)&g_dtcState[i].dtcStatus;
+    
+    // 2. 记录上个循环的结果
+    g_dtcState[i].testFailedLastOperationCycle = pStatusBit->testFailedThisOperationCycle;
+
+    // 3. === 真正的老化逻辑 (Aging Logic) ===
+    if (pStatusBit->confirmedDTC == 1)
+    {
+        // 如果上一个循环测试通过（无故障）
+        if (g_dtcState[i].testFailedLastOperationCycle == 0)
+        {
+            // 【修复】统一使用 extendData.DtcAgingCounter
+            if (g_dtcState[i].extendData.DtcAgingCounter < 40)
+            {
+                g_dtcState[i].extendData.DtcAgingCounter++;
+                needSave = 1;
+            }
+
+            // 检查是否达到 40 次
+            if (g_dtcState[i].extendData.DtcAgingCounter >= 40)
+            {
+                // 1. 清除 Confirmed 位
+                pStatusBit->confirmedDTC = 0;
+                // 2. 老化计数器清零
+                g_dtcState[i].extendData.DtcAgingCounter = 0;
+                // 3. 已老去计数器 +1
+                if (g_dtcState[i].extendData.DtcAgedCounter < 0xFF) {
+                    g_dtcState[i].extendData.DtcAgedCounter++;
+                }
+                needSave = 1;
+            }
+        }
+        else
+        {
+            // 上个循环坏了，老化清零
+            if(g_dtcState[i].extendData.DtcAgingCounter != 0) {
+                g_dtcState[i].extendData.DtcAgingCounter = 0;
+                needSave = 1;
+            }
+        }
+    }
+    else
+    {
+        // 非Confirmed状态，计数器保持0
+        if(g_dtcState[i].extendData.DtcAgingCounter != 0) {
+            g_dtcState[i].extendData.DtcAgingCounter = 0;
+            needSave = 1;
+        }
+    }
+
+    // 4. === 【关键】新循环开始，清除锁存标志 ===
+    // 允许新的点火周期再次计数
+    g_dtcState[i].extendData.Bit1CycleFlag = 0;
+
+    // 5. 清除状态位
     g_dtcState[i].faultCount = 0;
     g_dtcState[i].faultFlag = 0;
     g_dtcState[i].testResult = DTC_TEST_RESULT_NOT_COMPLETE;
     g_dtcState[i].timeCount = 0;
     g_dtcState[i].faultStateChange = 0;
-    // g_dtcState[i].TripCounter = dtcTem.TripCounter;
-    pStatusBit = (DtcStatusBit_t *)&g_dtcState[i].dtcStatus;
-    g_dtcState[i].testFailedLastOperationCycle = pStatusBit->testFailedThisOperationCycle;
-    // snapshot data
-    // memcpy(&g_dtcState[i].snapshotData,&dtcTem.snapshotData,sizeof(dtcTem.snapshotData));
-    // extended data //whl 20200107
-    // memcpy(&g_dtcState[i].extendData,&dtcTem.extendData,sizeof(dtcTem.extendData));
-    //
-    /*if(g_dtcState[i].dtcStatus.bitField.pendingDTC)//pending dtc bit
-    {
-      if( g_dtcState[i].TripCounter<g_dtcList[i].TripCounterFaultLimit)
-      {
-        g_dtcState[i].TripCounter++;
-      }
-    }*/
-
-    // g_dtcState[i].dtcStatus = dtcTem.dtcStatus.u8Field;
 
     pStatusBit->testFailedThisOperationCycle = 0;
     pStatusBit->testFailed = 0;
-#if (!DTC_STATUS_BIT4_ENABLE)
-    pStatusBit->testNotCompletedSinceLastClear = 0;
-#endif
-
-#if (!DTC_STATUS_BIT5_ENABLE)
-    pStatusBit->testFailedSinceLastClear = 0;
-#endif
-
-#if (DTC_STATUS_BIT6_ENABLE)
-    pStatusBit->testNotCompletedThisOperationCycle = 1;
-#else
-    pStatusBit->testNotCompletedThisOperationCycle = 0;
-#endif
-    pStatusBit->warningIndicatorRequested = 0;
-
+    
     if (!g_dtcState[i].testFailedLastOperationCycle)
     {
       pStatusBit->pendingDTC = 0;
-      if (g_dtcState[i].DTCAgingCounter < g_dtcList[i].DTCAgingFaultLimit)
-      {
-        g_dtcState[i].DTCAgingCounter++;
-      }
     }
-    // if(E_DTC_ITEM_NODE_MISSING_120==i)
-    //{
-    //	TBOX_PRINT("120-DTCAgingCounter %x \r\n",g_dtcState[E_DTC_ITEM_NODE_MISSING_120].DTCAgingCounter);
-    // }
+    
+    // ... (保留原有的宏定义清除逻辑) ...
+    #if (!DTC_STATUS_BIT4_ENABLE)
+    pStatusBit->testNotCompletedSinceLastClear = 0;
+    #endif
+    #if (!DTC_STATUS_BIT5_ENABLE)
+    pStatusBit->testFailedSinceLastClear = 0;
+    #endif
+    #if (DTC_STATUS_BIT6_ENABLE)
+    pStatusBit->testNotCompletedThisOperationCycle = 1;
+    #else
+    pStatusBit->testNotCompletedThisOperationCycle = 0;
+    #endif
+    pStatusBit->warningIndicatorRequested = 0;
+  }
+
+  if(needSave)
+  {
+      DtcSaveToWorkFlash();
   }
 }
 
 static void DtcAwakeInitialize(void)
 {
   uint32_t i;
-  // DtcStore_t dtcTem;
   DtcStatusBit_t *pStatusBit;
-  //  uint32_t size = sizeof(g_dtcState);
   uint32_t itemNum = sizeof(g_dtcList) / sizeof(g_dtcList[0]);
+  uint8_t needSave = 0;
 
   for (i = 0; i < itemNum; i++)
   {
-
     g_dtcState[i].currentOperationCycle++;
-    // g_dtcState[i].DTCAgingCounter = dtcTem.AgingCounter;
+    
+    pStatusBit = (DtcStatusBit_t *)&g_dtcState[i].dtcStatus;
+    g_dtcState[i].testFailedLastOperationCycle = pStatusBit->testFailedThisOperationCycle;
 
-    // g_dtcState[i].confirmStage = (DtcConfirmStage_e)dtcTem.confirmStage;
-    // g_dtcState[i].failedOperationCycle = dtcTem.faildOperationCycle;
+    // === 老化逻辑 (同DtcInitialize) ===
+    if (pStatusBit->confirmedDTC == 1)
+    {
+        if (g_dtcState[i].testFailedLastOperationCycle == 0)
+        {
+            if (g_dtcState[i].extendData.DtcAgingCounter < 40)
+            {
+                g_dtcState[i].extendData.DtcAgingCounter++;
+                needSave = 1;
+            }
+            if (g_dtcState[i].extendData.DtcAgingCounter >= 40)
+            {
+                pStatusBit->confirmedDTC = 0;
+                g_dtcState[i].extendData.DtcAgingCounter = 0;
+                if (g_dtcState[i].extendData.DtcAgedCounter < 0xFF) {
+                    g_dtcState[i].extendData.DtcAgedCounter++;
+                }
+                needSave = 1;
+            }
+        }
+        else
+        {
+            if(g_dtcState[i].extendData.DtcAgingCounter != 0) {
+                g_dtcState[i].extendData.DtcAgingCounter = 0;
+                needSave = 1;
+            }
+        }
+    }
+    else
+    {
+        if(g_dtcState[i].extendData.DtcAgingCounter != 0) {
+            g_dtcState[i].extendData.DtcAgingCounter = 0;
+            needSave = 1;
+        }
+    }
+
+    // === 清除本周期标志 ===
+    g_dtcState[i].extendData.Bit1CycleFlag = 0;
+
+    // === 常规清除 ===
     g_dtcState[i].faultCount = 0;
     if (g_dtcList[i].pDependce != NULL)
     {
@@ -782,71 +851,88 @@ static void DtcAwakeInitialize(void)
     g_dtcState[i].testResult = DTC_TEST_RESULT_NOT_COMPLETE;
     g_dtcState[i].timeCount = 0;
     g_dtcState[i].faultStateChange = 0;
-    // g_dtcState[i].TripCounter = dtcTem.TripCounter;
-    pStatusBit = (DtcStatusBit_t *)&g_dtcState[i].dtcStatus;
-    g_dtcState[i].testFailedLastOperationCycle = pStatusBit->testFailedThisOperationCycle;
-    // snapshot data
-    // memcpy(&g_dtcState[i].snapshotData,&dtcTem.snapshotData,sizeof(dtcTem.snapshotData));
-    // extended data //whl 20200107
-    // memcpy(&g_dtcState[i].extendData,&dtcTem.extendData,sizeof(dtcTem.extendData));
-    //
-    /*if(g_dtcState[i].dtcStatus.bitField.pendingDTC)//pending dtc bit
-    {
-      if( g_dtcState[i].TripCounter<g_dtcList[i].TripCounterFaultLimit)
-      {
-        g_dtcState[i].TripCounter++;
-      }
-    }*/
-
-    // g_dtcState[i].dtcStatus = dtcTem.dtcStatus.u8Field;
 
     pStatusBit->testFailedThisOperationCycle = 0;
     pStatusBit->testFailed = 0;
-#if (!DTC_STATUS_BIT4_ENABLE)
-    pStatusBit->testNotCompletedSinceLastClear = 0;
-#endif
-
-#if (!DTC_STATUS_BIT5_ENABLE)
-    pStatusBit->testFailedSinceLastClear = 0;
-#endif
-
-#if (DTC_STATUS_BIT6_ENABLE)
-    pStatusBit->testNotCompletedThisOperationCycle = 1;
-#else
-    pStatusBit->testNotCompletedThisOperationCycle = 0;
-#endif
-    pStatusBit->warningIndicatorRequested = 0;
-
     if (!g_dtcState[i].testFailedLastOperationCycle)
     {
       pStatusBit->pendingDTC = 0;
-      if (g_dtcState[i].DTCAgingCounter < g_dtcList[i].DTCAgingFaultLimit)
-      {
-        g_dtcState[i].DTCAgingCounter++;
-      }
     }
-    // if(E_DTC_ITEM_NODE_MISSING_120==i)
-    //{
-    //	TBOX_PRINT("120-DTCAgingCounter %x \r\n",g_dtcState[E_DTC_ITEM_NODE_MISSING_120].DTCAgingCounter);
-    // }
+
+    #if (!DTC_STATUS_BIT4_ENABLE)
+    pStatusBit->testNotCompletedSinceLastClear = 0;
+    #endif
+    #if (!DTC_STATUS_BIT5_ENABLE)
+    pStatusBit->testFailedSinceLastClear = 0;
+    #endif
+    #if (DTC_STATUS_BIT6_ENABLE)
+    pStatusBit->testNotCompletedThisOperationCycle = 1;
+    #else
+    pStatusBit->testNotCompletedThisOperationCycle = 0;
+    #endif
+    pStatusBit->warningIndicatorRequested = 0;
+  }
+
+  if(needSave)
+  {
+      DtcSaveToWorkFlash();
   }
 }
 
 static void DtcKl15OnInitialize(void)
 {
   uint32_t i;
-  // DtcStore_t dtcTem;
   DtcStatusBit_t *pStatusBit;
-  //  uint32_t size = sizeof(g_dtcState);
   uint32_t itemNum = sizeof(g_dtcList) / sizeof(g_dtcList[0]);
+  uint8_t needSave = 0;
 
   for (i = 0; i < itemNum; i++)
   {
     g_dtcState[i].currentOperationCycle++;
-    // g_dtcState[i].DTCAgingCounter = dtcTem.AgingCounter;
+    
+    pStatusBit = (DtcStatusBit_t *)&g_dtcState[i].dtcStatus;
+    g_dtcState[i].testFailedLastOperationCycle = pStatusBit->testFailedThisOperationCycle;
 
-    // g_dtcState[i].confirmStage = (DtcConfirmStage_e)dtcTem.confirmStage;
-    // g_dtcState[i].failedOperationCycle = dtcTem.faildOperationCycle;
+    // === 老化逻辑 ===
+    if (pStatusBit->confirmedDTC == 1)
+    {
+        if (g_dtcState[i].testFailedLastOperationCycle == 0)
+        {
+            if (g_dtcState[i].extendData.DtcAgingCounter < 40)
+            {
+                g_dtcState[i].extendData.DtcAgingCounter++;
+                needSave = 1;
+            }
+            if (g_dtcState[i].extendData.DtcAgingCounter >= 40)
+            {
+                pStatusBit->confirmedDTC = 0;
+                g_dtcState[i].extendData.DtcAgingCounter = 0;
+                if (g_dtcState[i].extendData.DtcAgedCounter < 0xFF) {
+                    g_dtcState[i].extendData.DtcAgedCounter++;
+                }
+                needSave = 1;
+            }
+        }
+        else
+        {
+            if(g_dtcState[i].extendData.DtcAgingCounter != 0) {
+                g_dtcState[i].extendData.DtcAgingCounter = 0;
+                needSave = 1;
+            }
+        }
+    }
+    else
+    {
+        if(g_dtcState[i].extendData.DtcAgingCounter != 0) {
+            g_dtcState[i].extendData.DtcAgingCounter = 0;
+            needSave = 1;
+        }
+    }
+
+    // === 清除本周期标志 ===
+    g_dtcState[i].extendData.Bit1CycleFlag = 0;
+
+    // === 常规清除 ===
     g_dtcState[i].faultCount = 0;
     if (g_dtcList[i].pDependce != NULL)
     {
@@ -855,53 +941,31 @@ static void DtcKl15OnInitialize(void)
     g_dtcState[i].testResult = DTC_TEST_RESULT_NOT_COMPLETE;
     g_dtcState[i].timeCount = 0;
     g_dtcState[i].faultStateChange = 0;
-    // g_dtcState[i].TripCounter = dtcTem.TripCounter;
-    pStatusBit = (DtcStatusBit_t *)&g_dtcState[i].dtcStatus;
-    g_dtcState[i].testFailedLastOperationCycle = pStatusBit->testFailedThisOperationCycle;
-    // snapshot data
-    // memcpy(&g_dtcState[i].snapshotData,&dtcTem.snapshotData,sizeof(dtcTem.snapshotData));
-    // extended data //whl 20200107
-    // memcpy(&g_dtcState[i].extendData,&dtcTem.extendData,sizeof(dtcTem.extendData));
-    //
-    /*if(g_dtcState[i].dtcStatus.bitField.pendingDTC)//pending dtc bit
-    {
-      if( g_dtcState[i].TripCounter<g_dtcList[i].TripCounterFaultLimit)
-      {
-        g_dtcState[i].TripCounter++;
-      }
-    }*/
-
-    // g_dtcState[i].dtcStatus = dtcTem.dtcStatus.u8Field;
 
     pStatusBit->testFailedThisOperationCycle = 0;
     pStatusBit->testFailed = 0;
-#if (!DTC_STATUS_BIT4_ENABLE)
-    pStatusBit->testNotCompletedSinceLastClear = 0;
-#endif
-
-#if (!DTC_STATUS_BIT5_ENABLE)
-    pStatusBit->testFailedSinceLastClear = 0;
-#endif
-
-#if (DTC_STATUS_BIT6_ENABLE)
-    pStatusBit->testNotCompletedThisOperationCycle = 1;
-#else
-    pStatusBit->testNotCompletedThisOperationCycle = 0;
-#endif
-    pStatusBit->warningIndicatorRequested = 0;
-
     if (!g_dtcState[i].testFailedLastOperationCycle)
     {
       pStatusBit->pendingDTC = 0;
-      if (g_dtcState[i].DTCAgingCounter < g_dtcList[i].DTCAgingFaultLimit)
-      {
-        g_dtcState[i].DTCAgingCounter++;
-      }
     }
-    // if(E_DTC_ITEM_NODE_MISSING_120==i)
-    //{
-    //	TBOX_PRINT("120-DTCAgingCounter %x \r\n",g_dtcState[E_DTC_ITEM_NODE_MISSING_120].DTCAgingCounter);
-    // }
+
+    #if (!DTC_STATUS_BIT4_ENABLE)
+    pStatusBit->testNotCompletedSinceLastClear = 0;
+    #endif
+    #if (!DTC_STATUS_BIT5_ENABLE)
+    pStatusBit->testFailedSinceLastClear = 0;
+    #endif
+    #if (DTC_STATUS_BIT6_ENABLE)
+    pStatusBit->testNotCompletedThisOperationCycle = 1;
+    #else
+    pStatusBit->testNotCompletedThisOperationCycle = 0;
+    #endif
+    pStatusBit->warningIndicatorRequested = 0;
+  }
+
+  if(needSave)
+  {
+      DtcSaveToWorkFlash();
   }
 }
 
@@ -1831,60 +1895,24 @@ static void SetDTCExtendedData(DtcState_t *pDtcState)
 
   if (pStatusBit->testFailed == 1)
   {
-    // === 故障发生 (Test Failed == 1) 时的所有逻辑 ===
 
-    // 1. 更新 FaultOccurrenceCounter (您的原始逻辑)
-    // (仅在 testFailed 从 0 -> 1 跳变时 +1)
     if (pDtcState->extendData.Bit1CycleFlag == 0)
     {
-      pDtcState->extendData.Bit1CycleFlag = 1;
+      pDtcState->extendData.Bit1CycleFlag = 1; 
       if (pDtcState->extendData.FaultOccurrenceCounter < 0xFF)
       {
         pDtcState->extendData.FaultOccurrenceCounter++;
       }
     }
 
-    // 2. 重置 Aging Counter (您的原始逻辑)
-    // 只要本周期测试失败，老化计数器立即清零
+
     pDtcState->extendData.DtcAgingCounter = 0;
 
-    // 3. === 关键修复 ===
-    // 只要测试失败，DTC 就必须被“确认” (confirmedDTC = 1)
-    // 否则，当 testFailed 变回 0 时，Aging 永远无法开始计数
     pStatusBit->confirmedDTC = 1;
   }
   else
   {
-    // === 故障恢复 (Test Failed == 0) 时的所有逻辑 ===
 
-    // 1. 重置 Occurrence 标志位 (您的原始逻辑)
-    // (以便下次故障时可以再次计数)
-    pDtcState->extendData.Bit1CycleFlag = 0;
-
-    // 2. 执行 Aging (老化) 逻辑 (您的原始逻辑)
-    // 只有 "已确认的DTC" (confirmedDTC == 1) 才需要被老化
-    if (pStatusBit->confirmedDTC == 1)
-    {
-      // 在每个 "测试通过" 的循环中 +1，直到 40 (0x28)
-      if (pDtcState->extendData.DtcAgingCounter < 0x28)
-      {
-        pDtcState->extendData.DtcAgingCounter++;
-
-        // 检查是否 *刚刚* 达到 40
-        if (pDtcState->extendData.DtcAgingCounter == 0x28)
-        {
-          // 成功老化! "已老去计数器" (Aged Counter) +1
-          pDtcState->extendData.DtcAgingCounter = 0;
-          if (pDtcState->extendData.DtcAgedCounter < 0xFF)
-          {
-            pDtcState->extendData.DtcAgedCounter++;
-          }
-
-          // 老化成功后，清除 "Confirmed" 状态位 (DTC 被治愈)
-          pStatusBit->confirmedDTC = 0;
-        }
-      }
-    }
   }
 }
 

@@ -3038,8 +3038,11 @@ static void RemoteControlNormalPackReqCanSignal(void)
 
                     case CMD_AC_TEMP_SET_E:
                         RemoteCtrlSignalValSet(g_remoteControlCanBuf,
-                                            TEL_HVACF_TempSelectManualReq,
-                                            (g_remoteControlParamValue > 0) ? g_remoteControlParamValue : 0);
+                                            TEL_HVACF_DrTempSelectReq,
+                                            g_remoteControlParamValue);
+                        /* 温度指令下强制单/三区关闭 */
+                        RemoteCtrlSignalValSet(g_remoteControlCanBuf, TEL_HVACF_DualReq,        0);
+                        RemoteCtrlSignalValSet(g_remoteControlCanBuf, TEL_HVACF_TripleZoneReq,  0);
                         break;
 
                     case CMD_AC_AIR_CAL_REQ_E:
@@ -3083,11 +3086,8 @@ static void RemoteControlNormalPackReqCanSignal(void)
                     
                     case CMD_AC_TEMP_AUTO_SET_E:
                         RemoteCtrlSignalValSet(g_remoteControlCanBuf,
-                                            TEL_HVACF_DrTempSelectReq,
-                                            g_remoteControlParamValue);
-                        /* 温度指令下强制单/三区关闭 */
-                        RemoteCtrlSignalValSet(g_remoteControlCanBuf, TEL_HVACF_DualReq,        0);
-                        RemoteCtrlSignalValSet(g_remoteControlCanBuf, TEL_HVACF_TripleZoneReq,  0);
+                                            TEL_HVACF_TempSelectManualReq,
+                                            (g_remoteControlParamValue > 0) ? g_remoteControlParamValue : 0);
                     
                     default:
                         /* 本次命令不需要特定覆盖，就只走默认值 */
@@ -3695,7 +3695,7 @@ static RemoteControlProcessResult_t CheckHvacCommandResult(void)
                     break;
                 
                 case CMD_AC_TEMP_SET_E:
-                    if(g_remoteControlParamValue == g_remoteControlSignalInfo.HVACF_TempSelectAuto)
+                    if(g_remoteControlParamValue == g_remoteControlSignalInfo.HVACF_DriverTempSelect)
                     {
                         result = RemoteControlResult_Success_e;
                     }
@@ -3742,7 +3742,7 @@ static RemoteControlProcessResult_t CheckHvacCommandResult(void)
                     break;
                 
                 case CMD_AC_TEMP_AUTO_SET_E:
-                    if(g_remoteControlParamValue == g_remoteControlSignalInfo.HVACF_DriverTempSelect)
+                    if(g_remoteControlParamValue == g_remoteControlSignalInfo.HVACF_TempSelectAuto)
                     {
                         result = RemoteControlResult_Success_e;
                     }

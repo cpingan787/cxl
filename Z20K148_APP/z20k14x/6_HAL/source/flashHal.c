@@ -60,10 +60,7 @@ static ResultStatus_t FlashHalIsMetaDataValid(const FlashHalMetaDataInfo_t *pMet
 /****************************** Public Function Implementations ***************/
 static uint8_t GetNewSectorNum(uint32_t FirstSectorAddress,uint8_t *newSectorFlag)
 {
-    scm_reg_t *scmRegPtr = (scm_reg_t *) SCM_BASE_ADDR;
-    scmRegPtr->SCM_MISCCTL1.CCACHE_CLR = 1U; 
-    scmRegPtr->SCM_MISCCTL1.CCACHE_CLR = 0U;
-    COMMON_DSB();
+  
     uint8_t selectSectorNum;
     uint8_t sector0Flag;
     uint8_t sector1Flag;

@@ -456,7 +456,7 @@ void TimerHalSetMode(uint8_t mode)
 {
     if (mode != 0)
     {
-        TimerHal_RtcIrqEnable();
+        //TimerHal_RtcIrqEnable();
         TIM0_Init();
     }
     else

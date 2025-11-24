@@ -268,6 +268,7 @@ void EcallGpioInit(void)
     PORT_PinmuxConfig(SRS_STATE_PORT, SRS_STATE_PIN, SRS_STATE_PIN_MUX);
     GPIO_SetPinDir(SRS_STATE_PORT, SRS_STATE_PIN, GPIO_INPUT);
     PORT_PinIntConfig(SRS_STATE_PORT, SRS_STATE_PIN, PORT_ISF_INT_BOTH_EDGE);
+    INT_SetPriority(SRS_STATE_PIN_IRQ, 0x3);
     INT_EnableIRQ(SRS_STATE_PIN_IRQ);
     /******** AMP ***************************/
     // PeripheralHalAmpInit();
