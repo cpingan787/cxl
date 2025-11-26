@@ -88,5 +88,6 @@ void EcallHalSetSosLedMode(EcallLedMode_e mode , uint16_t onTime , uint16_t offT
 uint32_t EcallHalSosLedControlReceive( SosLledState_e *msg, uint32_t time_out );
 uint32_t EcallHalSosLedControlSend( SosLledState_e flash );
 void EcallHalSetMode(uint8_t wakeMode);
+void EcallHalSetSrsEn(uint8_t flag);
 
 #endif  // _ECALLHAL_H

@@ -779,6 +779,7 @@ static void MsgCycleTimeOutProcess(uint8_t index)
 		(E_NETMANAGESTATE_NORMALOPERATIONSTATE == g_netManage[index].netManageState)||
 		(E_NETMANAGESTATE_READYSLEEPSTATE == g_netManage[index].netManageState))
 	{
+        int16_t     ret = 0U;
         uint32_t	canId;
         uint8_t 	canData[8];
         uint8_t 	CBV;
@@ -833,14 +834,15 @@ static void MsgCycleTimeOutProcess(uint8_t index)
         //7.WUP: fixed to the value 0x4C
         canData[7] = NM_WUP_VALUE;
 
-        if(CanHalNmTransmit(g_netManage[index].canHandle, canId, canData, NM_MESSAGE_PDU_LENGTH, NM_TRANS_CANFD_ENABLE) == 0)
+        ret = CanHalTransmit(g_netManage[index].canHandle, canId, canData, NM_MESSAGE_PDU_LENGTH, NM_TRANS_CANFD_ENABLE);
+        if(ret == 0)
         {
             g_netManage[index].busOffTimeCount = 0;
             //NetManageBusOffErrorCallBack(index,0x00);
         }
         else
         {
-            TBOX_PRINT("net Manage CanDriverHalTransmit error\r\n");
+            TBOX_PRINT("net Manage CanDriverHalTransmit error,error code = %d\r\n",ret);
         }
 	} 
 }
@@ -1251,7 +1253,7 @@ static void BusOffErrorResetCanNMTransmit(uint8_t index)
 
     //4:Origin of keeping network awake,reserve
 
-    if(CanHalNmTransmit(g_netManage[index].canHandle, canId, canData, NM_MESSAGE_PDU_LENGTH, NM_TRANS_CANFD_ENABLE) != 0)
+    if(CanHalTransmit(g_netManage[index].canHandle, canId, canData, NM_MESSAGE_PDU_LENGTH, NM_TRANS_CANFD_ENABLE) != 0)
     {
         TBOX_PRINT("net Manage CanDriverHalTransmit error\r\n");
     }

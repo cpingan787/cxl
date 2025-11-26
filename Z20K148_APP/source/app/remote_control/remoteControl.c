@@ -53,8 +53,8 @@
 #define REMOTE_CONTROL_CMD_WAKE_TYPE                (0x1U)
 #define REMOTE_CONTROL_CMD_OTA_TYPE                 (0x2U)
 
-#define REMOTE_CONTROL_BCM_REQ_MAX_CNT              (3U)
-#define REMOTE_CONTROL_PEPS_REQ_MAX_CNT             (3U)
+#define REMOTE_CONTROL_BCM_REQ_MAX_CNT              (2U)
+#define REMOTE_CONTROL_PEPS_REQ_MAX_CNT             (2U)
 #define REMOTE_CONTROL_TRANS_MAX_COUNT              (3U)
 
 #define ESK_LENGTH                                  (16U)
@@ -70,6 +70,7 @@
 #define REMOTE_CONTROL_ERR_HAZARD_LAMP_ON           (0x15U)
 #define REMOTE_CONTROL_ERR_HAZARD_LAMP_OFF          (0x16U)
 
+#define REMOTE_CONTROL_OTA_AND_WAKE_RESULT          (0U)
 /****************************** Type Definitions ******************************/
 typedef enum
 {   
@@ -102,14 +103,15 @@ typedef enum
 
 typedef enum
 {
-    REMOTE_CONTROL_BCM_REQ_AHTU_TIME    = 200U,
-    REMOTE_CONTROL_BCM_CHECK_AHTU_TIME  = 300U,
-    REMOTE_CONTROL_PEPS_REQ_AHTU_TIME   = 200U,
-    REMOTE_CONTROL_PEPS_CHECK_AHTU_TIME = 300U,
-    REMOTE_CONTROL_TRANS_CYCLE_TIME     = 40U,
-    REMOTE_CONTROL_TRANS_SEPE_TIME      = 120U,
-    REMOTE_CONTROL_PLGM_SEPE_TIME       = 100U,
-    REMOTE_CONTROL_CHECK_EXCUTE_TIME    = 16000U,
+    REMOTE_CONTROL_BCM_REQ_AHTU_TIME    = 199U,
+    REMOTE_CONTROL_BCM_CHECK_AHTU_TIME  = 299U,
+    REMOTE_CONTROL_PEPS_REQ_AHTU_TIME   = 199U,
+    REMOTE_CONTROL_PEPS_CHECK_AHTU_TIME = 299U,
+    REMOTE_CONTROL_TRANS_CYCLE_TIME     = 39U,
+    REMOTE_CONTROL_TRANS_SEPE_TIME      = 119U,
+    REMOTE_CONTROL_PLGM_SEPE_TIME       = 99U,
+    REMOTE_CONTROL_PLGM_CLOSE_WAIT_TIME = 199U,
+    REMOTE_CONTROL_CHECK_EXCUTE_TIME    = 15999U,
     REMOTE_CONTROL_SLEEP_FORBID_TIME    = 30000U,
 }RemoteControlTimeout_t;
 typedef enum
@@ -145,7 +147,8 @@ typedef enum
     PROCESS_SIGNAL_STATE_SPECIAL_TRANS,   
     PROCESS_SIGNAL_STATE_SPECIAL_WAIT,     
     PROCESS_SIGNAL_STATE_CHECK_SIGNAL,     
-    PROCESS_SIGNAL_STATE_PLGM_STEP       
+    PROCESS_SIGNAL_STATE_PLGM_STEP,
+    PROCESS_SIGNAL_STATE_CLOSE_PLGM_STEP,       
 } ProcessSignalState_t;
 
 typedef enum
@@ -213,10 +216,13 @@ static void RemoteControlStartStateMachine(void);
 static void RemoteControlSetKeepWakeFlag(uint8_t keepWakeFlag);
 static void RemoteControlForbidSleepCheck(void);
 static uint8_t RemoteControlMapEcuIdToIndex(RemoteControlEcuId_t ecuId);
-void BcmAuthCalcKey(const uint8_t canRandom[8], const uint8_t esk[16], uint8_t outKey[8]);
-void PepsAuthCalcKey8(const uint8_t rnd[8], const uint8_t esk[16], uint8_t out[8]);
+static void BcmAuthCalcKey(const uint8_t canRandom[8], const uint8_t esk[16], uint8_t outKey[8]);
+static void PepsAuthCalcKey8(const uint8_t rnd[8], const uint8_t esk[16], uint8_t out[8]);
 static void RemoteCtrlSignalValSet(uint8_t *buf, RemoteControlReqSignalId_t sig, double value);
-void RemoteConreolReqWakeStateMachine(void);
+static void RemoteConreolReqWakeStateMachine(void);
+static void RemoteControlSendReqWakeUpResult(void);
+static void RemoteControlSendIntoOtaModeResult(void);
+static void RemoteControlSetTotalState(RemoteControlState_t state);
 //static uint64_t BytesToU64Le(const uint8_t in[8]);
 /****************************** Global Variables ******************************/
 static uint8_t g_remoteControlCanBuf[REMOTE_CONTROL_SEND_CAN_SIZE] = {0};
@@ -448,6 +454,7 @@ static void RemoteControlCmdProcess(void)
             {
                 g_remoteControlReqWakeStatus = REMOTE_CONTROL_REQ_WAKE_STATUS_NORMAL;
             }
+            RemoteControlSendReqWakeUpResult();
         }
         else if(messageType == REMOTE_CONTROL_CMD_OTA_TYPE)
         {
@@ -461,10 +468,11 @@ static void RemoteControlCmdProcess(void)
             {
                 g_remoteControlOTAFlag = REMOTE_CONTROL_OTA_FLAG_ING;
             }
-            else if(g_remoteControlOTATime == 0U)
+            else if((g_remoteControlOTATime == 0U)||(g_remoteControlOTAFlag == 0))
             {
                 g_remoteControlOTAFlag = REMOTE_CONTROL_OTA_FLAG_IDLE;
             }
+            RemoteControlSendIntoOtaModeResult();
         }
     }
     return;
@@ -483,8 +491,20 @@ static void RemoteControlForbidSleepCheck(void)
 {
     if((g_remoteControlSleepForrbidHandle > 0) && (TimerHalIsTimeout(g_remoteControlSleepForrbidHandle) == 0))
     {
-        RemoteControlSetKeepWakeFlag(RemoteControlWakeUpFlag_NotKeep_e);
+        if(g_remoteControlTotalState != RemoteControlStateIdle)
+        {
+            g_remoteControlErrorCode = REMOTE_CONTROL_ERR_CODE_TIME_OUT;
+            RemoteControlSendResult((uint8_t)REMOTE_CONTROL_CMD_CONTROL_TYPE, (uint16_t)g_remoteControlErrorCode, g_remoteControlEcuId, g_remoteControlCmdId, g_remoteControlParamValue);
+            g_remoteControlErrorCode = REMOTE_CONTROL_ERR_CODE_SUCCESS;
+            g_remoteControlEcuId = ECU_NULL_E;
+            g_remoteControlCmdId = CMD_DEFAULT_E;
+            g_remoteControlParamValue = 0U;
+            //RemoteControlSetKeepWakeFlag(RemoteControlWakeUpFlag_NotKeep_e);
+            AutosarNmSdkClearSubNetWakeupRequest();
+            RemoteControlSetTotalState(RemoteControlStateIdle);
+        }
         TimerHalStopTime(g_remoteControlSleepForrbidHandle);
+        RemoteControlSetKeepWakeFlag(RemoteControlWakeUpFlag_NotKeep_e);
     }
 }
 
@@ -618,15 +638,29 @@ static RemoteControlProcessResult_t RemoteControlPreCheckProcess(void)
                 RemoteControlSetTotalState(RemoteControlStateCertification);
             }
         }
-        else if(g_remoteControlParamValue == 0)
-        {
-            RemoteControlSetTotalState(RemoteControlStateProcessSignal);
-        }
-        else
+        else if(g_remoteControlEcuId == ECU_PLGM_E)
         {
             RemoteControlSetTotalState(RemoteControlStateCertification);
         }
-
+        else if(g_remoteControlEcuId == ECU_BCM_E)
+        {
+            RemoteControlSetTotalState(RemoteControlStateCertification);
+        }
+        else if(g_remoteControlEcuId == ECU_PEPS_E)
+        {
+            if(g_remoteControlParamValue == 0)
+            {
+                if((g_remoteControlSignalInfo.BCM_KeySt == 0)&&(g_remoteControlSignalInfo.EMS_EngSt == 0x0))
+                {
+                    g_remoteControlErrorCode = REMOTE_CONTROL_ERR_CODE_SUCCESS;
+                    RemoteControlSetTotalState(RemoteControlStateSendResult);
+                }
+                else
+                {
+                    RemoteControlSetTotalState(RemoteControlStateCertification);
+                }
+            }
+        }
     }
     else
     {
@@ -748,13 +782,31 @@ static void RemoteControlHandleSignalProcess(void)
                 }
                 s_state = PROCESS_SIGNAL_STATE_PLGM_STEP;
             }
+            if((g_remoteControlEcuId == ECU_PLGM_E) && (g_remoteControlPlgmFrameTime == 0U) && (g_remoteControlParamValue == 0))
+            {
+                s_state = PROCESS_SIGNAL_STATE_CLOSE_PLGM_STEP;
+                TimerHalStartTime(g_remoteControlTransTimerHandle, REMOTE_CONTROL_PLGM_CLOSE_WAIT_TIME);
+            }
             else
             {
                 s_state = PROCESS_SIGNAL_STATE_NORMAL_TRANS;
             }
         }
         break;
-            
+        
+        case PROCESS_SIGNAL_STATE_CLOSE_PLGM_STEP:
+        {
+            if((g_remoteControlEcuId == ECU_PLGM_E) && (g_remoteControlPlgmFrameTime == 0U) && (g_remoteControlParamValue == 0))
+            {
+                if((g_remoteControlTransTimerHandle >= 0) && (TimerHalIsTimeout(g_remoteControlTransTimerHandle) == 0))
+                {
+                    TimerHalStopTime(g_remoteControlTransTimerHandle);
+                    s_state = PROCESS_SIGNAL_STATE_NORMAL_TRANS;
+                }
+            }
+        }
+        break;
+
         case PROCESS_SIGNAL_STATE_PLGM_STEP:
         {
             if((g_remoteControlTransTimerHandle >= 0) && (TimerHalIsTimeout(g_remoteControlTransTimerHandle) == 0))
@@ -772,9 +824,9 @@ static void RemoteControlHandleSignalProcess(void)
             
         case PROCESS_SIGNAL_STATE_NORMAL_TRANS:
         {
-            TBOX_PRINT("Remote control nomal send\n");
+            TBOX_PRINT("Remote control nomal send!\n");
             CanHalTransmit(g_remoteControlCan1Handle, s_canId, g_remoteControlCanBuf, 
-                          sizeof(g_remoteControlCanBuf), REMOTE_CONTROL_CAN_FD_NOT_USE);
+                        sizeof(g_remoteControlCanBuf), REMOTE_CONTROL_CAN_FD_NOT_USE);
             if(g_remoteControlTransTimerHandle >= 0)
             {
                 TimerHalStartTime(g_remoteControlTransTimerHandle, REMOTE_CONTROL_TRANS_CYCLE_TIME);
@@ -817,7 +869,7 @@ static void RemoteControlHandleSignalProcess(void)
             else if(g_remoteControlTransTimerHandle < 0)
             {
                 s_state = PROCESS_SIGNAL_STATE_CHECK_SIGNAL;
-                TBOX_PRINT("TIMER HANDLE ERROR！\n");
+                TBOX_PRINT("TIMER HANDLE ERROR!\n");
             }
         }
         break;
@@ -871,6 +923,10 @@ static void RemoteControlHandleSignalProcess(void)
                         else
                         {
                             g_remoteControlPlgmFrameTime = 0U;  
+                            if(g_remoteControlTransTimerHandle >= 0)
+                            {
+                                TimerHalStartTime(g_remoteControlTransTimerHandle, REMOTE_CONTROL_CHECK_EXCUTE_TIME); 
+                            }
                             s_state = PROCESS_SIGNAL_STATE_CHECK_SIGNAL; 
                         }
                     }
@@ -3505,15 +3561,23 @@ static void RemoteControlSpecialPackReqCanSignal(void)
         {
             if(g_remoteControlCmdId == CMD_DOORS_SET_E)
             {
-                if(g_remoteControlPlgmFrameTime == 0U)
+                if(g_remoteControlParamValue == 1)
                 {
-                    RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_TrunkUnlockReq,       0x0);
-                    RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_TrunkUnlockReqVD,     0x0);
+                    if(g_remoteControlPlgmFrameTime == 0U)
+                    {
+                        RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_TrunkUnlockReq,       0x0);
+                        RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_TrunkUnlockReqVD,     0x0);
+                    }
+                    else
+                    {
+                        RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_PLGMOpenReq,          0x0);
+                        RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_PLGMOpenReqVD,        0x0);
+                    }
                 }
                 else
                 {
-                    RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_PLGMOpenReq,          0x0);
-                    RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_PLGMOpenReqVD,        0x0);
+                    RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_PLGMCloseReq,          0x0);
+                    RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_PLGMCloseReqVD,        0x0);
                 }
             }
             break;
@@ -4077,7 +4141,7 @@ static void BuildKFromEsk(const uint8_t esk[16], uint32_t k[4])
  Return:          None
  Others:          Output order follows CAN frame sequence: Byte0..7 = SR7..SR0
  *************************************************/
-void BcmAuthCalcKey(const uint8_t canRandom[8], const uint8_t esk[16], uint8_t outKey[8])
+static void BcmAuthCalcKey(const uint8_t canRandom[8], const uint8_t esk[16], uint8_t outKey[8])
 {
     uint32_t v[2], k[4];
     BuildVFromCanRandom(canRandom, v);
@@ -4175,7 +4239,7 @@ static void BuildVFromRandom(const uint8_t rnd[8], uint32_t v[2])
  Return:          None
  Others:          First two bytes are always 0x00, followed by SR0..SR5
  *************************************************/
-void PepsAuthCalcKey8(const uint8_t rnd[8], const uint8_t esk[16], uint8_t out[8])
+static void PepsAuthCalcKey8(const uint8_t rnd[8], const uint8_t esk[16], uint8_t out[8])
 {
     uint32_t v[2], k[4];
     BuildVFromRandom(rnd, v);
@@ -4219,7 +4283,15 @@ uint8_t RemoteControlGetKeepWakeFlag(void)
     return g_remoteControlKeepWakeFlag;
 }
 
-void RemoteConreolReqWakeStateMachine(void)
+/*************************************************
+  Function:        RemoteConreolReqWakeStateMachine
+  Description:     Manage the state machine for remote wake requests
+  Input:           None
+  Output:          None
+  Return:          None
+  Others:          Sets or clears subnet wakeup requests based on wake time and status
+ *************************************************/
+static void RemoteConreolReqWakeStateMachine(void)
 {
     if(g_remoteControlReqWakeStatus == REMOTE_CONTROL_REQ_WAKE_STATUS_NORMAL)
     {
@@ -4236,7 +4308,62 @@ void RemoteConreolReqWakeStateMachine(void)
     }
 }
 
+/*************************************************
+  Function:        RemoteControlGetOtaFlag
+  Description:     Get the current OTA flag value
+  Input:           None
+  Output:          None
+  Return:          uint8_t - Current OTA flag value
+  Others:          Returns the global remote control OTA flag variable
+ *************************************************/
 uint8_t RemoteControlGetOtaFlag(void)
 {
     return g_remoteControlOTAFlag;
 }
+
+/*************************************************
+  Function:        RemoteControlSendReqWakeUpResult
+  Description:     Send wake-up request result to remote control
+  Input:           None
+  Output:          None
+  Return:          None
+  Others:          Creates and transmits wake-up result message through MPU HAL
+ *************************************************/
+static void RemoteControlSendReqWakeUpResult(void)
+{
+    g_remoteControlSendPack.aid = REMOTE_CONTROL_AID;
+    g_remoteControlSendPack.mid = REMOTE_CONTROL_MID;
+    g_remoteControlSendPack.subcommand = REMOTE_CONTROL_SUBCOMMAND_RESULT;
+
+    memset(g_remoteControlSendBuffer,0,sizeof(g_remoteControlSendBuffer));
+    g_remoteControlSendPack.dataBufferSize = sizeof(g_remoteControlSendBuffer);
+    g_remoteControlSendBuffer[0] = REMOTE_CONTROL_CMD_WAKE_TYPE;
+    g_remoteControlSendBuffer[1] = REMOTE_CONTROL_OTA_AND_WAKE_RESULT;
+    g_remoteControlSendPack.pDataBuffer = g_remoteControlSendBuffer;
+    g_remoteControlSendPack.dataLength = 2U;
+    MpuHalTransmit(g_remoteControlUartHandle,&g_remoteControlSendPack,MPU_HAL_UART_MODE);
+}
+
+/*************************************************
+  Function:        RemoteControlSendIntoOtaModeResult
+  Description:     Send OTA mode entry result to remote control
+  Input:           None
+  Output:          None
+  Return:          None
+  Others:          Creates and transmits OTA mode result message through MPU HAL
+ *************************************************/
+static void RemoteControlSendIntoOtaModeResult(void)
+{
+    g_remoteControlSendPack.aid = REMOTE_CONTROL_AID;
+    g_remoteControlSendPack.mid = REMOTE_CONTROL_MID;
+    g_remoteControlSendPack.subcommand = REMOTE_CONTROL_SUBCOMMAND_RESULT;
+
+    memset(g_remoteControlSendBuffer,0,sizeof(g_remoteControlSendBuffer));
+    g_remoteControlSendPack.dataBufferSize = sizeof(g_remoteControlSendBuffer);
+    g_remoteControlSendBuffer[0] = REMOTE_CONTROL_CMD_OTA_TYPE;
+    g_remoteControlSendBuffer[1] = REMOTE_CONTROL_OTA_AND_WAKE_RESULT;
+    g_remoteControlSendPack.pDataBuffer = g_remoteControlSendBuffer;
+    g_remoteControlSendPack.dataLength = 2U;
+    MpuHalTransmit(g_remoteControlUartHandle,&g_remoteControlSendPack,MPU_HAL_UART_MODE);
+}
+

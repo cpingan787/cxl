@@ -176,9 +176,9 @@ static int16_t TpDataMultiFrameRxFLowControlTransmit(int16_t tpHandle, int16_t c
     canTxMsg.canId = g_tpVariable[tpHandle].physicalTransmitCanId;
 
 #if (UDS_FRAME_CANFD == 0)
-    ret = CanHalDiagnosticTransmit(canHandle, canTxMsg.canId, canTxMsg.canData, canTxMsg.dlc, 0);
+    ret = CanHalTransmit(canHandle, canTxMsg.canId, canTxMsg.canData, canTxMsg.dlc, 0);
 #else
-    ret = CanHalDiagnosticTransmit(canHandle, canTxMsg.canId, canTxMsg.canData, canTxMsg.dlc, 3);
+    ret = CanHalTransmit(canHandle, canTxMsg.canId, canTxMsg.canData, canTxMsg.dlc, 3);
 #endif
     if (0 != ret)
     {
@@ -726,7 +726,7 @@ static int16_t CanTpDataMultFramTransmit(int16_t tpHandle, int16_t canHandle, ui
         }
         ret = CanHalDiagnosticReceive(canHandle, &rxCanMsg, 0); // whl20180613
         memset(rxCanMsg.canData, 0, 8);
-        ret = CanHalDiagnosticTransmit(canHandle, txCanId, txCanData, 8, 0);
+        ret = CanHalTransmit(canHandle, txCanId, txCanData, 8, 0);
         // TBOX_PRINT("can tp wait send %x\r\n",txCanId);
         if (ret != 0)
         {
@@ -848,7 +848,7 @@ static int16_t CanTpDataMultFramTransmit(int16_t tpHandle, int16_t canHandle, ui
 //         }
 //         ret = CanHalDiagnosticReceive(canHandle,&rxCanMsg,0); //whl20180613
 //         memset(rxCanMsg.canData, 0, 64);
-//         ret = CanHalDiagnosticTransmit(canHandle,txCanId,txCanData,64,0);
+//         ret = CanHalTransmit(canHandle,txCanId,txCanData,64,0);
 //         //TBOX_PRINT("can tp wait send %x\r\n",txCanId);
 //         if (ret != 0)
 //         {
@@ -996,8 +996,8 @@ static int16_t CanTpDataMultFramTransmitFd(int16_t tpHandle, int16_t canHandle, 
         }
 
         // --- 4.4 发送当前 CF 帧 ---
-        // 最后一个参数 '3' 假设是 CanHalDiagnosticTransmit 用于指示 CAN FD 格式的标志
-        ret = CanHalDiagnosticTransmit(canHandle, txCanId, txCanData, txCanDlc, 3);
+        // 最后一个参数 '3' 假设是 CanHalTransmit 用于指示 CAN FD 格式的标志
+        ret = CanHalTransmit(canHandle, txCanId, txCanData, txCanDlc, 3);
         if (ret != 0)
         {
             // 底层 CAN 发送失败
@@ -1050,7 +1050,7 @@ int16_t CanTpSdkDataTransmit(int16_t tpHandle, uint32_t canId, uint8_t *txData, 
         {
             data[i + 1] = g_tpVariable[tpHandle].pTpParameter->fillByte;
         }
-        return CanHalDiagnosticTransmit(canHandle, txCanId, data, 8, 0);
+        return CanHalTransmit(canHandle, txCanId, data, 8, 0);
     }
 
     uint8_t txCanData[8];
@@ -1070,7 +1070,7 @@ int16_t CanTpSdkDataTransmit(int16_t tpHandle, uint32_t canId, uint8_t *txData, 
     }
     txCanDlc = 8;
 
-    int16_t ret = CanHalDiagnosticTransmit(canHandle, txCanId, txCanData, txCanDlc, 0);
+    int16_t ret = CanHalTransmit(canHandle, txCanId, txCanData, txCanDlc, 0);
     if (ret != 0)
     {
         return -1;
@@ -1094,7 +1094,7 @@ int16_t CanTpSdkDataTransmit(int16_t tpHandle, uint32_t canId, uint8_t *txData, 
         {
             data[i + 1] = g_tpVariable[tpHandle].pTpParameter->fillByte;
         }
-        return CanHalDiagnosticTransmit(canHandle, txCanId, data, 8, 3);
+        return CanHalTransmit(canHandle, txCanId, data, 8, 3);
     }
 
     if (txLength < 63) // single frame
@@ -1142,7 +1142,7 @@ int16_t CanTpSdkDataTransmit(int16_t tpHandle, uint32_t canId, uint8_t *txData, 
         {
             data[i + 2] = g_tpVariable[tpHandle].pTpParameter->fillByte;
         }
-        return CanHalDiagnosticTransmit(canHandle, txCanId, data, txCanDlc, 3);
+        return CanHalTransmit(canHandle, txCanId, data, txCanDlc, 3);
     }
 
     uint8_t txCanData[64];
@@ -1162,7 +1162,7 @@ int16_t CanTpSdkDataTransmit(int16_t tpHandle, uint32_t canId, uint8_t *txData, 
     }
     txCanDlc = 64;
 
-    int16_t ret = CanHalDiagnosticTransmit(canHandle, txCanId, txCanData, txCanDlc, 3);
+    int16_t ret = CanHalTransmit(canHandle, txCanId, txCanData, txCanDlc, 3);
     if (ret != 0)
     {
         return -1;

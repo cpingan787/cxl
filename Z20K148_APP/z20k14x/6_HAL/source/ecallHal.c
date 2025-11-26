@@ -278,6 +278,22 @@ void EcallGpioInit(void)
     // IrqPinInit()
 }
 
+void EcallHalSetSrsEn(uint8_t flag)
+{
+    if (0 == flag)
+    {
+        PORT_PinIntConfig(SRS_STATE_PORT, SRS_STATE_PIN, PORT_ISF_DISABLED);
+        INT_DisableIRQ(SRS_STATE_PIN_IRQ);
+        GPIO_ClearPinOutput(SRS_EN_PORT, SRS_EN_PIN);
+    }
+    else
+    {
+        PORT_PinIntConfig(SRS_STATE_PORT, SRS_STATE_PIN, PORT_ISF_INT_BOTH_EDGE);
+        GPIO_SetPinOutput(SRS_EN_PORT, SRS_EN_PIN);
+        INT_EnableIRQ(SRS_STATE_PIN_IRQ);
+    }
+}
+
 void EcallHalSetSosLedRedState(uint8_t state)
 {
     if (0 == state)

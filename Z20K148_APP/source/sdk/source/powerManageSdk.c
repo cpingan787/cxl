@@ -862,6 +862,7 @@ static void PmStateMcuSleepProcess(uint32_t cycleTime)
     g_pmManage.kl30WakeCount = 0;
     TimerHalSetMode(0);
     //EcallHalSetMode(0);
+    EcallHalSetSrsEn(0);
     LogHalSetMode(0);
     /*进入低功耗函数*/
     PowerManageHalSleep();
@@ -880,6 +881,7 @@ static void PmStateMcuSleepProcess(uint32_t cycleTime)
     CanHalSetMode(1);
     /*设置peripheral模块进入正常模式*/
     PeripheralHalSetMode(1);
+    EcallHalSetSrsEn(1);
     /*设置蓝牙进入正常模式*/
     // BleHalSetMode(1);
     g_pmManage.wakeupCount++;

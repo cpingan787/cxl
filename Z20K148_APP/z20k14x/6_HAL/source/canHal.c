@@ -2199,6 +2199,10 @@ static int16_t CanTransmit(uint8_t u8Channel, uint32_t id, uint8_t u8Len, const 
                 COMMON_ENABLE_INTERRUPTS();
                 ret = 0;
             }
+            if(canSendRet == BUSY)
+            {
+                //ret = CAN_ERROR_TX_BUFFER_FULL;
+            }
             else if (canSendRet == ERR)
             {
                 TBOX_PRINT("Can%d send error, driver layer error code:%d\r\n", u8Channel, canSendRet);

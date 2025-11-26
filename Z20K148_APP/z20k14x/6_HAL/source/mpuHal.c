@@ -647,7 +647,7 @@ static void MpuHalGpioSetMode(uint8_t mode)
     if(mode == 1)
     {
         // gps en 
-        // GPIO_WritePinOutput(PORT_D, GPIO_0, GPIO_HIGH);
+        GPIO_WritePinOutput(PORT_D, GPIO_0, GPIO_HIGH);
         // ECALL LED
         GPIO_WritePinOutput(PORT_D, GPIO_5, GPIO_HIGH);
         // BCALL LED
@@ -656,7 +656,7 @@ static void MpuHalGpioSetMode(uint8_t mode)
     else
     {
         // gps en
-        // GPIO_WritePinOutput(PORT_D, GPIO_0, GPIO_LOW);
+        GPIO_WritePinOutput(PORT_D, GPIO_0, GPIO_LOW);
         // ECALL LED
         GPIO_WritePinOutput(PORT_D, GPIO_5, GPIO_LOW);
         // BCALL LED

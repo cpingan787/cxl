@@ -61,6 +61,11 @@ static EcuId_t g_ecuList[] = {
     /* DCAN Nodes */
     {0x74F, 0x7CF, TBOX_CAN_CHANNEL_2}, // ECU_DCAN_GWM
 
+    {0x067,0x068, TBOX_CAN_CHANNEL_2}, //用于TBOX和网关之间ota模式认证
+
+    {0x069,0x322, TBOX_CAN_CHANNEL_2}, // 用于向网关请求整车ota模式
+
+
 };
 
 static CanIdConfig_t g_ecuConfigure = {

@@ -634,7 +634,8 @@ static void TimerHalRtcSecCallback(void)
 *************************************************/
 static ResultStatus_t TimerHal_RTCInit(void)
 {
-    uint32_t oscReadyCnt = 0U;
+    ResultStatus_t ret = SUCC;
+    uint8_t oscReadyCnt = 0U;
     RTC_CompConfig_t compConfig = {
         .delayVal = 0U,
         .compVal = 127U,
@@ -643,47 +644,61 @@ static ResultStatus_t TimerHal_RTCInit(void)
     RTC_SWRest();
     RTC_Disable();
     CLK_OSC32KEnable(CLK_OSC_EXT_SRC);
-    while (CLK_WaitClkReady(CLK_SRC_OSC32K) == ERR)
-    {
-        oscReadyCnt++;
-        WDOG_Refresh(); 
-        if (oscReadyCnt >= 100U)
+    do {
+        while (CLK_WaitClkReady(CLK_SRC_OSC32K) == ERR)
         {
-            TBOX_PRINT("RTC init fail, OSC32K not ready\n");
-            return ERR;
+            oscReadyCnt++;
+            WDOG_Refresh(); 
+            if (oscReadyCnt >= 2U)
+            {
+                TBOX_PRINT("RTC CLK_SRC_OSC32K not ready\n");
+                ret = ERR;
+                break;
+            }
         }
-    } 
-    if (RTC_ClkConfig(RTC_CLK_OSC32K_EXT) == ERR)
-    {
-        TBOX_PRINT("RTC init fail, OSC32K not ready\n");
-        return ERR;
-    }
-    RTC_SetAlarmCounter(0U);    
-    RTC_SetSecondCounter(0U);
-    RTC_CompConfig(&compConfig);
-    TimerHal_RtcIrqEnable();
-    RTC_Enable();
+        if (ret == SUCC) {
+            if (RTC_ClkConfig(RTC_CLK_OSC32K_EXT) == ERR)
+            {
+                TBOX_PRINT("RTC RTC_CLK_OSC32K_EXT not ready\n");
+                ret = ERR;
+            }
+        }
+        if (ret == ERR) {
+            if (RTC_ClkConfig(RTC_CLK_LPO32K) == ERR)
+            {
+                TBOX_PRINT("RTC RTC_CLK_LPO32K not ready\n");
+                ret = ERR;
+                break;
+            }
+        }
 
-    g_currentTime.year = RTC_START_YEAR;
-    g_currentTime.month = 1U;
-    g_currentTime.day = 1U;
-    g_currentTime.hour = 0U;
-    g_currentTime.minute = 0U;
-    g_currentTime.second = 0U;
-    g_baseTime = g_currentTime;
-    g_rtcBaseSeconds = 0U;
+        RTC_SetAlarmCounter(0U);    
+        RTC_SetSecondCounter(0U);
+        RTC_CompConfig(&compConfig);
+        TimerHal_RtcIrqEnable();
+        RTC_Enable();
+
+        g_currentTime.year = RTC_START_YEAR;
+        g_currentTime.month = 1U;
+        g_currentTime.day = 1U;
+        g_currentTime.hour = 0U;
+        g_currentTime.minute = 0U;
+        g_currentTime.second = 0U;
+        g_baseTime = g_currentTime;
+        g_rtcBaseSeconds = 0U;
 #if (RTC_DEBUG_ENABLE == 1)
-    TimeData_t time = {
-        .year = 2025U,
-        .month = 10U,
-        .day = 30U,
-        .hour = 15U,
-        .minute = 07U,
-        .second = 0U,
-    };
-    TimerHal_RtcRemoteTimeSync(&time);
-#endif  
-    return SUCC;
+        TimeData_t time = {
+            .year = 2025U,
+            .month = 10U,
+            .day = 30U,
+            .hour = 15U,
+            .minute = 07U,
+            .second = 0U,
+        };
+        TimerHal_RtcRemoteTimeSync(&time);
+#endif
+    } while (0);
+    return ret;
 }
 
 /*************************************************
