@@ -155,12 +155,6 @@ int16_t FlashHalInit()
 
     do
     {
-        SYSCTRL_DisableModule(SYSCTRL_FLASH);
-        CLK_ModuleSrc(CLK_FLASH, CLK_SRC_FIRC64M);
-        CLK_SetClkDivider(CLK_FLASH, CLK_DIV_8);
-        SYSCTRL_ResetModule(SYSCTRL_FLASH);
-        SYSCTRL_EnableModule(SYSCTRL_FLASH);
-        
         FLASH_InstallCallBackFunc(FLASH_INT_CCIF, FLASHTEST_CCIF_ISR);
         INT_SetPriority(FLASH_CmdComplete_IRQn, 0x0);    //设置 FLASH_IRQn 的中断优先级。(高)0-3(低)
         INT_EnableIRQ(FLASH_CmdComplete_IRQn);            //使能 FLASH_IRQn 中断

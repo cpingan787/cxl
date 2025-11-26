@@ -96,7 +96,7 @@ static void System_Init(void);
  *		7，在切换时钟源之前，必须先设置适配 FLASH 的时钟。
  *		8，SCC_IRQn 的中断优先级必须设置为0(最高)，其他模块的中断优先级必须大于0，确保第一时间进入时钟中断。
 ****************************************************************************/
-#if 0
+#if 1
 /* Low Power */
 void CLOCK_Init(void)
 {
@@ -143,12 +143,19 @@ void CLOCK_Init(void)
 			}
         }
 
+		//Initialize CLOCK interrupt        
+        CLK_InstallCallBackFunc(CLK_INT_OSCLOC, &CLOCK_HSOSCLOC_ISR);//Register interrupt callback function
+        CLK_OSC40MMonitorEnable(CLK_MON_INT);    //Enable external crystal monitoring (when clock fails, trigger interrupt)
+        
+        INT_SetPriority(SCC_IRQn, 0x0);    //Set SCC_IRQn interrupt priority (low)0--15(high)
+        INT_EnableIRQ(SCC_IRQn);            //Enable SCC_IRQn interrupt
+
         /* 
          * FLASH 擦写时钟必须设置为 8M 
          * MCU进入stop模式前需将 FLASH 时钟源切换为 SLOW clock
          */
         SYSCTRL_DisableModule(SYSCTRL_FLASH);      /* 切换FLASH 控制器功能时钟之前，需要先关闭FLASH模块，否则时钟切换无效 */
-        CLK_SetClkDivider(CLK_SLOW, CLK_DIV_3);    /* CLK_SLOW = 160M / 3 = 40M，CLK_SLOW由内核时钟直接分配过来 */
+        CLK_SetClkDivider(CLK_SLOW, CLK_DIV_3);    /* CLK_SLOW = 120M / 3 = 40M，CLK_SLOW由内核时钟直接分配过来 */
 		delayCnt = 0u;
         while(ERR == CLK_ModuleSrc(CLK_FLASH, CLK_SRC_SLOW))  /* 选择SLOW时钟作为FLASH时钟源 */
         {
@@ -373,24 +380,7 @@ static void PMU_Init(void)
 {	
 	//进入 STANDBY 后，IO端口将与ADC、CMP、SPLL模块隔离，退出 STANDBY 后，首先要解除这个隔离状态。参考寄存器 PMU_ISO_CLR
 	PMU_IsoClr();	//清除端口与功能模块的隔离状态标志，解除IO端口与ADC、CMP、SPLL模块的隔离状态，必须
-
-	// PMU_Ctrl(PMU_VDD_LVD_LP, ENABLE);		//使能低功耗模式下的低压检测功能，必须
-	// PMU_Ctrl(PMU_VDD_LVD_ACT, ENABLE);		//使能运行模式下的低压检测功能，必须
-	// PMU_Ctrl(PMU_VDD_LVD_RE, ENABLE);		//使能低压检测复位功能，必须
-	//PMU_Ctrl(PMU_VDD_LVW, ENABLE);		//使能低压报警功能，配合 PMU 中断使用
 	PMU_Ctrl(PMU_REF_BUF_1V, ENABLE);		//使能内部1V参考电压
-	
-	//PMU_LdoEnLowDriveStrInLowPower(PMU_LDO_FLASH, ENABLE);	//在STOP模式下，使能这个LDO的低驱动能力模式。
-	
-	//初始化 PMU 中断	
-	PMU_IntMask(PMU_INT_ALL, MASK);		//禁止 PMU 中断
-	PMU_IntClr(PMU_INT_ALL);			//清除 PMU 中断标志
-	
-	//PMU_InstallCallBackFunc(PMU_VDD_LVW_INT, &PMU_VDD_LVW_ISR); //加载 VDD_LVW 低压报警中断处理函数
-	//PMU_IntMask(PMU_VDD_LVW_INT, MASK);	//禁止 VDD_LVW 中断
-	
-	INT_SetPriority(PMU_IRQn, 15);	//设置 PMU_IRQn 的中断优先级。(高)0--15(低)
-	INT_DisableIRQ(PMU_IRQn);		//禁止 PMU_IRQn 中断
 }
 
 /*****************************************************************************

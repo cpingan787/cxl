@@ -55,6 +55,7 @@ static int16_t RemoteDiagnosticSdkSendAck(MpuHalDataPack_t *recvPack, uint8_t re
     {
         return -1;
     }
+    TBOX_PRINT("[MCU] >> Sending ACK to MPU. Result: %d, Index: %d\r\n", result, recvPack->pDataBuffer[2]);
     g_txPack.aid = recvPack->aid;
     g_txPack.mid = recvPack->mid;
     g_txPack.subcommand = COMMAND_UDS_TRANSMIT_ACK;
@@ -75,6 +76,9 @@ static int16_t RemoteDiagnosticSdkSendAck(MpuHalDataPack_t *recvPack, uint8_t re
 static int16_t RemoteDiagnosticSdkSendResponse(MpuHalDataPack_t *recvPack, uint32_t canId, uint8_t *data, uint16_t lenth)
 {
     uint16_t i = 0;
+    // 用于打印循环的变量
+    uint16_t j = 0; 
+
     if (recvPack == NULL)
     {
         return -1;
@@ -82,17 +86,19 @@ static int16_t RemoteDiagnosticSdkSendResponse(MpuHalDataPack_t *recvPack, uint3
 
     g_txPack.aid = recvPack->aid;
     g_txPack.mid = recvPack->mid;
-    g_txPack.subcommand = COMMAND_UDS_RESPONSE_REQ;
+    g_txPack.subcommand = COMMAND_UDS_RESPONSE_REQ; // 0x03
 
     g_txData[0] = 0;
     g_txData[1] = 0;
-    g_txData[2] = recvPack->pDataBuffer[2];
+    g_txData[2] = recvPack->pDataBuffer[2]; // 序列号 Index
 
+    // 填充 CAN ID (大端)
     g_txData[3] = (canId >> 24) & 0xFF;
     g_txData[4] = (canId >> 16) & 0xFF;
     g_txData[5] = (canId >> 8) & 0xFF;
     g_txData[6] = canId & 0xFF;
 
+    // 填充 UDS 数据
     for (i = 0; i < lenth; i++)
     {
         g_txData[7 + i] = data[i];
@@ -101,6 +107,19 @@ static int16_t RemoteDiagnosticSdkSendResponse(MpuHalDataPack_t *recvPack, uint3
 
     g_txPack.pDataBuffer = g_txData;
     g_txPack.dataBufferSize = sizeof(g_txData);
+
+    // ================= [新增] 打印发送给 MPU 的原始 HEX 数据 =================
+    TBOX_PRINT("[MCU] >> TX to MPU (Hex): ");
+    // 打印包头信息 (模拟 MPU 协议头)
+    TBOX_PRINT("55 AA %02X %02X %02X ", g_txPack.aid, g_txPack.mid, g_txPack.subcommand);
+    
+    // 打印数据负载
+    for (j = 0; j < g_txPack.dataLength; j++)
+    {
+        TBOX_PRINT("%02X ", g_txData[j]);
+    }
+    TBOX_PRINT("\r\n");
+    // =========================================================================
 
     MpuHalTransmit(g_mpuHandle, &g_txPack, MPU_HAL_UART_MODE);
 
@@ -154,10 +173,11 @@ static uint8_t RemoteDiagnosticSdkTpTransmit(CanIdConfig_t *pEcuConfigure, MpuHa
         // TBOX_PRINT("Error: Invalid data length %d for MID 0x%02X", rxMsg->dataLength, rxMsg->mid);
         return 0xFF;
     }
+TBOX_PRINT("[MCU] << Parsing Request. TargetID: 0x%X\r\n", canId);
 
     if (canId == pEcuConfigure->functionalId)
     {
-
+TBOX_PRINT("[MCU] -> Functional Transmit\r\n");
         for (i = 0; i < canChannelList->canChanelListSize; i++)
         {
             UdsTpTransmit(g_udsTpHandle[canChannelList->canChanelList[i]], canId, pUdsData, udsDataLen);
@@ -193,6 +213,7 @@ static uint8_t RemoteDiagnosticSdkTpTransmit(CanIdConfig_t *pEcuConfigure, MpuHa
             }
             if (ecuId != 0xFF)
             {
+                TBOX_PRINT("[MCU] -> Found ECU Index: %d. Sending to CAN TP...\r\n", ecuId);
                 UdsTpPhyAddressSetCanId(g_udsTpHandle[pEcuConfigure->pEcuList[ecuId].channel], pEcuConfigure->pEcuList[ecuId].requestId, pEcuConfigure->pEcuList[ecuId].responseId);
                 UdsTpSetFilter(g_udsTpHandle[pEcuConfigure->pEcuList[ecuId].channel], 0);
                 UdsTpClearRecvBuffer(g_udsTpHandle[pEcuConfigure->pEcuList[ecuId].channel]);
@@ -202,11 +223,75 @@ static uint8_t RemoteDiagnosticSdkTpTransmit(CanIdConfig_t *pEcuConfigure, MpuHa
                 g_udsTimeCount = 0;
                 g_udsReceiveFlag = 1;
             }
+            else
+            {
+                 TBOX_PRINT("[MCU] Error: ECU ID Not Configured!\r\n");
+            }
         }
     }
     return ecuId;
 }
+// ==================== 模拟测试代码开始 ====================
+void SimulateRemoteDiagFlow(CanIdConfig_t *pEcuConfigure)
+{
+    TBOX_PRINT("\r\n==================================================\r\n");
+    TBOX_PRINT("   START REMOTE DIAGNOSTIC SIMULATION (MOCK)\r\n");
+    TBOX_PRINT("==================================================\r\n");
 
+    // 1. 构造模拟的 MPU 请求数据包
+    // 模拟：远程诊断(01) 请求(01) 序列号(05) 目标ID(0x720) 读DID(22 F1 90)
+    static uint8_t mock_buffer[] = {
+        0x00, 0x00,             // Res/Len (Byte 0-1)
+        0x05,                   // Index (Byte 2) - 序列号
+        0x00, 0x00, 0x07, 0x25, // Target CAN ID = 0x720 (Byte 3-6)
+        0x22, 0xF1, 0x90        // UDS Payload: ReadData F190 (VIN)
+    };
+
+    MpuHalDataPack_t mock_req;
+    mock_req.aid = 0x05;
+    mock_req.mid = 0x01;        // Remote Diag
+    mock_req.subcommand = 0x01; // Request
+    mock_req.pDataBuffer = mock_buffer;
+    mock_req.dataLength = sizeof(mock_buffer); // 7 (header) + 3 (uds) = 10
+
+    TBOX_PRINT("[SIM] 1. MPU sends Request: 22 F1 90 to ECU 0x720\r\n");
+
+    // 2. 模拟 MCU 收到请求后的处理：发送 ACK
+    // 这里我们手动调用逻辑，绕过 MpuHalReceive
+    TBOX_PRINT("[SIM] 2. MCU handles Request & Sends ACK...\r\n");
+    RemoteDiagnosticSdkSendAck(&mock_req, 0); // 0=Success
+
+    // 3. 模拟 MCU 转发到 CAN
+    TBOX_PRINT("[SIM] 3. MCU forwards to CAN TP...\r\n");
+    // 注意：这里传入 -1 作为 virtualTpHandle，因为我们主要测物理寻址
+    uint8_t ecuId = RemoteDiagnosticSdkTpTransmit(pEcuConfigure, &mock_req, -1);
+
+    if (ecuId == 0xFF)
+    {
+        TBOX_PRINT("[SIM] FAILURE: ECU ID 0x720 not found in config list!\r\n");
+        return;
+    }
+
+    // 4. 模拟 ECU 在 CAN 总线上回复了数据 (VIN码)
+    // 这一步通常是异步的 (UdsTpReceive)，我们这里直接构造数据并触发发送响应
+    TBOX_PRINT("[SIM] 4. (Async) ECU sends Response on CAN...\r\n");
+    
+    uint8_t mock_uds_response[] = {
+        0x62, 0xF1, 0x90, // Positive Response
+        'T', 'E', 'S', 'T', 'V', 'I', 'N', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0' // 17字节 VIN
+    };
+    uint16_t resp_len = sizeof(mock_uds_response);
+    uint32_t resp_can_id = pEcuConfigure->pEcuList[ecuId].responseId;
+
+    // 5. 模拟 MCU 收到 CAN 数据后，发给 MPU
+    TBOX_PRINT("[SIM] 5. MCU receives CAN data & Sends Response to MPU...\r\n");
+    RemoteDiagnosticSdkSendResponse(&mock_req, resp_can_id, mock_uds_response, resp_len);
+
+    TBOX_PRINT("==================================================\r\n");
+    TBOX_PRINT("   SIMULATION COMPLETE\r\n");
+    TBOX_PRINT("==================================================\r\n");
+}
+// ==================== 模拟测试代码结束 ====================
 void RemoteDiagnosticSdkProcess(CanIdConfig_t *pEcuConfigure, MpuBuffer_t *pMpuBuffer, UdsTpParameter_t *pTpParameter, CanChanel_t *canChannelList)
 {
     uint8_t i = 0;
@@ -251,7 +336,8 @@ void RemoteDiagnosticSdkProcess(CanIdConfig_t *pEcuConfigure, MpuBuffer_t *pMpuB
         g_udsTpHandle[canChannelList->canChanelList[i]] = UdsTpOpen(canChannelList->canChanelList[i], pMpuBuffer->canRxBuffer, pMpuBuffer->canRxBufferSize, pTpParameter);
         UdsTpSetFunctionId(g_udsTpHandle[canChannelList->canChanelList[i]], pEcuConfigure->functionalId);
     }
-
+vTaskDelay(100); 
+    SimulateRemoteDiagFlow(pEcuConfigure);
     while (1)
     {
         ret = MpuHalReceive(g_mpuHandle, &rxMsg, 5);
@@ -357,27 +443,27 @@ void RemoteDiagnosticSdkProcess(CanIdConfig_t *pEcuConfigure, MpuBuffer_t *pMpuB
 
                         g_udsReceiveFlag = 0;
                     }
-                    else
-                    {
-                        static uint8_t simulated_response[] = {
-                            0x62, 0xF1, 0x89,
-                            0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
-                            0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
-                            0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
-                        uint16_t simulated_len = sizeof(simulated_response);
+                    // else
+                    // {
+                    //     static uint8_t simulated_response[] = {
+                    //         0x62, 0xF1, 0x89,
+                    //         0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+                    //         0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+                    //         0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
+                    //     uint16_t simulated_len = sizeof(simulated_response);
 
-                        if (simulated_len <= sizeof(udsRxbuf))
-                        {
-                            memcpy(udsRxbuf, simulated_response, simulated_len);
-                            udsRecvLen = simulated_len;
+                    //     if (simulated_len <= sizeof(udsRxbuf))
+                    //     {
+                    //         memcpy(udsRxbuf, simulated_response, simulated_len);
+                    //         udsRecvLen = simulated_len;
 
-                            responseId = pEcuConfigure->pEcuList[ecuId].responseId;
+                    //         responseId = pEcuConfigure->pEcuList[ecuId].responseId;
 
-                            RemoteDiagnosticSdkSendResponse(&rxMsg, responseId, udsRxbuf, udsRecvLen);
-                        }
+                    //         RemoteDiagnosticSdkSendResponse(&rxMsg, responseId, udsRxbuf, udsRecvLen);
+                    //     }
 
-                        g_udsReceiveFlag = 0;
-                    }
+                    //     g_udsReceiveFlag = 0;
+                    // }
                 }
             }
 

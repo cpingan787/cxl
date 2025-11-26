@@ -257,7 +257,7 @@ void TIM0_FAULT_ISR(void)
 void TimerHalInit(void)
 {
     TIM0_Init();    //初始化TIM0模块
-    //TimerHal_RTCInit();    //初始化RTC模块
+    TimerHal_RTCInit();    //初始化RTC模块
 }
 
 /*************************************************
@@ -456,7 +456,7 @@ void TimerHalSetMode(uint8_t mode)
 {
     if (mode != 0)
     {
-        //TimerHal_RtcIrqEnable();
+        TimerHal_RtcIrqEnable();
         TIM0_Init();
     }
     else
@@ -642,7 +642,7 @@ static ResultStatus_t TimerHal_RTCInit(void)
     };
     RTC_SWRest();
     RTC_Disable();
-    CLK_OSC32KEnable(CLK_OSC_XTAL);
+    CLK_OSC32KEnable(CLK_OSC_EXT_SRC);
     while (CLK_WaitClkReady(CLK_SRC_OSC32K) == ERR)
     {
         oscReadyCnt++;
@@ -653,7 +653,7 @@ static ResultStatus_t TimerHal_RTCInit(void)
             return ERR;
         }
     } 
-    if (RTC_ClkConfig(RTC_CLK_OSC32K_INT) == ERR)
+    if (RTC_ClkConfig(RTC_CLK_OSC32K_EXT) == ERR)
     {
         TBOX_PRINT("RTC init fail, OSC32K not ready\n");
         return ERR;

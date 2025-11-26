@@ -148,6 +148,17 @@ typedef enum
     PROCESS_SIGNAL_STATE_PLGM_STEP       
 } ProcessSignalState_t;
 
+typedef enum
+{
+    REMOTE_CONTROL_REQ_WAKE_STATUS_IDLE,
+    REMOTE_CONTROL_REQ_WAKE_STATUS_NORMAL,          
+} RemoteControlReqWakeStatus;
+
+typedef enum
+{
+    REMOTE_CONTROL_OTA_FLAG_IDLE,
+    REMOTE_CONTROL_OTA_FLAG_ING,
+} RemoteControlOtaFlag_t;
 /****************************** Function Declarations *************************/
 static void RemoteControlStateMachine(void);
 static void RemoteControlCmdProcess(void);
@@ -205,6 +216,7 @@ static uint8_t RemoteControlMapEcuIdToIndex(RemoteControlEcuId_t ecuId);
 void BcmAuthCalcKey(const uint8_t canRandom[8], const uint8_t esk[16], uint8_t outKey[8]);
 void PepsAuthCalcKey8(const uint8_t rnd[8], const uint8_t esk[16], uint8_t out[8]);
 static void RemoteCtrlSignalValSet(uint8_t *buf, RemoteControlReqSignalId_t sig, double value);
+void RemoteConreolReqWakeStateMachine(void);
 //static uint64_t BytesToU64Le(const uint8_t in[8]);
 /****************************** Global Variables ******************************/
 static uint8_t g_remoteControlCanBuf[REMOTE_CONTROL_SEND_CAN_SIZE] = {0};
@@ -232,6 +244,11 @@ static uint8_t g_randomBcmArray[RANDOM_LENGTH] = {0};
 static uint8_t g_remoteControlHvacPepsCheck = 0U;
 static uint8_t g_remoteControlHvsmPepsCheck = 0U;
 static uint8_t g_hvacSignalSet[20] = {0U};
+static uint8_t g_remoteControlReqWakeByte = 0U;
+static uint32_t g_remoteControReqWakeTime = 0U;
+static RemoteControlReqWakeStatus g_remoteControlReqWakeStatus = REMOTE_CONTROL_REQ_WAKE_STATUS_IDLE;
+static uint8_t g_remoteControlOTAFlag = 0U;
+static uint32_t g_remoteControlOTATime = 0U;
 
 static RemoteControlTotalTable_t g_remoteControlLocalMap[REMOTE_CONTROL_ECU_MAX_NUM] = 
 {
@@ -334,7 +351,7 @@ void TaskAppVehicleRemoteControl( void *pvParameters )
             RemoteControlCmdProcess();
         }
         RemoteControlStateMachine();
-        //tbd for remote wake
+        RemoteConreolReqWakeStateMachine();
         //tbd for remote ota
         vTaskDelay(pdMS_TO_TICKS(5));
     }
@@ -421,11 +438,33 @@ static void RemoteControlCmdProcess(void)
         }
         else if(messageType == REMOTE_CONTROL_CMD_WAKE_TYPE)
         {
-            
+            g_remoteControlReqWakeByte = g_remoteControlReceivePack.pDataBuffer[1];
+            // 按大端方式组合Byte2到5到g_remoteControReqWakeTime
+            g_remoteControReqWakeTime = ((uint32_t)g_remoteControlReceivePack.pDataBuffer[2] << 24) | \
+                                      ((uint32_t)g_remoteControlReceivePack.pDataBuffer[3] << 16) | \
+                                      ((uint32_t)g_remoteControlReceivePack.pDataBuffer[4] << 8)  | \
+                                       (uint32_t)g_remoteControlReceivePack.pDataBuffer[5];
+            if((g_remoteControlReqWakeStatus == REMOTE_CONTROL_REQ_WAKE_STATUS_IDLE)&&(g_remoteControReqWakeTime != 0U))
+            {
+                g_remoteControlReqWakeStatus = REMOTE_CONTROL_REQ_WAKE_STATUS_NORMAL;
+            }
         }
         else if(messageType == REMOTE_CONTROL_CMD_OTA_TYPE)
         {
-            //tbd
+            g_remoteControlOTAFlag = g_remoteControlReceivePack.pDataBuffer[1];
+            g_remoteControlOTATime = ((uint32_t)g_remoteControlReceivePack.pDataBuffer[2] << 24) | \
+                                      ((uint32_t)g_remoteControlReceivePack.pDataBuffer[3] << 16) | \
+                                      ((uint32_t)g_remoteControlReceivePack.pDataBuffer[4] << 8)  | \
+                                       (uint32_t)g_remoteControlReceivePack.pDataBuffer[5];
+
+            if((g_remoteControlOTATime != 0U)&&(g_remoteControlReceivePack.pDataBuffer[1] == 0x1))
+            {
+                g_remoteControlOTAFlag = REMOTE_CONTROL_OTA_FLAG_ING;
+            }
+            else if(g_remoteControlOTATime == 0U)
+            {
+                g_remoteControlOTAFlag = REMOTE_CONTROL_OTA_FLAG_IDLE;
+            }
         }
     }
     return;
@@ -4180,3 +4219,24 @@ uint8_t RemoteControlGetKeepWakeFlag(void)
     return g_remoteControlKeepWakeFlag;
 }
 
+void RemoteConreolReqWakeStateMachine(void)
+{
+    if(g_remoteControlReqWakeStatus == REMOTE_CONTROL_REQ_WAKE_STATUS_NORMAL)
+    {
+        if(g_remoteControReqWakeTime != 0U)
+        {
+            AutosarNmSdkSetSubNetWakeupRequest(g_remoteControlReqWakeByte);
+        }
+        else if(g_remoteControReqWakeTime == 0U)
+        {
+            AutosarNmSdkClearSubNetWakeupRequest();
+            g_remoteControlReqWakeByte = 0U;
+            g_remoteControlReqWakeStatus = REMOTE_CONTROL_REQ_WAKE_STATUS_IDLE;
+        }
+    }
+}
+
+uint8_t RemoteControlGetOtaFlag(void)
+{
+    return g_remoteControlOTAFlag;
+}

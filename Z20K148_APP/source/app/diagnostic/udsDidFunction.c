@@ -29,6 +29,7 @@
 #include "FreeRTOS.h"
 #include "task.h"
 #include "mpuHal.h"
+#include "remoteControl.h"
 static uint8_t g_didF1A2[19] = {"P01       -V6.02.00"}; // CAN矩阵
 
 static uint8_t g_didF1B3[9] = {"CDONO-77E"};                        // 节点地址
@@ -4492,10 +4493,10 @@ int16_t Service2EWriteAdbStatus(uint8_t *pData, uint16_t dataLength)
   {
     return 0x13;
   }
-  if (pData[0] > 0x01)
-  {
-    return 0x31;
-  }
+//   if (pData[0] > 0x01)
+//   {
+//     return 0x31;
+//   }
 
   // int16_t storeResult = WorkFlashVehicleInforStore(E_PARAMETER_INFO_ADB_STATUS, pData, dataLength);
   // if (storeResult < 0)
@@ -7588,6 +7589,7 @@ int16_t Service31StartRoutinePkiTest(uint8_t *pDataIn, uint16_t lengthIn, uint8_
 }
 int16_t Service31StartRoutineDdrTest(uint8_t *pDataIn, uint16_t lengthIn, uint8_t *pDataOut, uint16_t *pLengthOut)
 {
+    uint8_t ota_flag = 0;
   // 1. 检查请求长度 (RID 0xB2E6 后面无 OptionRecord)
   if (lengthIn != 0)
   {
@@ -7633,7 +7635,18 @@ int16_t Service31StartRoutineDdrTest(uint8_t *pDataIn, uint16_t lengthIn, uint8_
 
     // 5. 执行 MPU 重启
     // TBOX_PRINT("RID 0xB2E6: MPU Positive Response. Rebooting MPU...\r\n");
-    MpuHalReset(); //
+    //MpuHalReset(); //
+    ota_flag = RemoteControlGetOtaFlag();
+    if (ota_flag == 1)
+    {
+        return 0x21;
+      // 处于OTA模式，不重启MPU
+      // TBOX_PRINT("OTA mode active, skipping MPU reboot.\r\n");
+    }
+    else
+    {
+        MpuHalReset();
+    }
 
     // 等待 MPU 开始重启 (提供短暂延时以确保 MPUHalReset 执行)
     vTaskDelay(50);

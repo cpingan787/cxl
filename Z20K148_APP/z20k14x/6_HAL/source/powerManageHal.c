@@ -64,8 +64,6 @@ static void PmKernelIntoSleepSet(void)
     COMMON_ENABLE_INTERRUPTS();    //使能 IRQ 全局中断。如果产生 IRQ 中断，进入，可清除 IRQ 标志位，避免 IRQ 保持置位，影响 WFI 指令
 
     CLK_SysClkSrc(CLK_SYS_FIRC64M);    //选择 FIRC 作为系统时钟的时钟源
-    CLK_ModuleSrc(CLK_FLASH, CLK_SRC_SLOW);  //设置FLASH控制器的时钟源
-    CLK_SetClkDivider(CLK_FLASH, CLK_DIV_1); //设置FLASH控制器时钟的分频器。FLASH控制器时钟的典型值是8Mhz
     
     //清除所有 IRQ 标志位，避免没有使能 IRQ 中断的标志置位，影响 WFI 指令
     for(uint8_t i=0; i<205; i++)
@@ -81,8 +79,6 @@ static void PmKernelIntoWakeupSet(void)
     WDOG_Refresh();    
 
     CLOCK_Init();    //重新初始化时钟
-    CLK_ModuleSrc(CLK_FLASH, CLK_SRC_FIRC64M);  //设置FLASH控制器的时钟源
-    CLK_SetClkDivider(CLK_FLASH, CLK_DIV_8); //设置FLASH控制器时钟的分频器。FLASH控制器时钟的典型值是8Mhz
 
     SYSCTRL_EnableModule(SYSCTRL_PORTA);
     SYSCTRL_EnableModule(SYSCTRL_PORTB);

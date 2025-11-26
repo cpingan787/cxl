@@ -87,8 +87,17 @@ typedef union TEL_11_A_T
     uint8_t data[8];
     struct
     {
-        uint64_t TEL_Longitude : 28;
-        uint64_t TEL_Latitude : 28;
+
+        uint64_t TEL_Latitude_1 : 8;
+        uint64_t TEL_Latitude_2 : 8;
+        uint64_t TEL_Latitude_3 : 8;
+        uint64_t TEL_Latitude_4 : 4;
+
+        uint64_t TEL_Longitude_1 : 4;
+        uint64_t TEL_Longitude_2 : 8;
+        uint64_t TEL_Longitude_3 : 8;
+        uint64_t TEL_Longitude_4 : 8;
+
         uint64_t TEL_NaviPstVD : 1;
         uint64_t TEL_11_Reserve : 7;
     } DetailInfo;
@@ -117,8 +126,8 @@ typedef union TEL_3
         uint64_t TEL_BTAvrcpSt : 1;
         uint64_t TEL_BTAvrcpPlayMode : 3;
 
-        uint64_t TEL_Reserve3 : 5;
         uint64_t TEL_TelematicsRegisterSt : 3;
+        uint64_t TEL_Reserve3 : 5;
 
         uint64_t TEL_Reserve4 : 32;
     } DetailInfo;
@@ -483,9 +492,10 @@ static int16_t CanPeriodMessage3C5(uint8_t *pCanData)
     uint16_t ret = 0U;
     if (pCanData != NULL)
     {
-        memset(pCanData, 0x00, 8);
-        const ftyCircleDataToMcu_t *ftyData = StateSyncGetFtyData();
+        memset(pCanData, 0x00, 8); 
         
+        const ftyCircleDataToMcu_t *ftyData = StateSyncGetFtyData();
+
         if (ftyData != NULL)
         {
             const GpsPosition_t *gpsPos = &ftyData->gpsPosition;
@@ -503,20 +513,24 @@ static int16_t CanPeriodMessage3C5(uint8_t *pCanData)
             uint32_t lon_abs_1e6 = gpsPos->longitude / 10;
 
             int32_t lat_signed = (gpsPos->northSouth == 0) ? (int32_t)lat_abs_1e6 : -(int32_t)lat_abs_1e6;
-            int32_t lon_signed = (gpsPos->eastWest == 0)   ? (int32_t)lon_abs_1e6 : -(int32_t)lon_abs_1e6;
+            int32_t lon_signed = (gpsPos->eastWest == 0) ? (int32_t)lon_abs_1e6 : -(int32_t)lon_abs_1e6;
 
-            g_tbox11Message.DetailInfo.TEL_Latitude  = (uint32_t)lat_signed & 0x0FFFFFFFU;
-            g_tbox11Message.DetailInfo.TEL_Longitude = (uint32_t)lon_signed & 0x0FFFFFFFU;
+            //TBOX_PRINT("lat_signed=0X%X, lon_signed=0X%X\r\n", lat_signed, lon_signed);
+
+            pCanData[0] = (uint8_t)((lon_signed >> 20) & 0xFF); // Bit 27-20
+            pCanData[1] = (uint8_t)((lon_signed >> 12) & 0xFF); // Bit 19-12
+            pCanData[2] = (uint8_t)((lon_signed >> 4) & 0xFF);  // Bit 11-4
+            
+            pCanData[3] = (uint8_t)((lon_signed << 4) & 0xF0); 
+
+            pCanData[3] |= (uint8_t)((lat_signed >> 24) & 0x0F);
+
+            pCanData[4] = (uint8_t)((lat_signed >> 16) & 0xFF); // Bit 23-16
+            pCanData[5] = (uint8_t)((lat_signed >> 8) & 0xFF);  // Bit 15-8
+            pCanData[6] = (uint8_t)(lat_signed & 0xFF);         // Bit 7-0
+
+            pCanData[7] = (uint8_t)(g_tbox11Message.DetailInfo.TEL_NaviPstVD & 0x01);
         }
-        else
-        {
-
-            g_tbox11Message.DetailInfo.TEL_NaviPstVD = 0U;
-            g_tbox11Message.DetailInfo.TEL_Latitude  = 0U;
-            g_tbox11Message.DetailInfo.TEL_Longitude = 0U;
-        }
-
-        memcpy(pCanData, &g_tbox11Message.data[0], sizeof(g_tbox11Message.data));
     }
     else
     {
@@ -535,6 +549,14 @@ static int16_t CanPeriodMessage3C5(uint8_t *pCanData)
    Others:          Sets various telematics status data including GPS, GPRS, Bluetooth
  *************************************************/
 
+/*************************************************
+   Function:        CanPeriodMessage35F
+   Description:     Process and prepare CAN message with ID 0x35F
+   Input:           pCanData - Pointer to CAN data buffer
+   Output:          pCanData - Filled with message data
+   Return:          0 on success, -1 on failure
+   Others:          Sets various telematics status data including GPS, GPRS, Bluetooth
+ *************************************************/
 static int16_t CanPeriodMessage35F(uint8_t *pCanData)
 {
     uint16_t ret = 0U;
@@ -543,14 +565,19 @@ static int16_t CanPeriodMessage35F(uint8_t *pCanData)
     {
         memset(pCanData, 0x00, 8);
         const ftyCircleDataToMcu_t *ftyData = StateSyncGetFtyData();
+
         if (ftyData != NULL)
         {
             g_tbox3Message.DetailInfo.TEL_GPSCommSt = 1U;
+
+            g_tbox3Message.DetailInfo.TEL_TelematicsRegisterSt = (uint64_t)(ftyData->lteNetworkStatus.b2_3.netState & 0x07);
         }
         else
         {
             g_tbox3Message.DetailInfo.TEL_GPSCommSt = 0U;
+            g_tbox3Message.DetailInfo.TEL_TelematicsRegisterSt = 0U;
         }
+
         g_tbox3Message.DetailInfo.TEL_GPRSOr3GCommSt = 0U;
         g_tbox3Message.DetailInfo.TEL_TelematicsModeActSt = 0U;
         g_tbox3Message.DetailInfo.TEL_BTPowerSt = 0U;
@@ -561,7 +588,7 @@ static int16_t CanPeriodMessage35F(uint8_t *pCanData)
         g_tbox3Message.DetailInfo.TEL_BTAvrcpSt = 0U;
         g_tbox3Message.DetailInfo.TEL_OTAState = 0U;
         g_tbox3Message.DetailInfo.TEL_BTManualMode = 0U;
-        g_tbox3Message.DetailInfo.TEL_TelematicsRegisterSt = 0U;
+
         g_tbox3Message.DetailInfo.TEL_MsgCounter = g_TEL_MsgCounter;
         g_TEL_MsgCounter = (g_TEL_MsgCounter + 1U) % 16U;
         memcpy(pCanData, &g_tbox3Message.data[0], sizeof(g_tbox3Message.data));

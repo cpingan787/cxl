@@ -75,4 +75,5 @@ typedef uint8_t RemoteControlCmdId_t;
 void TaskAppVehicleRemoteControl( void *pvParameters );
 RemoteControlState_t RemoteControlGetTotalState(void);
 uint8_t RemoteControlGetKeepWakeFlag(void);
+uint8_t RemoteControlGetOtaFlag(void);
 #endif

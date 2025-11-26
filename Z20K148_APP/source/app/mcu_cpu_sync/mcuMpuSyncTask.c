@@ -144,7 +144,7 @@ void McuMpuSyncTaskMain(void *pvParameters)
         // 升级周期调用
         FirmwareUpdateSdkCycleProcess();
         // 时间同步周期调用
-        TimeSyncSdkCycleProcess(timeSyncPack);
+        //TimeSyncSdkCycleProcess(timeSyncPack);
         // 电源状态同步周期调用
         MpuPowerSyncSdkCycleProcess(powerSyncPack);
 

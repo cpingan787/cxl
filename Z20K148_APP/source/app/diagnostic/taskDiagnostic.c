@@ -1676,9 +1676,11 @@ static int16_t Service0x31Process(uint8_t *udsData, uint16_t udsLen, uint8_t fun
   {
     return 0x13;
   }
-  if (!UdsCheckSecurityAccessValid(E_UDS_SECURITY_LEVEL1))
+  uint8_t factoryMode = UdsDidGetManufactoryMode();
+  
+  if ( (factoryMode < 0x10) && (g_currentSecurityLevel != E_UDS_SECURITY_LEVEL1) )
   {
-    negativeNum = 0x33; // Security Access Denied
+    negativeNum = 0x33;
     return negativeNum;
   }
 

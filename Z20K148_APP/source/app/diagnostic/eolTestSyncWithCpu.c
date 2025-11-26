@@ -28,11 +28,19 @@ int16_t CanPassthrough_RequestAndGetResponse(const uint8_t *pUdsRequest, uint16_
     int16_t ret;
     uint16_t repeatCount = 0;
     uint8_t rxSuccess = 0;
+    uint16_t maxRepeatCount = 2;
 
     if (pUdsRequest == NULL || pUdsResponse == NULL || pRespLength == NULL)
     {
         return -1;
     }
+
+    if (reqLength >= 3 && pUdsRequest[0] == 0x2E && pUdsRequest[1] == 0xB2 && pUdsRequest[2] == 0x96)
+    {
+        maxRepeatCount = 10; 
+    }
+    // ---------------------------------------------------------
+
     g_mpuDataPack.aid = PASSTHROUGH_AID;
     g_mpuDataPack.mid = PASSTHROUGH_MID;
     g_mpuDataPack.subcommand = PASSTHROUGH_SUB_MCU_TO_MPU; // 0x22
@@ -42,7 +50,7 @@ int16_t CanPassthrough_RequestAndGetResponse(const uint8_t *pUdsRequest, uint16_
 
     g_dataPack.pDataBuffer = g_dataBuffer;
     g_dataPack.dataBufferSize = sizeof(g_dataBuffer);
-    while (MpuHalReceive(g_mpuHandle, &g_dataPack, 0) == 0) // 清空接收缓冲区
+    while (MpuHalReceive(g_mpuHandle, &g_dataPack, 0) == 0)
     {
     }
 
@@ -64,13 +72,6 @@ int16_t CanPassthrough_RequestAndGetResponse(const uint8_t *pUdsRequest, uint16_
                 g_mpuDataBuffer[2] == g_dataBuffer[2] &&
                 g_mpuDataBuffer[1] == g_dataBuffer[1])
             {
-                // 打印收到的数据
-                // TBOX_PRINT("Received Passthrough Response: ");
-                // TBOX_PRINT("\r\n");
-                // for (uint16_t i = 0; i < g_dataPack.dataLength; i++)
-                // {
-                //     TBOX_PRINT("0x%02X ", g_dataPack.pDataBuffer[i]);
-                // }
                 memcpy(pUdsResponse, g_dataPack.pDataBuffer, g_dataPack.dataLength);
                 *pRespLength = g_dataPack.dataLength;
                 rxSuccess = 1;
@@ -84,7 +85,7 @@ int16_t CanPassthrough_RequestAndGetResponse(const uint8_t *pUdsRequest, uint16_
         else
         {
             repeatCount++;
-            if (repeatCount >= 2)
+            if (repeatCount >= maxRepeatCount)
             {
                 break;
             }
