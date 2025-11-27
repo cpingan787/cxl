@@ -4,7 +4,7 @@
 #define PARTNUMBER 24317098UL
 #define SOFTWARE_NUMBER 24317098UL
 #define MPU_SYSN_VERSION "000000000"
-#define MCU_SYSN_VERSION "005" // mcu内部版本号
+#define MCU_SYSN_VERSION "006" // mcu内部版本号
 #define MCU_MPU_ALL_VERSION MPU_SYSN_VERSION MCU_SYSN_VERSION
 // 0xF10B_cxl
 static const uint8_t g_didF10B[4] = {

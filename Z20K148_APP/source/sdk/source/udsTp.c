@@ -4,7 +4,7 @@
 #include "semphr.h"
 #include "udsTp.h"
 #include <string.h>
-
+#include "logHal.h"
 //诊断状态管理
 typedef enum
 {
@@ -364,8 +364,15 @@ int16_t UdsTpTransmit(int16_t handle,uint8_t typeFlag,uint8_t *txData,uint16_t d
         data[i+2] = txData[i];
     }
     dlc = 8;
+    //打印数据
     
     ret = CanHalTransmit(canHandle,txCanId,data,dlc,0);
+
+    TBOX_PRINT("[MCU] UDS Tx to CAN ID: 0x%X, Data:", txCanId);
+    for (i = 0; i < dlc; i++)
+    {
+       TBOX_PRINT(" %02X", data[i]);
+    }
     if(ret != 0)
     {
         return -1;
@@ -762,6 +769,24 @@ static int16_t UdsTpMultiFrameRx(int16_t udsTpHandle,int16_t canHandle,uint16_t 
         i++;
     }
     return rxCount;
+}
+
+int16_t UdsTpReceiveRaw(int16_t udsTpHandle, uint8_t *pData, uint16_t *dataLen)
+{
+    if(udsTpHandle < 0 || udsTpHandle >= REMOTE_DIAGNOSTIC_INSTANCE_NUM) return -1;
+    
+    int16_t canHandle = g_udsTp[udsTpHandle].canHandle;
+    CanHalMsg_t canRxMsg;
+    
+    int16_t ret = CanHalReceive(canHandle, &canRxMsg, 0);
+    
+    if(ret == 0)
+    {
+        *dataLen = canRxMsg.dlc;
+        memcpy(pData, canRxMsg.canData, *dataLen);
+        return 0;
+    }
+    return -1;
 }
 
 int16_t UdsTpReceive(int16_t udsTpHandle,uint8_t *pData,uint16_t *dataLen,uint32_t waitTime)

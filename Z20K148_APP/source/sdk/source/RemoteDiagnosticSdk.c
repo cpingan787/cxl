@@ -360,7 +360,16 @@ void RemoteDiagnosticSdkProcess(CanIdConfig_t *pEcuConfigure, MpuBuffer_t *pMpuB
                 if (ecuId != 0xFF)
                 {
                     udsRecvLen = 0;
-                    ret = UdsTpReceive(g_udsTpHandle[pEcuConfigure->pEcuList[ecuId].channel], udsRxbuf, &udsRecvLen, 0);
+                    uint32_t currentReqId = pEcuConfigure->pEcuList[ecuId].requestId;
+
+                    if (currentReqId == 0x067 || currentReqId == 0x069)
+                    {
+                        ret = UdsTpReceiveRaw(g_udsTpHandle[pEcuConfigure->pEcuList[ecuId].channel], udsRxbuf, &udsRecvLen);
+                    }
+                    else
+                    {
+                        ret = UdsTpReceive(g_udsTpHandle[pEcuConfigure->pEcuList[ecuId].channel], udsRxbuf, &udsRecvLen, 0);
+                    }
 
                     if (ret == 0)
                     {

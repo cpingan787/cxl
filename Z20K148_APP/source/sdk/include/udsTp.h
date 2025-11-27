@@ -121,4 +121,6 @@ void UdsTpSetFilter(int16_t handle,uint8_t respType);
 *************************************************/
 void UdsTpClearRecvBuffer(int16_t handle);
 
+//透传函数
+int16_t UdsTpReceiveRaw(int16_t udsTpHandle, uint8_t *pData, uint16_t *dataLen);
 #endif
