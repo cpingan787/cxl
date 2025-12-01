@@ -90,6 +90,17 @@ static int16_t Service2EWriteBluetoothName(uint8_t *Data,uint16_t len);
 
 static const struc_ReadDidMap m_readDidMap[] = 
 {
+    {0x1201,ServiceReadPinKL15Status},
+
+    {0x1202,TestService22ReadKL30Voltage},
+    
+    {0x1203,ServiceReadPinEcallStatus},
+    {0x1204,ServiceReadBatteryChargeState},
+    {0x1205,ServiceReadBlueToothName},
+    {0x1206,ServiceReadBlueToothMacAddress},
+    {0x1207,ServiceReadBlueToothSoftVersion},
+    {0x1208,ServiceReadPowerOnCount},
+
     {0xF15B, Service22ReadFingerPrint              },       //FingerPrint 
     {0xF187, Service22ReadPartNumber              },       //电控单元零件号         
     {0xF18A, Service22ReadSupplierId              },       //系统供应商标识号  
@@ -129,7 +140,7 @@ static const struc_ReadDidMap m_readDidMap[] =
     {0x127F, Service22ReadApnNumber               },       //apn number           
     {0x1280, Service22ReadGNSS                    },       //GPS状态               
     {0x1281, Service22ReadNetWorkProvider         },       //注册登录状态  
-    {0x1282, TestService22ReadKL30Voltage         },       // 
+    //{0x1282, TestService22ReadKL30Voltage         },       // 
     {0x1283, Service22ReadBatteryStatus           },       // 
     {0x1285, Service22ReadCpuFlashCapacity        },       //  
     {0x1286, ServiceReadBlueToothName             },       // 
@@ -138,7 +149,7 @@ static const struc_ReadDidMap m_readDidMap[] =
     {0x1290, ServiceReadPowerOnCount              },       //     
     {0x1401, ServiceReadPinIN_1Status             },       //   
     {0x1402, ServiceReadPinIN_2Status             },       //
-    {0x1403, ServiceReadPinKL15Status             },       //   
+    //{0x1403, ServiceReadPinKL15Status             },       //   
     {0x1404, ServiceReadPinSRSStatus              },       //
     {0x1405, ServiceReadPinEcallStatus            },       //   
     {0x1406, ServiceReadBatteryChargeState        },       //  

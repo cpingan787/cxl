@@ -34,9 +34,9 @@ typedef enum
 
 typedef enum
 {
-    E_VOLTAGE_STATUS_NORMAL = 0,      // Normal voltage status
-    E_VOLTAGE_STATUS_GENERAL_ERROR,   // General error status
-    E_VOLTAGE_STATUS_CRITICAL_ERROR   // Critical error status
+    E_VOLTAGE_STATUS_NORMAL = 0,    // Normal voltage status
+    E_VOLTAGE_STATUS_GENERAL_ERROR, // General error status
+    E_VOLTAGE_STATUS_CRITICAL_ERROR // Critical error status
 } VoltageStatus_e;
 /****************************** Function Declarations *************************/
 static void Can1BusErrorEvent(uint8_t flag);
@@ -90,11 +90,11 @@ static uint8_t g_kl30DtcResetFlag = 0;
 static uint32_t g_diagFaultTimerCount = 0;
 static const uint16_t g_communicationMaxVoltage = 18000; // mv
 static const uint16_t g_communicationMinVoltage = 7000;  // mv
-static const uint16_t g_diagCriticalMaxVoltage  = 18000; // mv
-static const uint16_t g_diagCriticalMinVoltage  = 7000;  // mv
-static const uint16_t g_diagMaxVoltage          = 16000; // mv
-static const uint16_t g_diagMinVoltage          = 9000;  // mv
-static const uint32_t g_diagFaultTime           = 500;   // ms
+static const uint16_t g_diagCriticalMaxVoltage = 18000;  // mv
+static const uint16_t g_diagCriticalMinVoltage = 7000;   // mv
+static const uint16_t g_diagMaxVoltage = 16000;          // mv
+static const uint16_t g_diagMinVoltage = 9000;           // mv
+static const uint32_t g_diagFaultTime = 500;             // ms
 /****************************** Public Function Implementations ***************/
 
 /****************************** Private Function Implementations ***************/
@@ -291,7 +291,7 @@ static void McuVoltageDtcCheckProcess(void)
         }
 
         // 检查 B320415: GPS天线开路或对电源短路
-        bool isOpen = (v_gps_mv > 800 && v_gps_mv < 1200) && (v_gps1_mv > 800 && v_gps1_mv < 1200);
+        bool isOpen = (v_gps_mv > 700 && v_gps_mv < 1200) && (v_gps1_mv > 700 && v_gps1_mv < 1200);
         bool isShortToBat = (v_gps_mv > 1500 && v_gps1_mv > 1500);
 
         if (isOpen || isShortToBat)
@@ -373,7 +373,7 @@ static void KL30DetectDtcProcess(uint32_t kl30Voltage)
 {
     static VoltageStatus_e lastVoltageStatus = E_VOLTAGE_STATUS_NORMAL;
     VoltageStatus_e currentVoltageStatus = E_VOLTAGE_STATUS_NORMAL;
-    
+
     // Determine current voltage status
     if (kl30Voltage >= g_diagMinVoltage && kl30Voltage <= g_diagMaxVoltage) // Normal voltage range (9-16V)
     {
@@ -387,23 +387,23 @@ static void KL30DetectDtcProcess(uint32_t kl30Voltage)
     {
         currentVoltageStatus = E_VOLTAGE_STATUS_GENERAL_ERROR;
     }
-    
+
     // Reset corresponding timers when status changes
     if (currentVoltageStatus != lastVoltageStatus)
     {
         if (currentVoltageStatus == E_VOLTAGE_STATUS_NORMAL) // Enter normal status
         {
-            g_diagFaultTimerCount = 0;      // Clear fault timer
-            g_diagRecoverTimerCount = 0;    // Reset recovery timer and restart timing
+            g_diagFaultTimerCount = 0;   // Clear fault timer
+            g_diagRecoverTimerCount = 0; // Reset recovery timer and restart timing
         }
         else // Enter error status
         {
-            g_diagRecoverTimerCount = 0;    // Clear recovery timer
-            g_diagFaultTimerCount = 0;      // Reset fault timer to ensure re-timing when switching between different error types
+            g_diagRecoverTimerCount = 0; // Clear recovery timer
+            g_diagFaultTimerCount = 0;   // Reset fault timer to ensure re-timing when switching between different error types
         }
         lastVoltageStatus = currentVoltageStatus;
     }
-    
+
     // Execute corresponding logic based on current status
     if (currentVoltageStatus == E_VOLTAGE_STATUS_NORMAL) // Normal voltage range
     {
@@ -423,7 +423,7 @@ static void KL30DetectDtcProcess(uint32_t kl30Voltage)
     {
         // Increase critical error timer
         g_diagFaultTimerCount++;
-        
+
         // Set DTC after critical error persists for 500ms
         if (g_diagFaultTimerCount >= (g_diagFaultTime / 10))
         {
@@ -436,14 +436,14 @@ static void KL30DetectDtcProcess(uint32_t kl30Voltage)
     {
         // Increase general error timer
         g_diagFaultTimerCount++;
-        
+
         // Set DTC after general error persists for 500ms
         if (g_diagFaultTimerCount >= (g_diagFaultTime / 10))
         {
             SetDtcFaultState(E_DTC_ITEM_MAIN_POWER_OVER_RANGE);
         }
     }
-    
+
     // Process DTC reset logic
     ProcessDtcReset();
 }

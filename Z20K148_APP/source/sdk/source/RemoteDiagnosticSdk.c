@@ -10,7 +10,7 @@
 #include "udsDidFunction.h"
 #include "FreeRTOS.h"
 #include "task.h"
-
+#include "remoteControl.h"
 #define COMMAND_UDS_TRANSMIT_AID 0x05
 
 /* *
@@ -196,11 +196,10 @@ static uint8_t RemoteDiagnosticSdkTpTransmit(CanIdConfig_t *pEcuConfigure, MpuHa
                 //
                 if (canId == 0x067 || canId == 0x069)
                 {
-                    CanHalTransmit(g_udsTpHandle[pEcuConfigure->pEcuList[ecuId].channel],
-                                   pEcuConfigure->pEcuList[ecuId].requestId,
-                                   pUdsData,
-                                   udsDataLen,
-                                   0);
+                    UdsTpTransmitRaw(g_udsTpHandle[pEcuConfigure->pEcuList[ecuId].channel],
+                                     canId,
+                                     pUdsData,
+                                     udsDataLen);
                 }
                 else
                 {
@@ -255,8 +254,10 @@ void RemoteDiagnosticSdkProcess(CanIdConfig_t *pEcuConfigure, MpuBuffer_t *pMpuB
     {
         return;
     }
+    
     g_canChannelList = canChannelList;
     virtualTpHandle = VirtualTpSdkClientOpen(virtualRxbuf, sizeof(virtualRxbuf), virtualTxbuf, sizeof(virtualTxbuf));
+    pMpuBuffer->canRxBufferSize = sizeof(pMpuBuffer->canRxBuffer) / sizeof(pMpuBuffer->canRxBuffer[0]);
 
     for (i = 0; i < canChannelList->canChanelListSize; i++)
     {
@@ -270,7 +271,32 @@ void RemoteDiagnosticSdkProcess(CanIdConfig_t *pEcuConfigure, MpuBuffer_t *pMpuB
 
         uint8_t currentMode = UdsDidGetManufactoryMode();
         uint8_t isNonFactoryMode = (currentMode <= 0x0F) ? 1 : 0;
+        // rxMsg.aid = COMMAND_UDS_TRANSMIT_AID;
+        // rxMsg.mid = COMMAND_UDS_FLASHER_MID;
+        // rxMsg.subcommand = COMMAND_UDS_TRANSMIT_REQ;
 
+        // rxMsg.pDataBuffer[0] = 0U;
+        // rxMsg.pDataBuffer[1] = 0U;
+
+        // rxMsg.pDataBuffer[2] = 0U;
+        // rxMsg.pDataBuffer[3] = 0U;
+        // rxMsg.pDataBuffer[4] = 0U;
+        // rxMsg.pDataBuffer[5] = 0U;
+        // rxMsg.pDataBuffer[6] = 0x67;
+        // rxMsg.pDataBuffer[7] = 0U;
+        // rxMsg.pDataBuffer[8] = 0U;
+        // rxMsg.pDataBuffer[9] = 0U;
+        // rxMsg.pDataBuffer[10] = 0x68;
+        // rxMsg.pDataBuffer[11] = 0U;
+        // rxMsg.pDataBuffer[12] = 0U;
+        // rxMsg.pDataBuffer[13] = 0U;
+        // rxMsg.pDataBuffer[14] = 0U;
+        // rxMsg.pDataBuffer[15] = 0U;
+        // rxMsg.pDataBuffer[16] = 0U;
+        // rxMsg.pDataBuffer[17] = 0U;
+        // rxMsg.pDataBuffer[18] = 0U;
+        // rxMsg.dataLength = 19;
+        // ret = MPU_HAL_STATUS_OK;
         if (ret == MPU_HAL_STATUS_OK)
         {
             if ((rxMsg.aid == COMMAND_UDS_TRANSMIT_AID) &&
@@ -308,15 +334,23 @@ void RemoteDiagnosticSdkProcess(CanIdConfig_t *pEcuConfigure, MpuBuffer_t *pMpuB
                 }
                 else if ((rxMsg.mid == COMMAND_UDS_RESET_MID) && ((rxMsg.subcommand & 0x7F) == 0x24)) // *MID 0x10, Subcmd 0x24*
                 {
-                    if (rxMsg.dataLength >= 1)
+                    uint8_t ota_flag = RemoteControlGetOtaFlag();
+                    if (ota_flag == 1)
                     {
-                        if (rxMsg.pDataBuffer[0] == 0x01)
+                        TBOX_PRINT("[RemoteDiag] OTA Active! Ignore Reset Command.\r\n");
+                    }
+                    else
+                    {
+                        if (rxMsg.dataLength >= 1)
                         {
-                            PeripheralHalMcuHardReset();
-                        }
-                        else if (rxMsg.pDataBuffer[0] == 0x00)
-                        {
-                            MpuHalReset();
+                            if (rxMsg.pDataBuffer[0] == 0x01)
+                            {
+                                PeripheralHalMcuHardReset();
+                            }
+                            else if (rxMsg.pDataBuffer[0] == 0x00)
+                            {
+                                MpuHalReset();
+                            }
                         }
                     }
                 }
@@ -364,6 +398,20 @@ void RemoteDiagnosticSdkProcess(CanIdConfig_t *pEcuConfigure, MpuBuffer_t *pMpuB
 
                     if (currentReqId == 0x067 || currentReqId == 0x069)
                     {
+
+//                        udsRxbuf[0] = 0x01;
+//                        udsRxbuf[1] = 0x02;
+//                        udsRxbuf[2] = 0x03;
+//                        udsRxbuf[3] = 0x04;
+//                        udsRxbuf[4] = 0x05;
+//                        udsRxbuf[5] = 0x06;
+//                        udsRxbuf[6] = 0x07;
+//                        udsRxbuf[7] = 0x08;
+//
+//                        udsRecvLen = 8;
+//
+//                        ret = 0;
+
                         ret = UdsTpReceiveRaw(g_udsTpHandle[pEcuConfigure->pEcuList[ecuId].channel], udsRxbuf, &udsRecvLen);
                     }
                     else

@@ -272,7 +272,7 @@ const ADC_ChannelConfig_t Ecallconfig =
 const ADC_ChannelConfig_t BcallLightconfig =
     {
         .adcDifferentialMode = ADC_SINGLE_MODE, // Select single-ended signal mode
-        .adcChannelP = ADC_P_CH14,              // Signal P pole channel, CH14
+        .adcChannelP = ADC_P_CH12,              // Signal P pole channel, CH12
         .adcChannelN = ADC_N_NONE               // Signal N pole channel. No need to configure N pole channel in single-ended signal mode
 };
 const ADC_ChannelConfig_t EcallLightconfig =
@@ -582,7 +582,7 @@ void ADC0_FWM_ISR(void)
         g_adBuffer[AD_CHANNEL_ECALL_LIGHT].adValue = adc0Data & 0x0FFF;
         ADC_ChannelConfig(ADC0_ID, &BcallLightconfig);
         break;
-    case ADC_P_CH14:
+    case ADC_P_CH12:
         g_adBuffer[AD_CHANNEL_BCALL_LIGHT].adValue = adc0Data & 0x0FFF;
         ADC_ChannelConfig(ADC0_ID, &AdcKl30Config);
         break;
@@ -720,12 +720,15 @@ int16_t PeripheralHalAdGet(uint8_t adChannel, uint32_t *pValue)
         if(adValid != 0)
         {
             // Common calculation for all valid channels
+            
             temData = adValue * AD_REF_VOLTAGE;
             temData = temData / 4096;
             
             // Apply channel-specific factor
             if(AD_CHANNEL_KL30 == adChannel)
             {
+                //TBOX_PRINT(" Raw Value: %d\r\n", adValue);
+                //TBOX_PRINT(" KL30 ADC Value: %d\r\n", temData);
                 temData = temData * AD_CHANNEL_KL30_FACTOR;
                 *pValue = temData;
                 result = 0;
@@ -1164,6 +1167,9 @@ static void PeripheralHalAdc0PinConfig(void)
     PORT_PinmuxConfig(PORT_C, GPIO_15, PTC15_ADC0_CH13);
     // B_call 指示灯短路到地
     PORT_PinmuxConfig(PORT_C, GPIO_14, PTC14_ADC0_CH12);
+
+    //
+    PORT_PinmuxConfig(PORT_C, GPIO_17, PTC17_ADC0_CH15);
 }
 
 /*************************************************

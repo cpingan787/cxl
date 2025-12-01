@@ -5,44 +5,44 @@
 #include "udsTp.h"
 #include <string.h>
 #include "logHal.h"
-//诊断状态管理
+// 诊断状态管理
 typedef enum
 {
     E_REMOTE_STATE_FIRST_FRAME = 0,
     E_REMOTE_STATE_FLOW_CONTROL_FRAME,
     E_REMOTE_STATE_CONSECUTIVE_FRAME,
     E_REMOTE_STATE_FRAME_FINISHED
-}RemoteEcuTpState_e;
+} RemoteEcuTpState_e;
 
-//udsTp用来设置接收缓存结构体
-typedef struct 
-{
-    RemoteEcuTpState_e tpState;
-    uint8_t *pTpBuffer;         //接收buffer
-    uint16_t tpBufferSize;      //Buffer大小
-    uint16_t tpReceiveCount;    //接收到的实际长度
-    uint32_t responseId;        //诊断响应can ID
-}FunctionEcu_t;
-
-//udsTp结构体
+// udsTp用来设置接收缓存结构体
 typedef struct
 {
-    int16_t	 canHandle;	                 //Can通信句柄
-    uint32_t physicalRequestId;	         //物理寻址请求ID
-    uint32_t physicalResponseId;         //物理寻址响应ID
-    uint32_t functionalRequestId;	     //功能寻址请求ID
-    FunctionEcu_t *pFunctionalEcuBuf;    //接收buffer
-    uint16_t functionalEcuBufSize;	     //接收buffer大小
-    uint16_t functionalEcuCount;         //接收计数
-    uint32_t functionalResponseIdMax;    //功能寻址响应最小ID
-    uint32_t functionalResponseIdMin;    //功能寻址响应最大ID
-    UdsTpParameter_t *pParameter;	     //CanTP参数设置
-}RemoteVariable_t;
+    RemoteEcuTpState_e tpState;
+    uint8_t *pTpBuffer;      // 接收buffer
+    uint16_t tpBufferSize;   // Buffer大小
+    uint16_t tpReceiveCount; // 接收到的实际长度
+    uint32_t responseId;     // 诊断响应can ID
+} FunctionEcu_t;
 
-#define REMOTE_DIAGNOSTIC_INSTANCE_NUM 6 //Can通道数量最大数
+// udsTp结构体
+typedef struct
+{
+    int16_t canHandle;                // Can通信句柄
+    uint32_t physicalRequestId;       // 物理寻址请求ID
+    uint32_t physicalResponseId;      // 物理寻址响应ID
+    uint32_t functionalRequestId;     // 功能寻址请求ID
+    FunctionEcu_t *pFunctionalEcuBuf; // 接收buffer
+    uint16_t functionalEcuBufSize;    // 接收buffer大小
+    uint16_t functionalEcuCount;      // 接收计数
+    uint32_t functionalResponseIdMax; // 功能寻址响应最小ID
+    uint32_t functionalResponseIdMin; // 功能寻址响应最大ID
+    UdsTpParameter_t *pParameter;     // CanTP参数设置
+} RemoteVariable_t;
 
-static RemoteVariable_t g_udsTp[REMOTE_DIAGNOSTIC_INSTANCE_NUM]; //为每一路定义一个初始化TP结构体
-static uint8_t g_handleOpenCount = 0;                             //初始化TP结构体使用计数
+#define REMOTE_DIAGNOSTIC_INSTANCE_NUM 6 // Can通道数量最大数
+
+static RemoteVariable_t g_udsTp[REMOTE_DIAGNOSTIC_INSTANCE_NUM]; // 为每一路定义一个初始化TP结构体
+static uint8_t g_handleOpenCount = 0;                            // 初始化TP结构体使用计数
 
 /*************************************************
   Function:       UdsTpOpen
@@ -54,32 +54,32 @@ static uint8_t g_handleOpenCount = 0;                             //初始化TP�
   Output:         无
   Return:         -1：失败
                   >0:有效句柄
-  Others:         
+  Others:
 *************************************************/
-int16_t UdsTpOpen(uint8_t canChanal,CanHalMsg_t *pCanRxbuffer,uint16_t pBufferNum,UdsTpParameter_t *pTpParameter)
+int16_t UdsTpOpen(uint8_t canChanal, CanHalMsg_t *pCanRxbuffer, uint16_t pBufferNum, UdsTpParameter_t *pTpParameter)
 {
     int16_t handle = -1;
     int16_t canHandle;
-    
-    if(g_handleOpenCount >= REMOTE_DIAGNOSTIC_INSTANCE_NUM)
+
+    if (g_handleOpenCount >= REMOTE_DIAGNOSTIC_INSTANCE_NUM)
     {
         return -1;
     }
     canHandle = CanHalOpen(canChanal);
-    if(canHandle < 0)
+    if (canHandle < 0)
     {
         return -2;
     }
-    CanHalSetRxBuffer(canHandle,pCanRxbuffer,pBufferNum);
+    CanHalSetRxBuffer(canHandle, pCanRxbuffer, pBufferNum);
     handle = g_handleOpenCount;
     g_handleOpenCount++;
-    
+
     g_udsTp[handle].canHandle = canHandle;
-    g_udsTp[handle].pParameter=pTpParameter;
-    g_udsTp[handle].pFunctionalEcuBuf=NULL;
-    g_udsTp[handle].functionalEcuBufSize=0;
-    g_udsTp[handle].functionalEcuCount=0;
-    
+    g_udsTp[handle].pParameter = pTpParameter;
+    g_udsTp[handle].pFunctionalEcuBuf = NULL;
+    g_udsTp[handle].functionalEcuBufSize = 0;
+    g_udsTp[handle].functionalEcuCount = 0;
+
     return handle;
 }
 
@@ -89,82 +89,82 @@ int16_t UdsTpOpen(uint8_t canChanal,CanHalMsg_t *pCanRxbuffer,uint16_t pBufferNu
   Input:          handle：udsTp句柄
                   requestId：功能寻址请求ID
   Output:         无
-  Return:         函数执行结果 
+  Return:         函数执行结果
                   0：成功
                   -1：失败
-  Others:         
+  Others:
 *************************************************/
-int16_t UdsTpSetFunctionId(int16_t handle,uint32_t requestId)
+int16_t UdsTpSetFunctionId(int16_t handle, uint32_t requestId)
 {
-    g_udsTp[handle].functionalRequestId=requestId;
-    
+    g_udsTp[handle].functionalRequestId = requestId;
+
     return 0;
 }
 
-static int16_t UdsTpMultFramGetFlowControl(int16_t tpHandle,int16_t canHandle,CanHalMsg_t *pRxMsg,uint8_t *pSTmin,uint8_t* pBlocksize)
+static int16_t UdsTpMultFramGetFlowControl(int16_t tpHandle, int16_t canHandle, CanHalMsg_t *pRxMsg, uint8_t *pSTmin, uint8_t *pBlocksize)
 {
-    int16_t ret,result;
+    int16_t ret, result;
     result = 0;
-    while(1)
+    while (1)
     {
-        //ret = CanHalDiagnosticReceive(canHandle,pRxMsg, g_tpVariable[tpHandle].pTpParameter->N_Bs_enforced);//wait 150 ms
-        ret = CanHalReceive(canHandle,pRxMsg,g_udsTp[tpHandle].pParameter->N_Bs_enforced);
+        // ret = CanHalDiagnosticReceive(canHandle,pRxMsg, g_tpVariable[tpHandle].pTpParameter->N_Bs_enforced);//wait 150 ms
+        ret = CanHalReceive(canHandle, pRxMsg, g_udsTp[tpHandle].pParameter->N_Bs_enforced);
 
         if (ret != 0)
         {
             result = -1;
-            break;//time out
+            break; // time out
         }
         if (pRxMsg->dlc < 3)
         {
             result = -1;
-            break;//error dlc
+            break; // error dlc
         }
-        if(0x00 == (pRxMsg->canData[0] & 0xF0))//single
+        if (0x00 == (pRxMsg->canData[0] & 0xF0)) // single
         {
-            if((pRxMsg->canData[1]==0x7F)&&(pRxMsg->canData[1]==0x78))//busy state
+            if ((pRxMsg->canData[1] == 0x7F) && (pRxMsg->canData[1] == 0x78)) // busy state
             {
                 continue;
             }
             else
             {
                 result = -1;
-                break;//not flow control frame
+                break; // not flow control frame
             }
         }
         if (0x30 != (pRxMsg->canData[0] & 0xF0))
         {
             result = -1;
-            break;//not flow control frame
+            break; // not flow control frame
         }
-        if (0 == (pRxMsg->canData[0] & 0x0F))//success receive
+        if (0 == (pRxMsg->canData[0] & 0x0F)) // success receive
         {
             break;
         }
-        else if (1 == (pRxMsg->canData[0] & 0x0F))//wait frame
+        else if (1 == (pRxMsg->canData[0] & 0x0F)) // wait frame
         {
             continue;
         }
-        else if (2 == (pRxMsg->canData[0] & 0x0F))//over flow frmae
+        else if (2 == (pRxMsg->canData[0] & 0x0F)) // over flow frmae
         {
             result = -1;
-            break;//not flow control frame
+            break; // not flow control frame
         }
         else
         {
             result = -1;
-            break;//not flow control frame
+            break; // not flow control frame
         }
     }
-    if(result==0)
+    if (result == 0)
     {
         *pBlocksize = pRxMsg->canData[1];
-        *pSTmin = pRxMsg->canData[2] + 0; //2ms     
+        *pSTmin = pRxMsg->canData[2] + 0; // 2ms
     }
     return result;
 }
 
-static int16_t UdsTpDataMultFramTransmit(int16_t tpHandle,int16_t canHandle,uint32_t txCanId,uint32_t multiFrameNum,uint8_t *txData,uint16_t txLength)
+static int16_t UdsTpDataMultFramTransmit(int16_t tpHandle, int16_t canHandle, uint32_t txCanId, uint32_t multiFrameNum, uint8_t *txData, uint16_t txLength)
 {
     uint32_t transmitCount = 0;
     int16_t ret;
@@ -176,19 +176,19 @@ static int16_t UdsTpDataMultFramTransmit(int16_t tpHandle,int16_t canHandle,uint
     int16_t result = 0;
     transmitCount += 6;
     int32_t txFrameCount = 0;
-    
-    //rxobj
-    //canHandle = g_tpVariable[tpHandle].physicalCanHandle; 
-    //canHandle = g_udsTp[handle].canHandle;
+
+    // rxobj
+    // canHandle = g_tpVariable[tpHandle].physicalCanHandle;
+    // canHandle = g_udsTp[handle].canHandle;
 
     uint8_t blockSize = 0;
-    uint8_t STmin = 0; //2ms?????
+    uint8_t STmin = 0; // 2ms?????
     uint32_t frameInterval;
-    
+
     fillByte = g_udsTp[tpHandle].pParameter->fillByte;
-    
-    ret = UdsTpMultFramGetFlowControl(tpHandle,canHandle,&rxCanMsg,&STmin,&blockSize);
-    if(ret!=0)
+
+    ret = UdsTpMultFramGetFlowControl(tpHandle, canHandle, &rxCanMsg, &STmin, &blockSize);
+    if (ret != 0)
     {
         return -1;
     }
@@ -215,27 +215,26 @@ static int16_t UdsTpDataMultFramTransmit(int16_t tpHandle,int16_t canHandle,uint
         }
         else
         {
-            txCanDlc = ((txLength - 6 - txFrameCount * 7) + 1); 
+            txCanDlc = ((txLength - 6 - txFrameCount * 7) + 1);
         }
-        for (j = 0; j < (txCanDlc-1); j++)
+        for (j = 0; j < (txCanDlc - 1); j++)
         {
             txCanData[j + 1] = txData[6 + txFrameCount * 7 + j];
-            
         }
 
-        for(;j<7;j++)
+        for (; j < 7; j++)
         {
-            txCanData[j + 1] = fillByte;//g_tpVariable[tpHandle].pTpParameter->fillByte;
+            txCanData[j + 1] = fillByte; // g_tpVariable[tpHandle].pTpParameter->fillByte;
         }
-        
-        if(frameInterval != 0)
+
+        if (frameInterval != 0)
         {
-            vTaskDelay( pdMS_TO_TICKS(STmin)); 
+            vTaskDelay(pdMS_TO_TICKS(STmin));
         }
-        ret = CanHalReceive(canHandle,&rxCanMsg,0);
+        ret = CanHalReceive(canHandle, &rxCanMsg, 0);
         memset(rxCanMsg.canData, 0, 8);
-        ret=CanHalTransmit(canHandle,txCanId,txCanData,8,0);
-        //TBOX_PRINT("can tp wait send %x\r\n",txCanId);
+        ret = CanHalTransmit(canHandle, txCanId, txCanData, 8, 0);
+        // TBOX_PRINT("can tp wait send %x\r\n",txCanId);
         if (ret != 0)
         {
             result = -1;
@@ -243,50 +242,61 @@ static int16_t UdsTpDataMultFramTransmit(int16_t tpHandle,int16_t canHandle,uint
         }
         memset(rxCanMsg.canData, 0, 8);
 
-        //transmitCount+
+        // transmitCount+
         if ((blockSize != 0) && ((txFrameCount + 1) >= blockSize))
         {
-            //break;//block transmit finished
-            //ret = CanHalDiagnosticReceive(canHandle,&rxCanMsg, m_flowControlTime);//wait 1000 ms
-            //ret = CanHalDiagnosticReceive(canHandle,&rxCanMsg, g_udsTp[tpHandle].pTpParameter->N_Bs_enforced);//wait 150 ms
-            ret = CanHalReceive(canHandle,&rxCanMsg,g_udsTp[tpHandle].pParameter->N_Bs_enforced);
+            // break;//block transmit finished
+            // ret = CanHalDiagnosticReceive(canHandle,&rxCanMsg, m_flowControlTime);//wait 1000 ms
+            // ret = CanHalDiagnosticReceive(canHandle,&rxCanMsg, g_udsTp[tpHandle].pTpParameter->N_Bs_enforced);//wait 150 ms
+            ret = CanHalReceive(canHandle, &rxCanMsg, g_udsTp[tpHandle].pParameter->N_Bs_enforced);
             if (ret != 0)
             {
                 result = -1;
-                break;//time out
+                break; // time out
             }
             if (rxCanMsg.dlc < 3)
             {
                 result = -1;
-                break;//error dlc
+                break; // error dlc
             }
             if (0x30 != (rxCanMsg.canData[0] & 0xF0))
             {
                 result = -1;
-                break;//not flow control frame
+                break; // not flow control frame
             }
             else
             {
                 blockSize += blockSize;
             }
-         }
+        }
     }
-    
-    //canHandle = g_tpVariable[tpHandle].physicalCanHandle;
-    //ret = CanHalDiagnosticReceive(canHandle,&rxCanMsg, 0);//wait 150 ms
-    //memset(rxCanMsg.canData, 0, 8);
-    //canHandle = g_tpVariable[tpHandle].functionalCanHandle;
-    //ret = CanHalDiagnosticReceive(canHandle,&rxCanMsg, 0);//wait 150 ms
-    //memset(rxCanMsg.canData, 0, 8);
-    CanHalReceive(canHandle,&rxCanMsg,0);
-    
+
+    // canHandle = g_tpVariable[tpHandle].physicalCanHandle;
+    // ret = CanHalDiagnosticReceive(canHandle,&rxCanMsg, 0);//wait 150 ms
+    // memset(rxCanMsg.canData, 0, 8);
+    // canHandle = g_tpVariable[tpHandle].functionalCanHandle;
+    // ret = CanHalDiagnosticReceive(canHandle,&rxCanMsg, 0);//wait 150 ms
+    // memset(rxCanMsg.canData, 0, 8);
+    CanHalReceive(canHandle, &rxCanMsg, 0);
+
     /*if (txFrameCount >= multiFrameNum)
     {
         break;//transmit success
     }*/
-       
-    
+
     return result;
+}
+
+int16_t UdsTpTransmitRaw(int16_t udsTpHandle, uint32_t canId, uint8_t *txData, uint16_t dataLen)
+{
+    if (udsTpHandle < 0 || udsTpHandle >= REMOTE_DIAGNOSTIC_INSTANCE_NUM)
+    {
+        return -1;
+    }
+
+    int16_t canHandle = g_udsTp[udsTpHandle].canHandle;
+
+    return CanHalTransmit(canHandle, canId, txData, dataLen, 0);
 }
 
 /*************************************************
@@ -299,33 +309,33 @@ static int16_t UdsTpDataMultFramTransmit(int16_t tpHandle,int16_t canHandle,uint
   Output:         无
   Return:         0：成功
                   -1：失败
-  Others:         
+  Others:
 *************************************************/
-int16_t UdsTpTransmit(int16_t handle,uint8_t typeFlag,uint8_t *txData,uint16_t dataLen)
+int16_t UdsTpTransmit(int16_t handle, uint8_t typeFlag, uint8_t *txData, uint16_t dataLen)
 {
     int16_t canHandle;
     uint32_t txCanId;
     uint8_t fillByte;
-    //uint8_t udsTransmitError = 0;
-    //uint8_t m_transmitErrorFailed = 1;
-    //uint8_t m_transmitOk = 0;
+    // uint8_t udsTransmitError = 0;
+    // uint8_t m_transmitErrorFailed = 1;
+    // uint8_t m_transmitOk = 0;
     uint8_t data[8];
     uint8_t dlc = 0;
     uint32_t multiFrameNum;
-    uint16_t i= 0;//j= 0;
+    uint16_t i = 0; // j= 0;
     int16_t ret = -1;
-    //CanHalMsg_t rxCanMsg;
-    //uint8_t blockSize = 0;
-    //uint8_t STmin;; 
-    //uint32_t frameInterval; 
-    //TickType_t xLastWakeTime;
-    //uint16_t 
-    
+    // CanHalMsg_t rxCanMsg;
+    // uint8_t blockSize = 0;
+    // uint8_t STmin;;
+    // uint32_t frameInterval;
+    // TickType_t xLastWakeTime;
+    // uint16_t
+
     canHandle = g_udsTp[handle].canHandle;
     fillByte = g_udsTp[handle].pParameter->fillByte;
-    
-    //功能寻址？
-    if(typeFlag == 1)
+
+    // 功能寻址？
+    if (typeFlag == 1)
     {
         txCanId = g_udsTp[handle].functionalRequestId;
     }
@@ -333,52 +343,44 @@ int16_t UdsTpTransmit(int16_t handle,uint8_t typeFlag,uint8_t *txData,uint16_t d
     {
         txCanId = g_udsTp[handle].physicalRequestId;
     }
-    
-    //长度<8?
-    if(dataLen<8)
+
+    // 长度<8?
+    if (dataLen < 8)
     {
         data[0] = dataLen;
         uint16_t i = 0;
-        for(i=0;i<dataLen;i++)
+        for (i = 0; i < dataLen; i++)
         {
-            data[i+1] = txData[i];
+            data[i + 1] = txData[i];
         }
-        for(;i<7;i++)
+        for (; i < 7; i++)
         {
-            data[i+1] = fillByte;
+            data[i + 1] = fillByte;
         }
-        return CanHalTransmit(canHandle,txCanId,data,8,0);
+        return CanHalTransmit(canHandle, txCanId, data, 8, 0);
     }
-    //初始化及组装第一个包
+    // 初始化及组装第一个包
     dlc = 0;
-    //transmitCount = 0;
-    multiFrameNum = (dataLen+1)/(8-1);
-    if((dataLen + 1) % (8 - 1) != 0)
+    // transmitCount = 0;
+    multiFrameNum = (dataLen + 1) / (8 - 1);
+    if ((dataLen + 1) % (8 - 1) != 0)
     {
         multiFrameNum += 1;
     }
     data[0] = (0x10 | (dataLen / 256));
     data[1] = (dataLen % 256);
-    for (i = 0; i < 6;i++ )
+    for (i = 0; i < 6; i++)
     {
-        data[i+2] = txData[i];
+        data[i + 2] = txData[i];
     }
     dlc = 8;
-    //打印数据
-    
-    ret = CanHalTransmit(canHandle,txCanId,data,dlc,0);
-
-    TBOX_PRINT("[MCU] UDS Tx to CAN ID: 0x%X, Data:", txCanId);
-    for (i = 0; i < dlc; i++)
-    {
-       TBOX_PRINT(" %02X", data[i]);
-    }
-    if(ret != 0)
+    ret = CanHalTransmit(canHandle, txCanId, data, dlc, 0);
+    if (ret != 0)
     {
         return -1;
     }
-    ret = UdsTpDataMultFramTransmit(handle,canHandle,txCanId,multiFrameNum,txData,dataLen);
-    if (ret!=0)
+    ret = UdsTpDataMultFramTransmit(handle, canHandle, txCanId, multiFrameNum, txData, dataLen);
+    if (ret != 0)
     {
         return -1;
     }
@@ -399,14 +401,14 @@ int16_t UdsTpTransmit(int16_t handle,uint8_t typeFlag,uint8_t *txData,uint16_t d
     int16_t ret = -1;
     CanHalMsg_t rxCanMsg;
     uint8_t blockSize = 0;
-    uint8_t STmin;; 
-    uint32_t frameInterval; 
+    uint8_t STmin;;
+    uint32_t frameInterval;
     TickType_t xLastWakeTime;
-    //uint16_t 
-    
+    //uint16_t
+
     canHandle = g_udsTp[handle].canHandle;
     fillByte = g_udsTp[handle].pParameter->fillByte;
-    
+
     //功能寻址？
     if(typeFlag == 1)
     {
@@ -416,7 +418,7 @@ int16_t UdsTpTransmit(int16_t handle,uint8_t typeFlag,uint8_t *txData,uint16_t d
     {
         txCanId = g_udsTp[handle].physicalRequestId;
     }
-    
+
     //长度<8?
     if(dataLen<8)
     {
@@ -500,7 +502,7 @@ int16_t UdsTpTransmit(int16_t handle,uint8_t typeFlag,uint8_t *txData,uint16_t d
             else if(0 == (rxCanMsg.canData[0] & 0x0F))            //接收成功
             {
                 blockSize = rxCanMsg.canData[1];
-                STmin = rxCanMsg.canData[2] + 0; //2ms修正值 
+                STmin = rxCanMsg.canData[2] + 0; //2ms修正值
                 if (STmin == 0)
                 {
                     frameInterval = 0;
@@ -523,7 +525,7 @@ int16_t UdsTpTransmit(int16_t handle,uint8_t typeFlag,uint8_t *txData,uint16_t d
                     }
                     else
                     {
-                        dlc = ((dataLen - 6 - txFrameCount * 7) + 1); 
+                        dlc = ((dataLen - 6 - txFrameCount * 7) + 1);
                     }
                     for (j = 0; j < (dlc-1); j++)
                     {
@@ -539,8 +541,8 @@ int16_t UdsTpTransmit(int16_t handle,uint8_t typeFlag,uint8_t *txData,uint16_t d
                         //RTOS_HalApiWaitUntil(&rtosTickCount,STmin);
                         vTaskDelayUntil(&xLastWakeTime,STmin);
                     }
-                    
-                    CanHalReceive(canHandle,&rxCanMsg,0); 
+
+                    CanHalReceive(canHandle,&rxCanMsg,0);
                     memset(rxCanMsg.canData, 0, 8);
                     ret=CanHalTransmit(canHandle,txCanId,data,8,0);
                     if(ret != 0)
@@ -564,13 +566,13 @@ int16_t UdsTpTransmit(int16_t handle,uint8_t typeFlag,uint8_t *txData,uint16_t d
                         if(0x30!=(rxCanMsg.canData[0]&0xF0))
                         {
                             udsTransmitError = m_transmitErrorFailed;
-                            break; 
+                            break;
                         }
                         blockSize += blockSize;
                     }
-                    
+
                 }
-                CanHalReceive(canHandle,&rxCanMsg,0); 
+                CanHalReceive(canHandle,&rxCanMsg,0);
                 if((udsTransmitError != m_transmitOk) || (txFrameCount >= multiFrameNum))
                 {
                     break;
@@ -581,7 +583,7 @@ int16_t UdsTpTransmit(int16_t handle,uint8_t typeFlag,uint8_t *txData,uint16_t d
                 udsTransmitError = m_transmitErrorFailed;
                 break;
             }
-            
+
         }
         else
         {
@@ -604,166 +606,165 @@ int16_t UdsTpTransmit(int16_t handle,uint8_t typeFlag,uint8_t *txData,uint16_t d
                   dataLen：接收数据长度
                   waitTime：接收超时时间设置 单位：ms
   Output:         无
-  Return:         0：接收数据成功 
+  Return:         0：接收数据成功
                   -1：未接收到数据
-  Others:         
+  Others:
 *************************************************/
-static int16_t UdsTpSingleFrameRx(CanHalMsg_t *canRxMsg,uint8_t *udsData,uint16_t *udsLen)
+static int16_t UdsTpSingleFrameRx(CanHalMsg_t *canRxMsg, uint8_t *udsData, uint16_t *udsLen)
 {
-    if((canRxMsg->canData[0] & 0x0f) > 7)
-    {
-        return -1;
-    }              
-    memcpy(udsData,&canRxMsg->canData[1],7);
-    *udsLen = canRxMsg->canData[0]&0x0F;
-    if(*udsLen > (canRxMsg->dlc - 1))
+    if ((canRxMsg->canData[0] & 0x0f) > 7)
     {
         return -1;
     }
-    
+    memcpy(udsData, &canRxMsg->canData[1], 7);
+    *udsLen = canRxMsg->canData[0] & 0x0F;
+    if (*udsLen > (canRxMsg->dlc - 1))
+    {
+        return -1;
+    }
+
     return 0;
 }
 
-static int16_t UdsTpMultiFrameRxFLowControlTransmit(int16_t canHandle,int16_t udsTpHandle)
+static int16_t UdsTpMultiFrameRxFLowControlTransmit(int16_t canHandle, int16_t udsTpHandle)
 {
     uint8_t fillByte;
     uint8_t blockSize;
     uint8_t STmin;
     CanHalMsg_t canTxMsg;
     int16_t ret = -1;
-    
+
     fillByte = g_udsTp[udsTpHandle].pParameter->fillByte;
     blockSize = 0x08;
     STmin = 0x14;
-    
+
     canTxMsg.dlc = 8;
     canTxMsg.canData[0] = 0x30;
-    canTxMsg.canData[1] = blockSize; 
-    canTxMsg.canData[2] = STmin; 
-    canTxMsg.canData[3] = fillByte; 
+    canTxMsg.canData[1] = blockSize;
+    canTxMsg.canData[2] = STmin;
+    canTxMsg.canData[3] = fillByte;
     canTxMsg.canData[4] = fillByte;
-    canTxMsg.canData[5] = fillByte; 
+    canTxMsg.canData[5] = fillByte;
     canTxMsg.canData[6] = fillByte;
     canTxMsg.canData[7] = fillByte;
-    canTxMsg.canId=g_udsTp[udsTpHandle].physicalRequestId;
-    
-    ret = CanHalTransmit(canHandle,canTxMsg.canId, canTxMsg.canData,canTxMsg.dlc,0);
-    if(ret != 0)
+    canTxMsg.canId = g_udsTp[udsTpHandle].physicalRequestId;
+
+    ret = CanHalTransmit(canHandle, canTxMsg.canId, canTxMsg.canData, canTxMsg.dlc, 0);
+    if (ret != 0)
     {
         return -1;
     }
     return 0;
 }
 
-static int16_t UdsTpMultiFrameRx(int16_t udsTpHandle,int16_t canHandle,uint16_t blockSize,uint16_t rxLen,uint8_t *udsData,CanHalMsg_t* pRxmsg)
+static int16_t UdsTpMultiFrameRx(int16_t udsTpHandle, int16_t canHandle, uint16_t blockSize, uint16_t rxLen, uint8_t *udsData, CanHalMsg_t *pRxmsg)
 {
-    uint16_t FrameCount,i,rxLenLeft,CF_num,rxCount;
+    uint16_t FrameCount, i, rxLenLeft, CF_num, rxCount;
     int16_t ret;
-    
+
     CF_num = 0x21;
     FrameCount = 0;
     rxLenLeft = rxLen;
     rxCount = 6;
-    
-    i=0;
-    while( i < 30)
-    { 
-        if(FrameCount >= blockSize)
+
+    i = 0;
+    while (i < 30)
+    {
+        if (FrameCount >= blockSize)
         {
-            ret= UdsTpMultiFrameRxFLowControlTransmit(canHandle,udsTpHandle);                  
-            if(0 != ret)
+            ret = UdsTpMultiFrameRxFLowControlTransmit(canHandle, udsTpHandle);
+            if (0 != ret)
             {
                 return -1;
-            }  
+            }
             FrameCount = 0;
         }
-        if(rxLenLeft>7)
+        if (rxLenLeft > 7)
         {
-            //if((FrameCount >= blockSize) && (blockSize != 0))
+            // if((FrameCount >= blockSize) && (blockSize != 0))
             //{
-            //    ret= TpDataMultiFrameRxFLowControlTransmit(tpHandle,canHandle);                
-            //    if(0 != ret)
-            //    {
-            //        return -1;
-            //    }  
-            //    FrameCount = 0;
-            //}
-          
-            //ret = CanHalDiagnosticReceive(canHandle,&canRxMsg,1000);N_Cr_enforced
-            //ret = CanHalDiagnosticReceive(canHandle,pRxmsg,g_tpVariable[tpHandle].pTpParameter->N_Cr_enforced);
-            ret = CanHalReceive(canHandle,pRxmsg,g_udsTp[udsTpHandle].pParameter->N_Cr_enforced);
-            if(0 != ret)
+            //     ret= TpDataMultiFrameRxFLowControlTransmit(tpHandle,canHandle);
+            //     if(0 != ret)
+            //     {
+            //         return -1;
+            //     }
+            //     FrameCount = 0;
+            // }
+
+            // ret = CanHalDiagnosticReceive(canHandle,&canRxMsg,1000);N_Cr_enforced
+            // ret = CanHalDiagnosticReceive(canHandle,pRxmsg,g_tpVariable[tpHandle].pTpParameter->N_Cr_enforced);
+            ret = CanHalReceive(canHandle, pRxmsg, g_udsTp[udsTpHandle].pParameter->N_Cr_enforced);
+            if (0 != ret)
             {
                 return -1;
-            }  
-            if((((pRxmsg->canData[0] >> 4) & 0x0f) == 0) || ((pRxmsg->canData[0] & 0xF0 )== 0X10))
-            {                            
+            }
+            if ((((pRxmsg->canData[0] >> 4) & 0x0f) == 0) || ((pRxmsg->canData[0] & 0xF0) == 0X10))
+            {
                 return -2;
             }
-            
-            if(CF_num != pRxmsg->canData[0])
+
+            if (CF_num != pRxmsg->canData[0])
             {
-                //return -1;
-                if((pRxmsg->canData[0] & 0xf0) == 0x20 )
+                // return -1;
+                if ((pRxmsg->canData[0] & 0xf0) == 0x20)
                 {
                     return -1;
                 }
                 continue;
             }
 
-            if(CF_num == 0x2F)
+            if (CF_num == 0x2F)
             {
                 CF_num = 0x20;
             }
             else
             {
-                    CF_num ++;
+                CF_num++;
             }
 
-            memcpy(udsData+rxCount,&pRxmsg->canData[1],(pRxmsg->dlc - 1));
-            rxCount += (pRxmsg->dlc - 1); 
+            memcpy(udsData + rxCount, &pRxmsg->canData[1], (pRxmsg->dlc - 1));
+            rxCount += (pRxmsg->dlc - 1);
             rxLenLeft -= 7;
-            FrameCount ++;
+            FrameCount++;
         }
         else
         {
-            
-            
-            //ret = CanHalDiagnosticReceive(canHandle,&canRxMsg,1000);
-            //ret = CanHalDiagnosticReceive(canHandle,pRxmsg,g_tpVariable[tpHandle].pTpParameter->N_Cr_enforced);
-            ret = CanHalReceive(canHandle,pRxmsg,g_udsTp[udsTpHandle].pParameter->N_Cr_enforced);
-            if(0 != ret)
+
+            // ret = CanHalDiagnosticReceive(canHandle,&canRxMsg,1000);
+            // ret = CanHalDiagnosticReceive(canHandle,pRxmsg,g_tpVariable[tpHandle].pTpParameter->N_Cr_enforced);
+            ret = CanHalReceive(canHandle, pRxmsg, g_udsTp[udsTpHandle].pParameter->N_Cr_enforced);
+            if (0 != ret)
             {
                 return -1;
-            } 
+            }
 
-            if((((pRxmsg->canData[0] >> 4) & 0x0f) == 0) || ((pRxmsg->canData[0] & 0xF0 ) == 0x10))
+            if ((((pRxmsg->canData[0] >> 4) & 0x0f) == 0) || ((pRxmsg->canData[0] & 0xF0) == 0x10))
             {
                 return -2;
             }
-            
-            if(CF_num != pRxmsg->canData[0])
+
+            if (CF_num != pRxmsg->canData[0])
             {
-                //return -1;
-                if((pRxmsg->canData[0] & 0xf0) == 0x20 )
+                // return -1;
+                if ((pRxmsg->canData[0] & 0xf0) == 0x20)
                 {
                     return -1;
-                }                            
+                }
                 continue;
             }
 
-            if(CF_num == 0x2F)
+            if (CF_num == 0x2F)
             {
                 CF_num = 0x20;
             }
             else
             {
-                CF_num ++;
+                CF_num++;
             }
-        
-            memcpy(udsData+rxCount,&pRxmsg->canData[1],(pRxmsg->dlc - 1));
-            rxCount += (pRxmsg->dlc - 1);                             
-              
+
+            memcpy(udsData + rxCount, &pRxmsg->canData[1], (pRxmsg->dlc - 1));
+            rxCount += (pRxmsg->dlc - 1);
+
             return rxCount;
         }
         i++;
@@ -773,14 +774,16 @@ static int16_t UdsTpMultiFrameRx(int16_t udsTpHandle,int16_t canHandle,uint16_t 
 
 int16_t UdsTpReceiveRaw(int16_t udsTpHandle, uint8_t *pData, uint16_t *dataLen)
 {
-    if(udsTpHandle < 0 || udsTpHandle >= REMOTE_DIAGNOSTIC_INSTANCE_NUM) return -1;
-    
+    if (udsTpHandle < 0 || udsTpHandle >= REMOTE_DIAGNOSTIC_INSTANCE_NUM)
+        return -1;
+
     int16_t canHandle = g_udsTp[udsTpHandle].canHandle;
+    //canHandle = g_udsTp[handle].canHandle;
     CanHalMsg_t canRxMsg;
-    
+
     int16_t ret = CanHalReceive(canHandle, &canRxMsg, 0);
-    
-    if(ret == 0)
+
+    if (ret == 0)
     {
         *dataLen = canRxMsg.dlc;
         memcpy(pData, canRxMsg.canData, *dataLen);
@@ -789,65 +792,65 @@ int16_t UdsTpReceiveRaw(int16_t udsTpHandle, uint8_t *pData, uint16_t *dataLen)
     return -1;
 }
 
-int16_t UdsTpReceive(int16_t udsTpHandle,uint8_t *pData,uint16_t *dataLen,uint32_t waitTime)
+int16_t UdsTpReceive(int16_t udsTpHandle, uint8_t *pData, uint16_t *dataLen, uint32_t waitTime)
 {
     int16_t canHandle;
     CanHalMsg_t canRxMsg;
-    //CanHalMsg_t  canTxMsg;
+    // CanHalMsg_t  canTxMsg;
     int16_t ret;
-    uint16_t rxLenLeft; 
+    uint16_t rxLenLeft;
     uint8_t n_PCItype;
     uint8_t blockSize;
-    //uint8_t STmin;
-    //uint8_t FrameCount = 0;
-    //uint8_t CF_num = 0x21;
-    //uint8_t fillByte;
+    // uint8_t STmin;
+    // uint8_t FrameCount = 0;
+    // uint8_t CF_num = 0x21;
+    // uint8_t fillByte;
     uint16_t txCount = 0;
-    //uint16_t i;
-    
+    // uint16_t i;
+
     canHandle = g_udsTp[udsTpHandle].canHandle;
-    //fillByte = g_udsTp[udsTpHandle].pParameter->fillByte;
+    // fillByte = g_udsTp[udsTpHandle].pParameter->fillByte;
     blockSize = 0x08;
-    //STmin = 0x14;
-    
-    if(pData==NULL||dataLen==NULL)
+    // STmin = 0x14;
+
+    if (pData == NULL || dataLen == NULL)
     {
         return -1;
     }
-    ret = CanHalReceive(canHandle,&canRxMsg,waitTime);
-    if(0 == ret)
+    ret = CanHalReceive(canHandle, &canRxMsg, waitTime);
+    if (0 == ret)
     {
         do
         {
-            n_PCItype = (canRxMsg.canData[0]>>4)&0x0F;
-            if(0 == n_PCItype)
+            n_PCItype = (canRxMsg.canData[0] >> 4) & 0x0F;
+            if (0 == n_PCItype)
             {
-                return UdsTpSingleFrameRx(&canRxMsg,pData,dataLen);
+                return UdsTpSingleFrameRx(&canRxMsg, pData, dataLen);
             }
-            else if(1 == n_PCItype)
+            else if (1 == n_PCItype)
             {
                 txCount = 0;
-                rxLenLeft = (((uint16_t)canRxMsg.canData[0]&0x0F) << 8) + canRxMsg.canData[1];
+                rxLenLeft = (((uint16_t)canRxMsg.canData[0] & 0x0F) << 8) + canRxMsg.canData[1];
                 *dataLen = rxLenLeft;
-                if(rxLenLeft < 8)
+                if (rxLenLeft < 8)
                 {
                     return -1;
                 }
-                memcpy(pData,&canRxMsg.canData[2], 6);
+                memcpy(pData, &canRxMsg.canData[2], 6);
                 rxLenLeft -= 6;
                 txCount += 6;
-                
-                ret =  UdsTpMultiFrameRxFLowControlTransmit(canHandle,udsTpHandle);
-                if(0 != ret)
+
+                ret = UdsTpMultiFrameRxFLowControlTransmit(canHandle, udsTpHandle);
+                if (0 != ret)
                 {
                     return -1;
                 }
-                
-                //ret = TpDataMultiFrameRx(tpHandle,canHandle,FrameSum,blockSize,rxLenLeft,udsData,&canRxMsg);
-                ret = UdsTpMultiFrameRx(udsTpHandle,canHandle,blockSize,rxLenLeft,pData,&canRxMsg);
-                if(ret<0)
+
+                // ret = TpDataMultiFrameRx(tpHandle,canHandle,FrameSum,blockSize,rxLenLeft,udsData,&canRxMsg);
+                ret = UdsTpMultiFrameRx(udsTpHandle, canHandle, blockSize, rxLenLeft, pData, &canRxMsg);
+                if (ret < 0)
                 {
-                    if(-2==ret)//receive again
+                    if (-2 == ret) // receive again
                     {
                         continue;
                     }
@@ -856,18 +859,18 @@ int16_t UdsTpReceive(int16_t udsTpHandle,uint8_t *pData,uint16_t *dataLen,uint32
                         return -1;
                     }
                 }
-                if(ret < *dataLen)
+                if (ret < *dataLen)
                 {
                     return -1;
                 }
                 return 0;
             }
-            else if((2 == n_PCItype) || (3 == n_PCItype))
+            else if ((2 == n_PCItype) || (3 == n_PCItype))
             {
                 return -1;
             }
-            return -1;   
-        }while(1);
+            return -1;
+        } while (1);
     }
     else
     {
@@ -881,7 +884,7 @@ int16_t UdsTpReceive(int16_t udsTpHandle,uint8_t *pData,uint16_t *dataLen,uint32
     CanHalMsg_t canRxMsg;
     CanHalMsg_t  canTxMsg;
     int16_t ret;
-    uint16_t rxLenLeft; 
+    uint16_t rxLenLeft;
     uint8_t n_PCItype;
     uint8_t blockSize;
     uint8_t STmin;
@@ -890,12 +893,12 @@ int16_t UdsTpReceive(int16_t udsTpHandle,uint8_t *pData,uint16_t *dataLen,uint32
     uint8_t fillByte;
     uint16_t txCount = 0;
     uint16_t i;
-    
+
     canHandle = g_udsTp[udsTpHandle].canHandle;
     fillByte = g_udsTp[udsTpHandle].pParameter->fillByte;
     blockSize = 0x08;
     STmin = 0x14;
-    
+
     if(pData==NULL||dataLen==NULL)
     {
         return -1;
@@ -905,7 +908,7 @@ int16_t UdsTpReceive(int16_t udsTpHandle,uint8_t *pData,uint16_t *dataLen,uint32
     {
         return -1;
     }
-    
+
     while(1)
     {
         n_PCItype = (canRxMsg.canData[0]>>4)&0x0F;
@@ -939,26 +942,26 @@ int16_t UdsTpReceive(int16_t udsTpHandle,uint8_t *pData,uint16_t *dataLen,uint32
             memcpy(pData,&canRxMsg.canData[2], 6);
             rxLenLeft -= 6;
             txCount += 6;
-            
+
             while(1)
             {
                 canTxMsg.dlc = 8;
                 canTxMsg.canData[0] = 0x30;
-                canTxMsg.canData[1] = blockSize; 
-                canTxMsg.canData[2] = STmin; 
-                canTxMsg.canData[3] = fillByte; 
+                canTxMsg.canData[1] = blockSize;
+                canTxMsg.canData[2] = STmin;
+                canTxMsg.canData[3] = fillByte;
                 canTxMsg.canData[4] = fillByte;
-                canTxMsg.canData[5] = fillByte; 
+                canTxMsg.canData[5] = fillByte;
                 canTxMsg.canData[6] = fillByte;
                 canTxMsg.canData[7] = fillByte;
                 canTxMsg.canId=g_udsTp[udsTpHandle].physicalRequestId;
-                
+
                 ret = CanHalTransmit(canHandle,canTxMsg.canId, canTxMsg.canData,canTxMsg.dlc,0);
                 if(ret != 0)
                 {
                     return -1;
                 }
-                
+
                 for(i = 0;i<30;i++)
                 {
                     if(rxLenLeft>7)
@@ -967,15 +970,15 @@ int16_t UdsTpReceive(int16_t udsTpHandle,uint8_t *pData,uint16_t *dataLen,uint32
                         {
                             canTxMsg.dlc = 8;
                             canTxMsg.canData[0] = 0x30;
-                            canTxMsg.canData[1] = blockSize; 
-                            canTxMsg.canData[2] = STmin; 
-                            canTxMsg.canData[3] = fillByte; 
+                            canTxMsg.canData[1] = blockSize;
+                            canTxMsg.canData[2] = STmin;
+                            canTxMsg.canData[3] = fillByte;
                             canTxMsg.canData[4] = fillByte;
-                            canTxMsg.canData[5] = fillByte; 
+                            canTxMsg.canData[5] = fillByte;
                             canTxMsg.canData[6] = fillByte;
                             canTxMsg.canData[7] = fillByte;
                             canTxMsg.canId=g_udsTp[udsTpHandle].physicalRequestId;
-                            
+
                             ret = CanHalTransmit(canHandle,canTxMsg.canId, canTxMsg.canData,canTxMsg.dlc,0);
                             if(ret != 0)
                             {
@@ -983,7 +986,7 @@ int16_t UdsTpReceive(int16_t udsTpHandle,uint8_t *pData,uint16_t *dataLen,uint32
                             }
                             FrameCount = 0;
                         }
-                        
+
                         ret = CanHalReceive(canHandle,&canRxMsg,g_udsTp[udsTpHandle].pParameter->N_Cr_enforced);
                         if(ret != 0)
                         {
@@ -1015,7 +1018,7 @@ int16_t UdsTpReceive(int16_t udsTpHandle,uint8_t *pData,uint16_t *dataLen,uint32
                                 CF_num++;
                             }
                             memcpy(pData+txCount,&canRxMsg.canData[1],(canRxMsg.dlc - 1));
-                            txCount += (canRxMsg.dlc - 1); 
+                            txCount += (canRxMsg.dlc - 1);
                             rxLenLeft -= 7;
                             FrameCount ++;
                         }
@@ -1055,15 +1058,15 @@ int16_t UdsTpReceive(int16_t udsTpHandle,uint8_t *pData,uint16_t *dataLen,uint32
                                     CF_num++;
                                 }
                                 memcpy(pData+txCount,&canRxMsg.canData[1],(canRxMsg.dlc - 1));
-                                txCount += (canRxMsg.dlc - 1); 
-                                
+                                txCount += (canRxMsg.dlc - 1);
+
                                 if(txCount < *dataLen)
                                 {
                                     return -1;
                                 }
                                 else
                                 {
-                                    rxLenLeft = 0; 
+                                    rxLenLeft = 0;
                                     return 0;
                                 }
                             }
@@ -1072,13 +1075,13 @@ int16_t UdsTpReceive(int16_t udsTpHandle,uint8_t *pData,uint16_t *dataLen,uint32
                 }
                 break;
             }
-            
+
         }
         else
         {
             return -1;
         }
-    
+
     }
     //return -1;
 }
@@ -1090,17 +1093,17 @@ int16_t UdsTpReceive(int16_t udsTpHandle,uint8_t *pData,uint16_t *dataLen,uint32
                   reqCanId：诊断请求ID
                   respCanId：对应的响应ID
   Output:         无
-  Return:         
-  Others:         
+  Return:
+  Others:
 *************************************************/
-void UdsTpPhyAddressSetCanId(int16_t handle,uint32_t reqCanId,uint32_t respCanId)
+void UdsTpPhyAddressSetCanId(int16_t handle, uint32_t reqCanId, uint32_t respCanId)
 {
-    if(handle < 0 || handle >=REMOTE_DIAGNOSTIC_INSTANCE_NUM)
+    if (handle < 0 || handle >= REMOTE_DIAGNOSTIC_INSTANCE_NUM)
     {
         return;
     }
-    g_udsTp[handle].physicalRequestId=reqCanId;
-    g_udsTp[handle].physicalResponseId=respCanId;
+    g_udsTp[handle].physicalRequestId = reqCanId;
+    g_udsTp[handle].physicalResponseId = respCanId;
     return;
 }
 
@@ -1110,21 +1113,21 @@ void UdsTpPhyAddressSetCanId(int16_t handle,uint32_t reqCanId,uint32_t respCanId
   Input:          handle：UdsTp 通信句柄
                   respType：诊断请求类型0：物理寻址 1：功能寻址
   Output:         无
-  Return:         
-  Others:         
+  Return:
+  Others:
 *************************************************/
-void UdsTpSetFilter(int16_t handle,uint8_t respType)
+void UdsTpSetFilter(int16_t handle, uint8_t respType)
 {
     CanHalMsgFilter_t canFilter;
-    //功能寻址？
-    if(respType == 1)
+    // 功能寻址？
+    if (respType == 1)
     {
-        if(NULL==g_udsTp[handle].pFunctionalEcuBuf)
+        if (NULL == g_udsTp[handle].pFunctionalEcuBuf)
         {
             canFilter.useStdFilter = 0x00;
             canFilter.canIdStdMin = g_udsTp[handle].functionalResponseIdMin;
-            canFilter.canIdStdMax = g_udsTp[handle].functionalResponseIdMax;  
-            canFilter.useExdtFilter = 0x00; 
+            canFilter.canIdStdMax = g_udsTp[handle].functionalResponseIdMax;
+            canFilter.useExdtFilter = 0x00;
             canFilter.canIdExtdMin = 0x00;
             canFilter.canIdExtdMax = 0xFFFFFFFF;
         }
@@ -1132,8 +1135,8 @@ void UdsTpSetFilter(int16_t handle,uint8_t respType)
         {
             canFilter.useStdFilter = 0x01;
             canFilter.canIdStdMin = g_udsTp[handle].functionalResponseIdMin;
-            canFilter.canIdStdMax = g_udsTp[handle].functionalResponseIdMax;  
-            canFilter.useExdtFilter = 0x00; 
+            canFilter.canIdStdMax = g_udsTp[handle].functionalResponseIdMax;
+            canFilter.useExdtFilter = 0x00;
             canFilter.canIdExtdMin = 0x00;
             canFilter.canIdExtdMax = 0xFFFFFFFF;
         }
@@ -1143,11 +1146,11 @@ void UdsTpSetFilter(int16_t handle,uint8_t respType)
         canFilter.useStdFilter = 0x01;
         canFilter.canIdStdMin = g_udsTp[handle].physicalResponseId;
         canFilter.canIdStdMax = g_udsTp[handle].physicalResponseId;
-        canFilter.useExdtFilter = 0x00; 
+        canFilter.useExdtFilter = 0x00;
         canFilter.canIdExtdMin = 0x00;
         canFilter.canIdExtdMax = 0xFFFFFFFF;
     }
-    CanHalSetFilter(g_udsTp[handle].canHandle,&canFilter);
+    CanHalSetFilter(g_udsTp[handle].canHandle, &canFilter);
     return;
 }
 
@@ -1156,24 +1159,22 @@ void UdsTpSetFilter(int16_t handle,uint8_t respType)
   Description:    UDS诊断请求请求清空接收buf
   Input:          handle：UdsTp 通信句柄
   Output:         无
-  Return:         
-  Others:         
+  Return:
+  Others:
 *************************************************/
 void UdsTpClearRecvBuffer(int16_t handle)
 {
     int16_t ret;
     int16_t canHandle;
-    CanHalMsg_t  canRxMsg;
+    CanHalMsg_t canRxMsg;
     canHandle = g_udsTp[handle].canHandle;
-    while(1)
+    while (1)
     {
-        ret = CanHalReceive(canHandle,&canRxMsg,0);
-        if(ret != 0)
+        ret = CanHalReceive(canHandle, &canRxMsg, 0);
+        if (ret != 0)
         {
             break;
         }
     }
     return;
 }
-
-
