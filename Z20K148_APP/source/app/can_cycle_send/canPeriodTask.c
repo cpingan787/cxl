@@ -492,8 +492,8 @@ static int16_t CanPeriodMessage3C5(uint8_t *pCanData)
     uint16_t ret = 0U;
     if (pCanData != NULL)
     {
-        memset(pCanData, 0x00, 8); 
-        
+        memset(pCanData, 0x00, 8);
+
         const ftyCircleDataToMcu_t *ftyData = StateSyncGetFtyData();
 
         if (ftyData != NULL)
@@ -515,13 +515,13 @@ static int16_t CanPeriodMessage3C5(uint8_t *pCanData)
             int32_t lat_signed = (gpsPos->northSouth == 0) ? (int32_t)lat_abs_1e6 : -(int32_t)lat_abs_1e6;
             int32_t lon_signed = (gpsPos->eastWest == 0) ? (int32_t)lon_abs_1e6 : -(int32_t)lon_abs_1e6;
 
-            //TBOX_PRINT("lat_signed=0X%X, lon_signed=0X%X\r\n", lat_signed, lon_signed);
+            // TBOX_PRINT("lat_signed=0X%X, lon_signed=0X%X\r\n", lat_signed, lon_signed);
 
             pCanData[0] = (uint8_t)((lon_signed >> 20) & 0xFF); // Bit 27-20
             pCanData[1] = (uint8_t)((lon_signed >> 12) & 0xFF); // Bit 19-12
             pCanData[2] = (uint8_t)((lon_signed >> 4) & 0xFF);  // Bit 11-4
-            
-            pCanData[3] = (uint8_t)((lon_signed << 4) & 0xF0); 
+
+            pCanData[3] = (uint8_t)((lon_signed << 4) & 0xF0);
 
             pCanData[3] |= (uint8_t)((lat_signed >> 24) & 0x0F);
 
@@ -568,7 +568,14 @@ static int16_t CanPeriodMessage35F(uint8_t *pCanData)
 
         if (ftyData != NULL)
         {
-            g_tbox3Message.DetailInfo.TEL_GPSCommSt = 1U;
+            if (ftyData->gnssModuleStatus.gnssEnableState == 1)
+            {
+                g_tbox3Message.DetailInfo.TEL_GPSCommSt = 1U;
+            }
+            else
+            {
+                g_tbox3Message.DetailInfo.TEL_GPSCommSt = 0U;
+            }
 
             g_tbox3Message.DetailInfo.TEL_TelematicsRegisterSt = (uint64_t)(ftyData->lteNetworkStatus.b2_3.netState & 0x07);
         }
@@ -577,7 +584,6 @@ static int16_t CanPeriodMessage35F(uint8_t *pCanData)
             g_tbox3Message.DetailInfo.TEL_GPSCommSt = 0U;
             g_tbox3Message.DetailInfo.TEL_TelematicsRegisterSt = 0U;
         }
-
         g_tbox3Message.DetailInfo.TEL_GPRSOr3GCommSt = 0U;
         g_tbox3Message.DetailInfo.TEL_TelematicsModeActSt = 0U;
         g_tbox3Message.DetailInfo.TEL_BTPowerSt = 0U;

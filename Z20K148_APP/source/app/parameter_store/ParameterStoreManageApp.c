@@ -1281,6 +1281,23 @@ int16_t WorkFlashVehicleInforStore(FlashParaId_e parameterId, uint8_t *data, uin
   uint8_t tem[256];
   uint8_t i;
 
+  switch (parameterId)
+  {
+    case E_PARAMETER_INFO_ECU_SERIAL_NUMBER: // SN
+      if (dataLength != 45) return -3;
+      break;
+      
+    case E_PARAMETER_INFO_VIN:               // VIN
+      if (dataLength != 17) return -3;
+      break;
+      
+    case E_PARAMETER_INFO_ECU_PART_NUMBER:   // PN
+      if (dataLength != 14) return -3;        
+      break;
+    default:
+      break; 
+  }
+  
   if (data == NULL) { return -1; }
 
   ret = VehicleInforGetDataOffsetAddressAndLength(parameterId, &importantFlag, &OffsetAddress, &length);

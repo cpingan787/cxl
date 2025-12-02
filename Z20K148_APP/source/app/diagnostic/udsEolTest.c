@@ -23,7 +23,7 @@ finish date:2018.7.31
 #include "batterySdk.h"
 #include "eolTestSyncWithCpu.h"
 #include "taskDtcProcess.h"
-
+#include "stateSyncSdk.h"
 
 #define UDS_EOL_TEST_DEBUG     1
 
@@ -85,35 +85,38 @@ static int16_t ServiceWritePowerOnCount(uint8_t *pData,uint16_t length);
 
 static int16_t TestService22ReadKL30Voltage(uint8_t *pData,uint16_t *pLength);
 
+static int16_t ToolReadCanChannelStatus(uint8_t *pData,uint16_t *pLength);
+static int16_t ToolReadGNSSStatus(uint8_t *pData,uint16_t *pLength);
+static int16_t ToolReadEmmcStatus(uint8_t *pData, uint16_t *pLength);
+static int16_t ToolQuickSleepStatus(uint8_t *pData, uint16_t *pLength);
+static int16_t ToolRead4GAntennaStatus(uint8_t *pData,uint16_t *pLength);
+static int16_t ToolReadGNSSAntennaStatus(uint8_t *pData,uint16_t *pLength);
 static int16_t Service2EWriteBluetoothName(uint8_t *Data,uint16_t len);
+
 
 
 static const struc_ReadDidMap m_readDidMap[] = 
 {
     {0x1201,ServiceReadPinKL15Status},
-
     {0x1202,TestService22ReadKL30Voltage},
-    
-    {0x1203,ServiceReadPinEcallStatus},
-    {0x1204,ServiceReadBatteryChargeState},
-    {0x1205,ServiceReadBlueToothName},
-    {0x1206,ServiceReadBlueToothMacAddress},
-    {0x1207,ServiceReadBlueToothSoftVersion},
-    {0x1208,ServiceReadPowerOnCount},
-
-    {0xF15B, Service22ReadFingerPrint              },       //FingerPrint 
-    {0xF187, Service22ReadPartNumber              },       //电控单元零件号         
-    {0xF18A, Service22ReadSupplierId              },       //系统供应商标识号  
-    {0xF18B, Service22ReadManufactureDate         },       //ECU制造日期       
-    //{0xF18C, Service22ReadSerialNumber            },       //电控单元序列号(ECU)   
-    {0xF190, Service22ReadVIN                     },       //VIN m_VIN      
-    {0xF193, Service22ReadHardwareVersion         },       //供应商ECU硬件版本号   
-    {0xF195, Service22ReadSoftwareVersion         },       //供应商ECU软件版本号   
-    {0xF197, Service22ReadPartName                },       //零件名称       
+    {0x1212, ToolReadCanChannelStatus},         // 3. CAN通道 (读)
+    {0x1203, Service22ReadICCID},               // 4. ICCID
+    {0x1204, Service22ReadIMSI},                // 5. IMSI
+    {0x1205, Service22ReadIMEI},                // 6. IMEI
+    {0x1206, Service22ReadApn1},                // 7. APN1
+    {0x1207, Service22ReadApn2},                // 8. APN2
+    {0x1208, Service22ReadApn3},                // 9. APN3
+    {0x1209, Service22ReadPhoneSignal},         // 10. CSQ (>=14)
+    {0x1210, ToolReadGNSSStatus},               // 11. GNSS (1:就绪)
+    {0x1211, ToolReadEmmcStatus},               // 12. EMMC (1:挂载成功)
+    {0x1213, ToolQuickSleepStatus},         // 14. 快速休眠状态(1:快速休眠)
+    // 13, 14, 15, 16 均为非DID读取或Write项
+    {0x1214, Service22ReadSoftwareNumber},      // 17. 软件版本号(内部)
+    {0x1215, Service22ReadVehicleSoftwareVersionF1AB}, // 18. 软件版本号(外部)
+    {0x1216, ToolRead4GAntennaStatus},          // 19. 4G天线
+    {0x1217, ToolReadGNSSAntennaStatus},        // 20. GNSS天线    
 //    {0xF1B0, Service22ReadEcuMask                 },       //安全访问掩码
 //    {0x1201, Service22ReadTboxCallNumber          },       //tbox电话号码    
-    {0x1202, Service22ReadIMEI                    },       //IMEI                  
-    {0x1203, Service22ReadICCID                   },       //ICCID
 //    {0x1204, Service22ReadPublicASEKey            },       //PublicASEKey
 //    {0x1205, Service22ReadPublicKey               },       //PublicKey
 //    {0x1206, Service22ReadTboxEcallNumber         },       //TboxEcallNumber
@@ -1064,6 +1067,88 @@ static int16_t ServiceSetPinMuteState(uint8_t *pData,uint16_t dataLength)
   return 0;  
 }
 
+static int16_t ToolReadCanChannelStatus(uint8_t *pData, uint16_t *pLength)
+{
+
+    pData[0] = 0x01; 
+    *pLength = 1;
+    return 0;
+}
+
+static int16_t ToolReadGNSSStatus(uint8_t *pData, uint16_t *pLength)
+{
+    uint8_t status = 0;
+    //uint16_t len = 0;
+    const ftyCircleDataToMcu_t *ftyData = StateSyncGetFtyData();
+    status = ftyData->gnssModuleStatus.gnssEnableState;
+    
+    if (status == 0) 
+    {
+        pData[0] = 0x00; // 未就绪
+    }
+    else
+    {
+        pData[0] = 0x01; // 就绪
+    }
+    *pLength = 1;
+    return 0;
+}
+
+static int16_t ToolReadEmmcStatus(uint8_t *pData, uint16_t *pLength)
+{
+    uint8_t status = 0;
+    uint16_t len = 0;
+    Service22ReadEmmcState(&status, &len);
+    // 假设 Service22ReadEmmcState 返回 1 表示正常/挂载
+    pData[0] = status; 
+    *pLength = 1;
+    return 0;
+}
+
+static int16_t ToolQuickSleepStatus(uint8_t *pData, uint16_t *pLength)
+{
+    uint8_t status = 0;
+    //PowerManageSdkGetQuickSleepStatus(&status);
+    pData[0] = status; 
+    *pLength = 1;
+    return 0;
+}
+
+static int16_t ToolRead4GAntennaStatus(uint8_t *pData, uint16_t *pLength)
+{
+    uint8_t status = 0;
+    //uint16_t len = 0;
+    //Service22ReadNADPrimaryAntenaStatus(&status, &len);
+    
+    if (status == 0x00) // Connected
+    {
+        pData[0] = 0x01; // 正常
+    }
+    else
+    {
+        pData[0] = 0x00; // 异常 (断开/短路)
+    }
+    *pLength = 1;
+    return 0;
+}
+
+static int16_t ToolReadGNSSAntennaStatus(uint8_t *pData, uint16_t *pLength)
+{
+    uint8_t status = 0;
+    //uint16_t len = 0;
+    //Service22ReadGNSSSAntenaStatus(&status, &len);
+    
+    if (status == 0x00) // Connected
+    {
+        pData[0] = 0x01; // 正常
+    }
+    else
+    {
+        pData[0] = 0x00; // 异常
+    }
+    *pLength = 1;
+    return 0;
+}
 static int16_t ServiceReadPinIN_1Status(uint8_t *pData,uint16_t *pLength)
 {
   int16_t state;

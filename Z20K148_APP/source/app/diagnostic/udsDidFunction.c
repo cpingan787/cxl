@@ -5569,6 +5569,10 @@ int16_t Service22ReadESKWrittenStatus(uint8_t *pData, uint16_t *pLength)
 // 0x010E_cxl
 int16_t Service22ReadIMEI(uint8_t *pData, uint16_t *pLength)
 {
+  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  {
+    return -1;
+  }  
   uint32_t len32 = 0;
   WorkFlashVehicleInforRead(E_PARAMETER_INFO_IMEI, pData, &len32);
 
@@ -5599,6 +5603,10 @@ int16_t Service2EWriteIMEI(uint8_t *pData, uint16_t dataLength)
 // 0x010F_cxl
 int16_t Service22ReadIMSI(uint8_t *pData, uint16_t *pLength)
 {
+  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  {
+    return -1;
+  }
   uint32_t len32 = 0;
 
   WorkFlashVehicleInforRead(E_PARAMETER_INFO_IMSI, pData, &len32);
@@ -5648,6 +5656,10 @@ int16_t Service2EWriteRtcWakeupSet(uint8_t *pData, uint16_t dataLength)
 // 0x0111_cxl
 int16_t Service22ReadICCID(uint8_t *pData, uint16_t *pLength)
 {
+  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  {
+    return -1;
+  }
   uint32_t len32 = 0;
   WorkFlashVehicleInforRead(E_PARAMETER_INFO_ICCID, pData, &len32);
   *pLength = (uint16_t)len32;
