@@ -24,7 +24,9 @@ finish date:2018.7.31
 #include "eolTestSyncWithCpu.h"
 #include "taskDtcProcess.h"
 #include "stateSyncSdk.h"
-
+#include "parameterSyncSdk.h"
+#include "projectConfigure.h"
+#include "logHal.h"
 #define UDS_EOL_TEST_DEBUG 1
 
 typedef enum
@@ -95,31 +97,32 @@ static int16_t ToolReadGNSSStatus(uint8_t *pData, uint16_t *pLength);
 static int16_t ToolReadEmmcStatus(uint8_t *pData, uint16_t *pLength);
 static int16_t ToolQuickSleepStatus(uint8_t *pData, uint16_t *pLength);
 static int16_t ToolReadSoftwareNumber(uint8_t *pData, uint16_t *pLength);
-static int16_t ToolReadVehicleSoftwareVersionF1AB(uint8_t *pData, uint16_t *pLength);
+static int16_t ToolReadVehicleSoftwareVersion(uint8_t *pData, uint16_t *pLength);
 static int16_t ToolRead4GAntennaStatus(uint8_t *pData, uint16_t *pLength);
 static int16_t ToolReadGNSSAntennaStatus(uint8_t *pData, uint16_t *pLength);
+static int16_t ToolDdrTest(uint8_t *pData, uint16_t *pLength);
 static int16_t Service2EWriteBluetoothName(uint8_t *Data, uint16_t len);
 
 static const struc_ReadDidMap m_readDidMap[] =
     {
         {0x1201, ServiceReadPinKL15Status},
         {0x1202, TestService22ReadKL30Voltage},
-        {0x1212, ToolReadCanChannelStatus}, // 3. CAN通道 (读)
-        {0x1203, ToolReadICCID},            // 4. ICCID
-        {0x1204, ToolReadIMSI},             // 5. IMSI
-        {0x1205, ToolReadIMEI},             // 6. IMEI
-        {0x1206, ToolReadApn1},             // 7. APN1
-        {0x1207, ToolReadApn2},                // 8. APN2
-        {0x1208, ToolReadApn3},                // 9. APN3
-        {0x1209, ToolReadPhoneSignal},         // 10. CSQ (>=14)
-        {0x1210, ToolReadGNSSStatus},               // 11. GNSS (1:就绪)
-        //{0x1211, ToolReadEmmcStatus},               // 12. EMMC (1:挂载成功)
-        //{0x1213, ToolQuickSleepStatus},         // 14. 快速休眠状态(1:快速休眠)
-        // 13, 14, 15, 16 均为非DID读取或Write项
-        // {0x1214, ToolReadSoftwareNumber},      // 17. 软件版本号(内部)
-        //{0x1215, ToolReadVehicleSoftwareVersionF1AB}, // 18. 软件版本号(外部)
-        //{0x1216, ToolRead4GAntennaStatus},          // 19. 4G天线
-        //{0x1217, ToolReadGNSSAntennaStatus},        // 20. GNSS天线
+        {0x1212, ToolReadCanChannelStatus},       // 3. CAN通道 (读)
+        {0x1203, ToolReadICCID},                  // 4. ICCID
+        {0x1204, ToolReadIMSI},                   // 5. IMSI
+        {0x1205, ToolReadIMEI},                   // 6. IMEI
+        {0x1206, ToolReadApn1},                   // 7. APN1
+        {0x1207, ToolReadApn2},                   // 8. APN2
+        {0x1208, ToolReadApn3},                   // 9. APN3
+        {0x1209, ToolReadPhoneSignal},            // 10. CSQ (>=14)
+        {0x1210, ToolReadGNSSStatus},             // 11. GNSS (1:就绪)
+        {0x1211, ToolReadEmmcStatus},             // 12. EMMC (1:挂载成功)
+        {0x1213, ToolQuickSleepStatus},           // 14. 快速休眠状态(1:快速休眠)
+        {0x1214, ToolReadSoftwareNumber},         // 17. 软件版本号(内部)
+        {0x1215, ToolReadVehicleSoftwareVersion}, // 18. 软件版本号(外部)
+        {0x1216, ToolRead4GAntennaStatus},        // 19. 4G天线
+        {0x1217, ToolReadGNSSAntennaStatus},      // 20. GNSS天线
+        {0x1301,ToolDdrTest},                        // DDR测试
         //    {0xF1B0, Service22ReadEcuMask                 },       //安全访问掩码
         //    {0x1201, Service22ReadTboxCallNumber          },       //tbox电话号码
         //    {0x1204, Service22ReadPublicASEKey            },       //PublicASEKey
@@ -1136,7 +1139,7 @@ static int16_t ServiceSetPinMuteState(uint8_t *pData, uint16_t dataLength)
     // PeripheralDriverHal_SetMUTE(pData[0]);
     return 0;
 }
-//透传函数
+// 透传函数
 static int16_t LocalReadMpuDid(uint16_t mpuDid, uint8_t *pData, uint16_t *pLength)
 {
     uint8_t mpuRequest[3];
@@ -1174,6 +1177,10 @@ static int16_t ToolReadCanChannelStatus(uint8_t *pData, uint16_t *pLength)
 
 static int16_t ToolReadICCID(uint8_t *pData, uint16_t *pLength)
 {
+    if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+    {
+        return -1;
+    }
     uint16_t len = 0;
     Service22ReadICCID(pData, &len);
     *pLength = len;
@@ -1182,6 +1189,10 @@ static int16_t ToolReadICCID(uint8_t *pData, uint16_t *pLength)
 
 static int16_t ToolReadIMSI(uint8_t *pData, uint16_t *pLength)
 {
+    if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+    {
+        return -1;
+    }
     uint16_t len = 0;
     Service22ReadIMSI(pData, &len);
     *pLength = len;
@@ -1190,6 +1201,10 @@ static int16_t ToolReadIMSI(uint8_t *pData, uint16_t *pLength)
 
 static int16_t ToolReadIMEI(uint8_t *pData, uint16_t *pLength)
 {
+    if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+    {
+        return -1;
+    }
     uint16_t len = 0;
     Service22ReadIMEI(pData, &len);
     *pLength = len;
@@ -1198,6 +1213,10 @@ static int16_t ToolReadIMEI(uint8_t *pData, uint16_t *pLength)
 
 static int16_t ToolReadApn1(uint8_t *pData, uint16_t *pLength)
 {
+    if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+    {
+        return -1;
+    }
     int16_t ret = LocalReadMpuDid(0x011B, pData, pLength);
     if (ret != 0)
         return 0x22;
@@ -1206,104 +1225,125 @@ static int16_t ToolReadApn1(uint8_t *pData, uint16_t *pLength)
 
 static int16_t ToolReadApn2(uint8_t *pData, uint16_t *pLength)
 {
+    if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+    {
+        return -1;
+    }
     int16_t ret = LocalReadMpuDid(0x013C, pData, pLength);
-    if (ret != 0) return 0x22;
+    if (ret != 0)
+        return 0x22;
     return 0;
 }
 
 static int16_t ToolReadApn3(uint8_t *pData, uint16_t *pLength)
 {
+    if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+    {
+        return -1;
+    }
     int16_t ret = LocalReadMpuDid(0x1061, pData, pLength);
-    if (ret != 0) return 0x22;
+    if (ret != 0)
+        return 0x22;
     return 0;
 }
 
 static int16_t ToolReadPhoneSignal(uint8_t *pData, uint16_t *pLength)
 {
+    if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+    {
+        return -1;
+    }
     const ftyCircleDataToMcu_t *ftyData = StateSyncGetFtyData();
 
     if (ftyData != NULL)
     {
-        // 2. 从结构体中提取信号强度
-        // 注意：这里取的是 lteNetworkStatus.rssi
-        // 工装要求：大于等于 14，非 99。这里只负责读取原始值。
-        pData[0] = ftyData->lteNetworkStatus.rssi; 
-        
+        pData[0] = ftyData->lteNetworkStatus.rssi;
+
         *pLength = 1;
-        return 0; // 成功
+        return 0;
     }
-    
-    // 如果获取不到数据 (例如 MCU 刚启动还没同步到数据)
-    return 0x22; // 返回 NRC 22
+
+    return 0x22;
 }
 
 static int16_t ToolReadGNSSStatus(uint8_t *pData, uint16_t *pLength)
 {
-    // 1. 获取状态同步大结构体指针
+    if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+    {
+        return -1;
+    }
     const ftyCircleDataToMcu_t *ftyData = StateSyncGetFtyData();
 
-    // 2. 检查指针有效性，防止 MPU 尚未同步数据时导致 MCU 崩溃
     if (ftyData != NULL)
     {
-        // 3. 读取 GNSS 模块状态
-        // 根据 stateSyncSdk.h 定义: gnssModuleStatus.gnssEnableState (1 bit)
-        // 1: gnss就绪/使能, 0: 未就绪
+
         pData[0] = (uint8_t)ftyData->gnssModuleStatus.gpsEnable;
-        
+
         *pLength = 1;
-        return 0; // 成功
+        return 0;
     }
-    
-    // 4. 如果尚未获取到同步数据，返回 NRC 0x22 (ConditionsNotCorrect)
-    // 此时诊断仪会收到否定响应，提示当前状态不可读
-    return 0x22; 
+
+    return 0x22;
 }
 
 static int16_t ToolReadEmmcStatus(uint8_t *pData, uint16_t *pLength)
 {
-    uint8_t status = 0;
-    uint16_t len = 0;
-    Service22ReadEmmcState(&status, &len);
-    // 假设 Service22ReadEmmcState 返回 1 表示正常/挂载
-    pData[0] = status;
-    *pLength = 1;
+    if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+    {
+        return -1;
+    }
+    int16_t ret = LocalReadMpuDid(0xB24A, pData, pLength);
+    if (ret != 0)
+        return 0x22;
     return 0;
 }
 
 static int16_t ToolQuickSleepStatus(uint8_t *pData, uint16_t *pLength)
 {
     uint8_t status = 0;
-    // PowerManageSdkGetQuickSleepStatus(&status);
+    // 需要调用快速休眠接口
     pData[0] = status;
     *pLength = 1;
     return 0;
 }
 
-static int16_t ToolRead4GAntennaStatus(uint8_t *pData, uint16_t *pLength)
+static int16_t ToolReadSoftwareNumber(uint8_t *pData, uint16_t *pLength)
 {
-    uint8_t status = 0;
-    // uint16_t len = 0;
-    // Service22ReadNADPrimaryAntenaStatus(&status, &len);
+    ProjectConfigSiRunSwVersion_C100(pData, pLength);
 
-    if (status == 0x00) // Connected
+    if (*pLength > 0 && pData[*pLength - 1] == '\0')
     {
-        pData[0] = 0x01; // 正常
+        (*pLength)--;
     }
-    else
-    {
-        pData[0] = 0x00; // 异常 (断开/短路)
-    }
-    *pLength = 1;
+
     return 0;
 }
 
-static int16_t ToolReadGNSSAntennaStatus(uint8_t *pData, uint16_t *pLength)
+static int16_t ToolReadVehicleSoftwareVersion(uint8_t *pData, uint16_t *pLength)
 {
-    uint8_t status = 0;
-    // uint16_t len = 0;
-    // Service22ReadGNSSSAntenaStatus(&status, &len);
+    if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+        return -1;
 
-    if (status == 0x00) // Connected
+    ProjectConfigGetEcuSwVersion_F189(pData, pLength);
+    if (*pLength > 0 && pData[*pLength - 1] == '\0')
+    {
+        (*pLength)--;
+    }
+
+    return 0;
+}
+
+static int16_t ToolRead4GAntennaStatus(uint8_t *pData, uint16_t *pLength)
+{
+    const ftyCircleDataToMcu_t *ftyData = StateSyncGetFtyData();
+    
+    if (ftyData == NULL)
+    {
+        return -1;
+    }
+    uint16_t status = ftyData->dtc.antMain;
+    //TBOX_PRINT("4G Antenna Status: %d\r\n", status);
+    if (status == 0)
     {
         pData[0] = 0x01; // 正常
     }
@@ -1311,9 +1351,51 @@ static int16_t ToolReadGNSSAntennaStatus(uint8_t *pData, uint16_t *pLength)
     {
         pData[0] = 0x00; // 异常
     }
+    
     *pLength = 1;
     return 0;
 }
+
+int16_t ToolReadGNSSAntennaStatus(uint8_t *pData, uint16_t *pLength)
+{
+    uint32_t v_gps_adc0_mv = 0; 
+    uint32_t v_gps_adc1_mv = 0;
+    uint8_t status = 0x00;      
+
+    int16_t ret0 = PeripheralHalAdGet(AD_CHANNEL_GPS, &v_gps_adc0_mv);
+    int16_t ret1 = PeripheralHalAdGet(AD_CHANNEL_GPS1, &v_gps_adc1_mv);
+    //TBOX_PRINT("GNSS Antenna ADC0: %d mV, ADC1: %d mV, ret0: %d, ret1: %d\r\n", v_gps_adc0_mv, v_gps_adc1_mv, ret0, ret1);
+    if (ret0 == 0 && ret1 == 0) 
+    {
+        if ((v_gps_adc0_mv > 700 && v_gps_adc0_mv < 1200) && (v_gps_adc1_mv < 700))
+        {
+            status = 0x01; // 正常
+        }
+        else
+        {
+            status = 0x00; // 异常
+        }
+    }
+    else
+    {
+        status = 0x00; 
+    }
+
+    pData[0] = status;
+    *pLength = 1;
+    return 0;
+}
+
+static int16_t ToolDdrTestResult(uint8_t *pData, uint16_t *pLength)
+{
+    uint8_t result = 0x00; // 0x00:未测试，0x01:通过，0x02:失败
+
+    // 需要调用DDR测试结果获取接口 00:启动ddr测试 01:检查结果
+    pData[0] = result;
+    *pLength = 1;
+    return 0;
+}
+
 static int16_t ServiceReadPinIN_1Status(uint8_t *pData, uint16_t *pLength)
 {
     int16_t state;

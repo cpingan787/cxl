@@ -611,7 +611,7 @@ static void MpuHalGpioInit(void)
     /********vbus***************************/
     PORT_PinmuxConfig(PORT_A, GPIO_1, PTA1_GPIO);
     GPIO_SetPinDir(PORT_A, GPIO_1, GPIO_OUTPUT);
-    GPIO_WritePinOutput(PORT_A, GPIO_1, GPIO_HIGH);
+    GPIO_WritePinOutput(PORT_A, GPIO_1, GPIO_LOW);
     /********wake  out***************************/
     PORT_PinmuxConfig(PORT_B, GPIO_8, PTB8_GPIO);
     GPIO_SetPinDir(PORT_B, GPIO_8, GPIO_OUTPUT);
@@ -928,6 +928,7 @@ void MpuHalCycleProcess(uint32_t cycleTime)
         if (timeCount > (MPU_HAL_CYC_TIME_CNT_20MS - cycleTime))
         {
             g_mpuManage.startState = E_MPU_HAL_START_STATE_KEY_OFF;
+            MpuHalSetVbus(1);
             MpuHalSetPowerkey(0);
         }
     }

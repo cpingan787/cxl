@@ -107,7 +107,7 @@ typedef enum
     REMOTE_CONTROL_BCM_CHECK_AHTU_TIME  = 299U,
     REMOTE_CONTROL_PEPS_REQ_AHTU_TIME   = 199U,
     REMOTE_CONTROL_PEPS_CHECK_AHTU_TIME = 299U,
-    REMOTE_CONTROL_TRANS_CYCLE_TIME     = 29U, //40ms
+    REMOTE_CONTROL_TRANS_CYCLE_TIME     = 39U, //40ms
     REMOTE_CONTROL_TRANS_SEPE_TIME      = 119U,
     REMOTE_CONTROL_PLGM_SEPE_TIME       = 99U,
     REMOTE_CONTROL_PLGM_CLOSE_WAIT_TIME = 199U,
@@ -826,7 +826,7 @@ static void RemoteControlHandleSignalProcess(void)
         {
             TBOX_PRINT("Remote control nomal send!\n");
             CanHalTransmit(g_remoteControlCan1Handle, s_canId, g_remoteControlCanBuf, 
-                        sizeof(g_remoteControlCanBuf), REMOTE_CONTROL_CAN_FD_NOT_USE);
+                        sizeof(g_remoteControlCanBuf), REMOTE_CONTROL_CAN_FD_USE);
             if(g_remoteControlTransTimerHandle >= 0)
             {
                 TimerHalStartTime(g_remoteControlTransTimerHandle, REMOTE_CONTROL_TRANS_CYCLE_TIME);
@@ -893,7 +893,7 @@ static void RemoteControlHandleSignalProcess(void)
         {
             TBOX_PRINT("Remote control special send\n");
             CanHalTransmit(g_remoteControlCan1Handle, s_canId, g_remoteControlCanBuf, 
-                          sizeof(g_remoteControlCanBuf), REMOTE_CONTROL_CAN_FD_NOT_USE);
+                          sizeof(g_remoteControlCanBuf), REMOTE_CONTROL_CAN_FD_USE);
             
             if(g_remoteControlTransTimerHandle >= 0)
             {
@@ -2775,7 +2775,7 @@ static RemoteControlProcessResult_t RemoteControlBcmCertification(void)
         
         case BCM_AUTU_REQ_E:
             memset(g_remoteControlCanBuf,0U,sizeof(g_remoteControlCanBuf));
-            CanHalTransmit(g_remoteControlCan1Handle,REMOTE_CONTROL_TEL_IMMOCode2_E,g_remoteControlCanBuf,sizeof(g_remoteControlCanBuf),REMOTE_CONTROL_CAN_FD_NOT_USE);
+            CanHalTransmit(g_remoteControlCan1Handle,REMOTE_CONTROL_TEL_IMMOCode2_E,g_remoteControlCanBuf,sizeof(g_remoteControlCanBuf),REMOTE_CONTROL_CAN_FD_USE);
             TimerHalStartTime(g_remoteControlAuthTimerHandle, REMOTE_CONTROL_BCM_REQ_AHTU_TIME);
             Can0ClearRxFlagByCanId(REMOTE_CONTROL_GW_BCM_E);
             bcmAuthState = BCM_AUTH_WAIT_RAND_E;
@@ -2813,7 +2813,7 @@ static RemoteControlProcessResult_t RemoteControlBcmCertification(void)
             g_randomBcmArray[6] = g_remoteControlSignalInfo.BCM_TEL_IMMOCode6;
             g_randomBcmArray[7] = g_remoteControlSignalInfo.BCM_TEL_IMMOCodeSt;
             BcmAuthCalcKey(g_randomBcmArray,g_remoteControlESK,g_remoteControlCanBuf);
-            CanHalTransmit(g_remoteControlCan1Handle,REMOTE_CONTROL_TEL_IMMOCode2_E,g_remoteControlCanBuf,sizeof(g_remoteControlCanBuf),REMOTE_CONTROL_CAN_FD_NOT_USE);
+            CanHalTransmit(g_remoteControlCan1Handle,REMOTE_CONTROL_TEL_IMMOCode2_E,g_remoteControlCanBuf,sizeof(g_remoteControlCanBuf),REMOTE_CONTROL_CAN_FD_USE);
             memset(g_remoteControlCanBuf,0U,sizeof(g_remoteControlCanBuf));
             TimerHalStartTime(g_remoteControlAuthTimerHandle, REMOTE_CONTROL_BCM_CHECK_AHTU_TIME);
             bcmAuthState = BCM_AUTH_CHECK_E;
@@ -2895,7 +2895,7 @@ static RemoteControlProcessResult_t RemoteControlPepsCertification(void)
         
         case PEPS_AUTU_REQ_E:
             memset(g_remoteControlCanBuf,0U,sizeof(g_remoteControlCanBuf));
-            CanHalTransmit(g_remoteControlCan1Handle,REMOTE_CONTROL_TEL_IMMOCode1_E,g_remoteControlCanBuf,sizeof(g_remoteControlCanBuf),REMOTE_CONTROL_CAN_FD_NOT_USE);
+            CanHalTransmit(g_remoteControlCan1Handle,REMOTE_CONTROL_TEL_IMMOCode1_E,g_remoteControlCanBuf,sizeof(g_remoteControlCanBuf),REMOTE_CONTROL_CAN_FD_USE);
             TimerHalStartTime(g_remoteControlAuthTimerHandle, REMOTE_CONTROL_PEPS_REQ_AHTU_TIME);
             Can0ClearRxFlagByCanId(REMOTE_CONTROL_GW_PEPS_E);
             pepsAuthState = PEPS_AUTH_WAIT_RAND_E;
@@ -2932,7 +2932,7 @@ static RemoteControlProcessResult_t RemoteControlPepsCertification(void)
             g_randomPepsArray[6] = g_remoteControlSignalInfo.PEPS_TEL_ChallengeCode6;
             g_randomPepsArray[7] = g_remoteControlSignalInfo.PEPS_TEL_ChallengeCode7;
             PepsAuthCalcKey8(g_randomPepsArray, g_remoteControlESK, g_remoteControlCanBuf);
-            CanHalTransmit(g_remoteControlCan1Handle,REMOTE_CONTROL_TEL_IMMOCode1_E,g_remoteControlCanBuf,sizeof(g_remoteControlCanBuf),REMOTE_CONTROL_CAN_FD_NOT_USE);
+            CanHalTransmit(g_remoteControlCan1Handle,REMOTE_CONTROL_TEL_IMMOCode1_E,g_remoteControlCanBuf,sizeof(g_remoteControlCanBuf),REMOTE_CONTROL_CAN_FD_USE);
             memset(g_remoteControlCanBuf,0U,sizeof(g_remoteControlCanBuf));
             TimerHalStartTime(g_remoteControlAuthTimerHandle, REMOTE_CONTROL_PEPS_CHECK_AHTU_TIME);
             pepsAuthState = PEPS_AUTH_CHECK_E;

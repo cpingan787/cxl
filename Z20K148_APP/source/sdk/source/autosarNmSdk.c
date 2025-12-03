@@ -30,7 +30,7 @@
 /****************************** Macro Definitions ******************************/
 #define AUTOSAR_NET_MANAGE_MAX_INSTANCE         (1U)
 #define NM_MESSAGE_PDU_LENGTH                   (8U)
-#define NM_TRANS_CANFD_ENABLE                   (0U)
+#define NM_TRANS_CANFD_ENABLE                   (1U)
 #define NM_E_OK                                 (0U)
 #define NM_E_NOT_EXECUTED                       (2U)
 #define NM_E_NOT_OK                             (3U)

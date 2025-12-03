@@ -207,7 +207,7 @@ void TIM0_Init(void)
     TIM_InstallCallBackFunc(TIM0_ID, TIM_INT_TO, Timer0Handler);    //加载TIM_INT_TO中断函数
     TIM_IntMask(TIM0_ID, TIM_INT_TO, UNMASK);                    //使能TIM_INT_TO中断
 
-    INT_SetPriority(TIM0_Overflow_IRQn, 0x7);//设置 TIM0_Oveflow_IRQn 的中断优先级。(高)0--15(低)
+    INT_SetPriority(TIM0_Overflow_IRQn, 0x2);//设置 TIM0_Oveflow_IRQn 的中断优先级。(高)0--15(低)
     INT_EnableIRQ(TIM0_Overflow_IRQn);        //使能 TIM0_Oveflow_IRQn 中断
 
     //启动模块，模块开始运行

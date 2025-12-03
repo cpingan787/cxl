@@ -87,6 +87,7 @@ typedef struct
     uint32_t kl30WakeCount;
     uint32_t kl30WakeDelay;
     uint32_t remoteControlWakeTimeoutCount;
+    uint32_t preSleepNoticeCount;
     const PmSdkConfig_t *pPmConfig;
     
 }PmSdkManage_t;
@@ -155,7 +156,8 @@ int16_t PowerManageSdkInit(const PmSdkConfig_t* pmConfig)
         g_pmManage.sleepOpenCount = 0;
         g_pmManage.kl30OffFlag = 0;
         g_pmManage.sleepState = 1;
-        g_pmManage.mpuWakeSource = 0; 
+        g_pmManage.mpuWakeSource = 0;
+        g_pmManage.preSleepNoticeCount = 0; 
         result = PM_SDK_STATUS_OK;
     }
     
@@ -833,7 +835,16 @@ static void PmStatePreSleepWaitProcess(uint32_t cycleTime)
     }   
     else if(g_pmManage.wakeDelayCount >= PM_MCU_SEND_SLEEP_CMD_TIMEOUT)
     {
-        g_pmManage.pmState = E_PM_STATE_PRE_SLEEP_NOTICE;
+        g_pmManage.preSleepNoticeCount++;
+        if(g_pmManage.preSleepNoticeCount > 60)
+        {
+            g_pmManage.pmState = E_PM_STATE_MCU_SLEEP;
+            g_pmManage.preSleepNoticeCount = 0;
+        }
+        else
+        {
+            g_pmManage.pmState = E_PM_STATE_PRE_SLEEP_NOTICE;
+        }
         g_pmManage.wakeDelayCount = 0;
     }
 }
@@ -858,6 +869,7 @@ static void PmStateMcuSleepProcess(uint32_t cycleTime)
     /*gSensor上电*/
     /*GSensorHalPowerOn();*/
     /*休眠前状态清零*/
+    g_pmManage.preSleepNoticeCount = 0;
     g_pmManage.wakeDelayCount = 0;
     g_pmManage.kl30WakeCount = 0;
     TimerHalSetMode(0);

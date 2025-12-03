@@ -3245,6 +3245,7 @@ void TaskEcuDiagnostic(void *pvParameters)
   int16_t ret;
   uint8_t functionalFlag = 0;
   // int16_t tpHandle;
+  uint8_t isS3ServerTimerActive = 0;
 
   g_tpHandle = CanTpSdkInitialize(TBOX_CAN_CHANNEL_2, &g_tpParameter, &g_tpBuffer);
 
@@ -3291,7 +3292,7 @@ void TaskEcuDiagnostic(void *pvParameters)
         }
       }
     }
-    uint8_t currentTesterPresent = (g_currentSession != E_DEFAULT_SESSION) ? 1 : 0;
+    uint8_t currentTesterPresent = ((g_currentSession != E_DEFAULT_SESSION) || (isS3ServerTimerActive == 1)) ? 1 : 0;
 
     if (currentTesterPresent != g_isTesterPresent)
     {
@@ -3324,11 +3325,13 @@ void TaskEcuDiagnostic(void *pvParameters)
     {
       g_ecuOnlineFlag = 0;
       TimerHalStartTime(ecuOnlineTimerHandle, 5000);
+      isS3ServerTimerActive = 1;
     }
     if (TimerHalIsTimeout(ecuOnlineTimerHandle) == 0)
     {
       TimerHalStopTime(ecuOnlineTimerHandle);
       ResetTboxStatusUpdate();
+      isS3ServerTimerActive = 0;
     }
     if (TimerHalIsTimeout(g_ecuSecurityTimerHandle) == 0)
     {

@@ -229,11 +229,11 @@ static TEL_18 g_tbox18Message;
 static TEL_TimeVD_e g_timeVdValue = E_TEL_TIME_INVALID;
 CAN_CYCLE_SEND_CONFIGURE_BEGIN(2)
 /****************************    Time,  Id,       FdFlag    Length  CanllBack******/
-CAN_CYCLE_SEND_CONFIGURE_CAN(500, 0x3C5, 0, 8, CanPeriodMessage3C5)
-CAN_CYCLE_SEND_CONFIGURE_CAN(100, 0x35F, 0, 8, CanPeriodMessage35F)
-CAN_CYCLE_SEND_CONFIGURE_CAN(200, 0x35C, 0, 8, CanPeriodMessage35C)
-CAN_CYCLE_SEND_CONFIGURE_CAN(500, 0x39E, 0, 8, CanPeriodMessage39E)
-CAN_CYCLE_SEND_CONFIGURE_CAN(500, 0x273, 0, 8, CanPeriodMessage273)
+CAN_CYCLE_SEND_CONFIGURE_CAN(500, 0x3C5, 1, 8, CanPeriodMessage3C5)
+CAN_CYCLE_SEND_CONFIGURE_CAN(100, 0x35F, 1, 8, CanPeriodMessage35F)
+CAN_CYCLE_SEND_CONFIGURE_CAN(200, 0x35C, 1, 8, CanPeriodMessage35C)
+CAN_CYCLE_SEND_CONFIGURE_CAN(500, 0x39E, 1, 8, CanPeriodMessage39E)
+CAN_CYCLE_SEND_CONFIGURE_CAN(500, 0x273, 1, 8, CanPeriodMessage273)
 CAN_CYCLE_SEND_CONFIGURE_END(2)
 
 const CanChannelCycleSendConfigure_t g_canCycleConfigureList[] =
@@ -492,8 +492,8 @@ static int16_t CanPeriodMessage3C5(uint8_t *pCanData)
     uint16_t ret = 0U;
     if (pCanData != NULL)
     {
-        memset(pCanData, 0x00, 8);
-
+        memset(pCanData, 0x00, 8); 
+        
         const ftyCircleDataToMcu_t *ftyData = StateSyncGetFtyData();
 
         if (ftyData != NULL)
@@ -515,13 +515,13 @@ static int16_t CanPeriodMessage3C5(uint8_t *pCanData)
             int32_t lat_signed = (gpsPos->northSouth == 0) ? (int32_t)lat_abs_1e6 : -(int32_t)lat_abs_1e6;
             int32_t lon_signed = (gpsPos->eastWest == 0) ? (int32_t)lon_abs_1e6 : -(int32_t)lon_abs_1e6;
 
-            // TBOX_PRINT("lat_signed=0X%X, lon_signed=0X%X\r\n", lat_signed, lon_signed);
+            //TBOX_PRINT("lat_signed=0X%X, lon_signed=0X%X\r\n", lat_signed, lon_signed);
 
             pCanData[0] = (uint8_t)((lon_signed >> 20) & 0xFF); // Bit 27-20
             pCanData[1] = (uint8_t)((lon_signed >> 12) & 0xFF); // Bit 19-12
             pCanData[2] = (uint8_t)((lon_signed >> 4) & 0xFF);  // Bit 11-4
-
-            pCanData[3] = (uint8_t)((lon_signed << 4) & 0xF0);
+            
+            pCanData[3] = (uint8_t)((lon_signed << 4) & 0xF0); 
 
             pCanData[3] |= (uint8_t)((lat_signed >> 24) & 0x0F);
 
@@ -584,6 +584,7 @@ static int16_t CanPeriodMessage35F(uint8_t *pCanData)
             g_tbox3Message.DetailInfo.TEL_GPSCommSt = 0U;
             g_tbox3Message.DetailInfo.TEL_TelematicsRegisterSt = 0U;
         }
+
         g_tbox3Message.DetailInfo.TEL_GPRSOr3GCommSt = 0U;
         g_tbox3Message.DetailInfo.TEL_TelematicsModeActSt = 0U;
         g_tbox3Message.DetailInfo.TEL_BTPowerSt = 0U;
