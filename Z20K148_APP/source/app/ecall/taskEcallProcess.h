@@ -35,9 +35,18 @@ typedef enum
     AIRBAG_PWM_CRASH          /* 碰撞 33.3% */
 } AirbagPwmState_e;
 
+typedef enum
+{
+    TELEMATICS_MODE_NOT_ACTIVE = 0,   /* Not active */
+    TELEMATICS_MODE_TBOX = 1,         /* TBOX mode */
+    TELEMATICS_MODE_BLUETOOTH = 2,    /* Bluetooth mode */
+    TELEMATICS_MODE_BCALL = 3,        /* Bcall Mode */
+    TELEMATICS_MODE_ECALL = 4         /* Ecall Mode */
+} TelematicsMode_e;
+
 /* 中断回调（每次上升沿/下降沿调用一次） */
 void AirbagPwmIsrHandler(uint8_t level);
-
 void TaskEcallProcess( void *pvParameters );
-
+TelematicsMode_e XCallGetTelemataticsMode(void);
+void XCallSetTelemataticsMode(TelematicsMode_e mode);
 #endif    //_TASK_APP_ECALL_PROCESS_H

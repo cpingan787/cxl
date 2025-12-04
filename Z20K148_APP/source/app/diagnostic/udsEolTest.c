@@ -27,6 +27,8 @@ finish date:2018.7.31
 #include "parameterSyncSdk.h"
 #include "projectConfigure.h"
 #include "logHal.h"
+#include "udsDidFunction.h"
+
 #define UDS_EOL_TEST_DEBUG 1
 
 typedef enum
@@ -57,7 +59,7 @@ static int16_t ServiceGetWifiConnectTestResult(uint8_t *pData, uint16_t *pLength
 static int16_t ServiceGetetBlueToothConnectTestResult(uint8_t *pData, uint16_t *pLength);
 static int16_t ServiceGetetCallNumberTestResult(uint8_t *pData, uint16_t *pLength);
 
-static int16_t ServiceSetTboxTestMode(uint8_t *pData, uint16_t length);
+//static int16_t ServiceSetTboxTestMode(uint8_t *pData, uint16_t length);
 static int16_t ServiceSetTboxSleepMode(uint8_t *pData, uint16_t length);
 static int16_t ServiceSetApnPingTest(uint8_t *pData, uint16_t dataLength);
 static int16_t ServiceSetWifiConnectTest(uint8_t *pData, uint16_t dataLength);
@@ -70,6 +72,9 @@ static int16_t ServiceSetPinLED_1State(uint8_t *pData, uint16_t dataLength);
 static int16_t ServiceSetPinLED_2State(uint8_t *pData, uint16_t dataLength);
 static int16_t ServiceSetBatteryCharge(uint8_t *pData, uint16_t dataLength);
 static int16_t ServiceSetPinMuteState(uint8_t *pData, uint16_t dataLength);
+
+static int16_t ServiceSetDdrTest(uint8_t *pData, uint16_t dataLength);
+
 // read by identifier
 static int16_t ServiceReadPinIN_1Status(uint8_t *pData, uint16_t *pLength);
 static int16_t ServiceReadPinIN_2Status(uint8_t *pData, uint16_t *pLength);
@@ -100,7 +105,6 @@ static int16_t ToolReadSoftwareNumber(uint8_t *pData, uint16_t *pLength);
 static int16_t ToolReadVehicleSoftwareVersion(uint8_t *pData, uint16_t *pLength);
 static int16_t ToolRead4GAntennaStatus(uint8_t *pData, uint16_t *pLength);
 static int16_t ToolReadGNSSAntennaStatus(uint8_t *pData, uint16_t *pLength);
-static int16_t ToolDdrTest(uint8_t *pData, uint16_t *pLength);
 static int16_t Service2EWriteBluetoothName(uint8_t *Data, uint16_t len);
 
 static const struc_ReadDidMap m_readDidMap[] =
@@ -122,7 +126,6 @@ static const struc_ReadDidMap m_readDidMap[] =
         {0x1215, ToolReadVehicleSoftwareVersion}, // 18. 软件版本号(外部)
         {0x1216, ToolRead4GAntennaStatus},        // 19. 4G天线
         {0x1217, ToolReadGNSSAntennaStatus},      // 20. GNSS天线
-        {0x1301,ToolDdrTest},                        // DDR测试
         //    {0xF1B0, Service22ReadEcuMask                 },       //安全访问掩码
         //    {0x1201, Service22ReadTboxCallNumber          },       //tbox电话号码
         //    {0x1204, Service22ReadPublicASEKey            },       //PublicASEKey
@@ -181,38 +184,33 @@ static const struc_WriteDidMap m_writeDidMap[] =
     {
         /*RDID  Lenth   point_store*/
         {
-            0xF187,
-            Service2EWritePartNumber,
-        }, // EndModelPartNumber
-        {
-            0xF18A,
-            Service2EWriteSupplierId,
-        },
-        {
-            0xF193,
-            Service2EWriteHardwareVersion,
-        },
+            0x1218,
+            Service2EWriteSerialNumber,
+        },                           // sn
+        {1219, 
+            Service2EWriteGacEcuPartNumber,
+        },  // pn
         //{0xF195, Service2EWriteSoftwareVersion,     },
-        {
-            0xF197,
-            Service2EWritePartName,
-        },
-        {
-            0xF15A,
-            Service2EWriteFingerPrint,
-        },
-        {
-            0xF18B,
-            Service2EWriteManufactureDate,
-        },
-        {
-            0xF190,
-            Service2EWriteVIN,
-        },
-        {
-            0xF1B0,
-            Service2EWriteESKeyByEol,
-        },
+        // {
+        //     0xF197,
+        //     Service2EWritePartName,
+        // },
+        // {
+        //     0xF15A,
+        //     Service2EWriteFingerPrint,
+        // },
+        // {
+        //     0xF18B,
+        //     Service2EWriteManufactureDate,
+        // },
+        // {
+        //     0xF190,
+        //     Service2EWriteVIN,
+        // },
+        // {
+        //     0xF1B0,
+        //     Service2EWriteESKeyByEol,
+        // },
         //{0xF18C, Service2EWriteSerialNumber,         },
         //    {0x1201, Service2EWriteTboxCallNumber,       },
         //    {0x1202, Service2EWriteIMEI,                 },
@@ -268,7 +266,8 @@ static const struc_WriteDidMap m_routineStartDidMap[] =
     {
         {
             0x1301,
-            ServiceSetTboxTestMode,
+            //ServiceSetTboxTestMode,
+            ServiceSetDdrTest,
         },
         {
             0x1303,
@@ -342,7 +341,7 @@ static enum_TestUdsSecurityLevel m_SeedGetLevel = TestUdsSecurity_LevelNone;
 static uint8_t m_returnKey[10];
 static uint8_t m_seedArray[10];
 static uint32_t m_securityTimeOutCount = 0;
-static uint8_t m_diagnosticCanChannel = TBOX_CAN_CHANNEL_1;
+//static uint8_t m_diagnosticCanChannel = TBOX_CAN_CHANNEL_1;
 
 static void GetRandomKey(uint8_t *pKeyArray, uint8_t *pKeySize)
 {
@@ -697,10 +696,10 @@ static int16_t ServiceTestClearDtc(uint8_t *pDataIn, uint16_t lenIn, uint8_t *pD
     return negativeNum;
 }
 
-void ServiceTestSetDiagnosticCan(uint8_t canChannel)
-{
-    m_diagnosticCanChannel = canChannel;
-}
+//void ServiceTestSetDiagnosticCan(uint8_t canChannel)
+//{
+//    m_diagnosticCanChannel = canChannel;
+//}
 static uint8_t ServiceTestProcessSecurityCheck(uint8_t *pUdsDataIn, uint16_t lenIn, uint8_t *pUdsDataOut, uint16_t *pLenOut)
 {
     uint8_t negativeNum = 0;
@@ -956,82 +955,82 @@ static int16_t ServiceGetetCallNumberTestResult(uint8_t *pData, uint16_t *pLengt
 
 data:1,test mode,0:normal mode
 **************************/
-static int16_t ServiceSetTboxTestMode(uint8_t *pData, uint16_t length)
-{
-    uint16_t ret;
-    uint8_t TestModeFlag;
-    ret = 0;
-    TestModeFlag = pData[0];
-    PowerManageSdkSetTestMode(TestModeFlag);
-    if (TestModeFlag == 0)
-    {
-        CanHalSetCanTestMode(TBOX_CAN_CHANNEL_1, 0);
-        CanHalSetCanTestMode(TBOX_CAN_CHANNEL_2, 0);
-        CanHalSetCanTestMode(TBOX_CAN_CHANNEL_3, 0);
-        CanHalSetCanTestMode(TBOX_CAN_CHANNEL_4, 0);
-        CanHalSetCanTestMode(TBOX_CAN_CHANNEL_5, 0);
-        CanHalSetCanTestMode(TBOX_CAN_CHANNEL_6, 0);
-        PeripheralHalSetTestMode(0);
-        BatterySdkSetNormalMode();
-    }
-    else
-    {
-        if (TBOX_CAN_CHANNEL_1 == m_diagnosticCanChannel)
-        {
-            CanHalSetCanTestMode(TBOX_CAN_CHANNEL_2, 1);
-            CanHalSetCanTestMode(TBOX_CAN_CHANNEL_3, 1);
-            CanHalSetCanTestMode(TBOX_CAN_CHANNEL_4, 1);
-            CanHalSetCanTestMode(TBOX_CAN_CHANNEL_5, 1);
-            CanHalSetCanTestMode(TBOX_CAN_CHANNEL_6, 1);
-        }
-        else if (TBOX_CAN_CHANNEL_2 == m_diagnosticCanChannel)
-        {
-            CanHalSetCanTestMode(TBOX_CAN_CHANNEL_1, 1);
-            CanHalSetCanTestMode(TBOX_CAN_CHANNEL_3, 1);
-            CanHalSetCanTestMode(TBOX_CAN_CHANNEL_4, 1);
-            CanHalSetCanTestMode(TBOX_CAN_CHANNEL_5, 1);
-            CanHalSetCanTestMode(TBOX_CAN_CHANNEL_6, 1);
-        }
-        else if (TBOX_CAN_CHANNEL_3 == m_diagnosticCanChannel)
-        {
-            CanHalSetCanTestMode(TBOX_CAN_CHANNEL_1, 1);
-            CanHalSetCanTestMode(TBOX_CAN_CHANNEL_2, 1);
-            CanHalSetCanTestMode(TBOX_CAN_CHANNEL_4, 1);
-            CanHalSetCanTestMode(TBOX_CAN_CHANNEL_5, 1);
-            CanHalSetCanTestMode(TBOX_CAN_CHANNEL_6, 1);
-        }
-        else if (TBOX_CAN_CHANNEL_4 == m_diagnosticCanChannel)
-        {
-            CanHalSetCanTestMode(TBOX_CAN_CHANNEL_1, 1);
-            CanHalSetCanTestMode(TBOX_CAN_CHANNEL_2, 1);
-            CanHalSetCanTestMode(TBOX_CAN_CHANNEL_3, 1);
-            CanHalSetCanTestMode(TBOX_CAN_CHANNEL_5, 1);
-            CanHalSetCanTestMode(TBOX_CAN_CHANNEL_6, 1);
-        }
-        else if (TBOX_CAN_CHANNEL_5 == m_diagnosticCanChannel)
-        {
-            CanHalSetCanTestMode(TBOX_CAN_CHANNEL_1, 1);
-            CanHalSetCanTestMode(TBOX_CAN_CHANNEL_2, 1);
-            CanHalSetCanTestMode(TBOX_CAN_CHANNEL_3, 1);
-            CanHalSetCanTestMode(TBOX_CAN_CHANNEL_4, 1);
-            CanHalSetCanTestMode(TBOX_CAN_CHANNEL_6, 1);
-        }
-        else if (TBOX_CAN_CHANNEL_6 == m_diagnosticCanChannel)
-        {
-            CanHalSetCanTestMode(TBOX_CAN_CHANNEL_1, 1);
-            CanHalSetCanTestMode(TBOX_CAN_CHANNEL_2, 1);
-            CanHalSetCanTestMode(TBOX_CAN_CHANNEL_3, 1);
-            CanHalSetCanTestMode(TBOX_CAN_CHANNEL_4, 1);
-            CanHalSetCanTestMode(TBOX_CAN_CHANNEL_5, 1);
-        }
-        PeripheralHalSetTestMode(1);
-        BatterySdkSetTestMode();
-    }
+// static int16_t ServiceSetTboxTestMode(uint8_t *pData, uint16_t length)
+// {
+//     uint16_t ret;
+//     uint8_t TestModeFlag;
+//     ret = 0;
+//     TestModeFlag = pData[0];
+//     PowerManageSdkSetTestMode(TestModeFlag);
+//     if (TestModeFlag == 0)
+//     {
+//         CanHalSetCanTestMode(TBOX_CAN_CHANNEL_1, 0);
+//         CanHalSetCanTestMode(TBOX_CAN_CHANNEL_2, 0);
+//         CanHalSetCanTestMode(TBOX_CAN_CHANNEL_3, 0);
+//         CanHalSetCanTestMode(TBOX_CAN_CHANNEL_4, 0);
+//         CanHalSetCanTestMode(TBOX_CAN_CHANNEL_5, 0);
+//         CanHalSetCanTestMode(TBOX_CAN_CHANNEL_6, 0);
+//         PeripheralHalSetTestMode(0);
+//         BatterySdkSetNormalMode();
+//     }
+//     else
+//     {
+//         if (TBOX_CAN_CHANNEL_1 == m_diagnosticCanChannel)
+//         {
+//             CanHalSetCanTestMode(TBOX_CAN_CHANNEL_2, 1);
+//             CanHalSetCanTestMode(TBOX_CAN_CHANNEL_3, 1);
+//             CanHalSetCanTestMode(TBOX_CAN_CHANNEL_4, 1);
+//             CanHalSetCanTestMode(TBOX_CAN_CHANNEL_5, 1);
+//             CanHalSetCanTestMode(TBOX_CAN_CHANNEL_6, 1);
+//         }
+//         else if (TBOX_CAN_CHANNEL_2 == m_diagnosticCanChannel)
+//         {
+//             CanHalSetCanTestMode(TBOX_CAN_CHANNEL_1, 1);
+//             CanHalSetCanTestMode(TBOX_CAN_CHANNEL_3, 1);
+//             CanHalSetCanTestMode(TBOX_CAN_CHANNEL_4, 1);
+//             CanHalSetCanTestMode(TBOX_CAN_CHANNEL_5, 1);
+//             CanHalSetCanTestMode(TBOX_CAN_CHANNEL_6, 1);
+//         }
+//         else if (TBOX_CAN_CHANNEL_3 == m_diagnosticCanChannel)
+//         {
+//             CanHalSetCanTestMode(TBOX_CAN_CHANNEL_1, 1);
+//             CanHalSetCanTestMode(TBOX_CAN_CHANNEL_2, 1);
+//             CanHalSetCanTestMode(TBOX_CAN_CHANNEL_4, 1);
+//             CanHalSetCanTestMode(TBOX_CAN_CHANNEL_5, 1);
+//             CanHalSetCanTestMode(TBOX_CAN_CHANNEL_6, 1);
+//         }
+//         else if (TBOX_CAN_CHANNEL_4 == m_diagnosticCanChannel)
+//         {
+//             CanHalSetCanTestMode(TBOX_CAN_CHANNEL_1, 1);
+//             CanHalSetCanTestMode(TBOX_CAN_CHANNEL_2, 1);
+//             CanHalSetCanTestMode(TBOX_CAN_CHANNEL_3, 1);
+//             CanHalSetCanTestMode(TBOX_CAN_CHANNEL_5, 1);
+//             CanHalSetCanTestMode(TBOX_CAN_CHANNEL_6, 1);
+//         }
+//         else if (TBOX_CAN_CHANNEL_5 == m_diagnosticCanChannel)
+//         {
+//             CanHalSetCanTestMode(TBOX_CAN_CHANNEL_1, 1);
+//             CanHalSetCanTestMode(TBOX_CAN_CHANNEL_2, 1);
+//             CanHalSetCanTestMode(TBOX_CAN_CHANNEL_3, 1);
+//             CanHalSetCanTestMode(TBOX_CAN_CHANNEL_4, 1);
+//             CanHalSetCanTestMode(TBOX_CAN_CHANNEL_6, 1);
+//         }
+//         else if (TBOX_CAN_CHANNEL_6 == m_diagnosticCanChannel)
+//         {
+//             CanHalSetCanTestMode(TBOX_CAN_CHANNEL_1, 1);
+//             CanHalSetCanTestMode(TBOX_CAN_CHANNEL_2, 1);
+//             CanHalSetCanTestMode(TBOX_CAN_CHANNEL_3, 1);
+//             CanHalSetCanTestMode(TBOX_CAN_CHANNEL_4, 1);
+//             CanHalSetCanTestMode(TBOX_CAN_CHANNEL_5, 1);
+//         }
+//         PeripheralHalSetTestMode(1);
+//         BatterySdkSetTestMode();
+//     }
 
-    ret = EolTestSyncWithCpuTransmit(SYNC_CPU_CONTROL_ITEM_TEST_MODE, &TestModeFlag, 1);
+//     ret = EolTestSyncWithCpuTransmit(SYNC_CPU_CONTROL_ITEM_TEST_MODE, &TestModeFlag, 1);
 
-    return ret;
-}
+//     return ret;
+// }
 
 static int16_t ServiceSetTboxSleepMode(uint8_t *pData, uint16_t length)
 {
@@ -1139,6 +1138,29 @@ static int16_t ServiceSetPinMuteState(uint8_t *pData, uint16_t dataLength)
     // PeripheralDriverHal_SetMUTE(pData[0]);
     return 0;
 }
+
+static int16_t ServiceSetDdrTest(uint8_t *pData, uint16_t dataLength)
+{
+    uint8_t outData[10];
+    uint16_t outLen = 0;
+    
+    if (dataLength < 1)
+    {
+        return -1;
+    }
+
+    if (pData[0] == 0x00) // BB 01 13 01 00 -> Start
+    {
+        return Service31StartRoutineDdrTest(&pData[1], dataLength - 1, outData, &outLen);
+    }
+    else if (pData[0] == 0x01) // BB 01 13 01 01 -> Result
+    {
+        return Service31ResultRoutineDdrTest(NULL, 0, outData, &outLen);
+    }
+    
+    return -1;
+}
+
 // 透传函数
 static int16_t LocalReadMpuDid(uint16_t mpuDid, uint8_t *pData, uint16_t *pLength)
 {
@@ -1336,13 +1358,13 @@ static int16_t ToolReadVehicleSoftwareVersion(uint8_t *pData, uint16_t *pLength)
 static int16_t ToolRead4GAntennaStatus(uint8_t *pData, uint16_t *pLength)
 {
     const ftyCircleDataToMcu_t *ftyData = StateSyncGetFtyData();
-    
+
     if (ftyData == NULL)
     {
         return -1;
     }
     uint16_t status = ftyData->dtc.antMain;
-    //TBOX_PRINT("4G Antenna Status: %d\r\n", status);
+    // TBOX_PRINT("4G Antenna Status: %d\r\n", status);
     if (status == 0)
     {
         pData[0] = 0x01; // 正常
@@ -1351,21 +1373,21 @@ static int16_t ToolRead4GAntennaStatus(uint8_t *pData, uint16_t *pLength)
     {
         pData[0] = 0x00; // 异常
     }
-    
+
     *pLength = 1;
     return 0;
 }
 
 int16_t ToolReadGNSSAntennaStatus(uint8_t *pData, uint16_t *pLength)
 {
-    uint32_t v_gps_adc0_mv = 0; 
+    uint32_t v_gps_adc0_mv = 0;
     uint32_t v_gps_adc1_mv = 0;
-    uint8_t status = 0x00;      
+    uint8_t status = 0x00;
 
     int16_t ret0 = PeripheralHalAdGet(AD_CHANNEL_GPS, &v_gps_adc0_mv);
     int16_t ret1 = PeripheralHalAdGet(AD_CHANNEL_GPS1, &v_gps_adc1_mv);
-    //TBOX_PRINT("GNSS Antenna ADC0: %d mV, ADC1: %d mV, ret0: %d, ret1: %d\r\n", v_gps_adc0_mv, v_gps_adc1_mv, ret0, ret1);
-    if (ret0 == 0 && ret1 == 0) 
+    // TBOX_PRINT("GNSS Antenna ADC0: %d mV, ADC1: %d mV, ret0: %d, ret1: %d\r\n", v_gps_adc0_mv, v_gps_adc1_mv, ret0, ret1);
+    if (ret0 == 0 && ret1 == 0)
     {
         if ((v_gps_adc0_mv > 700 && v_gps_adc0_mv < 1200) && (v_gps_adc1_mv < 700))
         {
@@ -1378,20 +1400,10 @@ int16_t ToolReadGNSSAntennaStatus(uint8_t *pData, uint16_t *pLength)
     }
     else
     {
-        status = 0x00; 
+        status = 0x00;
     }
 
     pData[0] = status;
-    *pLength = 1;
-    return 0;
-}
-
-static int16_t ToolDdrTestResult(uint8_t *pData, uint16_t *pLength)
-{
-    uint8_t result = 0x00; // 0x00:未测试，0x01:通过，0x02:失败
-
-    // 需要调用DDR测试结果获取接口 00:启动ddr测试 01:检查结果
-    pData[0] = result;
     *pLength = 1;
     return 0;
 }

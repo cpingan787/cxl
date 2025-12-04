@@ -133,7 +133,7 @@ static void DelayRLTUnderFlowCallback(void)
         adTimeCount = 0;
     }
 
-    //EcallHalSosLedTimerCallback();
+    EcallHalSosLedTimerCallback();
 }
 
 static void Timer0Handler(void)

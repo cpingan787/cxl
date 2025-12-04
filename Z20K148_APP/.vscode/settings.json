@@ -4,6 +4,8 @@
         "projectconfigure.h": "c",
         "mcumpusynctask.h": "c",
         "statesyncsdk.h": "c",
-        "parametersyncsdk.h": "c"
+        "parametersyncsdk.h": "c",
+        "mpupowersyncsdk.h": "c",
+        "taskdiagnostic.h": "c"
     }
 }

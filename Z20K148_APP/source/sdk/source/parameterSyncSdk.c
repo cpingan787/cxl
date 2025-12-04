@@ -31,6 +31,13 @@ static MpuHalDataPack_t g_syncParamToMpuPack;   // Mcu请求同步参数至Mpu�
 static uint8_t g_mpuDataBuffer[200] = {0};      // 用来存储MCU请求和响应数据的缓存buffer
 static MpuHalDataPack_t g_mpuDataPack;          // 用来存储要发送的请求和响应数据的缓存结构体
 
+
+static const ParamLengthEntry_t g_paramLengthTable[] = {
+    {E_ParamId_SN, 45},
+    {E_ParamId_VIN, 17},
+    {E_ParamId_ParatNumber, 14},
+};
+
 /*************************************************
   Function:       ParameterSyncRequstGetAllParamPackage
   Description:    请求同步所有参数接口
@@ -412,54 +419,55 @@ int16_t ParameterSyncSdkInit(int16_t mpuHandle, pMcuParametReadFun_t mcuParamRea
 
 static uint8_t IsValidParamData(uint8_t paramId, uint8_t *data, uint16_t length)
 {
-    const uint16_t LEN_SN = 45;
-    const uint16_t LEN_VIN = 17;
-    const uint16_t LEN_PART_NUMBER = 14;
-    switch (paramId)
+    uint8_t i;
+    uint8_t found = 0;
+    uint16_t expectedLen = 0;
+
+    for (i = 0; i < sizeof(g_paramLengthTable) / sizeof(g_paramLengthTable[0]); i++)
     {
-    case E_ParamId_SN:
-        if (length != LEN_SN)
-            return 0;
-        break;
-    case E_ParamId_VIN:
-        if (length != LEN_VIN)
-            return 0;
-        break;
-    case E_ParamId_ParatNumber:
-        if (length != LEN_PART_NUMBER)
-            return 0;
-        break;
-    default:
-        break;
+        if (g_paramLengthTable[i].paramId == paramId)
+        {
+            expectedLen = g_paramLengthTable[i].length;
+            found = 1;
+            break;
+        }
     }
 
-    if (paramId == E_ParamId_SN || paramId == E_ParamId_VIN || paramId == E_ParamId_ParatNumber)
+    if (found)
     {
-        uint8_t isAll0x00 = 1;
-        uint8_t isAll0x01 = 1;
-        uint8_t isAll0xFF = 1;
-
-        for (uint16_t i = 0; i < length; i++)
+        if (length != expectedLen)
         {
-            if (data[i] != 0x30)
-                isAll0x00 = 0;
-            if (data[i] != 0x31)
-                isAll0x01 = 0;
-            if (data[i] != 0xFF)
-                isAll0xFF = 0;
+            return 0;
+        }
 
-            if (isAll0x01 == 0 && isAll0xFF == 0 && isAll0x00 == 0)
+        if (paramId == E_ParamId_SN || paramId == E_ParamId_VIN || paramId == E_ParamId_ParatNumber)
+        {
+            uint8_t isAll0x00 = 1;
+            uint8_t isAll0x01 = 1;
+            uint8_t isAll0xFF = 1;
+
+            for (uint16_t j = 0; j < length; j++)
             {
-                return 1;
+                if (data[j] != 0x30) // ASCII '0'
+                    isAll0x00 = 0;
+                if (data[j] != 0x31) // ASCII '1'
+                    isAll0x01 = 0;
+                if (data[j] != 0xFF) 
+                    isAll0xFF = 0;
+                // 
+                if (isAll0x01 == 0 && isAll0xFF == 0 && isAll0x00 == 0)
+                {
+                    return 1;
+                }
+            }
+
+            if (isAll0x00 || isAll0x01 || isAll0xFF)
+            {
+                return 0;
             }
         }
-
-        if (isAll0x00 || isAll0x01 || isAll0xFF)
-        {
-            return 0;
-        }
     }
-
+    
     return 1;
 }
 
@@ -564,8 +572,15 @@ void ParameterSyncSdkCycleProcess(MpuHalDataPack_t *recvDataPack)
         {
             if (recvDataPack->pDataBuffer[0] < 26)
             {
-                g_mcuParameterWriteCbFunc(recvDataPack->pDataBuffer[0], &recvDataPack->pDataBuffer[2], recvDataPack->pDataBuffer[1]);
-                ParameterSyncResponseSyncParamPackage(1, recvDataPack->pDataBuffer[0]);
+                if (IsValidParamData(recvDataPack->pDataBuffer[0], &recvDataPack->pDataBuffer[2], recvDataPack->pDataBuffer[1]))
+                {
+                    g_mcuParameterWriteCbFunc(recvDataPack->pDataBuffer[0], &recvDataPack->pDataBuffer[2], recvDataPack->pDataBuffer[1]);
+                    ParameterSyncResponseSyncParamPackage(1, recvDataPack->pDataBuffer[0]);
+                }
+                else
+                {
+                    ParameterSyncResponseSyncParamPackage(0, recvDataPack->pDataBuffer[0]);
+                }
                 MpuHalTransmit(g_mpuHandle, &g_mpuDataPack, MPU_HAL_UART_MODE);
             }
             else

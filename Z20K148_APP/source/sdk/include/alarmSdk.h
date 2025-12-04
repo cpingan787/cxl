@@ -112,9 +112,9 @@ typedef enum
 extern SelfcheckRunState_e g_selfcheckRunState;
 
 int16_t AlarmSdkEcallTriger(uint8_t type);
+int16_t AlarmSdkBcallTriger(uint8_t type);
 int16_t AlarmSdkInit(void);
 void AlarmSdkCycleProcess(void);
-
 void AlarmSdkSetSelfcheckState(SelfcheckRunState_e state);
 SelfcheckRunState_e AlarmSdkGetSelfcheckState(void);
 void AlarmSdkSetMcuSelfcheckResult(uint8_t item, uint8_t result);
@@ -123,5 +123,10 @@ void AlarmSdkSetMpuSelfcheckResult(uint8_t item, uint8_t result);
 MpuSelfcheckMsg_t* AlarmSdkGetMpuSelfcheckResult(void);
 int16_t AlarmSdkSelfchackPeriSend(void);
 uint8_t AlarmSdkGetEcallTriggerType(void);
+uint8_t AlarmSdkGetBcallTriggerType(void);
+int16_t AlarmSdkEcallClose(uint8_t type);
+int16_t AlarmSdkBcallClose(uint8_t type);
+uint8_t AlarmSdkGetEcallCallState(void);
+uint8_t AlarmSdkGetBcallCallState(void);
 
 #endif  // _ALARM_SDK_H

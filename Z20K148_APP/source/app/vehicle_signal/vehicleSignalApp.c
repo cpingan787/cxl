@@ -55,6 +55,7 @@ CAN_ID_CONFIGURE_DEFINE(GW_SRS_1_T)
 CAN_ID_CONFIGURE_DEFINE(GW_SRS_2_T)
 CAN_ID_CONFIGURE_DEFINE(GW_EMS_1_T)
 CAN_ID_CONFIGURE_DEFINE(GW_EBS_1_T)
+CAN_ID_CONFIGURE_DEFINE(GW_ACU_1_T)
 CAN_ID_CONFIGURE_DEFINE_END(0)
 
 /****************************** Global Variables ******************************/
@@ -80,6 +81,7 @@ CAN_V_ID_ELEMENT(GW_SRS_1_T, 20, 0x1AE)
 CAN_V_ID_ELEMENT(GW_SRS_2_T, 100, 0x3AB)
 CAN_V_ID_ELEMENT(GW_EMS_1_T, 100, 0x1EE)
 CAN_V_ID_ELEMENT(GW_EBS_1_T, 500, 0x315)
+CAN_V_ID_ELEMENT(GW_ACU_1_T, 500, 0x1E2)
 CAN_ID_CONFIGURE_END(0)
 
 static const can0_signal_configure_t m_can0SignalConfigure =
@@ -8078,6 +8080,33 @@ static const can0_signal_configure_t m_can0SignalConfigure =
                 .useInvalidFlag = 1,
                 .InvalidData = 0xFFFFFFFF,
             }, // IBS  wake-up internal time  after Master without response with previous wake-up block.
+
+        .ACU_Key2St =
+            {
+                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_ACU_1_T),
+                .dataType = 0,
+                .startBit = 258,
+                .bitLength = 2,
+                .resulotion = 1,
+                .offset = 0,
+                .useInvalidFlag = 1,
+                .InvalidData = 0xFFFFFFFF,
+            }, // Indicate if the charge current is bigger than the threshold
+
+        .ACU_TELBcallReq =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_ACU_1_T),
+            .dataType = 0,
+            .startBit = 316,
+            .bitLength = 2,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // Indicate if the charge current is bigger than the threshold
+
 
 };
 

@@ -184,7 +184,7 @@ static const WdidInfor_t g_Service2EFunMapList[] =
         //{0xCF1E,     16,      Service2EWriteProlinesChannelKey,             E_UDS_NONE_SECURITY_LEVEL},
         //{0xCF1F,     1,       Service2EWritePhoneKeyOffLineUseTimes,        E_UDS_NONE_SECURITY_LEVEL},
         //{0xCF20,     12,      Service2EWriteNFCCardID,                      E_UDS_NONE_SECURITY_LEVEL},
-        {0xF18C, 45, Service2EWriteSerialNumber, E_UDS_SECURITY_LEVEL1},       // 0xF18C_cxl
+        //{0xF18C, 45, Service2EWriteSerialNumber, E_UDS_SECURITY_LEVEL1},       // 0xF18C_cxl
         {0x011B, 32, Service2EWriteApn1, E_UDS_SECURITY_LEVEL1},               // 0x011B_cxl
         {0x011C, 16, Service2EWriteIp1Addr, E_UDS_SECURITY_LEVEL1},            // 0x011C_cxl
         {0x011D, 8, Service2EWriteTspPort, E_UDS_SECURITY_LEVEL1},             // 0x011D_cxl
@@ -257,7 +257,7 @@ static const WdidInfor_t g_Service2EFunMapList[] =
         {0x0111, 20, Service2EWriteICCID, E_UDS_SECURITY_LEVEL1}, // 0x0111_cxl
         {0X010E, 15, Service2EWriteIMEI, E_UDS_SECURITY_LEVEL1},  // 0x010E_cxl
         {0X010F, 15, Service2EWriteIMSI, E_UDS_SECURITY_LEVEL1},  // 0x010F_cxl
-        {0xF187,14,Service2EWriteGacEcuPartNumber,E_UDS_SECURITY_LEVEL1}, // 0xF187_cxl
+        //{0xF187,14,Service2EWriteGacEcuPartNumber,E_UDS_SECURITY_LEVEL1}, // 0xF187_cxl
         {0xB208, 2, Service2EWriteRtcWakeupSet, E_UDS_SECURITY_LEVEL1},
         {0xB25F, 1, Service2EWrite4GModuleRsetTime, E_UDS_SECURITY_LEVEL1},
         {0x0200, 2, Service2EWriteReprogramCounter, E_UDS_SECURITY_LEVEL1},
@@ -3253,7 +3253,7 @@ void TaskEcuDiagnostic(void *pvParameters)
   {
     return;
   }
-  ServiceTestSetDiagnosticCan(TBOX_CAN_CHANNEL_2);
+  //ServiceTestSetDiagnosticCan(TBOX_CAN_CHANNEL_2);
 
   CanTpSdkSetCanId(g_tpHandle, g_physicalReceiveCanId, g_functionalReceiveCanId, g_physicalTransmitCanId);
 

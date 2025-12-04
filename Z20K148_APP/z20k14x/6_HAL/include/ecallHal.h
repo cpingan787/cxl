@@ -38,13 +38,13 @@
 #define AMP_STB_PIN                     GPIO_14
 #define AMP_STB_PIN_MUX                 PTE14_GPIO
 
-#define AMP_MUTE_PORT                   PORT_E
-#define AMP_MUTE_PIN                    GPIO_0
-#define AMP_MUTE_PIN_MUX                PTE0_GPIO
+#define AMP_MUTE_PORT                   PORT_C
+#define AMP_MUTE_PIN                    GPIO_5
+#define AMP_MUTE_PIN_MUX                PTC5_GPIO
 
-#define FAULTZ_DET_PORT                 PORT_C
-#define FAULTZ_DET_PIN                  GPIO_10
-#define FAULTZ_DET_PIN_MUX              PTC10_GPIO
+#define FAULTZ_DET_PORT                 PORT_E
+#define FAULTZ_DET_PIN                  GPIO_0
+#define FAULTZ_DET_PIN_MUX              PTE0_GPIO
 
 #define SRS_EN_PORT                     PORT_D
 #define SRS_EN_PIN                      GPIO_7

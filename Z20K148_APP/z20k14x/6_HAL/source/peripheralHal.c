@@ -297,13 +297,9 @@ const WDOG_Config_t WDOG_Config =
 static uint8_t g_adcInitSatate = 0;
 
 /****************************** Function Declarations *************************/
-#if(0)
 static void PeripheralHalAmpInit(void);
-#endif
 static void PeripheralHalSysOnInit(void);
-#if(1)
 static void PeripheralHalAdc0Init(void);
-#endif
 static void PeripheralHalAdc1Init(void);
 static void Timer1Handler(void);
 static void PeripheralHal1msTimerInit(void);
@@ -1008,7 +1004,7 @@ void PeripheralHalFeedWatchDog(void)
 void PeripheralHalInit(void)
 {
     IrqPinInit();
-    //PeripheralHalAmpInit();
+    PeripheralHalAmpInit();
     PeripheralHalSysOnInit();
     PeripheralHalAdc0Init();
     PeripheralHalAdc1Init();
@@ -1120,7 +1116,6 @@ void PeripheralHalTestMain(void)
  Return:          None
  Others:          Configures AMP_STB, AMP_MUTE and FAULTZ_DET pins
  *************************************************/
-#if(0)
 static void PeripheralHalAmpInit()
 {
 	PORT_PinmuxConfig(AMP_STB_PORT, AMP_STB_PIN, AMP_STB_PIN_MUX);
@@ -1135,7 +1130,7 @@ static void PeripheralHalAmpInit()
 	GPIO_SetPinDir(FAULTZ_DET_PORT, FAULTZ_DET_PIN, GPIO_INPUT);
 	GPIO_ClearPinOutput(FAULTZ_DET_PORT, FAULTZ_DET_PIN);
 }
-#endif
+
 /*************************************************
   Function:       PeripheralHalSysOnInit
   Description:    Initialize SYS_ON pin configuration

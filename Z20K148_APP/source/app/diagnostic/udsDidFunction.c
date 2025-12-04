@@ -2452,10 +2452,10 @@ int16_t Service2EWriteSerialNumber(uint8_t *pData, uint16_t dataLength)
   {
     return 0x72;
   }
-  // if (storeResult == 0)
-  // {
-  //   ParameterSyncSdkSetToCpu(E_ParamId_SN, pData, dataLength);
-  // }
+  if (storeResult == 0)
+  {
+    ParameterSyncSdkSetToCpu(E_ParamId_SN, pData, dataLength);
+  }
   return 0;
 }
 
@@ -4809,6 +4809,10 @@ int16_t Service2ETboxCurrentRunningMode(uint8_t *pData, uint16_t dataLength)
 // 0x0110_cxl
 int16_t Service2EWriteManufactoryMode(uint8_t *pData, uint16_t dataLength)
 {
+  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  {
+    return -1;
+  }
   if (dataLength != 1)
   {
     return 0x13;
@@ -5731,18 +5735,18 @@ int16_t Service22ReadTspPort(uint8_t *pData, uint16_t *pLength)
 // 0xB209_cxl
 int16_t Service22ReadTspTimeout(uint8_t *pData, uint16_t *pLength)
 {
-//   uint32_t length;
-//   int16_t ret;
+   uint32_t length;
+   int16_t ret;
 
-//   ret = WorkFlashVehicleInforRead(E_PARAMETER_INFO_TSP_TIMEOUT, pData, &length);
+   ret = WorkFlashVehicleInforRead(E_PARAMETER_INFO_TSP_TIMEOUT, pData, &length);
 
-//   if (ret != 0 || length == 0)
-//   {
-//     pData[0] = 0x05;
-//   }
+   if (ret != 0 || length == 0)
+   {
+     pData[0] = 0x05;
+   }
 
-//   *pLength = 1;
-//   return 0;
+   *pLength = 1;
+   return 0;
 }
 
 // 0x011F_cxl

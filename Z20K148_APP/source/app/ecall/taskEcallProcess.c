@@ -25,7 +25,7 @@
 #define	SOS_LED_TRIG_MSG_QUEUE_DEPTH	    ( 5 )
 #define SOS_KEY_DEBANCE_TIME                ( 100 )                         /*按键消除去抖动的时间*/
 #define SOS_KEY_PRESS_MIN_TIME              ( 500 )                         /*按键被按下最短时间*/
-#define SOS_KEY_PRESS_MAX_TIME              ( 4000 )                        /*按键被按下最长时间*/
+#define SOS_KEY_PRESS_MAX_TIME              ( 10000 )                        /*按键被按下最长时间*/
 #define SOS_KEY_RELEASED_TIME               ( 2000 )                        /*按键被释放的时间*/
 #define SOS_KEY_ECALL_TEST_TIME             ( 10000 )                       /*按键ECALL测试模式的时间*/
 #define SOS_KEY_RESET_TBOX_TIME             ( 20000 )                       /*按键复位TBOX的时间*/    
@@ -75,11 +75,13 @@ static const PwmRule_t g_pwmRules[] =
       .needCycles = 3u },
 };
 static volatile PwmRuntime_t g_pwm;
-
+static TelematicsMode_e g_telemataticsMode = TELEMATICS_MODE_NOT_ACTIVE;
 /****************************** Function Declarations *************************/
 static void AirbagPwmInit(void);
 static AirbagPwmState_e AirbagPwmGetState(void);
-
+static void BcallSignalProcess(void);
+static void AirbagSingleProcess(void);
+static void XCallCloseSignalProcess(void);
 /****************************** Public Function Implementations ***************/
 
 /** ****************************************************************************
@@ -125,11 +127,11 @@ static void SosLedControlProcess(void)
         switch( sos_led_msg )
         {
             case E_SOS_LED_STATE_RING:         /*ECALL拨号中LED状态指示灯 200ms开800ms关*/
-                EcallHalSetSosLedMode( E_ECALL_LED_MODE_FLASH , 200 , 800 );
+                EcallHalSetSosLedMode( E_ECALL_LED_MODE_FLASH , 100 , 100 );
                 SetSosLedState( E_SOS_LED_STATE_RING );
             break;
             case E_SOS_LED_STATE_CALL:         /*ECALL正在通话中LED状态指示灯 800ms开200ms关*/
-                EcallHalSetSosLedMode( E_ECALL_LED_MODE_FLASH , 800 , 200 );
+                EcallHalSetSosLedMode( E_ECALL_LED_MODE_FLASH , 100 , 100 );
                 SetSosLedState( E_SOS_LED_STATE_CALL );
             break;
             case E_SOS_LED_STATE_WAIT_BACK:    /*ECALL等待PSAP应答时 500ms开500ms关*/
@@ -160,11 +162,19 @@ static void SosLedControlProcess(void)
     }
 }
 
+/** ****************************************************************************
+* @remarks       static uint8_t SosButtonPressAction( uint32_t presstime, uint8_t* saveBtnState, SosLledState_e* saveLedState)
+* @brief         SOS按键按下动作处理函数
+* @param[in]     presstime - 按键按下的时间
+* @param[out]    saveBtnState - 保存按键状态的指针
+* @param[out]    saveLedState - 保存LED状态的指针
+* @return        成功返回0
+* @attention     根据按键按下的时间长度执行不同的动作
+*******************************************************************************/
 static uint8_t SosButtonPressAction( uint32_t presstime, uint8_t* saveBtnState, SosLledState_e* saveLedState)
 {
     uint8_t btnState;
     SosLledState_e ledState;
-    SosLledState_e ledStateDebug = E_SOS_LED_STATE_INIT;
 
     btnState = *saveBtnState;
     ledState = *saveLedState;
@@ -178,16 +188,6 @@ static uint8_t SosButtonPressAction( uint32_t presstime, uint8_t* saveBtnState, 
             TBOX_PRINT("SOS button press over 30S, cur led mode:%d.\r\n", ledState);
             EcallHalSosLedControlSend( E_SOS_LED_STATE_WARNING );
             g_SosButtonClickMsg.hardFault = 1;
-        }
-    }
-    else if( presstime >= SOS_KEY_RESET_TBOX_TIME )
-    {
-        if(btnState == 1)
-        {
-            btnState = 2;
-            ledStateDebug = GetSosLedState();
-            TBOX_PRINT("SOS button press over 20S, cur led mode:%d.\r\n", ledStateDebug);
-            EcallHalSosLedControlSend( ledState );
         }
     }
     else if( presstime >= SOS_KEY_ECALL_TEST_TIME )
@@ -207,6 +207,14 @@ static uint8_t SosButtonPressAction( uint32_t presstime, uint8_t* saveBtnState, 
     return 0;
 }
 
+/** ****************************************************************************
+* @remarks       static uint8_t SosButtonReleaseAction( uint32_t presskeeptime, SosButtonState_e *st )
+* @brief         SOS按键释放动作处理函数
+* @param[in]     presskeeptime - 按键按下的持续时间
+* @param[out]    st - 按键状态指针
+* @return        成功返回0
+* @attention     根据按键按下的时间长度执行不同的动作，如触发测试模式、重置TBOX等
+*******************************************************************************/
 static uint8_t SosButtonReleaseAction( uint32_t presskeeptime, SosButtonState_e *st )
 {
     SosButtonState_e SosButtonState = *st;
@@ -216,13 +224,6 @@ static uint8_t SosButtonReleaseAction( uint32_t presskeeptime, SosButtonState_e 
         TBOX_PRINT("SOS button is released, Into idle mode: [E_SOS_BUTTON_STATE_IDLE]\r\n");
         SosButtonState = E_SOS_BUTTON_STATE_IDLE;
         memset( (uint8_t *)&g_SosButtonClickMsg, 0x00, sizeof( SosButtonClickMsg_t ));
-    }
-    else if( presskeeptime >= SOS_KEY_RESET_TBOX_TIME )
-    {
-        TBOX_PRINT("SOS button reset tbox\r\n");
-        MpuHalPowerOff();
-        vTaskDelay(100);
-        PeripheralHalMcuHardReset();
     }
     else if( presskeeptime >= SOS_KEY_ECALL_TEST_TIME )
     {
@@ -327,7 +328,7 @@ static void SosButtonDetection( void )
         else
         {
             key_time = osElapsedTimeGet( g_SosButtonClickMsg.releasedTime, g_SosButtonClickMsg.pressTime );
-            if( key_time >= SOS_KEY_RELEASED_TIME )                     /*触发按键成功*/    // TODO guanyuan confirm requirement
+            if( key_time >= SOS_KEY_RELEASED_TIME )                     /*触发按键成功*/    
             {
                 AlarmSdkEcallTriger(E_ECALL_TRIGGER_BTN_MANN);
                 EcallHalSetVehicleMute(1);
@@ -609,7 +610,15 @@ static void SelfcheckCycleProcess( void )
 }
 #endif
 
-void AirbagSingleProcess(void)
+/** ****************************************************************************
+* @remarks       void AirbagSingleProcess(void)
+* @brief         气囊信号处理函数
+* @param[in]     无
+* @param[out]    无
+* @return        无
+* @attention     处理CAN总线和硬件PWM两种气囊信号，检测到碰撞信号时触发ECALL
+*******************************************************************************/
+static void AirbagSingleProcess(void)
 {
     double dataVaule = 0;
     uint8_t airbagSingal = 0;
@@ -638,7 +647,6 @@ void AirbagSingleProcess(void)
     {
         if(airbagCanFlag == 1)
         {
-            //TBOX_PRINT("Airbag can recover normal\r\n");
             airbagCanFlag = 0;
         }
     }
@@ -655,19 +663,113 @@ void AirbagSingleProcess(void)
       }
     else if(airBagState == AIRBAG_PWM_NORMAL)
     {
-        //TBOX_PRINT("Airbag srs recover normal\r\n");
         airbagHardwareFlag = 0;
     }
 }
 
+/** ****************************************************************************
+* @remarks       static void BcallSignalProcess(void)
+* @brief         B-Call信号处理函数
+* @param[in]     无
+* @param[out]    无
+* @return        无
+* @attention     从CAN总线读取B-Call请求信号，在未触发ECALL的情况下触发B-Call
+*******************************************************************************/
+static void BcallSignalProcess(void)
+{
+    double dataVaule = 0;
+    uint8_t bcallSingal = 0;
+    static uint8_t bcallCanFlag = 0;
+    const can0_signal_configure_t *pCan0SignalConfigure = NULL;    
+    pCan0SignalConfigure = GetCan0SignalConfigure();
+    CanParseSdkReadSignal(g_CanSignalFormat,&pCan0SignalConfigure->ACU_TELBcallReq,&dataVaule);   
+    bcallSingal = (uint8_t)dataVaule;
+    if(bcallSingal == 1)
+    {
+        if((bcallCanFlag == 0)&&(AlarmSdkGetEcallCallState() == 0)&&(AlarmSdkGetBcallCallState() == 0))
+        {
+            AlarmSdkBcallTriger(E_ECALL_TRIGGER_CAN_AUTO);
+            EcallHalSetVehicleMute(1);
+            bcallCanFlag = 1;
+            TBOX_PRINT("Bcall can triggers BCALL, signal = %02x\r\n", bcallSingal);
+        }
+        else if((bcallCanFlag == 0)&&(AlarmSdkGetEcallCallState() != 0))
+        {
+            TBOX_PRINT("Ecall still run,bcall is forbiden\r\n");
+        }
+    }
+    else
+    {
+        if(bcallCanFlag == 1)
+        {
+            bcallCanFlag = 0;
+        }
+    }
+}
+
+/** ****************************************************************************
+* @remarks       static void XCallCloseSignalProcess(void)
+* @brief         eCall/bCall关闭信号处理函数
+* @param[in]     无
+* @param[out]    无
+* @return        无
+* @attention     从CAN总线读取ACU_Key2St信号，用于关闭正在进行的eCall或bCall
+*******************************************************************************/
+static void XCallCloseSignalProcess(void)
+{
+    double dataVaule = 0;
+    uint8_t acuKeySingal = 0U;
+    static uint8_t acuCanFlag = 0U;
+    uint8_t ecallStatus = 0U;
+    uint8_t bcallStatus = 0U;
+    uint8_t triggerType = 0U;
+    const can0_signal_configure_t *pCan0SignalConfigure = NULL;    
+    pCan0SignalConfigure = GetCan0SignalConfigure();
+    CanParseSdkReadSignal(g_CanSignalFormat,&pCan0SignalConfigure->ACU_Key2St,&dataVaule);  
+    ecallStatus = AlarmSdkGetEcallCallState();
+    bcallStatus = AlarmSdkGetBcallCallState(); 
+    acuKeySingal = (uint8_t)dataVaule;
+    if(acuKeySingal == 1)
+    {
+        if(acuCanFlag == 0)
+        {
+            if(ecallStatus != 0)
+            {
+                triggerType = AlarmSdkGetEcallTriggerType();
+                AlarmSdkEcallClose(triggerType -1);    
+                acuCanFlag = 1;
+            }
+            else if(bcallStatus != 0)
+            {
+                triggerType = AlarmSdkGetBcallTriggerType();
+                AlarmSdkBcallClose(triggerType -1);    
+                acuCanFlag = 1;
+            }
+        }
+    }
+    else
+    {
+        if(acuCanFlag == 1)
+        {
+            acuCanFlag = 0;
+        }
+    }
+}
+
+/** ****************************************************************************
+* @remarks       void TaskEcallProcess( void *pvParameters )
+* @brief         ECALL功能主任务函数
+* @param[in]     pvParameters - FreeRTOS任务参数
+* @param[out]    无
+* @return        无
+* @attention     周期性处理SOS按键、LED控制、ECALL、气囊信号和B-Call信号等功能
+*******************************************************************************/
 void TaskEcallProcess( void *pvParameters )
 {
     uint16_t cycleTimeCount = 0;
     AlarmSdkInit();
     AirbagPwmInit();
-#if(0)
     SetSosLedState(E_SOS_LED_STATE_INIT);
-#endif
     AlarmSdkSetSelfcheckState(E_SELFCHECK_RUN_INIT);
     memset( (uint8_t *)&g_SosButtonClickMsg, 0x00, sizeof( SosButtonClickMsg_t ));
 
@@ -681,6 +783,10 @@ void TaskEcallProcess( void *pvParameters )
         AlarmSdkCycleProcess();
         /* 气囊信号处理 */
         AirbagSingleProcess();
+        /* B-Call信号处理 */
+        BcallSignalProcess();
+        /* eCall/bCall关闭信号处理 */
+        XCallCloseSignalProcess();
 
         cycleTimeCount++;
         if(cycleTimeCount == (100 / ECALL_PROCESS_CYCLE_TIME))
@@ -709,6 +815,13 @@ void TaskEcallProcess( void *pvParameters )
     }
 }
 
+/** ****************************************************************************
+ * @remarks   初始化气囊PWM信号检测相关变量
+ * @brief     初始化气囊PWM信号状态跟踪结构体中的所有成员变量
+ * @param     无
+ * @return    无
+ * @attention 此函数应在系统初始化时调用，确保气囊PWM信号检测的初始状态正确
+ * ****************************************************************************/
 static void AirbagPwmInit(void)
 {
     g_pwm.lastTick  = 0;
@@ -720,6 +833,13 @@ static void AirbagPwmInit(void)
     g_pwm.lastLevel = 0;
 }
 
+/** ****************************************************************************
+ * @remarks   气囊PWM信号中断处理函数
+ * @brief     处理气囊PWM信号的电平变化中断，记录高低电平时间并判断PWM状态
+ * @param     level - 当前PWM信号的电平状态(0表示低电平，非0表示高电平)
+ * @return    无
+ * @attention 此函数在中断上下文中执行，应保持轻量级以避免长时间占用CPU
+ * ****************************************************************************/
 void AirbagPwmIsrHandler(uint8_t level)
 {
     uint32_t now;
@@ -797,7 +917,38 @@ void AirbagPwmIsrHandler(uint8_t level)
     }
 }
 
+/** ****************************************************************************
+ * @remarks   获取气囊PWM信号状态
+ * @brief     返回当前检测到的气囊PWM信号稳定状态
+ * @param     无
+ * @return    当前气囊PWM信号状态枚举值
+ * @attention 此函数仅读取状态，不修改任何变量
+ ****************************************************************************/
 static AirbagPwmState_e AirbagPwmGetState(void)
 {
     return g_pwm.stableState;
+}
+
+/** ****************************************************************************
+ * @remarks   设置远程通信模式
+ * @brief     更新全局远程通信模式状态变量
+ * @param     mode - 要设置的远程通信模式枚举值
+ * @return    无
+ * @attention 此函数修改全局状态，可能需要考虑线程安全性
+ * ****************************************************************************/
+void XCallSetTelemataticsMode(TelematicsMode_e mode)
+{
+    g_telemataticsMode = mode;
+}
+
+/** ****************************************************************************
+ * @remarks   获取远程通信模式
+ * @brief     返回当前全局远程通信模式状态
+ * @param     无
+ * @return    当前的远程通信模式枚举值
+ * @attention 此函数仅返回状态，不修改任何全局变量
+ * ****************************************************************************/
+TelematicsMode_e XCallGetTelemataticsMode(void)
+{
+    return g_telemataticsMode;
 }

@@ -651,6 +651,8 @@ typedef struct
     CanParseSignal_t EBS_SOCWakeUpTreshold;
     CanParseSignal_t EBS_WakeupEnTime;
     CanParseSignal_t EBS_WakeupIntervalTime;
+    CanParseSignal_t ACU_Key2St;
+    CanParseSignal_t ACU_TELBcallReq;
 } can0_signal_configure_t;
 
 /****************************** Function Declarations *************************/
