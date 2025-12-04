@@ -693,6 +693,13 @@ static void DtcInitialize(void)
   uint8_t needSave = 0; // 标记是否需要写Flash
 
   FlashDtcRead((uint8_t *)g_dtcState, sizeof(g_dtcState));
+  
+  if (g_dtcState[0].extendData.FaultOccurrenceCounter == 0xFF && 
+      g_dtcState[0].extendData.DtcAgedCounter == 0xFF)
+  {
+      memset(g_dtcState, 0, sizeof(g_dtcState));
+      needSave = 1;
+  }
 
   for (i = 0; i < itemNum; i++)
   {
@@ -1456,20 +1463,6 @@ int16_t DtcProcessDtcTestGetCountByMask(uint8_t statusMaskIn, uint32_t *dtcNumOu
   return 0;
 }
 
-/****************************************************
-
-return
-  0 : success
-  -2:invalid record number
-  -1:invalid dtc code
-***************************************************/
-/****************************************************
-
-return
-  0 : success
-  -2:invalid record number
-  -1:invalid dtc code
-***************************************************/
 int16_t DtcProcessGetExtendedData(uint32_t dtcCode, uint8_t recordNum, uint8_t *extendedData, uint32_t *pExtendedDataLength, uint8_t *statusOut)
 {
   uint32_t i;
@@ -1480,52 +1473,51 @@ int16_t DtcProcessGetExtendedData(uint32_t dtcCode, uint8_t recordNum, uint8_t *
   {
     if (g_dtcList[i].dtcCode == dtcCode)
     {
-      if (0x01 == recordNum) // fault occurrence counter data
+      if (0x01 == recordNum) 
       {
-        extendedData[0] = 0x01; // Record 0x01
-        extendedData[1] = g_dtcState[i].extendData.FaultOccurrenceCounter;
-        *pExtendedDataLength = 0x02;
+        extendedData[0] = 0x01; // Record Number
+        extendedData[1] = 0x00; // High Byte
+        extendedData[2] = g_dtcState[i].extendData.FaultOccurrenceCounter; // Low Byte
+        *pExtendedDataLength = 0x03; // 总长度 = 1(ID) + 2(Data)
         *statusOut = g_dtcState[i].dtcStatus;
         ret = 0x00;
       }
-      // === 修改点 1：将 Aging Counter 映射到 0x02 ===
-      else if (0x02 == recordNum) // aging counter data (自定义映射)
+      else if (0x02 == recordNum) 
       {
-        extendedData[0] = 0x02; // Record 0x02
-        extendedData[1] = g_dtcState[i].extendData.DtcAgingCounter;
-        *pExtendedDataLength = 0x02;
+        extendedData[0] = 0x02; // Record Number
+        extendedData[1] = 0x00;
+        extendedData[2] = g_dtcState[i].extendData.DtcAgingCounter; // Low Byte
+        *pExtendedDataLength = 0x03; // 总长度 = 1(ID) + 2(Data)
         *statusOut = g_dtcState[i].dtcStatus;
         ret = 0x00;
       }
-      // === 修改点 2：将 Aged Counter 映射到 0x03 ===
-      else if (0x03 == recordNum) // aged counter data (自定义映射)
+      else if (0x03 == recordNum) 
       {
-        extendedData[0] = 0x03; // Record 0x03
-        extendedData[1] = g_dtcState[i].extendData.DtcAgedCounter;
-        *pExtendedDataLength = 0x02;
+        extendedData[0] = 0x03; // Record Number
+        extendedData[1] = g_dtcState[i].extendData.DtcAgedCounter; // Value
+        *pExtendedDataLength = 0x02; // 总长度 = 1(ID) + 1(Data)
         *statusOut = g_dtcState[i].dtcStatus;
         ret = 0x00;
       }
-      else if (0xFF == recordNum) // all extended data
+      else if (0xFF == recordNum) 
       {
-        // === 修改点 3：0xFF 分支必须与上面的自定义映射保持一致 ===
         uint32_t len = 0;
 
-        // 1. Fault Occurence Counter (Record 0x01)
+        // Record 0x01 (Length 2 Data)
         extendedData[len++] = 0x01;
-        extendedData[len++] = g_dtcState[i].extendData.FaultOccurrenceCounter;
+        extendedData[len++] = 0x00; // High
+        extendedData[len++] = g_dtcState[i].extendData.FaultOccurrenceCounter; // Low
 
-        // 2. Aging Counter (Record 0x02)
-        extendedData[len++] = 0x02; // 匹配上面的 0x02
-        extendedData[len++] = g_dtcState[i].extendData.DtcAgingCounter;
+        // Record 0x02 (Length 2 Data)
+        extendedData[len++] = 0x02;
+        extendedData[len++] = 0x00; // High
+        extendedData[len++] = g_dtcState[i].extendData.DtcAgingCounter; // Low
 
-        // 3. Aged Counter (Record 0x03)
-        extendedData[len++] = 0x03; // 匹配上面的 0x03
-        extendedData[len++] = g_dtcState[i].extendData.DtcAgedCounter;
+        // Record 0x03 (Length 1 Data)
+        extendedData[len++] = 0x03;
+        extendedData[len++] = g_dtcState[i].extendData.DtcAgedCounter; 
 
-        *pExtendedDataLength = len; // 长度是 6
-        // === 结束修改 ===
-
+        *pExtendedDataLength = len; //8 字节
         *statusOut = g_dtcState[i].dtcStatus;
         ret = 0x00;
       }

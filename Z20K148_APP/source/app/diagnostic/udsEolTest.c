@@ -76,9 +76,10 @@ static int16_t ServiceSetPinMuteState(uint8_t *pData, uint16_t dataLength);
 static int16_t ServiceSetDdrTest(uint8_t *pData, uint16_t dataLength);
 
 // read by identifier
+static int16_t ServiceReadPinKL15Status(uint8_t *pData, uint16_t *pLength);
+#if 0
 static int16_t ServiceReadPinIN_1Status(uint8_t *pData, uint16_t *pLength);
 static int16_t ServiceReadPinIN_2Status(uint8_t *pData, uint16_t *pLength);
-static int16_t ServiceReadPinKL15Status(uint8_t *pData, uint16_t *pLength);
 static int16_t ServiceReadPinSRSStatus(uint8_t *pData, uint16_t *pLength);
 static int16_t ServiceReadPinEcallStatus(uint8_t *pData, uint16_t *pLength);
 static int16_t ServiceReadBatteryChargeState(uint8_t *pData, uint16_t *pLength);
@@ -87,7 +88,7 @@ static int16_t ServiceReadBlueToothMacAddress(uint8_t *pData, uint16_t *pLength)
 static int16_t ServiceReadBlueToothSoftVersion(uint8_t *pData, uint16_t *pLength);
 static int16_t ServiceReadPowerOnCount(uint8_t *pData, uint16_t *pLength);
 static int16_t ServiceWritePowerOnCount(uint8_t *pData, uint16_t length);
-
+#endif
 static int16_t TestService22ReadKL30Voltage(uint8_t *pData, uint16_t *pLength);
 
 static int16_t ToolReadCanChannelStatus(uint8_t *pData, uint16_t *pLength);
@@ -105,7 +106,7 @@ static int16_t ToolReadSoftwareNumber(uint8_t *pData, uint16_t *pLength);
 static int16_t ToolReadVehicleSoftwareVersion(uint8_t *pData, uint16_t *pLength);
 static int16_t ToolRead4GAntennaStatus(uint8_t *pData, uint16_t *pLength);
 static int16_t ToolReadGNSSAntennaStatus(uint8_t *pData, uint16_t *pLength);
-static int16_t Service2EWriteBluetoothName(uint8_t *Data, uint16_t len);
+//static int16_t Service2EWriteBluetoothName(uint8_t *Data, uint16_t len);
 
 static const struc_ReadDidMap m_readDidMap[] =
     {
@@ -139,7 +140,7 @@ static const struc_ReadDidMap m_readDidMap[] =
         //    {0x120C, Service22ReadIpAddress               },       //企业平台地址
         //    {0x120D, Service22ReadIpPort                  },       //企业平台端口
         //    {0x120E, Service22ReadBID                     },       //BID
-        {0x120F, Service22ReadIMSI}, // IMSI
+        //{0x120F, Service22ReadIMSI}, // IMSI
         //    {0x1210, Service22ReadTboxPreKey              },       //TboxPreKey
         //    {0x1211, Service22ReadKeyType                 },       //KeyType
         //    {0x1212, Service22ReadTboxMsgNumber1,         },
@@ -148,35 +149,35 @@ static const struc_ReadDidMap m_readDidMap[] =
         //    {0x1216, Service22ReadTboxModel,              },
         //    {0x1217, Service22ReadCarModeType,            },
         //    {0x1218, Service22ReadSecurityVersion,        },
-        {0x127C, Service22ReadRegisterFlag},    // 网络注册状态
-        {0x127D, Service22ReadNetWorkType},     // 网络类型
-        {0x127E, Service22ReadPhoneSignal},     // 网络信号强度
-        {0x127F, Service22ReadApnNumber},       // apn number
-        {0x1280, Service22ReadGNSS},            // GPS状态
-        {0x1281, Service22ReadNetWorkProvider}, // 注册登录状态
-        //{0x1282, TestService22ReadKL30Voltage         },       //
-        {0x1283, Service22ReadBatteryStatus},      //
-        {0x1285, Service22ReadCpuFlashCapacity},   //
-        {0x1286, ServiceReadBlueToothName},        //
-        {0x1287, ServiceReadBlueToothMacAddress},  //
-        {0x1288, ServiceReadBlueToothSoftVersion}, //
-        {0x1290, ServiceReadPowerOnCount},         //
-        {0x1401, ServiceReadPinIN_1Status},        //
-        {0x1402, ServiceReadPinIN_2Status},        //
-        //{0x1403, ServiceReadPinKL15Status             },       //
-        {0x1404, ServiceReadPinSRSStatus},       //
-        {0x1405, ServiceReadPinEcallStatus},     //
-        {0x1406, ServiceReadBatteryChargeState}, //
+        // {0x127C, Service22ReadRegisterFlag},    // 网络注册状态
+        // {0x127D, Service22ReadNetWorkType},     // 网络类型
+        // {0x127E, Service22ReadPhoneSignal},     // 网络信号强度
+        // {0x127F, Service22ReadApnNumber},       // apn number
+        // {0x1280, Service22ReadGNSS},            // GPS状态
+        // {0x1281, Service22ReadNetWorkProvider}, // 注册登录状态
+        // //{0x1282, TestService22ReadKL30Voltage         },       //
+        // {0x1283, Service22ReadBatteryStatus},      //
+        // {0x1285, Service22ReadCpuFlashCapacity},   //
+        // {0x1286, ServiceReadBlueToothName},        //
+        // {0x1287, ServiceReadBlueToothMacAddress},  //
+        // {0x1288, ServiceReadBlueToothSoftVersion}, //
+        // {0x1290, ServiceReadPowerOnCount},         //
+        // {0x1401, ServiceReadPinIN_1Status},        //
+        // {0x1402, ServiceReadPinIN_2Status},        //
+        // //{0x1403, ServiceReadPinKL15Status             },       //
+        // {0x1404, ServiceReadPinSRSStatus},       //
+        // {0x1405, ServiceReadPinEcallStatus},     //
+        // {0x1406, ServiceReadBatteryChargeState}, //
 
-        /***************add***************************/
-        {0xF1B2, Service22ReadVehicleManufacturingDate},       // Installation Date
-        {0xF192, Service22ReadHardwareNumber},                 // 供应商ECU硬件版本号
-        {0xF194, Service22ReadSoftwareNumber},                 // 供应商ECU软件版本号
-        {0x2409, Service22ReadEOLconfig},                      // 下线配置
-        {0x2408, Service22ReadVehicleManufacturingDate},       //
-        {0x240A, Service22ReadAppSoftwareFingerprint},         // e50
-        {0x240B, Service22ReadSubnetConfigListOnHighSpeedCan}, // e50
-        {0x240C, Service22ReadDiagnosticCanReport},            // e50
+        // /***************add***************************/
+        // {0xF1B2, Service22ReadVehicleManufacturingDate},       // Installation Date
+        // {0xF192, Service22ReadHardwareNumber},                 // 供应商ECU硬件版本号
+        // {0xF194, Service22ReadSoftwareNumber},                 // 供应商ECU软件版本号
+        // {0x2409, Service22ReadEOLconfig},                      // 下线配置
+        // {0x2408, Service22ReadVehicleManufacturingDate},       //
+        // {0x240A, Service22ReadAppSoftwareFingerprint},         // e50
+        // {0x240B, Service22ReadSubnetConfigListOnHighSpeedCan}, // e50
+        // {0x240C, Service22ReadDiagnosticCanReport},            // e50
 
 };
 
@@ -236,14 +237,14 @@ static const struc_WriteDidMap m_writeDidMap[] =
         //    {0x1217, Service2EWriteCarModeType,          },
         //    {0x1218, Service2EWriteSecurityVersion,      },
         //    {0x127C, Service2EWriteTboxRegisterFlag,     },
-        {
-            0x1286,
-            Service2EWriteBluetoothName,
-        },
-        {
-            0x1290,
-            ServiceWritePowerOnCount,
-        },
+//        {
+//            0x1286,
+//            Service2EWriteBluetoothName,
+//        },
+//        {
+//            0x1290,
+//            ServiceWritePowerOnCount,
+//        },
 
         /***************add***************************/
         {0x2401, Service2EWriteVariantcode}, // ECU编码
@@ -1408,6 +1409,18 @@ int16_t ToolReadGNSSAntennaStatus(uint8_t *pData, uint16_t *pLength)
     return 0;
 }
 
+static int16_t ServiceReadPinKL15Status(uint8_t *pData, uint16_t *pLength)
+{
+    int16_t state;
+
+    state = PeripheralHalGetKl15Status();
+    pData[0] = state;
+
+    *pLength = 1;
+    return 0;
+}
+
+#if 0
 static int16_t ServiceReadPinIN_1Status(uint8_t *pData, uint16_t *pLength)
 {
     int16_t state;
@@ -1436,16 +1449,7 @@ static int16_t ServiceReadPinIN_2Status(uint8_t *pData, uint16_t *pLength)
     return 0;
 }
 
-static int16_t ServiceReadPinKL15Status(uint8_t *pData, uint16_t *pLength)
-{
-    int16_t state;
 
-    state = PeripheralHalGetKl15Status();
-    pData[0] = state;
-
-    *pLength = 1;
-    return 0;
-}
 
 static int16_t ServiceReadPinSRSStatus(uint8_t *pData, uint16_t *pLength)
 {
@@ -1577,6 +1581,19 @@ static int16_t ServiceWritePowerOnCount(uint8_t *pData, uint16_t length)
     return ret;
 }
 
+static int16_t Service2EWriteBluetoothName(uint8_t *Data, uint16_t len)
+{
+    int16_t ret;
+
+    ret = EolTestSyncWithCpuTransmit(SYNC_CPU_CONTROL_ITEM_SET_BLUE_TOOTH_NAME, Data, len);
+
+    if (ret != 0)
+    {
+        return -1;
+    }
+    return 0;
+}
+#endif
 static int16_t TestService22ReadKL30Voltage(uint8_t *pData, uint16_t *pLength)
 {
     uint32_t voltage;
@@ -1591,15 +1608,4 @@ static int16_t TestService22ReadKL30Voltage(uint8_t *pData, uint16_t *pLength)
     return 0;
 }
 
-static int16_t Service2EWriteBluetoothName(uint8_t *Data, uint16_t len)
-{
-    int16_t ret;
 
-    ret = EolTestSyncWithCpuTransmit(SYNC_CPU_CONTROL_ITEM_SET_BLUE_TOOTH_NAME, Data, len);
-
-    if (ret != 0)
-    {
-        return -1;
-    }
-    return 0;
-}

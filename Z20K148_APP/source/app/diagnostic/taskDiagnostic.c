@@ -3443,9 +3443,11 @@ static uint8_t CommunicationControl(uint8_t ContolType, uint8_t SubService)
     {
     case 01:
       CanPeriodSendDisableAll(); // 停止周期性应用报文发送
+      g_bCommunicationControlFlag = 1;
       break;
     case 02:
       AutosarNmSdkDisableCommunication(0); // 停止网络管理报文发送/接收
+      g_bCommunicationControlFlag = 1;
       break;
     case 03:
       // CycleSendDisable(TBOX_CAN_CHANNEL_E);
