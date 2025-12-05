@@ -2830,7 +2830,7 @@ static int16_t Service0x2EProcess(uint8_t *udsData, uint16_t udsLen, uint8_t fun
   }
   else
   {
-    uint8_t mpu_response_buffer[20]; // mpu会给我回什么
+    uint8_t mpu_response_buffer[64]; // mpu会给我回什么
     uint16_t mpu_response_length = 0;
     int8_t passthroughRet;
     if (ParameterSyncSdkGetFromCpuIsFinished() != 0)

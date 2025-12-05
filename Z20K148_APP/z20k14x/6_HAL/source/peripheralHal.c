@@ -25,6 +25,8 @@
 #include "powerManageSdk.h"
 #include "scm_drv.h"
 #include "taskEcallProcess.h"
+#include "FreeRTOS.h"
+#include "task.h"
 /****************************** Macro Definitions ******************************/
 #define WAKEUP_SOURCE_NONE            (0U)     
 #define WAKEUP_SOURCE_CAN1            (1U)     
@@ -715,10 +717,10 @@ int16_t PeripheralHalAdGet(uint8_t adChannel, uint32_t *pValue)
     }
     else
     {
-        COMMON_DISABLE_INTERRUPTS();
+        taskENTER_CRITICAL();
         adValid = g_adBuffer[adChannel].adValid;
         adValue = g_adBuffer[adChannel].adValue;
-        COMMON_ENABLE_INTERRUPTS();     
+        taskEXIT_CRITICAL();     
         if(adValid != 0)
         {
             // Common calculation for all valid channels
@@ -1128,7 +1130,6 @@ static void PeripheralHalAmpInit()
 
 	PORT_PinmuxConfig(FAULTZ_DET_PORT, FAULTZ_DET_PIN, FAULTZ_DET_PIN_MUX);
 	GPIO_SetPinDir(FAULTZ_DET_PORT, FAULTZ_DET_PIN, GPIO_INPUT);
-	GPIO_ClearPinOutput(FAULTZ_DET_PORT, FAULTZ_DET_PIN);
 }
 
 /*************************************************

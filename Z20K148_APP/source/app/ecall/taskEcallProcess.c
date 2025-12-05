@@ -57,11 +57,10 @@ typedef struct
 /****************************** Global Variables ******************************/
 static SosLledState_e g_SosLedState;        
 static SosButtonClickMsg_t g_SosButtonClickMsg;
-#ifdef IIC_ENABLE
+static const uint8_t g_CanSignalFormat = VEHICLE_CAN_UNPACK_FORMAT_MOTO_LSB;
+#if(0)
 static uint8_t selfCheckStatusPrintFlag = 0;
 #endif
-static const uint8_t g_CanSignalFormat = VEHICLE_CAN_UNPACK_FORMAT_MOTO_LSB;
-
 static const PwmRule_t g_pwmRules[] =
 {
     /* 规则0：正常 66.7% (高 20ms±2, 低 10ms±2) */
@@ -336,6 +335,16 @@ static void SosButtonDetection( void )
                 SosButtonState = E_SOS_BUTTON_STATE_IDLE;
                 memset( (uint8_t *)&g_SosButtonClickMsg, 0x00, sizeof( SosButtonClickMsg_t ));
             }
+            if(AlarmSdkGetEcallCallState() != 0)
+            {
+                if( key_time <= SOS_KEY_RELEASED_TIME )                     /*触发按键成功*/    
+                {
+                    AlarmSdkEcallClose(E_ECALL_TRIGGER_BTN_MANN);
+                    TBOX_PRINT("SOS button close ECALL, Into idle mode: [E_SOS_BUTTON_STATE_IDLE]\r\n");
+                    SosButtonState = E_SOS_BUTTON_STATE_IDLE;
+                    memset( (uint8_t *)&g_SosButtonClickMsg, 0x00, sizeof( SosButtonClickMsg_t ));
+                }
+            }
         }
     }
     else if(SosButtonState == E_SOS_BUTTON_STATE_CANCELLED )
@@ -348,8 +357,7 @@ static void SosButtonDetection( void )
         }
     }
 }
-
-#ifdef IIC_ENABLE
+#if(0)
 /** ****************************************************************************
 * @remarks       static uint32_t HardwareSelfcheckResult( void )
 * @brief         系统硬件状态自检
@@ -793,23 +801,19 @@ void TaskEcallProcess( void *pvParameters )
         {
             if(AlarmSdkGetEcallTriggerType() == 0)
             {
-                #ifdef IIC_ENABLE
-                EcallHalRestartAmpDiagnostic();
-                #endif
+                //EcallHalRestartAmpDiagnostic();
             }
         }
         if(cycleTimeCount >= (1000 / ECALL_PROCESS_CYCLE_TIME))
         {
             cycleTimeCount = 0;
-            #ifdef IIC_ENABLE
             EcallHalGetAmpFaultStatus();
             EcallHalGetAmpDiagnosticStatus();
     
             /* 上电自检 */
-            SelfcheckCycleProcess();
+            //SelfcheckCycleProcess();
             AlarmSdkSelfchackPeriSend();
-            EcallHalRestartAmpClose();
-            #endif
+            //EcallHalRestartAmpClose();
         }
         vTaskDelay(ECALL_PROCESS_CYCLE_TIME);
     }

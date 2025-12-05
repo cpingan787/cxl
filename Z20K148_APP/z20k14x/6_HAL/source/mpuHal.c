@@ -961,7 +961,7 @@ int16_t MpuHalOpen(void)
 {
     int16_t handle = -1, index = 0;
 
-    COMMON_DISABLE_INTERRUPTS();
+    taskENTER_CRITICAL();
     for (index = 0; index < MPU_HAL_HANDLE_INSTANSE_MAX; index++)
     {
         if (g_mpuManage.rxHandle[index].useFlag == 0)
@@ -971,7 +971,7 @@ int16_t MpuHalOpen(void)
             break;
         }
     }
-    COMMON_ENABLE_INTERRUPTS();
+    taskEXIT_CRITICAL();
     return handle;
 }
 
@@ -1143,7 +1143,7 @@ int16_t MpuHalTransmit(int16_t handle, const MpuHalDataPack_t *pTxMsg, MpuHalTXM
         {
             if (pTxMsg->dataLength < MPU_HAL_TXMSG_MAX_LEN)
             {
-                COMMON_DISABLE_INTERRUPTS();
+                taskENTER_CRITICAL();
                 MpuPackHeader(packHeader, pTxMsg);
                 crc = MpuPackGetCrc(packHeader, pTxMsg);
                 index = 0;
@@ -1156,7 +1156,7 @@ int16_t MpuHalTransmit(int16_t handle, const MpuHalDataPack_t *pTxMsg, MpuHalTXM
                 sTxBuffer[index] = crc & MPU_HAL_8BIT_MASK;
                 index++;
                 ret = MpuHalQueueSend(&g_mpuTxBuf[txMode], sTxBuffer, index, txMode);
-                COMMON_ENABLE_INTERRUPTS();
+                taskEXIT_CRITICAL();
             }
             else
             {

@@ -2181,11 +2181,10 @@ static int16_t CanTransmit(uint8_t u8Channel, uint32_t id, uint8_t u8Len, const 
             }
             pCAN_MessageInfo->idType = CAN_MSG_ID_STD;
             pCAN_MessageInfo->dataLen = u8Len;
-            COMMON_ENABLE_INTERRUPTS();
 
             // Use static mail counter, manage each channel independently
             canSendRet = CAN_Send(pstCanType, u8MailNum[u8Channel], pCAN_MessageInfo, id, pu8CmdData);
-
+            COMMON_ENABLE_INTERRUPTS();
             // Cyclically update mail counter
             if (++u8MailNum[u8Channel] >= CAN_SEND_MAIL_MAX_NUMBER)
             {
@@ -2194,9 +2193,9 @@ static int16_t CanTransmit(uint8_t u8Channel, uint32_t id, uint8_t u8Len, const 
 
             if (canSendRet == SUCC)
             {
-                COMMON_DISABLE_INTERRUPTS();
+                taskENTER_CRITICAL();
                 g_driverCanManage[u8Channel].txTimeOutCount = 0;
-                COMMON_ENABLE_INTERRUPTS();
+                taskEXIT_CRITICAL();
                 ret = 0;
             }
             if(canSendRet == BUSY)
@@ -2286,12 +2285,12 @@ int16_t CanHalTransmit(int16_t canHandle, uint32_t canId, const uint8_t *canData
                         }
                         if (ret == SUCC)
                         {
-                            COMMON_DISABLE_INTERRUPTS();
+                            taskENTER_CRITICAL();
                             if (g_driverCanManage[canChannel].txStartTimeCount == 0xffffffff)
                             {
                                 g_driverCanManage[canChannel].txStartTimeCount = 0x00;
                             }
-                            COMMON_ENABLE_INTERRUPTS();
+                            taskEXIT_CRITICAL();
                         }
                     }
                 }
@@ -2424,12 +2423,12 @@ int16_t CanHalNmTransmit(int16_t canHandle, uint32_t canId, uint8_t *canData, ui
     }
     if (ret == 0)
     {
-        COMMON_DISABLE_INTERRUPTS(); // disable interrupt
+        taskENTER_CRITICAL(); // disable interrupt
         if (g_driverCanManage[canChannel].txStartTimeCount == 0xffffffff)
         {
             g_driverCanManage[canChannel].txStartTimeCount = 0x00;
         }
-        COMMON_ENABLE_INTERRUPTS(); // enable interrupt
+        taskEXIT_CRITICAL(); // enable interrupt
     }
     return ret;
 }
@@ -2510,9 +2509,9 @@ int16_t CanHalAppMsgEnable(int16_t canHandle)
     {
         return CAN_ERROR_INVALID_HANDLE;
     }
-    COMMON_DISABLE_INTERRUPTS();
+    taskENTER_CRITICAL();
     g_driverCanManage[canChannel].AppMsgEnable++;
-    COMMON_DISABLE_INTERRUPTS();
+    taskEXIT_CRITICAL();
     return 0;
 }
 
@@ -2528,9 +2527,9 @@ int16_t CanHalAppMsgDisable(int16_t canHandle)
     {
         return CAN_ERROR_INVALID_HANDLE;
     }
-    COMMON_DISABLE_INTERRUPTS();
+    taskENTER_CRITICAL();
     g_driverCanManage[canChannel].AppMsgEnable--;
-    COMMON_ENABLE_INTERRUPTS();
+    taskEXIT_CRITICAL();
     return 0;
 }
 
@@ -2540,9 +2539,9 @@ int16_t CanHalTxMsgEnable(uint8_t canChannel)
     {
         return CAN_ERROR_INVALID_HANDLE;
     }
-    COMMON_DISABLE_INTERRUPTS();
+    taskENTER_CRITICAL();
     g_driverCanManage[canChannel].txMsgEnable = 1;
-    COMMON_ENABLE_INTERRUPTS();
+    taskEXIT_CRITICAL();
     return 0;
 }
 
@@ -2552,9 +2551,9 @@ int16_t CanHalTxMsgDisable(uint8_t canChannel)
     {
         return CAN_ERROR_INVALID_HANDLE;
     }
-    COMMON_DISABLE_INTERRUPTS();
+    taskENTER_CRITICAL();
     g_driverCanManage[canChannel].txMsgEnable = 0;
-    COMMON_ENABLE_INTERRUPTS();
+    taskEXIT_CRITICAL();
     return 0;
 }
 
@@ -2571,9 +2570,9 @@ uint32_t CanHalGetTimeCountSinceLastCanTx(int16_t canHandle)
     {
         return 0xFFFFFFFF;
     }
-    COMMON_DISABLE_INTERRUPTS(); // disable interrupt
+    taskENTER_CRITICAL(); // disable interrupt
     timeCount = g_driverCanManage[canChannel].txStartTimeCount;
-    COMMON_ENABLE_INTERRUPTS(); // enable interrupt
+    taskEXIT_CRITICAL(); // enable interrupt
     return timeCount;
 }
 
@@ -2699,12 +2698,12 @@ int16_t CanHalDiagnosticTransmit(int16_t canHandle, uint32_t canId, uint8_t *can
     }
     if (ret == 0)
     {
-        COMMON_DISABLE_INTERRUPTS(); // disable interrupt
+        taskENTER_CRITICAL(); // disable interrupt
         if (g_driverCanManage[canChannel].txStartTimeCount == 0xffffffff)
         {
             g_driverCanManage[canChannel].txStartTimeCount = 0x00;
         }
-        COMMON_ENABLE_INTERRUPTS(); // enable interrupt
+        taskEXIT_CRITICAL(); // enable interrupt
     }
     return ret;
 }
@@ -2982,10 +2981,10 @@ static void CanHalCanBusLoadCheck(uint32_t cycleTime_ms)
         if (g_driverCanManage[i].loadTimeCount >= 100)
         {
             g_driverCanManage[i].loadTimeCount = 0;
-            COMMON_DISABLE_INTERRUPTS();
+            taskENTER_CRITICAL();
             msgCount = g_driverCanManage[i].loadMsgCount;
             g_driverCanManage[i].loadMsgCount = 0;
-            COMMON_ENABLE_INTERRUPTS();
+            taskEXIT_CRITICAL();
             /*if(i==0)
              {
                TBOX_PRINT("can load %d \r\n",msgCount);
@@ -3022,13 +3021,13 @@ void CanHalCanBusOffCycleProcess(uint32_t cycleTime_ms)
         }
         if (g_driverCanManage[i].busNoAckErrorState == 0x00) // 无错误
         {
-            COMMON_DISABLE_INTERRUPTS();
+            taskENTER_CRITICAL();
             if (g_driverCanManage[i].txTimeOutCount != 0xFFFFFFFF)
             {
                 if (g_driverCanManage[i].txTimeOutCount < txTimeOut)
                 {
                     g_driverCanManage[i].txTimeOutCount += cycleTime_ms;
-                    COMMON_ENABLE_INTERRUPTS();
+                    taskEXIT_CRITICAL();
                 }
                 else
                 {
@@ -3038,7 +3037,7 @@ void CanHalCanBusOffCycleProcess(uint32_t cycleTime_ms)
                     {
                       TBOX_PRINT("g_driverCanManage[i].BusErrorState %d\r\n",i,g_driverCanManage[i].BusErrorState);
                     }*/
-                    COMMON_ENABLE_INTERRUPTS();
+                    taskEXIT_CRITICAL();
                     if (0 == g_driverCanManage[i].BusErrorState)
                     {
                         if (g_driverCanManage[i].noAckError) // no ack
@@ -3076,7 +3075,7 @@ void CanHalCanBusOffCycleProcess(uint32_t cycleTime_ms)
             }
             else
             {
-                COMMON_ENABLE_INTERRUPTS();
+                taskEXIT_CRITICAL();
             }
         }
         else if (g_driverCanManage[i].busNoAckErrorState == 0x01) // error

@@ -69,13 +69,10 @@ typedef struct
 }EcallLedSwitchTime_t;
 /****************************** Global Variables ******************************/
 static EcallLedSwitchTime_t g_SosLedSwitchTime = {E_ECALL_LED_MODE_KEEP_OFF, 0, 0, 0};
-#ifdef IIC_ENABLE
 static uint32_t g_ampInitTime = 0u;
 static uint8_t g_ampInitFlag = 0u;
-#endif
 QueueHandle_t g_SosLedMsgQueue = NULL;
 SemaphoreHandle_t  g_SosLedMutex = NULL;        // 当前互斥操作信号量
-#ifdef IIC_ENABLE
 volatile static uint16_t I2C_RxBuffer[11];      // 定义接收数据使用的数组
 volatile static uint32_t I2C_RxBufSN;           //定义接收数组的当前序号
 volatile static uint32_t I2C_CheckErrCnt;       //防止I2C模块故障的计数变量
@@ -96,7 +93,6 @@ static const I2C_FifoConfig_t g_stcI2cFifoConfig =
     .recvFifoThr = 0,                           // RX_FIFO中的数据个数大于等于门槛值(n+1)时，触发 RX_FULL 中断
     .transmitFifoThr = 0                        // TX_FIFO中的数据个数小于等于门槛值(n+1)时，触发 TX_EMPTY 中断
 };
-#endif
 /****************************** Function Declarations *************************/
 #if(0)
 static void I2cStopDetIsr(void);    //声明I2C_INT_STOP_DET/停止位信号产生 对应的中断处理函数
@@ -104,11 +100,9 @@ static void I2cStartDetIsr(void);    //声明I2C_INT_START_DET/起始位信号�
 static void I2xRxFullIsr(void);    //声明I2C_INT_RX_FULL/接收FIFO满 对应的中断处理函数
 static void I2cRxOverIsr(void);    //声明I2C_INT_RX_OVERL/接收FIFO溢出 对应的中断处理函数
 #endif
-#ifdef IIC_ENABLE
 static void I2cSclStuckAtLowIsr(void);          //声明I2C SCL持续低电平 中断函数
-void Sa51034Init(void);
-void Sa51034Close(void);
-#endif
+void Sa51500Init(void);
+void Sa51500Close(void);
 /****************************** Public Function Implementations ***************/
 #if (SOFTWARE_IIC_ENABLE == 1)
 static void iic_sleep(void)
@@ -340,7 +334,6 @@ void EcallHalSetAmpSdz(uint8_t flag)
 
 void EcallHalSetAmpMute(uint8_t flag)
 {
-    TBOX_PRINT("ECALL_AMP_MUTE state is %d\r\n", flag);
     if (0 == flag)
     {
         GPIO_ClearPinOutput(AMP_MUTE_PORT, AMP_MUTE_PIN);
@@ -355,16 +348,12 @@ void EcallHalSetVehicleMute(uint8_t flag)
 {
     if (0 == flag)
     {
-        #ifdef IIC_ENABLE
-        Sa51034Close();
-        #endif
+        Sa51500Close();
         GPIO_ClearPinOutput(VEHICLE_MUTE_PORT, VEHICLE_MUTE_PIN);
     }
     else
     {
-        #ifdef IIC_ENABLE
-        Sa51034Init();
-        #endif
+        Sa51500Init();
         GPIO_SetPinOutput(VEHICLE_MUTE_PORT, VEHICLE_MUTE_PIN);
     }
 }
@@ -412,7 +401,6 @@ uint8_t EcallHalGetSosButtonConnectStatus(void)
     return ret;
 }
 
-#ifdef IIC_ENABLE
 /*****************************************************************************
  * 函数:I2C0_Init
  * 功能:完成对I2C模块的配置，把I2C配置成主机模式。
@@ -443,20 +431,19 @@ static void I2C0_Init(void)
     GPIO_SetPinDir(I2C_SCL_PORT, I2C_SCL_PORT_PIN, GPIO_OUTPUT);
     GPIO_SetPinDir(I2C_SDA_PORT, I2C_SDA_PORT_PIN, GPIO_OUTPUT);
 
-    I2C_Disable(USER_I2C_SCB_INDEX);                                        // Disable I2C module via PARCC; 
+    SYSCTRL_DisableModule(USER_I2C_SCB_TYPE);
+    PORT_PinmuxConfig(I2C_SCL_PORT, I2C_SCL_PORT_PIN, I2C_SCL_PORT_MUX);
+    PORT_PinmuxConfig(I2C_SDA_PORT, I2C_SDA_PORT_PIN, I2C_SDA_PORT_MUX);
+    PORT_PullConfig(I2C_SDA_PORT, I2C_SDA_PORT_PIN, PORT_PULL_UP);
+    PORT_PullConfig(I2C_SCL_PORT, I2C_SCL_PORT_PIN, PORT_PULL_UP);
+    SYSCTRL_ResetModule(USER_I2C_SCB_TYPE);
 
-    //需要在设置I2C模块后，把I2C使用的IO设置成I2C功能
-    PORT_PinmuxConfig(I2C_SCL_PORT, I2C_SCL_PORT_PIN, I2C_SCL_PORT_MUX);    // Pinmux I2C SCL pin
-    PORT_PinmuxConfig(I2C_SDA_PORT, I2C_SDA_PORT_PIN, I2C_SDA_PORT_MUX);    // Pinmux I2C SDA pin
-    PORT_PullConfig(I2C_SDA_PORT, I2C_SDA_PORT_PIN, PORT_PULL_UP);         
-    PORT_PullConfig(I2C_SCL_PORT, I2C_SCL_PORT_PIN, PORT_PULL_UP);        
-    
-    SYSCTRL_ResetModule(USER_I2C_SCB_TYPE);                                 //Reset I2C via PARCC reset field
-    
-    CLK_ModuleSrc(USER_I2C_SCB_PCLK, CLK_SRC_PLL);                          //I2C模块的时钟源选择外部晶振
-    CLK_SetClkDivider(USER_I2C_SCB_PCLK, CLK_DIV_10);                       //设置I2C时钟的分频器。模块的时钟不能高于CPU的总线时钟
-    SYSCTRL_EnableModule(USER_I2C_SCB_TYPE);                                //在系统控制模块中，使能I2C模块
-                                           // Disable I2C
+    CLK_ModuleSrc(USER_I2C_SCB_PCLK, CLK_SRC_PLL);                          // I2C模块的时钟源选择外部晶振
+    CLK_SetClkDivider(USER_I2C_SCB_PCLK, CLK_DIV_10);                       // 设置I2C时钟的分频器。模块的时钟不能高于CPU的总线时钟
+    SYSCTRL_EnableModule(USER_I2C_SCB_TYPE);
+
+    //初始化I2C模块寄存器
+    I2C_Disable(USER_I2C_SCB_INDEX);
     I2C_SdaRecover(USER_I2C_SCB_INDEX, ENABLE);                             //Enable SDA recover feature
     I2C_MstBusRecover(USER_I2C_SCB_INDEX, ENABLE);                          //Enable I2C bus recover feature
     I2C_ClearErrorStatusAll(USER_I2C_SCB_INDEX);                            //Clear All Error Status
@@ -468,24 +455,10 @@ static void I2C0_Init(void)
     //设置中断信息
     I2C_IntCmd(USER_I2C_SCB_INDEX, I2C_INT_ALL, DISABLE);                   //禁止I2C模块的所有中断
     I2C_ClearInt(USER_I2C_SCB_INDEX, I2C_INT_ALL);                          //清除I2C模块所有的中断标志
-
-    // I2C_InstallCallBackFunc(USER_I2C_SCB_INDEX, I2C_INT_STOP_DET, I2cStopDetIsr);//安装I2C停止位信号产生中断函数
-    // I2C_IntCmd(USER_I2C_SCB_INDEX, I2C_INT_STOP_DET, ENABLE);    // 使能 I2C_INT_STOP_DET/停止位信号产生 中断
-
-    // I2C_InstallCallBackFunc(USER_I2C_SCB_INDEX, I2C_INT_START_DET, I2cStartDetIsr);//安装I2C起始位信号产生中断函数
-    // I2C_IntCmd(USER_I2C_SCB_INDEX, I2C_INT_START_DET, ENABLE);    // 使能 I2C_INT_START_DET/起始位信号产生 中断
-
-    // I2C_InstallCallBackFunc(USER_I2C_SCB_INDEX, I2C_INT_RX_FULL, I2xRxFullIsr);//安装I2C接收FIFO满中断函数
-    // I2C_IntCmd(USER_I2C_SCB_INDEX, I2C_INT_RX_FULL, ENABLE);    // 使能 I2C_INT_RX_FULL/接收FIFO满 中断
-
-    // I2C_InstallCallBackFunc(USER_I2C_SCB_INDEX, I2C_INT_RX_OVER, I2cRxOverIsr);//安装I2C接收FIFO溢出中断函数
-    // I2C_IntCmd(USER_I2C_SCB_INDEX, I2C_INT_RX_OVER, ENABLE);    // 使能 I2C_INT_RX_OVER/接收FIFO溢出 中断
-
     I2C_InstallCallBackFunc(USER_I2C_SCB_INDEX, I2C_INT_SCL_STUCK_AT_LOW, I2cSclStuckAtLowIsr);//安装I2C SCL持续低电平 中断函数
-    I2C_IntCmd(USER_I2C_SCB_INDEX, I2C_INT_SCL_STUCK_AT_LOW, ENABLE);    // 使能 I2C_INT_SCL_STUCK_AT_LOW/SCL持续低电平 中断
-
-    INT_SetPriority(USER_I2C_SCB_IRQN, 0x3);                            //设置 I2C_IRQn 的中断优先级。(高)0--15(低)
-    INT_EnableIRQ(USER_I2C_SCB_IRQN);                                   //使能I2C_IRQn 中断
+    I2C_IntCmd(USER_I2C_SCB_INDEX, I2C_INT_SCL_STUCK_AT_LOW, ENABLE);       // 使能 I2C_INT_SCL_STUCK_AT_LOW/SCL持续低电平 中断
+    INT_SetPriority(USER_I2C_SCB_IRQN, 0x3);                                //设置 I2C_IRQn 的中断优先级。(高)0--15(低)
+    INT_EnableIRQ(USER_I2C_SCB_IRQN);                                       //使能I2C_IRQn 中断
 
     // Initialize global variables
     uint8_t i;
@@ -493,12 +466,11 @@ static void I2C0_Init(void)
         I2C_RxBuffer[i] = 0;
     }
     I2C_RxBufSN = 0;
-    I2C_CheckErrCnt = 0;                                            // Counter variable to prevent I2C module failure
+    I2C_CheckErrCnt = 0;                                                    // Counter variable to prevent I2C module failure
 
-    I2C_Enable(USER_I2C_SCB_INDEX);                                 // Enable I2C
+    I2C_Enable(USER_I2C_SCB_INDEX);                                         // Enable I2C
 #endif
 }
-#endif
 
 #if(0)
 /*****************************************************************************
@@ -578,7 +550,6 @@ static void I2cRxOverIsr(void)
 
 }
 #endif
-#ifdef IIC_ENABLE
 /*****************************************************************************
  * 函数:I2cSclStuckAtLowIsr
  * 功能: 声明I2C SCL持续低电平 中断处理函数
@@ -720,7 +691,7 @@ static int16_t Sa51034ReadOneByte(uint8_t regAddr,uint8_t *buffer)
 #endif
 }
 
-void Sa51034Init(void)                                                    
+void Sa51500Init(void)                                                    
 {
     uint16_t timerCounter = 100;
     uint8_t controlRegValue = 0;
@@ -731,7 +702,7 @@ void Sa51034Init(void)
     }
 
     EcallHalSetAmpSdz(1);
-    EcallHalSetAmpMute(0);
+    EcallHalSetAmpMute(1);
     I2C0_Init();                                             
 
     do
@@ -742,18 +713,18 @@ void Sa51034Init(void)
 
     if(timerCounter == 0)
     {
-        TBOX_PRINT("SA51034 init error, CONTROL_REGISTER = 0x%02x\n", controlRegValue);
+        //TBOX_PRINT("SA51034 init error, CONTROL_REGISTER = 0x%02x\n", controlRegValue);
     }
     else
     {
-        TBOX_PRINT("SA51034 init success\n");
+        //TBOX_PRINT("SA51034 init success\n");
         g_ampInitFlag = 1;
         g_ampInitTime = xTaskGetTickCount();
     }
 
 }
 
-void Sa51034Close(void)
+void Sa51500Close(void)
 {
 #if (SOFTWARE_IIC_ENABLE == 1)
     iic_sleep();
@@ -773,7 +744,7 @@ uint8_t EcallHalGetAmpFaultStatus(void)
 
     if(g_ampInitFlag == 0)
     {
-        Sa51034Init();
+        Sa51500Init();
     }
 
     readTime = xTaskGetTickCount();
@@ -789,7 +760,7 @@ uint8_t EcallHalGetAmpFaultStatus(void)
         if(ret == SUCC)
         {
 #if(DEBUG_PRINT_ENABLE)
-            TBOX_PRINT("faultRegValue = %02x\r\n", faultRegValue);
+            //TBOX_PRINT("faultRegValue = %02x\r\n", faultRegValue);
 #endif
             return faultRegValue;
         }
@@ -807,7 +778,7 @@ uint8_t EcallHalGetAmpDiagnosticStatus(void)
 
     if(g_ampInitFlag == 0)
     {
-        Sa51034Init();
+        Sa51500Init();
     }
 
     readTime = xTaskGetTickCount();
@@ -823,7 +794,7 @@ uint8_t EcallHalGetAmpDiagnosticStatus(void)
         if(ret == SUCC)
         {
 #if(DEBUG_PRINT_ENABLE)
-            TBOX_PRINT("diagnosticRegValue = %02x\r\n", diagnosticRegValue);
+            //TBOX_PRINT("diagnosticRegValue = %02x\r\n", diagnosticRegValue);
 #endif
             return diagnosticRegValue;
         }
@@ -841,7 +812,7 @@ uint8_t EcallHalGetAmpControlStatus(void)
 
     if(g_ampInitFlag == 0)
     {
-        Sa51034Init();
+        Sa51500Init();
     }
 
     readTime = xTaskGetTickCount();
@@ -879,7 +850,7 @@ uint8_t EcallHalSetAmpControlStatus(uint8_t value)
 
     if(g_ampInitFlag == 0)
     {
-        Sa51034Init();
+        Sa51500Init();
     }
 
     do
@@ -924,14 +895,14 @@ uint8_t EcallHalRestartAmpClose(void)
 {
     if(g_ampInitFlag == 0)
     {
-        Sa51034Init();
+        Sa51500Init();
     }
     else
     {
         // EcallHalSetAmpMute(1);
         EcallHalSetAmpSdz(0);
 
-        DEBUG_PRINT("close sdz\r\n");
+        //DEBUG_PRINT("close sdz\r\n");
     }
     
     return 0x00;
@@ -941,8 +912,8 @@ uint8_t EcallHalRestartAmpDiagnostic(void)
 {
     if(g_ampInitFlag == 0)
     {
-        Sa51034Init();
-        DEBUG_PRINT("init sa51034\r\n");
+        Sa51500Init();
+        //DEBUG_PRINT("init sa51034\r\n");
     }
     else
     {
@@ -956,7 +927,6 @@ uint8_t EcallHalRestartAmpDiagnostic(void)
     
     return 0x00;
 }
-#endif
 
 /**
  * @brief 
@@ -995,9 +965,7 @@ void EcallHalInit(void)
     EcallGpioInit();
     g_SosLedMsgQueue = xQueueCreate(5, sizeof(SosLledState_e));
     g_SosLedMutex = xSemaphoreCreateMutex();  
-    #ifdef IIC_ENABLE
-    Sa51034Init();
-    #endif
+    Sa51500Init();
 }
 
 /** ****************************************************************************
@@ -1101,9 +1069,7 @@ void EcallHalSetMode(uint8_t wakeMode)
         EcallHalSetSosLedRedState( 0 );
         EcallHalSetSosLedGreenState( 0 );
         EcallHalSetVehicleMute(0);
-        #ifdef IIC_ENABLE
-        Sa51034Close();
-        #endif
+        Sa51500Close();
     }
     else if(1 == wakeMode)
     {

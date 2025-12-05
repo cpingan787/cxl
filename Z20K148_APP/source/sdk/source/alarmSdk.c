@@ -300,9 +300,7 @@ void AlarmSdkCycleProcess(void)
             }
             else if((g_dataPack.subcommand&0x7F) == 0x03)
             {
-                #ifdef IIC_ENABLE
                 ret = EcallHalSetAmpControlStatus(g_dataPack.pDataBuffer[0]);
-                #endif
                 AlarmSdkSetAmpGainResponse(ret,g_dataPack.mid);
             }
             else

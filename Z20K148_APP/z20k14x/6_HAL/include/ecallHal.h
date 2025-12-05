@@ -13,7 +13,6 @@
 #include <stdint.h>
 
 /****************************** Macro Definitions *****************************/
-//#define IIC_ENABLE
 #define ECALL_LED_R_PORT                PORT_D
 #define ECALL_LED_R_PIN                 GPIO_5
 #define ECALL_LED_R_PIN_MUX             PTD5_GPIO

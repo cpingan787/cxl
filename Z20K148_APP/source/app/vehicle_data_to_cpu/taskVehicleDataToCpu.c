@@ -115,7 +115,7 @@ static void TboxCanRxCycleProcess(void)
       }
     }
     canIdleCnt++;
-    if((canMsgReceiveCnt >= CAN_MSG_RECEIVE_THRESHOLD)||(canIdleCnt >= CAN_IDLE_COUNT_THRESHOLD))
+    if((canIdleCnt >= 100))
     {
         CanMsgTransmitToCpu(1,g_mpuHandle);
         canMsgReceiveCnt = 0U;

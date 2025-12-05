@@ -322,7 +322,7 @@ static int16_t TpDataMultiFrameRxFd(int16_t tpHandle, int16_t canHandle, uint16_
     CF_num = 0x21;
     FrameCount = 0;
     rxLenLeft = rxLen;
-    rxCount = 6;
+    rxCount = 62;
     if (tpHandle >= UDS_TP_MAX_NUMBER || tpHandle < 0)
     {
         return -1;

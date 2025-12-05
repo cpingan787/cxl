@@ -19,7 +19,7 @@ static uint8_t g_dataBuffer[300] = {0};
 static MpuHalDataPack_t g_dataPack;
 static uint8_t g_recvDataBuffer[300] = {0};
 
-static uint8_t g_mpuDataBuffer[100] = {0};
+static uint8_t g_mpuDataBuffer[512] = {0};
 static MpuHalDataPack_t g_mpuDataPack;
 
 int16_t CanPassthrough_RequestAndGetResponse(const uint8_t *pUdsRequest, uint16_t reqLength,
@@ -35,7 +35,7 @@ int16_t CanPassthrough_RequestAndGetResponse(const uint8_t *pUdsRequest, uint16_
         return -1;
     }
 
-    if (reqLength >= 3 && pUdsRequest[0] == 0x2E && pUdsRequest[1] == 0xB2 && pUdsRequest[2] == 0x96)
+    if (reqLength >= 3 && pUdsRequest[0] == 0x2E && pUdsRequest[1] == 0xB2 && pUdsRequest[2] == 0x89)
     {
         maxRepeatCount = 10; 
     }

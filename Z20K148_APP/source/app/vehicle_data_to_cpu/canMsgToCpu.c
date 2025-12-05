@@ -38,11 +38,18 @@ typedef struct
   int16_t index;
 }StackBuffer_t;
 
+typedef struct
+{
+    uint8_t  txBuffer[TX_BUFFER_CAN_MSG_NUM_MAX * 14 + 3 + 8];
+    uint16_t index[TX_BUFFER_CAN_MSG_NUM_MAX];
+}CanMsgTxBuffer_t;
+
 /****************************** Global Variables ******************************//****************************** Global Variables ******************************/
 CanMsgRxConfigureBuffer_t g_canRxToCpuConfigureBuffer[RX_CAN_CONFIGURE_CHANNEL_NUMBER][RX_CAN_CONFIGURE_BUFFER_SIZE];
 static CanIdConfigure_t g_canRxToCpuConfigure[RX_CAN_CONFIGURE_CHANNEL_NUMBER];
 static StackBuffer_t g_stack;
-static uint8_t g_txBuffer[TX_BUFFER_CAN_MSG_NUM_MAX * 14 + 3 + 8];
+// static uint8_t g_txBuffer[TX_BUFFER_CAN_MSG_NUM_MAX * 14 + 3 + 8];
+static CanMsgTxBuffer_t g_canMsgTxBuffer;
 static uint16_t g_txBufferCount = 0;
 static uint16_t g_txByteOffset = 2;
 
@@ -275,7 +282,6 @@ static int16_t GetIndexFromCanMsgConfigureBuffer(uint8_t canChannel,uint32_t can
 int16_t SaveCanMsgToBuffer(uint8_t canChannel,const CanHalMsg_t *pCanMsg)
 {
     int32_t bufferIndex;
-    uint16_t i;
     int16_t result = 0;
     
     bufferIndex = GetIndexFromCanMsgConfigureBuffer(canChannel,pCanMsg->canId);
@@ -298,20 +304,34 @@ int16_t SaveCanMsgToBuffer(uint8_t canChannel,const CanHalMsg_t *pCanMsg)
         
         return result;
     }
-    
-    g_txBuffer[g_txByteOffset++] = canChannel;
-    g_txBuffer[g_txByteOffset++] = (pCanMsg->canId>>24)&0xFF;
-    g_txBuffer[g_txByteOffset++] = (pCanMsg->canId>>16)&0xFF;
-    g_txBuffer[g_txByteOffset++] = (pCanMsg->canId>>8)&0xFF;
-    g_txBuffer[g_txByteOffset++] = pCanMsg->canId&0xFF;
-    g_txBuffer[g_txByteOffset++] = pCanMsg->dlc;
-    
-    for(i=0;i<pCanMsg->dlc;i++)
+
+    if (g_canMsgTxBuffer.index[bufferIndex] != 0)
     {
-        g_txBuffer[g_txByteOffset++] = pCanMsg->canData[i];
+        uint32_t idex = g_canMsgTxBuffer.index[bufferIndex];
+        g_canMsgTxBuffer.txBuffer[idex++] = canChannel;
+        g_canMsgTxBuffer.txBuffer[idex++] = (pCanMsg->canId>>24)&0xFF;
+        g_canMsgTxBuffer.txBuffer[idex++] = (pCanMsg->canId>>16)&0xFF;
+        g_canMsgTxBuffer.txBuffer[idex++] = (pCanMsg->canId>>8)&0xFF;
+        g_canMsgTxBuffer.txBuffer[idex++] = pCanMsg->canId&0xFF;
+        g_canMsgTxBuffer.txBuffer[idex++] = pCanMsg->dlc;
+        for(uint32_t i = 0; i < pCanMsg->dlc; i++)
+        {
+            g_canMsgTxBuffer.txBuffer[idex++] = pCanMsg->canData[i];
+        }
+    } else {
+        g_canMsgTxBuffer.index[bufferIndex] = g_txByteOffset;
+        g_canMsgTxBuffer.txBuffer[g_txByteOffset++] = canChannel;
+        g_canMsgTxBuffer.txBuffer[g_txByteOffset++] = (pCanMsg->canId>>24)&0xFF;
+        g_canMsgTxBuffer.txBuffer[g_txByteOffset++] = (pCanMsg->canId>>16)&0xFF;
+        g_canMsgTxBuffer.txBuffer[g_txByteOffset++] = (pCanMsg->canId>>8)&0xFF;
+        g_canMsgTxBuffer.txBuffer[g_txByteOffset++] = pCanMsg->canId&0xFF;
+        g_canMsgTxBuffer.txBuffer[g_txByteOffset++] = pCanMsg->dlc;
+        for(uint32_t i = 0; i < pCanMsg->dlc; i++)
+        {
+            g_canMsgTxBuffer.txBuffer[g_txByteOffset++] = pCanMsg->canData[i];
+        }
+        g_txBufferCount++;
     }
-    
-    g_txBufferCount++;
     
     taskEXIT_CRITICAL();
     
@@ -357,18 +377,22 @@ int16_t CanMsgTransmitToCpu(uint8_t canChannel,int16_t mpuHandle)
         return 0;
     }
 
-    g_txBuffer[0] = (uint8_t)((g_txBufferCount >> 8) & 0xFF);  
-    g_txBuffer[1] = (uint8_t)(g_txBufferCount & 0xFF);  
+    g_canMsgTxBuffer.txBuffer[0] = (uint8_t)((g_txBufferCount >> 8) & 0xFF);  
+    g_canMsgTxBuffer.txBuffer[1] = (uint8_t)(g_txBufferCount & 0xFF);  
 
     txData.aid = 0x02;
     txData.mid = 0x02;
     txData.subcommand = 0x00;
     txData.dataBufferSize = g_txByteOffset;
     txData.dataLength = g_txByteOffset;
-    txData.pDataBuffer = g_txBuffer;
+    txData.pDataBuffer = g_canMsgTxBuffer.txBuffer;
     MpuHalTransmit(mpuHandle,&txData, MPU_HAL_UART_MODE);
-
+    memset(g_canMsgTxBuffer.txBuffer, 0, sizeof(g_canMsgTxBuffer.txBuffer));
     g_txByteOffset = 2;
+    for (uint32_t i = 0; i < TX_BUFFER_CAN_MSG_NUM_MAX; i++)
+    {
+        g_canMsgTxBuffer.index[i] = 0;
+    }
     g_txBufferCount = 0;
     return 0;
 }
@@ -444,7 +468,7 @@ void SetCanMsgConfigureBufferInvalidData(void)
 void SetCanMsgConfigureBufferValidData(void)
 {
     uint32_t i;
-    uint32_t byteOffset;
+    //uint32_t byteOffset;
     for(i = 0; i < RX_CAN_CONFIGURE_CHANNEL_NUMBER; i++)
     {
         CanMsgConfigureSortLittleToBig(g_canRxToCpuConfigureBuffer[i],g_canRxToCpuConfigure[i].elementCount);
@@ -453,14 +477,14 @@ void SetCanMsgConfigureBufferValidData(void)
     {
         g_canRxToCpuConfigure[i].size = g_canRxToCpuConfigure[i].elementCount;
     }  
-    g_txBufferCount = g_canRxToCpuConfigure[0].elementCount;
+    //g_txBufferCount = g_canRxToCpuConfigure[0].elementCount;
     for(i = 0; i < g_txBufferCount; i++)
     {
-        byteOffset = i*12+11;
-        g_txBuffer[byteOffset++] = (g_canRxToCpuConfigureBuffer[0][i].canId>>24)&0xFF;
-        g_txBuffer[byteOffset++] = (g_canRxToCpuConfigureBuffer[0][i].canId>>16)&0xFF;
-        g_txBuffer[byteOffset++] = (g_canRxToCpuConfigureBuffer[0][i].canId>>8)&0xFF;
-        g_txBuffer[byteOffset++] = g_canRxToCpuConfigureBuffer[0][i].canId&0xFF;     
+        //byteOffset = i*12+11;
+        // g_txBuffer[byteOffset++] = (g_canRxToCpuConfigureBuffer[0][i].canId>>24)&0xFF;
+        // g_txBuffer[byteOffset++] = (g_canRxToCpuConfigureBuffer[0][i].canId>>16)&0xFF;
+        // g_txBuffer[byteOffset++] = (g_canRxToCpuConfigureBuffer[0][i].canId>>8)&0xFF;
+        // g_txBuffer[byteOffset++] = g_canRxToCpuConfigureBuffer[0][i].canId&0xFF;     
     }
 }
 
