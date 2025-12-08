@@ -31,7 +31,6 @@ static MpuHalDataPack_t g_syncParamToMpuPack;   // Mcu请求同步参数至Mpu�
 static uint8_t g_mpuDataBuffer[200] = {0};      // 用来存储MCU请求和响应数据的缓存buffer
 static MpuHalDataPack_t g_mpuDataPack;          // 用来存储要发送的请求和响应数据的缓存结构体
 
-
 static const ParamLengthEntry_t g_paramLengthTable[] = {
     {E_ParamId_SN, 45},
     {E_ParamId_VIN, 17},
@@ -270,10 +269,10 @@ static int16_t ParameterSyncResponseGetParamPackage(MpuHalDataPack_t *recvDataPa
         case E_ParamId_SW_Version: // C100
             ProjectConfigSiRunSwVersion_C100(pWrite + 2, &paramLenth);
             break;
-        
-        case E_ParamId_ParatNumber: // F187_cxl
-            ProjectConfigGetGacEcuPartNumber_F187(pWrite + 2, &paramLenth);
-            break;
+
+        // case E_ParamId_ParatNumber: // F187_cxl
+        //     ProjectConfigGetGacEcuPartNumber_F187(pWrite + 2, &paramLenth);
+        //     break;
         default:
             if (g_mcuParameterReadCbFunc != NULL)
             {
@@ -452,9 +451,9 @@ static uint8_t IsValidParamData(uint8_t paramId, uint8_t *data, uint16_t length)
                     isAll0x00 = 0;
                 if (data[j] != 0x31) // ASCII '1'
                     isAll0x01 = 0;
-                if (data[j] != 0xFF) 
+                if (data[j] != 0xFF)
                     isAll0xFF = 0;
-                // 
+                //
                 if (isAll0x01 == 0 && isAll0xFF == 0 && isAll0x00 == 0)
                 {
                     return 1;
@@ -467,7 +466,7 @@ static uint8_t IsValidParamData(uint8_t paramId, uint8_t *data, uint16_t length)
             }
         }
     }
-    
+
     return 1;
 }
 
@@ -769,6 +768,12 @@ int16_t ParameterSyncSdkSetToCpu(uint8_t parameterId, uint8_t *pData, uint16_t l
 {
     int16_t ret = -1;
     uint16_t i = 0;
+    uint8_t retryCount = 0;
+
+    const uint8_t MAX_RETRY_TIMES = 2;
+    
+    const uint32_t POLL_INTERVAL_MS = 10;   
+    const uint16_t WAIT_LOOP_COUNT = 50;    
 
     if (pData == NULL || length == 0)
     {
@@ -776,24 +781,32 @@ int16_t ParameterSyncSdkSetToCpu(uint8_t parameterId, uint8_t *pData, uint16_t l
     }
 
     ParameterSyncRequstSyncParamPackage(parameterId);
-    MpuHalTransmit(g_mpuHandle, &g_syncParamToMpuPack, MPU_HAL_UART_MODE);
-    g_syncParamToMpuTimeCount = 0;
-    g_syncParamToMpuRequstFlag = 1;
-    g_syncParamToMpuRequstCount = 0;
 
-    for (i = 0; i < 300; i++)
+    g_syncParamToMpuTimeCount = 0;
+    g_syncParamToMpuRequstCount = 0;
+    g_syncParamToMpuRequstFlag = 1;
+
+    for (retryCount = 0; retryCount < MAX_RETRY_TIMES; retryCount++)
     {
-        if (g_syncParamToMpuRequstFlag == 0)
+        MpuHalTransmit(g_mpuHandle, &g_syncParamToMpuPack, MPU_HAL_UART_MODE);
+
+        for (i = 0; i < WAIT_LOOP_COUNT; i++)
         {
-            ret = 0;
-            g_syncParamToMpuRequstFlag = 0;
-            break;
+            if (g_syncParamToMpuRequstFlag == 0)
+            {
+                return 0; 
+            }
+            vTaskDelay(pdMS_TO_TICKS(POLL_INTERVAL_MS));
         }
-        // RTOS_HalApiWait(10);
-        vTaskDelay(pdMS_TO_TICKS(10));
+        
     }
 
-    return ret;
+    if (g_syncParamToMpuRequstFlag != 0)
+    {
+        g_syncParamToMpuRequstFlag = 0;
+    }
+
+    return -1;
 }
 
 /*************************************************

@@ -28,6 +28,7 @@ finish date:2018.7.31
 #include "projectConfigure.h"
 #include "logHal.h"
 #include "udsDidFunction.h"
+#include "powerManageSdk.h"
 
 #define UDS_EOL_TEST_DEBUG 1
 
@@ -59,7 +60,7 @@ static int16_t ServiceGetWifiConnectTestResult(uint8_t *pData, uint16_t *pLength
 static int16_t ServiceGetetBlueToothConnectTestResult(uint8_t *pData, uint16_t *pLength);
 static int16_t ServiceGetetCallNumberTestResult(uint8_t *pData, uint16_t *pLength);
 
-//static int16_t ServiceSetTboxTestMode(uint8_t *pData, uint16_t length);
+// static int16_t ServiceSetTboxTestMode(uint8_t *pData, uint16_t length);
 static int16_t ServiceSetTboxSleepMode(uint8_t *pData, uint16_t length);
 static int16_t ServiceSetApnPingTest(uint8_t *pData, uint16_t dataLength);
 static int16_t ServiceSetWifiConnectTest(uint8_t *pData, uint16_t dataLength);
@@ -101,13 +102,13 @@ static int16_t ToolReadApn3(uint8_t *pData, uint16_t *pLength);
 static int16_t ToolReadPhoneSignal(uint8_t *pData, uint16_t *pLength);
 static int16_t ToolReadGNSSStatus(uint8_t *pData, uint16_t *pLength);
 static int16_t ToolReadEmmcStatus(uint8_t *pData, uint16_t *pLength);
-static int16_t ToolQuickSleepStatus(uint8_t *pData, uint16_t *pLength);
+static int16_t ToolReadSleepStatus(uint8_t *pData, uint16_t *pLength);
 static int16_t ToolReadSoftwareNumber(uint8_t *pData, uint16_t *pLength);
 static int16_t ToolReadVehicleSoftwareVersion(uint8_t *pData, uint16_t *pLength);
 static int16_t ToolRead4GAntennaStatus(uint8_t *pData, uint16_t *pLength);
 static int16_t ToolReadGNSSAntennaStatus(uint8_t *pData, uint16_t *pLength);
-//static int16_t Service2EWriteBluetoothName(uint8_t *Data, uint16_t len);
-
+// static int16_t Service2EWriteBluetoothName(uint8_t *Data, uint16_t len);
+static int16_t ToolWriteSleepStatus(uint8_t *pData, uint16_t dataLength);
 static const struc_ReadDidMap m_readDidMap[] =
     {
         {0x1201, ServiceReadPinKL15Status},
@@ -122,52 +123,52 @@ static const struc_ReadDidMap m_readDidMap[] =
         {0x1209, ToolReadPhoneSignal},            // 10. CSQ (>=14)
         {0x1210, ToolReadGNSSStatus},             // 11. GNSS (1:就绪)
         {0x1211, ToolReadEmmcStatus},             // 12. EMMC (1:挂载成功)
-        {0x1213, ToolQuickSleepStatus},           // 14. 快速休眠状态(1:快速休眠)
+        {0x1213, ToolReadSleepStatus},            // 14. 快速休眠状态(1:快速休眠)
         {0x1214, ToolReadSoftwareNumber},         // 17. 软件版本号(内部)
         {0x1215, ToolReadVehicleSoftwareVersion}, // 18. 软件版本号(外部)
         {0x1216, ToolRead4GAntennaStatus},        // 19. 4G天线
         {0x1217, ToolReadGNSSAntennaStatus},      // 20. GNSS天线
-        //    {0xF1B0, Service22ReadEcuMask                 },       //安全访问掩码
-        //    {0x1201, Service22ReadTboxCallNumber          },       //tbox电话号码
-        //    {0x1204, Service22ReadPublicASEKey            },       //PublicASEKey
-        //    {0x1205, Service22ReadPublicKey               },       //PublicKey
-        //    {0x1206, Service22ReadTboxEcallNumber         },       //TboxEcallNumber
-        //    {0x1207, Service22ReadTboxBcallNumber         },       //TboxBcallNumber
-        //    {0x1208, Service22ReadTboxIcallNumber         },       //TboxIcallNumber
-        //    {0x1209, Service22ReadTspCallNumber1          },       //TspCallNumber1
-        //    {0x120A, Service22ReadTspCallNumber2          },       //TspCallNumber2
-        //    {0x120B, Service22ReadTspCallNumber3          },       //TspCallNumber3
-        //    {0x120C, Service22ReadIpAddress               },       //企业平台地址
-        //    {0x120D, Service22ReadIpPort                  },       //企业平台端口
-        //    {0x120E, Service22ReadBID                     },       //BID
-        //{0x120F, Service22ReadIMSI}, // IMSI
-        //    {0x1210, Service22ReadTboxPreKey              },       //TboxPreKey
-        //    {0x1211, Service22ReadKeyType                 },       //KeyType
-        //    {0x1212, Service22ReadTboxMsgNumber1,         },
-        //    {0x1213, Service22ReadTboxMsgNumber1,         },
-        //    {0x1214, Service22ReadCanUploadCycle,         },
-        //    {0x1216, Service22ReadTboxModel,              },
-        //    {0x1217, Service22ReadCarModeType,            },
-        //    {0x1218, Service22ReadSecurityVersion,        },
-        // {0x127C, Service22ReadRegisterFlag},    // 网络注册状态
-        // {0x127D, Service22ReadNetWorkType},     // 网络类型
-        // {0x127E, Service22ReadPhoneSignal},     // 网络信号强度
-        // {0x127F, Service22ReadApnNumber},       // apn number
-        // {0x1280, Service22ReadGNSS},            // GPS状态
-        // {0x1281, Service22ReadNetWorkProvider}, // 注册登录状态
-        // //{0x1282, TestService22ReadKL30Voltage         },       //
-        // {0x1283, Service22ReadBatteryStatus},      //
-        // {0x1285, Service22ReadCpuFlashCapacity},   //
-        // {0x1286, ServiceReadBlueToothName},        //
-        // {0x1287, ServiceReadBlueToothMacAddress},  //
-        // {0x1288, ServiceReadBlueToothSoftVersion}, //
-        // {0x1290, ServiceReadPowerOnCount},         //
-        // {0x1401, ServiceReadPinIN_1Status},        //
-        // {0x1402, ServiceReadPinIN_2Status},        //
-        // //{0x1403, ServiceReadPinKL15Status             },       //
-        // {0x1404, ServiceReadPinSRSStatus},       //
-        // {0x1405, ServiceReadPinEcallStatus},     //
-        // {0x1406, ServiceReadBatteryChargeState}, //
+                                                  //    {0xF1B0, Service22ReadEcuMask                 },       //安全访问掩码
+                                                  //    {0x1201, Service22ReadTboxCallNumber          },       //tbox电话号码
+                                                  //    {0x1204, Service22ReadPublicASEKey            },       //PublicASEKey
+                                                  //    {0x1205, Service22ReadPublicKey               },       //PublicKey
+                                                  //    {0x1206, Service22ReadTboxEcallNumber         },       //TboxEcallNumber
+                                                  //    {0x1207, Service22ReadTboxBcallNumber         },       //TboxBcallNumber
+                                                  //    {0x1208, Service22ReadTboxIcallNumber         },       //TboxIcallNumber
+                                                  //    {0x1209, Service22ReadTspCallNumber1          },       //TspCallNumber1
+                                                  //    {0x120A, Service22ReadTspCallNumber2          },       //TspCallNumber2
+                                                  //    {0x120B, Service22ReadTspCallNumber3          },       //TspCallNumber3
+                                                  //    {0x120C, Service22ReadIpAddress               },       //企业平台地址
+                                                  //    {0x120D, Service22ReadIpPort                  },       //企业平台端口
+                                                  //    {0x120E, Service22ReadBID                     },       //BID
+                                                  //{0x120F, Service22ReadIMSI}, // IMSI
+                                                  //    {0x1210, Service22ReadTboxPreKey              },       //TboxPreKey
+                                                  //    {0x1211, Service22ReadKeyType                 },       //KeyType
+                                                  //    {0x1212, Service22ReadTboxMsgNumber1,         },
+                                                  //    {0x1213, Service22ReadTboxMsgNumber1,         },
+                                                  //    {0x1214, Service22ReadCanUploadCycle,         },
+                                                  //    {0x1216, Service22ReadTboxModel,              },
+                                                  //    {0x1217, Service22ReadCarModeType,            },
+                                                  //    {0x1218, Service22ReadSecurityVersion,        },
+                                                  // {0x127C, Service22ReadRegisterFlag},    // 网络注册状态
+                                                  // {0x127D, Service22ReadNetWorkType},     // 网络类型
+                                                  // {0x127E, Service22ReadPhoneSignal},     // 网络信号强度
+                                                  // {0x127F, Service22ReadApnNumber},       // apn number
+                                                  // {0x1280, Service22ReadGNSS},            // GPS状态
+                                                  // {0x1281, Service22ReadNetWorkProvider}, // 注册登录状态
+                                                  // //{0x1282, TestService22ReadKL30Voltage         },       //
+                                                  // {0x1283, Service22ReadBatteryStatus},      //
+                                                  // {0x1285, Service22ReadCpuFlashCapacity},   //
+                                                  // {0x1286, ServiceReadBlueToothName},        //
+                                                  // {0x1287, ServiceReadBlueToothMacAddress},  //
+                                                  // {0x1288, ServiceReadBlueToothSoftVersion}, //
+                                                  // {0x1290, ServiceReadPowerOnCount},         //
+                                                  // {0x1401, ServiceReadPinIN_1Status},        //
+                                                  // {0x1402, ServiceReadPinIN_2Status},        //
+                                                  // //{0x1403, ServiceReadPinKL15Status             },       //
+                                                  // {0x1404, ServiceReadPinSRSStatus},       //
+                                                  // {0x1405, ServiceReadPinEcallStatus},     //
+                                                  // {0x1406, ServiceReadBatteryChargeState}, //
 
         // /***************add***************************/
         // {0xF1B2, Service22ReadVehicleManufacturingDate},       // Installation Date
@@ -184,13 +185,9 @@ static const struc_ReadDidMap m_readDidMap[] =
 static const struc_WriteDidMap m_writeDidMap[] =
     {
         /*RDID  Lenth   point_store*/
-        {
-            0x1218,
-            Service2EWriteSerialNumber,
-        },                           // sn
-        {1219, 
-            Service2EWriteGacEcuPartNumber,
-        },  // pn
+        {0x1218, Service2EWriteSerialNumber},     // sn
+        {0x1219, Service2EWriteGacEcuPartNumber}, // pn
+        {0x1213, ToolWriteSleepStatus},
         //{0xF195, Service2EWriteSoftwareVersion,     },
         // {
         //     0xF197,
@@ -237,14 +234,14 @@ static const struc_WriteDidMap m_writeDidMap[] =
         //    {0x1217, Service2EWriteCarModeType,          },
         //    {0x1218, Service2EWriteSecurityVersion,      },
         //    {0x127C, Service2EWriteTboxRegisterFlag,     },
-//        {
-//            0x1286,
-//            Service2EWriteBluetoothName,
-//        },
-//        {
-//            0x1290,
-//            ServiceWritePowerOnCount,
-//        },
+        //        {
+        //            0x1286,
+        //            Service2EWriteBluetoothName,
+        //        },
+        //        {
+        //            0x1290,
+        //            ServiceWritePowerOnCount,
+        //        },
 
         /***************add***************************/
         {0x2401, Service2EWriteVariantcode}, // ECU编码
@@ -267,7 +264,7 @@ static const struc_WriteDidMap m_routineStartDidMap[] =
     {
         {
             0x1301,
-            //ServiceSetTboxTestMode,
+            // ServiceSetTboxTestMode,
             ServiceSetDdrTest,
         },
         {
@@ -342,7 +339,7 @@ static enum_TestUdsSecurityLevel m_SeedGetLevel = TestUdsSecurity_LevelNone;
 static uint8_t m_returnKey[10];
 static uint8_t m_seedArray[10];
 static uint32_t m_securityTimeOutCount = 0;
-//static uint8_t m_diagnosticCanChannel = TBOX_CAN_CHANNEL_1;
+// static uint8_t m_diagnosticCanChannel = TBOX_CAN_CHANNEL_1;
 
 static void GetRandomKey(uint8_t *pKeyArray, uint8_t *pKeySize)
 {
@@ -697,10 +694,10 @@ static int16_t ServiceTestClearDtc(uint8_t *pDataIn, uint16_t lenIn, uint8_t *pD
     return negativeNum;
 }
 
-//void ServiceTestSetDiagnosticCan(uint8_t canChannel)
+// void ServiceTestSetDiagnosticCan(uint8_t canChannel)
 //{
-//    m_diagnosticCanChannel = canChannel;
-//}
+//     m_diagnosticCanChannel = canChannel;
+// }
 static uint8_t ServiceTestProcessSecurityCheck(uint8_t *pUdsDataIn, uint16_t lenIn, uint8_t *pUdsDataOut, uint16_t *pLenOut)
 {
     uint8_t negativeNum = 0;
@@ -859,7 +856,7 @@ int16_t ServiceTestProcess(uint8_t *pUdsDataIn, uint16_t lenIn, uint8_t *pUdsDat
             }
             else
             {
-                negativeNum = 0x7F; // invalid security
+                negativeNum = 0x33; // invalid security
             }
         }
         else
@@ -1144,7 +1141,7 @@ static int16_t ServiceSetDdrTest(uint8_t *pData, uint16_t dataLength)
 {
     uint8_t outData[10];
     uint16_t outLen = 0;
-    
+
     if (dataLength < 1)
     {
         return -1;
@@ -1158,7 +1155,7 @@ static int16_t ServiceSetDdrTest(uint8_t *pData, uint16_t dataLength)
     {
         return Service31ResultRoutineDdrTest(NULL, 0, outData, &outLen);
     }
-    
+
     return -1;
 }
 
@@ -1321,12 +1318,14 @@ static int16_t ToolReadEmmcStatus(uint8_t *pData, uint16_t *pLength)
     return 0;
 }
 
-static int16_t ToolQuickSleepStatus(uint8_t *pData, uint16_t *pLength)
+static int16_t ToolReadSleepStatus(uint8_t *pData, uint16_t *pLength)
 {
-    uint8_t status = 0;
-    // 需要调用快速休眠接口
-    pData[0] = status;
+    uint8_t sleepStatus;
+
+    sleepStatus = PowerManageSdkGetFastSleep();
+    pData[0] = sleepStatus;
     *pLength = 1;
+
     return 0;
 }
 
@@ -1379,7 +1378,7 @@ static int16_t ToolRead4GAntennaStatus(uint8_t *pData, uint16_t *pLength)
     return 0;
 }
 
-int16_t ToolReadGNSSAntennaStatus(uint8_t *pData, uint16_t *pLength)
+static int16_t ToolReadGNSSAntennaStatus(uint8_t *pData, uint16_t *pLength)
 {
     uint32_t v_gps_adc0_mv = 0;
     uint32_t v_gps_adc1_mv = 0;
@@ -1406,6 +1405,21 @@ int16_t ToolReadGNSSAntennaStatus(uint8_t *pData, uint16_t *pLength)
 
     pData[0] = status;
     *pLength = 1;
+    return 0;
+}
+
+static int16_t ToolWriteSleepStatus(uint8_t *pData, uint16_t dataLength)
+{
+    if (dataLength != 1)
+    {
+        return -1;
+    }
+    if (pData[0] > 1)
+    {
+        return -1;
+    }
+    PowerManageSdkSetFastSleep(pData[0]);
+
     return 0;
 }
 
@@ -1607,5 +1621,3 @@ static int16_t TestService22ReadKL30Voltage(uint8_t *pData, uint16_t *pLength)
     *pLength = 4;
     return 0;
 }
-
-

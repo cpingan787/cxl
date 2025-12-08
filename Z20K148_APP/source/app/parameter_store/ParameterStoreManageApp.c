@@ -768,7 +768,6 @@
 #include "ParameterStoreManageApp.h"
 
 // ==================== 宏定义 (完全保留，一个不少) ====================
-#define WORKFLASH_ECU_PART_NUM_LEN 14 + 2
 #define WORKFLASH_SYSTEM_SUPPLIER_ID_LEN 16 + 2
 #define WORKFLASH_ECU_HARDWARE_VER_LEN 16 + 2
 #define WORKFLASH_ECU_SOFTWARE_VER_LEN 16 + 2
@@ -878,9 +877,6 @@
 #define WORKFLASH_4G_RESET_COUNT_LEN (1 + 2)          // 0xB260_cxl
 
 // ==================== 结构体定义 ====================
-
-// 1. 车辆重要信息存储结构体（地址：0x0000）
-// 注意：这里只保留 ESK、VIN、版本号等“打死不动”的核心参数
 typedef struct
 {
   uint8_t u8SystemSupplierId[WORKFLASH_SYSTEM_SUPPLIER_ID_LEN];                   // 系统供应商标识
@@ -901,9 +897,6 @@ typedef struct
   uint8_t u8VIN_hex[WORKFLASH_VIN_LEN];
 } vehicleInforParamImportant_t;
 
-// 2. 车辆可变信息存储结构体（地址：0x4000）
-// 注意：将所有带 _cxl 注释的参数（APN、IP、电话号码等）全部移到这里
-// 这样即使修改这些参数，也只会擦除 0x4000 区域，保护了 0x0000 的 ESK
 typedef struct
 {
   // --- 原有的 Variable 参数 ---
@@ -917,7 +910,6 @@ typedef struct
   uint8_t u8ECU_SoftwareNumber[WORKFLASH_SOFTWARE_NUM_LEN];
   uint8_t u8ECU_HardwareVersion[WORKFLASH_ECU_HARDWARE_VER_LEN];
   uint8_t u8ECU_SoftwareVersion[WORKFLASH_ECU_SOFTWARE_VER_LEN];
-  uint8_t u8ECUPartNumber[WORKFLASH_ECU_PART_NUM_LEN];
   uint8_t u8MCU_AppSoftWareVersion[WORKFLASH_MCU_APP_SOFTWARE_VERSION_LEN];
   uint8_t u8TboxCallNumber[32];
   uint8_t u8MCU_AppSoftWareVersionF1C1[32];
@@ -1122,7 +1114,6 @@ TBOX_PARAMETER_MAP(E_PARAMETER_INFO_IMSI, u8IMSI, 0)
 TBOX_PARAMETER_MAP(E_PARAMETER_INFO_TBOX_REGISTER_FLAG, u8RegisterFlag, 0)
 TBOX_PARAMETER_MAP(E_PARAMETER_INFO_KEY_TYPE, u8KeyType, 0)
 TBOX_PARAMETER_MAP(E_PARAMETER_INFO_MCU_RESET_COUNT, u8McuResetCount, 0)
-TBOX_PARAMETER_MAP(E_PARAMETER_INFO_ECU_PART_NUMBER, u8ECUPartNumber, 0)
 TBOX_PARAMETER_MAP(E_PARAMETER_INFO_ECU_HARDWARE_NUM, u8ECU_HardwareNumber, 0)
 TBOX_PARAMETER_MAP(E_PARAMETER_INFO_ECU_SOFTWARE_NUM, u8ECU_SoftwareNumber, 0)
 TBOX_PARAMETER_MAP(E_PARAMETER_INFO_ECU_HARDWARE_VERSION, u8ECU_HardwareVersion, 0)

@@ -26,8 +26,7 @@ Copyright ? 2024 SiRun (Beijing) . All rights reserved.
 #define WORKFLASH_ADDRESS_SMALL_BLOCK_2 0x14017580 // 小块存储地址，一小块=128字节
 
 typedef enum
-{
-    E_PARAMETER_INFO_ECU_PART_NUMBER,    
+{   
     E_PARAMETER_INFO_SYSTEM_SUPPLIER_ID, // 系统供应商标识
     E_PARAMETER_INFO_ECU_HARDWARE_VERSION,
     E_PARAMETER_INFO_ECU_SOFTWARE_VERSION,

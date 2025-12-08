@@ -59,11 +59,9 @@ void PowerManageSdkGetPowerInfo(uint8_t* pPmState,uint8_t* pWakeupSource,uint32_
 
 void PowerManageSdkSetMpuWakeUpFlag(uint8_t flag);
 
+void PowerManageSdkSetFastSleep(uint8_t fastSleepFlag);
 
-
-
-
-
+uint8_t PowerManageSdkGetFastSleep(void);
 
 
 

@@ -2045,53 +2045,6 @@ int16_t Service2EWriteSoftwareNumber(uint8_t *pData, uint16_t dataLength)
 }
 
 /************************** ADD 2E DID *****************************************************/
-int16_t Service2EWritePartNumber(uint8_t *pData, uint16_t dataLength)
-{
-  int16_t ret;
-  uint16_t ascLength;
-  uint8_t asc[64];
-
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
-  {
-    return -1;
-  }
-#if 1
-  if (dataLength > (sizeof(asc) / 2)) // size too large
-  {
-    return -1;
-  }
-  ret = HexArrayToCharArray(pData, dataLength, asc, &ascLength);
-  if (ret != 0) // convert failed
-  {
-    return -1;
-  }
-
-  ret = WorkFlashVehicleInforStore(E_PARAMETER_INFO_ECU_PART_NUMBER, asc, ascLength);
-  if (ret != 0)
-  {
-    return -1;
-  }
-  /*ret = SetParameterSyncToCpu(SYNC_PARAMETER_ITEM_ECU_PART_NUMBER,asc,ascLength);
-  if(ret!=0)
-  {
-    return -1;
-  } */
-
-#else
-  ret = WorkFlashVehicleInforStore(E_PARAMETER_INFO_ECU_PART_NUMBER, pData, dataLength);
-  if (ret != 0)
-  {
-    return -1;
-  }
-  ret = SetParameterSyncToCpu(SYNC_PARAMETER_ITEM_ECU_PART_NUMBER, pData, dataLength);
-  if (ret != 0)
-  {
-    return -1;
-  }
-#endif
-
-  return 0;
-}
 
 int16_t Service2EWriteSupplierId(uint8_t *pData, uint16_t dataLength)
 {
@@ -5262,39 +5215,39 @@ int16_t Service22ReadBootSoftwarePartNumber(uint8_t *pData, uint16_t *pLength)
   return 0;
 }
 
-// // 0xF187_cxl
-// int16_t Service22ReadGacEcuPartNumber(uint8_t *pData, uint16_t *pLength)
-// {
-//   //ProjectConfigGetGacEcuPartNumber_F187(pData, pLength);
-//   uint32_t len32;
-//   WorkFlashVehicleInforRead(E_PARAMETER_INFO_ECU_PART_NUMBER, pData, &len32);
-//   *pLength = len32;
-//   return 0;
-// }
 // 0xF187_cxl
 int16_t Service22ReadGacEcuPartNumber(uint8_t *pData, uint16_t *pLength)
 {
-    // ProjectConfigGetGacEcuPartNumber_F187(pData, pLength);
-    ProjectConfigGetGacEcuPartNumber_F187(pData, pLength);
-    return 0;
+  //ProjectConfigGetGacEcuPartNumber_F187(pData, pLength);
+  uint32_t len;
+  WorkFlashVehicleInforRead(E_PARAMETER_INFO_PART_NAME, pData, &len);
+  *pLength = len;
+  return 0;
 }
+// // 0xF187_cxl
+// int16_t Service22ReadGacEcuPartNumber(uint8_t *pData, uint16_t *pLength)
+// {
+//     // ProjectConfigGetGacEcuPartNumber_F187(pData, pLength);
+//     ProjectConfigGetGacEcuPartNumber_F187(pData, pLength);
+//     return 0;
+// }
 // 0xF187_cxl
 int16_t Service2EWriteGacEcuPartNumber(uint8_t *pData, uint16_t dataLength)
 {
-    if (dataLength > 14)
+    if (dataLength != 14)
     {
         return 0x13;
     }
 
-    int16_t storeResult = WorkFlashVehicleInforStore(E_PARAMETER_INFO_ECU_PART_NUMBER, pData, dataLength);
+    int16_t storeResult = WorkFlashVehicleInforStore(E_PARAMETER_INFO_PART_NAME, pData, dataLength);
     if (storeResult < 0)
     {
         return 0x72;
     }
-    // if (storeResult == 0)
-    // {
-    //   ParameterSyncSdkSetToCpu(E_ParamId_EcuPartNumber, pData, dataLength);
-    // }
+    if (storeResult == 0)
+    {
+      ParameterSyncSdkSetToCpu(E_ParamId_ParatNumber, pData, dataLength);
+    }
     return 0;
 }
 // 0xF189_cxl

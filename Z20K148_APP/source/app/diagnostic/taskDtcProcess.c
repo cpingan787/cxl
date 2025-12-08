@@ -601,6 +601,10 @@ static void SnapshotSaveLogicProcess(uint8_t *pDtcStatus, uint8_t *pFaultStateCh
 
 static void DtcNormalProcess(void)
 {
+    if (GetDtcProcessSetStatus() == 0) 
+    {
+        return;
+    }
   uint32_t i;
   uint32_t size;
 

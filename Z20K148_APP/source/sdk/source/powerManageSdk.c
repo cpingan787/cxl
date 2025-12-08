@@ -88,6 +88,7 @@ typedef struct
     uint32_t kl30WakeDelay;
     uint32_t remoteControlWakeTimeoutCount;
     uint32_t preSleepNoticeCount;
+    uint8_t fastSleepFlag; /*快速休眠标志*/
     const PmSdkConfig_t *pPmConfig;
     
 }PmSdkManage_t;
@@ -133,7 +134,6 @@ static void PmStatePreCheckCanProcess(uint32_t cycleTime);
 static void PmStateGetMpuWakeSourceProcess(uint32_t cycleTime);
 static uint8_t PowerManageSdkGetMpuWakeUpFlag(void);
 
-
 int16_t PowerManageSdkInit(const PmSdkConfig_t* pmConfig)
 {
     int16_t result = PM_SDK_STATUS_ERR; // 默认返回错误状态
@@ -157,7 +157,8 @@ int16_t PowerManageSdkInit(const PmSdkConfig_t* pmConfig)
         g_pmManage.kl30OffFlag = 0;
         g_pmManage.sleepState = 1;
         g_pmManage.mpuWakeSource = 0;
-        g_pmManage.preSleepNoticeCount = 0; 
+        g_pmManage.preSleepNoticeCount = 0;
+        g_pmManage.fastSleepFlag = 0; 
         result = PM_SDK_STATUS_OK;
     }
     
@@ -715,14 +716,22 @@ static void PmStatePreSleepNoticeProcess(uint32_t cycleTime)
     g_pmManage.wakeDelayCount = 0;
 #if (PM_SDK_DEBUG_NO_MPU)
 #else
-    if(g_pmManage.pPmConfig->deepSleepConfig.mpuDeepSleep!=0)
+    if(g_pmManage.pPmConfig->deepSleepConfig.mpuDeepSleep != 0)
     {
         MpuPowerSyncSdkSetSleep(g_pmManage.deepSleepFlag);
     }
     else
     {
-        /*通知MPU休眠*/
-        MpuPowerSyncSdkSetSleep(0);
+        if(PowerManageSdkGetFastSleep() != 0)
+        {
+            /*快速休眠模式*/
+            MpuPowerSyncSdkSetSleep(3);
+        }
+        else
+        {
+            /*正常休眠模式*/
+            MpuPowerSyncSdkSetSleep(0);
+        }
     }
 #endif
     g_pmManage.pmState = E_PM_STATE_PRE_SLEEP_WAIT;
@@ -1216,3 +1225,12 @@ void PowerManageSdkSetMpuWakeUpFlag(uint8_t flag)
     g_pmMpuWakeUpFlag = flag;
 }
 
+void PowerManageSdkSetFastSleep(uint8_t fastSleepFlag)
+{
+    g_pmManage.fastSleepFlag = fastSleepFlag;
+}
+
+uint8_t PowerManageSdkGetFastSleep(void)
+{
+    return g_pmManage.fastSleepFlag;
+}

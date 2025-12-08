@@ -855,14 +855,11 @@ static SeriveGetSubFunState_e ServiceGetRoutineResultDidFunction(uint16_t DID, p
   {
     if (g_routineResultDidMap[i].u16DID == DID)
     {
-      if (g_currentSecurityLevel == g_routineResultDidMap[i].u8SecurityLevel)
-      {
         if (g_routineResultDidMap[i].pFun != NULL)
         {
           *pfun = g_routineResultDidMap[i].pFun;
           ret = E_SUBFUN_GET_OK;
         }
-      }
       else
       {
         return E_SUBFUN_GET_INVALID_SECURITY;
