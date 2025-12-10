@@ -19,6 +19,8 @@
 #include "string.h"
 #include "logHal.h"
 #include "stateSyncSdk.h"
+#include "taskEcallProcess.h"
+#include "remoteControl.h"
 #if (SELFCHECK_RESULT_SEND == 1)
 #include "ecallHal.h"
 #endif
@@ -110,8 +112,8 @@ typedef union TEL_3
     {
         uint64_t TEL_GPSCommSt : 2;
         uint64_t TEL_GPRSOr3GCommSt : 2;
-        uint64_t TEL_Reserve1 : 1;
         uint64_t TEL_TelematicsModeActSt : 3;
+        uint64_t TEL_Reserve1 : 1;
 
         uint64_t TEL_MsgCounter : 4;
 
@@ -120,11 +122,11 @@ typedef union TEL_3
         uint64_t TEL_BTAutoconectingSt : 1;
         uint64_t TEL_BTPowerSt : 1;
 
-        uint64_t TEL_BTManualMode : 2;
-        uint64_t TEL_Reserve2 : 1;
-        uint64_t TEL_OTAState : 1;
-        uint64_t TEL_BTAvrcpSt : 1;
         uint64_t TEL_BTAvrcpPlayMode : 3;
+        uint64_t TEL_BTAvrcpSt : 1;
+        uint64_t TEL_OTAState : 1;
+        uint64_t TEL_Reserve2 : 1;
+        uint64_t TEL_BTManualMode : 2;
 
         uint64_t TEL_TelematicsRegisterSt : 3;
         uint64_t TEL_Reserve3 : 5;
@@ -586,14 +588,14 @@ static int16_t CanPeriodMessage35F(uint8_t *pCanData)
         }
 
         g_tbox3Message.DetailInfo.TEL_GPRSOr3GCommSt = 0U;
-        g_tbox3Message.DetailInfo.TEL_TelematicsModeActSt = 0U;
+        g_tbox3Message.DetailInfo.TEL_TelematicsModeActSt = XCallGetTelemataticsMode();
         g_tbox3Message.DetailInfo.TEL_BTPowerSt = 0U;
         g_tbox3Message.DetailInfo.TEL_BTAutoconectingSt = 0U;
         g_tbox3Message.DetailInfo.TEL_BTHisdel = 0U;
         g_tbox3Message.DetailInfo.TEL_BTHandfreeSt = 0U;
         g_tbox3Message.DetailInfo.TEL_BTAvrcpPlayMode = 0U;
         g_tbox3Message.DetailInfo.TEL_BTAvrcpSt = 0U;
-        g_tbox3Message.DetailInfo.TEL_OTAState = 0U;
+        g_tbox3Message.DetailInfo.TEL_OTAState = RemoteControlGetOtaFlag();
         g_tbox3Message.DetailInfo.TEL_BTManualMode = 0U;
 
         g_tbox3Message.DetailInfo.TEL_MsgCounter = g_TEL_MsgCounter;

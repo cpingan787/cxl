@@ -43,6 +43,9 @@ typedef struct
   const DtcDependency_t *pDependce;
   DtcGroup_e dtcGroup; // 0:no fault recover,1:fault recover
 
+  uint8_t did0120Byte; // 0xFF 默认全1 全使能dtc
+  uint8_t did0120Bit;
+
 } DtcConfig_t;
 
 typedef enum
@@ -105,61 +108,47 @@ const DtcDependency_t g_canDNodeLost =
 };
 
 const static DtcConfig_t g_dtcList[] =
-    {
-        // /* dtcCode testDtcCode      checkCycleTime     faultLimit RecoverLimit DTCAgingLimit FaultDepend FaultDetectEnable****/
-        // {0xC07388, 0x007388, (10 / DTC_PROCESS_CYCLE_TIME), 1, -1, 40, NULL, E_DTC_GROUP_KL15_DEDECT}, // E_DTC_ITEM_DCAN_BUSOFF
-        // {0xD10017, 0x110017, (10 / DTC_PROCESS_CYCLE_TIME), 1, -1, 40, NULL, E_DTC_GROUP_KL15_DEDECT}, // DTC_ITEM_KL30_VOLTAGE_HIGH
-        // {0xD10116, 0x110016, (10 / DTC_PROCESS_CYCLE_TIME), 1, -1, 40, NULL, E_DTC_GROUP_KL15_DEDECT}, // DTC_ITEM_KL30_VOLTAGE_LOW
-
-        // {0xD02016, 0x102016, (10 / DTC_PROCESS_CYCLE_TIME), 1, -1, 40, &g_canDNodeLost, E_DTC_GROUP_KL15_DEDECT}, // E_DTC_ITEM_NODE_MISSING_BCM1_310,
-
-        // {0xD02016, 0x102016, (10 / DTC_PROCESS_CYCLE_TIME), 1, -1, 40, &g_canDNodeLost, E_DTC_GROUP_KL15_DEDECT}, // E_DTC_ITEM_NODE_MISSING_BCM1_319,
-        // {0xD02019, 0x102019, (10 / DTC_PROCESS_CYCLE_TIME), 1, -1, 40, &g_canDNodeLost, E_DTC_GROUP_KL15_DEDECT}, // E_DTC_ITEM_NODE_MISSING_AC1_29D,
-        // {0xD02021, 0x102021, (10 / DTC_PROCESS_CYCLE_TIME), 1, -1, 40, &g_canDNodeLost, E_DTC_GROUP_KL15_DEDECT}, // E_DTC_ITEM_NODE_MISSING_PEPS2_295,
-        // {0xD02024, 0x102024, (10 / DTC_PROCESS_CYCLE_TIME), 1, -1, 40, &g_canDNodeLost, E_DTC_GROUP_KL15_DEDECT}, // E_DTC_ITEM_NODE_MISSING_GWFD1_2BB,
-        // {0xD02028, 0x102028, (10 / DTC_PROCESS_CYCLE_TIME), 1, -1, 40, &g_canDNodeLost, E_DTC_GROUP_KL15_DEDECT}, // E_DTC_ITEM_NODE_MISSING_IP2_27F,
-        // {0xD02031, 0x102031, (10 / DTC_PROCESS_CYCLE_TIME), 1, -1, 40, &g_canDNodeLost, E_DTC_GROUP_KL15_DEDECT}, // E_DTC_ITEM_NODE_MISSING_TPMS1_341,
-        // {0xD02032, 0x102032, (10 / DTC_PROCESS_CYCLE_TIME), 1, -1, 40, &g_canDNodeLost, E_DTC_GROUP_KL15_DEDECT}, // E_DTC_ITEM_NODE_MISSING_EEM1_2A8,
-
-        {0xC07388, 0X007388, (10 / DTC_PROCESS_CYCLE_TIME), 1, -1, 40, NULL, E_DTC_GROUP_KL15_DEDECT},  // E_DTC_ITEM_TCAN_BUSOFF              // U007388: T-CAN 总线离线
-        //{0xB20E16, 0xB320E16, (10 / DTC_PROCESS_CYCLE_TIME), 1, -1, 40, NULL, E_DTC_GROUP_KL15_DEDECT}, // E_DTC_ITEM_BACKUP_BATTERY_LOW        // B320E16: 后备电池电量低
-        {0x91001C, 0xB11001C, (10 / DTC_PROCESS_CYCLE_TIME), 1, -1, 40, NULL, E_DTC_GROUP_KL15_DEDECT}, // E_DTC_ITEM_MAIN_POWER_OVER_RANGE     // B11001C: 主电源电压超限
-        {0x910091, 0xB110091, (10 / DTC_PROCESS_CYCLE_TIME), 1, -1, 40, NULL, E_DTC_GROUP_KL15_DEDECT}, // E_DTC_ITEM_MAIN_POWER_OVER_MAX_RANGE // B110091: 主电源电压超极限
-        {0xB20244, 0xB320244, (10 / DTC_PROCESS_CYCLE_TIME), 1, -1, 40, NULL, E_DTC_GROUP_KL15_DEDECT}, // E_DTC_ITEM_MEMORY_FAILURE            // B320244: 内部数据存储器故障
-
-        {0xB20415, 0xB320415, (10 / DTC_PROCESS_CYCLE_TIME), 1, -1, 40, NULL, E_DTC_GROUP_KL15_DEDECT}, // E_DTC_ITEM_MPU_GPS_ANTENNA_OPEN_SHORT // B320415: GPS 天线开路或短路到电源 (MPU)
-        {0xB20411, 0xB320411, (10 / DTC_PROCESS_CYCLE_TIME), 1, -1, 40, NULL, E_DTC_GROUP_KL15_DEDECT}, // E_DTC_ITEM_MPU_GPS_ANTENNA_SHORT_GND  // B320411: GPS 天线短路到地 (MPU)
-
-        {0xB20513, 0xB320513, (10 / DTC_PROCESS_CYCLE_TIME), 1, -1, 40, NULL, E_DTC_GROUP_KL15_DEDECT}, // E_DTC_ITEM_MPU_4G_MAIN_ANT_OPEN       // B320513: 4G 主天线开路 (MPU)
-        {0xB20512, 0xB320512, (10 / DTC_PROCESS_CYCLE_TIME), 1, -1, 40, NULL, E_DTC_GROUP_KL15_DEDECT}, // E_DTC_ITEM_MPU_4G_MAIN_ANT_SHORT_BAT  // B320512: 4G 主天线短路到电源 (MPU)
-        {0xB20511, 0xB320511, (10 / DTC_PROCESS_CYCLE_TIME), 1, -1, 40, NULL, E_DTC_GROUP_KL15_DEDECT}, // E_DTC_ITEM_MPU_4G_MAIN_ANT_SHORT_GND  // B320511: 4G 主天线短路到地 (MPU)
-
-        {0xB20613, 0xB320613, (10 / DTC_PROCESS_CYCLE_TIME), 1, -1, 40, NULL, E_DTC_GROUP_KL15_DEDECT}, // E_DTC_ITEM_MPU_4G_AUX_ANT_OPEN        // B320613: 4G 副天线开路 (MPU)
-        {0xB20612, 0xB320612, (10 / DTC_PROCESS_CYCLE_TIME), 1, -1, 40, NULL, E_DTC_GROUP_KL15_DEDECT}, // E_DTC_ITEM_MPU_4G_AUX_ANT_SHORT_BAT   // B320612: 4G 副天线短路到电源 (MPU)
-        {0xB20611, 0xB320611, (10 / DTC_PROCESS_CYCLE_TIME), 1, -1, 40, NULL, E_DTC_GROUP_KL15_DEDECT}, // E_DTC_ITEM_MPU_4G_AUX_ANT_SHORT_GND   // B320611: 4G 副天线短路到地 (MPU)
-
-        {0xB20909, 0xB320909, (10 / DTC_PROCESS_CYCLE_TIME), 1, -1, 40, NULL, E_DTC_GROUP_KL15_DEDECT}, // E_DTC_ITEM_MPU_SIM_FAULT              // B320909: SIM 卡故障 (MPU)
-        {0xB20104, 0xB320104, (10 / DTC_PROCESS_CYCLE_TIME), 1, -1, 40, NULL, E_DTC_GROUP_KL15_DEDECT}, // E_DTC_ITEM_MPU_4G_INTERNAL_COMM_FAULT // B320104: 4G 模块内部通信故障 (MPU)
-        {0xB20B79, 0xB320B79, (10 / DTC_PROCESS_CYCLE_TIME), 1, -1, 40, NULL, E_DTC_GROUP_KL15_DEDECT}, // E_DTC_ITEM_MPU_ETH_LINE_FAULT         // B320B79: 以太网物理线路故障 (MPU)
-        {0xB20B08, 0xB320B08, (10 / DTC_PROCESS_CYCLE_TIME), 1, -1, 40, NULL, E_DTC_GROUP_KL15_DEDECT}, // E_DTC_ITEM_MPU_ETH_COMM_FAULT         // B320B08: 以太网通信错误 (MPU)
-        {0xB21296, 0xB321296, (10 / DTC_PROCESS_CYCLE_TIME), 1, -1, 40, NULL, E_DTC_GROUP_KL15_DEDECT}, // E_DTC_ITEM_MPU_DDR_FAULT              // B321296: 模组 DDR 故障 (MPU)
-
-        //{0xB21198, 0xB321198, (10 / DTC_PROCESS_CYCLE_TIME), 1, -1, 40, NULL, E_DTC_GROUP_KL15_DEDECT}, // E_DTC_ITEM_MCU_OVER_TEMPERATURE       // B321198: MCU 过温
-        {0xB20707, 0xB320707, (10 / DTC_PROCESS_CYCLE_TIME), 1, -1, 40, NULL, E_DTC_GROUP_KL15_DEDECT}, // E_DTC_ITEM_MPU_BCALL_KEY_STUCK        // B320707: B-Call 按键卡滞 (MPU)
-        {0xB20807, 0xB320807, (10 / DTC_PROCESS_CYCLE_TIME), 1, -1, 40, NULL, E_DTC_GROUP_KL15_DEDECT}, // E_DTC_ITEM_MPU_ECALL_KEY_STUCK        // B320807: E-Call 按键卡滞 (MPU)
-
-        {0xB20C11, 0xB320C11, (10 / DTC_PROCESS_CYCLE_TIME), 1, -1, 40, NULL, E_DTC_GROUP_KL15_DEDECT}, // E_DTC_ITEM_ECALL_LIGHT_SHORT_GND      // B320C11: E-Call 指示灯短路到地
-        {0xB20D11, 0xB320D11, (10 / DTC_PROCESS_CYCLE_TIME), 1, -1, 40, NULL, E_DTC_GROUP_KL15_DEDECT}, // E_DTC_ITEM_BCALL_LIGHT_SHORT_GND      // B320D11: B-Call 指示灯短路到地
-
-        {0xB2011C, 0xB32011C, (10 / DTC_PROCESS_CYCLE_TIME), 1, -1, 40, NULL, E_DTC_GROUP_KL15_DEDECT}, // E_DTC_ITEM_4G_MODULE_VOLTAGE      // B32011C: 4G 模块电压异常 (MPU)
-        {0xB3001C, 0xB33001C, (10 / DTC_PROCESS_CYCLE_TIME), 1, -1, 40, NULL, E_DTC_GROUP_KL15_DEDECT}, // E_DTC_ITEM_CAN_POWER_ABNORMAL         // B33001C: CAN 电源电压超限
-        {0xB2031C, 0xB32031C, (10 / DTC_PROCESS_CYCLE_TIME), 1, -1, 40, NULL, E_DTC_GROUP_KL15_DEDECT}, // E_DTC_ITEM_MPU_MIC_POWER_FAULT        // B32031C: 麦克风电源故障 (MPU)
-        {0xB2031F, 0xB32031F, (10 / DTC_PROCESS_CYCLE_TIME), 1, -1, 40, NULL, E_DTC_GROUP_KL15_DEDECT}, // E_DTC_ITEM_MPU_MIC_SIGNAL_FAULT       // B32031F: 麦克风信号输入故障 (MPU)
-
-        {0xB20198, 0xB320198, (10 / DTC_PROCESS_CYCLE_TIME), 1, -1, 40, NULL, E_DTC_GROUP_KL15_DEDECT}, // E_DTC_ITEM_MPU_OPENCPU_OVER_TEMP      // B320198: OpenCPU 过温 (MPU)
+{
+    // dtcCode, testCode, time, limit, recLimit, age, dep, group,                                     BYTE, BIT
+    {0xC07388, 0X007388, (10 / DTC_PROCESS_CYCLE_TIME), 1, -1, 40, NULL, E_DTC_GROUP_KL15_DEDECT,     0, 1}, // U007388
+    {0x91001C, 0xB11001C, (10 / DTC_PROCESS_CYCLE_TIME), 1, -1, 40, NULL, E_DTC_GROUP_KL15_DEDECT,    0, 3}, // B11001C
+    {0x910091, 0xB110091, (10 / DTC_PROCESS_CYCLE_TIME), 1, -1, 40, NULL, E_DTC_GROUP_KL15_DEDECT,    0, 4}, // B110091
+    {0xB20244, 0xB320244, (10 / DTC_PROCESS_CYCLE_TIME), 1, -1, 40, NULL, E_DTC_GROUP_KL15_DEDECT,    0, 7}, // B320244
+    
+    {0xB20415, 0xB320415, (10 / DTC_PROCESS_CYCLE_TIME), 1, -1, 40, NULL, E_DTC_GROUP_KL15_DEDECT,    1, 2}, // B320415
+    {0xB20411, 0xB320411, (10 / DTC_PROCESS_CYCLE_TIME), 1, -1, 40, NULL, E_DTC_GROUP_KL15_DEDECT,    1, 3}, // B320411
+    
+    {0xB20513, 0xB320513, (10 / DTC_PROCESS_CYCLE_TIME), 1, -1, 40, NULL, E_DTC_GROUP_KL15_DEDECT,    1, 4}, // B320513
+    {0xB20512, 0xB320512, (10 / DTC_PROCESS_CYCLE_TIME), 1, -1, 40, NULL, E_DTC_GROUP_KL15_DEDECT,    1, 5}, // B320512
+    {0xB20511, 0xB320511, (10 / DTC_PROCESS_CYCLE_TIME), 1, -1, 40, NULL, E_DTC_GROUP_KL15_DEDECT,    1, 6}, // B320511
+    
+    {0xB20613, 0xB320613, (10 / DTC_PROCESS_CYCLE_TIME), 1, -1, 40, NULL, E_DTC_GROUP_KL15_DEDECT,    1, 7}, // B320613
+    {0xB20612, 0xB320612, (10 / DTC_PROCESS_CYCLE_TIME), 1, -1, 40, NULL, E_DTC_GROUP_KL15_DEDECT,    2, 0}, // B320612
+    {0xB20611, 0xB320611, (10 / DTC_PROCESS_CYCLE_TIME), 1, -1, 40, NULL, E_DTC_GROUP_KL15_DEDECT,    2, 1}, // B320611
+    
+    {0xB20909, 0xB320909, (10 / DTC_PROCESS_CYCLE_TIME), 1, -1, 40, NULL, E_DTC_GROUP_KL15_DEDECT,    2, 4}, // B320909
+    {0xB20104, 0xB320104, (10 / DTC_PROCESS_CYCLE_TIME), 1, -1, 40, NULL, E_DTC_GROUP_KL15_DEDECT,    2, 5}, // B320104
+    {0xB20B79, 0xB320B79, (10 / DTC_PROCESS_CYCLE_TIME), 1, -1, 40, NULL, E_DTC_GROUP_KL15_DEDECT,    2, 7}, // B320B79
+    {0xB20B08, 0xB320B08, (10 / DTC_PROCESS_CYCLE_TIME), 1, -1, 40, NULL, E_DTC_GROUP_KL15_DEDECT,    3, 0}, // B320B08
+    {0xB21296, 0xB321296, (10 / DTC_PROCESS_CYCLE_TIME), 1, -1, 40, NULL, E_DTC_GROUP_KL15_DEDECT,    0xFF, 0xFF}, // B321296 (调查表中未明确位置，需确认)
+    
+    {0xB20707, 0xB320707, (10 / DTC_PROCESS_CYCLE_TIME), 1, -1, 40, NULL, E_DTC_GROUP_KL15_DEDECT,    2, 2}, // B320707
+    {0xB20807, 0xB320807, (10 / DTC_PROCESS_CYCLE_TIME), 1, -1, 40, NULL, E_DTC_GROUP_KL15_DEDECT,    2, 3}, // B320807
+    
+    {0xB20C11, 0xB320C11, (10 / DTC_PROCESS_CYCLE_TIME), 1, -1, 40, NULL, E_DTC_GROUP_KL15_DEDECT,    3, 1}, // B320C11
+    {0xB20D11, 0xB320D11, (10 / DTC_PROCESS_CYCLE_TIME), 1, -1, 40, NULL, E_DTC_GROUP_KL15_DEDECT,    3, 2}, // B320D11
+    
+    {0xB2011C, 0xB32011C, (10 / DTC_PROCESS_CYCLE_TIME), 1, -1, 40, NULL, E_DTC_GROUP_KL15_DEDECT,    0, 5}, // B32011C
+    {0xB3001C, 0xB33001C, (10 / DTC_PROCESS_CYCLE_TIME), 1, -1, 40, NULL, E_DTC_GROUP_KL15_DEDECT,    0, 6}, // B33001C
+    {0xB2031C, 0xB32031C, (10 / DTC_PROCESS_CYCLE_TIME), 1, -1, 40, NULL, E_DTC_GROUP_KL15_DEDECT,    1, 0}, // B32031C
+    {0xB2031F, 0xB32031F, (10 / DTC_PROCESS_CYCLE_TIME), 1, -1, 40, NULL, E_DTC_GROUP_KL15_DEDECT,    1, 1}, // B32031F
+    
+    {0xB20198, 0xB320198, (10 / DTC_PROCESS_CYCLE_TIME), 1, -1, 40, NULL, E_DTC_GROUP_KL15_DEDECT,    4, 0}, // B320198
 };
 
 #define WORKFLASH_DTC_NUMBER (sizeof(g_dtcList) / sizeof(g_dtcList[0]))
+
+static uint8_t g_u8DtcSettingControl[12];
 
 static DtcState_t g_dtcState[WORKFLASH_DTC_NUMBER];
 static DtcGroupManage_t g_dtcGroupManage;
@@ -190,6 +179,16 @@ static int16_t WorkFlashWriteVehicleDTCBufferToFlash(void);
 static void SetDTCExtendedData(DtcState_t *pDtcState);
 static void ClearDTCExtendedData(DtcState_t *pDtcState);
 static void DtcSaveToWorkFlash(void);
+
+void DtcReloadSettingControl(void)
+{
+    uint32_t len = 0;
+    // 从 WorkFlash 读取，如果失败则默认全 1 (全 Enable)
+    if (WorkFlashVehicleInforRead(E_PARAMETER_INFO_DTC_SETTING_CONTROL, g_u8DtcSettingControl, &len) != 0 || len == 0)
+    {
+        memset(g_u8DtcSettingControl, 0xFF, sizeof(g_u8DtcSettingControl));
+    }
+}
 
 int16_t TaskAppDtcProcessInit(void)
 {
@@ -607,13 +606,22 @@ static void DtcNormalProcess(void)
     }
   uint32_t i;
   uint32_t size;
-
+  uint8_t dtcEnabled = 1;
   size = sizeof(g_dtcList) / sizeof(g_dtcList[0]);
 
   for (i = 0; i < size; i++)
   {
+    dtcEnabled = 1;
+    if (g_dtcList[i].did0120Byte < 12)
+    {
+        // 检查对应位是否为 1 为 0 表示屏蔽
+        if (!((g_u8DtcSettingControl[g_dtcList[i].did0120Byte] >> g_dtcList[i].did0120Bit) & 0x01))
+        {
+            dtcEnabled = 0;
+        }
+    }
 
-    if (g_dtcGroupManage.enableFlag[g_dtcList[i].dtcGroup] != 0)
+    if (g_dtcGroupManage.enableFlag[g_dtcList[i].dtcGroup] != 0 && dtcEnabled == 1)
     {
       if (g_dtcList[i].pDependce == NULL)
       {
@@ -696,6 +704,7 @@ static void DtcInitialize(void)
   uint32_t itemNum = sizeof(g_dtcList) / sizeof(g_dtcList[0]);
   uint8_t needSave = 0; // 标记是否需要写Flash
 
+  DtcReloadSettingControl();
   FlashDtcRead((uint8_t *)g_dtcState, sizeof(g_dtcState));
   
   if (g_dtcState[0].extendData.FaultOccurrenceCounter == 0xFF && 

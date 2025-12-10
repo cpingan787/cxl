@@ -39,6 +39,7 @@ CAN_ID_CONFIGURE_DEFINE(GW_FRDCM_1_T)
 CAN_ID_CONFIGURE_DEFINE(GW_FLDCM_2_T)
 CAN_ID_CONFIGURE_DEFINE(GW_BCM_TEL_T)
 CAN_ID_CONFIGURE_DEFINE(GW_BCM_1_T)
+CAN_ID_CONFIGURE_DEFINE(GW_BCM_2_T)
 CAN_ID_CONFIGURE_DEFINE(GW_PEPS_3_T)
 CAN_ID_CONFIGURE_DEFINE(GW_PEPS_5_T)
 CAN_ID_CONFIGURE_DEFINE(GW_PEPS_1_T)
@@ -65,6 +66,7 @@ CAN_V_ID_ELEMENT(GW_FRDCM_1_T, 100, 0x3E7)
 CAN_V_ID_ELEMENT(GW_FLDCM_2_T, 1000, 0x3E6)
 CAN_V_ID_ELEMENT(GW_BCM_TEL_T, 1000, 0x046) // event message default
 CAN_V_ID_ELEMENT(GW_BCM_1_T, 100, 0x1E3)
+CAN_V_ID_ELEMENT(GW_BCM_2_T, 20, 0x25D)
 CAN_V_ID_ELEMENT(GW_PEPS_3_T, 1000, 0x055)  // event message default
 CAN_V_ID_ELEMENT(GW_PEPS_5_T, 1000, 0x04D)  // event message default
 CAN_V_ID_ELEMENT(GW_PEPS_1_T, 100, 0x1E5)
@@ -1138,24 +1140,984 @@ static const can0_signal_configure_t m_can0SignalConfigure =
                 .useInvalidFlag = 1,
                 .InvalidData = 0xFFFFFFFF,
             }, // Request=Challenge code to T-BOX
+         
+        .BCM_IG1St =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+            .dataType = 0,
+            .startBit = 2,
+            .bitLength = 1,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // Ignition 1 status
 
-        .BCM_KeySt =
+        .BCM_BatSOCLowWarning =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+            .dataType = 0,
+            .startBit = 3,
+            .bitLength = 1,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // Battery Low SOC Warning
+
+        .BCM_PGearSt =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+            .dataType = 0,
+            .startBit = 4,
+            .bitLength = 1,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // P gear status
+
+        .BCM_LampOnWarningReq =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+            .dataType = 0,
+            .startBit = 5,
+            .bitLength = 1,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // Lamp left on warning request
+
+        .BCM_HornSwitchSt =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+            .dataType = 0,
+            .startBit = 6,
+            .bitLength = 1,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // Horn switch status
+
+        .BCM_FrontWiperServiceMode =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+            .dataType = 0,
+            .startBit = 7,
+            .bitLength = 1,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // BCM_FrontWiper Service Mode
+
+        .BCM_TrunkReleaseCmd =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+            .dataType = 0,
+            .startBit = 14,
+            .bitLength = 1,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // Trunk release command
+
+        .BCM_SunRoofOpenWarning =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+            .dataType = 0,
+            .startBit = 27,
+            .bitLength = 1,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // Sunroof open warning
+
+        .BCM_RmtCtrlFobBattLow =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+            .dataType = 0,
+            .startBit = 29,
+            .bitLength = 1,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // Remote control fob battery low
+
+        .BCM_KeyInReminderWarnReq =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+            .dataType = 0,
+            .startBit = 30,
+            .bitLength = 1,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // Key in reminder warning request
+
+        .BCM_AlarmHistory =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+            .dataType = 0,
+            .startBit = 32,
+            .bitLength = 3,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // Alarm history
+
+        .BCM_ETWS_St =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+            .dataType = 0,
+            .startBit = 40,
+            .bitLength = 1,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // Engine theft warning system status
+
+        .BCM_WinMoveSt =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+            .dataType = 0,
+            .startBit = 41,
+            .bitLength = 2,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // Window move status
+
+        .BCM_SunRoofPstSt =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+            .dataType = 0,
+            .startBit = 43,
+            .bitLength = 4,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // Sunroof position status
+
+        .BCM_FOB_ID =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+            .dataType = 0,
+            .startBit = 51,
+            .bitLength = 4,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // FOB ID
+
+        .BCM_RemoteControlSt =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+            .dataType = 0,
+            .startBit = 56,
+            .bitLength = 4,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // Remote control status
+
+        .RLS_LightSwitchReason =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+            .dataType = 0,
+            .startBit = 60,
+            .bitLength = 4,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // RLS light switch reason
+
+        .BCM_RemoteCtrlFDMRMCfgSt =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+            .dataType = 0,
+            .startBit = 128,
+            .bitLength = 1,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // Remote control FDMRM config status
+
+        .BCM_FogLampTurnCfgSt =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+            .dataType = 0,
+            .startBit = 129,
+            .bitLength = 1,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // Fog lamp turn config status
+
+        .BCM_RemoteUnlockCfgSt =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+            .dataType = 0,
+            .startBit = 130,
+            .bitLength = 1,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // Remote unlock config status
+
+        .BCM_SpdAutoLockCfgSt =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+            .dataType = 0,
+            .startBit = 131,
+            .bitLength = 1,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // Speed auto lock config status
+
+        .BCM_AutoUnlockCfgSt =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+            .dataType = 0,
+            .startBit = 132,
+            .bitLength = 2,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // Auto unlock config status 
+
+        .BCM_FollowMeHomeCfgSt =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+            .dataType = 0,
+            .startBit = 134,
+            .bitLength = 2,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // Follow me home function configuration status
+
+        .BCM_AutoLightSnsCfgSt =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+            .dataType = 0,
+            .startBit = 136,
+            .bitLength = 3,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // Sensibility of auto light configuration status
+
+        .BCM_FrontWiperSerPstFuncCfgSt =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+            .dataType = 0,
+            .startBit = 139,
+            .bitLength = 1,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // Front wiper service position function configuration status
+
+        .BCM_RGearEnableRearWipeCfgSt =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+            .dataType = 0,
+            .startBit = 140,
+            .bitLength = 1,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // Reverse gear enable rear wiping configuration status
+
+        .BCM_DTRLFuncCfgSt =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+            .dataType = 0,
+            .startBit = 141,
+            .bitLength = 1,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // BCM day time running lamp function configuration status
+
+        .BCM_HornCfgSt =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+            .dataType = 0,
+            .startBit = 142,
+            .bitLength = 1,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // BCM horn active on lock and unlock configuration status
+
+        .BCM_OSRMAutoFoldCfgSt =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+            .dataType = 0,
+            .startBit = 143,
+            .bitLength = 1,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // BCM outside rear view mirror auto folding function configuration status
+
+        .BCM_IALFuncCfgSt =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+            .dataType = 0,
+            .startBit = 152,
+            .bitLength = 1,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // IAL(Interior Ambient Light) function status
+
+        .BCM_AutoWiperCfgSt =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+            .dataType = 0,
+            .startBit = 153,
+            .bitLength = 1,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // Auto Wiper configuration status
+
+        .BCM_AutoDomeLightCfgSt =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+            .dataType = 0,
+            .startBit = 155,
+            .bitLength = 1,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // BCM auto dome light configuration status
+
+        .BCM_DRLActive_cfgst =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+            .dataType = 0,
+            .startBit = 156,
+            .bitLength = 1,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // Day time running lamp  configuration status，memory the ACU DRL SW Status
+
+        .BCM_IGNOffTimeVD =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+            .dataType = 0,
+            .startBit = 157,
+            .bitLength = 1,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // Ignition off time validity
+
+        .BCM_IGNOffTime =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+            .dataType = 0,
+            .startBit = 158,
+            .bitLength = 10,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // Ignition off time
+
+        .BCM_HeadlightDelayCfgSt =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+            .dataType = 0,
+            .startBit = 165,
+            .bitLength = 1,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // BCM Head light delay function configuration status
+
+        .BCM_AutoSRWinCloseCfgSt =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+            .dataType = 0,
+            .startBit = 163,
+            .bitLength = 1,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // Automactic Sunroof/Window Close configuration status of locking
+
+        .BCM_RLSAutoSRWinCloseCfgSt =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+            .dataType = 0,
+            .startBit = 164,
+            .bitLength = 1,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // Automactic Sunroof/Window Close configuration status in rain
+
+        .BCM_ACU_DRLSw_Enable =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+            .dataType = 0,
+            .startBit = 167,
+            .bitLength = 1,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // indicate if allow to control Day time running lamp  by ACU
+
+        .BCM_LatestLockUnlockCmd =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+            .dataType = 0,
+            .startBit = 168,
+            .bitLength = 5,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // The latest lock/unlock command source
+
+        .BCM_ParkAutoUnlockCfgSt =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+            .dataType = 0,
+            .startBit = 173,
+            .bitLength = 2,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // Park auto unlock configuration status
+
+        .BCM_ADSLightCfgSt =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+            .dataType = 0,
+            .startBit = 175,
+            .bitLength = 1,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // ADS light enable
+
+        .BCM_HazardLampSt =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+            .dataType = 0,
+            .startBit = 192,
+            .bitLength = 1,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // Hazard lamp status
+
+        .BCM_RLSWarning_Rain =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+            .dataType = 0,
+            .startBit = 193,
+            .bitLength = 1,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // RLS auto wiper warning
+
+        .BCM_RLSWarning_Light =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+            .dataType = 0,
+            .startBit = 194,
+            .bitLength = 1,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // RLS auto light warning
+
+        .BCM_ReverseLightSt =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+            .dataType = 0,
+            .startBit = 196,
+            .bitLength = 1,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // Reverse light status
+
+        .BCM_ReverseLightFaultSt =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+            .dataType = 0,
+            .startBit = 197,
+            .bitLength = 1,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // Reverse light fault status
+
+        .BCM_BrakeLightSt =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+            .dataType = 0,
+            .startBit = 198,
+            .bitLength = 1,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // Brake light status
+
+        .BCM_SunshadePst =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+            .dataType = 0,
+            .startBit = 200,
+            .bitLength = 7,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // The Sun Shade Position
+
+        .BCM_RearWiperSwitchSt =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+            .dataType = 0,
+            .startBit = 207,
+            .bitLength = 1,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // Rear wiper switch status
+
+        .BCM_FRWinMoveSt =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+            .dataType = 0,
+            .startBit = 208,
+            .bitLength = 2,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // Front rear window moved status
+
+        .BCM_TEL_HazLampCtrlSt =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+            .dataType = 0,
+            .startBit = 214,
+            .bitLength = 1,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // Hazard lamp in telematic control status
+
+        .BCM_AlarmHistory1 =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+            .dataType = 0,
+            .startBit = 216,
+            .bitLength = 3,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // BCM recent alarm trigger reason
+
+        .BCM_TrunkReleaseCmd1 =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+            .dataType = 0,
+            .startBit = 219,
+            .bitLength = 1,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // Trunk release command
+
+        .BCM_FrontWiperSwitchSt =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+            .dataType = 0,
+            .startBit = 221,
+            .bitLength = 2,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // Front wiper switch status
+
+        .BCM_AmbientLightSt =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+            .dataType = 0,
+            .startBit = 223,
+            .bitLength = 1,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // Ambient Light status
+
+        .BCM_VCU_UnlockACChgPortReqP =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+            .dataType = 0,
+            .startBit = 224,
+            .bitLength = 1,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // BCM request VCU to unlock AC charge lock port(Periodic Message)
+
+        .BCM_FuelCapAjarSt =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+            .dataType = 0,
+            .startBit = 225,
+            .bitLength = 1,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // High pressure FuelCap ajar status
+
+        .BCM_RefuelSwSt =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+            .dataType = 0,
+            .startBit = 226,
+            .bitLength = 1,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // Refule switch state
+
+        .BCM_RLSAutoSRWinCloseResult =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+            .dataType = 0,
+            .startBit = 228,
+            .bitLength = 2,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // Automactic Sunroof/Window Close Result
+
+        .BCM_SearchingKeyReq =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+            .dataType = 0,
+            .startBit = 230,
+            .bitLength = 1,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // the request of searching key when relock , SBM lock and T-BOX lock
+
+        .BCM_HornSwSt =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+            .dataType = 0,
+            .startBit = 231,
+            .bitLength = 1,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // horn switch status
+
+        .BCM_SunRoofPst =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+            .dataType = 0,
+            .startBit = 232,
+            .bitLength = 8,
+            .resulotion = 0.5,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // (Front) SunRoof Position
+
+        .BCM_HazardLampSwitchSt =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+            .dataType = 0,
+            .startBit = 241,
+            .bitLength = 1,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // Hazard lamp switch status
+
+        .BCM_MirrorAutoFoldUnfoldCmd =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+            .dataType = 0,
+            .startBit = 242,
+            .bitLength = 2,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // Auto Rearview Mirror Auto Fold/Unfold comand
+
+        .BCM_SunshadePstSt =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+            .dataType = 0,
+            .startBit = 244,
+            .bitLength = 4,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // The Sunshade Position status.
+
+        .BCM_RainstormModeReq =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+            .dataType = 0,
+            .startBit = 248,
+            .bitLength = 2,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // Rain storm Mode request
+
+        .RLS_AutoSRWinCloseReq =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+            .dataType = 0,
+            .startBit = 250,
+            .bitLength = 3,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // Sunroof/Window Close Request
+
+        .BCM_ADSLightSt =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+            .dataType = 0,
+            .startBit = 253,
+            .bitLength = 1,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // Front and behind ADS light status
+
+        .BCM_FWPIntLevelSt =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+            .dataType = 0,
+            .startBit = 378,
+            .bitLength = 3,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // Front Wiper interval level
+
+        .BCM_FWPAutoLevelSt =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+            .dataType = 0,
+            .startBit = 381,
+            .bitLength = 3,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // Front Wiper RLS sensitivity level
+
+        .BCM_HeadLightDelayTime =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+            .dataType = 0,
+            .startBit = 368,
+            .bitLength = 3,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // Head lightl delay time
+
+        .BCM_RemoteDiagCode =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+            .dataType = 0,
+            .startBit = 376,
+            .bitLength = 2,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // IBCM Remote Diagnostic Code for T-BOx    
+
+        .BCM_LowBeamSt =
             {
                 .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_2_T),
                 .dataType = 0,
                 .startBit = 0,
-                .bitLength = 2,
+                .bitLength = 1,
                 .resulotion = 1,
                 .offset = 0,
                 .useInvalidFlag = 1,
                 .InvalidData = 0xFFFFFFFF,
-            }, // Ignition key position status
-
-        .BCM_IG1St =
+            }, // Low beam status
+        .BCM_HighBeamSt =
             {
                 .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_2_T),
+                .dataType = 0,
+                .startBit = 1,
+                .bitLength = 1,
+                .resulotion = 1,
+                .offset = 0,
+                .useInvalidFlag = 1,
+                .InvalidData = 0xFFFFFFFF,
+            }, // High beam status
+        .BCM_FrontFogLampSt =
+            {
+                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_2_T),
                 .dataType = 0,
                 .startBit = 2,
                 .bitLength = 1,
@@ -1163,12 +2125,11 @@ static const can0_signal_configure_t m_can0SignalConfigure =
                 .offset = 0,
                 .useInvalidFlag = 1,
                 .InvalidData = 0xFFFFFFFF,
-            }, // Ignition 1 status
-
-        .BCM_BatSOCLowWarning =
+            }, // Front fog lamp status
+        .BCM_RearFogLampSt =
             {
                 .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_2_T),
                 .dataType = 0,
                 .startBit = 3,
                 .bitLength = 1,
@@ -1176,38 +2137,23 @@ static const can0_signal_configure_t m_can0SignalConfigure =
                 .offset = 0,
                 .useInvalidFlag = 1,
                 .InvalidData = 0xFFFFFFFF,
-            }, // Battery Low SOC Warning
-
-        .BCM_PGearSt =
+            }, // Rear fog lamp status
+        .BCM_FrontWiperSt =
             {
                 .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_2_T),
                 .dataType = 0,
                 .startBit = 4,
-                .bitLength = 1,
+                .bitLength = 2,
                 .resulotion = 1,
                 .offset = 0,
                 .useInvalidFlag = 1,
                 .InvalidData = 0xFFFFFFFF,
-            }, // P gear status
-
-        .BCM_LampOnWarningReq =
+            }, // Front wiper status
+        .BCM_KeyInsertSt =
             {
                 .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 5,
-                .bitLength = 1,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // Lamp left on warning request
-
-        .BCM_HornSwitchSt =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_2_T),
                 .dataType = 0,
                 .startBit = 6,
                 .bitLength = 1,
@@ -1215,12 +2161,11 @@ static const can0_signal_configure_t m_can0SignalConfigure =
                 .offset = 0,
                 .useInvalidFlag = 1,
                 .InvalidData = 0xFFFFFFFF,
-            }, // Horn switch status
-
-        .BCM_FrontWiperServiceMode =
+            }, // Key insert status
+        .BCM_ReverseSwitchStVD =
             {
                 .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_2_T),
                 .dataType = 0,
                 .startBit = 7,
                 .bitLength = 1,
@@ -1228,38 +2173,23 @@ static const can0_signal_configure_t m_can0SignalConfigure =
                 .offset = 0,
                 .useInvalidFlag = 1,
                 .InvalidData = 0xFFFFFFFF,
-            }, // BCM_FrontWiper Service Mode
-
-        .BCM_DriverDoorAjarSt =
+            }, // Flag indicating reverse switch status
+        .BCM_KeySt =
             {
                 .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_2_T),
                 .dataType = 0,
                 .startBit = 8,
-                .bitLength = 1,
+                .bitLength = 2,
                 .resulotion = 1,
                 .offset = 0,
                 .useInvalidFlag = 1,
                 .InvalidData = 0xFFFFFFFF,
-            }, // Driver door ajar status
-
-        .BCM_PsngrDoorAjarSt =
+            }, // Ignition key position status
+        .BCM_DTRLSt =
             {
                 .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 9,
-                .bitLength = 1,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // Passenger door ajar status
-
-        .BCM_RLDoorAjarSt =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_2_T),
                 .dataType = 0,
                 .startBit = 10,
                 .bitLength = 1,
@@ -1267,12 +2197,11 @@ static const can0_signal_configure_t m_can0SignalConfigure =
                 .offset = 0,
                 .useInvalidFlag = 1,
                 .InvalidData = 0xFFFFFFFF,
-            }, // Rear left door ajar status
-
-        .BCM_RRDoorAjarSt =
+            }, // Day time running lamp status
+        .BCM_BonnetAjarSt =
             {
                 .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_2_T),
                 .dataType = 0,
                 .startBit = 11,
                 .bitLength = 1,
@@ -1280,12 +2209,11 @@ static const can0_signal_configure_t m_can0SignalConfigure =
                 .offset = 0,
                 .useInvalidFlag = 1,
                 .InvalidData = 0xFFFFFFFF,
-            }, // Rear right door ajar status
-
-        .BCM_BonnetAjarSt =
+            }, // Bonnet ajar status
+        .BCM_RearWiperSt =
             {
                 .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_2_T),
                 .dataType = 0,
                 .startBit = 12,
                 .bitLength = 1,
@@ -1293,25 +2221,12 @@ static const can0_signal_configure_t m_can0SignalConfigure =
                 .offset = 0,
                 .useInvalidFlag = 1,
                 .InvalidData = 0xFFFFFFFF,
-            }, // Bonnet/hood ajar status
+            }, // Rear wiper status
 
-        .BCM_TrunkAjarSt =
+        .BCM_DriverDoorAjarSt =
             {
                 .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 13,
-                .bitLength = 1,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // Trunk ajar status
-
-        .BCM_TrunkReleaseCmd =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_2_T),
                 .dataType = 0,
                 .startBit = 14,
                 .bitLength = 1,
@@ -1319,12 +2234,11 @@ static const can0_signal_configure_t m_can0SignalConfigure =
                 .offset = 0,
                 .useInvalidFlag = 1,
                 .InvalidData = 0xFFFFFFFF,
-            }, // Trunk release command
-
-        .BCM_DTRLSt =
+            }, // Driver door ajar status
+        .BCM_BrakeLightSwitchSt =
             {
                 .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_2_T),
                 .dataType = 0,
                 .startBit = 15,
                 .bitLength = 1,
@@ -1332,12 +2246,11 @@ static const can0_signal_configure_t m_can0SignalConfigure =
                 .offset = 0,
                 .useInvalidFlag = 1,
                 .InvalidData = 0xFFFFFFFF,
-            }, // Day time running lamp status
-
-        .BCM_LeftTurnLampSt =
+            }, // Brake light switch status
+        .BCM_TrunkAjarSt =
             {
                 .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_2_T),
                 .dataType = 0,
                 .startBit = 16,
                 .bitLength = 1,
@@ -1345,12 +2258,11 @@ static const can0_signal_configure_t m_can0SignalConfigure =
                 .offset = 0,
                 .useInvalidFlag = 1,
                 .InvalidData = 0xFFFFFFFF,
-            }, // Left turn lamp status
-
-        .BCM_LeftTurnLampFaultSt =
+            }, // Trunk ajar status
+        .BCM_PsngrDoorAjarSt =
             {
                 .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_2_T),
                 .dataType = 0,
                 .startBit = 17,
                 .bitLength = 1,
@@ -1358,12 +2270,11 @@ static const can0_signal_configure_t m_can0SignalConfigure =
                 .offset = 0,
                 .useInvalidFlag = 1,
                 .InvalidData = 0xFFFFFFFF,
-            }, // Left turn lamp fault status
-
-        .BCM_RightTurnLampSt =
+            }, // Passenger door ajar status
+        .BCM_RLDoorAjarSt =
             {
                 .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_2_T),
                 .dataType = 0,
                 .startBit = 18,
                 .bitLength = 1,
@@ -1371,12 +2282,11 @@ static const can0_signal_configure_t m_can0SignalConfigure =
                 .offset = 0,
                 .useInvalidFlag = 1,
                 .InvalidData = 0xFFFFFFFF,
-            }, // Right turn lamp status
-
-        .BCM_RightTurnLampFaultSt =
+            }, // Rear left door ajar status
+        .BCM_RRDoorAjarSt =
             {
                 .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_2_T),
                 .dataType = 0,
                 .startBit = 19,
                 .bitLength = 1,
@@ -1384,12 +2294,11 @@ static const can0_signal_configure_t m_can0SignalConfigure =
                 .offset = 0,
                 .useInvalidFlag = 1,
                 .InvalidData = 0xFFFFFFFF,
-            }, // Right turn lamp fault status
-
-        .BCM_LowBeamSt =
+            }, // Rear right door ajar status
+        .BCM_DRLLFaultSt =
             {
                 .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_2_T),
                 .dataType = 0,
                 .startBit = 20,
                 .bitLength = 1,
@@ -1397,12 +2306,11 @@ static const can0_signal_configure_t m_can0SignalConfigure =
                 .offset = 0,
                 .useInvalidFlag = 1,
                 .InvalidData = 0xFFFFFFFF,
-            }, // Low beam status
-
-        .BCM_HighBeamSt =
+            }, // Left side DRL(Daytime Running Lamp) fault status
+        .BCM_CentralUnLockSWSt =
             {
                 .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_2_T),
                 .dataType = 0,
                 .startBit = 21,
                 .bitLength = 1,
@@ -1410,12 +2318,11 @@ static const can0_signal_configure_t m_can0SignalConfigure =
                 .offset = 0,
                 .useInvalidFlag = 1,
                 .InvalidData = 0xFFFFFFFF,
-            }, // High beam status
-
-        .BCM_FrontFogLampSt =
+            }, // Central Unlock switch status
+        .BCM_FrontWasherSt =
             {
                 .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_2_T),
                 .dataType = 0,
                 .startBit = 22,
                 .bitLength = 1,
@@ -1423,12 +2330,11 @@ static const can0_signal_configure_t m_can0SignalConfigure =
                 .offset = 0,
                 .useInvalidFlag = 1,
                 .InvalidData = 0xFFFFFFFF,
-            }, // Front fog lamp status
-
-        .BCM_RearFogLampSt =
+            }, // Front washer status
+        .BCM_RearWasherSt =
             {
                 .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_2_T),
                 .dataType = 0,
                 .startBit = 23,
                 .bitLength = 1,
@@ -1436,12 +2342,11 @@ static const can0_signal_configure_t m_can0SignalConfigure =
                 .offset = 0,
                 .useInvalidFlag = 1,
                 .InvalidData = 0xFFFFFFFF,
-            }, // Rear fog lamp status
-
-        .BCM_ParkingLampSt =
+            }, // Rear washer status
+        .BCM_RoomlampSt =
             {
                 .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_2_T),
                 .dataType = 0,
                 .startBit = 24,
                 .bitLength = 1,
@@ -1449,12 +2354,11 @@ static const can0_signal_configure_t m_can0SignalConfigure =
                 .offset = 0,
                 .useInvalidFlag = 1,
                 .InvalidData = 0xFFFFFFFF,
-            }, // Parking lamp status
-
-        .BCM_BrakeLightSwitchSt =
+            }, // Room lamp status
+        .BCM_DRLRFaultSt =
             {
                 .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_2_T),
                 .dataType = 0,
                 .startBit = 25,
                 .bitLength = 1,
@@ -1462,365 +2366,13 @@ static const can0_signal_configure_t m_can0SignalConfigure =
                 .offset = 0,
                 .useInvalidFlag = 1,
                 .InvalidData = 0xFFFFFFFF,
-            }, // Brake light switch status
-
-        .BCM_VehReverseSt =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 26,
-                .bitLength = 1,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // Indication the BCM judgement of the vehicle reverse status
-
-        .BCM_SunRoofOpenWarning =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 27,
-                .bitLength = 1,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // SunRoof open warning
-
-        .BCM_TransportModeSt =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 28,
-                .bitLength = 1,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // Transport mode status
-
-        .BCM_RmtCtrlFobBattLow =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 29,
-                .bitLength = 1,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // Remote control fob battery low
-
-        .BCM_KeyInReminderWarnReq =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 30,
-                .bitLength = 1,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // Key in reminder warning
-
-        .BCM_KeyInsertSt =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 31,
-                .bitLength = 1,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // Key insert status
-
-        .BCM_AlarmHistory =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 32,
-                .bitLength = 3,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // BCM recent alarm trigger reason
-
-        .BCM_ATWS_St =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 35,
-                .bitLength = 3,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // Anti-theft warning status
-
-        .BCM_DriverDoorLockSt =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 38,
-                .bitLength = 1,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // Driver door lock status
-
-        .BCM_PsngrDoorLockSt =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 39,
-                .bitLength = 1,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // Passenger door lock status
-
-        .BCM_RoomlampSt =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 40,
-                .bitLength = 1,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // Room lamp status
-
-        .BCM_ETWS_St =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 41,
-                .bitLength = 1,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // Engine theft warning status
-
-        .BCM_WinMoveSt =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 42,
-                .bitLength = 2,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // Window move Status
-
-        .BCM_SunRoofPstSt =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 44,
-                .bitLength = 4,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // The  (Front) sun roof position status.
-
-        .BCM_FrontWasherSt =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 48,
-                .bitLength = 1,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // Front washer status
-
-        .BCM_DRLLFaultSt =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 49,
-                .bitLength = 1,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // Left side DRL(Daytime Running Lamp) fault status
-
-        .BCM_DRLRFaultSt =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 50,
-                .bitLength = 1,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
             }, // Right side DRL(Daytime Running Lamp) fault status
-
-        .BCM_FOB_ID =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 51,
-                .bitLength = 4,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // Fob identification
-
-        .BCM_HornSt =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 55,
-                .bitLength = 1,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // Horn status
-
-        .BCM_RemoteControlSt =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 56,
-                .bitLength = 4,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // BCM leave out remote mode reasons
-
-        .RLS_LightSwitchReason =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 60,
-                .bitLength = 4,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // This signal indicates which ambient conditions have been detected by the running light sensor
-
-        .BCM_FrontWiperSt =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 68,
-                .bitLength = 2,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // Front wiper status
-
-        .BCM_ReverseSwitchStVD =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 71,
-                .bitLength = 1,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // Flag indicating reverse switch status
-
-        .BCM_RearWiperSt =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 76,
-                .bitLength = 1,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // Rear wiper status
-
-        .BCM_ReverseSwitchSt =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 77,
-                .bitLength = 1,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // Reverse switch status
-
-        .BCM_CentralUnLockSWSt =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 85,
-                .bitLength = 1,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // Central Unlock switch status
-
-        .BCM_RearWasherSt =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 87,
-                .bitLength = 1,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // Rear washer status
-
         .BCM_TurnLightSwitchSt =
             {
                 .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_2_T),
                 .dataType = 0,
-                .startBit = 90,
+                .startBit = 26,
                 .bitLength = 2,
                 .resulotion = 1,
                 .offset = 0,
@@ -1828,876 +2380,258 @@ static const can0_signal_configure_t m_can0SignalConfigure =
                 .InvalidData = 0xFFFFFFFF,
             }, // Turn light switch status
 
-        .BCM_BrakeLightFaultSt =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 92,
-                .bitLength = 1,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // Brake light fault status
-
         .BCM_PositionLightswitchSt =
             {
                 .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_2_T),
                 .dataType = 0,
-                .startBit = 93,
+                .startBit = 29,
                 .bitLength = 1,
                 .resulotion = 1,
                 .offset = 0,
                 .useInvalidFlag = 1,
                 .InvalidData = 0xFFFFFFFF,
             }, // Position light switch status
-
         .BCM_PositionLightFaultSt =
             {
                 .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_2_T),
                 .dataType = 0,
-                .startBit = 94,
+                .startBit = 30,
                 .bitLength = 1,
                 .resulotion = 1,
                 .offset = 0,
                 .useInvalidFlag = 1,
                 .InvalidData = 0xFFFFFFFF,
             }, // Position light fault status
-
         .BCM_LowBeamFaultSt =
             {
                 .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_2_T),
                 .dataType = 0,
-                .startBit = 95,
+                .startBit = 31,
                 .bitLength = 1,
                 .resulotion = 1,
                 .offset = 0,
                 .useInvalidFlag = 1,
                 .InvalidData = 0xFFFFFFFF,
             }, // Lowbeam fault status
-
+        .BCM_HornSt =
+            {
+                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_2_T),
+                .dataType = 0,
+                .startBit = 32,
+                .bitLength = 1,
+                .resulotion = 1,
+                .offset = 0,
+                .useInvalidFlag = 1,
+                .InvalidData = 0xFFFFFFFF,
+            }, // Horn status
+        .BCM_LeftTurnLampSt =
+            {
+                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_2_T),
+                .dataType = 0,
+                .startBit = 33,
+                .bitLength = 1,
+                .resulotion = 1,
+                .offset = 0,
+                .useInvalidFlag = 1,
+                .InvalidData = 0xFFFFFFFF,
+            }, // Left turn lamp status
+        .BCM_LeftTurnLampFaultSt =
+            {
+                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_2_T),
+                .dataType = 0,
+                .startBit = 34,
+                .bitLength = 1,
+                .resulotion = 1,
+                .offset = 0,
+                .useInvalidFlag = 1,
+                .InvalidData = 0xFFFFFFFF,
+            }, // Left turn lamp fault status
+        .BCM_RightTurnLampSt =
+            {
+                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_2_T),
+                .dataType = 0,
+                .startBit = 35,
+                .bitLength = 1,
+                .resulotion = 1,
+                .offset = 0,
+                .useInvalidFlag = 1,
+                .InvalidData = 0xFFFFFFFF,
+            }, // Right turn lamp status
+        .BCM_RightTurnLampFaultSt =
+            {
+                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_2_T),
+                .dataType = 0,
+                .startBit = 36,
+                .bitLength = 1,
+                .resulotion = 1,
+                .offset = 0,
+                .useInvalidFlag = 1,
+                .InvalidData = 0xFFFFFFFF,
+            }, // Right turn lamp fault status
+        .BCM_ParkingLampSt =
+            {
+                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_2_T),
+                .dataType = 0,
+                .startBit = 37,
+                .bitLength = 1,
+                .resulotion = 1,
+                .offset = 0,
+                .useInvalidFlag = 1,
+                .InvalidData = 0xFFFFFFFF,
+            }, // Parking lamp status
+        .BCM_TransportModeSt =
+            {
+                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_2_T),
+                .dataType = 0,
+                .startBit = 38,
+                .bitLength = 1,
+                .resulotion = 1,
+                .offset = 0,
+                .useInvalidFlag = 1,
+                .InvalidData = 0xFFFFFFFF,
+            }, // Vehicle transport mode request
+        .BCM_VehReverseSt =
+            {
+                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_2_T),
+                .dataType = 0,
+                .startBit = 39,
+                .bitLength = 1,
+                .resulotion = 1,
+                .offset = 0,
+                .useInvalidFlag = 1,
+                .InvalidData = 0xFFFFFFFF,
+            }, // Indication the BCM judgement of the vehicle reverse status
+        .BCM_ATWS_St =
+            {
+                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_2_T),
+                .dataType = 0,
+                .startBit = 40,
+                .bitLength = 3,
+                .resulotion = 1,
+                .offset = 0,
+                .useInvalidFlag = 1,
+                .InvalidData = 0xFFFFFFFF,
+            }, // Anti-theft warning status
         .BCM_AutoHighBeamCtrlSt =
             {
                 .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_2_T),
                 .dataType = 0,
-                .startBit = 107,
+                .startBit = 43,
                 .bitLength = 1,
                 .resulotion = 1,
                 .offset = 0,
                 .useInvalidFlag = 1,
                 .InvalidData = 0xFFFFFFFF,
             }, // Auto light control by IFC(Intelligent Front Camera)status
-
         .BCM_BeamSwitchSt =
             {
                 .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_2_T),
                 .dataType = 0,
-                .startBit = 108,
+                .startBit = 44,
                 .bitLength = 2,
                 .resulotion = 1,
                 .offset = 0,
                 .useInvalidFlag = 1,
                 .InvalidData = 0xFFFFFFFF,
             }, // Beam switch status
-
         .BCM_MainLampSWSt =
             {
                 .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_2_T),
                 .dataType = 0,
-                .startBit = 110,
+                .startBit = 46,
                 .bitLength = 2,
                 .resulotion = 1,
                 .offset = 0,
                 .useInvalidFlag = 1,
                 .InvalidData = 0xFFFFFFFF,
             }, // Main Lamp switch status
-
         .BCM_BCAN_2_MsgCounter =
             {
                 .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_2_T),
                 .dataType = 0,
-                .startBit = 112,
+                .startBit = 48,
                 .bitLength = 4,
                 .resulotion = 1,
                 .offset = 0,
                 .useInvalidFlag = 1,
                 .InvalidData = 0xFFFFFFFF,
-            }, // The message counter is a 0-15 counter, increased of one unit on every message transmission
-
+            }, // The message counter is a 0-15 counter, increased of one unit...
+        .BCM_DriverDoorLockSt =
+            {
+                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_2_T),
+                .dataType = 0,
+                .startBit = 52,
+                .bitLength = 1,
+                .resulotion = 1,
+                .offset = 0,
+                .useInvalidFlag = 1,
+                .InvalidData = 0xFFFFFFFF,
+            }, // Driver door lock status
+        .BCM_PsngrDoorLockSt =
+            {
+                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_2_T),
+                .dataType = 0,
+                .startBit = 53,
+                .bitLength = 1,
+                .resulotion = 1,
+                .offset = 0,
+                .useInvalidFlag = 1,
+                .InvalidData = 0xFFFFFFFF,
+            }, // Passenger door lock status
         .BCM_InteriorTrunkReleaseSwitchSt =
             {
                 .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_2_T),
                 .dataType = 0,
-                .startBit = 118,
+                .startBit = 54,
                 .bitLength = 1,
                 .resulotion = 1,
                 .offset = 0,
                 .useInvalidFlag = 1,
                 .InvalidData = 0xFFFFFFFF,
             }, // Trunk release command
-
         .BCM_CentralLockSWSt =
             {
                 .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_2_T),
                 .dataType = 0,
-                .startBit = 119,
+                .startBit = 55,
                 .bitLength = 1,
                 .resulotion = 1,
                 .offset = 0,
                 .useInvalidFlag = 1,
                 .InvalidData = 0xFFFFFFFF,
             }, // Central lock switch status
-
         .BCM_BCAN_2_Checksum =
             {
                 .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
+                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_2_T),
                 .dataType = 0,
-                .startBit = 120,
+                .startBit = 56,
                 .bitLength = 8,
                 .resulotion = 1,
                 .offset = 0,
                 .useInvalidFlag = 1,
                 .InvalidData = 0xFFFFFFFF,
             }, // Checksum = (byte0 +byte1 …+ byte6) XOR 0xFF
-
-        .BCM_RemoteCtrlFDMRMCfgSt =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 128,
-                .bitLength = 1,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // Remote control driver door window and sun roof configuration status
-
-        .BCM_FogLampTurnCfgSt =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 129,
-                .bitLength = 1,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // Fog lamp auxiliary lighting when turning configuration status
-
-        .BCM_RemoteUnlockCfgSt =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 130,
-                .bitLength = 1,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // Remote unlock doors configuration status
-
-        .BCM_SpdAutoLockCfgSt =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 131,
-                .bitLength = 1,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // High speed auto lock doors configuration status
-
-        .BCM_AutoUnlockCfgSt =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 132,
-                .bitLength = 2,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // Auto unlock doors configuration status
-
-        .BCM_FollowMeHomeCfgSt =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 134,
-                .bitLength = 2,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // Follow me home function configuration status
-
-        .BCM_AutoLightSnsCfgSt =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 136,
-                .bitLength = 3,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // Sensibility of auto light configuration status
-
-        .BCM_FrontWiperSerPstFuncCfgSt =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 139,
-                .bitLength = 1,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // Front wiper service position function configuration status
-
-        .BCM_RGearEnableRearWipeCfgSt =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 140,
-                .bitLength = 1,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // Reverse gear enable rear wiping configuration status
-
-        .BCM_DTRLFuncCfgSt =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 141,
-                .bitLength = 1,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // BCM day time running lamp function configuration status
-
-        .BCM_HornCfgSt =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 142,
-                .bitLength = 1,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // BCM horn active on lock and unlock configuration status
-
-        .BCM_OSRMAutoFoldCfgSt =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 143,
-                .bitLength = 1,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // BCM outside rear view mirror auto folding function configuration status
-
-        .BCM_IALFuncCfgSt =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 152,
-                .bitLength = 1,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // IAL(Interior Ambient Light) function status
-
-        .BCM_AutoWiperCfgSt =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 153,
-                .bitLength = 1,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // Auto Wiper configuration status
-
-        .BCM_AutoDomeLightCfgSt =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 155,
-                .bitLength = 1,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // BCM auto dome light configuration status
-
-        .BCM_DRLActive_cfgst =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 156,
-                .bitLength = 1,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // Day time running lamp  configuration status，memory the ACU DRL SW Status
-
-        .BCM_IGNOffTimeVD =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 157,
-                .bitLength = 1,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // Ignition off time validity
-
-        .BCM_IGNOffTime =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 158,
-                .bitLength = 10,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // Ignition off time
-
-        .BCM_HeadlightDelayCfgSt =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 165,
-                .bitLength = 1,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // BCM Head light delay function configuration status
-
-        .BCM_AutoSRWinCloseCfgSt =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 163,
-                .bitLength = 1,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // Automactic Sunroof/Window Close configuration status of locking
-
-        .BCM_RLSAutoSRWinCloseCfgSt =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 164,
-                .bitLength = 1,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // Automactic Sunroof/Window Close configuration status in rain
-
-        .BCM_ACU_DRLSw_Enable =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 167,
-                .bitLength = 1,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // indicate if allow to control Day time running lamp  by ACU
-
-        .BCM_LatestLockUnlockCmd =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 168,
-                .bitLength = 5,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // The latest lock/unlock command source
-
-        .BCM_ParkAutoUnlockCfgSt =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 173,
-                .bitLength = 2,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // Park auto unlock configuration status
-
-        .BCM_ADSLightCfgSt =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 175,
-                .bitLength = 1,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // ADS light enable
-
-        .BCM_HazardLampSt =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 192,
-                .bitLength = 1,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // Hazard lamp status
-
-        .BCM_RLSWarning_Rain =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 193,
-                .bitLength = 1,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // RLS auto wiper warning
-
-        .BCM_RLSWarning_Light =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 194,
-                .bitLength = 1,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // RLS auto light warning
-
-        .BCM_ReverseLightSt =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 196,
-                .bitLength = 1,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // Reverse light status
-
-        .BCM_ReverseLightFaultSt =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 197,
-                .bitLength = 1,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // Reverse light fault status
-
-        .BCM_BrakeLightSt =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 198,
-                .bitLength = 1,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // Brake light status
-
-        .BCM_SunshadePst =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 200,
-                .bitLength = 7,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // The Sun Shade Position
-
-        .BCM_RearWiperSwitchSt =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 207,
-                .bitLength = 1,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // Rear wiper switch status
-
-        .BCM_FRWinMoveSt =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 208,
-                .bitLength = 2,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // Front rear window moved status
-
-        .BCM_TEL_HazLampCtrlSt =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 214,
-                .bitLength = 1,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // Hazard lamp in telematic control status
-
-        .BCM_AlarmHistory1 =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 216,
-                .bitLength = 3,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // BCM recent alarm trigger reason
-
-        .BCM_TrunkReleaseCmd1 =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 219,
-                .bitLength = 1,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // Trunk release command
-
-        .BCM_FrontWiperSwitchSt =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 221,
-                .bitLength = 2,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // Front wiper switch status
-
-        .BCM_AmbientLightSt =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 223,
-                .bitLength = 1,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // Ambient Light status
-
-        .BCM_VCU_UnlockACChgPortReqP =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 224,
-                .bitLength = 1,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // BCM request VCU to unlock AC charge lock port(Periodic Message)
-
-        .BCM_FuelCapAjarSt =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 225,
-                .bitLength = 1,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // High pressure FuelCap ajar status
-
-        .BCM_RefuelSwSt =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 226,
-                .bitLength = 1,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // Refule switch state
-
-        .BCM_RLSAutoSRWinCloseResult =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 228,
-                .bitLength = 2,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // Automactic Sunroof/Window Close Result
-
-        .BCM_SearchingKeyReq =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 230,
-                .bitLength = 1,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // the request of searching key when relock , SBM lock and T-BOX lock
-
-        .BCM_HornSwSt =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 231,
-                .bitLength = 1,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // horn switch status
-
-        .BCM_SunRoofPst =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 232,
-                .bitLength = 8,
-                .resulotion = 0.5,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // (Front) SunRoof Position
-
-        .BCM_HazardLampSwitchSt =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 241,
-                .bitLength = 1,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // Hazard lamp switch status
-
-        .BCM_MirrorAutoFoldUnfoldCmd =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 242,
-                .bitLength = 2,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // Auto Rearview Mirror Auto Fold/Unfold comand
-
-        .BCM_SunshadePstSt =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 244,
-                .bitLength = 4,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // The Sunshade Position status.
-
-        .BCM_RainstormModeReq =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 248,
-                .bitLength = 2,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // Rain storm Mode request
-
-        .RLS_AutoSRWinCloseReq =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 250,
-                .bitLength = 3,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // Sunroof/Window Close Request
-
-        .BCM_ADSLightSt =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 253,
-                .bitLength = 1,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // Front and behind ADS light status
-
-        .BCM_FWPIntLevelSt =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 378,
-                .bitLength = 3,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // Front Wiper interval level
-
-        .BCM_FWPAutoLevelSt =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 381,
-                .bitLength = 3,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // Front Wiper RLS sensitivity level
-
-        .BCM_HeadLightDelayTime =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 368,
-                .bitLength = 3,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // Head lightl delay time
-
-        .BCM_RemoteDiagCode =
-            {
-                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
-                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_BCM_1_T),
-                .dataType = 0,
-                .startBit = 376,
-                .bitLength = 2,
-                .resulotion = 1,
-                .offset = 0,
-                .useInvalidFlag = 1,
-                .InvalidData = 0xFFFFFFFF,
-            }, // IBCM Remote Diagnostic Code for T-BOx
 
         .PEPS_DriverdoorReq =
             {

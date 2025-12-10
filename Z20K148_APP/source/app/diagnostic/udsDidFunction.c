@@ -4814,22 +4814,14 @@ int16_t Service2EWriteDtcSettingControl(uint8_t *pData, uint16_t dataLength)
   {
     return 0x72;
   }
-  DtcProcessDisableByGroup(E_DTC_GROUP_WAKE_DEDECT); // 全部禁用
-  DtcProcessDisableByGroup(E_DTC_GROUP_KL15_DEDECT);
 
-  for (int i = 0; i < dataLength; i++)
-  {
-    if (pData[i] == 0x01) // 如果该字节为0x01，则使能对应的DTC组
-    {
-      if (i == 0)
-        DtcProcessEnableByGroup(E_DTC_GROUP_KL15_DEDECT);
-      if (i == 1)
-        DtcProcessEnableByGroup(E_DTC_GROUP_WAKE_DEDECT);
-    }
-  }
+  DtcReloadSettingControl(); 
 
-  return 0; // 返回成功
+  return 0; 
 }
+
+
+
 int16_t Service22ReadVehicleModelF112(uint8_t *pData, uint16_t *pLength) // 车辆 	ASCII	20
 {
   uint32_t length;

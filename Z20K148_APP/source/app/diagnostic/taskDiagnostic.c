@@ -253,7 +253,7 @@ static const WdidInfor_t g_Service2EFunMapList[] =
         {0xB2E6, 64, Service2EWriteFunctionConfig, E_UDS_SECURITY_LEVEL1}, // 0xB2E6_cxl
         {0x0110, 1, Service2EWriteManufactoryMode, E_UDS_SECURITY_LEVEL1}, // 0x0110_cxl
         {0xB2B4, 1, Service2EWriteTransportMode, E_UDS_SECURITY_LEVEL1},   // 0xB2B4_cxl
-        //{0x0120, 12, Service2EWriteDtcSettingControl, E_UDS_SECURITY_LEVEL1}, // 0x0120_cxl
+        {0x0120, 12, Service2EWriteDtcSettingControl, E_UDS_SECURITY_LEVEL1}, // 0x0120_cxl
         {0x0111, 20, Service2EWriteICCID, E_UDS_SECURITY_LEVEL1}, // 0x0111_cxl
         {0X010E, 15, Service2EWriteIMEI, E_UDS_SECURITY_LEVEL1},  // 0x010E_cxl
         {0X010F, 15, Service2EWriteIMSI, E_UDS_SECURITY_LEVEL1},  // 0x010F_cxl
@@ -476,7 +476,7 @@ static const RdidInfor_t g_Service22FunMapList[] =
         {0x0110, 1, Service22ReadManufactoryMode},                                                // 工厂模式 0x0110_cxl
         {0xB2B4, 1, Service22ReadTransportMode},                                                  // 运输模式   0xB2B4_cxl
         {0xB2B5, 1, Service22ReadKeySt},                                                          // 电子钥匙状态   0xB2B5_cxl
-        //{0x0120, 12, Service22ReadDtcSettingControl},                                             // DTC使能控制 0x0120_cxl
+        {0x0120, 12, Service22ReadDtcSettingControl},                                             // DTC使能控制 0x0120_cxl
         {0xF186, 1, Service22ReadActiveDiagnosticSession},    // 0xF186_cxl
         {0x031C, 50, Service22ReadTspDomain1},                // 0x031C_cxl
         //{0x5001, 1, Service22ReadVehicleMode},                // 车辆模式 0x5001_cxl
@@ -1299,31 +1299,25 @@ static uint8_t Service0x19Process0x01(uint8_t *udsData, uint16_t udsLen)
   uint8_t negativeNum = 0;
   uint32_t dtcNum = 0;
   uint8_t MaskValue = 0;
+
   if (udsLen == 0x03)
   {
-    if (udsData[2] & 0x09)
-    {
-      // read dtc num
-      DtcProcessDtcGetCountByMask(udsData[2], &dtcNum, &MaskValue);
-      g_udsTxBuffer[2] = MaskValue;
-      g_udsTxBuffer[3] = 0x00;
-      g_udsTxBuffer[4] = (uint8_t)((dtcNum >> 8) & 0XFF);
-      g_udsTxBuffer[5] = (uint8_t)(dtcNum & 0XFF);
-      ;
-    }
-    else
-    {
-      g_udsTxBuffer[2] = 0x00;
-      g_udsTxBuffer[3] = 0x00;
-      g_udsTxBuffer[4] = 0;
-      g_udsTxBuffer[5] = 0;
-    }
+    g_udsTxBuffer[0] = 0x59; 
+    g_udsTxBuffer[1] = 0x01;
+
+    DtcProcessDtcGetCountByMask(udsData[2], &dtcNum, &MaskValue);
+    g_udsTxBuffer[2] = MaskValue;
+    g_udsTxBuffer[3] = 0x01; 
+    g_udsTxBuffer[4] = (uint8_t)((dtcNum >> 8) & 0xFF);
+    g_udsTxBuffer[5] = (uint8_t)(dtcNum & 0xFF);
+
     DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, g_udsTxBuffer, 6, 0);
   }
   else
   {
-    negativeNum = 0x13; // invlid length
+    negativeNum = 0x13;
   }
+
   return negativeNum;
 }
 
@@ -2821,7 +2815,7 @@ static int16_t Service0x2EProcess(uint8_t *udsData, uint16_t udsLen, uint8_t fun
   responseData[1] = udsData[1];
   responseData[2] = udsData[2];
 
-  if (did == 0xB2E5 || did == 0xF18C || did == 0xF187|| did == 0xB2B4)
+  if (did == 0xB2E5 || did == 0xF18C || did == 0xF187|| did == 0xB2B4 || did == 0x0120)
   {
     DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 3, 0);
   }
@@ -3266,7 +3260,7 @@ void TaskEcuDiagnostic(void *pvParameters)
   //  EolConfigureInit();
   //  //DiagCanReportValueInit();
   //  VinInit();
-  //  //EskkeyCheckInit();
+  EskkeyCheckInit();
 
   // CopyMcuAppSoftWareVersionToFlash();// save app software version
   // CopyMcuAppSoftWareNumberToFlash(); // save app software Number

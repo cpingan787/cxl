@@ -845,11 +845,22 @@ static void RemoteControlHandleSignalProcess(void)
                 {
                     if(g_remoteControlEcuId == ECU_HVAC_E)
                     {
-                        s_state = PROCESS_SIGNAL_STATE_CHECK_SIGNAL; 
-                        if(g_remoteControlTransTimerHandle >= 0)
+                        if(g_remoteControlHvacPepsCheck == 0U)
                         {
-                            TimerHalStartTime(g_remoteControlTransTimerHandle, REMOTE_CONTROL_CHECK_EXCUTE_TIME); 
-                        }   
+                            s_state = PROCESS_SIGNAL_STATE_SPECIAL_PACK;
+                            if(g_remoteControlTransTimerHandle >= 0)
+                            {
+                                TimerHalStartTime(g_remoteControlTransTimerHandle, REMOTE_CONTROL_TRANS_SEPE_TIME);
+                            }
+                        }
+                        else
+                        {
+                            s_state = PROCESS_SIGNAL_STATE_CHECK_SIGNAL; 
+                            if(g_remoteControlTransTimerHandle >= 0)
+                            {
+                                TimerHalStartTime(g_remoteControlTransTimerHandle, REMOTE_CONTROL_CHECK_EXCUTE_TIME); 
+                            }   
+                        }
                     }
                     else
                     {

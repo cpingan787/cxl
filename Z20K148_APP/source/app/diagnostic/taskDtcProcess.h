@@ -189,4 +189,5 @@ void SetVolFault(void);
 int16_t TaskAppDtcProcessInit(void);
 void TaskDtcProcess(void *pvParameters);
 
+void DtcReloadSettingControl(void);
 #endif //_TASK_APP_MCU_CPU_SYSNC_H
