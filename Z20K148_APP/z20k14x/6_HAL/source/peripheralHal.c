@@ -365,15 +365,6 @@ void PORTA_IRQHandler(void)
 void PORTB_IRQHandler(void)
 {
     uint32_t intStatus;
-    intStatus = PORT_GetIntStatus(CANFD1_RX_PORT, CANFD1_RX_PIN);
-    if (intStatus != 0ul)
-    {
-        PORT_ClearPinInt(CANFD1_RX_PORT, CANFD1_RX_PIN);
-        if(g_wakeupSourceFun != NULL)
-        {
-          g_wakeupSourceFun(WAKEUP_SOURCE_CAN1);
-        }
-    }
 
     intStatus = PORT_GetIntStatus(GSM_IRQ_PORT, GSM_IRQ_PIN);
     if (intStatus != 0ul)
@@ -382,7 +373,7 @@ void PORTB_IRQHandler(void)
         PORT_ClearPinInt(GSM_IRQ_PORT, GSM_IRQ_PIN);
         if(g_wakeupSourceFun != NULL)
         {
-          g_wakeupSourceFun(WAKEUP_SOURCE_MPU);
+            g_wakeupSourceFun(WAKEUP_SOURCE_MPU);
         }
     }
 }
@@ -442,10 +433,6 @@ void PORTE_IRQHandler(void)
         PORT_ClearPinInt(MPU_HAL_SPI_REQ_PORT, MPU_HAL_SPI_REQ_PORT_PIN);
 #if (SPI_DMA_ENABLE == 1)
         MpuHal_SpiIrqCallback();
-        if(g_wakeupSourceFun != NULL)
-        {
-            g_wakeupSourceFun(WAKEUP_SOURCE_MPU);
-        }
 #endif
     }
 
@@ -462,10 +449,6 @@ void PORTE_IRQHandler(void)
 		// 	BatteryHalEnableOut();  
         //   	// PeripheralHalMpuPowerOn(0);
         // }
-        if(g_wakeupSourceFun != NULL)
-        {
-			g_wakeupSourceFun(WAKEUP_SOURCE_KL30);
-        }
     }
 
     intStatus = PORT_GetIntStatus(KL15_IRQ_PORT, KL15_IRQ_PIN);
@@ -474,7 +457,7 @@ void PORTE_IRQHandler(void)
         PORT_ClearPinInt(KL15_IRQ_PORT, KL15_IRQ_PIN);
         if(g_wakeupSourceFun != NULL)
         {
-          g_wakeupSourceFun(WAKEUP_SOURCE_KL15);
+            g_wakeupSourceFun(WAKEUP_SOURCE_KL15);
         }
     }
 

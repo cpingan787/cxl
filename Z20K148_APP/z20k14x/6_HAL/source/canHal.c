@@ -643,40 +643,40 @@ void CAN0_Init(uint8_t canIndex, uint8_t canfdFlag, CanBaudType_e idBandrate, Ca
         // CAN_IntMask(CAN_ID_1, CAN1_MB_ISR, UNMASK, 0x00000000U, 0x00000000U, 0x00000000U, 0x00000000U);    //使能邮箱的发送、接收完成中断
         // 参数：CAN模块序号、中断代码、中断屏蔽码、MB0-31、MB32-63
 
-        INT_SetPriority(CAN1_BusOff_IRQn, 0x1); // 设置 CAN1_BusOff_IRQn 的中断优先级，包含BUS_OFF_DONE。(高)0--15(低)
+        INT_SetPriority(CAN1_BusOff_IRQn, 0x3); // 设置 CAN1_BusOff_IRQn 的中断优先级，包含BUS_OFF_DONE。(高)0--15(低)
         INT_EnableIRQ(CAN1_BusOff_IRQn);        // 使能 CAN1_BusOff_IRQn 中断
 
-        INT_SetPriority(CAN1_TxWarn_IRQn, 0x1); // 设置 CAN1_TxWarn_IRQn 的中断优先级。(高)0--15(低)
+        INT_SetPriority(CAN1_TxWarn_IRQn, 0x3); // 设置 CAN1_TxWarn_IRQn 的中断优先级。(高)0--15(低)
         INT_DisableIRQ(CAN1_TxWarn_IRQn);       // 禁止 CAN1_TxWarn_IRQn 中断
 
-        INT_SetPriority(CAN1_RxWarn_IRQn, 0x1); // 设置 CAN1_RxWarn_IRQn 的中断优先级。(高)0--15(低)
+        INT_SetPriority(CAN1_RxWarn_IRQn, 0x3); // 设置 CAN1_RxWarn_IRQn 的中断优先级。(高)0--15(低)
         INT_DisableIRQ(CAN1_RxWarn_IRQn);       // 禁止 CAN1_RxWarn_IRQn 中断
 
-        INT_SetPriority(CAN1_Err_IRQn, 0x1); // 设置 CAN1_Err_IRQn 的中断优先级。(高)0--15(低)
+        INT_SetPriority(CAN1_Err_IRQn, 0x3); // 设置 CAN1_Err_IRQn 的中断优先级。(高)0--15(低)
         INT_EnableIRQ(CAN1_Err_IRQn);        // 使能 CAN1_Err_IRQn 中断
 
-        INT_SetPriority(CAN1_ErrFd_IRQn, 0x1); // 设置 CAN1_ErrFd_IRQn 的中断优先级。(高)0--15(低)
+        INT_SetPriority(CAN1_ErrFd_IRQn, 0x3); // 设置 CAN1_ErrFd_IRQn 的中断优先级。(高)0--15(低)
         INT_DisableIRQ(CAN1_ErrFd_IRQn);       // 禁止 CAN1_ErrFd_IRQn 中断
 
-        INT_SetPriority(CAN1_PnWake_IRQn, 0x1); // 设置 CAN1_PnWake_IRQn 的中断优先级。(高)0--15(低)
+        INT_SetPriority(CAN1_PnWake_IRQn, 0x3); // 设置 CAN1_PnWake_IRQn 的中断优先级。(高)0--15(低)
         INT_DisableIRQ(CAN1_PnWake_IRQn);       // 禁止 CAN1_PnWake_IRQn 中断
 
-        INT_SetPriority(CAN1_SelfWakeup_IRQn, 0x1); // 设置 CAN1_SelfWakeup_IRQn 的中断优先级。(高)0--15(低)
+        INT_SetPriority(CAN1_SelfWakeup_IRQn, 0x3); // 设置 CAN1_SelfWakeup_IRQn 的中断优先级。(高)0--15(低)
         INT_DisableIRQ(CAN1_SelfWakeup_IRQn);       // 禁止 CAN1_SelfWakeup_IRQn 中断
 
-        INT_SetPriority(CAN1_Ecc_IRQn, 0x1); // 设置 CAN1_Ecc_IRQn 的中断优先级，包含三个 MEM_ERR。(高)0--15(低)
+        INT_SetPriority(CAN1_Ecc_IRQn, 0x3); // 设置 CAN1_Ecc_IRQn 的中断优先级，包含三个 MEM_ERR。(高)0--15(低)
         INT_EnableIRQ(CAN1_Ecc_IRQn);        // 使能 CAN1_Ecc_IRQn 中断
 
-        INT_SetPriority(CAN1_Mb0To15_IRQn, 0x1); // 设置 CAN1_Mb0To15_IRQn 的中断优先级。(高)0--15(低)
+        INT_SetPriority(CAN1_Mb0To15_IRQn, 0x3); // 设置 CAN1_Mb0To15_IRQn 的中断优先级。(高)0--15(低)
         INT_EnableIRQ(CAN1_Mb0To15_IRQn);        // 使能 CAN1_Mb0To15_IRQn 的IRQ中断
 
-        INT_SetPriority(CAN1_Mb16To31_IRQn, 0xF); // 设置 CAN1_Mb16To31_IRQn 的中断优先级。(高)0--15(低)
+        INT_SetPriority(CAN1_Mb16To31_IRQn, 0x3); // 设置 CAN1_Mb16To31_IRQn 的中断优先级。(高)0--15(低)
         INT_DisableIRQ(CAN1_Mb16To31_IRQn);       // 禁止 CAN1_Mb16To31_IRQn 的IRQ中断
 
-        INT_SetPriority(CAN1_Mb32To47_IRQn, 0xF); // 设置 CAN1_Mb32To47_IRQn 的中断优先级。(高)0--15(低)
+        INT_SetPriority(CAN1_Mb32To47_IRQn, 0x3); // 设置 CAN1_Mb32To47_IRQn 的中断优先级。(高)0--15(低)
         INT_DisableIRQ(CAN1_Mb32To47_IRQn);       // 禁止 CAN1_Mb32To47_IRQn 中断
 
-        INT_SetPriority(CAN1_Mb48To63_IRQn, 0xF); // 设置 CAN1_Mb48To63_IRQn 的中断优先级。(高)0--15(低)
+        INT_SetPriority(CAN1_Mb48To63_IRQn, 0x3); // 设置 CAN1_Mb48To63_IRQn 的中断优先级。(高)0--15(低)
         INT_DisableIRQ(CAN1_Mb48To63_IRQn);       // 禁止 CAN1_Mb48To63_IRQn 中断
 
         // 初始化全局变量

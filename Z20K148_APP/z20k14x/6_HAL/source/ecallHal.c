@@ -730,6 +730,7 @@ void Sa51500Close(void)
     iic_sleep();
 #endif
     EcallHalSetAmpSdz(0);
+    EcallHalSetAmpMute(0);
     GPIO_SetPinDir(I2C_SDA_PORT, I2C_SDA_PORT_PIN, GPIO_INPUT);
     GPIO_SetPinDir(I2C_SCL_PORT, I2C_SCL_PORT_PIN, GPIO_INPUT);
     g_ampInitFlag = 0;
@@ -1069,11 +1070,14 @@ void EcallHalSetMode(uint8_t wakeMode)
         EcallHalSetSosLedRedState( 0 );
         EcallHalSetSosLedGreenState( 0 );
         EcallHalSetVehicleMute(0);
-        Sa51500Close();
+        GPIO_ClearPinOutput(ECALL_PWR_EN_PORT, ECALL_PWR_EN_PIN);
     }
     else if(1 == wakeMode)
     {
-
+        EcallHalSetSosLedRedState( 1 );
+        EcallHalSetSosLedGreenState( 1 );
+        EcallHalSetVehicleMute(1);
+        GPIO_SetPinOutput(ECALL_PWR_EN_PORT, ECALL_PWR_EN_PIN);
     }  
 }
 

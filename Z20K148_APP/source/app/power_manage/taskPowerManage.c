@@ -75,7 +75,7 @@ static const AutosarNmParameter_t g_netManageAutosarConfigure[] =
             .wakeupTime = 100,               // Maximum time to start sending network management messages repeatedly after transitioning from sleep mode to network mode
             .immediateTimes = 10,            // Number of network management messages sent at immediateCycleTime in the sub-state mode
             .busOffQuickTime = 0,            // Time for quick recovery after bus-off in milliseconds
-            .busOffSlowTime = 0,             // Time for slow recovery after bus-off in milliseconds
+            .busOffSlowTime = 180,             // Time for slow recovery after bus-off in milliseconds
             .busOffQuickTimes = 0,           // Number of quick recovery attempts after bus-off
             .busOffErrorEventLimitCount = 2, // Minimum number of bus-off DTC occurrences required
             .canBusErrorCallBack = Can1BusErrorEvent,
@@ -85,6 +85,9 @@ static const AutosarNmParameter_t g_netManageAutosarConfigure[] =
 static uint8_t g_communicationStartFlag = 0;
 static uint8_t g_powerOnState = 0;
 static kl30DetectState_e g_voltageComState = E_KL30_DETECT_LOW;
+static kl30DetectState_e g_voltageComTargetState = E_KL30_DETECT_LOW; // Target state to transition to
+static uint32_t g_voltageStateChangeCount = 0; // Counter for state hold time
+static const uint32_t g_voltageStateHoldTime = 20; // 20 cycles = 200ms (since each cycle is 10ms)
 static uint32_t g_diagRecoverTimerCount = 0;
 static uint8_t g_kl30DtcResetFlag = 0;
 static uint32_t g_diagFaultTimerCount = 0;
@@ -450,47 +453,83 @@ static void KL30DetectDtcProcess(uint32_t kl30Voltage)
 
 static void KL30DetectCommunicationProcess(uint32_t kl30Voltage)
 {
+    kl30DetectState_e targetState = g_voltageComState;
+    
+    // Determine target state based on current voltage
     if (E_KL30_DETECT_NORMAL == g_voltageComState)
     {
         if (kl30Voltage > (g_communicationMaxVoltage))
         {
-            g_voltageComState = E_KL30_DETECT_HIGH;
-            // to do stop communication
-            StopCommunication();
-            // Ng_AllDisableCommunication();
+            targetState = E_KL30_DETECT_HIGH;
         }
         else if (kl30Voltage < (g_communicationMinVoltage))
         {
-            g_voltageComState = E_KL30_DETECT_LOW;
-            // to do stop communication
-            // Ng_AllDisableCommunication();
-            StopCommunication();
+            targetState = E_KL30_DETECT_LOW;
         }
     }
     else if (E_KL30_DETECT_HIGH == g_voltageComState)
     {
         if (kl30Voltage < g_communicationMaxVoltage) // recover
         {
-            g_voltageComState = E_KL30_DETECT_NORMAL;
-            // start communication
-            // Nm_AllEnableCommunication();
-            StartCommunication();
-        }
-        else
-        {
-            StopCommunication();
+            targetState = E_KL30_DETECT_NORMAL;
         }
     }
     else if (E_KL30_DETECT_LOW == g_voltageComState)
     {
         if (kl30Voltage > g_communicationMinVoltage) // recover
         {
-            g_voltageComState = E_KL30_DETECT_NORMAL;
-            // start communication
-            // Nm_AllEnableCommunication();
-            StartCommunication();
+            targetState = E_KL30_DETECT_NORMAL;
+        }
+    }
+    
+    // Check if target state is different from current state
+    if (targetState != g_voltageComState)
+    {
+        // Check if we're already tracking this state change
+        if (targetState != g_voltageComTargetState)
+        {
+            // New state change detected, start counting
+            g_voltageComTargetState = targetState;
+            g_voltageStateChangeCount = 0;
         }
         else
+        {
+            // Continue counting for the same state change
+            g_voltageStateChangeCount++;
+            
+            // Check if state has been stable for required time (200ms)
+            if (g_voltageStateChangeCount >= g_voltageStateHoldTime)
+            {
+                // State has been stable long enough, perform state change
+                g_voltageComState = targetState;
+                
+                // Reset counters
+                g_voltageStateChangeCount = 0;
+                
+                // Execute actions based on new state
+                if (E_KL30_DETECT_NORMAL == g_voltageComState)
+                {
+                    // start communication
+                    // Nm_AllEnableCommunication();
+                    StartCommunication();
+                }
+                else
+                {
+                    // to do stop communication
+                    // Ng_AllDisableCommunication();
+                    StopCommunication();
+                }
+            }
+        }
+    }
+    else
+    {
+        // Target state is same as current state, reset counters
+        g_voltageStateChangeCount = 0;
+        g_voltageComTargetState = targetState;
+        
+        // If in abnormal state, ensure communication is stopped
+        if (E_KL30_DETECT_NORMAL != g_voltageComState)
         {
             StopCommunication();
         }

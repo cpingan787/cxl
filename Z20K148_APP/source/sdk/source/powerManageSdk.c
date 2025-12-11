@@ -617,10 +617,17 @@ static void PmStateWakeDelayProcess(uint32_t cycleTime)
     else if(PeripheralHalGetKl15Status() == 0)
     {
         PmNmGotoSleepMode();
-        g_pmManage.wakeDelayCount += cycleTime;
-        if(g_pmManage.wakeDelayCount >= 2000)               //delay for remote control cmd
+        if((g_pmManage.wakeupSource == PM_HAL_WAKEUP_SOURCE_MPU) || (PowerManageSdkGetMpuWakeUpFlag() == 0x01))
         {
-            g_pmManage.wakeDelayCount = 0;
+           g_pmManage.wakeDelayCount += cycleTime;
+            if(g_pmManage.wakeDelayCount >= 1000)               //delay for remote control cmd
+            {
+                g_pmManage.wakeDelayCount = 0;
+                g_pmManage.pmState = E_PM_STATE_CHECK_NM_STATUS;
+            }
+        }
+        else
+        {
             g_pmManage.pmState = E_PM_STATE_CHECK_NM_STATUS;
         }
     }
@@ -882,7 +889,7 @@ static void PmStateMcuSleepProcess(uint32_t cycleTime)
     g_pmManage.wakeDelayCount = 0;
     g_pmManage.kl30WakeCount = 0;
     TimerHalSetMode(0);
-    //EcallHalSetMode(0);
+    EcallHalSetMode(0);
     EcallHalSetSrsEn(0);
     LogHalSetMode(0);
     /*进入低功耗函数*/
@@ -902,6 +909,7 @@ static void PmStateMcuSleepProcess(uint32_t cycleTime)
     CanHalSetMode(1);
     /*设置peripheral模块进入正常模式*/
     PeripheralHalSetMode(1);
+    EcallHalSetMode(1);
     EcallHalSetSrsEn(1);
     /*设置蓝牙进入正常模式*/
     // BleHalSetMode(1);
@@ -913,7 +921,6 @@ static void PmStateMcuSleepProcess(uint32_t cycleTime)
     if((g_pmManage.wakeupSource == PM_HAL_WAKEUP_SOURCE_MPU) || (PowerManageSdkGetMpuWakeUpFlag() == 0x01))
     {
         /*MPU唤醒处理*/
-        PowerManageSdkSetMpuWakeUpFlag(0x00);
         g_pmManage.pmState = E_PM_STATE_GET_MPU_WAKE_SOURCE;
         MpuPowerSyncSdkSetWake(g_pmManage.wakeupSource);
     }
@@ -997,7 +1004,6 @@ static void PmStateGetMpuWakeSourceProcess(uint32_t cycleTime)
         /*获取MPU唤醒源完成，执行MCU唤醒*/
         g_pmNmLocalWakeupTime = 0U;
         g_pmManage.mpuWakeSource = PM_HAL_WAKEUP_SOURCE_MPU;
-        AutosarNmSdkSetSubNetWakeupRequest(0x7F);
         PmNmGotoAwakeMode(g_pmManage.wakeupSource);
         PmAwakeInitProcess(g_pmManage.wakeupSource);
         WakeDelayProcess(g_pmManage.wakeupSource,g_pmManage.mpuWakeSource ,&g_pmManage.wakeDelayTime);
@@ -1012,7 +1018,7 @@ static void PmStateGetMpuWakeSourceProcess(uint32_t cycleTime)
         g_pmManage.pmState = E_PM_STATE_WAKE_DELAY;
         WakeDelayProcess(g_pmManage.wakeupSource,g_pmManage.mpuWakeSource ,&g_pmManage.wakeDelayTime);
         g_pmManage.wakeDelayCount = 0;
-    }    
+    }
 }
 
 void PowerManageSdkCycleProcess(uint32_t cycleTime)

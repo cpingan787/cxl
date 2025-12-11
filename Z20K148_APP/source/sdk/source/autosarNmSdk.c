@@ -30,11 +30,11 @@
 /****************************** Macro Definitions ******************************/
 #define AUTOSAR_NET_MANAGE_MAX_INSTANCE         (1U)
 #define NM_MESSAGE_PDU_LENGTH                   (8U)
-#define NM_TRANS_CANFD_ENABLE                   (1U)
+#define NM_TRANS_CANFD_ENABLE                   (0U)
 #define NM_E_OK                                 (0U)
 #define NM_E_NOT_EXECUTED                       (2U)
 #define NM_E_NOT_OK                             (3U)
-#define NM_BUS_OFF_ERROR_RESET_MSG_ENABLE       (0U)
+#define NM_BUS_OFF_ERROR_RESET_MSG_ENABLE       (1U)
 
 //Network management message config
 #define NM_MESSAGE_DEFAULT_VALUE                (0x00)
@@ -1211,10 +1211,15 @@ static void BusOffErrorResetCanNMTransmit(uint8_t index)
 {
     uint32_t	canId;
     uint8_t 	CBV;
+    int16_t     ret = 0U;
     uint8_t 	canData[8];
+    uint8_t     ignStatus = 0;
+    uint8_t     canStatus = 0;
     uint8_t     wakeupSource;
 
     StartMsgCycleTimer(index);
+    ignStatus = PeripheralHalGetKl15Status();
+    AutosarNmSdkGetCanStatus(index,&canStatus);
     if(g_netManage[index].passiveMode)
     {
         return;
@@ -1231,11 +1236,7 @@ static void BusOffErrorResetCanNMTransmit(uint8_t index)
 
     //2: Origin of the wake up 
     wakeupSource = PowerManageGetLastWakeupSource();
-    if((wakeupSource >= PM_HAL_WAKEUP_SOURCE_CAN1) && (wakeupSource <= PM_HAL_WAKEUP_SOURCE_CAN8))
-    {
-        canData[2] = NM_CAN_MESSAGE_WAKEUP_VALUE;
-    }
-    else if((wakeupSource == PM_HAL_WAKEUP_SOURCE_KL15)||(PeripheralHalGetKl15Status() != 0))     //cold power on no wake up flag
+    if(ignStatus == NM_IGN_ON)                          //15 prio level 1
     {
         canData[2] = NM_IGN_ON_WAKEUP_VALUE;
     }
@@ -1243,19 +1244,33 @@ static void BusOffErrorResetCanNMTransmit(uint8_t index)
     {
         canData[2] = NM_TSP_MESSAGE_WAKEUP_VALUE;
     }
-    else
+    else if(canStatus == 1)
     {
-        canData[2] = NM_WAKE_UP_REASON_DEFALUT_VALUE;
+        canData[2] = NM_CAN_MESSAGE_WAKEUP_VALUE;
+    }
+    else if((wakeupSource != PM_HAL_WAKEUP_SOURCE_CAN2) && (wakeupSource != PM_HAL_WAKEUP_SOURCE_KL15))
+    {
+        canData[2] = wakeupSource;                      //for special situation find problem
     }
 
     //3:SubNet wake up request
     canData[3] = g_nmSubNetWakeupRequestValue;
 
     //4:Origin of keeping network awake,reserve
+    canData[4] = ignStatus;
 
-    if(CanHalTransmit(g_netManage[index].canHandle, canId, canData, NM_MESSAGE_PDU_LENGTH, NM_TRANS_CANFD_ENABLE) != 0)
+    //7.WUP: fixed to the value 0x4C
+    canData[7] = NM_WUP_VALUE;
+
+    ret = CanHalTransmit(g_netManage[index].canHandle, canId, canData, NM_MESSAGE_PDU_LENGTH, NM_TRANS_CANFD_ENABLE);
+    if(ret == 0)
     {
-        TBOX_PRINT("net Manage CanDriverHalTransmit error\r\n");
+        g_netManage[index].busOffTimeCount = 0;
+        //NetManageBusOffErrorCallBack(index,0x00);
+    }
+    else
+    {
+        TBOX_PRINT("net Manage CanDriverHalTransmit error,error code = %d\r\n",ret);
     }
 }
 #endif

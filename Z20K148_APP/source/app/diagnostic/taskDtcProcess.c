@@ -1764,7 +1764,7 @@ void GetSnapshotRecordData(DtcSnapshotRecordGlobal_t *SnapshotRecordData)
   // TBOX_PRINT("DTC Snapshot ECU Voltage: %d\r\n", SnapshotRecordDataTemp->ecuVoltage);
 
   CanParseSdkReadSignal(VEHICLE_CAN_UNPACK_FORMAT_MOTO_LSB, &pCan0SignalConfigure->BCS_VehSpd, &dataValue);
-  SnapshotRecordDataTemp->vehicleSpeed = (uint16_t)dataValue;
+  SnapshotRecordDataTemp->vehicleSpeed = (uint16_t)(dataValue / 0.05625f);
 
   CanParseSdkReadSignal(VEHICLE_CAN_UNPACK_FORMAT_MOTO_LSB, &pCan0SignalConfigure->EMS_EngSpd, &dataValue);
 

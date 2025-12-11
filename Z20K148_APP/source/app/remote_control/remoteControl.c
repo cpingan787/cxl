@@ -499,7 +499,6 @@ static void RemoteControlForbidSleepCheck(void)
             g_remoteControlEcuId = ECU_NULL_E;
             g_remoteControlCmdId = CMD_DEFAULT_E;
             g_remoteControlParamValue = 0U;
-            //RemoteControlSetKeepWakeFlag(RemoteControlWakeUpFlag_NotKeep_e);
             AutosarNmSdkClearSubNetWakeupRequest();
             RemoteControlSetTotalState(RemoteControlStateIdle);
         }
@@ -559,6 +558,7 @@ static void RemoteControlStartStateMachine(void)
         g_remoteControlParamValue = g_remoteControlReceivePack.pDataBuffer[4];
         TBOX_PRINT("valid cmd, ecuId: %d, cmdId: %d, paramValue: %d\r\n", g_remoteControlEcuId, g_remoteControlCmdId, g_remoteControlParamValue);
         RemoteControlSetKeepWakeFlag(RemoteControlWakeUpFlag_Keep_e);
+        AutosarNmSdkSetSubNetWakeupRequest(0x7F);
         RemoteControlSetTotalState(RemoteControlStatePreCheck);
         TimerHalStartTime(g_remoteControlSleepForrbidHandle, REMOTE_CONTROL_SLEEP_FORBID_TIME);
     }
@@ -659,6 +659,10 @@ static RemoteControlProcessResult_t RemoteControlPreCheckProcess(void)
                 {
                     RemoteControlSetTotalState(RemoteControlStateCertification);
                 }
+            }
+            else
+            {
+                RemoteControlSetTotalState(RemoteControlStateCertification);
             }
         }
     }
@@ -1059,7 +1063,6 @@ static void RemoteControlSendResultProcess(void)
     g_remoteControlEcuId = ECU_NULL_E;
     g_remoteControlCmdId = CMD_DEFAULT_E;
     g_remoteControlParamValue = 0U;
-    //RemoteControlSetKeepWakeFlag(RemoteControlWakeUpFlag_NotKeep_e);
     AutosarNmSdkClearSubNetWakeupRequest();
     RemoteControlSetTotalState(RemoteControlStateIdle);
 }

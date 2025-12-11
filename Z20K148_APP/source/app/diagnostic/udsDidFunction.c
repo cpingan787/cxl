@@ -5456,7 +5456,7 @@ int16_t Service22ReadVehicleSpeed(uint8_t *pData, uint16_t *pLength)
   CanParseSdkReadSignal(VEHICLE_CAN_UNPACK_FORMAT_INTEL, &pCan0SignalConfigure->BCS_VehSpd, &physical_speed_kph);
 
   // Raw Value
-  raw_value = (uint16_t)physical_speed_kph;
+  raw_value = (uint16_t)(physical_speed_kph / 0.05625f);
 
   // 大端模式
   pData[0] = (raw_value >> 8) & 0xFF;
