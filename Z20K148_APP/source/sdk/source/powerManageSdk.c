@@ -1018,6 +1018,16 @@ static void PmStateGetMpuWakeSourceProcess(uint32_t cycleTime)
         g_pmManage.pmState = E_PM_STATE_WAKE_DELAY;
         WakeDelayProcess(g_pmManage.wakeupSource,g_pmManage.mpuWakeSource ,&g_pmManage.wakeDelayTime);
         g_pmManage.wakeDelayCount = 0;
+    } 
+    else if(RemoteControlGetKeepWakeFlag() == 1)   
+    {
+        g_pmNmLocalWakeupTime = 0U;
+        g_pmManage.mpuWakeSource = PM_HAL_WAKEUP_SOURCE_MPU;
+        PmNmGotoAwakeMode(g_pmManage.wakeupSource);
+        PmAwakeInitProcess(g_pmManage.wakeupSource);
+        WakeDelayProcess(g_pmManage.wakeupSource,g_pmManage.mpuWakeSource ,&g_pmManage.wakeDelayTime);
+        g_pmManage.wakeDelayCount = 0;
+        g_pmManage.pmState = E_PM_STATE_WAKE_DELAY;
     }
 }
 

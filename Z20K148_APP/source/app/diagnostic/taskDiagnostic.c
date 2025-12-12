@@ -214,10 +214,10 @@ static const WdidInfor_t g_Service2EFunMapList[] =
         {0x031C, 50, Service2EWriteTspDomain1, E_UDS_SECURITY_LEVEL1},         // 0x031C_cxl
         {0x1061, 32, Service2EWriteApn3, E_UDS_SECURITY_LEVEL1},               // 0x1061_cxl
         {0xB2CB, 50, Service2EWriteOtaDomainName, E_UDS_SECURITY_LEVEL1},      // 0xB2CB_cxl //104F_cxl
-        {0x104F, 50, Service2EWriteOtaDomainName, E_UDS_SECURITY_LEVEL1},      // 0xB2CB_cxl //104F_cxl
+        //{0x104F, 50, Service2EWriteOtaDomainName, E_UDS_SECURITY_LEVEL1},      // 0xB2CB_cxl //104F_cxl
 
         {0xB2CC, 8, Service2EWriteOtaPort, E_UDS_SECURITY_LEVEL1},               // 0xB2CC_cxl
-        {0x1050, 8, Service2EWriteOtaPort, E_UDS_SECURITY_LEVEL1},               // 0x1050_cxl B2CC_cxl
+        //{0x1050, 8, Service2EWriteOtaPort, E_UDS_SECURITY_LEVEL1},               // 0x1050_cxl B2CC_cxl
         {0x1052, 50, Service2EWritePkiDomainName, E_UDS_SECURITY_LEVEL1},        // 0x1052_cxl
         {0x1053, 8, Service2EWritePkiPort, E_UDS_SECURITY_LEVEL1},               // 0x1053_cxl
         {0x105E, 8, Service2EWriteTspPort3, E_UDS_SECURITY_LEVEL1},              // 0x105E_cxl
@@ -468,9 +468,9 @@ static const RdidInfor_t g_Service22FunMapList[] =
         {0xB2E6, 64, Service22ReadFunctionConfig},                                                // 0xB2E6_cxl
         {0xB257, 2, Service22ReadEthLineFaultInfo},                                               // 0xB257_cxl
         {0xB2CB, 50, Service22ReadOtaDomainName},                                                 //   0xB2CB_cxl //104F_cxl
-        {0x104F, 50, Service22ReadOtaDomainName},                                                 // 0xB2CB_cxl //104F_cxl
+        //{0x104F, 50, Service22ReadOtaDomainName},                                                 // 0xB2CB_cxl //104F_cxl
         {0xB2CC, 8, Service22ReadOtaPort},                                                        //   0xB2CC_cxl
-        {0x1050, 8, Service22ReadOtaPort},                                                        // 0x1050_cxl B2CC_cxl
+        //{0x1050, 8, Service22ReadOtaPort},                                                        // 0x1050_cxl B2CC_cxl
         {0x1052, 50, Service22ReadPkiDomainName},                                                 //   0x1052_cxl
         {0x1053, 8, Service22ReadPkiPort},                                                        //    0x1053_cxl
         {0x0110, 1, Service22ReadManufactoryMode},                                                // 工厂模式 0x0110_cxl

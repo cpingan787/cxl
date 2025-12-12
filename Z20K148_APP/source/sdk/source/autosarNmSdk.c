@@ -1209,68 +1209,72 @@ static void CanHardwareControllerProcess(uint8_t index)
  *************************************************/
 static void BusOffErrorResetCanNMTransmit(uint8_t index)
 {
-    uint32_t	canId;
-    uint8_t 	CBV;
-    int16_t     ret = 0U;
-    uint8_t 	canData[8];
-    uint8_t     ignStatus = 0;
-    uint8_t     canStatus = 0;
-    uint8_t     wakeupSource;
-
-    StartMsgCycleTimer(index);
-    ignStatus = PeripheralHalGetKl15Status();
-    AutosarNmSdkGetCanStatus(index,&canStatus);
-    if(g_netManage[index].passiveMode)
+    if((E_NETMANAGESTATE_STARTUPSTATE == g_netManage[index].netManageState)||
+		(E_NETMANAGESTATE_NORMALOPERATIONSTATE == g_netManage[index].netManageState))
     {
-        return;
-    }
-    memset(canData,NM_MESSAGE_DEFAULT_VALUE,sizeof(canData));
-    canId = g_pNmConfigure[index].BaseAddress + g_pNmConfigure[index].NodeId; 
+        uint32_t	canId;
+        uint8_t 	CBV;
+        int16_t     ret = 0U;
+        uint8_t 	canData[8];
+        uint8_t     ignStatus = 0;
+        uint8_t     canStatus = 0;
+        uint8_t     wakeupSource;
 
-    //0:Source Node Identifier
-    canData[0] = g_pNmConfigure[index].NodeId;     
+        StartMsgCycleTimer(index);
+        ignStatus = PeripheralHalGetKl15Status();
+        AutosarNmSdkGetCanStatus(index,&canStatus);
+        if(g_netManage[index].passiveMode)
+        {
+            return;
+        }
+        memset(canData,NM_MESSAGE_DEFAULT_VALUE,sizeof(canData));
+        canId = g_pNmConfigure[index].BaseAddress + g_pNmConfigure[index].NodeId; 
 
-    //1:Control Bit Vector
-    CBV = NM_CBV_DEFAULT_VALUE;
-    canData[1] = CBV;    //GAC reserve this byte 
+        //0:Source Node Identifier
+        canData[0] = g_pNmConfigure[index].NodeId;     
 
-    //2: Origin of the wake up 
-    wakeupSource = PowerManageGetLastWakeupSource();
-    if(ignStatus == NM_IGN_ON)                          //15 prio level 1
-    {
-        canData[2] = NM_IGN_ON_WAKEUP_VALUE;
-    }
-    else if(wakeupSource == PM_HAL_WAKEUP_SOURCE_MPU)
-    {
-        canData[2] = NM_TSP_MESSAGE_WAKEUP_VALUE;
-    }
-    else if(canStatus == 1)
-    {
-        canData[2] = NM_CAN_MESSAGE_WAKEUP_VALUE;
-    }
-    else if((wakeupSource != PM_HAL_WAKEUP_SOURCE_CAN2) && (wakeupSource != PM_HAL_WAKEUP_SOURCE_KL15))
-    {
-        canData[2] = wakeupSource;                      //for special situation find problem
-    }
+        //1:Control Bit Vector
+        CBV = NM_CBV_DEFAULT_VALUE;
+        canData[1] = CBV;    //GAC reserve this byte 
 
-    //3:SubNet wake up request
-    canData[3] = g_nmSubNetWakeupRequestValue;
+        //2: Origin of the wake up 
+        wakeupSource = PowerManageGetLastWakeupSource();
+        if(ignStatus == NM_IGN_ON)                          //15 prio level 1
+        {
+            canData[2] = NM_IGN_ON_WAKEUP_VALUE;
+        }
+        else if(wakeupSource == PM_HAL_WAKEUP_SOURCE_MPU)
+        {
+            canData[2] = NM_TSP_MESSAGE_WAKEUP_VALUE;
+        }
+        else if(canStatus == 1)
+        {
+            canData[2] = NM_CAN_MESSAGE_WAKEUP_VALUE;
+        }
+        else if((wakeupSource != PM_HAL_WAKEUP_SOURCE_CAN2) && (wakeupSource != PM_HAL_WAKEUP_SOURCE_KL15))
+        {
+            canData[2] = wakeupSource;                      //for special situation find problem
+        }
 
-    //4:Origin of keeping network awake,reserve
-    canData[4] = ignStatus;
+        //3:SubNet wake up request
+        canData[3] = g_nmSubNetWakeupRequestValue;
 
-    //7.WUP: fixed to the value 0x4C
-    canData[7] = NM_WUP_VALUE;
+        //4:Origin of keeping network awake,reserve
+        canData[4] = ignStatus;
 
-    ret = CanHalTransmit(g_netManage[index].canHandle, canId, canData, NM_MESSAGE_PDU_LENGTH, NM_TRANS_CANFD_ENABLE);
-    if(ret == 0)
-    {
-        g_netManage[index].busOffTimeCount = 0;
-        //NetManageBusOffErrorCallBack(index,0x00);
-    }
-    else
-    {
-        TBOX_PRINT("net Manage CanDriverHalTransmit error,error code = %d\r\n",ret);
+        //7.WUP: fixed to the value 0x4C
+        canData[7] = NM_WUP_VALUE;
+
+        ret = CanHalTransmit(g_netManage[index].canHandle, canId, canData, NM_MESSAGE_PDU_LENGTH, NM_TRANS_CANFD_ENABLE);
+        if(ret == 0)
+        {
+            g_netManage[index].busOffTimeCount = 0;
+            //NetManageBusOffErrorCallBack(index,0x00);
+        }
+        else
+        {
+            TBOX_PRINT("net Manage CanDriverHalTransmit error,error code = %d\r\n",ret);
+        }
     }
 }
 #endif

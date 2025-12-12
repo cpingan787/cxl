@@ -1029,10 +1029,11 @@ static void DtcCycleProcess(void)
   }
   else if (E_DTC_PROCESS_STATE_KL15OFF == g_dtcProcessState)
   {
-    if (sleepFlag)
+    if (sleepFlag == 0)
     {
       g_dtcProcessState = E_DTC_PROCESS_STATE_SLEEP;
       PowerManageSdkSetSleepAck(g_sleepCommandHandle);
+      
     }
     else if (PeripheralHalGetKl15Status())
     {
