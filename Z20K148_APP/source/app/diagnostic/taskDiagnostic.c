@@ -3239,6 +3239,7 @@ void TaskEcuDiagnostic(void *pvParameters)
   uint8_t isS3ServerTimerActive = 0;
 
   g_tpHandle = CanTpSdkInitialize(TBOX_CAN_CHANNEL_2, &g_tpParameter, &g_tpBuffer);
+  abcinit();
 
   if (g_tpHandle < 0)
   {
@@ -3283,6 +3284,8 @@ void TaskEcuDiagnostic(void *pvParameters)
         }
       }
     }
+    
+aaabb();
     uint8_t currentTesterPresent = ((g_currentSession != E_DEFAULT_SESSION) || (isS3ServerTimerActive == 1)) ? 1 : 0;
 
     if (currentTesterPresent != g_isTesterPresent)

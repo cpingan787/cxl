@@ -4,10 +4,8 @@
 #include "logHal.h"
 #include "FreeRTOS.h"
 #include "task.h"
-#define MPU_SYNC_EOL_TEST_AID 0x05
-#define MPU_SYNC_EOL_TEST_MID 0x10
-#define MPU_SYNC_EOL_TEST_SUBCMD_REQ 0x01
-#define MPU_SYNC_EOL_TEST_SUBCMD_RESP 0x02
+#include "timerHal.h"
+#include "taskDiagnostic.h"
 
 #define PASSTHROUGH_AID 0x05
 #define PASSTHROUGH_MID 0x10
@@ -22,46 +20,99 @@ static uint8_t g_recvDataBuffer[300] = {0};
 static uint8_t g_mpuDataBuffer[512] = {0};
 static MpuHalDataPack_t g_mpuDataPack;
 
+/* 修改 CanPassthrough_RequestAndGetResponse 函数 */
+
+
+void abcinit()
+{
+    // TimerHalOpen
+}
+
+
+void aaabb()
+{
+    if (state == IDLE)
+    {
+        // do nothing
+    }
+    else if (state == TX_DATA_FULL)
+    {
+        MpuHalTransmit(g_mpuHandle, &g_mpuDataPack, MPU_HAL_UART_MODE);
+        // TimerHalStartTime()
+        state = WAIT_MPU_RESPONSE;
+        state = WAIT_MPU_RESPONSE;
+    }
+    else if (state == WAIT_MPU_RESPONSE)
+    {
+        ret = MpuHalReceive(g_mpuHandle, &g_dataPack, 0);
+        if (ret == 0)
+        {
+            // TimerHalStopTime
+            uint8_t subCommand = g_dataPack.subcommand & 0x7F;
+            if (g_dataPack.aid == PASSTHROUGH_AID &&
+                g_dataPack.mid == PASSTHROUGH_MID &&
+                subCommand == PASSTHROUGH_SUB_MPU_TO_MCU &&
+                g_mpuDataBuffer[2] == g_dataBuffer[2] &&
+                g_mpuDataBuffer[1] == g_dataBuffer[1])
+            {
+                memcpy(pUdsResponse, g_dataPack.pDataBuffer, g_dataPack.dataLength);
+                *pRespLength = g_dataPack.dataLength;
+                rxSuccess = 1;
+                state = REC_OK
+            }
+            else
+            {
+            }
+        }
+        // 等待接收响应的逻辑
+        // 如果接收到响应，处理响应数据
+        // 如果超时未接收到响应，可能需要重新发送数据
+    }
+    else if (state == REC_OK)
+    {
+        // DiagnosticDataTransmit
+        state = IDLE;
+    }
+    else
+    {
+        // error
+    }
+
+    if (TimerHalIsTimeout(timerHandle) == 0)
+    {
+        // 超时处理逻辑
+        state = IDLE; // 重新发送数据
+    }
+}
+
 int16_t CanPassthrough_RequestAndGetResponse(const uint8_t *pUdsRequest, uint16_t reqLength,
                                              uint8_t *pUdsResponse, uint16_t *pRespLength)
 {
     int16_t ret;
     uint16_t repeatCount = 0;
     uint8_t rxSuccess = 0;
-    uint16_t maxRepeatCount = 2;
+
+    uint16_t maxRepeatCount = 5;
 
     if (pUdsRequest == NULL || pUdsResponse == NULL || pRespLength == NULL)
     {
         return -1;
     }
 
-    // if (reqLength >= 3 && pUdsRequest[0] == 0x2E && pUdsRequest[1] == 0xB2 && pUdsRequest[2] == 0x89)
-    // {
-    //     maxRepeatCount = 10; 
-    // }
-    // ---------------------------------------------------------
-
     g_mpuDataPack.aid = PASSTHROUGH_AID;
     g_mpuDataPack.mid = PASSTHROUGH_MID;
-    g_mpuDataPack.subcommand = PASSTHROUGH_SUB_MCU_TO_MPU; // 0x22
+    g_mpuDataPack.subcommand = PASSTHROUGH_SUB_MCU_TO_MPU;
     memcpy(g_mpuDataBuffer, pUdsRequest, reqLength);
     g_mpuDataPack.pDataBuffer = g_mpuDataBuffer;
     g_mpuDataPack.dataLength = reqLength;
 
+    uint8_t clearCnt = 0;
     g_dataPack.pDataBuffer = g_dataBuffer;
     g_dataPack.dataBufferSize = sizeof(g_dataBuffer);
-    while (MpuHalReceive(g_mpuHandle, &g_dataPack, 0) == 0)
-    {
-    }
-
-    MpuHalTransmit(g_mpuHandle, &g_mpuDataPack, MPU_HAL_UART_MODE);
-
-    g_dataPack.pDataBuffer = g_dataBuffer;
-    g_dataPack.dataBufferSize = sizeof(g_dataBuffer);
+    state = TX_DATA_FULL;
 
     do
     {
-        ret = MpuHalReceive(g_mpuHandle, &g_dataPack, 100);
 
         if (ret == 0)
         {
@@ -79,7 +130,6 @@ int16_t CanPassthrough_RequestAndGetResponse(const uint8_t *pUdsRequest, uint16_
             }
             else
             {
-                // DO NOT
             }
         }
         else
@@ -89,9 +139,7 @@ int16_t CanPassthrough_RequestAndGetResponse(const uint8_t *pUdsRequest, uint16_
             {
                 break;
             }
-
             MpuHalTransmit(g_mpuHandle, &g_mpuDataPack, MPU_HAL_UART_MODE);
-            vTaskDelay(50);
         }
 
     } while (1);
