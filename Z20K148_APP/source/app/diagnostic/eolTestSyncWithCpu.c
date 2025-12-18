@@ -6,7 +6,7 @@
 #include "timerHal.h"
 #include "FreeRTOS.h"
 #include "task.h"
-
+#include "logHal.h"
 /* 协议常量定义 */
 #define PASSTHROUGH_AID 0x05
 #define PASSTHROUGH_MID 0x10
