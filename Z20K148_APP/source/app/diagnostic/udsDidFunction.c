@@ -6303,15 +6303,9 @@ int16_t Service22ReadPkiApply(uint8_t *pData, uint16_t *pLength)
 int16_t Service22ReadPkiCertStatus(uint8_t *pData, uint16_t *pLength)
 {
   uint8_t pki_status = 0x00;
-  int16_t ret;
+  //int16_t ret;
 
-  ret = EolTestSyncWithCpuGetPkiStatus(&pki_status);
-
-  if (ret != 0)
-  {
-    pki_status = 0x00;
-  }
-
+  //ret = EolTestSyncWithCpuGetPkiStatus(&pki_status);
   pData[0] = pki_status;
   *pLength = 1;
 

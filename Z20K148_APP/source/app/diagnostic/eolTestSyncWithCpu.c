@@ -1,397 +1,250 @@
-#include "string.h"
-#include "mpuHal.h"
 #include "eolTestSyncWithCpu.h"
-#include "logHal.h"
+#include <string.h>
+#include <stdint.h>
+#include "mpuHal.h"
+#include "taskDtcProcess.h"
+#include "timerHal.h"
 #include "FreeRTOS.h"
 #include "task.h"
-#include "timerHal.h"
-#include "taskDiagnostic.h"
 
+/* 协议常量定义 */
 #define PASSTHROUGH_AID 0x05
 #define PASSTHROUGH_MID 0x10
 #define PASSTHROUGH_SUB_MCU_TO_MPU 0x22
 #define PASSTHROUGH_SUB_MPU_TO_MCU 0x23
 
+#define SYNC_TIMEOUT_MS 100
+
+/* 静态变量 */
 static int16_t g_mpuHandle = -1;
-static uint8_t g_dataBuffer[300] = {0};
-static MpuHalDataPack_t g_dataPack;
-static uint8_t g_recvDataBuffer[300] = {0};
+static int16_t g_timerHandle = -1;
 
-static uint8_t g_mpuDataBuffer[512] = {0};
-static MpuHalDataPack_t g_mpuDataPack;
+static volatile EolSyncState_e g_eolState = EOL_STATE_IDLE;
 
-/* 修改 CanPassthrough_RequestAndGetResponse 函数 */
+// 发送缓冲区
+static uint8_t g_mpuTxBuffer[512];
+static MpuHalDataPack_t g_mpuTxPack;
 
+// 接收缓冲区
+static uint8_t g_mpuRxDataBuffer[512];
+static MpuHalDataPack_t g_mpuRxPack;
+static uint8_t g_recvInternalBuffer[600];
 
-void abcinit()
-{
-    // TimerHalOpen
-}
+// 回调与同步结果保存
+static UdsResponseCallback_t g_currentCallback = NULL;
+static uint8_t g_udsRespBuffer[512];
+static uint16_t g_syncRespLen = 0;
+static int16_t g_syncResult = -1;
 
-
-void aaabb()
-{
-    if (state == IDLE)
-    {
-        // do nothing
-    }
-    else if (state == TX_DATA_FULL)
-    {
-        MpuHalTransmit(g_mpuHandle, &g_mpuDataPack, MPU_HAL_UART_MODE);
-        // TimerHalStartTime()
-        state = WAIT_MPU_RESPONSE;
-        state = WAIT_MPU_RESPONSE;
-    }
-    else if (state == WAIT_MPU_RESPONSE)
-    {
-        ret = MpuHalReceive(g_mpuHandle, &g_dataPack, 0);
-        if (ret == 0)
-        {
-            // TimerHalStopTime
-            uint8_t subCommand = g_dataPack.subcommand & 0x7F;
-            if (g_dataPack.aid == PASSTHROUGH_AID &&
-                g_dataPack.mid == PASSTHROUGH_MID &&
-                subCommand == PASSTHROUGH_SUB_MPU_TO_MCU &&
-                g_mpuDataBuffer[2] == g_dataBuffer[2] &&
-                g_mpuDataBuffer[1] == g_dataBuffer[1])
-            {
-                memcpy(pUdsResponse, g_dataPack.pDataBuffer, g_dataPack.dataLength);
-                *pRespLength = g_dataPack.dataLength;
-                rxSuccess = 1;
-                state = REC_OK
-            }
-            else
-            {
-            }
-        }
-        // 等待接收响应的逻辑
-        // 如果接收到响应，处理响应数据
-        // 如果超时未接收到响应，可能需要重新发送数据
-    }
-    else if (state == REC_OK)
-    {
-        // DiagnosticDataTransmit
-        state = IDLE;
-    }
-    else
-    {
-        // error
-    }
-
-    if (TimerHalIsTimeout(timerHandle) == 0)
-    {
-        // 超时处理逻辑
-        state = IDLE; // 重新发送数据
-    }
-}
-
-int16_t CanPassthrough_RequestAndGetResponse(const uint8_t *pUdsRequest, uint16_t reqLength,
-                                             uint8_t *pUdsResponse, uint16_t *pRespLength)
-{
-    int16_t ret;
-    uint16_t repeatCount = 0;
-    uint8_t rxSuccess = 0;
-
-    uint16_t maxRepeatCount = 5;
-
-    if (pUdsRequest == NULL || pUdsResponse == NULL || pRespLength == NULL)
-    {
-        return -1;
-    }
-
-    g_mpuDataPack.aid = PASSTHROUGH_AID;
-    g_mpuDataPack.mid = PASSTHROUGH_MID;
-    g_mpuDataPack.subcommand = PASSTHROUGH_SUB_MCU_TO_MPU;
-    memcpy(g_mpuDataBuffer, pUdsRequest, reqLength);
-    g_mpuDataPack.pDataBuffer = g_mpuDataBuffer;
-    g_mpuDataPack.dataLength = reqLength;
-
-    uint8_t clearCnt = 0;
-    g_dataPack.pDataBuffer = g_dataBuffer;
-    g_dataPack.dataBufferSize = sizeof(g_dataBuffer);
-    state = TX_DATA_FULL;
-
-    do
-    {
-
-        if (ret == 0)
-        {
-            uint8_t subCommand = g_dataPack.subcommand & 0x7F;
-            if (g_dataPack.aid == PASSTHROUGH_AID &&
-                g_dataPack.mid == PASSTHROUGH_MID &&
-                subCommand == PASSTHROUGH_SUB_MPU_TO_MCU &&
-                g_mpuDataBuffer[2] == g_dataBuffer[2] &&
-                g_mpuDataBuffer[1] == g_dataBuffer[1])
-            {
-                memcpy(pUdsResponse, g_dataPack.pDataBuffer, g_dataPack.dataLength);
-                *pRespLength = g_dataPack.dataLength;
-                rxSuccess = 1;
-                break;
-            }
-            else
-            {
-            }
-        }
-        else
-        {
-            repeatCount++;
-            if (repeatCount >= maxRepeatCount)
-            {
-                break;
-            }
-            MpuHalTransmit(g_mpuHandle, &g_mpuDataPack, MPU_HAL_UART_MODE);
-        }
-
-    } while (1);
-
-    if (rxSuccess)
-    {
-        return 0; // 成功
-    }
-    else
-    {
-        return -1; // 失败
-    }
-}
+/* 初始化函数 */
 void EolTestSyncWithCpuInit(void)
 {
     MpuHalFilter_t filter;
+
     g_mpuHandle = MpuHalOpen();
+    g_timerHandle = TimerHalOpen();
+
+    // 初始化缓冲区
+    memset(g_mpuTxBuffer, 0, sizeof(g_mpuTxBuffer));
+    memset(g_recvInternalBuffer, 0, sizeof(g_recvInternalBuffer));
 
     filter.aid = PASSTHROUGH_AID;
     filter.midMin = PASSTHROUGH_MID;
     filter.midMax = PASSTHROUGH_MID;
 
     MpuHalSetRxFilter(g_mpuHandle, &filter);
-    MpuHalSetRxBuffer(g_mpuHandle, g_recvDataBuffer, sizeof(g_recvDataBuffer));
+    MpuHalSetRxBuffer(g_mpuHandle, g_recvInternalBuffer, sizeof(g_recvInternalBuffer));
 
-    return;
+    g_eolState = EOL_STATE_IDLE;
 }
-#if 0
-static void PackRequestControlCpuInterface(uint8_t controlItem, uint8_t *pControlData, uint16_t ControlDataLength)
+
+int16_t EolSync_StartRequest(const uint8_t *pRequest, uint16_t reqLen, UdsResponseCallback_t callback)
 {
-    uint16_t i = 0;
-    uint16_t lenth = 0;
-
-    g_mpuDataPack.aid = MPU_SYNC_EOL_TEST_AID;
-    g_mpuDataPack.mid = MPU_SYNC_EOL_TEST_MID;
-    g_mpuDataPack.subcommand = MPU_SYNC_EOL_TEST_SUBCMD_REQ;
-
-    memset(g_mpuDataBuffer, 0, sizeof(g_mpuDataBuffer));
-
-    g_mpuDataPack.dataBufferSize = sizeof(g_mpuDataBuffer);
-    g_mpuDataBuffer[0] = controlItem;
-    g_mpuDataBuffer[1] = ControlDataLength & 0xFF;
-    for (i = 0; i < ControlDataLength; i++)
+    if (g_eolState != EOL_STATE_IDLE)
     {
-        g_mpuDataBuffer[2 + i] = pControlData[i];
+        return -1; // 忙碌
     }
 
-    lenth = ControlDataLength + 2;
-    g_mpuDataPack.pDataBuffer = g_mpuDataBuffer;
-    g_mpuDataPack.dataLength = lenth;
+    memcpy(g_mpuTxBuffer, pRequest, reqLen);
 
-    return;
+    g_mpuTxPack.aid = PASSTHROUGH_AID;
+    g_mpuTxPack.mid = PASSTHROUGH_MID;
+    g_mpuTxPack.subcommand = PASSTHROUGH_SUB_MCU_TO_MPU;
+    g_mpuTxPack.pDataBuffer = g_mpuTxBuffer;
+    g_mpuTxPack.dataLength = reqLen;
+
+    g_currentCallback = callback;
+
+    g_eolState = EOL_STATE_SEND_REQ;
+
+    return 0;
 }
-#endif
-int16_t EolTestSyncWithCpuTransmit(uint8_t item, uint8_t *pData, uint16_t length)
+
+void EolTestSyncMainLoop(void)
 {
-#if 0
     int16_t ret;
-    uint16_t repeatCount;
-    uint8_t rxSucess;
-    ret = 0;
-    repeatCount = 0;
-    rxSucess = 0;
-    // if(CheckControlItemIsValid(item)!=0)
-    //{
-    //     return -1;
-    // }
-    g_dataPack.pDataBuffer = g_dataBuffer;
-    g_dataPack.dataBufferSize = sizeof(g_dataBuffer);
-    do
-    {
-        if (repeatCount >= 1)
-        {
-            ret = 1;
-            break;
-        }
-        // UartDriverHalReceiveWait(m_uartHandle,m_uartRxData,&rxLength,0);
-        MpuHalReceive(g_mpuHandle, &g_dataPack, 0);
-        PackRequestControlCpuInterface(item, pData, length);
-        MpuHalTransmit(g_mpuHandle, &g_mpuDataPack, MPU_HAL_UART_MODE);
-        while (1)
-        {
-            ret = MpuHalReceive(g_mpuHandle, &g_dataPack, 150);
-            if (ret == 0)
-            {
-                uint8_t subCommand;
-                uint8_t mid;
-                mid = g_dataPack.mid;
-                subCommand = g_dataPack.subcommand & 0x7F;
-                if (MPU_SYNC_EOL_TEST_MID == mid)
-                {
-                    if ((MPU_SYNC_EOL_TEST_SUBCMD_RESP == subCommand) && (g_dataPack.pDataBuffer[1] == item))
-                    {
-                        // check return value is success
-                        if (g_dataPack.pDataBuffer[0] != 0)
-                        {
-                            ret = 1; // operation failed
-                        }
-                        rxSucess = 1;
-                        break;
-                    }
-                }
-            }
-            else
-            {
-                repeatCount++;
-                break;
-            }
-        }
-        if (rxSucess)
-        {
-            break;
-        }
-    } while (1);
 
-    if (rxSucess)
+    if (g_eolState == EOL_STATE_IDLE)
     {
-        return 0;
+        return;
     }
-    else
+
+    if (g_eolState == EOL_STATE_SEND_REQ)
+    {
+        // 发送请求
+        MpuHalTransmit(g_mpuHandle, &g_mpuTxPack, MPU_HAL_UART_MODE);
+
+        // 启动超时
+        TimerHalStartTime(g_timerHandle, SYNC_TIMEOUT_MS);
+
+        // 切换状态
+        g_eolState = EOL_STATE_WAIT_RESP;
+
+        // 注意：这里不使用 return 或 else，
+        // 目的是让代码继续向下执行，在同一个周期内立即尝试接收数据，
+        // 达到原代码中 switch case 去掉 break 的效果。
+    }
+
+    // 3. 等待响应状态
+    // (如果刚从 SEND_REQ 切换过来，或者之前就在此状态，都会执行)
+    if (g_eolState == EOL_STATE_WAIT_RESP)
+    {
+        g_mpuRxPack.pDataBuffer = g_mpuRxDataBuffer;
+        g_mpuRxPack.dataBufferSize = sizeof(g_mpuRxDataBuffer);
+
+        ret = MpuHalReceive(g_mpuHandle, &g_mpuRxPack, 0);
+
+        if (ret == 0) // 收到数据
+        {
+            uint8_t subCommand = g_mpuRxPack.subcommand & 0x7F;
+
+            if (g_mpuRxPack.aid == PASSTHROUGH_AID &&
+                g_mpuRxPack.mid == PASSTHROUGH_MID &&
+                subCommand == PASSTHROUGH_SUB_MPU_TO_MCU)
+            {
+                // 停止超时定时器
+                TimerHalStopTime(g_timerHandle);
+
+                // 拷贝数据
+                memcpy(g_udsRespBuffer, g_mpuRxPack.pDataBuffer, g_mpuRxPack.dataLength);
+
+                // 调用回调
+                if (g_currentCallback != NULL)
+                {
+                    g_currentCallback(g_udsRespBuffer, g_mpuRxPack.dataLength, 0);
+                }
+                
+                // 任务完成，回空闲
+                g_eolState = EOL_STATE_IDLE;
+                return; // 成功处理后直接退出
+            }
+        }
+    
+        if (TimerHalIsTimeout(g_timerHandle) == 0) // 0 表示超时
+        {
+            TimerHalStopTime(g_timerHandle);
+            LogHalUpLoadLog("EOL Sync Timeout");
+            
+            // 超时回调
+            if (g_currentCallback != NULL)
+            {
+                g_currentCallback(NULL, 0, 1); // 1 = Error/Timeout
+            }
+            g_eolState = EOL_STATE_IDLE;
+        }
+    }
+    else 
+    {
+        LogHalUpLoadLog("EOL Sync Invalid State");
+        g_eolState = EOL_STATE_IDLE;
+    }
+}
+
+EolSyncState_e EolSync_GetState(void)
+{
+    return g_eolState;
+}
+
+static int16_t SyncInternalCallback(uint8_t *pData, uint16_t length, uint8_t result)
+{
+    if (result == 0)
+    {
+        g_syncRespLen = length;
+    }
+    g_syncResult = result;
+    return 0;
+}
+
+int16_t CanPassthrough_RequestAndGetResponse(const uint8_t *pUdsRequest, uint16_t reqLength,
+                                             uint8_t *pUdsResponse, uint16_t *pRespLength)
+{
+    if (g_eolState != EOL_STATE_IDLE)
+        return -1;
+
+    g_syncResult = -1;
+    g_syncRespLen = 0;
+
+    if (EolSync_StartRequest(pUdsRequest, reqLength, SyncInternalCallback) != 0)
     {
         return -1;
     }
-#endif
+
+    while (g_eolState != EOL_STATE_IDLE)
+    {
+        EolTestSyncMainLoop();
+        vTaskDelay(1);
+    }
+
+    if (g_syncResult == 0)
+    {
+        memcpy(pUdsResponse, g_udsRespBuffer, g_syncRespLen);
+        *pRespLength = g_syncRespLen;
+        return 0;
+    }
     return -1;
 }
-#if 0
-static void PackRequestGetCpuInfo(uint8_t GetInfoItem)
-{
 
-    g_mpuDataPack.aid = MPU_SYNC_EOL_TEST_AID;
-    g_mpuDataPack.mid = MPU_SYNC_EOL_TEST_MID;
-    g_mpuDataPack.subcommand = MPU_SYNC_EOL_TEST_SUBCMD_REQ;
-
-    memset(g_mpuDataBuffer, 0, sizeof(g_mpuDataBuffer));
-
-    g_mpuDataPack.dataBufferSize = sizeof(g_mpuDataBuffer);
-    g_mpuDataBuffer[0] = GetInfoItem;
-
-    g_mpuDataPack.pDataBuffer = g_mpuDataBuffer;
-    g_mpuDataPack.dataLength = 1;
-
-    return;
-}
-#endif
 int16_t EolTestSyncWithCpuRecv(uint8_t item, uint8_t *pData, uint16_t *pLength)
 {
-    return 0;
-#if 0
+    uint8_t request[3];
+    uint8_t response[64];
+    uint16_t respLen = 0;
     int16_t ret;
-    uint16_t repeatCount;
-    uint8_t rxSucess;
-    ret = 0;
-    repeatCount = 0;
-    rxSucess = 0;
-    // if(CheckGetItemIsValid(item)!=0)
-    //{
-    //     return -1;
-    // }
-    g_dataPack.pDataBuffer = g_dataBuffer;
-    g_dataPack.dataBufferSize = sizeof(g_dataBuffer);
-    do
-    {
-        if (repeatCount >= 3)
-        {
-            ret = 1;
-            break;
-        }
-        // clear uart buffer
-        while (1)
-        {
-            int16_t ret;
-            ret = MpuHalReceive(g_mpuHandle, &g_dataPack, 0);
-            if (ret != 0)
-            {
-                break;
-            }
-        }
 
-        PackRequestGetCpuInfo(item);
-        // UartDriverHalTransmit(m_uartHandle,m_uartTxData,txLength);
-        MpuHalTransmit(g_mpuHandle, &g_mpuDataPack, MPU_HAL_UART_MODE);
-        while (1)
-        {
-            ret = MpuHalReceive(g_mpuHandle, &g_dataPack, 150);
-            if (ret == 0)
-            {
-                uint8_t subCommand;
-                uint8_t mid;
-                mid = g_dataPack.mid;
-                subCommand = g_dataPack.subcommand & 0x7F;
-                if (MPU_SYNC_EOL_TEST_MID == mid)
-                {
-                    if (MPU_SYNC_EOL_TEST_SUBCMD_RESP == subCommand)
-                    {
-                        // check return value is success
-                        if ((g_dataPack.pDataBuffer[1] == item))
-                        {
-                            uint16_t length;
-                            length = g_dataPack.pDataBuffer[2];
-                            for (uint16_t i = 0; i < length; i++)
-                            {
-                                pData[i] = g_dataPack.pDataBuffer[3 + i];
-                            }
-                            *pLength = length;
-                            rxSucess = 1;
-                            break;
-                        }
-                    }
-                }
-            }
-            else
-            {
-                repeatCount++;
-                break;
-            }
-        }
-        if (rxSucess)
-        {
-            break;
-        }
-    } while (1);
+    request[0] = 0x22;
+    request[1] = 0x00;
+    request[2] = item;
 
-    if (rxSucess)
+    ret = CanPassthrough_RequestAndGetResponse(request, 3, response, &respLen);
+
+    if (ret == 0 && respLen > 3)
     {
+        memcpy(pData, &response[3], respLen - 3);
+        *pLength = respLen - 3;
         return 0;
     }
-    else
-    {
-        return -1;
-    }
-#endif
+    return -1;
 }
 
-// 0xB262_cxl
-int16_t EolTestSyncWithCpuGetPkiStatus(uint8_t *pPkiStatus)
+int16_t EolTestSyncWithCpuTransmit(uint8_t item, uint8_t *pData, uint16_t length)
 {
-    uint8_t response_byte = 0;
-    uint16_t response_length = 0;
-    int16_t ret;
+    uint8_t request[64];
+    uint8_t response[64];
+    uint16_t respLen = 0;
 
-    if (pPkiStatus == NULL)
-    {
+    if (length > 60)
         return -1;
-    }
-    ret = EolTestSyncWithCpuRecv(SYNC_CPU_GET_INFO_ITEM_PKI_STATUS, &response_byte, &response_length);
 
-    if (ret == 0 && response_length >= 1)
+    request[0] = 0x2E;
+    request[1] = 0x00;
+    request[2] = item;
+    memcpy(&request[3], pData, length);
+
+    int16_t ret = CanPassthrough_RequestAndGetResponse(request, length + 3, response, &respLen);
+
+    if (ret == 0 && respLen >= 3 && response[0] == 0x6E)
     {
-        *pPkiStatus = response_byte;
         return 0;
     }
-
     return -1;
 }

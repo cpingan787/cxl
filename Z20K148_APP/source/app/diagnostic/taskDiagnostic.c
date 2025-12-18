@@ -2649,22 +2649,20 @@ static int16_t Service0x22Process(uint8_t *udsData, uint16_t udsLen, uint8_t fun
   first_did = (udsData[1] << 8) | udsData[2];
 
   if (IsDidPassthrough_22(first_did))
-  {
-    uint8_t mpu_response_buffer[512];
-    uint16_t mpu_response_length = 0;
-    int16_t ret;
-    // TBOX_PRINT("22 passthrough DID: %04X\n", first_did);
-    ret = CanPassthrough_RequestAndGetResponse(udsData, udsLen, mpu_response_buffer, &mpu_response_length);
-    if (ret == 0 && mpu_response_length > 0)
     {
-      DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, mpu_response_buffer, mpu_response_length, 0);
-      return 0;
+        // 启动异步请求，不阻塞
+        if (EolSync_StartRequest(udsData, udsLen, UdsAsyncResponseCallback) == 0)
+        {
+            // 返回 1 (或其他非0且非标准NRC的值)
+            // 告诉调用者 DiagnosticResponseProcess 不要立即发送任何响应
+            // 也不要报错，因为响应将由回调函数异步发送
+            return 1; 
+        }
+        else
+        {
+            return 0x21; // BusyRepeatRequest
+        }
     }
-    else
-    {
-      negativeNum = 0x31;
-    }
-  }
   else
   {
 
@@ -2821,23 +2819,27 @@ static int16_t Service0x2EProcess(uint8_t *udsData, uint16_t udsLen, uint8_t fun
   }
   else
   {
-    uint8_t mpu_response_buffer[64]; // mpu会给我回什么
-    uint16_t mpu_response_length = 0;
-    int8_t passthroughRet;
-    if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
-    {
-      return 0x72;
-    }
-    passthroughRet = CanPassthrough_RequestAndGetResponse(udsData, udsLen, mpu_response_buffer, &mpu_response_length);
+      // --- 透传逻辑 (异步状态机) ---
+      
+      // 检查参数同步状态 (原逻辑保留)
+      if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+      {
+        return 0x72; // 系统未就绪
+      }
 
-    if (passthroughRet == 0 && mpu_response_length > 0)
-    {
-      DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, mpu_response_buffer, mpu_response_length, 0);
-    }
-    else
-    {
-      negativeNum = 0x72;
-    }
+      // 启动异步请求
+      //
+      int16_t startRet = EolSync_StartRequest(udsData, udsLen, UdsAsyncResponseCallback);
+
+      if (startRet == 0)
+      {
+          return 1; 
+      }
+      else
+      {
+          // 启动失败 (例如状态机忙)
+          return 0x21; // BusyRepeatRequest
+      }
   }
   return negativeNum;
 }
@@ -3229,6 +3231,23 @@ static void DiagnosticSeedAccessInit(void)
 #endif
 // static void UdsServiceProcess(uint8_t *pTpData, uint32_t tpDataLength, uint8_t FunctionalAddress);
 
+static int16_t UdsAsyncResponseCallback(uint8_t *pData, uint16_t length, uint8_t result)
+{
+    if (result == 0) // 成功
+    {
+        DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, pData, length, 0);
+    }
+    else // 失败/超时
+    {
+        uint8_t nrcData[3];
+        nrcData[0] = 0x7F;
+        nrcData[1] = 0x22;
+        nrcData[2] = 0x72;
+        DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, nrcData, 3, 0);
+    }
+    return 0;
+}
+
 void TaskEcuDiagnostic(void *pvParameters)
 {
 
@@ -3239,7 +3258,7 @@ void TaskEcuDiagnostic(void *pvParameters)
   uint8_t isS3ServerTimerActive = 0;
 
   g_tpHandle = CanTpSdkInitialize(TBOX_CAN_CHANNEL_2, &g_tpParameter, &g_tpBuffer);
-  abcinit();
+  //abcinit();
 
   if (g_tpHandle < 0)
   {
@@ -3285,7 +3304,11 @@ void TaskEcuDiagnostic(void *pvParameters)
       }
     }
     
-aaabb();
+    EolTestSyncMainLoop();
+    if (EolSync_GetState() != EOL_STATE_IDLE)
+    {
+        g_ecuOnlineFlag = 1;
+    }
     uint8_t currentTesterPresent = ((g_currentSession != E_DEFAULT_SESSION) || (isS3ServerTimerActive == 1)) ? 1 : 0;
 
     if (currentTesterPresent != g_isTesterPresent)
