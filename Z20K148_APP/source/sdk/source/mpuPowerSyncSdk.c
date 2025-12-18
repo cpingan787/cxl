@@ -32,7 +32,7 @@ static uint8_t g_sleepDisableEvent = 0;        // 0 :无阻止休眠事件 其�
 static uint8_t g_mpuKeepAliveLoseFlag = 1; // mpu 心跳丢失标记 0：未丢失，1：丢失
 
 static MpuErrorCbFun_t g_mpuErrorCallBackFunc = NULL;
-
+static uint8_t mpuPowerSysnWakeFlag = 0U; // mpu 唤醒源设置标记 0：允许休眠 1：不允许休眠
 typedef struct
 {
     uint8_t setFlag;     // 0:没有设置  1：需要设置
@@ -41,6 +41,8 @@ typedef struct
 } WakeUpSourceSet_t;
 
 static WakeUpSourceSet_t g_wakeUpSource; // 设置唤醒源
+
+static void MpuPowerSyncSdkSetWakeFlag(uint8_t wakeFlag);
 
 static int16_t MpuPowerSyncSdkRequstSleep(uint8_t sleepFlag)
 {
@@ -211,6 +213,33 @@ static int16_t MpuPowerSyncSdkSendPowerState(void)
 
     return 0;
 }
+
+static int16_t MpuPowerSyncSdkSendKeepWakeAck(void)
+{
+    if (g_mpuHandle < 0)
+    {
+        return -1;
+    }
+    g_powerSyncPack.aid = 0x01;
+    g_powerSyncPack.mid = 0x04;
+    g_powerSyncPack.subcommand = 0x07;
+
+    memset(g_packData, 0, sizeof(g_packData));
+
+    g_powerSyncPack.dataBufferSize = sizeof(g_packData);
+
+    xSemaphoreTake(g_mutexHandle, portMAX_DELAY);
+    g_packData[0] = MpuPowerSyncSdkGetWakeFlag();
+    xSemaphoreGive(g_mutexHandle);
+
+    g_powerSyncPack.pDataBuffer = g_packData;
+    g_powerSyncPack.dataLength = 1;
+
+    MpuHalTransmit(g_mpuHandle, &g_powerSyncPack, MPU_HAL_UART_MODE);
+    
+    return 0;
+}
+
 #if (SYNC_GSENSOR_ENABLE == 1)
 static int16_t MpuPowerSyncSdkSendGsensorState(void)
 {
@@ -343,8 +372,12 @@ void MpuPowerSyncSdkCycleProcess(MpuHalDataPack_t *msgData)
                     g_mpuKeepAliveLoseFlag = 0;
                 }
             }
-            else
+            else if ((msgData->subcommand & 0x7F) == 0x07) // mpu请求mcu维持唤醒
             {
+                xSemaphoreTake(g_mutexHandle, portMAX_DELAY);
+                MpuPowerSyncSdkSetWakeFlag(msgData->pDataBuffer[0]);
+                xSemaphoreGive(g_mutexHandle);
+                MpuPowerSyncSdkSendKeepWakeAck();
             }
         }
     }
@@ -559,4 +592,14 @@ int16_t MpuPowerSyncSdkRegisteMpuErrorCb(MpuErrorCbFun_t mpuErrorFunc)
 uint8_t MpuPowerSyncSdkGetNadModuleStatus(void)
 {
     return g_mpuKeepAliveLoseFlag;
+}
+
+static void MpuPowerSyncSdkSetWakeFlag(uint8_t wakeFlag)
+{
+    mpuPowerSysnWakeFlag = wakeFlag;
+}
+
+uint8_t MpuPowerSyncSdkGetWakeFlag(void)
+{
+    return mpuPowerSysnWakeFlag;
 }

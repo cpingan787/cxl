@@ -5252,7 +5252,9 @@ int16_t Service22ReadVehicleManufacturerECUSoftwareVersionNumberDataIdentifierF1
 // 0xF18E_cxl
 int16_t Service22ReadGacVisteonInHousePartNumber(uint8_t *pData, uint16_t *pLength)
 {
-  ProjectConfigGetVisteonPartNumber_F18E(pData, pLength);
+  uint32_t len;
+  WorkFlashVehicleInforRead(E_PARAMETER_INFO_PART_NAME, pData, &len);
+  *pLength = len;
   return 0;
 }
 

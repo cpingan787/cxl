@@ -53,6 +53,8 @@
 #define SRS_STATE_PIN                   GPIO_6
 #define SRS_STATE_PIN_MUX               PTD6_GPIO
 #define SRS_STATE_PIN_IRQ               PORTD_IRQn
+
+#define AMP_ENABLE                      (0)
 /****************************** Type Definitions ******************************/
 typedef enum
 {

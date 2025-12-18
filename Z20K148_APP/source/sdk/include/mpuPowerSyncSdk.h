@@ -146,4 +146,6 @@ int16_t MpuPowerSyncSdkRegisteMpuErrorCb(MpuErrorCbFun_t mpuErrorFunc);
 *************************************************/
 uint8_t MpuPowerSyncSdkGetNadModuleStatus(void);
 
+uint8_t MpuPowerSyncSdkGetWakeFlag(void);
+
 #endif

@@ -35,7 +35,7 @@
 #define REMOTE_CONTROL_HVAC_CMD_NUM                 (9U)
 #define REMOTE_CONTROL_PEPS_CMD_NUM                 (4U)
 #define REMOTE_CONTROL_BCM_CMD_NUM                  (12U)
-#define REMOTE_CONTROL_HVSM_CMD_NUM                 (4U)
+#define REMOTE_CONTROL_HVSM_CMD_NUM                 (8U)
 #define REMOTE_CONTROL_PLGM_CMD_NUM                 (1U)
 #define REMOTE_CONTROL_HOD_CMD_NUM                  (1U)
 #define REMOTE_CONTROL_SEND_CAN_SIZE                (8U)
@@ -201,13 +201,12 @@ static RemoteControlProcessResult_t CheckHvsmCommandResult(void);
 static RemoteControlProcessResult_t CheckHvacCommandResult(void);
 static RemoteControlProcessResult_t CheckBcmCommandResult(void);
 static RemoteControlProcessResult_t CheckPlgmCommandResult(void);
-static RemoteControlProcessResult_t RemoteControlPreCheckProcess(void);
 static RemoteControlProcessResult_t RemoteControlCheckResCanSignal(void);
 static RemoteControlProcessResult_t RemoteControlCheckAcTempAutoSetFun(void);
 static void RemoteControlCertificationProcess(void);
 static void RemoteControlHandleSignalProcess(void);
 static void RemoteControlSendResultProcess(void);
-static void RemoteControlSendResultProcess(void);
+static void RemoteControlPreCheckProcess(void);
 static void RemoteControlSendAck(void);
 static void RemoteControlNormalPackReqCanSignal(void);
 static void RemoteControlSendResult(uint8_t msgtype, uint16_t errorcode, uint16_t ecuid, uint8_t cmdid, uint8_t paravalue);
@@ -305,6 +304,10 @@ static RemoteControlTotalTable_t g_remoteControlLocalMap[REMOTE_CONTROL_ECU_MAX_
             {CMD_M_SEAT_VENTILATE_E,    RemoteControlCheckSeatVentilateOnFun    ,RemoteControlPepsCertification},
             {CMD_S_SEAT_HEAT_SET_E,     RemoteControlCheckSeatHeatSetFun        ,RemoteControlPepsCertification},
             {CMD_S_SEAT_VENTILATE_E,    RemoteControlCheckSeatVentilateOnFun    ,RemoteControlPepsCertification},
+            {CMD_RL_SEAT_HEAT_SET_E,    RemoteControlCheckSeatHeatSetFun        ,RemoteControlPepsCertification},
+            {CMD_RL_SEAT_VENTILATE_E,   RemoteControlCheckSeatVentilateOnFun    ,RemoteControlPepsCertification},
+            {CMD_RR_SEAT_HEAT_SET_E,    RemoteControlCheckSeatHeatSetFun        ,RemoteControlPepsCertification},
+            {CMD_RR_SEAT_VENTILATE_E,   RemoteControlCheckSeatVentilateOnFun    ,RemoteControlPepsCertification},
         },
         REMOTE_CONTROL_HVSM_CMD_NUM,
     }, 
@@ -502,6 +505,7 @@ static void RemoteControlForbidSleepCheck(void)
             AutosarNmSdkClearSubNetWakeupRequest();
             RemoteControlSetTotalState(RemoteControlStateIdle);
         }
+        LogHalUpLoadLog("remote control forbid timeout\n");
         TimerHalStopTime(g_remoteControlSleepForrbidHandle);
         RemoteControlSetKeepWakeFlag(RemoteControlWakeUpFlag_NotKeep_e);
     }
@@ -579,14 +583,12 @@ static void RemoteControlStartStateMachine(void)
 * Return      : RemoteControlProcessResult_t - Success, Fail, or Processing status
 * Others      : Sets global state based on check result
 *******************************************************************************/
-static RemoteControlProcessResult_t RemoteControlPreCheckProcess(void)
+static void RemoteControlPreCheckProcess(void)
 {
     RemoteControlProcessResult_t result = RemoteControlResult_Success_e;
     const RemoteControlEntry_t* entry = RemoteControlFindCmdEntry(g_remoteControlEcuId, g_remoteControlCmdId);
-    if(CanGetAppMsgEnable(TBOX_CAN_CHANNEL_2) == 0x0)
-    {
-        return result;
-    }
+
+    LogHalUpLoadLog("remote control start check\n");
     if (entry == NULL)
     {
         TBOX_PRINT("Error: No entry found for ECU %d CMD %d\n", g_remoteControlEcuId, g_remoteControlCmdId);
@@ -670,7 +672,6 @@ static RemoteControlProcessResult_t RemoteControlPreCheckProcess(void)
     {
         RemoteControlSetTotalState(RemoteControlStateSendResult);
     }
-    return result;
 }
 
 /*******************************************************************************
@@ -711,6 +712,7 @@ static void RemoteControlCertificationProcess(void)
                 }
             }
         }
+        LogHalUpLoadLog("remote control start certification\n");
         isInitialized = 1;  
     }
     
@@ -758,6 +760,7 @@ static void RemoteControlCertificationProcess(void)
 *******************************************************************************/
 static void RemoteControlHandleSignalProcess(void)
 {
+    uint8_t ret = 0U;
     static uint32_t s_canId = 0U;                 
     static uint8_t s_transCount = 0U;             
     static ProcessSignalState_t s_state = PROCESS_SIGNAL_STATE_IDLE; 
@@ -828,9 +831,12 @@ static void RemoteControlHandleSignalProcess(void)
             
         case PROCESS_SIGNAL_STATE_NORMAL_TRANS:
         {
-            TBOX_PRINT("Remote control nomal send!\n");
-            CanHalTransmit(g_remoteControlCan1Handle, s_canId, g_remoteControlCanBuf, 
+            ret = CanHalTransmit(g_remoteControlCan1Handle, s_canId, g_remoteControlCanBuf, 
                         sizeof(g_remoteControlCanBuf), REMOTE_CONTROL_CAN_FD_USE);
+            if(ret != 0U)
+            {
+                LogHalUpLoadLog("remote control normal trans error, ret = %d\n", ret);
+            }
             if(g_remoteControlTransTimerHandle >= 0)
             {
                 TimerHalStartTime(g_remoteControlTransTimerHandle, REMOTE_CONTROL_TRANS_CYCLE_TIME);
@@ -906,9 +912,12 @@ static void RemoteControlHandleSignalProcess(void)
             
         case PROCESS_SIGNAL_STATE_SPECIAL_TRANS:
         {
-            TBOX_PRINT("Remote control special send\n");
-            CanHalTransmit(g_remoteControlCan1Handle, s_canId, g_remoteControlCanBuf, 
+            ret = CanHalTransmit(g_remoteControlCan1Handle, s_canId, g_remoteControlCanBuf, 
                           sizeof(g_remoteControlCanBuf), REMOTE_CONTROL_CAN_FD_USE);
+            if(ret != 0U)
+            {
+                LogHalUpLoadLog("remote control special trans error, ret = %d\n", ret);
+            }
             
             if(g_remoteControlTransTimerHandle >= 0)
             {
@@ -973,7 +982,7 @@ static void RemoteControlHandleSignalProcess(void)
             {
                 if((g_remoteControlEcuId == ECU_HVAC_E) && (g_remoteControlHvacPepsCheck == 0U))
                 {
-                    TBOX_PRINT("PEPS START SUCECESS,SEND OTHER CMD!\n");
+                    LogHalUpLoadLog("HVAC PEPS START SUCECESS\n");
                     RemoteControlSetTotalState(RemoteControlStateProcessSignal);
                     if(g_remoteControlTransTimerHandle >= 0)
                     {
@@ -983,7 +992,7 @@ static void RemoteControlHandleSignalProcess(void)
                 }
                 else if((g_remoteControlEcuId == ECU_HVSM_E) && (g_remoteControlHvsmPepsCheck == 0U))
                 {
-                    TBOX_PRINT("PEPS START SUCECESS,SEND OTHER CMD!\n");
+                    LogHalUpLoadLog("HVSM PEPS START SUCECESS\n");
                     RemoteControlSetTotalState(RemoteControlStateProcessSignal);
                     if(g_remoteControlTransTimerHandle >= 0)
                     {
@@ -1010,6 +1019,7 @@ static void RemoteControlHandleSignalProcess(void)
             }
             else if((g_remoteControlTransTimerHandle >= 0) && (TimerHalIsTimeout(g_remoteControlTransTimerHandle) == 0))
             {
+                LogHalUpLoadLog("remote control check signal timeout!\n");
                 g_remoteControlErrorCode = REMOTE_CONTROL_ERR_CODE_TIME_OUT;
                 TBOX_PRINT("Remote control check signal timeout!\n");
                 TimerHalStopTime(g_remoteControlTransTimerHandle);
@@ -2770,6 +2780,7 @@ static RemoteControlProcessResult_t RemoteControlBcmCertification(void)
     static uint8_t bcmAuthReqCnt = 0U;
     uint16_t eskLength = 0U;
     uint16_t canIdFlag = 0U;
+    uint8_t canRet = 0U;
 
     switch(bcmAuthState)
     {
@@ -2789,7 +2800,11 @@ static RemoteControlProcessResult_t RemoteControlBcmCertification(void)
         
         case BCM_AUTU_REQ_E:
             memset(g_remoteControlCanBuf,0U,sizeof(g_remoteControlCanBuf));
-            CanHalTransmit(g_remoteControlCan1Handle,REMOTE_CONTROL_TEL_IMMOCode2_E,g_remoteControlCanBuf,sizeof(g_remoteControlCanBuf),REMOTE_CONTROL_CAN_FD_USE);
+            canRet = CanHalTransmit(g_remoteControlCan1Handle,REMOTE_CONTROL_TEL_IMMOCode2_E,g_remoteControlCanBuf,sizeof(g_remoteControlCanBuf),REMOTE_CONTROL_CAN_FD_USE);
+            if(canRet != 0U)
+            {
+                LogHalUpLoadLog("remote control bcm autu req error, ret = %d\n", ret);
+            }
             TimerHalStartTime(g_remoteControlAuthTimerHandle, REMOTE_CONTROL_BCM_REQ_AHTU_TIME);
             Can0ClearRxFlagByCanId(REMOTE_CONTROL_GW_BCM_E);
             bcmAuthState = BCM_AUTH_WAIT_RAND_E;
@@ -2827,7 +2842,11 @@ static RemoteControlProcessResult_t RemoteControlBcmCertification(void)
             g_randomBcmArray[6] = g_remoteControlSignalInfo.BCM_TEL_IMMOCode6;
             g_randomBcmArray[7] = g_remoteControlSignalInfo.BCM_TEL_IMMOCodeSt;
             BcmAuthCalcKey(g_randomBcmArray,g_remoteControlESK,g_remoteControlCanBuf);
-            CanHalTransmit(g_remoteControlCan1Handle,REMOTE_CONTROL_TEL_IMMOCode2_E,g_remoteControlCanBuf,sizeof(g_remoteControlCanBuf),REMOTE_CONTROL_CAN_FD_USE);
+            canRet = CanHalTransmit(g_remoteControlCan1Handle,REMOTE_CONTROL_TEL_IMMOCode2_E,g_remoteControlCanBuf,sizeof(g_remoteControlCanBuf),REMOTE_CONTROL_CAN_FD_USE);
+            if(canRet != 0U)
+            {
+                LogHalUpLoadLog("remote control bcm cal key send error, ret = %d\n", ret);
+            }
             memset(g_remoteControlCanBuf,0U,sizeof(g_remoteControlCanBuf));
             TimerHalStartTime(g_remoteControlAuthTimerHandle, REMOTE_CONTROL_BCM_CHECK_AHTU_TIME);
             bcmAuthState = BCM_AUTH_CHECK_E;
@@ -2890,6 +2909,7 @@ static RemoteControlProcessResult_t RemoteControlPepsCertification(void)
     static uint8_t pepsAuthReqCnt = 0U;
     static uint16_t eskLength = 0U;
     uint16_t canIdFlag = 0U;
+    uint8_t canRet = 0U;
 
     switch(pepsAuthState)
     {
@@ -2909,7 +2929,11 @@ static RemoteControlProcessResult_t RemoteControlPepsCertification(void)
         
         case PEPS_AUTU_REQ_E:
             memset(g_remoteControlCanBuf,0U,sizeof(g_remoteControlCanBuf));
-            CanHalTransmit(g_remoteControlCan1Handle,REMOTE_CONTROL_TEL_IMMOCode1_E,g_remoteControlCanBuf,sizeof(g_remoteControlCanBuf),REMOTE_CONTROL_CAN_FD_USE);
+            canRet = CanHalTransmit(g_remoteControlCan1Handle,REMOTE_CONTROL_TEL_IMMOCode1_E,g_remoteControlCanBuf,sizeof(g_remoteControlCanBuf),REMOTE_CONTROL_CAN_FD_USE);
+            if(canRet != 0U)
+            {
+                LogHalUpLoadLog("remote control peps autu req error, ret = %d\n", ret);
+            }
             TimerHalStartTime(g_remoteControlAuthTimerHandle, REMOTE_CONTROL_PEPS_REQ_AHTU_TIME);
             Can0ClearRxFlagByCanId(REMOTE_CONTROL_GW_PEPS_E);
             pepsAuthState = PEPS_AUTH_WAIT_RAND_E;
@@ -2946,7 +2970,11 @@ static RemoteControlProcessResult_t RemoteControlPepsCertification(void)
             g_randomPepsArray[6] = g_remoteControlSignalInfo.PEPS_TEL_ChallengeCode6;
             g_randomPepsArray[7] = g_remoteControlSignalInfo.PEPS_TEL_ChallengeCode7;
             PepsAuthCalcKey8(g_randomPepsArray, g_remoteControlESK, g_remoteControlCanBuf);
-            CanHalTransmit(g_remoteControlCan1Handle,REMOTE_CONTROL_TEL_IMMOCode1_E,g_remoteControlCanBuf,sizeof(g_remoteControlCanBuf),REMOTE_CONTROL_CAN_FD_USE);
+            canRet = CanHalTransmit(g_remoteControlCan1Handle,REMOTE_CONTROL_TEL_IMMOCode1_E,g_remoteControlCanBuf,sizeof(g_remoteControlCanBuf),REMOTE_CONTROL_CAN_FD_USE);
+            if(canRet != 0U)
+            {
+                LogHalUpLoadLog("remote control peps calc key error, ret = %d\n", ret);
+            }
             memset(g_remoteControlCanBuf,0U,sizeof(g_remoteControlCanBuf));
             TimerHalStartTime(g_remoteControlAuthTimerHandle, REMOTE_CONTROL_PEPS_CHECK_AHTU_TIME);
             pepsAuthState = PEPS_AUTH_CHECK_E;
@@ -3292,32 +3320,40 @@ static void RemoteControlNormalPackReqCanSignal(void)
                 {
                     case CMD_M_SEAT_HEAT_SET_E:
                         RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_FLHeatingLevelReq,    g_remoteControlParamValue);
-                        RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_FRHeatingLevelReq,    g_remoteControlParamValue);
-                        RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_RLHeatingLevelReq,    g_remoteControlParamValue);
-                        RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_RRHeatingLevelReq,    g_remoteControlParamValue);
                         RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_HVSMCtrlModeSt,       0x1);
                         break;
                         
                     case CMD_M_SEAT_VENTILATE_E:
                         RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_FLVentilatingLevelReq, g_remoteControlParamValue);
-                        RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_FRVentilatingLevelReq, g_remoteControlParamValue);
-                        RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_RLVentilatingLevelReq, g_remoteControlParamValue);
-                        RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_RRVentilatingLevelReq, g_remoteControlParamValue);
                         RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_HVSMCtrlModeSt,        0x1);
                         break;
                         
                     case CMD_S_SEAT_HEAT_SET_E:
-                        RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_FLHeatingLevelReq, g_remoteControlParamValue);
                         RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_FRHeatingLevelReq, g_remoteControlParamValue);
-                        RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_RLHeatingLevelReq, g_remoteControlParamValue);
-                        RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_RRHeatingLevelReq, g_remoteControlParamValue);
                         RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_HVSMCtrlModeSt,    0x1);
                         break;
                         
                     case CMD_S_SEAT_VENTILATE_E:
-                        RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_FLVentilatingLevelReq, g_remoteControlParamValue);
                         RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_FRVentilatingLevelReq, g_remoteControlParamValue);
+                        RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_HVSMCtrlModeSt,        0x1);
+                        break;
+                    
+                    case CMD_RL_SEAT_HEAT_SET_E:
+                        RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_RLHeatingLevelReq, g_remoteControlParamValue);
+                        RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_HVSMCtrlModeSt,    0x1);
+                        break;
+                        
+                    case CMD_RL_SEAT_VENTILATE_E:
                         RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_RLVentilatingLevelReq, g_remoteControlParamValue);
+                        RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_HVSMCtrlModeSt,        0x1);
+                        break;
+                        
+                    case CMD_RR_SEAT_HEAT_SET_E:
+                        RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_RRHeatingLevelReq, g_remoteControlParamValue);
+                        RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_HVSMCtrlModeSt,    0x1);
+                        break;
+                        
+                    case CMD_RR_SEAT_VENTILATE_E:
                         RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_RRVentilatingLevelReq, g_remoteControlParamValue);
                         RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_HVSMCtrlModeSt,        0x1);
                         break;
@@ -3527,9 +3563,6 @@ static void RemoteControlSpecialPackReqCanSignal(void)
                     case CMD_M_SEAT_HEAT_SET_E:
                     {
                         RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_FLHeatingLevelReq,    0x4);
-                        RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_FRHeatingLevelReq,    0x4);
-                        RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_RLHeatingLevelReq,    0x4);
-                        RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_RRHeatingLevelReq,    0x4);
                         RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_HVSMCtrlModeSt,       0x0);
                         break;
                     }
@@ -3537,32 +3570,52 @@ static void RemoteControlSpecialPackReqCanSignal(void)
                     case CMD_M_SEAT_VENTILATE_E:
                     {
                         RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_FLVentilatingLevelReq,    0x4);
-                        RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_FRVentilatingLevelReq,    0x4);
-                        RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_RLVentilatingLevelReq,    0x4);
-                        RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_RRVentilatingLevelReq,    0x4);
                         RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_HVSMCtrlModeSt,           0x0);
                         break;
                     }
                     
                     case CMD_S_SEAT_HEAT_SET_E:
                     {
-                        RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_FLHeatingLevelReq,        0x4);
                         RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_FRHeatingLevelReq,        0x4);
-                        RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_RLHeatingLevelReq,        0x4);
-                        RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_RRHeatingLevelReq,        0x4);
                         RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_HVSMCtrlModeSt,           0x0);
                         break;
                     }
                     
                     case CMD_S_SEAT_VENTILATE_E:
                     {
-                        RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_FLVentilatingLevelReq,    0x4);
                         RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_FRVentilatingLevelReq,    0x4);
+                        RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_HVSMCtrlModeSt,           0x0);
+                        break;
+                    }
+                    
+                    case CMD_RL_SEAT_HEAT_SET_E:
+                    {
+                        RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_RLHeatingLevelReq,        0x4);
+                        RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_HVSMCtrlModeSt,           0x0);
+                        break;
+                    }
+                    
+                    case CMD_RL_SEAT_VENTILATE_E:
+                    {
                         RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_RLVentilatingLevelReq,    0x4);
+                        RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_HVSMCtrlModeSt,           0x0);
+                        break;
+                    }
+
+                    case CMD_RR_SEAT_HEAT_SET_E:
+                    {
+                        RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_RRHeatingLevelReq,        0x4);
+                        RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_HVSMCtrlModeSt,           0x0);
+                        break;
+                    }
+                    
+                    case CMD_RR_SEAT_VENTILATE_E:
+                    {
                         RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_RRVentilatingLevelReq,    0x4);
                         RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_HVSMCtrlModeSt,           0x0);
                         break;
                     }
+
                     
                     default:
                         break;
@@ -3719,32 +3772,56 @@ static RemoteControlProcessResult_t CheckHvsmCommandResult(void)
         switch(g_remoteControlCmdId)
         {
             case CMD_M_SEAT_HEAT_SET_E:
-                if((g_remoteControlSignalInfo.HVSM_FLHeatingActLevel == g_remoteControlParamValue) &&
-                (g_remoteControlSignalInfo.HVSM_FRHeatingActLevel == g_remoteControlParamValue))
+                if(g_remoteControlSignalInfo.HVSM_FLHeatingActLevel == g_remoteControlParamValue)
                 {
                     result = RemoteControlResult_Success_e;
                 }
                 break;
                 
             case CMD_M_SEAT_VENTILATE_E:
-                if((g_remoteControlSignalInfo.HVSM_FLVentilatingActLevel == g_remoteControlParamValue) &&
-                (g_remoteControlSignalInfo.HVSM_FRVentilatingActLevel == g_remoteControlParamValue))
+                if(g_remoteControlSignalInfo.HVSM_FLVentilatingActLevel == g_remoteControlParamValue)
                 {
                     result = RemoteControlResult_Success_e;
                 }
                 break;
                 
             case CMD_S_SEAT_HEAT_SET_E:
-                if((g_remoteControlSignalInfo.HVSM_FLHeatingActLevel == g_remoteControlParamValue) &&
-                (g_remoteControlSignalInfo.HVSM_FRHeatingActLevel == g_remoteControlParamValue))
+                if(g_remoteControlSignalInfo.HVSM_FRHeatingActLevel == g_remoteControlParamValue)
                 {
                     result = RemoteControlResult_Success_e;
                 }
                 break;
                 
             case CMD_S_SEAT_VENTILATE_E:
-                if((g_remoteControlSignalInfo.HVSM_FLVentilatingActLevel == g_remoteControlParamValue) &&
-                (g_remoteControlSignalInfo.HVSM_FRVentilatingActLevel == g_remoteControlParamValue))
+                if(g_remoteControlSignalInfo.HVSM_FRVentilatingActLevel == g_remoteControlParamValue)
+                {
+                    result = RemoteControlResult_Success_e;
+                }
+                break;
+            
+            case CMD_RL_SEAT_HEAT_SET_E:
+                if(g_remoteControlSignalInfo.HVSMR_RLHeatingActLevel == g_remoteControlParamValue)
+                {
+                    result = RemoteControlResult_Success_e;
+                }
+                break;
+                
+            case CMD_RL_SEAT_VENTILATE_E:
+                if(g_remoteControlSignalInfo.HVSMR_RLVentilatingActLevel == g_remoteControlParamValue)
+                {
+                    result = RemoteControlResult_Success_e;
+                }
+                break;
+            
+            case CMD_RR_SEAT_HEAT_SET_E:
+                if(g_remoteControlSignalInfo.HVSMR_RRHeatingActLevel == g_remoteControlParamValue)
+                {
+                    result = RemoteControlResult_Success_e;
+                }
+                break;
+
+            case CMD_RR_SEAT_VENTILATE_E:
+                if(g_remoteControlSignalInfo.HVSMR_RRVentilatingActLevel == g_remoteControlParamValue)
                 {
                     result = RemoteControlResult_Success_e;
                 }

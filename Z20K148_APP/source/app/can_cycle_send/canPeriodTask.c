@@ -21,13 +21,15 @@
 #include "stateSyncSdk.h"
 #include "taskEcallProcess.h"
 #include "remoteControl.h"
+#include "taskEcallProcess.h"
 #if (SELFCHECK_RESULT_SEND == 1)
 #include "ecallHal.h"
 #endif
 /****************************** Macro Definitions ******************************/
-#define CYCLE_SEND_WITH_SECOC_SDK (0)
-#define CYCLE_SEND_WITH_CANFD (1)
-#define CYCLE_SEND_WITHOUT_CANFD (0)
+#define CYCLE_SEND_WITH_SECOC_SDK       (0U)
+#define CYCLE_SEND_WITH_CANFD           (1U)
+#define CYCLE_SEND_WITHOUT_CANFD        (0U)
+#define APP_MESSAGE_START_TIME          (90U)
 #define SIZE_OF_ARRAY(arrayName) (sizeof(arrayName) / sizeof(arrayName)[0])
 
 #define CAN_CYCLE_SEND_CONFIGURE_BEGIN(groupNum) const CanSendMsgConfigure_t m_group##groupNum##SendMsgConfigure[] = \
@@ -42,8 +44,6 @@
 #define CYCLE_SEND_CAN_CONFIGURE(groupNum) m_group##groupNum##SendMsgConfigure                     // Cycle send configuration
 #define CYCLE_SEND_CAN_BUFFER(groupNum) m_group##groupNum##SendMsgBuffer                           // Cycle send buffer
 #define CYCLE_SEND_CAN_CONFIGURE_SIZE(groupNum) SIZE_OF_ARRAY(m_group##groupNum##SendMsgConfigure) // Cycle send configuration size
-
-static uint8_t g_TEL_MsgCounter = 0U;
 
 /****************************** Type Definitions ******************************/
 typedef int16_t (*pCanMsgProcessFun_t)(uint8_t *pMsgData);
@@ -228,6 +228,7 @@ static TEL_3 g_tbox3Message;
 static TEL_4 g_tbox4Message;
 // static TEL_12 g_tbox12Message;
 static TEL_18 g_tbox18Message;
+static uint8_t g_TEL_MsgCounter = 0U;
 static TEL_TimeVD_e g_timeVdValue = E_TEL_TIME_INVALID;
 CAN_CYCLE_SEND_CONFIGURE_BEGIN(2)
 /****************************    Time,  Id,       FdFlag    Length  CanllBack******/
@@ -241,7 +242,7 @@ CAN_CYCLE_SEND_CONFIGURE_END(2)
 const CanChannelCycleSendConfigure_t g_canCycleConfigureList[] =
     {
         {.canChannel = TBOX_CAN_CHANNEL_2,
-         .msgStartTime = 90,
+         .msgStartTime = 10,
          .pCycleConfigureList = CYCLE_SEND_CAN_CONFIGURE(2),
          .cycleConfigureListSize = CYCLE_SEND_CAN_CONFIGURE_SIZE(2),
          .pMsgBuffer = CYCLE_SEND_CAN_BUFFER(2)},
@@ -290,7 +291,7 @@ int16_t CanPeriodSendEnable(uint8_t canChannel)
             g_canChannelBufferList[i].enableFlag = 0x01;
             for (j = 0; j < g_canCycleConfigureList[i].cycleConfigureListSize; j++)
             {
-                g_canCycleConfigureList[i].pMsgBuffer[j].timeCount = (g_canCycleConfigureList[i].pCycleConfigureList[j].cycleTime - 7);
+                g_canCycleConfigureList[i].pMsgBuffer[j].timeCount = (g_canCycleConfigureList[i].pCycleConfigureList[j].cycleTime - APP_MESSAGE_START_TIME);
             }
             ret = 0;
             break;
@@ -629,7 +630,7 @@ static int16_t CanPeriodMessage35C(uint8_t *pCanData)
         g_tbox4Message.DetailInfo.TEL_BTDisplayAct = 0U;
         g_tbox4Message.DetailInfo.TEL_BTConnectingAct = 0U;
         g_tbox4Message.DetailInfo.TEL_BTConnectingSt = 0U;
-        g_tbox4Message.DetailInfo.TEL_PhoneCallSt = 0U;
+        g_tbox4Message.DetailInfo.TEL_PhoneCallSt = XCallGetPhoneCallState();
         g_tbox4Message.DetailInfo.TEL_A2DPSupportSt = 0U;
         g_tbox4Message.DetailInfo.TEL_AVRCPSupportSt = 0U;
         g_tbox4Message.DetailInfo.TEL_MobilePowerSt = 0U;

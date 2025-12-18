@@ -61,6 +61,7 @@
 #define MPU_HAL_UART0_NVIC_PRIORITY             (0x3)
 #define MPU_HAL_UART0_RX_CYCLYE                 (1U)
 #define MPU_HAL_SEND_IRQ_ENABLE                 (1U) 
+#define MPU_HAL_SEND_QUEUE_WAIT_CNT             (10U)
 
 #define UART_BAUDRATE                       (115200 * 4)
 #define UART_OSC_FREQ                       8000000
@@ -2053,6 +2054,7 @@ void MpuHalUartTxTask(void *pvParameters)
 {
     uint32_t ret = MPU_HAL_STATUS_OK;
     uint32_t queueData = 0u;
+    static uint8_t txSendQueueCnt = 0U;
     MpuUartHandleTypeDef *huart = &g_mpuUartRingBuf;
 
     g_mpuTxBuf[MPU_HAL_UART_MODE].txQueueHandle = xQueueCreate(MPU_HAL_TX_QUEUE_LEN, sizeof(uint32_t));
@@ -2074,6 +2076,12 @@ void MpuHalUartTxTask(void *pvParameters)
         ret = MpuHalPacketSend(MPU_HAL_UART_MODE, queueData, &g_mpuTxBuf[MPU_HAL_UART_MODE]);
         if (ret != MPU_HAL_STATUS_OK) {
             TBOX_PRINT("UART PacketSend failed, ret = 0x%X\n", ret);
+        }
+        txSendQueueCnt++;
+        if (txSendQueueCnt >= MPU_HAL_SEND_QUEUE_WAIT_CNT)
+        {
+            txSendQueueCnt = 0U;
+            vTaskDelay(pdMS_TO_TICKS(1));
         }
     }
 }

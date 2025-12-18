@@ -365,7 +365,7 @@ static const uint16_t g_passthroughDidList_22[] = {
     0x2111,
     0xB2E6,
     0x1014,
-    0x011F,
+    //0x011F,
     0x0124,
 };
 static const RdidInfor_t g_Service22FunMapList[] =
@@ -599,8 +599,8 @@ static uint8_t g_ecuOnlineFlag = 0;
 static UdsSecurityLevel_e g_currentSecurityLevel = E_UDS_NONE_SECURITY_LEVEL;
 static UdsSecurityLevel_e g_securitySendSeedLevel = E_UDS_NONE_SECURITY_LEVEL;
 
-static uint8_t g_ecuResetFlag[3];
-static uint8_t g_u8ConsecutiveSeedCount[3] = {0, 0, 0};
+static uint8_t g_ecuResetFlag[4];
+static uint8_t g_u8ConsecutiveSeedCount[4] = {0, 0, 0, 0};
 static SecurityTimerDelayType_e g_securityTimerDelayType;
 static SecurityTimerDelayType_e g_securityTimerDelayType_2;
 static SecurityTimerDelayType_e g_securityTimerDelayType_3;
@@ -917,7 +917,7 @@ static void SaveSeedAccessCountToNonVolatile(uint8_t *data)
   uint8_t *dataTem;
   dataTem = data;
   // WorkFlashUserInfoStore(E_SECURITY_INFO,dataTem,3);
-  WorkFlashVehicleInforStore(E_PARAMETER_INFO_UDS_SECURITY_ERROR_COUNT, dataTem, 3);
+  WorkFlashVehicleInforStore(E_PARAMETER_INFO_UDS_SECURITY_ERROR_COUNT, dataTem, 4);
 }
 #if 0
 static uint8_t GetSeedAccessCountFromVolatile(uint8_t *data)
@@ -2051,7 +2051,7 @@ static uint8_t Service0x27Process0x01(uint8_t *udsData, uint16_t udsLen, uint8_t
       if (g_securityTimerDelayType != E_SECURITYTIMER_ACCESSERRORDELAY)
       {
         negativeNum = 0x36;
-        TimerHalStartTime(g_ecuSecurityTimerHandle, 180000);
+        TimerHalStartTime(g_ecuSecurityTimerHandle, 10000);
         g_securityTimerDelayType = E_SECURITYTIMER_ACCESSERRORDELAY;
       }
       else
@@ -2098,7 +2098,7 @@ static uint8_t Service0x27Process0x02(uint8_t *udsData, uint16_t udsLen, uint8_t
       else
       {
         negativeNum = 0x36;
-        TimerHalStartTime(g_ecuSecurityTimerHandle, 180000);
+        TimerHalStartTime(g_ecuSecurityTimerHandle, 10000);
         g_securityTimerDelayType = E_SECURITYTIMER_ACCESSERRORDELAY;
       }
     }
@@ -2177,7 +2177,7 @@ static uint8_t Service0x27Process0x03(uint8_t *udsData, uint16_t udsLen, uint8_t
       if (g_securityTimerDelayType_3 != E_SECURITYTIMER_ACCESSERRORDELAY)
       {
         negativeNum = 0x36;
-        TimerHalStartTime(g_ecuSecurityTimerHandle_3, 180000);
+        TimerHalStartTime(g_ecuSecurityTimerHandle_3, 10000);
         g_securityTimerDelayType_3 = E_SECURITYTIMER_ACCESSERRORDELAY;
       }
       else
@@ -2291,7 +2291,7 @@ if (g_currentSession != E_PROGROM_SESSION)
       if (g_securityTimerDelayType_Reprog != E_SECURITYTIMER_ACCESSERRORDELAY)
       {
         negativeNum = 0x36;
-        TimerHalStartTime(g_ecuSecurityTimerHandle_Reprog, 180000);
+        TimerHalStartTime(g_ecuSecurityTimerHandle_Reprog, 10000);
         g_securityTimerDelayType_Reprog = E_SECURITYTIMER_ACCESSERRORDELAY;
       }
       else
@@ -3378,7 +3378,23 @@ void TaskEcuDiagnostic(void *pvParameters)
       }
       g_securityTimerDelayType_3 = E_SECURITYTIMER_NONE;
     }
-
+    if (TimerHalIsTimeout(g_ecuSecurityTimerHandle_Reprog) == 0)
+    {
+      TimerHalStopTime(g_ecuSecurityTimerHandle_Reprog);
+      
+      if (E_SECURITYTIMER_RESETDELAY == g_securityTimerDelayType_Reprog)
+      {
+        g_ecuResetFlag[3] = 0;
+        g_u8ConsecutiveSeedCount[3] = 0;
+        SaveSeedAccessCountToNonVolatile(g_u8ConsecutiveSeedCount);
+      }
+      if (E_SECURITYTIMER_ACCESSERRORDELAY == g_securityTimerDelayType_Reprog)
+      {
+        g_u8ConsecutiveSeedCount[3] = 0;
+        SaveSeedAccessCountToNonVolatile(g_u8ConsecutiveSeedCount);
+      }
+      g_securityTimerDelayType_Reprog = E_SECURITYTIMER_NONE;
+    }
     vTaskDelay(5);
     ServiceTestCycleProcess(5); // 5ms
     // PrintTaskInfo();

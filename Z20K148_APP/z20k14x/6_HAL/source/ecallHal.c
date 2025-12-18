@@ -245,11 +245,11 @@ void EcallGpioInit(void)
     /******** ECALL_LED_R (reserved) **************************/
     PORT_PinmuxConfig(ECALL_LED_R_PORT, ECALL_LED_R_PIN, ECALL_LED_R_PIN_MUX);
     GPIO_SetPinDir(ECALL_LED_R_PORT, ECALL_LED_R_PIN, GPIO_OUTPUT);
-    GPIO_SetPinOutput(ECALL_LED_R_PORT, ECALL_LED_R_PIN);
+    GPIO_ClearPinOutput(ECALL_LED_R_PORT, ECALL_LED_R_PIN);                     //default off
     /******** ECALL_LED_G ***************************/
     PORT_PinmuxConfig(ECALL_LED_G_PORT, ECALL_LED_G_PIN, ECALL_LED_G_PIN_MUX);
     GPIO_SetPinDir(ECALL_LED_G_PORT, ECALL_LED_G_PIN, GPIO_OUTPUT);
-    GPIO_SetPinOutput(ECALL_LED_G_PORT, ECALL_LED_G_PIN);
+    GPIO_ClearPinOutput(ECALL_LED_G_PORT, ECALL_LED_G_PIN);                     //default off
      /******** ECALL_BK_LIGHT ***************************/
     // PORT_PinmuxConfig(ECALL_BK_LIGHT_PORT, ECALL_BK_LIGHT_PIN, ECALL_BK_LIGHT_PIN_MUX);
     // GPIO_SetPinDir(ECALL_BK_LIGHT_PORT, ECALL_BK_LIGHT_PIN, GPIO_OUTPUT);
@@ -348,12 +348,16 @@ void EcallHalSetVehicleMute(uint8_t flag)
 {
     if (0 == flag)
     {
+        #if AMP_ENABLE == 1
         Sa51500Close();
+        #endif
         GPIO_ClearPinOutput(VEHICLE_MUTE_PORT, VEHICLE_MUTE_PIN);
     }
     else
     {
+        #if AMP_ENABLE == 1
         Sa51500Init();
+        #endif
         GPIO_SetPinOutput(VEHICLE_MUTE_PORT, VEHICLE_MUTE_PIN);
     }
 }
@@ -966,7 +970,9 @@ void EcallHalInit(void)
     EcallGpioInit();
     g_SosLedMsgQueue = xQueueCreate(5, sizeof(SosLledState_e));
     g_SosLedMutex = xSemaphoreCreateMutex();  
+    #if AMP_ENABLE == 1
     Sa51500Init();
+    #endif
 }
 
 /** ****************************************************************************
@@ -1067,15 +1073,15 @@ void EcallHalSetMode(uint8_t wakeMode)
 {   
     if(0 == wakeMode)
     {
-        EcallHalSetSosLedRedState( 0 );
-        EcallHalSetSosLedGreenState( 0 );
+        EcallHalSetSosLedRedState(0);
+        EcallHalSetSosLedGreenState(0);
         EcallHalSetVehicleMute(0);
         GPIO_ClearPinOutput(ECALL_PWR_EN_PORT, ECALL_PWR_EN_PIN);
     }
     else if(1 == wakeMode)
     {
-        EcallHalSetSosLedRedState( 1 );
-        EcallHalSetSosLedGreenState( 1 );
+        EcallHalSetSosLedRedState(0);   //change power on led off
+        EcallHalSetSosLedGreenState(0); //change power on led off
         EcallHalSetVehicleMute(1);
         GPIO_SetPinOutput(ECALL_PWR_EN_PORT, ECALL_PWR_EN_PIN);
     }  

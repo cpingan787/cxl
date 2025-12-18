@@ -51,6 +51,10 @@ typedef enum
 #define CMD_M_SEAT_VENTILATE_E      (2U)
 #define CMD_S_SEAT_HEAT_SET_E       (3U)
 #define CMD_S_SEAT_VENTILATE_E      (4U)
+#define CMD_RL_SEAT_HEAT_SET_E      (5U)
+#define CMD_RL_SEAT_VENTILATE_E     (6U)
+#define CMD_RR_SEAT_HEAT_SET_E      (7U)
+#define CMD_RR_SEAT_VENTILATE_E     (8U)
 // PLGM commands
 #define CMD_DOORS_SET_E             (1U)
 // BCM commands

@@ -75,6 +75,7 @@ static const PwmRule_t g_pwmRules[] =
 };
 static volatile PwmRuntime_t g_pwm;
 static TelematicsMode_e g_telemataticsMode = TELEMATICS_MODE_NOT_ACTIVE;
+static PhoneCallState_e g_PhoneCallState = E_ECALL_STATE_NOT_ACTIVE;
 /****************************** Function Declarations *************************/
 static void AirbagPwmInit(void);
 static AirbagPwmState_e AirbagPwmGetState(void);
@@ -125,36 +126,41 @@ static void SosLedControlProcess(void)
     {
         switch( sos_led_msg )
         {
-            case E_SOS_LED_STATE_RING:         /*ECALL拨号中LED状态指示灯 200ms开800ms关*/
+            case E_SOS_LED_STATE_RING:         /*ECALL拨号中LED状态指示灯 100ms开100ms关*/
                 EcallHalSetSosLedMode( E_ECALL_LED_MODE_FLASH , 100 , 100 );
                 SetSosLedState( E_SOS_LED_STATE_RING );
             break;
-            case E_SOS_LED_STATE_CALL:         /*ECALL正在通话中LED状态指示灯 800ms开200ms关*/
-                EcallHalSetSosLedMode( E_ECALL_LED_MODE_FLASH , 100 , 100 );
+
+            case E_SOS_LED_STATE_CALL:         /*ECALL正在通话中LED状态指示灯常亮*/
+                EcallHalSetSosLedMode( E_ECALL_LED_MODE_KEEP_ON , 0 , 0 );
                 SetSosLedState( E_SOS_LED_STATE_CALL );
             break;
+
             case E_SOS_LED_STATE_WAIT_BACK:    /*ECALL等待PSAP应答时 500ms开500ms关*/
                 EcallHalSetSosLedMode( E_ECALL_LED_MODE_FLASH , 500 , 500 );
                 SetSosLedState( E_SOS_LED_STATE_WAIT_BACK );
             break;
+
             case E_SOS_LED_STATE_END:          /*ECALL事件结束 LED灯关闭时全部为 0*/
                 EcallHalSetSosLedMode( E_ECALL_LED_MODE_KEEP_OFF , 0 , 0 );
                 SetSosLedState( E_SOS_LED_STATE_END );
             break;
 
-            /************************************************************************/
             case E_SOS_LED_STATE_SELFCHECK_ERR:      /*设备自检失败，LED状态指示灯 200ms开1800ms关*/
                 EcallHalSetSosLedMode( E_ECALL_LED_MODE_FLASH , 200 , 1800 );
                 SetSosLedState( E_SOS_LED_STATE_SELFCHECK_ERR );
             break;
+
             case E_SOS_LED_STATE_WARNING:         /*中断故障，LED状态指示灯 125ms开125ms关*/
                 EcallHalSetSosLedMode( E_ECALL_LED_MODE_FLASH , 125 , 125 );
                 SetSosLedState( E_SOS_LED_STATE_WARNING );
             break;  
+
             case E_SOS_LED_STATE_SELFCHECK_ON:           /*ECALL事件结束 LED灯打开时全部为 0*/
                 EcallHalSetSosLedMode( E_ECALL_LED_MODE_KEEP_ON , 0 , 0 );
                 SetSosLedState( E_SOS_LED_STATE_SELFCHECK_ON );
             break;
+            
             default:
             break;
         }
@@ -801,18 +807,21 @@ void TaskEcallProcess( void *pvParameters )
         {
             if(AlarmSdkGetEcallTriggerType() == 0)
             {
-                //EcallHalRestartAmpDiagnostic();
+                #if AMP_ENABLE == 1
+                EcallHalRestartAmpDiagnostic();
+                #endif
             }
         }
         if(cycleTimeCount >= (1000 / ECALL_PROCESS_CYCLE_TIME))
         {
             cycleTimeCount = 0;
+            #if AMP_ENABLE == 1
             EcallHalGetAmpFaultStatus();
             EcallHalGetAmpDiagnosticStatus();
-    
+            #endif
             /* 上电自检 */
             //SelfcheckCycleProcess();
-            AlarmSdkSelfchackPeriSend();
+            //AlarmSdkSelfchackPeriSend();
             //EcallHalRestartAmpClose();
         }
         vTaskDelay(ECALL_PROCESS_CYCLE_TIME);
@@ -955,4 +964,40 @@ void XCallSetTelemataticsMode(TelematicsMode_e mode)
 TelematicsMode_e XCallGetTelemataticsMode(void)
 {
     return g_telemataticsMode;
+}
+
+/*************************************************
+  Function:       XCallSetPhoneCallState
+  Description:    设置电话通话状态
+  Input:          state: 通话状态枚举值
+                  E_ECALL_STATE_INCOMING_TELEGRAM: 来电\
+                  E_ECALL_STATE_CONNECTING: 正在连接\
+                  E_ECALL_STATE_ANSWER_CALLS: 接听电话\
+                  E_ECALL_STATE_ON_THE_PHONE: 通话中\
+                  E_ECALL_STATE_HANG_UP: 挂断电话\
+                  E_ECALL_STATE_CALL_OVER: 通话结束
+  Output:         无
+  Return:         无
+*************************************************/
+void XCallSetPhoneCallState(PhoneCallState_e state)
+{
+    g_PhoneCallState = state;
+}
+
+/*************************************************
+  Function:       XCallGetPhoneCallState
+  Description:    获取当前电话通话状态
+  Input:          无
+  Output:         无
+  Return:         当前通话状态枚举值
+                  E_ECALL_STATE_INCOMING_TELEGRAM: 来电\
+                  E_ECALL_STATE_CONNECTING: 正在连接\
+                  E_ECALL_STATE_ANSWER_CALLS: 接听电话\
+                  E_ECALL_STATE_ON_THE_PHONE: 通话中\
+                  E_ECALL_STATE_HANG_UP: 挂断电话\
+                  E_ECALL_STATE_CALL_OVER: 通话结束
+*************************************************/
+PhoneCallState_e XCallGetPhoneCallState(void)
+{
+    return g_PhoneCallState;
 }

@@ -21,7 +21,7 @@
 #include "taskPowerManage.h"
 #include "taskDtcProcess.h"
 #include "canPeriodTask.h"
-
+#include "gpio_drv.h"
 /****************************** Macro Definitions ******************************/
 
 /****************************** Type Definitions ******************************/
@@ -67,11 +67,11 @@ static const AutosarNmParameter_t g_netManageAutosarConfigure[] =
             .NodeIdMax = 0xFF,               // Maximum node value for CAN network management messages
             .startUpTime = 1000,             // Maximum time the node stays in RMS (Start Up State) mode. T_REPEAT_MESSAGE unit: ms
             .nmTimeOutTime = 1000,           // Maximum time the node stays in NM (Network Mode) state. T_NM_TIMEOUT unit: ms.
-            .waitBusSleepTime = 5000 - 80,  // Ensure all nodes have time to stop their network activities. T_WAIT_BUS_SLEEP unit: ms
+            .waitBusSleepTime = 5000,  // Ensure all nodes have time to stop their network activities. T_WAIT_BUS_SLEEP unit: ms
             .startTXTime = 10,               // Maximum time interval from leaving BSM (Bus Sleep Mode) to entering RMS (Repeat Message State) mode and starting to send the first NM message
             .startxAppFrameTime = 20,        // Maximum time interval to start sending application frames after successfully sending the first NM message
             .immediateCycleTime = 20,        // Period for sending NM messages rapidly in the sub-state mode, unit: ms
-            .msgCycleTime = 200 - 8,             // Normal cycle time for sending network management messages in the sub-state or regular operation mode
+            .msgCycleTime = 200 - 5,             // Normal cycle time for sending network management messages in the sub-state or regular operation mode
             .wakeupTime = 100,               // Maximum time to start sending network management messages repeatedly after transitioning from sleep mode to network mode
             .immediateTimes = 10,            // Number of network management messages sent at immediateCycleTime in the sub-state mode
             .busOffQuickTime = 0,            // Time for quick recovery after bus-off in milliseconds
@@ -208,8 +208,11 @@ static void McuVoltageDtcCheckProcess(void)
     uint32_t v_gps1_mv = 0;
     uint32_t v_bcall_led_mv = 0;
     uint32_t v_ecall_led_mv = 0;
-    uint32_t v_bcall_adc_mv = 0;
-    uint32_t v_ecall_adc_mv = 0;
+    //uint32_t v_bcall_adc_mv = 0;
+    //uint32_t v_ecall_adc_mv = 0;
+    const uint32_t STUCK_LIMIT_1MIN = 6000;
+    static uint32_t s_ecall_stuck_cnt = 0;
+    static uint32_t s_bcall_stuck_cnt = 0;
     // 1. 读取主电源电压 (KL30)
     // if (PeripheralHalAdGet(AD_CHANNEL_KL30, &kl30_voltage_mv) == 0)
     // {
@@ -335,29 +338,39 @@ static void McuVoltageDtcCheckProcess(void)
         }
     }
     // 8. B-Call 按键电气故障诊断 (DTC B320707)
-    if (PeripheralHalAdGet(AD_CHANNEL_BCALL, &v_bcall_adc_mv) == 0)
+    if (GPIO_ReadPinLevel(PORT_C, GPIO_1) == 1)
     {
-        if (v_bcall_adc_mv > 2400 || v_bcall_adc_mv < 450)
+        if (s_bcall_stuck_cnt < STUCK_LIMIT_1MIN)
+        {
+            s_bcall_stuck_cnt++;
+        }
+        else
         {
             SetDtcFaultState(E_DTC_ITEM_MPU_BCALL_KEY_STUCK);
         }
-        else
-        {
-            ClearDtcFaultState(E_DTC_ITEM_MPU_BCALL_KEY_STUCK);
-        }
+    }
+    else
+    {
+        s_bcall_stuck_cnt = 0;
+        ClearDtcFaultState(E_DTC_ITEM_MPU_BCALL_KEY_STUCK);
     }
 
     // 9. E-Call 按键电气故障诊断 (DTC B320807)
-    if (PeripheralHalAdGet(AD_CHANNEL_ECALL, &v_ecall_adc_mv) == 0)
+    if (GPIO_ReadPinLevel(PORT_C, GPIO_0) == 1) 
     {
-        if (v_ecall_adc_mv > 2400 || v_ecall_adc_mv < 450)
+        if (s_ecall_stuck_cnt < STUCK_LIMIT_1MIN)
         {
-            SetDtcFaultState(E_DTC_ITEM_MPU_ECALL_KEY_STUCK);
+            s_ecall_stuck_cnt++;
         }
         else
         {
-            ClearDtcFaultState(E_DTC_ITEM_MPU_ECALL_KEY_STUCK);
+            SetDtcFaultState(E_DTC_ITEM_MPU_ECALL_KEY_STUCK);
         }
+    }
+    else
+    {
+        s_ecall_stuck_cnt = 0;
+        ClearDtcFaultState(E_DTC_ITEM_MPU_ECALL_KEY_STUCK);
     }
 }
 
@@ -630,11 +643,20 @@ void WatchDogCycleProcess(void)
     PeripheralHalFeedWatchDog();
 }
 
+void EBcallInit(void)
+{
+    PORT_PinmuxConfig(PORT_C, GPIO_0, PTC0_GPIO);
+    GPIO_SetPinDir(PORT_C, GPIO_0, GPIO_INPUT);
+
+    PORT_PinmuxConfig(PORT_C, GPIO_1, PTC1_GPIO);
+    GPIO_SetPinDir(PORT_C, GPIO_1, GPIO_INPUT);
+}
+
 void TaskPowerManage(void *pvParameters)
 {
     TickType_t xLastWakeTime;
     uint8_t timeCount;
-
+    EBcallInit();
     AutosarNmSdkConfig(g_netManageAutosarConfigure, sizeof(g_netManageAutosarConfigure) / sizeof(g_netManageAutosarConfigure[0]));
     PowerManageSdkInit(&g_pmCondg);
     // BatterySdkInit(&g_batterConfig,10,E_BATTERY_XYSR);

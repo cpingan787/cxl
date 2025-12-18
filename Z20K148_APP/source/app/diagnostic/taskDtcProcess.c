@@ -1221,7 +1221,7 @@ static void DtcDetectDisable(void)
 
 static void SetDtcProcessEnableFlag(uint8_t flag)
 {
-  static uint8_t enableFlag = 0;
+  static uint8_t enableFlag = 1;
   if (flag)
   {
     if (enableFlag == 0)

@@ -27,6 +27,7 @@
 #include "taskPowerManage.h"
 #include "powerManageHal.h"
 #include "canPeriodTask.h"
+#include "osTimerSdk.h"
 /****************************** Macro Definitions ******************************/
 #define AUTOSAR_NET_MANAGE_MAX_INSTANCE         (1U)
 #define NM_MESSAGE_PDU_LENGTH                   (8U)
@@ -34,7 +35,7 @@
 #define NM_E_OK                                 (0U)
 #define NM_E_NOT_EXECUTED                       (2U)
 #define NM_E_NOT_OK                             (3U)
-#define NM_BUS_OFF_ERROR_RESET_MSG_ENABLE       (1U)
+#define NM_BUS_OFF_ERROR_RESET_MSG_ENABLE       (0U)
 
 //Network management message config
 #define NM_MESSAGE_DEFAULT_VALUE                (0x00)
@@ -81,8 +82,6 @@
 
 #define NM_WUP_VALUE                            (0x4C)
 
-// Global variable for sub-network wakeup request value
-static uint8_t g_nmSubNetWakeupRequestValue = NM_SUB_NET_WAKEUP_REQ_DEFAULT_VALUE;
 /****************************** Type Definitions ******************************/
 typedef enum
 {
@@ -135,7 +134,8 @@ typedef enum
 static AutosarNmVariable_t g_netManage[AUTOSAR_NET_MANAGE_MAX_INSTANCE];
 static const AutosarNmParameter_t *g_pNmConfigure = NULL;
 static uint8_t g_netManageNumber = 0;
-
+// Global variable for sub-network wakeup request value
+static uint8_t g_nmSubNetWakeupRequestValue = NM_SUB_NET_WAKEUP_REQ_DEFAULT_VALUE;
 /****************************** Function Declarations *************************/
 static void StartNMTimer(uint8_t index);
 static void StartWaitBusSleepTimer(uint8_t index);
@@ -232,11 +232,11 @@ int16_t AutosarNmSdkConfig(const AutosarNmParameter_t *pNmConfigre, uint8_t NmNu
             canFilter.canIdExtdMin = 0x00;
             canFilter.canIdExtdMax = 0xFFFFFFFF;
             CanHalSetFilter(g_netManage[i].receiveCheckCanHandle, &canFilter);   
-            g_netManage[i].NMTimerHandle = TimerHalOpen();
-            g_netManage[i].MsgCycleTimerHandle = TimerHalOpen();
-            g_netManage[i].BusSleepTimerHandle = TimerHalOpen();
-            g_netManage[i].StartUpTimerHandle = TimerHalOpen();
-            g_netManage[i].busOffRecoverTimerHandle = TimerHalOpen();
+            g_netManage[i].NMTimerHandle = OsTimerSdkOpen();
+            g_netManage[i].MsgCycleTimerHandle = OsTimerSdkOpen();
+            g_netManage[i].BusSleepTimerHandle = OsTimerSdkOpen();
+            g_netManage[i].StartUpTimerHandle = OsTimerSdkOpen();
+            g_netManage[i].busOffRecoverTimerHandle = OsTimerSdkOpen();
         }
     } 
     return retVal;
@@ -614,7 +614,7 @@ static int16_t AutosarNmPassiveStartUp( const int16_t nmChannelHandle )
  *************************************************/
 static void StartNMTimer(uint8_t index)
 {
-    TimerHalStartTime(g_netManage[index].NMTimerHandle, g_pNmConfigure[index].nmTimeOutTime);
+    OsTimerSdkStartTime(g_netManage[index].NMTimerHandle, g_pNmConfigure[index].nmTimeOutTime);
 }
 
 /*************************************************
@@ -627,7 +627,7 @@ static void StartNMTimer(uint8_t index)
  *************************************************/
 // static void StopNMTimer(uint8_t index)
 // {
-//   TimerHalStopTime(g_netManage[index].NMTimerHandle);
+//   OsTimerSdkStopTime(g_netManage[index].NMTimerHandle);
 // }
 
 /*************************************************
@@ -640,7 +640,7 @@ static void StartNMTimer(uint8_t index)
  *************************************************/
 static void StartWaitBusSleepTimer(uint8_t index)
 {
-    TimerHalStartTime(g_netManage[index].BusSleepTimerHandle, g_pNmConfigure[index].waitBusSleepTime);
+    OsTimerSdkStartTime(g_netManage[index].BusSleepTimerHandle, g_pNmConfigure[index].waitBusSleepTime);
 }
 
 /*************************************************
@@ -653,7 +653,7 @@ static void StartWaitBusSleepTimer(uint8_t index)
  *************************************************/
 static void StopWaitBusSleepTimer(uint8_t index)
 {
-    TimerHalStopTime(g_netManage[index].BusSleepTimerHandle);
+    OsTimerSdkStopTime(g_netManage[index].BusSleepTimerHandle);
 }
 
 /*************************************************
@@ -666,7 +666,7 @@ static void StopWaitBusSleepTimer(uint8_t index)
  *************************************************/
 static void StartMsgCycleTimer(uint8_t index)
 { 
-    TimerHalStartTime(g_netManage[index].MsgCycleTimerHandle, g_pNmConfigure[index].msgCycleTime);
+    OsTimerSdkStartTime(g_netManage[index].MsgCycleTimerHandle, g_pNmConfigure[index].msgCycleTime);
 }
 
 /*************************************************
@@ -679,7 +679,7 @@ static void StartMsgCycleTimer(uint8_t index)
  *************************************************/
 static void StopMsgCycleTimer(uint8_t index)
 {
-    TimerHalStopTime(g_netManage[index].MsgCycleTimerHandle);
+    OsTimerSdkStopTime(g_netManage[index].MsgCycleTimerHandle);
 }
 
 /*************************************************
@@ -692,7 +692,7 @@ static void StopMsgCycleTimer(uint8_t index)
  *************************************************/
 static void StartStartUpTimer(uint8_t index)
 {
-    TimerHalStartTime(g_netManage[index].StartUpTimerHandle, g_pNmConfigure[index].startUpTime);
+    OsTimerSdkStartTime(g_netManage[index].StartUpTimerHandle, g_pNmConfigure[index].startUpTime);
 }
 
 /*************************************************
@@ -705,7 +705,7 @@ static void StartStartUpTimer(uint8_t index)
  *************************************************/
 static void StopStartUpTimer(uint8_t index)
 {
-    TimerHalStopTime(g_netManage[index].StartUpTimerHandle);
+    OsTimerSdkStopTime(g_netManage[index].StartUpTimerHandle);
 }
 
 /*************************************************
@@ -933,13 +933,13 @@ static void NetManageStateBussLeepMode(uint8_t index)
  *************************************************/
 static void NetManageStateStartUp(uint8_t index)
 {
-    if((g_netManage[index].networkRequestFlag == 1) && (TimerHalIsTimeout(g_netManage[index].StartUpTimerHandle) == 0))  
+    if((g_netManage[index].networkRequestFlag == 1) && (OsTimerSdkIsTimeout(g_netManage[index].StartUpTimerHandle) == 0))  
     {   
         TBOX_PRINT("Nm SUM to NOM!\r\n");
         StopStartUpTimer(index);
         g_netManage[index].netManageState = E_NETMANAGESTATE_NORMALOPERATIONSTATE;   
     }
-    else if((g_netManage[index].networkRequestFlag == 0) && (TimerHalIsTimeout(g_netManage[index].StartUpTimerHandle) == 0))   
+    else if((g_netManage[index].networkRequestFlag == 0) && (OsTimerSdkIsTimeout(g_netManage[index].StartUpTimerHandle) == 0))   
     {
         TBOX_PRINT("Nm SUM to RSM!\r\n");
         StopStartUpTimer(index);
@@ -969,7 +969,7 @@ static void NetManageStateReadySleep(uint8_t index)
         TBOX_PRINT("Nm RSM to NOM!\r\n");
 		g_netManage[index].netManageState = E_NETMANAGESTATE_NORMALOPERATIONSTATE; 
 	}
-	if(TimerHalIsTimeout(g_netManage[index].NMTimerHandle) == 0)  
+	if(OsTimerSdkIsTimeout(g_netManage[index].NMTimerHandle) == 0)  
 	{
 		StartWaitBusSleepTimer(index);
 		CanPeriodSendDisable(TBOX_CAN_CHANNEL_2);
@@ -995,7 +995,7 @@ static void NetManageStateNomalOperation(uint8_t index)
         TBOX_PRINT("Nm NOM to RSM!\r\n");
         g_netManage[index].netManageState = E_NETMANAGESTATE_READYSLEEPSTATE;     
     }
-    if(TimerHalIsTimeout(g_netManage[index].NMTimerHandle) == 0)   //Condition 6 ,T_NM_TIMEROUT��ʱ
+    if(OsTimerSdkIsTimeout(g_netManage[index].NMTimerHandle) == 0)   //Condition 6 ,T_NM_TIMEROUT��ʱ
     {
         StartNMTimer(index);
     }
@@ -1031,7 +1031,7 @@ static void NetManageStatePrepareBusSleep(uint8_t index)
         MsgCycleTimeOutProcess(index);
         CanPeriodSendEnable(TBOX_CAN_CHANNEL_2);
     }
-    else if(TimerHalIsTimeout(g_netManage[index].BusSleepTimerHandle) == 0)   
+    else if(OsTimerSdkIsTimeout(g_netManage[index].BusSleepTimerHandle) == 0)   
     {
         TBOX_PRINT("Nm PBM to BSM!\r\n");
         StopWaitBusSleepTimer(index);
@@ -1126,7 +1126,7 @@ static void CanHardwareControllerProcess(uint8_t index)
                 {
                     if(g_pNmConfigure[index].busOffSlowTime != 0)
                     {
-                        TimerHalStartTime(g_netManage[index].busOffRecoverTimerHandle, g_pNmConfigure[index].busOffSlowTime);
+                        OsTimerSdkStartTime(g_netManage[index].busOffRecoverTimerHandle, g_pNmConfigure[index].busOffSlowTime);
                         g_netManage[index].busOffTimerOnFlag = 1;
                     }
                     else
@@ -1139,7 +1139,7 @@ static void CanHardwareControllerProcess(uint8_t index)
                     if(g_pNmConfigure[index].busOffQuickTime != 0)
                     {
                         // start busoff recover quick timer
-                        TimerHalStartTime(g_netManage[index].busOffRecoverTimerHandle, g_pNmConfigure[index].busOffQuickTime);
+                        OsTimerSdkStartTime(g_netManage[index].busOffRecoverTimerHandle, g_pNmConfigure[index].busOffQuickTime);
                         g_netManage[index].busOffTimerOnFlag = 1;
                         g_netManage[index].busOffTimeCount++;
                     }
@@ -1154,7 +1154,7 @@ static void CanHardwareControllerProcess(uint8_t index)
                 if(g_pNmConfigure[index].busOffSlowTime != 0)
                 {
                     //start busoff recover slow timer
-                    TimerHalStartTime(g_netManage[index].busOffRecoverTimerHandle,g_pNmConfigure[index].busOffSlowTime);
+                    OsTimerSdkStartTime(g_netManage[index].busOffRecoverTimerHandle,g_pNmConfigure[index].busOffSlowTime);
                     g_netManage[index].busOffTimerOnFlag = 1;
                     if(g_netManage[index].busOffTimeCount < g_pNmConfigure[index].busOffErrorEventLimitCount)
                     {
@@ -1289,14 +1289,14 @@ static void BusOffErrorResetCanNMTransmit(uint8_t index)
  *************************************************/
 static void NetManageTimerProcess(uint8_t index)
 {
-	if(TimerHalIsTimeout(g_netManage[index].MsgCycleTimerHandle) == 0)
+	if(OsTimerSdkIsTimeout(g_netManage[index].MsgCycleTimerHandle) == 0)
 	{
         MsgCycleTimeOutProcess(index);
 	}
 
-	if(TimerHalIsTimeout(g_netManage[index].busOffRecoverTimerHandle) == 0)
+	if(OsTimerSdkIsTimeout(g_netManage[index].busOffRecoverTimerHandle) == 0)
 	{
-        TimerHalStopTime(g_netManage[index].busOffRecoverTimerHandle);
+        OsTimerSdkStopTime(g_netManage[index].busOffRecoverTimerHandle);
         CanHalResetHardware(g_netManage[index].canHandle);
         g_netManage[index].busOffTimerOnFlag = 0;
 #if(NM_BUS_OFF_ERROR_RESET_MSG_ENABLE) == 1

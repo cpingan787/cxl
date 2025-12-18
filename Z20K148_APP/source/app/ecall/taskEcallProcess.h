@@ -44,9 +44,22 @@ typedef enum
     TELEMATICS_MODE_ECALL = 4         /* Ecall Mode */
 } TelematicsMode_e;
 
+typedef enum
+{
+    E_ECALL_STATE_NOT_ACTIVE = 0,
+    E_ECALL_STATE_INCOMING_TELEGRAM,
+    E_ECALL_STATE_CONNECTING,
+    E_ECALL_STATE_ANSWER_CALLS,
+	E_ECALL_STATE_ON_THE_PHONE,
+    E_ECALL_STATE_HANG_UP,
+	E_ECALL_STATE_CALL_OVER,
+} PhoneCallState_e;
+
 /* 中断回调（每次上升沿/下降沿调用一次） */
 void AirbagPwmIsrHandler(uint8_t level);
 void TaskEcallProcess( void *pvParameters );
 TelematicsMode_e XCallGetTelemataticsMode(void);
+PhoneCallState_e XCallGetPhoneCallState(void);
 void XCallSetTelemataticsMode(TelematicsMode_e mode);
+void XCallSetPhoneCallState(PhoneCallState_e state);
 #endif    //_TASK_APP_ECALL_PROCESS_H

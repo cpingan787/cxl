@@ -1784,6 +1784,18 @@ void RemoteControlGetSignalValue(RemoteControlStatusSignalInfo_t *stRemoteCtrlSi
     CanParseSdkReadSignal(g_CanSignalFormat, &pCan0SignalConfigure->HVSM_FRVentilatingActLevel, &dataVaule);
     stRemoteCtrlSignalValTemp->HVSM_FRVentilatingActLevel = (uint8_t)dataVaule;
 
+    CanParseSdkReadSignal(g_CanSignalFormat, &pCan0SignalConfigure->HVSMR_RLHeatingActLevel, &dataVaule);
+    stRemoteCtrlSignalValTemp->HVSMR_RLHeatingActLevel = (uint8_t)dataVaule;
+
+    CanParseSdkReadSignal(g_CanSignalFormat, &pCan0SignalConfigure->HVSMR_RRHeatingActLevel, &dataVaule);
+    stRemoteCtrlSignalValTemp->HVSMR_RRHeatingActLevel = (uint8_t)dataVaule;
+
+    CanParseSdkReadSignal(g_CanSignalFormat, &pCan0SignalConfigure->HVSMR_RLVentilatingActLevel, &dataVaule);
+    stRemoteCtrlSignalValTemp->HVSMR_RLVentilatingActLevel = (uint8_t)dataVaule;
+
+    CanParseSdkReadSignal(g_CanSignalFormat, &pCan0SignalConfigure->HVSMR_RRVentilatingActLevel, &dataVaule);
+    stRemoteCtrlSignalValTemp->HVSMR_RRVentilatingActLevel = (uint8_t)dataVaule;
+
     /* PLGM */
     CanParseSdkReadSignal(g_CanSignalFormat, &pCan0SignalConfigure->PLGM_ModeSW, &dataVaule);
     stRemoteCtrlSignalValTemp->PLGM_ModeSW = (uint8_t)dataVaule;

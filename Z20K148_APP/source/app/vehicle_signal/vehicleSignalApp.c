@@ -46,6 +46,7 @@ CAN_ID_CONFIGURE_DEFINE(GW_PEPS_1_T)
 CAN_ID_CONFIGURE_DEFINE(GW_BCM_BCAN_11_T)
 CAN_ID_CONFIGURE_DEFINE(GW_HVACF_1_T)
 CAN_ID_CONFIGURE_DEFINE(GW_SCM_HVSM_1_T)
+CAN_ID_CONFIGURE_DEFINE(GW_HVSM_1_T)
 CAN_ID_CONFIGURE_DEFINE(GW_PLGM_1_T)
 CAN_ID_CONFIGURE_DEFINE(GWM_TCAN_NM)
 CAN_ID_CONFIGURE_DEFINE(GW_1_T)
@@ -73,6 +74,7 @@ CAN_V_ID_ELEMENT(GW_PEPS_1_T, 100, 0x1E5)
 CAN_V_ID_ELEMENT(GW_BCM_BCAN_11_T, 100, 0x3B9)
 CAN_V_ID_ELEMENT(GW_HVACF_1_T, 200, 0x1E6)
 CAN_V_ID_ELEMENT(GW_SCM_HVSM_1_T, 200, 0x34E)
+CAN_V_ID_ELEMENT(GW_HVSM_1_T, 200, 0x34F)
 CAN_V_ID_ELEMENT(GW_PLGM_1_T, 100, 0x305)
 CAN_V_ID_ELEMENT(GWM_TCAN_NM, 200, 0x54F)
 CAN_V_ID_ELEMENT(GW_1_T, 100, 0x3C8)
@@ -3998,7 +4000,59 @@ static const can0_signal_configure_t m_can0SignalConfigure =
                 .InvalidData = 0xFFFFFFFF,
             }, // Front right seat temperature
 
-        .PLGM_Latchst =
+        .HVSMR_RLHeatingActLevel =
+            {
+                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_HVSM_1_T),
+                .dataType = 0,
+                .startBit = 0,
+                .bitLength = 3,
+                .resulotion = 1,
+                .offset = 0,
+                .useInvalidFlag = 1,
+                .InvalidData = 0xFFFFFFFF,
+            }, // Rear left seat heating actual level
+        
+        .HVSMR_RRHeatingActLevel =
+            {
+                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_HVSM_1_T),
+                .dataType = 0,
+                .startBit = 4,
+                .bitLength = 3,
+                .resulotion = 1,
+                .offset = 0,
+                .useInvalidFlag = 1,
+                .InvalidData = 0xFFFFFFFF,
+            }, // Rear right seat heating actual level
+        
+        .HVSMR_RLVentilatingActLevel =
+            {
+                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_HVSM_1_T),
+                .dataType = 0,
+                .startBit = 8,
+                .bitLength = 3,
+                .resulotion = 1,
+                .offset = 0,
+                .useInvalidFlag = 1,
+                .InvalidData = 0xFFFFFFFF,
+            }, // Rear left seat ventilating actual level
+        
+        .HVSMR_RRVentilatingActLevel =
+            {
+                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_HVSM_1_T),
+                .dataType = 0,
+                .startBit = 12,
+                .bitLength = 3,
+                .resulotion = 1,
+                .offset = 0,
+                .useInvalidFlag = 1,
+                .InvalidData = 0xFFFFFFFF,
+            }, // Tail door latch status
+        
+        .PLGM_Latchst = 
             {
                 .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
                 .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_PLGM_1_T),
@@ -4009,7 +4063,7 @@ static const can0_signal_configure_t m_can0SignalConfigure =
                 .offset = 0,
                 .useInvalidFlag = 1,
                 .InvalidData = 0xFFFFFFFF,
-            }, // Tail door latch status
+            },
 
         .PLGM_Doorst =
             {

@@ -21,15 +21,15 @@
 #include "int_drv.h"
 
 /****************************** Macro Definitions ******************************/
-#define WORKFLASH_BASE_ADDRESS                    FLASH_DATA_BASE_ADDR
-#define WORKFLASH_PARAMETER_ADDRESS_OFFSET      0
-#define ERASE_ADDRESS_INC    0x8000                // 32kbyte for 1M device
-
+#define WORKFLASH_BASE_ADDRESS                      FLASH_DATA_BASE_ADDR
+#define WORKFLASH_PARAMETER_ADDRESS_OFFSET          (0U)
+#define ERASE_ADDRESS_INC                           (0x8000U)                // 32kbyte for 1M device
+#define FLASH_YIELD_EVERY_PHRASES                   (32U)
 /****************************** Type Definitions ******************************/
 typedef union
 {
-  uint8_t u8Data[8192];
-  uint32_t u32Data[2048];
+    uint8_t u8Data[FLASH_SECTOR_SIZE];
+    uint32_t u32Data[FLASH_SECTOR_SIZE / sizeof(uint32_t)];
 }WorkFlashBuffer_u;
 
 /****************************** Global Variables ******************************/
@@ -58,6 +58,15 @@ static uint8_t GetNewSectorNum(uint32_t FirstSectorAddress,uint8_t *newSectorFla
 static ResultStatus_t FlashHalIsMetaDataValid(const FlashHalMetaDataInfo_t *pMetaData);
 
 /****************************** Public Function Implementations ***************/
+/*************************************************
+  Function:       GetNewSectorNum
+  Description:    Get new sector number for flash writing
+  Input:          FirstSectorAddress - First sector address
+                  newSectorFlag - Pointer to store new sector flag
+  Output:         newSectorFlag - Updated with new flag value
+  Return:         Selected sector number (0 or 1)
+  Others:         
+*************************************************/
 static uint8_t GetNewSectorNum(uint32_t FirstSectorAddress,uint8_t *newSectorFlag)
 {
   
@@ -71,62 +80,62 @@ static uint8_t GetNewSectorNum(uint32_t FirstSectorAddress,uint8_t *newSectorFla
     sector0Flag = *((uint8_t *)(FLASH_DATA_BASE_ADDR+(FirstSectorAddress+8190)));
     sector1Flag = *((uint8_t *)(FLASH_DATA_BASE_ADDR+(FirstSectorAddress+8190+0x2000)));  
     
-    if(sector0Flag==0xFF)//select sector0
+    if(sector0Flag == 0xFF)//select sector0
     {
         selectSectorNum = 0;
         newFlag = 0;
     }
-    else if(sector1Flag==0xFF)//select sector1
+    else if(sector1Flag == 0xFF)//select sector1
     {
         selectSectorNum = 1;
         newFlag = sector0Flag+1;        
     }
     else
     {
-        if(sector0Flag<sector1Flag)
+        if(sector0Flag < sector1Flag)
         {
-            if(sector0Flag!=0)//select sector0
+            if(sector0Flag != 0)//select sector0
             {
                 selectSectorNum = 0;
-                newFlag = sector1Flag+1;
+                newFlag = sector1Flag + 1;
             }
             else//select sector1
             {
-              if(sector1Flag!=1)
+              if(sector1Flag != 1)
               {
                 selectSectorNum = 1;
-                newFlag = sector0Flag+1;                
+                newFlag = sector0Flag + 1;                
               }
               else
               {
                 selectSectorNum = 0;
-                newFlag = sector1Flag+1;            
+                newFlag = sector1Flag + 1;            
               }
             }
         }
         else
         {
-          if(sector1Flag!=0)
+          if(sector1Flag != 0)
           {
                 selectSectorNum = 1;
-                newFlag = sector0Flag+1;
+                newFlag = sector0Flag + 1;
           }
           else
           {
-            if(sector0Flag!=1)
+            if(sector0Flag != 1)
             {
               selectSectorNum = 0;
-              newFlag = sector1Flag+1;
+              newFlag = sector1Flag + 1;
             }
             else
             {
                 selectSectorNum = 1;
-                newFlag = sector0Flag+1;       
+                newFlag = sector0Flag + 1;       
             }
           }
         }
     }
-    if(newFlag==0xFF)
+    if(newFlag == 0xFF)
     {
         newFlag = 0;
     } 
@@ -134,6 +143,14 @@ static uint8_t GetNewSectorNum(uint32_t FirstSectorAddress,uint8_t *newSectorFla
     return selectSectorNum;
 }
 
+/*************************************************
+  Function:       FLASHTEST_CCIF_ISR
+  Description:    FLASH CCIF interrupt service routine
+  Input:          None
+  Output:         None
+  Return:         None
+  Others:         Handles flash command complete interrupt
+*************************************************/
 void FLASHTEST_CCIF_ISR(void)
 {
     // FLASH_IntFlag = 1;
@@ -200,62 +217,67 @@ int16_t FlashHalDataBlockWrite(uint32_t blockAddress,uint32_t writeOffset,const 
 
     xSemaphoreTake( g_workFlashMutexHandle, portMAX_DELAY );
     
-    sectorBaseAddress = (blockAddress&0xC000)+WORKFLASH_PARAMETER_ADDRESS_OFFSET;//first sector address
+    sectorBaseAddress = (blockAddress & 0xC000) + WORKFLASH_PARAMETER_ADDRESS_OFFSET;   //first sector address
     
     sectorNum = GetNewSectorNum(sectorBaseAddress,&newSectorFlag);
     
-    alternativeAddress = sectorBaseAddress+WORKFLASH_BASE_ADDRESS+(uint32_t)sectorNum*0x2000; 
-    startAddress = alternativeAddress+writeOffset;
+    alternativeAddress = sectorBaseAddress + WORKFLASH_BASE_ADDRESS + (uint32_t)sectorNum * 0x2000; 
+    startAddress = alternativeAddress + writeOffset;
     endAddress = startAddress + writeLength;
     
     //TBOX_PRINT("WorkFlashWriteBySector alternativeAddress %x\r\n",alternativeAddress);
-    if(endAddress>=(alternativeAddress+0x2000))
+    if(endAddress >= (alternativeAddress + 0x2000))
     {
-      xSemaphoreGive(g_workFlashMutexHandle);
-      return -1;
+        xSemaphoreGive(g_workFlashMutexHandle);
+        return -1;
     }
     
     if(sectorNum==0)
     {
-      pAddress = (uint32_t *)(sectorBaseAddress+WORKFLASH_BASE_ADDRESS+0x2000); 
+        pAddress = (uint32_t *)(sectorBaseAddress + WORKFLASH_BASE_ADDRESS + 0x2000); 
     }
     else
     {
-      pAddress = (uint32_t *)(sectorBaseAddress+WORKFLASH_BASE_ADDRESS);  
+        pAddress = (uint32_t *)(sectorBaseAddress + WORKFLASH_BASE_ADDRESS);  
     }
 
-    for(i=0;i<2048;i++)
+    for(i = 0; i < 2048; i++)
     {
         g_workFlashBuffer.u32Data[i] = pAddress[i];
     }
-    for(i=0;i<writeLength;i++)
+    for(i = 0; i < writeLength; i++)
     {
-        g_workFlashBuffer.u8Data[i+writeOffset] = pWriteData[i];
+        g_workFlashBuffer.u8Data[i + writeOffset] = pWriteData[i];
     }
     g_workFlashBuffer.u8Data[8190] = newSectorFlag;      
 
     // Erase sector 0
-    COMMON_DISABLE_INTERRUPTS();    //禁止 IRQ 全局中断
+    COMMON_DISABLE_INTERRUPTS();        //禁止 IRQ 全局中断
     ret = FLASH_EraseSector(alternativeAddress, &g_stcFlashCmdExeConfig);
-    COMMON_ENABLE_INTERRUPTS();        //使能 IRQ 全局中断
+    COMMON_ENABLE_INTERRUPTS();         //使能 IRQ 全局中断
     if (ret != SUCC)
     {
-      xSemaphoreGive(g_workFlashMutexHandle);
-      return -1;
+        xSemaphoreGive(g_workFlashMutexHandle);
+        return -1;
     }
 
     // Write sector 0 with 32bit access
 
-    for(i=0;i<512;i++)
+    for(i = 0; i < 512; i++)
     {
-      COMMON_DISABLE_INTERRUPTS();    //禁止 IRQ 全局中断
-      ret = FLASH_ProgramPhrase(alternativeAddress+i*16, (uint8_t *)&g_workFlashBuffer.u32Data[i*4], &g_stcFlashCmdExeConfig);
-      COMMON_ENABLE_INTERRUPTS();        //使能 IRQ 全局中断
-      if (ret != SUCC)
-      {
-        xSemaphoreGive(g_workFlashMutexHandle);
-        return -1;
-      }
+        COMMON_DISABLE_INTERRUPTS();      //禁止 IRQ 全局中断
+        ret = FLASH_ProgramPhrase(alternativeAddress + i * 16, (uint8_t *)&g_workFlashBuffer.u32Data[i * 4], &g_stcFlashCmdExeConfig);
+        COMMON_ENABLE_INTERRUPTS();        //使能 IRQ 全局中断
+        if (ret != SUCC)
+        {
+            xSemaphoreGive(g_workFlashMutexHandle);
+            return -1;
+        }
+
+        if (((i + 1U) % FLASH_YIELD_EVERY_PHRASES) == 0U)
+        {
+            vTaskDelay(1);               //enable task switch,prevent task blocked in ISR             
+        }
     }    
     // Disable write access
     
@@ -282,15 +304,15 @@ int16_t FlashHalDataBlockRead(uint32_t blockAddress,uint32_t readOffset,uint8_t 
     uint8_t newSectorFlag;
     uint8_t sectorNum;
     uint8_t *pDataAddress;
-    uint32_t i;
+    uint32_t i = 0U;
     
     xSemaphoreTake( g_workFlashMutexHandle, portMAX_DELAY );
     
-    alternativeAddress = (blockAddress&0xFFFFC000)+(WORKFLASH_PARAMETER_ADDRESS_OFFSET);//first sector address
+    alternativeAddress = (blockAddress & 0xFFFFC000) + (WORKFLASH_PARAMETER_ADDRESS_OFFSET);//first sector address
     
     sectorNum = GetNewSectorNum(alternativeAddress,&newSectorFlag);
     pDataAddress = (uint8_t *)(alternativeAddress + readOffset + WORKFLASH_BASE_ADDRESS);
-    if(sectorNum==0)
+    if(sectorNum == 0)
     {
       pDataAddress += 0x2000;
     }
@@ -319,12 +341,12 @@ int16_t FlashHalDataBlockRead(uint32_t blockAddress,uint32_t readOffset,uint8_t 
 int16_t FlashHalSmallDataBlockRead(uint32_t blockAddress,uint32_t readOffset,uint8_t *pReadData,uint32_t pReadLength)
 {
     uint8_t *pDataAddress;
-    uint32_t i;
+    uint32_t i = 0U;
     
     xSemaphoreTake( g_workFlashMutexHandle, portMAX_DELAY );  
     pDataAddress = (uint8_t *)(blockAddress + readOffset);
     
-    for(i=0;i<pReadLength;i++)
+    for(i = 0;i < pReadLength;i++)
     {
       pReadData[i] = pDataAddress[i];
     }

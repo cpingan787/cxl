@@ -75,6 +75,10 @@ typedef struct
     uint8_t HVSM_FRHeatingActLevel;
     uint8_t HVSM_FLVentilatingActLevel;
     uint8_t HVSM_FRVentilatingActLevel;
+    uint8_t HVSMR_RLHeatingActLevel;
+    uint8_t HVSMR_RRHeatingActLevel;
+    uint8_t HVSMR_RLVentilatingActLevel;
+    uint8_t HVSMR_RRVentilatingActLevel;
     //PLGM
     uint8_t PLGM_ModeSW;
     uint8_t PLGM_DoorSt;
@@ -161,7 +165,7 @@ typedef enum
     TEL_RLVentilatingLevelReq,
     TEL_RLHVSMAutoModeReq,
     TEL_RRHeatingLevelReq,
-    TEL_RRVentilatingLevelReq,
+     TEL_RRVentilatingLevelReq,
     TEL_RRHVSMAutoModeReq,
     TEL_HVSMCtrlModeSt,
     TEL_HVACF_TempSelectManualReq,

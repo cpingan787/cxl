@@ -252,19 +252,6 @@ const ADC_ChannelConfig_t AdcMicFaultConfig =
         .adcChannelN = ADC_N_NONE               // Signal N pole channel. No need to configure N pole channel in single-ended signal mode
 };
 // ADC0
-const ADC_ChannelConfig_t Bcallconfig =
-    {
-        .adcDifferentialMode = ADC_SINGLE_MODE, // Select single-ended signal mode
-        .adcChannelP = ADC_P_CH9,               // Signal P pole channel, CH9
-        .adcChannelN = ADC_N_NONE               // Signal N pole channel. No need to configure N pole channel in single-ended signal mode
-};
-
-const ADC_ChannelConfig_t Ecallconfig =
-    {
-        .adcDifferentialMode = ADC_SINGLE_MODE, // Select single-ended signal mode
-        .adcChannelP = ADC_P_CH8,               // Signal P pole channel, CH8
-        .adcChannelN = ADC_N_NONE               // Signal N pole channel. No need to configure N pole channel in single-ended signal mode
-};
 
 const ADC_ChannelConfig_t BcallLightconfig =
     {
@@ -299,7 +286,9 @@ const WDOG_Config_t WDOG_Config =
 static uint8_t g_adcInitSatate = 0;
 
 /****************************** Function Declarations *************************/
+#if AMP_ENABLE == 1
 static void PeripheralHalAmpInit(void);
+#endif
 static void PeripheralHalSysOnInit(void);
 static void PeripheralHalAdc0Init(void);
 static void PeripheralHalAdc1Init(void);
@@ -552,26 +541,20 @@ void ADC0_FWM_ISR(void)
     adc0Channl = adc0Data >> 12;
     switch (adc0Channl)
     {
-    case ADC_P_CH8:
-        g_adBuffer[AD_CHANNEL_ECALL].adValue = adc0Data & 0x0FFF;
-        ADC_ChannelConfig(ADC0_ID, &Bcallconfig);
-        break;
-    case ADC_P_CH9:
-        g_adBuffer[AD_CHANNEL_BCALL].adValue = adc0Data & 0x0FFF;
-        ADC_ChannelConfig(ADC0_ID, &EcallLightconfig);
-        break;
-    case ADC_P_CH13:
-        g_adBuffer[AD_CHANNEL_ECALL_LIGHT].adValue = adc0Data & 0x0FFF;
-        ADC_ChannelConfig(ADC0_ID, &BcallLightconfig);
-        break;
     case ADC_P_CH12:
         g_adBuffer[AD_CHANNEL_BCALL_LIGHT].adValue = adc0Data & 0x0FFF;
         ADC_ChannelConfig(ADC0_ID, &EcallButtonconfig);
         break;
-    
+
     case ADC_P_CH15:
         g_adBuffer[AD_CHANNEL_SOS_KEY].adValue = adc0Data & 0x0FFF;
-        ADC_ChannelConfig(ADC0_ID, &Ecallconfig);
+        ADC_ChannelConfig(ADC0_ID, &EcallLightconfig);
+        break;
+
+    case ADC_P_CH13:
+        g_adBuffer[AD_CHANNEL_ECALL_LIGHT].adValue = adc0Data & 0x0FFF;
+        ADC_ChannelConfig(ADC0_ID, &BcallLightconfig);
+        break;
     default:
         break;
     }
@@ -989,7 +972,9 @@ void PeripheralHalFeedWatchDog(void)
 void PeripheralHalInit(void)
 {
     IrqPinInit();
+    #if AMP_ENABLE == 1
     PeripheralHalAmpInit();
+    #endif
     PeripheralHalSysOnInit();
     PeripheralHalAdc0Init();
     PeripheralHalAdc1Init();
@@ -1093,6 +1078,7 @@ void PeripheralHalTestMain(void)
     count = 0;
 }
 /****************************** Private Function Implementations ***************/
+#if AMP_ENABLE == 1
 /*************************************************
  Function:        PeripheralHalAmpInit
  Description:     Initialize the audio amplifier control pins
@@ -1114,7 +1100,7 @@ static void PeripheralHalAmpInit()
 	PORT_PinmuxConfig(FAULTZ_DET_PORT, FAULTZ_DET_PIN, FAULTZ_DET_PIN_MUX);
 	GPIO_SetPinDir(FAULTZ_DET_PORT, FAULTZ_DET_PIN, GPIO_INPUT);
 }
-
+#endif
 /*************************************************
   Function:       PeripheralHalSysOnInit
   Description:    Initialize SYS_ON pin configuration
@@ -1140,10 +1126,6 @@ static void PeripheralHalSysOnInit (void)
 *************************************************/
 static void PeripheralHalAdc0PinConfig(void)
 {
-    // B_call 按键粘合故障
-    PORT_PinmuxConfig(PORT_C, GPIO_1, PTC1_ADC0_CH9);
-    // E_call 按键粘合故障
-    PORT_PinmuxConfig(PORT_C, GPIO_0, PTC0_ADC0_CH8);
     // E_call 指示灯短路到地
     PORT_PinmuxConfig(PORT_C, GPIO_15, PTC15_ADC0_CH13);
     // B_call 指示灯短路到地
@@ -1162,10 +1144,6 @@ static void PeripheralHalAdc0PinConfig(void)
 *************************************************/
 static void PeripheralHalAdc0PinDeinit(void)
 {
-    // B_call 按键粘合故障
-    PORT_PinmuxConfig(PORT_C, GPIO_1, PTC1_GPIO);
-    // E_call 按键粘合故障
-    PORT_PinmuxConfig(PORT_C, GPIO_0, PTC0_GPIO);
     // E_call 指示灯短路到地
     PORT_PinmuxConfig(PORT_C, GPIO_15, PTC15_GPIO);
     // B_call 指示灯短路到地
@@ -1244,7 +1222,7 @@ static void PeripheralHalAdc0Init(void)
 	Ex_Adc0Workaround2(); 
     ADC_Init(ADC0_ID, &ADC0_Config);            					//Initialize ADC module
 
-    ADC_ChannelConfig(ADC0_ID, &Bcallconfig); // Configure current ADC sampling mode and selected channel number
+    ADC_ChannelConfig(ADC0_ID, &BcallLightconfig); // Configure current ADC sampling mode and selected channel number
 
     ADC_FifoDepthRedefine(ADC0_ID, 16);        						//Redefine FIFO depth to 16, range: 1-16
     ADC_FifoWatermarkConfig(ADC0_ID, ADC0_FIFO_WATERMARK);			//Set FIFO Watermark value

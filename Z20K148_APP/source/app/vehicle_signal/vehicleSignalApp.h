@@ -340,6 +340,10 @@ typedef struct
     CanParseSignal_t HVSM_FRHVSMAutoModeSt;
     CanParseSignal_t HVSM_FLSeatTemp;
     CanParseSignal_t HVSM_FRSeatTemp;
+    CanParseSignal_t HVSMR_RLHeatingActLevel;
+    CanParseSignal_t HVSMR_RRHeatingActLevel;
+    CanParseSignal_t HVSMR_RLVentilatingActLevel;
+    CanParseSignal_t HVSMR_RRVentilatingActLevel;
     CanParseSignal_t PLGM_Latchst;
     CanParseSignal_t PLGM_Doorst;
     CanParseSignal_t PLGM_LatchCinchedSW;

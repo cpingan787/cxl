@@ -679,8 +679,8 @@ static ResultStatus_t TimerHal_RTCInit(void)
         RTC_Enable();
 
         g_currentTime.year = RTC_START_YEAR;
-        g_currentTime.month = 1U;
-        g_currentTime.day = 1U;
+        g_currentTime.month = 0U;
+        g_currentTime.day = 0U;
         g_currentTime.hour = 0U;
         g_currentTime.minute = 0U;
         g_currentTime.second = 0U;

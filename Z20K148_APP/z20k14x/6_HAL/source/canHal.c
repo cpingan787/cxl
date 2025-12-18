@@ -684,6 +684,7 @@ void CAN0_Init(uint8_t canIndex, uint8_t canfdFlag, CanBaudType_e idBandrate, Ca
 
         // 使能CAN模块，使其进入工作状态
         CAN_Enable(CAN_ID_1);
+        TBOX_PRINT("CAN1 init successs!\r\n");
         break;
     case 2:
         // 设置 CAN2 模块使用的端口
@@ -2251,8 +2252,9 @@ int16_t CanHalTransmit(int16_t canHandle, uint32_t canId, const uint8_t *canData
                     {
                         ret = CAN_ERROR_TX_DISABLE;
                     }
-                    else if (g_driverCanManage[canChannel].busNoAckErrorState != 0 ||
-                             g_driverCanManage[canChannel].busErrorAppDiableFlag)
+                    else if ((g_driverCanManage[canChannel].busNoAckErrorState != 0) ||
+                            (g_driverCanManage[canChannel].busErrorAppDiableFlag) ||
+                            (g_driverCanManage[canChannel].BusErrorState))
                     {
                         ret = CAN_ERROR_BUS_ERROR;
                     }
@@ -2584,11 +2586,11 @@ static int16_t CanControllerBusOffError(uint8_t canChannel)
     {
     case 0:
         busErr = CAN0_BusOffIntFlag;
-        CAN0_BusOffIntFlag = 0;
+        //CAN0_BusOffIntFlag = 0;
         break;
     case 1:
         busErr = CAN1_BusOffIntFlag;
-        CAN1_BusOffIntFlag = 0;
+        //CAN1_BusOffIntFlag = 0;
         break;
     case 2:
         // busErr = (CAN_GetESR1BufForCbf(CAN_ID_2) >> 2) & 0x01;

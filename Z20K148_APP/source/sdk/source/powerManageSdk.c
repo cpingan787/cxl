@@ -573,7 +573,7 @@ static void PmStateWakeDelayProcess(uint32_t cycleTime)
             WakeDelayProcess(g_pmManage.wakeupSource,0x00,&g_pmManage.wakeDelayTime);
         }
     }
-    if(RemoteControlGetKeepWakeFlag() == 1)
+    if((RemoteControlGetKeepWakeFlag() == 1) || (RemoteControlGetOtaFlag() == 1) || (MpuPowerSyncSdkGetWakeFlag() == 1))
     {
         PmNmAllStart(1);
         g_pmManage.pmState = E_PM_STATE_WAKE_DELAY;
@@ -604,7 +604,7 @@ static void PmStateWakeDelayProcess(uint32_t cycleTime)
             g_pmManage.pmState = E_PM_STATE_CHECK_NM_STATUS;            
         }
     }
-    else if(sleepAck==1)
+    else if(sleepAck == 1)
     {
         PmNmGotoSleepMode();
         g_pmManage.wakeDelayCount = 0;
@@ -649,7 +649,7 @@ static void PmStateCheckNmStatusProcess(uint32_t cycleTime)
         g_pmManage.wakeDelayCount = 0;
         TBOX_PRINT("PmStateCheckNmStatusProcess--%d\r\n",sleepStatus);
     }
-    else if(sleepStatus ==2)
+    else if(sleepStatus == 2)
     {
         g_pmManage.wakeDelayCount = 0;
         g_pmNmLocalWakeupTime = 0U;
@@ -664,6 +664,15 @@ static void PmStateCheckNmStatusProcess(uint32_t cycleTime)
         g_pmManage.wakeDelayCount = 0;
         g_pmManage.wakeupSource = PM_HAL_WAKEUP_SOURCE_KL15;
         WakeDelayProcess(PM_HAL_WAKEUP_SOURCE_KL15,0x00,&g_pmManage.wakeDelayTime);
+        g_pmManage.pmState = E_PM_STATE_WAKE_DELAY;
+    }
+    else if((RemoteControlGetKeepWakeFlag() == 1) || (RemoteControlGetOtaFlag() == 1) || (MpuPowerSyncSdkGetWakeFlag() == 1))   //add for off ignore kl15 remote wakeup
+    {
+        g_pmManage.wakeDelayCount = 0;
+        g_pmNmLocalWakeupTime = 0U;
+        g_pmManage.mpuWakeSource = PM_HAL_WAKEUP_SOURCE_MPU;
+        PmNmGotoAwakeMode(g_pmManage.wakeupSource);
+        WakeDelayProcess(g_pmManage.wakeupSource,g_pmManage.mpuWakeSource ,&g_pmManage.wakeDelayTime);
         g_pmManage.pmState = E_PM_STATE_WAKE_DELAY;
     }
     else if(MpuPowerSyncSdkGetSleepDisableState() != 0)
@@ -787,7 +796,16 @@ static void PmStatePreSleepWaitProcess(uint32_t cycleTime)
         WakeDelayProcess(g_pmManage.wakeupSource, g_pmManage.mpuWakeSource, &g_pmManage.wakeDelayTime);
         g_pmManage.wakeDelayCount = 0;
     }
-    else if(MpuPowerSyncSdkGetSleepDisableState()!=0)
+    else if((RemoteControlGetKeepWakeFlag() == 1) || (RemoteControlGetOtaFlag() == 1) || (MpuPowerSyncSdkGetWakeFlag() == 1))   //add for off ignore kl15 remote wakeup
+    {
+        g_pmManage.wakeDelayCount = 0;
+        g_pmNmLocalWakeupTime = 0U;
+        g_pmManage.mpuWakeSource = PM_HAL_WAKEUP_SOURCE_MPU;
+        PmNmGotoAwakeMode(g_pmManage.wakeupSource);
+        WakeDelayProcess(g_pmManage.wakeupSource,g_pmManage.mpuWakeSource ,&g_pmManage.wakeDelayTime);
+        g_pmManage.pmState = E_PM_STATE_WAKE_DELAY;
+    }
+    else if(MpuPowerSyncSdkGetSleepDisableState() != 0)
     {
         g_pmManage.sleepState = 1;
         g_pmNmLocalWakeupTime = 0U;
@@ -798,7 +816,7 @@ static void PmStatePreSleepWaitProcess(uint32_t cycleTime)
         WakeDelayProcess(g_pmManage.wakeupSource, g_pmManage.mpuWakeSource, &g_pmManage.wakeDelayTime);
         g_pmManage.wakeDelayCount = 0;
     }
-    else if(g_pmManage.wakeResetFlag==PM_NM_RESET_WAKE_LOCAL)
+    else if(g_pmManage.wakeResetFlag == PM_NM_RESET_WAKE_LOCAL)
     {
         /*电源管理复位唤醒状态*/
         g_pmManage.wakeResetFlag = 0;
@@ -813,7 +831,7 @@ static void PmStatePreSleepWaitProcess(uint32_t cycleTime)
         WakeDelayProcess(g_pmManage.wakeupSource, g_pmManage.mpuWakeSource ,&g_pmManage.wakeDelayTime);
         g_pmManage.wakeDelayCount = 0;
     }
-    else if(g_pmManage.wakeResetFlag==PM_NM_RESET_WAKE_MPU)
+    else if(g_pmManage.wakeResetFlag == PM_NM_RESET_WAKE_MPU)
     {
         g_pmManage.wakeResetFlag = 0;
         g_pmManage.sleepState = 1;
@@ -999,7 +1017,7 @@ static void PmStateGetMpuWakeSourceProcess(uint32_t cycleTime)
 #else
     ret = MpuPowerSyncSdkGetWakeStatus(&cpuWakeSource);
 #endif
-    if(ret==0)
+    if(ret == 0)
     {
         /*获取MPU唤醒源完成，执行MCU唤醒*/
         g_pmNmLocalWakeupTime = 0U;
@@ -1019,7 +1037,7 @@ static void PmStateGetMpuWakeSourceProcess(uint32_t cycleTime)
         WakeDelayProcess(g_pmManage.wakeupSource,g_pmManage.mpuWakeSource ,&g_pmManage.wakeDelayTime);
         g_pmManage.wakeDelayCount = 0;
     } 
-    else if(RemoteControlGetKeepWakeFlag() == 1)   
+    else if((RemoteControlGetKeepWakeFlag() == 1) || (RemoteControlGetOtaFlag() == 1) || (MpuPowerSyncSdkGetWakeFlag() == 1))   
     {
         g_pmNmLocalWakeupTime = 0U;
         g_pmManage.mpuWakeSource = PM_HAL_WAKEUP_SOURCE_MPU;

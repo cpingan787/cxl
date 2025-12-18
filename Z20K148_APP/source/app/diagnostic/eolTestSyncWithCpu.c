@@ -35,10 +35,10 @@ int16_t CanPassthrough_RequestAndGetResponse(const uint8_t *pUdsRequest, uint16_
         return -1;
     }
 
-    if (reqLength >= 3 && pUdsRequest[0] == 0x2E && pUdsRequest[1] == 0xB2 && pUdsRequest[2] == 0x89)
-    {
-        maxRepeatCount = 10; 
-    }
+    // if (reqLength >= 3 && pUdsRequest[0] == 0x2E && pUdsRequest[1] == 0xB2 && pUdsRequest[2] == 0x89)
+    // {
+    //     maxRepeatCount = 10; 
+    // }
     // ---------------------------------------------------------
 
     g_mpuDataPack.aid = PASSTHROUGH_AID;

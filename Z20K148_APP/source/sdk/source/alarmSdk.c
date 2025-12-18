@@ -133,6 +133,7 @@ int16_t AlarmSdkBcallClose(uint8_t type)
     return 0;
 }
 
+#if AMP_ENABLE == 1
 static int16_t AlarmSdkSetAmpGainResponse(uint8_t result,uint8_t id)
 {
     if(g_mpuHandle < 0)
@@ -163,6 +164,7 @@ static int16_t AlarmSdkSetAmpGainResponse(uint8_t result,uint8_t id)
 
     return 0;
 }
+#endif
 
 int16_t AlarmSdkSelfchackPeriSend(void)
 {
@@ -256,10 +258,14 @@ void AlarmSdkCycleProcess(void)
                     }
                     else if((g_dataPack.mid == 0x10)&&(AlarmSdkGetBcallCallState() == 0))
                     {
+                        XCallSetTelemataticsMode(TELEMATICS_MODE_NOT_ACTIVE);
+                        XCallSetPhoneCallState(E_ECALL_STATE_HANG_UP);
                         TBOX_PRINT("Ecall close success\r\n");
                     }
                     else if((g_dataPack.mid == 0x14)&&(AlarmSdkGetBcallCallState() == 0))
                     {
+                        XCallSetTelemataticsMode(TELEMATICS_MODE_NOT_ACTIVE);
+                        XCallSetPhoneCallState(E_ECALL_STATE_HANG_UP);
                         TBOX_PRINT("Bcall close success\r\n");
                     }
                 }
@@ -268,40 +274,65 @@ void AlarmSdkCycleProcess(void)
                     TBOX_PRINT("ecall state = %d\r\n", g_dataPack.pDataBuffer[1]);
                     switch (g_dataPack.pDataBuffer[1])
                     {
-                    case E_ECALL_STATE_NO_ECALL:
-                        if(g_ecallTriggerType != 0)
-                        {
-                            EcallHalSetVehicleMute(0);
-                            AlarmSdkSetEcallCallState(0U);
-                            XCallSetTelemataticsMode(TELEMATICS_MODE_NOT_ACTIVE);
-                            g_ecallTriggerType = 0;
-                        }
-                        if(g_bcallTriggerType != 0)
-                        {
-                            EcallHalSetVehicleMute(0);
-                            AlarmSdkSetBcallCallState(0U);
-                            XCallSetTelemataticsMode(TELEMATICS_MODE_NOT_ACTIVE);
-                            g_bcallTriggerType = 0;
-                        }
-                        break;
-                    case E_ECALL_STATE_IN_CALL:
-                        EcallHalSosLedControlSend(E_SOS_LED_STATE_RING);        /*ECALL拨号中LED状态指示灯 200ms开200ms关*/
-                        break;
-                    case E_ECALL_STATE_DURING_CALL:
-                        EcallHalSosLedControlSend(E_SOS_LED_STATE_CALL);        /*ECALL正在通话中LED状态指示灯 200ms开200ms关*/
-                        break;
-                    case E_ECALL_STATE_WAIT_PSPA_CALLBACK:
-                        EcallHalSosLedControlSend(E_SOS_LED_STATE_WAIT_BACK);   /*ECALL等待PSAP应答时 500ms开500ms关*/
-                        break;
-                    default:
-                        break;
+                        case E_ECALL_STATE_NO_ECALL:
+                            if(g_ecallTriggerType != 0)
+                            {
+                                EcallHalSetVehicleMute(0);
+                                AlarmSdkSetEcallCallState(0U);
+                                EcallHalSosLedControlSend(E_SOS_LED_STATE_END); 
+                                EcallHalSosLedControlSend(E_SOS_LED_STATE_INIT);
+                                XCallSetTelemataticsMode(TELEMATICS_MODE_NOT_ACTIVE);
+                                XCallSetPhoneCallState(E_ECALL_STATE_NOT_ACTIVE);
+                                g_ecallTriggerType = 0;
+                            }
+                            if(g_bcallTriggerType != 0)
+                            {
+                                EcallHalSetVehicleMute(0);
+                                AlarmSdkSetBcallCallState(0U);
+                                EcallHalSosLedControlSend(E_SOS_LED_STATE_END); 
+                                EcallHalSosLedControlSend(E_SOS_LED_STATE_INIT);
+                                XCallSetTelemataticsMode(TELEMATICS_MODE_NOT_ACTIVE);
+                                XCallSetPhoneCallState(E_ECALL_STATE_NOT_ACTIVE);
+                                g_bcallTriggerType = 0;
+                            }
+                            break;
+
+                        case E_ECALL_STATE_IN_CALL:
+                            XCallSetPhoneCallState(E_ECALL_STATE_CONNECTING);
+                            EcallHalSosLedControlSend(E_SOS_LED_STATE_RING);        /*ECALL拨号中LED状态指示灯 100ms开100ms关*/
+                            break;
+
+                        case E_ECALL_STATE_DURING_CALL:
+                            XCallSetPhoneCallState(E_ECALL_STATE_ON_THE_PHONE);
+                            EcallHalSosLedControlSend(E_SOS_LED_STATE_CALL);        /*ECALL正在通话中LED状态指示灯常亮*/
+                            break;
+
+                        case E_ECALL_STATE_END_CALL:
+                            XCallSetPhoneCallState(E_ECALL_STATE_HANG_UP);
+                            EcallHalSosLedControlSend(E_SOS_LED_STATE_END);        /*ECALL通话结束LED状态指示灯关*/
+                            break;
+
+                        case E_ECALL_STATE_END_CALL_ABNORM:
+                            XCallSetPhoneCallState(E_ECALL_STATE_HANG_UP);
+                            EcallHalSosLedControlSend(E_SOS_LED_STATE_END);        /*ECALL通话异常结束LED状态指示灯关*/
+                            break;
+
+                        case E_ECALL_STATE_WAIT_PSPA_CALLBACK:
+                            XCallSetPhoneCallState(E_ECALL_STATE_CALL_OVER);
+                            EcallHalSosLedControlSend(E_SOS_LED_STATE_END);         /*ECALL客服挂断*/
+                            break;
+
+                        default:
+                            break;
                     }
                 }
             }
             else if((g_dataPack.subcommand&0x7F) == 0x03)
             {
+                #if AMP_ENABLE == 1
                 ret = EcallHalSetAmpControlStatus(g_dataPack.pDataBuffer[0]);
                 AlarmSdkSetAmpGainResponse(ret,g_dataPack.mid);
+                #endif
             }
             else
             {
