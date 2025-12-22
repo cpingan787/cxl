@@ -4,7 +4,7 @@
 #define PARTNUMBER 24317098UL
 #define SOFTWARE_NUMBER 24317098UL
 #define MPU_SYSN_VERSION "000000000"
-#define MCU_SYSN_VERSION "007" // mcu内部版本号
+#define MCU_SYSN_VERSION "008" // mcu内部版本号
 #define MCU_MPU_ALL_VERSION MPU_SYSN_VERSION MCU_SYSN_VERSION
 // 0xF10B_cxl
 static const uint8_t g_didF10B[4] = {
@@ -17,10 +17,10 @@ static const uint8_t g_didF17F[17] = "87H6ADE060  H.E00"; // 硬件版本号    
 static const uint8_t g_didF180[17] = "000123456789B.100"; // 0xF180_cxl
 static const uint8_t g_didF187[14] = "8550003ADE0600";    // 零件号                                                                                     // 0xF187_cxl
 static const uint8_t g_didF189[17] = "8786ADE060  S.E01"; // 软件版本号                                                                                   // 0xF189_cxl
-static const uint8_t g_didF18E[14] = "GAVN1234567890";    // 0xF18E_cxl
-static const uint8_t g_didF193[6] = "123456";             // 0xF190_cxl
-static const uint8_t g_didF195[6] = "TA 1.0";             // 0xF195_cxl
-static const uint8_t g_didF18A[9] = {"GAEI12345"};        // 0xF18A_cxl
+//static const uint8_t g_didF18E[14] = "GAVN1234567890";    // 0xF18E_cxl
+static const uint8_t g_didF193[6] = "V1.000";             // 0xF190_cxl
+static const uint8_t g_didF195[6] = "V1.000";             // 0xF195_cxl
+static const uint8_t g_didF18A[9] = {"GAE302   "};        // 0xF18A_cxl
 // static const uint8_t g_didF18F[20] = "TESTSN01234567890123";                                                                                      // 0xF18F_cxl
 static const uint8_t g_didB279[5] = "1.0.2";                                                                                                      // 0xB279_cxl
 static const uint8_t g_partNumber[] = {(PARTNUMBER >> 24) & 0xFF, (PARTNUMBER >> 16) & 0xFF, (PARTNUMBER >> 8) & 0xFF, (PARTNUMBER >> 0) & 0xFF}; //
@@ -181,12 +181,6 @@ void ProjectConfigGetEcuSwVersion_F189(uint8_t *pData, uint16_t *pLength)
 {
     memcpy(pData, g_didF189, sizeof(g_didF189));
     *pLength = sizeof(g_didF189);
-}
-
-void ProjectConfigGetVisteonPartNumber_F18E(uint8_t *pData, uint16_t *pLength)
-{
-    memcpy(pData, g_didF18E, sizeof(g_didF18E));
-    *pLength = sizeof(g_didF18E);
 }
 
 void ProjectConfigGetSupplierSwVersion_F195(uint8_t *pData, uint16_t *pLength)

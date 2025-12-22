@@ -2651,17 +2651,14 @@ static int16_t Service0x22Process(uint8_t *udsData, uint16_t udsLen, uint8_t fun
 
   if (IsDidPassthrough_22(first_did))
     {
-        // 启动异步请求，不阻塞
         if (EolSync_StartRequest(udsData, udsLen, UdsAsyncResponseCallback) == 0)
         {
-            // 返回 1 (或其他非0且非标准NRC的值)
-            // 告诉调用者 DiagnosticResponseProcess 不要立即发送任何响应
-            // 也不要报错，因为响应将由回调函数异步发送
+
             return 1; 
         }
         else
         {
-            return 0x21; // BusyRepeatRequest
+            return 0x21;
         }
     }
   else
@@ -2820,16 +2817,11 @@ static int16_t Service0x2EProcess(uint8_t *udsData, uint16_t udsLen, uint8_t fun
   }
   else
   {
-      // --- 透传逻辑 (异步状态机) ---
       
-      // 检查参数同步状态 (原逻辑保留)
       if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
       {
-        return 0x72; // 系统未就绪
+        return 0x72;
       }
-
-      // 启动异步请求
-      //
       int16_t startRet = EolSync_StartRequest(udsData, udsLen, UdsAsyncResponseCallback);
 
       if (startRet == 0)
@@ -2838,8 +2830,7 @@ static int16_t Service0x2EProcess(uint8_t *udsData, uint16_t udsLen, uint8_t fun
       }
       else
       {
-          // 启动失败 (例如状态机忙)
-          return 0x21; // BusyRepeatRequest
+          return 0x21;
       }
   }
   return negativeNum;

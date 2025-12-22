@@ -91,22 +91,14 @@ void EolTestSyncMainLoop(void)
 
     if (g_eolState == EOL_STATE_SEND_REQ)
     {
-        // 发送请求
         MpuHalTransmit(g_mpuHandle, &g_mpuTxPack, MPU_HAL_UART_MODE);
 
-        // 启动超时
         TimerHalStartTime(g_timerHandle, SYNC_TIMEOUT_MS);
 
-        // 切换状态
         g_eolState = EOL_STATE_WAIT_RESP;
 
-        // 注意：这里不使用 return 或 else，
-        // 目的是让代码继续向下执行，在同一个周期内立即尝试接收数据，
-        // 达到原代码中 switch case 去掉 break 的效果。
     }
 
-    // 3. 等待响应状态
-    // (如果刚从 SEND_REQ 切换过来，或者之前就在此状态，都会执行)
     if (g_eolState == EOL_STATE_WAIT_RESP)
     {
         g_mpuRxPack.pDataBuffer = g_mpuRxDataBuffer;
@@ -122,29 +114,25 @@ void EolTestSyncMainLoop(void)
                 g_mpuRxPack.mid == PASSTHROUGH_MID &&
                 subCommand == PASSTHROUGH_SUB_MPU_TO_MCU)
             {
-                // 停止超时定时器
                 TimerHalStopTime(g_timerHandle);
 
-                // 拷贝数据
                 memcpy(g_udsRespBuffer, g_mpuRxPack.pDataBuffer, g_mpuRxPack.dataLength);
 
-                // 调用回调
                 if (g_currentCallback != NULL)
                 {
                     g_currentCallback(g_udsRespBuffer, g_mpuRxPack.dataLength, 0);
                 }
-                
-                // 任务完成，回空闲
+
                 g_eolState = EOL_STATE_IDLE;
-                return; // 成功处理后直接退出
+                return; 
             }
         }
-    
-        if (TimerHalIsTimeout(g_timerHandle) == 0) // 0 表示超时
+
+        if (TimerHalIsTimeout(g_timerHandle) == 0)
         {
             TimerHalStopTime(g_timerHandle);
             LogHalUpLoadLog("EOL Sync Timeout");
-            
+
             // 超时回调
             if (g_currentCallback != NULL)
             {
@@ -153,7 +141,7 @@ void EolTestSyncMainLoop(void)
             g_eolState = EOL_STATE_IDLE;
         }
     }
-    else 
+    else
     {
         LogHalUpLoadLog("EOL Sync Invalid State");
         g_eolState = EOL_STATE_IDLE;

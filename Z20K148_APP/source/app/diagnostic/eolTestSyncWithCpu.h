@@ -26,8 +26,6 @@
 #define SYNC_CPU_GET_INFO_ITEM_NET_PROVIDER 43
 #define SYNC_CPU_GET_INFO_ITEM_GNSS 44
 
-#define SYNC_CPU_GET_INFO_ITEM_PKI_STATUS 46 // B262_cxl获取PKI状态的命令ID
-
 typedef enum
 {
     EOL_STATE_IDLE,
@@ -38,21 +36,17 @@ typedef enum
     EOL_STATE_ERROR
 } EolSyncState_e;
 
-// 定义回调函数指针类型
 typedef int16_t (*UdsResponseCallback_t)(uint8_t *pData, uint16_t length, uint8_t result);
 
 void EolTestSyncWithCpuInit(void);
 
-// 供 TaskEcuDiagnostic 周期性调用
 void EolTestSyncMainLoop(void);
 
-// 异步启动请求
 int16_t EolSync_StartRequest(const uint8_t *pRequest, uint16_t reqLen, UdsResponseCallback_t callback);
 
-// 获取当前状态
+
 EolSyncState_e EolSync_GetState(void);
 
-// 兼容旧接口的函数声明
 int16_t CanPassthrough_RequestAndGetResponse(const uint8_t *pUdsRequest, uint16_t reqLength, uint8_t *pUdsResponse, uint16_t *pRespLength);
 int16_t EolTestSyncWithCpuRecv(uint8_t item, uint8_t *pData, uint16_t *pLength);
 int16_t EolTestSyncWithCpuTransmit(uint8_t item, uint8_t *pData, uint16_t length);

@@ -317,7 +317,7 @@ static void McuVoltageDtcCheckProcess(void)
         //  检查 B320D11: B_Call指示灯短路到地
         if (v_bcall_led_mv < 100) // 阈值 0.1V = 100mV
         {
-            SetDtcFaultState(E_DTC_ITEM_BCALL_LIGHT_SHORT_GND);
+        //    SetDtcFaultState(E_DTC_ITEM_BCALL_LIGHT_SHORT_GND);
         }
         else
         {
@@ -330,7 +330,7 @@ static void McuVoltageDtcCheckProcess(void)
     {
         if (v_ecall_led_mv < 100)
         {
-            SetDtcFaultState(E_DTC_ITEM_ECALL_LIGHT_SHORT_GND);
+        //    SetDtcFaultState(E_DTC_ITEM_ECALL_LIGHT_SHORT_GND);
         }
         else
         {
