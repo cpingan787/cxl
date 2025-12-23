@@ -128,13 +128,6 @@ typedef struct
     SignalConfig_t TEL_WindowsVentilateModeCloseReq;
     SignalConfig_t TEL_WindowsVentilateModeCloseReqVD;
 } RemoteControlReqSignal077_t;
-
-typedef struct 
-{
-    SignalConfig_t TEL_LockDoorForceReq;
-    SignalConfig_t TEL_LockDoorForceReqVD;
-}RemoteControlReqSignal05A_t;
-
 typedef struct
 {
     SignalConfig_t TEL_IMMOCode1;
@@ -1567,40 +1560,6 @@ static RemoteControlReqSignal077_t g_077Configure =
     },
 };
 
-static RemoteControlReqSignal05A_t g_05AConfigure = 
-{
-    .TEL_LockDoorForceReq = 
-    {
-      .reqId = TEL_LockDoorForceReq,
-      .signalInfo = {
-        .msgBufferPointer = NULL,
-        .canBufferIdIndex = 0,
-        .dataType = (uint16_t)0,
-        .startBit = (uint16_t)2,
-        .bitLength = (uint16_t)1,
-        .resulotion = (float)1,
-        .offset = (float)0,
-        .useInvalidFlag = 0,
-        .InvalidData = 0u,
-      },
-    },
-    .TEL_LockDoorForceReqVD = 
-    {
-      .reqId = TEL_LockDoorForceReqVD,
-      .signalInfo = {
-        .msgBufferPointer = NULL,
-        .canBufferIdIndex = 0,
-        .dataType = (uint16_t)0,
-        .startBit = (uint16_t)3,
-        .bitLength = (uint16_t)1,
-        .resulotion = (float)1,
-        .offset = (float)0,
-        .useInvalidFlag = 0,
-        .InvalidData = 0u,
-      },
-    },
-};
-
 /****************************** Public Function Implementations ***************/
 /***************************************************************************
  * @Function    RemoteControlGetSignalValue
@@ -1989,13 +1948,6 @@ void RemoteCtrlSignalValToCanFrame(uint8_t* pMsgData, RemoteControlReqSignalId_t
             pSignalConfig = (SignalConfig_t *)&g_077Configure;
             signalSize = sizeof(g_077Configure)/sizeof(SignalConfig_t);
             g_remoteControlReqCanId = REMOTE_CONTROL_TEL_16_B_T_E;
-            ret = 0U;
-            break;
-        case TEL_LockDoorForceReq:
-        case TEL_LockDoorForceReqVD:
-            pSignalConfig = (SignalConfig_t *)&g_05AConfigure;
-            signalSize = sizeof(g_05AConfigure)/sizeof(SignalConfig_t);
-            g_remoteControlReqCanId = REMOTE_CONTROL_TEL_MSM_1_T_E;
             ret = 0U;
             break;
         default:

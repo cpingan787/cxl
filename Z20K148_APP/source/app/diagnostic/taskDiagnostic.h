@@ -35,5 +35,4 @@ int16_t TaskEcuDiagnosticInit(void);
 void TaskEcuDiagnostic(void *pvParameters);
 uint8_t GetTesterPresenceStatus(void); //获取当前诊断仪连接状态
 SessionState_e GetCurrentSession(void);
-static int16_t UdsAsyncResponseCallback(uint8_t *pData, uint16_t length, uint8_t result);
 #endif //_DIAGNOSTIC_H

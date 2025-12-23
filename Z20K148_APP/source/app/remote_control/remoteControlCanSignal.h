@@ -93,7 +93,6 @@ typedef enum
     REMOTE_CONTROL_TEL_HVSM_1_E             = 0x05B,
     REMOTE_CONTROL_TEL_16_B_T_E             = 0x077,
     REMOTE_CONTROL_TEL_HVACF_1_E            = 0x05C,
-    REMOTE_CONTROL_TEL_MSM_1_T_E            = 0x05A, 
 }RemoteControlReqCanId_t;
 
 typedef enum
@@ -148,8 +147,6 @@ typedef enum
     TEL_HornOffReqVD,
     TEL_HazardLightOffReq,
     TEL_HazardLightOffReqVD,
-    TEL_LockDoorForceReq,
-    TEL_LockDoorForceReqVD,
     TEL_PLGMOpenReq,
     TEL_PLGMOpenReqVD,
     TEL_PLGMCloseReq,
@@ -168,7 +165,7 @@ typedef enum
     TEL_RLVentilatingLevelReq,
     TEL_RLHVSMAutoModeReq,
     TEL_RRHeatingLevelReq,
-    TEL_RRVentilatingLevelReq,
+     TEL_RRVentilatingLevelReq,
     TEL_RRHVSMAutoModeReq,
     TEL_HVSMCtrlModeSt,
     TEL_HVACF_TempSelectManualReq,

@@ -317,7 +317,7 @@ static void McuVoltageDtcCheckProcess(void)
         //  检查 B320D11: B_Call指示灯短路到地
         if (v_bcall_led_mv < 100) // 阈值 0.1V = 100mV
         {
-        //    SetDtcFaultState(E_DTC_ITEM_BCALL_LIGHT_SHORT_GND);
+            SetDtcFaultState(E_DTC_ITEM_BCALL_LIGHT_SHORT_GND);
         }
         else
         {
@@ -330,7 +330,7 @@ static void McuVoltageDtcCheckProcess(void)
     {
         if (v_ecall_led_mv < 100)
         {
-        //    SetDtcFaultState(E_DTC_ITEM_ECALL_LIGHT_SHORT_GND);
+            SetDtcFaultState(E_DTC_ITEM_ECALL_LIGHT_SHORT_GND);
         }
         else
         {
@@ -608,7 +608,7 @@ void PmDebugPrint(void)
         lastWakeupSource = wakeupSource;
         lastWakeupCount = wakeCount;
         TBOX_PRINT("powerstate is %d,wakesoure is %d,wakecount is %d\r\n", pmState, wakeupSource, wakeCount);
-        LogHalUpLoadLog("ps is %d,wakesc is %d,wakecnt is %d", pmState, wakeupSource, wakeCount);
+        LogHalUpLoadLog("powerstate is %d,wakesoure is %d,wakecount is %d\r\n", pmState, wakeupSource, wakeCount);
         return;
     }
     else if (count < 200)
@@ -617,7 +617,7 @@ void PmDebugPrint(void)
     }
     count = 0;
     TBOX_PRINT("powerstate is %d,wakesoure is %d,wakecount is %d\r\n", pmState, wakeupSource, wakeCount);
-    LogHalUpLoadLog("ps is %d,wakesc is %d,wakecnt is %d", pmState, wakeupSource, wakeCount);
+    LogHalUpLoadLog("powerstate is %d,wakesoure is %d,wakecount is %d\r\n", pmState, wakeupSource, wakeCount);
     uint32_t voltage = 0;
     BatterySdkGetVoltage(&voltage);
 
