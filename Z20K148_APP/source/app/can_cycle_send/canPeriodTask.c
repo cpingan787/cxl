@@ -242,7 +242,7 @@ CAN_CYCLE_SEND_CONFIGURE_END(2)
 const CanChannelCycleSendConfigure_t g_canCycleConfigureList[] =
     {
         {.canChannel = TBOX_CAN_CHANNEL_2,
-         .msgStartTime = 10,
+         .msgStartTime = 0,
          .pCycleConfigureList = CYCLE_SEND_CAN_CONFIGURE(2),
          .cycleConfigureListSize = CYCLE_SEND_CAN_CONFIGURE_SIZE(2),
          .pMsgBuffer = CYCLE_SEND_CAN_BUFFER(2)},
@@ -292,6 +292,7 @@ int16_t CanPeriodSendEnable(uint8_t canChannel)
             for (j = 0; j < g_canCycleConfigureList[i].cycleConfigureListSize; j++)
             {
                 g_canCycleConfigureList[i].pMsgBuffer[j].timeCount = (g_canCycleConfigureList[i].pCycleConfigureList[j].cycleTime - APP_MESSAGE_START_TIME);
+                //g_canCycleConfigureList[i].pMsgBuffer[j].timeCount = APP_MESSAGE_START_TIME;
             }
             ret = 0;
             break;
@@ -340,7 +341,8 @@ int16_t CanPeriodSendDisable(uint8_t canChannel)
         {
             for (j = 0; j < g_canCycleConfigureList[i].cycleConfigureListSize; j++)
             {
-                g_canCycleConfigureList[i].pMsgBuffer[j].timeCount = (g_canCycleConfigureList[i].pCycleConfigureList[j].cycleTime - 3);
+                //g_canCycleConfigureList[i].pMsgBuffer[j].timeCount = (g_canCycleConfigureList[i].pCycleConfigureList[j].cycleTime - 3);
+                g_canCycleConfigureList[i].pMsgBuffer[j].timeCount = 0;
             }
             g_canChannelBufferList[i].enableFlag = 0x00;
             ret = 0;
@@ -366,7 +368,8 @@ int16_t CanPeriodSendEnableAll(void)
         g_canChannelBufferList[i].enableFlag = 0x01;
         for (j = 0; j < g_canCycleConfigureList[i].cycleConfigureListSize; j++)
         {
-            g_canCycleConfigureList[i].pMsgBuffer[j].timeCount = (g_canCycleConfigureList[i].pCycleConfigureList[j].cycleTime - 7);
+            g_canCycleConfigureList[i].pMsgBuffer[j].timeCount = (g_canCycleConfigureList[i].pCycleConfigureList[j].cycleTime - APP_MESSAGE_START_TIME);
+            //g_canCycleConfigureList[i].pMsgBuffer[j].timeCount = APP_MESSAGE_START_TIME;
         }
     }
     return 0;
@@ -387,7 +390,8 @@ int16_t CanPeriodSendDisableAll(void)
     {
         for (j = 0; j < g_canCycleConfigureList[i].cycleConfigureListSize; j++)
         {
-            g_canCycleConfigureList[i].pMsgBuffer[j].timeCount = (g_canCycleConfigureList[i].pCycleConfigureList[j].cycleTime - 3);
+            //g_canCycleConfigureList[i].pMsgBuffer[j].timeCount = (g_canCycleConfigureList[i].pCycleConfigureList[j].cycleTime - 3);
+            g_canCycleConfigureList[i].pMsgBuffer[j].timeCount = 0;
         }
         g_canChannelBufferList[i].enableFlag = 0x00;
     }
@@ -814,7 +818,7 @@ static void CanPeriodSetCanConfigureWakeUpStartTime(uint32_t startTime_ms, const
         {
             continue;
         }
-        pMsgBuffer[i].timeCount = pMsgConfigure[i].cycleTime - startTime_ms;
+        //pMsgBuffer[i].timeCount = pMsgConfigure[i].cycleTime - startTime_ms;
     }
 }
 
@@ -839,7 +843,7 @@ static void CanPeriodSetCanConfigureInitializeStartTime(uint32_t startTime_ms, c
         {
             continue;
         }
-        pMsgBuffer[i].timeCount = pMsgConfigure[i].cycleTime - startTime_ms;
+        //pMsgBuffer[i].timeCount = pMsgConfigure[i].cycleTime - startTime_ms;
     }
 }
 

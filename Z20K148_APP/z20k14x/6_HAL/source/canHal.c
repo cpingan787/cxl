@@ -458,7 +458,7 @@ void CAN0_Init(uint8_t canIndex, uint8_t canfdFlag, CanBaudType_e idBandrate, Ca
 
         /* CAN的错误计数寄存器，大于96小于等于127，产生主动错误；大于127，产生 被动错误，如果是发送状态，产生 BusOff；255后，计数归零。*/
         CAN_InstallCallBackFunc(CAN_ID_0, CAN_INT_BUS_OFF, CAN0_BUS_OFF_ISR); // 加载 BUS_OFF中断处理函数
-        CAN_InstallCallBackFunc(CAN_ID_0, CAN_INT_ERR, CAN0_ERR_ISR);         // 加载 错误中断处理函数。ErrTimer>127
+        //CAN_InstallCallBackFunc(CAN_ID_0, CAN_INT_ERR, CAN0_ERR_ISR);         // 加载 错误中断处理函数。ErrTimer>127
         // CAN_InstallCallBackFunc(CAN_ID_0, CAN_INT_TXW, CAN0_TXW_ISR);                //加载 发送报警中断处理函数。96 <ErrTimer<= 127
         // CAN_InstallCallBackFunc(CAN_ID_0, CAN_INT_RXW, CAN0_RXW_ISR);                //加载 接收报警中断处理函数。96 <ErrTimer<= 127
         CAN_InstallCallBackFunc(CAN_ID_0, CAN_INT_BUS_OFF_DONE, CAN0_BusOffDone_ISR); // 加载 BusOff事件已经自动/软件恢复中断处理函数
@@ -467,9 +467,9 @@ void CAN0_Init(uint8_t canIndex, uint8_t canfdFlag, CanBaudType_e idBandrate, Ca
         // CAN_InstallCallBackFunc(CAN_ID_0, CAN_INT_RXFIFO_FRAME, CAN0_RXFIFO_FRAME_ISR);        //加载 RX FIFO frame 有效中断处理函数
         // CAN_InstallCallBackFunc(CAN_ID_0, CAN_INT_RXFIFO_WARNING, CAN0_RXFIFO_WARNING_ISR);    //加载 RX FIFO 报警中断处理函数
         // CAN_InstallCallBackFunc(CAN_ID_0, CAN_INT_RXFIFO_OVERFLOW, CAN0_RXFIFO_OVERFLOW_ISR);    //加载 RX FIFO 溢出中断处理函数
-        CAN_InstallCallBackFunc(CAN_ID_0, CAN_INT_HOST_MEM_ERR, CAN0_HOST_MEM_ERR_ISR); // 加载 被CPU发现的不可矫正错误中断处理函数
-        CAN_InstallCallBackFunc(CAN_ID_0, CAN_INT_CAN_MEM_ERR, CAN0_CAN_MEM_ERR_ISR);   // 加载 被CAN模块发现的不可矫正错误中断处理函数
-        CAN_InstallCallBackFunc(CAN_ID_0, CAN_INT_COR_MEM_ERR, CAN0_COR_MEM_ERR_ISR);   // 加载 可矫正错误中断处理函数
+        //CAN_InstallCallBackFunc(CAN_ID_0, CAN_INT_HOST_MEM_ERR, CAN0_HOST_MEM_ERR_ISR); // 加载 被CPU发现的不可矫正错误中断处理函数
+        //CAN_InstallCallBackFunc(CAN_ID_0, CAN_INT_CAN_MEM_ERR, CAN0_CAN_MEM_ERR_ISR);   // 加载 被CAN模块发现的不可矫正错误中断处理函数
+        //CAN_InstallCallBackFunc(CAN_ID_0, CAN_INT_COR_MEM_ERR, CAN0_COR_MEM_ERR_ISR);   // 加载 可矫正错误中断处理函数
         // CAN_InstallCallBackFunc(CAN_ID_0, CAN_INT_PN_WAKEUP_MATCH, CAN0_PN_WAKEUP_MATCH_ISR);    //加载 匹配唤醒中断处理函数
         // CAN_InstallCallBackFunc(CAN_ID_0, CAN_INT_PN_WAKEUP_TIMEOUT, CAN0_PN_WAKEUP_TIMEOUT_ISR);//加载 超时唤醒中断处理函数
         //  CAN_InstallCallBackFunc(CAN_ID_0, CAN_INT_MB, CAN0_MB_ISR);                //加载 邮箱的发送、接收完成中断处理函数
@@ -487,7 +487,7 @@ void CAN0_Init(uint8_t canIndex, uint8_t canfdFlag, CanBaudType_e idBandrate, Ca
                                              // 参数：CAN模块序号、邮箱序号、中断屏蔽码
 
         CAN_IntMask(CAN_ID_0, CAN_INT_BUS_OFF, UNMASK, 0x00000000U, 0x00000000U, 0x00000000U, 0x00000000U); // 使能CAN0的 BUS_OFF 中断
-        CAN_IntMask(CAN_ID_0, CAN_INT_ERR, UNMASK, 0x00000000U, 0x00000000U, 0x00000000U, 0x00000000U);     // 使能错误中断。ErrTimer>127
+        //CAN_IntMask(CAN_ID_0, CAN_INT_ERR, UNMASK, 0x00000000U, 0x00000000U, 0x00000000U, 0x00000000U);     // 使能错误中断。ErrTimer>127
         // CAN_IntMask(CAN_ID_0, CAN_INT_TXW, UNMASK, 0x00000000U, 0x00000000U, 0x00000000U, 0x00000000U);    //使能发送报警中断。96 <ErrTimer<= 127
         // CAN_IntMask(CAN_ID_0, CAN_INT_RXW, UNMASK, 0x00000000U, 0x00000000U, 0x00000000U, 0x00000000U);    //使能接收报警中断。96 <ErrTimer<= 127
         CAN_IntMask(CAN_ID_0, CAN_INT_BUS_OFF_DONE, UNMASK, 0x00000000U, 0x00000000U, 0x00000000U, 0x00000000U); // 使能BusOff事件已经自动/软件恢复中断
@@ -496,9 +496,9 @@ void CAN0_Init(uint8_t canIndex, uint8_t canfdFlag, CanBaudType_e idBandrate, Ca
         // CAN_IntMask(CAN_ID_0, CAN_INT_RXFIFO_FRAME, UNMASK, 0x00000000U, 0x00000000U, 0x00000000U, 0x00000000U);    //使能RX FIFO frame 有效中断
         // CAN_IntMask(CAN_ID_0, CAN_INT_RXFIFO_WARNING, UNMASK, 0x00000000U, 0x00000000U, 0x00000000U, 0x00000000U);//使能RX FIFO 报警中断
         // CAN_IntMask(CAN_ID_0, CAN_INT_RXFIFO_OVERFLOW, UNMASK, 0x00000000U, 0x00000000U, 0x00000000U, 0x00000000U);//使能RX FIFO 溢出中断
-        CAN_IntMask(CAN_ID_0, CAN_INT_HOST_MEM_ERR, UNMASK, 0x00000000U, 0x00000000U, 0x00000000U, 0x00000000U); // 使能被CPU发现的不可矫正错误中断
-        CAN_IntMask(CAN_ID_0, CAN_INT_CAN_MEM_ERR, UNMASK, 0x00000000U, 0x00000000U, 0x00000000U, 0x00000000U);  // 使能被CAN模块发现的不可矫正错误中断
-        CAN_IntMask(CAN_ID_0, CAN_INT_COR_MEM_ERR, UNMASK, 0x00000000U, 0x00000000U, 0x00000000U, 0x00000000U);  // 使能可矫正错误中断
+        //CAN_IntMask(CAN_ID_0, CAN_INT_HOST_MEM_ERR, UNMASK, 0x00000000U, 0x00000000U, 0x00000000U, 0x00000000U); // 使能被CPU发现的不可矫正错误中断
+        //CAN_IntMask(CAN_ID_0, CAN_INT_CAN_MEM_ERR, UNMASK, 0x00000000U, 0x00000000U, 0x00000000U, 0x00000000U);  // 使能被CAN模块发现的不可矫正错误中断
+        //CAN_IntMask(CAN_ID_0, CAN_INT_COR_MEM_ERR, UNMASK, 0x00000000U, 0x00000000U, 0x00000000U, 0x00000000U);  // 使能可矫正错误中断
         // CAN_IntMask(CAN_ID_0, CAN_INT_PN_WAKEUP_MATCH, UNMASK, 0x00000000U, 0x00000000U, 0x00000000U, 0x00000000U);    //使能匹配唤醒中断
         // CAN_IntMask(CAN_ID_0, CAN_INT_PN_WAKEUP_TIMEOUT, UNMASK, 0x00000000U, 0x00000000U, 0x00000000U, 0x00000000U);    //使能超时唤醒中断
         CAN_IntMask(CAN_ID_0, CAN_INT_MB, UNMASK, 0x0000001FU, 0x00000000U, 0x00000000U, 0x00000000U); // 使能邮箱的发送、接收完成中断
@@ -514,7 +514,7 @@ void CAN0_Init(uint8_t canIndex, uint8_t canfdFlag, CanBaudType_e idBandrate, Ca
         INT_DisableIRQ(CAN0_RxWarn_IRQn);       // 禁止 CAN0_RxWarn_IRQn 中断
 
         INT_SetPriority(CAN0_Err_IRQn, 0x1); // 设置 CAN0_Err_IRQn 的中断优先级。(高)0--15(低)
-        INT_EnableIRQ(CAN0_Err_IRQn);        // 使能 CAN0_Err_IRQn 中断
+        INT_DisableIRQ(CAN0_Err_IRQn);        // 使能 CAN0_Err_IRQn 中断
 
         INT_SetPriority(CAN0_ErrFd_IRQn, 0x1); // 设置 CAN0_ErrFd_IRQn 的中断优先级。(高)0--15(低)
         INT_DisableIRQ(CAN0_ErrFd_IRQn);       // 禁止 CAN0_ErrFd_IRQn 中断
@@ -526,7 +526,7 @@ void CAN0_Init(uint8_t canIndex, uint8_t canfdFlag, CanBaudType_e idBandrate, Ca
         INT_DisableIRQ(CAN0_SelfWakeup_IRQn);       // 禁止 CAN0_SelfWakeup_IRQn 中断
 
         INT_SetPriority(CAN0_Ecc_IRQn, 0x1); // 设置 CAN0_Ecc_IRQn 的中断优先级，包含三个 MEM_ERR。(高)0--15(低)
-        INT_EnableIRQ(CAN0_Ecc_IRQn);        // 使能 CAN0_Ecc_IRQn 中断
+        INT_DisableIRQ(CAN0_Ecc_IRQn);        // 禁止 CAN0_Ecc_IRQn 中断
 
         INT_SetPriority(CAN0_Mb0To15_IRQn, 0x1); // 设置 CAN0_Mb0To15_IRQn 的中断优先级。(高)0--15(低)
         INT_EnableIRQ(CAN0_Mb0To15_IRQn);        // 使能 CAN0_Mb0To15_IRQn 的IRQ中断
@@ -1276,7 +1276,7 @@ void CAN1_MB0TO15_ISR(uint32_t mbIdx)
     CAN_MsgBuf_t can1RxBuf; // 定义CAN1接收使用的缓存变量
     if (mbIdx <= 4)
     {
-        g_driverCanManage[1].busErrorAppDiableFlag = 0x00;
+        //g_driverCanManage[1].busErrorAppDiableFlag = 0x00;
     }
     if (mbIdx > 4)
     {

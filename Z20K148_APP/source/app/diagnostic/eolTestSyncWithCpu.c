@@ -91,6 +91,11 @@ void EolTestSyncMainLoop(void)
 
     if (g_eolState == EOL_STATE_SEND_REQ)
     {
+        g_mpuRxPack.pDataBuffer = g_mpuRxDataBuffer;
+        g_mpuRxPack.dataBufferSize = sizeof(g_mpuRxDataBuffer);
+        while (MpuHalReceive(g_mpuHandle, &g_mpuRxPack, 0) == 0)
+        {
+        }
         MpuHalTransmit(g_mpuHandle, &g_mpuTxPack, MPU_HAL_UART_MODE);
 
         TimerHalStartTime(g_timerHandle, SYNC_TIMEOUT_MS);
@@ -100,9 +105,7 @@ void EolTestSyncMainLoop(void)
 
     if (g_eolState == EOL_STATE_WAIT_RESP)
     {
-        g_mpuRxPack.pDataBuffer = g_mpuRxDataBuffer;
-        g_mpuRxPack.dataBufferSize = sizeof(g_mpuRxDataBuffer);
-        
+   
         ret = MpuHalReceive(g_mpuHandle, &g_mpuRxPack, 0);
 
         if (ret == 0) // 收到数据

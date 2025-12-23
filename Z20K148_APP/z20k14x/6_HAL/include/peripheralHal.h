@@ -36,6 +36,7 @@
 #define AD_CHANNEL_GPS                  9
 #define AD_CHANNEL_GPS1                 14
 #define AD_CHANNEL_MIC                  10
+#define AD_CHANNEL_MIC_POWER            15
 
 #define AD_CHANNEL_MICP                 11
 #define AD_CHANNEL_SYS_5V               12
@@ -48,6 +49,7 @@
 #define AD_CHANNEL_ECALL_FACTOR         1
 #define AD_CHANNEL_BCALL_LIGHT_FACTOR   1
 #define AD_CHANNEL_ECALL_LIGHT_FACTOR   1
+#define AD_CHANNEL_MIC_POWER_FACTOR      1
 // adc1
 #define AD_CHANNEL_KL_30_FACTOR         1
 #define AD_CHANNEL_4G_FACTOR            1

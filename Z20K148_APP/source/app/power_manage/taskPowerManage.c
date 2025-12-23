@@ -208,6 +208,7 @@ static void McuVoltageDtcCheckProcess(void)
     uint32_t v_gps1_mv = 0;
     uint32_t v_bcall_led_mv = 0;
     uint32_t v_ecall_led_mv = 0;
+    uint32_t v_mic_power_mv = 0;
     //uint32_t v_bcall_adc_mv = 0;
     //uint32_t v_ecall_adc_mv = 0;
     const uint32_t STUCK_LIMIT_1MIN = 6000;
@@ -371,6 +372,21 @@ static void McuVoltageDtcCheckProcess(void)
     {
         s_ecall_stuck_cnt = 0;
         ClearDtcFaultState(E_DTC_ITEM_MPU_ECALL_KEY_STUCK);
+    }
+
+    // 10.麦克风电源监测
+    if (PeripheralHalAdGet(AD_CHANNEL_MIC_POWER, &v_mic_power_mv) == 0)
+    {
+         TBOX_PRINT("mic power voltage is %d mv\r\n", v_mic_power_mv);
+
+        if (v_mic_power_mv < 1800 || v_mic_power_mv > 2200)
+        {
+            SetDtcFaultState(E_DTC_ITEM_MPU_MIC_POWER_FAULT);
+        }
+        else
+        {
+            ClearDtcFaultState(E_DTC_ITEM_MPU_MIC_POWER_FAULT);
+        }
     }
 }
 
@@ -643,20 +659,11 @@ void WatchDogCycleProcess(void)
     PeripheralHalFeedWatchDog();
 }
 
-void EBcallInit(void)
-{
-    PORT_PinmuxConfig(PORT_C, GPIO_0, PTC0_GPIO);
-    GPIO_SetPinDir(PORT_C, GPIO_0, GPIO_INPUT);
-
-    PORT_PinmuxConfig(PORT_C, GPIO_1, PTC1_GPIO);
-    GPIO_SetPinDir(PORT_C, GPIO_1, GPIO_INPUT);
-}
 
 void TaskPowerManage(void *pvParameters)
 {
     TickType_t xLastWakeTime;
     uint8_t timeCount;
-    EBcallInit();
     AutosarNmSdkConfig(g_netManageAutosarConfigure, sizeof(g_netManageAutosarConfigure) / sizeof(g_netManageAutosarConfigure[0]));
     PowerManageSdkInit(&g_pmCondg);
     // BatterySdkInit(&g_batterConfig,10,E_BATTERY_XYSR);

@@ -158,7 +158,7 @@ typedef struct {
 static TimerIrqKpi_t g_timer1IrqKpi;
 #endif
 static SoftwareTimer_t g_softwareTimers[MAX_SOFTWARE_TIMERS];
-AdConvertBuffer_t g_adBuffer[15];
+AdConvertBuffer_t g_adBuffer[16];
 typeSetWakeupSourceCallbackPtr g_wakeupSourceFun;
 static uint8_t g_adcCompletedFlag = 0;
 static uint8_t g_ledSleepFlag = 0;
@@ -270,6 +270,12 @@ const ADC_ChannelConfig_t EcallButtonconfig =
         .adcDifferentialMode = ADC_SINGLE_MODE, // Select single-ended signal mode
         .adcChannelP = ADC_P_CH15,              // Signal P pole channel, CH15
         .adcChannelN = ADC_N_NONE               // Signal N pole channel. No need to configure N pole channel in single-ended signal mode
+};
+const ADC_ChannelConfig_t AdcMicPowerConfig =
+    {
+    .adcDifferentialMode = ADC_SINGLE_MODE,
+    .adcChannelP = ADC_P_CH2,
+    .adcChannelN = ADC_N_NONE
 };
 const WDOG_Config_t WDOG_Config =
 {
@@ -553,7 +559,11 @@ void ADC0_FWM_ISR(void)
 
     case ADC_P_CH13:
         g_adBuffer[AD_CHANNEL_ECALL_LIGHT].adValue = adc0Data & 0x0FFF;
-        ADC_ChannelConfig(ADC0_ID, &BcallLightconfig);
+        ADC_ChannelConfig(ADC0_ID, &AdcMicPowerConfig);
+        break;
+    case ADC_P_CH2:
+        g_adBuffer[AD_CHANNEL_MIC_POWER].adValue = adc0Data & 0x0FFF;
+        ADC_ChannelConfig(ADC0_ID, &BcallLightconfig); 
         break;
     default:
         break;
@@ -775,6 +785,12 @@ int16_t PeripheralHalAdGet(uint8_t adChannel, uint32_t *pValue)
             else if (AD_CHANNEL_ECALL_LIGHT == adChannel)
             {
                 temData = temData * AD_CHANNEL_ECALL_LIGHT_FACTOR;
+                *pValue = temData;
+                result = 0;
+            }
+            else if (AD_CHANNEL_MIC_POWER == adChannel)
+            {
+                temData = temData * AD_CHANNEL_MIC_POWER_FACTOR;
                 *pValue = temData;
                 result = 0;
             }
@@ -1132,6 +1148,8 @@ static void PeripheralHalAdc0PinConfig(void)
     PORT_PinmuxConfig(PORT_C, GPIO_14, PTC14_ADC0_CH12);
     // E-CALL 按键监测
     PORT_PinmuxConfig(PORT_C, GPIO_17, PTC17_ADC0_CH15);
+    // MIC 电源通道
+    PORT_PinmuxConfig(PORT_A, GPIO_6, PTA6_ADC0_CH2);
 }
 
 /*************************************************
@@ -1150,6 +1168,8 @@ static void PeripheralHalAdc0PinDeinit(void)
     PORT_PinmuxConfig(PORT_C, GPIO_14, PTC14_GPIO);
     // E-CALL 按键监测
     PORT_PinmuxConfig(PORT_C, GPIO_17, PTC17_GPIO);
+    // MIC 电源通道
+    PORT_PinmuxConfig(PORT_A, GPIO_6, PTA6_GPIO);
 }
 
 /*************************************************

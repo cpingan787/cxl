@@ -29,9 +29,17 @@
 #define ECALL_PWR_EN_PIN                GPIO_12
 #define ECALL_PWR_EN_PIN_MUX            PTC12_GPIO
 
+#define ECALL_BUTTON_PORT               PORT_C
+#define ECALL_BUTTON_PIN                GPIO_0
+#define ECALL_BUTTON_PIN_MUX            PTC0_GPIO
+
 #define VEHICLE_MUTE_PORT               PORT_D
 #define VEHICLE_MUTE_PIN                GPIO_9
 #define VEHICLE_MUTE_PIN_MUX            PTD9_GPIO
+
+#define CODEC_MIC_PWR_EN_PORT           PORT_E
+#define CODEC_MIC_PWR_EN_PIN            GPIO_15
+#define CODEC_MIC_PWR_EN_PIN_MUX        PTE15_GPIO
 
 #define AMP_STB_PORT                    PORT_E
 #define AMP_STB_PIN                     GPIO_14
