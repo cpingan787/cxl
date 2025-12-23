@@ -412,29 +412,29 @@ static int16_t CheckVinIsAsciiZero(uint8_t *pVin)
 
 int16_t Service22ReadVIN(uint8_t *pData, uint16_t *pLength)
 {
-  uint32_t length;
-  int16_t ret;
-  uint8_t vinTem[40];
-  // uint8_t i;
-  ret = WorkFlashVehicleInforRead(E_PARAMETER_INFO_VIN, vinTem, &length);
-  if (ret != 0)
-  {
-    return -1;
-  }
-  if (CheckVinIsAsciiZero(vinTem) != 0)
-  {
-    memcpy(pData, vinTem, 17);
-    *pLength = 17;
-    return 0;
-  }
-#if (0)
-  ret = WorkFlashVehicleInforRead(E_PARAMETER_INFO_VIN_hex, pData, &length);
-  if (ret != 0)
-  {
-    return -1;
-  }
-#endif
-  *pLength = 17;
+//   uint32_t length;
+//   int16_t ret;
+//   uint8_t vinTem[40];
+//   // uint8_t i;
+//   ret = WorkFlashVehicleInforRead(E_PARAMETER_INFO_VIN, vinTem, &length);
+//   if (ret != 0)
+//   {
+//     return -1;
+//   }
+//   if (CheckVinIsAsciiZero(vinTem) != 0)
+//   {
+//     memcpy(pData, vinTem, 17);
+//     *pLength = 17;
+//     return 0;
+//   }
+// #if (0)
+//   ret = WorkFlashVehicleInforRead(E_PARAMETER_INFO_VIN_hex, pData, &length);
+//   if (ret != 0)
+//   {
+//     return -1;
+//   }
+// #endif
+//   *pLength = 17;
 
   return 0;
 }
@@ -2377,15 +2377,15 @@ int16_t Service2EWriteVIN(uint8_t *pData, uint16_t dataLength)
     return -1;
   }
 
-  int16_t storeResult = WorkFlashVehicleInforStore(E_PARAMETER_INFO_VIN, pData, dataLength);
-  if (storeResult < 0)
-  {
-    return 0x72;
-  }
-  if (storeResult == 0)
-  {
-    ParameterSyncSdkSetToCpu(E_ParamId_VIN, pData, dataLength);
-  }
+//   int16_t storeResult = WorkFlashVehicleInforStore(E_PARAMETER_INFO_VIN, pData, dataLength);
+//   if (storeResult < 0)
+//   {
+//     return 0x72;
+//   }
+//   if (storeResult == 0)
+//   {
+//    ParameterSyncSdkSetToCpu(E_ParamId_VIN, pData, dataLength);
+//  }
 
   return 0;
 }
@@ -3371,15 +3371,15 @@ int16_t Service2EWriteECallNum1(uint8_t *pData, uint16_t dataLength)
   {
     return -1;
   }
-  int16_t storeResult = WorkFlashVehicleInforStore(E_PARAMETER_INFO_ECALL_NUM1, pData, dataLength);
-  if (storeResult < 0)
-  {
-    return 0x72;
-  }
-  if (storeResult == 0)
-  {
-    ParameterSyncSdkSetToCpu(E_ParamId_ECallNumber, pData, dataLength);
-  }
+//   int16_t storeResult = WorkFlashVehicleInforStore(E_PARAMETER_INFO_ECALL_NUM1, pData, dataLength);
+//   if (storeResult < 0)
+//   {
+//     return 0x72;
+//   }
+//   if (storeResult == 0)
+//   {
+//     ParameterSyncSdkSetToCpu(E_ParamId_ECallNumber, pData, dataLength);
+//   }
 
   return 0;
 }
@@ -3395,15 +3395,15 @@ int16_t Service2EWriteBCallNum1(uint8_t *pData, uint16_t dataLength)
   {
     return -1;
   }
-  int16_t storeResult = WorkFlashVehicleInforStore(E_PARAMETER_INFO_BCALL_NUM1, pData, dataLength);
-  if (storeResult < 0)
-  {
-    return 0x72;
-  }
-  if (storeResult == 0)
-  {
-    ParameterSyncSdkSetToCpu(E_ParamId_BCallNumber, pData, dataLength);
-  }
+//   int16_t storeResult = WorkFlashVehicleInforStore(E_PARAMETER_INFO_BCALL_NUM1, pData, dataLength);
+//   if (storeResult < 0)
+//   {
+//     return 0x72;
+//   }
+//   if (storeResult == 0)
+//   {
+     //ParameterSyncSdkSetToCpu(E_ParamId_BCallNumber, pData, dataLength);
+//   }
 
   return 0;
 }
@@ -6303,15 +6303,9 @@ int16_t Service22ReadPkiApply(uint8_t *pData, uint16_t *pLength)
 int16_t Service22ReadPkiCertStatus(uint8_t *pData, uint16_t *pLength)
 {
   uint8_t pki_status = 0x00;
-  int16_t ret;
+  //int16_t ret;
 
-  ret = EolTestSyncWithCpuGetPkiStatus(&pki_status);
-
-  if (ret != 0)
-  {
-    pki_status = 0x00;
-  }
-
+  //ret = EolTestSyncWithCpuGetPkiStatus(&pki_status);
   pData[0] = pki_status;
   *pLength = 1;
 

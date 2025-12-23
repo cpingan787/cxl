@@ -32,7 +32,7 @@
 /****************************** Macro Definitions ******************************/
 #define REMOTE_CONTROL_ECU_MAX_NUM                  (7U)
 #define REMOTE_CONTROL_ECU_CMD_MAX_NUM              (20U)
-#define REMOTE_CONTROL_HVAC_CMD_NUM                 (9U)
+#define REMOTE_CONTROL_HVAC_CMD_NUM                 (10U)
 #define REMOTE_CONTROL_PEPS_CMD_NUM                 (4U)
 #define REMOTE_CONTROL_BCM_CMD_NUM                  (12U)
 #define REMOTE_CONTROL_HVSM_CMD_NUM                 (8U)
@@ -294,7 +294,7 @@ static RemoteControlTotalTable_t g_remoteControlLocalMap[REMOTE_CONTROL_ECU_MAX_
             {CMD_TRUNK_AJAR_E,          RemoteControlCheckTrunkAjarFun          ,RemoteControlBcmCertification},
             {CMD_WIN_VENTILATE_SET_E,   RemoteControlCheckWinVentilateSetFun    ,RemoteControlBcmCertification},
             {CMD_MID_CTRL_FBD_LOCK_E,   RemoteControlCheckMidCtrlFbdLockFun     ,RemoteControlBcmCertification},
-            {CMD_HAZARD_LAMP_OFF_E,     RemoteControlCheckParkLampSetFun        ,RemoteControlBcmCertification},
+            //{CMD_HAZARD_LAMP_OFF_E,     RemoteControlCheckParkLampSetFun        ,RemoteControlBcmCertification},
         },
         REMOTE_CONTROL_BCM_CMD_NUM,
     },
@@ -428,7 +428,7 @@ static void RemoteControlCmdProcess(void)
     ((g_remoteControlReceivePack.subcommand & 0x7f)== REMOTE_CONTROL_SUBCMD))
     {
         messageType = g_remoteControlReceivePack.pDataBuffer[0];
-        
+        LogHalUpLoadLog("RC rcv =%d", messageType);
         RemoteControlSendAck();
         
         if(messageType == REMOTE_CONTROL_CMD_CONTROL_TYPE)
@@ -505,7 +505,7 @@ static void RemoteControlForbidSleepCheck(void)
             AutosarNmSdkClearSubNetWakeupRequest();
             RemoteControlSetTotalState(RemoteControlStateIdle);
         }
-        LogHalUpLoadLog("remote control forbid timeout\n");
+        LogHalUpLoadLog("RC fbd timeout\n");
         TimerHalStopTime(g_remoteControlSleepForrbidHandle);
         RemoteControlSetKeepWakeFlag(RemoteControlWakeUpFlag_NotKeep_e);
     }
@@ -560,7 +560,7 @@ static void RemoteControlStartStateMachine(void)
         g_remoteControlEcuId = (RemoteControlEcuId_t)(((uint16_t)g_remoteControlReceivePack.pDataBuffer[2] << 8) | g_remoteControlReceivePack.pDataBuffer[1]);
         g_remoteControlCmdId = g_remoteControlReceivePack.pDataBuffer[3];
         g_remoteControlParamValue = g_remoteControlReceivePack.pDataBuffer[4];
-        TBOX_PRINT("valid cmd, ecuId: %d, cmdId: %d, paramValue: %d\r\n", g_remoteControlEcuId, g_remoteControlCmdId, g_remoteControlParamValue);
+        LogHalUpLoadLog("Rc valid cmd,ecu:%d,cmd:%d,param:%d", g_remoteControlEcuId, g_remoteControlCmdId, g_remoteControlParamValue);
         RemoteControlSetKeepWakeFlag(RemoteControlWakeUpFlag_Keep_e);
         AutosarNmSdkSetSubNetWakeupRequest(0x7F);
         RemoteControlSetTotalState(RemoteControlStatePreCheck);
@@ -588,7 +588,7 @@ static void RemoteControlPreCheckProcess(void)
     RemoteControlProcessResult_t result = RemoteControlResult_Success_e;
     const RemoteControlEntry_t* entry = RemoteControlFindCmdEntry(g_remoteControlEcuId, g_remoteControlCmdId);
 
-    LogHalUpLoadLog("remote control start check\n");
+    LogHalUpLoadLog("RC start check");
     if (entry == NULL)
     {
         TBOX_PRINT("Error: No entry found for ECU %d CMD %d\n", g_remoteControlEcuId, g_remoteControlCmdId);
@@ -712,7 +712,7 @@ static void RemoteControlCertificationProcess(void)
                 }
             }
         }
-        LogHalUpLoadLog("remote control start certification\n");
+        LogHalUpLoadLog("RC start ctf");
         isInitialized = 1;  
     }
     
@@ -835,7 +835,7 @@ static void RemoteControlHandleSignalProcess(void)
                         sizeof(g_remoteControlCanBuf), REMOTE_CONTROL_CAN_FD_USE);
             if(ret != 0U)
             {
-                LogHalUpLoadLog("remote control normal trans error, ret = %d\n", ret);
+                LogHalUpLoadLog("RC nm trans error,ret=%d\n", ret);
             }
             if(g_remoteControlTransTimerHandle >= 0)
             {
@@ -916,7 +916,7 @@ static void RemoteControlHandleSignalProcess(void)
                           sizeof(g_remoteControlCanBuf), REMOTE_CONTROL_CAN_FD_USE);
             if(ret != 0U)
             {
-                LogHalUpLoadLog("remote control special trans error, ret = %d\n", ret);
+                LogHalUpLoadLog("RC spc trans error,ret=%d\n", ret);
             }
             
             if(g_remoteControlTransTimerHandle >= 0)
@@ -982,7 +982,7 @@ static void RemoteControlHandleSignalProcess(void)
             {
                 if((g_remoteControlEcuId == ECU_HVAC_E) && (g_remoteControlHvacPepsCheck == 0U))
                 {
-                    LogHalUpLoadLog("HVAC PEPS START SUCECESS\n");
+                    LogHalUpLoadLog("AC PEPS START");
                     RemoteControlSetTotalState(RemoteControlStateProcessSignal);
                     if(g_remoteControlTransTimerHandle >= 0)
                     {
@@ -992,7 +992,7 @@ static void RemoteControlHandleSignalProcess(void)
                 }
                 else if((g_remoteControlEcuId == ECU_HVSM_E) && (g_remoteControlHvsmPepsCheck == 0U))
                 {
-                    LogHalUpLoadLog("HVSM PEPS START SUCECESS\n");
+                    LogHalUpLoadLog("SM PEPS START");
                     RemoteControlSetTotalState(RemoteControlStateProcessSignal);
                     if(g_remoteControlTransTimerHandle >= 0)
                     {
@@ -1019,9 +1019,8 @@ static void RemoteControlHandleSignalProcess(void)
             }
             else if((g_remoteControlTransTimerHandle >= 0) && (TimerHalIsTimeout(g_remoteControlTransTimerHandle) == 0))
             {
-                LogHalUpLoadLog("remote control check signal timeout!\n");
+                LogHalUpLoadLog("RC check signal timeout");
                 g_remoteControlErrorCode = REMOTE_CONTROL_ERR_CODE_TIME_OUT;
-                TBOX_PRINT("Remote control check signal timeout!\n");
                 TimerHalStopTime(g_remoteControlTransTimerHandle);
                 s_canId = 0U;
                 s_transCount = 0U;
@@ -2803,7 +2802,7 @@ static RemoteControlProcessResult_t RemoteControlBcmCertification(void)
             canRet = CanHalTransmit(g_remoteControlCan1Handle,REMOTE_CONTROL_TEL_IMMOCode2_E,g_remoteControlCanBuf,sizeof(g_remoteControlCanBuf),REMOTE_CONTROL_CAN_FD_USE);
             if(canRet != 0U)
             {
-                LogHalUpLoadLog("remote control bcm autu req error, ret = %d\n", ret);
+                LogHalUpLoadLog("BCM autu req error,ret=%d", ret);
             }
             TimerHalStartTime(g_remoteControlAuthTimerHandle, REMOTE_CONTROL_BCM_REQ_AHTU_TIME);
             Can0ClearRxFlagByCanId(REMOTE_CONTROL_GW_BCM_E);
@@ -2845,7 +2844,7 @@ static RemoteControlProcessResult_t RemoteControlBcmCertification(void)
             canRet = CanHalTransmit(g_remoteControlCan1Handle,REMOTE_CONTROL_TEL_IMMOCode2_E,g_remoteControlCanBuf,sizeof(g_remoteControlCanBuf),REMOTE_CONTROL_CAN_FD_USE);
             if(canRet != 0U)
             {
-                LogHalUpLoadLog("remote control bcm cal key send error, ret = %d\n", ret);
+                LogHalUpLoadLog("BCM cal key send error,ret=%d", ret);
             }
             memset(g_remoteControlCanBuf,0U,sizeof(g_remoteControlCanBuf));
             TimerHalStartTime(g_remoteControlAuthTimerHandle, REMOTE_CONTROL_BCM_CHECK_AHTU_TIME);
@@ -2932,7 +2931,7 @@ static RemoteControlProcessResult_t RemoteControlPepsCertification(void)
             canRet = CanHalTransmit(g_remoteControlCan1Handle,REMOTE_CONTROL_TEL_IMMOCode1_E,g_remoteControlCanBuf,sizeof(g_remoteControlCanBuf),REMOTE_CONTROL_CAN_FD_USE);
             if(canRet != 0U)
             {
-                LogHalUpLoadLog("remote control peps autu req error, ret = %d\n", ret);
+                LogHalUpLoadLog("PEPS autu req error,ret=%d", ret);
             }
             TimerHalStartTime(g_remoteControlAuthTimerHandle, REMOTE_CONTROL_PEPS_REQ_AHTU_TIME);
             Can0ClearRxFlagByCanId(REMOTE_CONTROL_GW_PEPS_E);
@@ -2973,7 +2972,7 @@ static RemoteControlProcessResult_t RemoteControlPepsCertification(void)
             canRet = CanHalTransmit(g_remoteControlCan1Handle,REMOTE_CONTROL_TEL_IMMOCode1_E,g_remoteControlCanBuf,sizeof(g_remoteControlCanBuf),REMOTE_CONTROL_CAN_FD_USE);
             if(canRet != 0U)
             {
-                LogHalUpLoadLog("remote control peps calc key error, ret = %d\n", ret);
+                LogHalUpLoadLog("PEPS calc key error,ret=%d", ret);
             }
             memset(g_remoteControlCanBuf,0U,sizeof(g_remoteControlCanBuf));
             TimerHalStartTime(g_remoteControlAuthTimerHandle, REMOTE_CONTROL_PEPS_CHECK_AHTU_TIME);
@@ -3495,7 +3494,14 @@ static void RemoteControlNormalPackReqCanSignal(void)
                     }
                     break;
                    
-                
+                case CMD_MID_CTRL_FBD_LOCK_E:
+                    if(g_remoteControlParamValue == 1)
+                    {
+                        RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_LockDoorForceReq,     0x1);
+                        RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_LockDoorForceReqVD,   0x1);
+                    }
+                    break;
+                    
                 default:
                     break;
             }
@@ -4433,6 +4439,7 @@ static void RemoteControlSendReqWakeUpResult(void)
     g_remoteControlSendPack.pDataBuffer = g_remoteControlSendBuffer;
     g_remoteControlSendPack.dataLength = 2U;
     MpuHalTransmit(g_remoteControlUartHandle,&g_remoteControlSendPack,MPU_HAL_UART_MODE);
+    LogHalUpLoadLog("RC Send WakeUp Ack");
 }
 
 /*************************************************
@@ -4456,5 +4463,6 @@ static void RemoteControlSendIntoOtaModeResult(void)
     g_remoteControlSendPack.pDataBuffer = g_remoteControlSendBuffer;
     g_remoteControlSendPack.dataLength = 2U;
     MpuHalTransmit(g_remoteControlUartHandle,&g_remoteControlSendPack,MPU_HAL_UART_MODE);
+    LogHalUpLoadLog("RC Send Into Ota Mode Ack");
 }
 

@@ -54,6 +54,7 @@ int16_t AlarmSdkEcallTriger(uint8_t type)
     g_alarmPack.dataLength = 1;
     
     MpuHalTransmit(g_mpuHandle, &g_alarmPack, MPU_HAL_UART_MODE);
+    LogHalUpLoadLog("Ec sed type=%d",type);
     return 0;
 }
 
@@ -79,6 +80,7 @@ int16_t AlarmSdkBcallTriger(uint8_t type)
     g_alarmPack.dataLength = 1;
     
     MpuHalTransmit(g_mpuHandle, &g_alarmPack, MPU_HAL_UART_MODE);
+    LogHalUpLoadLog("Bc sed type=%d",type);
 
     return 0;
 }
@@ -105,6 +107,7 @@ int16_t AlarmSdkEcallClose(uint8_t type)
     g_alarmPack.dataLength = 1;
     
     MpuHalTransmit(g_mpuHandle, &g_alarmPack, MPU_HAL_UART_MODE);
+    LogHalUpLoadLog("Ec cls type=%d",type);
     return 0;
 }
 
@@ -130,6 +133,7 @@ int16_t AlarmSdkBcallClose(uint8_t type)
     g_alarmPack.dataLength = 1;
     
     MpuHalTransmit(g_mpuHandle, &g_alarmPack, MPU_HAL_UART_MODE);
+    LogHalUpLoadLog("Bc cls type=%d",type);
     return 0;
 }
 
@@ -249,29 +253,29 @@ void AlarmSdkCycleProcess(void)
                     if((g_dataPack.mid == 0x10)&&(AlarmSdkGetEcallCallState() != 0))
                     {
                         XCallSetTelemataticsMode(TELEMATICS_MODE_ECALL);
-                        TBOX_PRINT("Ecall trigger success\r\n");
+                        LogHalUpLoadLog("Ec tri suc");
                     }
                     else if((g_dataPack.mid == 0x14)&&(AlarmSdkGetBcallCallState() != 0))
                     {
                         XCallSetTelemataticsMode(TELEMATICS_MODE_BCALL);
-                        TBOX_PRINT("Bcall trigger success\r\n");
+                        LogHalUpLoadLog("Bc tri suc");
                     }
-                    else if((g_dataPack.mid == 0x10)&&(AlarmSdkGetBcallCallState() == 0))
+                    else if((g_dataPack.mid == 0x10)&&(AlarmSdkGetEcallCallState() == 0))
                     {
                         XCallSetTelemataticsMode(TELEMATICS_MODE_NOT_ACTIVE);
                         XCallSetPhoneCallState(E_ECALL_STATE_HANG_UP);
-                        TBOX_PRINT("Ecall close success\r\n");
+                        LogHalUpLoadLog("Ec cs suc");
                     }
                     else if((g_dataPack.mid == 0x14)&&(AlarmSdkGetBcallCallState() == 0))
                     {
                         XCallSetTelemataticsMode(TELEMATICS_MODE_NOT_ACTIVE);
                         XCallSetPhoneCallState(E_ECALL_STATE_HANG_UP);
-                        TBOX_PRINT("Bcall close success\r\n");
+                        LogHalUpLoadLog("Bc cls suc");
                     }
                 }
                 else if(g_dataPack.pDataBuffer[0] == 2)
                 {
-                    TBOX_PRINT("ecall state = %d\r\n", g_dataPack.pDataBuffer[1]);
+                    LogHalUpLoadLog("Xc state=%d", g_dataPack.pDataBuffer[1]);
                     switch (g_dataPack.pDataBuffer[1])
                     {
                         case E_ECALL_STATE_NO_ECALL:
