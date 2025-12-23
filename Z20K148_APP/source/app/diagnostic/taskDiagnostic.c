@@ -38,6 +38,7 @@ finish date:2018.7.31
 #include "mcuMpuSyncTask.h"
 #include "parameterSyncSdk.h"
 #include "vehicleSignalApp.h"
+#include "remoteDiagnosticSdk.h"
 // #include "cy_mw_flash.h"
 
 #define UDS_SECURITY_ERROR_COUNT_IN_NONVOLATILE 1
@@ -1013,7 +1014,7 @@ static int16_t Service0x10Process(uint8_t *udsData, uint16_t udsLen, uint8_t fun
       {
         g_currentSession = E_EXTEND_SESSION;
         // g_currentSecurityLevel = E_UDS_NONE_SECURITY_LEVEL; // lock security
-        g_ecuOnlineFlag = 1;
+        //g_ecuOnlineFlag = 1;
         uint8_t factoryMode = UdsDidGetManufactoryMode();
         if (factoryMode < 0x10)
         {
@@ -1751,7 +1752,12 @@ static int16_t Service0x3EProcess(uint8_t *udsData, uint16_t udsLen, uint8_t fun
       case 0x00:
       case 0x80:
       {
-        g_ecuOnlineFlag = 1;
+        if (RemoteDiagnosticSdkGetOnlineStatus() != 1)
+        {
+          g_ecuOnlineFlag = 1;
+          LogHalUpLoadLog("[MCU] RemoteDiagnosticSdkGetOnlineStatus: 0x%X\r\n", g_ecuOnlineFlag);
+          //TBOX_PRINT("[MCU] RemoteDiagnosticSdkGetOnlineStatus: 0x%X\r\n", g_ecuOnlineFlag);
+        }
 
         if ((udsData[UDS_OFFSET_SUB_FUNC] >> 7) == 0)
         {
@@ -3052,10 +3058,10 @@ static int16_t DiagnosticResponseProcess(uint8_t *udsData, uint16_t udsLen, uint
   }
 #endif
 
-  if (g_currentSession != E_DEFAULT_SESSION)
-  {
-    g_ecuOnlineFlag = 1;
-  }
+//   if (g_currentSession != E_DEFAULT_SESSION)
+//   {
+//     g_ecuOnlineFlag = 1;
+//   }
 
   return 0;
 }
@@ -3301,8 +3307,7 @@ void TaskEcuDiagnostic(void *pvParameters)
     {
         g_ecuOnlineFlag = 1;
     }
-    uint8_t currentTesterPresent = ((g_currentSession != E_DEFAULT_SESSION) || (isS3ServerTimerActive == 1)) ? 1 : 0;
-
+    uint8_t currentTesterPresent = (isS3ServerTimerActive == 1) ? 1 : 0;
     if (currentTesterPresent != g_isTesterPresent)
     {
       g_isTesterPresent = currentTesterPresent;

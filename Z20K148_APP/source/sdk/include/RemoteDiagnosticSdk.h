@@ -113,4 +113,15 @@ void RemoteDiagnosticSdkDisable(void);
 *************************************************/
 void RemoteDiagnosticSdkRecover(void);
 
+
+/*************************************************
+  Function:       RemoteDiagnosticSdkGetOnlineStatus
+  Description:    获取远程诊断在线状态接口
+  Input:          无
+  Output:         无
+  Return:         0：离线
+                  1：在线
+  Others:
+*************************************************/
+uint8_t RemoteDiagnosticSdkGetOnlineStatus(void);
 #endif
