@@ -339,8 +339,8 @@ void FirmwareUpdateSdkCycleProcess(void)
             FlashHalGetMetaDataInfo(&s_MetaDataInfo);
             s_MetaDataInfo.m_metaBootFlag = FLASH_BOOT_OTA_ACTIVE_FLAG;
             FlashHalWriteMetaDataInfo(&s_MetaDataInfo);
-            vTaskDelay( pdMS_TO_TICKS((100)));
             TBOX_PRINT("Ready reset to boot loader\r\n");
+            vTaskDelay( pdMS_TO_TICKS((200)));
             PeripheralHalMcuHardReset();
         }
         else

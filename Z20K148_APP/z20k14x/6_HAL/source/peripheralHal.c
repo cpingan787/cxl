@@ -129,7 +129,12 @@
 #define HZ_TO_MS (1000UL)        // 1秒 = 1e3毫秒
 #define CPU_FREQ_HZ (120000000UL) // 120MHz
 #endif
-
+/* slope_Q20 ≈ 9362286  -> 8.9286mV/count
+ * offset_mV ≈ 143mV
+ * according to T08 hardware 
+ */
+#define KL30_SLOPE_Q20                (9362286UL)
+#define KL30_OFFSET_mV                (143L)
 /****************************** Type Definitions ******************************/
 typedef struct
 {
@@ -313,6 +318,7 @@ static void Ex_Adc1Workaround2(void);
 static void Ex_Adc1Workaround1(void);
 static void Ex_Adc0Workaround2(void);
 static void Ex_Adc0Workaround1(void);
+static uint32_t PeripheralHalKl30RawTo_mV(uint16_t raw);
 /****************************** Public Function Implementations ***************/
 /*************************************************
   Function:       PeripheralHalRegisterSetWakeupSourceCallback
@@ -688,7 +694,8 @@ int16_t PeripheralHalAdGet(uint8_t adChannel, uint32_t *pValue)
     uint8_t adValid = 0;
     int16_t result = -2; // Default return value
     
-    if(adChannel >= (sizeof(g_adBuffer)/sizeof(g_adBuffer[0])))
+    if ((pValue == NULL) ||
+        (adChannel >= (uint8_t)(sizeof(g_adBuffer) / sizeof(g_adBuffer[0]))))
     {
         result = -1;
     }
@@ -702,13 +709,12 @@ int16_t PeripheralHalAdGet(uint8_t adChannel, uint32_t *pValue)
         {
             // Common calculation for all valid channels
             temData = adValue * AD_REF_VOLTAGE;
-            temData = temData / 4096;
+            temData = temData / 4095;
             
             // Apply channel-specific factor
             if(AD_CHANNEL_KL30 == adChannel)
             {
-                temData = temData * AD_CHANNEL_KL30_FACTOR;
-                *pValue = temData;
+                *pValue = PeripheralHalKl30RawTo_mV(adValue); /* mV */
                 result = 0;
             }
             //            else if (AD_CHANNEL_BATTERY == adChannel)
@@ -1836,4 +1842,25 @@ static void Ex_Adc1Workaround2(void)
     {
         (void)ADC_GetConversionResult(ADC1_ID);
     }
+}
+/*************************************************
+ Function    : PeripheralHalKl30RawTo_mV
+ Description : Convert KL30 raw ADC value to millivolt (mV)
+ Input       : raw - Raw ADC value from KL30 measurement
+ Output      : None
+ Return      : uint32_t - Converted voltage value in millivolt (mV)
+ Others      : Uses linear conversion formula: v = raw*slope + offset
+               KL30_SLOPE_Q20 and KL30_OFFSET_mV are used for the conversion
+*************************************************/
+static uint32_t PeripheralHalKl30RawTo_mV(uint16_t raw)
+{
+    uint64_t acc;
+    int32_t  v_mV;
+
+    /* v = raw*slope + offset */
+    acc = (uint64_t)raw * (uint64_t)KL30_SLOPE_Q20;
+    v_mV = (int32_t)(acc >> 20);
+    v_mV += (int32_t)KL30_OFFSET_mV;
+
+    return (uint32_t)v_mV;
 }

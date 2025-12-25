@@ -276,6 +276,7 @@ static const uint16_t g_passthroughDidList_22[] = {
     // 0x0110,
     // 0xF193,
     // 0xF195,
+    0xF190,
     0x031C,
     // 0xB205,
     // 0xB206,
@@ -367,7 +368,7 @@ static const uint16_t g_passthroughDidList_22[] = {
     0xB2E6,
     0x1014,
     //0x011F,
-    //0x0124,
+    0x0124,
 };
 static const RdidInfor_t g_Service22FunMapList[] =
     {
@@ -2658,22 +2659,17 @@ static int16_t Service0x22Process(uint8_t *udsData, uint16_t udsLen, uint8_t fun
   first_did = (udsData[1] << 8) | udsData[2];
 
   if (IsDidPassthrough_22(first_did))
-  {
-    uint8_t mpu_response_buffer[512];
-    uint16_t mpu_response_length = 0;
-    int16_t ret;
-    // TBOX_PRINT("22 passthrough DID: %04X\n", first_did);
-    ret = CanPassthrough_RequestAndGetResponse(udsData, udsLen, mpu_response_buffer, &mpu_response_length);
-    if (ret == 0 && mpu_response_length > 0)
     {
-      DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, mpu_response_buffer, mpu_response_length, 0);
-      return 0;
+        if (EolSync_StartRequest(udsData, udsLen, UdsAsyncResponseCallback) == 0)
+        {
+
+            return 1; 
+        }
+        else
+        {
+            return 0x21;
+        }
     }
-    else
-    {
-      negativeNum = 0x31;
-    }
-  }
   else
   {
 
@@ -2830,23 +2826,21 @@ static int16_t Service0x2EProcess(uint8_t *udsData, uint16_t udsLen, uint8_t fun
   }
   else
   {
-    uint8_t mpu_response_buffer[64]; // mpu会给我回什么
-    uint16_t mpu_response_length = 0;
-    int8_t passthroughRet;
-    if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
-    {
-      return 0x72;
-    }
-    passthroughRet = CanPassthrough_RequestAndGetResponse(udsData, udsLen, mpu_response_buffer, &mpu_response_length);
+      
+      if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+      {
+        return 0x72;
+      }
+      int16_t startRet = EolSync_StartRequest(udsData, udsLen, UdsAsyncResponseCallback);
 
-    if (passthroughRet == 0 && mpu_response_length > 0)
-    {
-      DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, mpu_response_buffer, mpu_response_length, 0);
-    }
-    else
-    {
-      negativeNum = 0x72;
-    }
+      if (startRet == 0)
+      {
+          return 1; 
+      }
+      else
+      {
+          return 0x21;
+      }
   }
   return negativeNum;
 }
@@ -3238,6 +3232,23 @@ static void DiagnosticSeedAccessInit(void)
 #endif
 // static void UdsServiceProcess(uint8_t *pTpData, uint32_t tpDataLength, uint8_t FunctionalAddress);
 
+static int16_t UdsAsyncResponseCallback(uint8_t *pData, uint16_t length, uint8_t result)
+{
+    if (result == 0) // 成功
+    {
+        DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, pData, length, 0);
+    }
+    else // 失败/超时
+    {
+        uint8_t nrcData[3];
+        nrcData[0] = 0x7F;
+        nrcData[1] = 0x22;
+        nrcData[2] = 0x72;
+        DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, nrcData, 3, 0);
+    }
+    return 0;
+}
+
 void TaskEcuDiagnostic(void *pvParameters)
 {
 
@@ -3293,7 +3304,12 @@ void TaskEcuDiagnostic(void *pvParameters)
         }
       }
     }
-	
+    
+    EolTestSyncMainLoop();
+    // if (EolSync_GetState() != EOL_STATE_IDLE)
+    // {
+    //     g_ecuOnlineFlag = 1;
+    // }
     uint8_t currentTesterPresent = (isS3ServerTimerActive == 1) ? 1 : 0;
     if (currentTesterPresent != g_isTesterPresent)
     {

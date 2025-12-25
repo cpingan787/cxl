@@ -51,9 +51,9 @@
 #define MPU_HAL_PACK_FIX_HEADER_0XBB            0xBB // SPI 6字节头帧
 #define MPU_HAL_PACK_HEADER_RESERVED            0x00
 #define MPU_HAL_CRC_DEFAULT_VALUE               0x0000
-#define MPU_HAL_CYC_TIME_CNT_50MS               500 // base cycleTime = 10
-#define MPU_HAL_CYC_TIME_CNT_40MS               400 // base cycleTime = 10
-#define MPU_HAL_CYC_TIME_CNT_20MS               200 // base cycleTime = 10  
+#define MPU_HAL_CYC_TIME_CNT_55MS               550     // base cycleTime = 10
+#define MPU_HAL_CYC_TIME_CNT_400MS              4000    // base cycleTime = 10
+#define MPU_HAL_CYC_TIME_CNT_50MS               500     // base cycleTime = 10   
 #define MPU_HAL_RX_QUEUE_LEN                    10
 #define MPU_HAL_TX_QUEUE_LEN                    40
 #define MPU_HAL_UART_TX_ONCE_LEN                40
@@ -912,7 +912,7 @@ void MpuHalCycleProcess(uint32_t cycleTime)
     else if (E_MPU_HAL_START_STATE_POWER_DELAY == g_mpuManage.startState)
     {
         timeCount += cycleTime;
-        if (timeCount >= (MPU_HAL_CYC_TIME_CNT_40MS - cycleTime))
+        if (timeCount >= (MPU_HAL_CYC_TIME_CNT_400MS - cycleTime))
         {
             g_mpuManage.startState = E_MPU_HAL_START_STATE_KEY_ON;
         }
@@ -926,16 +926,21 @@ void MpuHalCycleProcess(uint32_t cycleTime)
     else if (E_MPU_HAL_START_STATE_KEY_ON_DELAY == g_mpuManage.startState)
     {
         timeCount += cycleTime;
-        if (timeCount > (MPU_HAL_CYC_TIME_CNT_20MS - cycleTime))
+        if (timeCount > (MPU_HAL_CYC_TIME_CNT_55MS - cycleTime))
         {
             g_mpuManage.startState = E_MPU_HAL_START_STATE_KEY_OFF;
-            MpuHalSetVbus(1);
+            timeCount = 0U;
             MpuHalSetPowerkey(0);
         }
     }
     else if (E_MPU_HAL_START_STATE_KEY_OFF == g_mpuManage.startState)
     {
-        g_mpuManage.startState = E_MPU_HAL_START_STATE_FINISH;
+        timeCount += cycleTime;
+        if (timeCount > (MPU_HAL_CYC_TIME_CNT_50MS - cycleTime))
+        {
+            MpuHalSetVbus(1);
+            g_mpuManage.startState = E_MPU_HAL_START_STATE_FINISH;
+        }
     }
     else
         ;

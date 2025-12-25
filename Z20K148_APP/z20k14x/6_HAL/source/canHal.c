@@ -565,7 +565,7 @@ void CAN0_Init(uint8_t canIndex, uint8_t canfdFlag, CanBaudType_e idBandrate, Ca
         CAN_Disable(CAN_ID_1);                               // 禁止CAN模块
         CAN_Init(CAN_ID_1, &g_Can1Config);                   // 初始化CAN模块
         CAN_SetRxMaskType(CAN_ID_1, CAN_RX_MASK_INDIVIDUAL); // 使用邮箱的独立屏蔽寄存器
-        // CAN_BusOffRecoveryScheme(CAN_ID_1, CAN_BUS_OFF_RECOV_AUTO);    //使能BUS_OFF自动恢复功能。
+        CAN_BusOffRecoveryScheme(CAN_ID_1, CAN_BUS_OFF_RECOV_MANUAL);    //使能BUS_OFF自动恢复功能。
 
         /* 初始化邮箱说明：MB0用于发送网络管理报文，MB1用于发送网络诊断报文，MB2-4用于发送常规报文。MB5-31用于接收报文，
             共有27个邮箱可以用于接收。建议：网络管理数据使用一个邮箱接收，诊断数据使用一个邮箱接收，对重要的报文，
