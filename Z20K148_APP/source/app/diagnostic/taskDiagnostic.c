@@ -367,7 +367,7 @@ static const uint16_t g_passthroughDidList_22[] = {
     0xB2E6,
     0x1014,
     //0x011F,
-    0x0124,
+    //0x0124,
 };
 static const RdidInfor_t g_Service22FunMapList[] =
     {

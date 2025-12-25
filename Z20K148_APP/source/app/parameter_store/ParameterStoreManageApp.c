@@ -875,6 +875,7 @@
 #define WORKFLASH_TRANSPORT_MODE_LEN (1 + 2)          // 0xB2B4_cxl
 #define WORKFLASH_MANUFACTORY_MODE_LEN (1 + 2)        // 0x0110_cxl
 #define WORKFLASH_4G_RESET_COUNT_LEN (1 + 2)          // 0xB260_cxl
+#define WORKFLASH_TBOX_RESET_FLAG_LEN (1 + 2)         // Tbox Reset Flag
 
 // ==================== 结构体定义 ====================
 typedef struct
@@ -993,7 +994,7 @@ typedef struct
   uint8_t u8TransportMode[WORKFLASH_TRANSPORT_MODE_LEN];                // 0xB2B4_cxl
   uint8_t u8ManufactoryMode[WORKFLASH_MANUFACTORY_MODE_LEN];            // 0x0110_cxl
   uint8_t u8_4gResetCount[WORKFLASH_4G_RESET_COUNT_LEN];                // 0xB260_cxl
-  
+  uint8_t u8TboxResetFlag[WORKFLASH_TBOX_RESET_FLAG_LEN];               // Tbox Reset Flag   
   // 保留一些之前定义的但没用的参数位，防止偏移错乱
   uint8_t u8WorkAddr[WORKFLASH_WORK_ADDR_LEN];
   uint8_t u8WorkPort[WORKFLASH_WORK_PORT_LEN];
@@ -1199,7 +1200,7 @@ TBOX_PARAMETER_MAP(E_PARAMETER_INFO_FUNCTION_CONFIG, u8FunctionConfig, 0)
 TBOX_PARAMETER_MAP(E_PARAMETER_INFO_TRANSPORT_MODE, u8TransportMode, 0)
 TBOX_PARAMETER_MAP(E_PARAMETER_INFO_MANUFACTORY_MODE, u8ManufactoryMode, 0)
 TBOX_PARAMETER_MAP(E_PARAMETER_INFO_4G_RESET_COUNT, u8_4gResetCount, 0)
-
+TBOX_PARAMETER_MAP(E_PARAMETER_INFO_TBOX_RESET_FLAG, u8TboxResetFlag, 0)            // Tbox Reset Flag
 TBOX_PARAMTER_MAP_END()
 
 #if 0

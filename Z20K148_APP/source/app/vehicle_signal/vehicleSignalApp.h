@@ -655,6 +655,9 @@ typedef struct
     CanParseSignal_t EBS_WakeupIntervalTime;
     CanParseSignal_t ACU_Key2St;
     CanParseSignal_t ACU_TELBcallReq;
+    CanParseSignal_t ACU_AuthRand;
+    CanParseSignal_t ACU_AuthKey;
+    CanParseSignal_t ACU_TelModuleResetReq;
 } can0_signal_configure_t;
 
 /****************************** Function Declarations *************************/

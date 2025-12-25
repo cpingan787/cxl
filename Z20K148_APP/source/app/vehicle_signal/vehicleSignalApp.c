@@ -58,6 +58,7 @@ CAN_ID_CONFIGURE_DEFINE(GW_SRS_2_T)
 CAN_ID_CONFIGURE_DEFINE(GW_EMS_1_T)
 CAN_ID_CONFIGURE_DEFINE(GW_EBS_1_T)
 CAN_ID_CONFIGURE_DEFINE(GW_ACU_1_T)
+CAN_ID_CONFIGURE_DEFINE(GW_ACU_32_B_T)
 CAN_ID_CONFIGURE_DEFINE_END(0)
 
 /****************************** Global Variables ******************************/
@@ -86,6 +87,7 @@ CAN_V_ID_ELEMENT(GW_SRS_2_T, 100, 0x3AB)
 CAN_V_ID_ELEMENT(GW_EMS_1_T, 100, 0x1EE)
 CAN_V_ID_ELEMENT(GW_EBS_1_T, 500, 0x315)
 CAN_V_ID_ELEMENT(GW_ACU_1_T, 500, 0x1E2)
+CAN_V_ID_ELEMENT(GW_ACU_32_B_T, 1000, 0x075) 
 CAN_ID_CONFIGURE_END(0)
 
 static const can0_signal_configure_t m_can0SignalConfigure =
@@ -8094,7 +8096,45 @@ static const can0_signal_configure_t m_can0SignalConfigure =
             .useInvalidFlag = 1,
             .InvalidData = 0xFFFFFFFF,
         }, // Indicate if the charge current is bigger than the threshold
+        
+        .ACU_AuthRand =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_ACU_32_B_T),
+            .dataType = 0,
+            .startBit = 8,
+            .bitLength = 16,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // Indicate if the charge current is bigger than the threshold
 
+        .ACU_AuthKey =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_ACU_32_B_T),
+            .dataType = 0,
+            .startBit = 24,
+            .bitLength = 16,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // Indicate if the charge current is bigger than the threshold
+
+        .ACU_TelModuleResetReq =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_ACU_32_B_T),
+            .dataType = 0,
+            .startBit = 32,
+            .bitLength = 1,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // Indicate if the charge current is bigger than the threshold
 
 };
 
