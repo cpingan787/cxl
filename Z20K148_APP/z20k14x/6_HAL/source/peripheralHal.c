@@ -648,6 +648,7 @@ void PeripheralHalAdcStart(uint8_t sarNo)
         g_adBuffer[AD_CHANNEL_BCALL_LIGHT].adValid = 1;
         g_adBuffer[AD_CHANNEL_ECALL_LIGHT].adValid = 1;
         g_adBuffer[AD_CHANNEL_SOS_KEY].adValid = 1;
+        g_adBuffer[AD_CHANNEL_MIC_POWER].adValid = 1;
         ADC_SoftwareTrigger(ADC0_ID); // Software generates a trigger signal for ADC
         break;
     case 1:
@@ -764,30 +765,30 @@ int16_t PeripheralHalAdGet(uint8_t adChannel, uint32_t *pValue)
                 *pValue = temData;
                 result = 0;
             }
-            else if (AD_CHANNEL_BCALL == adChannel)
-            {
-                temData = temData * AD_CHANNEL_BCALL_FACTOR;
-                *pValue = temData;
-                result = 0;
-            }
-            else if (AD_CHANNEL_ECALL == adChannel)
-            {
-                temData = temData * AD_CHANNEL_ECALL_FACTOR;
-                *pValue = temData;
-                result = 0;
-            }
-            else if (AD_CHANNEL_BCALL_LIGHT == adChannel)
-            {
-                temData = temData * AD_CHANNEL_BCALL_LIGHT_FACTOR;
-                *pValue = temData;
-                result = 0;
-            }
-            else if (AD_CHANNEL_ECALL_LIGHT == adChannel)
-            {
-                temData = temData * AD_CHANNEL_ECALL_LIGHT_FACTOR;
-                *pValue = temData;
-                result = 0;
-            }
+            // else if (AD_CHANNEL_BCALL == adChannel)
+            // {
+            //     temData = temData * AD_CHANNEL_BCALL_FACTOR;
+            //     *pValue = temData;
+            //     result = 0;
+            // }
+            // else if (AD_CHANNEL_ECALL == adChannel)
+            // {
+            //     temData = temData * AD_CHANNEL_ECALL_FACTOR;
+            //     *pValue = temData;
+            //     result = 0;
+            // }
+            // else if (AD_CHANNEL_BCALL_LIGHT == adChannel)
+            // {
+            //     temData = temData * AD_CHANNEL_BCALL_LIGHT_FACTOR;
+            //     *pValue = temData;
+            //     result = 0;
+            // }
+            // else if (AD_CHANNEL_ECALL_LIGHT == adChannel)
+            // {
+            //     temData = temData * AD_CHANNEL_ECALL_LIGHT_FACTOR;
+            //     *pValue = temData;
+            //     result = 0;
+            // }
             else if (AD_CHANNEL_MIC_POWER == adChannel)
             {
                 temData = temData * AD_CHANNEL_MIC_POWER_FACTOR;

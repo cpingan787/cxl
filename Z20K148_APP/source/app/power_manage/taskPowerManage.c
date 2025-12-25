@@ -347,7 +347,7 @@ static void McuVoltageDtcCheckProcess(void)
         }
         else
         {
-            SetDtcFaultState(E_DTC_ITEM_MPU_BCALL_KEY_STUCK);
+        //    SetDtcFaultState(E_DTC_ITEM_MPU_BCALL_KEY_STUCK);
         }
     }
     else
@@ -377,9 +377,9 @@ static void McuVoltageDtcCheckProcess(void)
     // 10.麦克风电源监测
     if (PeripheralHalAdGet(AD_CHANNEL_MIC_POWER, &v_mic_power_mv) == 0)
     {
-         TBOX_PRINT("mic power voltage is %d mv\r\n", v_mic_power_mv);
+        // TBOX_PRINT("mic power voltage is %d mv\r\n", v_mic_power_mv);
 
-        if (v_mic_power_mv < 1800 || v_mic_power_mv > 2200)
+        if (v_mic_power_mv < 2400 || v_mic_power_mv > 2800)
         {
             SetDtcFaultState(E_DTC_ITEM_MPU_MIC_POWER_FAULT);
         }

@@ -344,7 +344,7 @@ void RemoteDiagnosticSdkProcess(CanIdConfig_t *pEcuConfigure, MpuBuffer_t *pMpuB
             if ((rxMsg.aid == COMMAND_UDS_TRANSMIT_AID) &&
                 ((rxMsg.mid == COMMAND_UDS_REMOTE_DIAG_MID) || // 0x01
                  (rxMsg.mid == COMMAND_UDS_FLASHER_MID) ||     // 0x20
-                 ((rxMsg.mid == COMMAND_UDS_RESET_MID)&& ((rxMsg.subcommand & 0x7F) == 0x24))))        // 0x10
+                 ((rxMsg.mid == COMMAND_UDS_RESET_MID) && ((rxMsg.subcommand & 0x7F) == 0x24))))        // 0x10
             {    
                 TimerHalStartTime(g_remoteDiagnosticTimerHandle, 3000);
                 g_remoteDiagnosticOnlineStatus = 1;                        // 设为在线
