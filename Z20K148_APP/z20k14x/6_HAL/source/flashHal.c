@@ -53,6 +53,9 @@ const static FlashHalMetaDataInfo_t g_flashHalMetaDataDefaultInfo =
 
 static WorkFlashBuffer_u g_workFlashBuffer;
 
+static uint8_t g_flashBackDoorKey[12] = {0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,
+                                        0xFF,0xFF,0xFF,0xFF};//flash jtag backdoor key
+
 /****************************** Function Declarations *************************/
 static uint8_t GetNewSectorNum(uint32_t FirstSectorAddress,uint8_t *newSectorFlag);
 static ResultStatus_t FlashHalIsMetaDataValid(const FlashHalMetaDataInfo_t *pMetaData);
@@ -597,4 +600,49 @@ int16_t FlashHalRead(uint32_t addr, uint8_t *data, uint32_t size)
       data[i] = pDataAddress[i];
     }
     return 0;
+}
+/*************************************************
+  Function:       FlashHalOpenJtag
+  Description:    Open flash jtag back door
+  Input:          none
+  Output:         none
+  Return:         Success: SUCC
+                  Failure: ERR
+  Others:
+*************************************************/
+
+ResultStatus_t FlashHalOpenJtag(void)
+{
+    ResultStatus_t ret = ERR;
+    uint32_t sector_start = 0x02000000;    //flash back door sector address
+    COMMON_DISABLE_INTERRUPTS();
+    ret = FLASH_EraseSector(sector_start, &g_stcFlashCmdExeConfig);
+    COMMON_ENABLE_INTERRUPTS();
+    if (ret != SUCC)
+    {
+        TBOX_PRINT("Line %d: flash back door sector erase failed %d\r\n", __LINE__, ret);
+    }
+    return ret;
+}
+
+/*************************************************
+  Function:       FlashHalCloseJtag
+  Description:    Close flash jtag back door
+  Input:          none
+  Output:         none
+  Return:         Success: SUCC
+                  Failure: ERR
+  Others:
+*************************************************/
+ResultStatus_t FlashHalCloseJtag(void)
+{
+    ResultStatus_t ret = ERR;
+    COMMON_DISABLE_INTERRUPTS();
+    ret = FLASH_EnterSecurityMode(ENABLE,g_flashBackDoorKey,&g_stcFlashCmdExeConfig); //warnning!!!!!: close jtag port
+    COMMON_ENABLE_INTERRUPTS();
+    if (ret != SUCC)
+    {
+        TBOX_PRINT("Line %d: close flash back door failed %d\r\n", __LINE__, ret);
+    }
+    return ret;
 }

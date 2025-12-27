@@ -256,5 +256,6 @@ void FlashHalTestMain(void);
 ResultStatus_t FlashHalGetMetaDataInfo(FlashHalMetaDataInfo_t *pMetaData);
 ResultStatus_t FlashHalWriteMetaDataInfo(const FlashHalMetaDataInfo_t *pMetaData);
 int16_t FlashHalRead(uint32_t addr, uint8_t *data, uint32_t size);
-
+ResultStatus_t FlashHalOpenJtag(void);
+ResultStatus_t FlashHalCloseJtag(void);
 #endif

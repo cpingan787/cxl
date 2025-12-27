@@ -30,6 +30,7 @@
 #include "task.h"
 #include "mpuHal.h"
 #include "remoteControl.h"
+#include "flashHal.h"
 static uint8_t g_didF1A2[19] = {"P01       -V6.02.00"}; // CAN矩阵
 
 static uint8_t g_didF1B3[9] = {"CDONO-77E"};                        // 节点地址
@@ -53,8 +54,10 @@ static uint8_t g_2EReportToDcanVaule = 0;
 const char g_ucuType[] = "SGMW-UCU-05";
 static uint8_t g_vin[17];
 static uint8_t g_eskKeyValid = 0;
+static uint8_t g_jtagPortFlag = 1;
 
 static void CheckVinWriteStatus(void);
+static void SetJtagPortFlag(uint8_t flag);
 
 static uint8_t HexToChar(uint8_t hexValue)
 {
@@ -4620,13 +4623,16 @@ int16_t Service2EWriteJtagStatus(uint8_t *pData, uint16_t dataLength)
   {
     return 0x13;
   }
-  int16_t storeResult = WorkFlashVehicleInforStore(E_PARAMETER_INFO_JTAG_STATUS, pData, dataLength);
-  if (storeResult < 0)
+  if(pData[0] == 0)
   {
-    return 0x72;
+    FlashHalCloseJtag();
+    SetJtagPortFlag(0);
   }
-
-  // PeripheralHalSetJtag(pData[0]);
+  else
+  {
+    FlashHalOpenJtag();
+    SetJtagPortFlag(1);
+  }
 
   return 0;
 }
@@ -6847,14 +6853,7 @@ int16_t Service22ReadGnssGalaxy(uint8_t *pData, uint16_t *pLength)
 // 0xB2E5_cxl
 int16_t Service22ReadJtagStatus(uint8_t *pData, uint16_t *pLength)
 {
-  uint32_t length;
-  int16_t ret = WorkFlashVehicleInforRead(E_PARAMETER_INFO_JTAG_STATUS, pData, &length);
-
-  if (ret != 0 || length == 0)
-  {
-    pData[0] = 0x00;
-  }
-
+  pData[0] = GetJtagPortFlag();
   *pLength = 1;
   return 0;
 }
@@ -7985,6 +7984,17 @@ int16_t Service31RequestRoutineResultsPKI(uint8_t *pDataIn, uint16_t lengthIn, u
 
   return 0;
 }
+
+static void SetJtagPortFlag(uint8_t flag)
+{
+  g_jtagPortFlag = flag;
+}
+
+uint8_t GetJtagPortFlag(void)
+{
+  return g_jtagPortFlag;
+}
+
 #if 0
 int16_t Service31RequestRoutineResultsDiagDefault(uint8_t *pDataIn, uint16_t lengthIn, uint8_t *pDataOut, uint16_t *pLengthOut)
 {

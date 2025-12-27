@@ -1756,11 +1756,9 @@ void GetSnapshotRecordData(DtcSnapshotRecordGlobal_t *SnapshotRecordData)
   const can0_signal_configure_t *pCan0SignalConfigure = GetCan0SignalConfigure();
 
   PeripheralHalAdGet(AD_CHANNEL_KL30, &KL30Voltage);
-  KL30Voltage = KL30Voltage / 100;
-  if (KL30Voltage > 50)
-  {
-    KL30Voltage = KL30Voltage + 1;
-  }
+
+  KL30Voltage = (KL30Voltage + 50) / 100;//四舍五入
+
   SnapshotRecordDataTemp->ecuVoltage = (uint16_t)KL30Voltage;
   // TBOX_PRINT("DTC Snapshot ECU Voltage: %d\r\n", SnapshotRecordDataTemp->ecuVoltage);
 

@@ -59,7 +59,7 @@ static EcuId_t g_ecuList[] = {
     {0x72D, 0x7AD, TBOX_CAN_CHANNEL_2}, // ECU_TCAN_TBOX
 
     /* DCAN Nodes */
-    {0x74F, 0x7CF, TBOX_CAN_CHANNEL_2}, // ECU_DCAN_GWM
+    {0x74F, 0x7CF, TBOX_CAN_CHANNEL_2}, // ECU_DCAN_GWM/
 
     {0x067,0x068, TBOX_CAN_CHANNEL_2}, //用于TBOX和网关之间ota模式认证
 

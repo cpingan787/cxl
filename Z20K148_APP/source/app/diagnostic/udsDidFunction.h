@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include "stdbool.h"
 uint8_t UdsDidGetManufactoryMode(void);
+uint8_t GetJtagPortFlag(void);
 bool UdsCheckSecurityAccessValid(uint8_t requiredLevel);
 // serive 22 read function
 int16_t Service22ReadPartNumber(uint8_t *pData, uint16_t *pLength);
