@@ -406,10 +406,19 @@ static void AcuResetTboxStateMachine(void)
             break;
 
         case ACU_RESET_TBOX_STATE_AUTU:
-            calKey = ((((g_acuSignalVal.ACU_AuthRand << 5) ^ g_acuSignalVal.ACU_AuthRand) >> 2) ^ g_acuSignalVal.ACU_AuthRand);
-            if(calKey == g_acuSignalVal.ACU_AuthKey)
+            if(g_acuSignalVal.ACU_AuthRand != 0)                //rand key != 0
             {
-                acuResetTboxState = ACU_RESET_TBOX_STATE_CHECK;
+                calKey = ((((g_acuSignalVal.ACU_AuthRand << 5) ^ g_acuSignalVal.ACU_AuthRand) >> 2) ^ g_acuSignalVal.ACU_AuthRand);
+                if(calKey == g_acuSignalVal.ACU_AuthKey)
+                {
+                    acuResetTboxState = ACU_RESET_TBOX_STATE_CHECK;
+                }
+                else
+                {
+                    SetTelModuleResetSt(TEL_MODULE_RESET_ST_FAILED);
+                    SetTelResetFailReason(TEL_RESET_FAIL_REASON_AUTU_FAILED);
+                    acuResetTboxState = ACU_RESET_TBOX_STATE_PACK_NORMAL;
+                }
             }
             else
             {

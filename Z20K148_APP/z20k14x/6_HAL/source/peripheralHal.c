@@ -663,7 +663,7 @@ void PeripheralHalAdcStart(uint8_t sarNo)
         g_adBuffer[AD_CHANNEL_4G].adValid = 1;
         g_adBuffer[AD_CHANNEL_GPS].adValid = 1;
         g_adBuffer[AD_CHANNEL_GPS1].adValid = 1;
-
+        g_adBuffer[AD_CHANNEL_MIC].adValid = 1;
         ADC_SoftwareTrigger(ADC1_ID); // Software generates a trigger signal for ADC
         break;
     case 2:

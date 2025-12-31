@@ -5216,10 +5216,10 @@ int16_t Service22ReadBootSoftwarePartNumber(uint8_t *pData, uint16_t *pLength)
 // 0xF187_cxl
 int16_t Service22ReadGacEcuPartNumber(uint8_t *pData, uint16_t *pLength)
 {
-  //ProjectConfigGetGacEcuPartNumber_F187(pData, pLength);
-  uint32_t len;
-  WorkFlashVehicleInforRead(E_PARAMETER_INFO_PART_NAME, pData, &len);
-  *pLength = len;
+  ProjectConfigGetGacEcuPartNumber_F187(pData, pLength);
+//   uint32_t len;
+//   WorkFlashVehicleInforRead(E_PARAMETER_INFO_PART_NAME, pData, &len);
+//   *pLength = len;
   return 0;
 }
 // // 0xF187_cxl

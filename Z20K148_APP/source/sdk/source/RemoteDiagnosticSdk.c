@@ -239,11 +239,12 @@ static uint8_t RemoteDiagnosticSdkTpTransmit(CanIdConfig_t *pEcuConfigure, MpuHa
 
                 if (canId == 0x067 || canId == 0x069)
                 {
-                    LogHalUpLoadLog
+                    LogHalUpLoadLog("[MCU] Special ID (0x%X) -> Raw Mode (Keep Headers)\r\n", canId);
                     UdsTpTransmitRaw(g_udsTpHandle[pEcuConfigure->pEcuList[ecuId].channel], canId, pUdsData, udsDataLen);
                 }
                 else
                 {
+                    LogHalUpLoadLog("[MCU] Std ID (0x%X) -> Standard Mode (Strip Headers)\r\n", canId);
                     UdsTpTransmit(g_udsTpHandle[pEcuConfigure->pEcuList[ecuId].channel], canId, pUdsData, udsDataLen);
                 }
 

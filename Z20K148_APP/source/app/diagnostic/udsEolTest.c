@@ -107,6 +107,7 @@ static int16_t ToolReadSoftwareNumber(uint8_t *pData, uint16_t *pLength);
 static int16_t ToolReadVehicleSoftwareVersion(uint8_t *pData, uint16_t *pLength);
 static int16_t ToolRead4GAntennaStatus(uint8_t *pData, uint16_t *pLength);
 static int16_t ToolReadGNSSAntennaStatus(uint8_t *pData, uint16_t *pLength);
+static int16_t ToolReadSerialNumber(uint8_t *pData, uint16_t *pLength);
 // static int16_t Service2EWriteBluetoothName(uint8_t *Data, uint16_t len);
 static int16_t ToolWriteSleepStatus(uint8_t *pData, uint16_t dataLength);
 static const struc_ReadDidMap m_readDidMap[] =
@@ -128,6 +129,8 @@ static const struc_ReadDidMap m_readDidMap[] =
         {0x1215, ToolReadVehicleSoftwareVersion}, // 18. 软件版本号(外部)
         {0x1216, ToolRead4GAntennaStatus},        // 19. 4G天线
         {0x1217, ToolReadGNSSAntennaStatus},      // 20. GNSS天线
+        {0x1218, ToolReadSerialNumber}, // 21. SN
+
                                                   //    {0xF1B0, Service22ReadEcuMask                 },       //安全访问掩码
                                                   //    {0x1201, Service22ReadTboxCallNumber          },       //tbox电话号码
                                                   //    {0x1204, Service22ReadPublicASEKey            },       //PublicASEKey
@@ -186,7 +189,7 @@ static const struc_WriteDidMap m_writeDidMap[] =
     {
         /*RDID  Lenth   point_store*/
         {0x1218, Service2EWriteSerialNumber},     // sn
-        {0x1219, Service2EWriteGacEcuPartNumber}, // pn
+        //{0x1219, Service2EWriteGacEcuPartNumber}, // pn
         {0x1213, ToolWriteSleepStatus},
         //{0xF195, Service2EWriteSoftwareVersion,     },
         // {
@@ -1434,6 +1437,18 @@ static int16_t ServiceReadPinKL15Status(uint8_t *pData, uint16_t *pLength)
     return 0;
 }
 
+
+static int16_t ToolReadSerialNumber(uint8_t *pData, uint16_t *pLength)
+{
+  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+    {
+        return -1;
+    }
+   int16_t ret = LocalReadMpuDid(0xF18C, pData, pLength);
+   if (ret != 0)
+       return 0x22;
+   return 0;
+}
 #if 0
 static int16_t ServiceReadPinIN_1Status(uint8_t *pData, uint16_t *pLength)
 {

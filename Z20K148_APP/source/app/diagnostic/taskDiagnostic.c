@@ -276,6 +276,7 @@ static const uint16_t g_passthroughDidList_22[] = {
     // 0x0110,
     // 0xF193,
     // 0xF195,
+    0xF18C,
     0xF190,
     0x031C,
     // 0xB205,
