@@ -154,8 +154,8 @@ static CanBufferHal_t *g_canDriverBufferList[] =
 static AllCanRxBuffer_t g_allCanRxBuffer;
 static uint8_t g_canBusOffProcessFlag[CAN_CHANNEL_NUMBER_MAX];
 uint8_t g_canTestModeFlag[CAN_CHANNEL_NUMBER_MAX] = {0};
-static volatile unsigned int CAN0_BusOffIntFlag; // 定义CAN0 的BusOff中断进入标志
-static volatile unsigned int CAN1_BusOffIntFlag; // 定义CAN0 的BusOff中断进入标志
+static volatile unsigned int CAN0_BusOffIntFlag = 0U; // 定义CAN0 的BusOff中断进入标志
+static volatile unsigned int CAN1_BusOffIntFlag = 0U; // 定义CAN0 的BusOff中断进入标志
 static uint32_t g_receiveCanNmFlag = 0U;
 #if 0
 static const CAN_Config_t g_Can0Config =
@@ -447,7 +447,7 @@ void CAN0_Init(uint8_t canIndex, uint8_t canfdFlag, CanBaudType_e idBandrate, Ca
         CAN_Disable(CAN_ID_0);                               // 禁止CAN模块
         CAN_Init(CAN_ID_0, &g_Can0Config);                   // 初始化CAN0模块
         CAN_SetRxMaskType(CAN_ID_0, CAN_RX_MASK_INDIVIDUAL); // 使用邮箱的独立屏蔽寄存器
-        // CAN_BusOffRecoveryScheme(CAN_ID_0, CAN_BUS_OFF_RECOV_AUTO);    //使能BUS_OFF自动恢复功能。
+        CAN_BusOffRecoveryScheme(CAN_ID_0, CAN_BUS_OFF_RECOV_AUTO);    //使能BUS_OFF自动恢复功能。
 
         /* 初始化邮箱说明：MB0用于发送网络管理报文，MB1用于发送网络诊断报文，MB2-4用于发送常规报文。MB5-31用于接收报文，
             共有27个邮箱可以用于接收。建议：网络管理数据使用一个邮箱接收，诊断数据使用一个邮箱接收，对重要的报文，
@@ -562,7 +562,7 @@ void CAN0_Init(uint8_t canIndex, uint8_t canfdFlag, CanBaudType_e idBandrate, Ca
         INT_DisableIRQ(CAN0_Mb48To63_IRQn);       // 禁止 CAN0_Mb48To63_IRQn 中断
 
         // 初始化全局变量
-        CAN0_BusOffIntFlag = 0; // CAN0的BusOff中断进入标志
+        //CAN0_BusOffIntFlag = 0; // CAN0的BusOff中断进入标志
 
         // 使能CAN模块，使其进入工作状态
         CAN_Enable(CAN_ID_0);
@@ -701,7 +701,7 @@ void CAN0_Init(uint8_t canIndex, uint8_t canfdFlag, CanBaudType_e idBandrate, Ca
         INT_DisableIRQ(CAN1_Mb48To63_IRQn);       // 禁止 CAN1_Mb48To63_IRQn 中断
 
         // 初始化全局变量
-        CAN1_BusOffIntFlag = 0; // CAN0的BusOff中断进入标志
+        //CAN1_BusOffIntFlag = 0; // CAN0的BusOff中断进入标志
 
         // 使能CAN模块，使其进入工作状态
         CAN_Enable(CAN_ID_1);
@@ -967,7 +967,7 @@ void CAN0_BusOffDone_ISR(void)
 void CAN1_BusOffDone_ISR(void)
 {
     CAN_IntClear(CAN_ID_1, CAN_INT_BUS_OFF_DONE, 0x00000000U, 0x00000000U, 0x00000000U, 0x00000000U); // 清除CAN的BUS_OFF_DONE中断标志位
-    CAN1_BusOffIntFlag = 0;                                                                           // CAN0 的BusOff中断进入标志
+    //CAN1_BusOffIntFlag = 0;                                                                           // CAN0 的BusOff中断进入标志
 }
 
 void CAN2_BusOffDone_ISR(void)
@@ -2875,7 +2875,9 @@ int16_t CanHalTransmitFromIsr(uint8_t canChannel,uint32_t canId,uint8_t *canData
 static void CanControllerReset(uint8_t canChannel)
 {
     CanInit(canChannel, CANFD_ENABLE_CONFIG, E_CAN_500K, E_CAN_2000K, E_CAN_MODE_NORMAL);
+    CAN1_BusOffIntFlag = 0U;
     g_driverCanManage[canChannel].BusErrorState = 0x00;
+    LogHalUpLoadLog("BusoffRecover");
 }
 
 static void CanCancelTransmit(uint8_t canChannel)

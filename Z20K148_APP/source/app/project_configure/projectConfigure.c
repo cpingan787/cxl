@@ -14,10 +14,10 @@ static const uint8_t g_didF10B[4] = {
     0x01,
     0x01};
 
-// static const uint8_t g_didF17F[17] = "87H6ADE060  H.E00"; // 硬件版本号                                                                                  // 0xF17F_cxl                                                                                //// 0xF17F_cxl                                                                                   // 0xF17F_cxl                                                                                   // 0xF17F_cxl                                                                                     // 0xF17F_cxl
+//static const uint8_t g_didF17F[17] = "87H6ADE060  H.E00"; // 硬件版本号                                                                                  // 0xF17F_cxl                                                                                //// 0xF17F_cxl                                                                                   // 0xF17F_cxl                                                                                   // 0xF17F_cxl                                                                                     // 0xF17F_cxl
 static const uint8_t g_didF180[17] = "000123456789B.100"; // 0xF180_cxl
-static const uint8_t g_didF187[14] = "8550003ADE0500";    // 零件号                                                                                     // 0xF187_cxl
-static const uint8_t g_didF189[17] = "8786ADE050  S.E02"; // 软件版本号                                                                                   // 0xF189_cxl
+static const uint8_t g_didF187[14] = "8550003ADE0600";    // 零件号                                                                                     // 0xF187_cxl
+static const uint8_t g_didF189[17] = "8786ADE060  S.E01"; // 软件版本号                                                                                   // 0xF189_cxl
 // static const uint8_t g_didF18E[14] = "GAVN1234567890";    // 0xF18E_cxl
 static const uint8_t g_didF193[6] = "V1.000";      // 0xF190_cxl
 static const uint8_t g_didF195[6] = "V1.000";      // 0xF195_cxl
@@ -63,6 +63,7 @@ int32_t BootInfo_ReadHardwareVersion(uint8_t *buf, uint32_t bufLen)
 
     return 0;
 }
+
 
 int16_t ProjectConfigGetDiagSoftwareVersion(uint8_t *pVersion, uint32_t *pLength)
 {

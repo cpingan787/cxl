@@ -38,7 +38,7 @@ finish date:2018.7.31
 #include "mcuMpuSyncTask.h"
 #include "parameterSyncSdk.h"
 #include "vehicleSignalApp.h"
-#include "projectConfigure.h"
+#include "remoteDiagnosticSdk.h"
 // #include "cy_mw_flash.h"
 
 #define UDS_SECURITY_ERROR_COUNT_IN_NONVOLATILE 1
@@ -276,9 +276,9 @@ static const uint16_t g_passthroughDidList_22[] = {
     // 0x0110,
     // 0xF193,
     // 0xF195,
-    0x031C,
     0xF190,
     0xF18C,
+    0x031C,
     // 0xB205,
     // 0xB206,
     // 0x010E,
@@ -351,7 +351,7 @@ static const uint16_t g_passthroughDidList_22[] = {
     0xB209,
     0xB259,
     // 0xB25B,
-    0xB261,
+    //0xB261,
     0xB2C8,
     0xB296,
     0xB297,
@@ -1015,7 +1015,7 @@ static int16_t Service0x10Process(uint8_t *udsData, uint16_t udsLen, uint8_t fun
       {
         g_currentSession = E_EXTEND_SESSION;
         // g_currentSecurityLevel = E_UDS_NONE_SECURITY_LEVEL; // lock security
-        g_ecuOnlineFlag = 1;
+        //g_ecuOnlineFlag = 1;
         uint8_t factoryMode = UdsDidGetManufactoryMode();
         if (factoryMode < 0x10)
         {
@@ -1757,10 +1757,10 @@ static int16_t Service0x3EProcess(uint8_t *udsData, uint16_t udsLen, uint8_t fun
         //TBOX_PRINT("456: 0x%X\r\n", g_ecuOnlineFlag);
         if (RemoteDiagnosticSdkGetOnlineStatus() != 1)
         {
-            if (functionAddressFlag == 0) 
-            {
-                g_ecuOnlineFlag = 1;
-            }
+          if(functionAddressFlag)
+          {
+            g_ecuOnlineFlag = 1;
+          }
           //LogHalUpLoadLog("[MCU] RemoteDiagnosticSdkGetOnlineStatus: 0x%X\r\n", g_ecuOnlineFlag);
           //TBOX_PRINT("123: 0x%X\r\n", g_ecuOnlineFlag);
         }
@@ -2662,22 +2662,17 @@ static int16_t Service0x22Process(uint8_t *udsData, uint16_t udsLen, uint8_t fun
   first_did = (udsData[1] << 8) | udsData[2];
 
   if (IsDidPassthrough_22(first_did))
-  {
-    uint8_t mpu_response_buffer[512];
-    uint16_t mpu_response_length = 0;
-    int16_t ret;
-    // TBOX_PRINT("22 passthrough DID: %04X\n", first_did);
-    ret = CanPassthrough_RequestAndGetResponse(udsData, udsLen, mpu_response_buffer, &mpu_response_length);
-    if (ret == 0 && mpu_response_length > 0)
     {
-      DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, mpu_response_buffer, mpu_response_length, 0);
-      return 0;
+        if (EolSync_StartRequest(udsData, udsLen, UdsAsyncResponseCallback) == 0)
+        {
+
+            return 1; 
+        }
+        else
+        {
+            return 0x21;
+        }
     }
-    else
-    {
-      negativeNum = 0x31;
-    }
-  }
   else
   {
 
@@ -2828,29 +2823,27 @@ static int16_t Service0x2EProcess(uint8_t *udsData, uint16_t udsLen, uint8_t fun
   responseData[1] = udsData[1];
   responseData[2] = udsData[2];
 
-  if (did == 0xB2E5 || did == 0xF187|| did == 0xB2B4 || did == 0x0120)
+  if (did == 0xB2E5 || did == 0xF18C || did == 0xF187|| did == 0xB2B4 || did == 0x0120)
   {
     DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 3, 0);
   }
   else
   {
-    uint8_t mpu_response_buffer[64]; // mpu会给我回什么
-    uint16_t mpu_response_length = 0;
-    int8_t passthroughRet;
-    if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
-    {
-      return 0x72;
-    }
-    passthroughRet = CanPassthrough_RequestAndGetResponse(udsData, udsLen, mpu_response_buffer, &mpu_response_length);
+      
+      if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+      {
+        return 0x72;
+      }
+      int16_t startRet = EolSync_StartRequest(udsData, udsLen, UdsAsyncResponseCallback);
 
-    if (passthroughRet == 0 && mpu_response_length > 0)
-    {
-      DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, mpu_response_buffer, mpu_response_length, 0);
-    }
-    else
-    {
-      negativeNum = 0x72;
-    }
+      if (startRet == 0)
+      {
+          return 1; 
+      }
+      else
+      {
+          return 0x21;
+      }
   }
   return negativeNum;
 }
@@ -3071,10 +3064,10 @@ static int16_t DiagnosticResponseProcess(uint8_t *udsData, uint16_t udsLen, uint
   }
 #endif
 
-  if (g_currentSession != E_DEFAULT_SESSION)
-  {
-    g_ecuOnlineFlag = 1;
-  }
+//   if (g_currentSession != E_DEFAULT_SESSION)
+//   {
+//     g_ecuOnlineFlag = 1;
+//   }
 
   return 0;
 }
@@ -3242,6 +3235,23 @@ static void DiagnosticSeedAccessInit(void)
 #endif
 // static void UdsServiceProcess(uint8_t *pTpData, uint32_t tpDataLength, uint8_t FunctionalAddress);
 
+static int16_t UdsAsyncResponseCallback(uint8_t *pData, uint16_t length, uint8_t result)
+{
+    if (result == 0) // 成功
+    {
+        DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, pData, length, 0);
+    }
+    else // 失败/超时
+    {
+        uint8_t nrcData[3];
+        nrcData[0] = 0x7F;
+        nrcData[1] = 0x22;
+        nrcData[2] = 0x72;
+        DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, nrcData, 3, 0);
+    }
+    return 0;
+}
+
 void TaskEcuDiagnostic(void *pvParameters)
 {
 
@@ -3252,6 +3262,7 @@ void TaskEcuDiagnostic(void *pvParameters)
   uint8_t isS3ServerTimerActive = 0;
 
   g_tpHandle = CanTpSdkInitialize(TBOX_CAN_CHANNEL_2, &g_tpParameter, &g_tpBuffer);
+  //abcinit();
 
   if (g_tpHandle < 0)
   {
@@ -3296,8 +3307,13 @@ void TaskEcuDiagnostic(void *pvParameters)
         }
       }
     }
-    uint8_t currentTesterPresent = ((g_currentSession != E_DEFAULT_SESSION) || (isS3ServerTimerActive == 1)) ? 1 : 0;
-
+    
+    EolTestSyncMainLoop();
+    // if (EolSync_GetState() != EOL_STATE_IDLE)
+    // {
+    //     g_ecuOnlineFlag = 1;
+    // }
+    uint8_t currentTesterPresent = (isS3ServerTimerActive == 1) ? 1 : 0;
     if (currentTesterPresent != g_isTesterPresent)
     {
       g_isTesterPresent = currentTesterPresent;
@@ -3327,12 +3343,14 @@ void TaskEcuDiagnostic(void *pvParameters)
 
     if (g_ecuOnlineFlag)
     {
+      //TBOX_PRINT("ECU online timer start\r\n");
       g_ecuOnlineFlag = 0;
       TimerHalStartTime(ecuOnlineTimerHandle, 5000);
       isS3ServerTimerActive = 1;
     }
     if (TimerHalIsTimeout(ecuOnlineTimerHandle) == 0)
     {
+      //  TBOX_PRINT("ECU offline timer out\r\n");
       TimerHalStopTime(ecuOnlineTimerHandle);
       ResetTboxStatusUpdate();
       isS3ServerTimerActive = 0;
