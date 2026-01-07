@@ -37,7 +37,7 @@
 #define CAN_NM_WAKEUP_ID_MAX                (0x5FF)
 #define CAN_TX_ENQUEUE_TIMEOUT_MS           (5U)
 #define CAN_TX_BUSY_MAX_RETRY               (2U)
-#define CAN_TX_BUSY_RETRY_DELAY_MS          (2U)
+#define CAN_TX_BUSY_RETRY_DELAY_MS          (3U)
 /****************************** Type Definitions ******************************/
 typedef enum
 {
@@ -386,7 +386,6 @@ void CAN0_HOST_MEM_ERR_ISR(void);      // 声明被CPU发现的不可矫正错�
 void CAN0_CAN_MEM_ERR_ISR(void);       // 声明被CAN模块发现的不可矫正错误中断处理函数
 void CAN0_COR_MEM_ERR_ISR(void);       // 声明可矫正错误中断处理函数
 void CAN0_MB0TO15_ISR(uint32_t mbIdx); // 声明邮箱0-15的中断处理函数
-
 void CAN1_BUS_OFF_ISR(void); // 声明BUS_OFF中断处理函数
 void CAN1_ERR_ISR(void);     // 声明错误中断处理函数。ErrTimer>127
 // void CAN1_TXW_ISR(void);            //声明发送报警中断处理函数。96 <ErrTimer<= 127
@@ -397,7 +396,6 @@ void CAN1_HOST_MEM_ERR_ISR(void);      // 声明被CPU发现的不可矫正错�
 void CAN1_CAN_MEM_ERR_ISR(void);       // 声明被CAN模块发现的不可矫正错误中断处理函数
 void CAN1_COR_MEM_ERR_ISR(void);       // 声明可矫正错误中断处理函数
 void CAN1_MB0TO15_ISR(uint32_t mbIdx); // 声明邮箱0-15的中断处理函数
-
 void CAN2_BUS_OFF_ISR(void); // 声明BUS_OFF中断处理函数
 void CAN2_ERR_ISR(void);     // 声明错误中断处理函数。ErrTimer>127
 // void CAN2_TXW_ISR(void);            //声明发送报警中断处理函数。96 <ErrTimer<= 127
@@ -414,13 +412,19 @@ static void CanHalTxInit(void);
 static int16_t CanHalTxWaitInitDone(TickType_t waitTicks);
 /****************************** Public Function Implementations ***************/
 /*****************************************************************************
- * 函数:CAN0_Init
- * 功能:配置CAN0模块，
- * 参数:
- * 返回:
- * 说明:1，CAN0的时钟源使用外部40MHz的晶振
- *        2，CAN的错误计数寄存器，大于96小于等于127，产生主动错误；大于127，产生被动错误，如果是发送状态，
- *            产生BusOff；255后，计数归零。
+ * Function:        CAN0_Init
+ * Description:     Configure and initialize CAN module according to canIndex
+ * Input:           canIndex          - CAN instance index (0: CAN0, 1: CAN1, 2: CAN2)
+ *                  canfdFlag         - CAN FD enable flag
+ *                  idBandrate        - Arbitration(ID) phase baud rate type
+ *                  dataBandrateRate  - Data phase baud rate type (CAN FD only)
+ * Output:          None
+ * Return:          None
+ * Others:          1) CAN clock source uses external 40 MHz crystal (PLL derived as configured)
+ *                  2) CAN error counter behavior:
+ *                     - 96 < error_count <= 127 : Error warning
+ *                     - error_count > 127       : Error passive; if transmitting, may enter Bus-Off
+ *                     - error_count reaches 255 : Counter wraps to 0
  ****************************************************************************/
 void CAN0_Init(uint8_t canIndex, uint8_t canfdFlag, CanBaudType_e idBandrate, CanBaudType_e dataBandrateRate)
 {
@@ -849,11 +853,12 @@ void CAN0_Init(uint8_t canIndex, uint8_t canfdFlag, CanBaudType_e idBandrate, Ca
 }
 
 /*****************************************************************************
- * 函数: CAN0_BUS_OFF_ISR
- * 功能: CAN0 BUS_OFF中断的处理函数
- * 参数:
- * 返值:
- * 说明:
+ * Function:        CAN0_BUS_OFF_ISR
+ * Description:     CAN0 bus-off interrupt service routine
+ * Input:           None
+ * Output:          None
+ * Return:          None
+ * Others:          Clears CAN_INT_BUS_OFF interrupt flag and sets CAN0_BusOffIntFlag
  ****************************************************************************/
 void CAN0_BUS_OFF_ISR(void)
 {
@@ -862,23 +867,40 @@ void CAN0_BUS_OFF_ISR(void)
     // CAN_RecoverFromBusOffManually(CAN_ID_0);    //手动从 CAN BusOff 状态恢复到正常状态
 }
 
+/*****************************************************************************
+ * Function:        CAN1_BUS_OFF_ISR
+ * Description:     CAN1 bus-off interrupt service routine
+ * Input:           None
+ * Output:          None
+ * Return:          None
+ * Others:          Clears CAN_INT_BUS_OFF interrupt flag and sets CAN1_BusOffIntFlag
+ ****************************************************************************/
 void CAN1_BUS_OFF_ISR(void)
 {
     CAN_IntClear(CAN_ID_1, CAN_INT_BUS_OFF, 0x00000000U, 0x00000000U, 0x00000000U, 0x00000000U); // 清除CAN的BUS_OFF中断标志位
     CAN1_BusOffIntFlag = 1;                                                                      // CAN1 的BusOff中断进入标志
 }
 
+/*****************************************************************************
+ * Function:        CAN2_BUS_OFF_ISR
+ * Description:     CAN2 bus-off interrupt service routine
+ * Input:           None
+ * Output:          None
+ * Return:          None
+ * Others:          Clears CAN_INT_BUS_OFF interrupt flag
+ ****************************************************************************/
 void CAN2_BUS_OFF_ISR(void)
 {
     CAN_IntClear(CAN_ID_2, CAN_INT_BUS_OFF, 0x00000000U, 0x00000000U, 0x00000000U, 0x00000000U); // 清除CAN的BUS_OFF中断标志位
 }
 
 /*****************************************************************************
- * 函数: CAN0_ERR_ISR
- * 功能: CAN0 (被动)错误中断处理函数。ErrTimer>127
- * 参数:
- * 返值:
- * 说明: 1，在有些应用中，可以把被动错误作为BUS_OFF
+ * Function:        CAN0_ERR_ISR
+ * Description:     CAN0 error interrupt service routine (Error Passive), ErrTimer > 127
+ * Input:           None
+ * Output:          None
+ * Return:          None
+ * Others:          In some applications, error passive can be treated as bus-off
  ****************************************************************************/
 void CAN0_ERR_ISR(void)
 {
@@ -888,12 +910,28 @@ void CAN0_ERR_ISR(void)
     // CAN0_BusOffIntFlag = 1;    //CAN0 的BusOff中断进入标志。
 }
 
+/*****************************************************************************
+ * Function:        CAN1_ERR_ISR
+ * Description:     CAN1 error interrupt service routine (Error Passive), ErrTimer > 127
+ * Input:           None
+ * Output:          None
+ * Return:          None
+ * Others:          Clears CAN_INT_ERR interrupt flag
+ ****************************************************************************/
 void CAN1_ERR_ISR(void)
 {
     CAN_IntClear(CAN_ID_1, CAN_INT_ERR, 0x00000000U, 0x00000000U, 0x00000000U, 0x00000000U); // 清除CAN 错误中断标志位
                                                                                              // 参数：CAN模块序号、中断代码、MB0-31、MB32-63(中断代码为CAN_INT_MB时有效，1--清除中断标志位)
 }
 
+/*****************************************************************************
+ * Function:        CAN2_ERR_ISR
+ * Description:     CAN2 error interrupt service routine (Error Passive), ErrTimer > 127
+ * Input:           None
+ * Output:          None
+ * Return:          None
+ * Others:          Clears CAN_INT_ERR interrupt flag
+ ****************************************************************************/
 void CAN2_ERR_ISR(void)
 {
     CAN_IntClear(CAN_ID_2, CAN_INT_ERR, 0x00000000U, 0x00000000U, 0x00000000U, 0x00000000U); // 清除CAN 错误中断标志位
@@ -901,11 +939,12 @@ void CAN2_ERR_ISR(void)
 }
 
 /*****************************************************************************
- * 函数: CAN0_TXW_ISR
- * 功能: CAN0 发送报警中断处理函数。96 <ErrTimer<= 127
- * 参数:
- * 返值:
- * 说明:
+ * Function:        CAN0_TXW_ISR
+ * Description:     CAN0 transmit warning interrupt service routine, 96 < ErrTimer <= 127
+ * Input:           None
+ * Output:          None
+ * Return:          None
+ * Others:          Clears CAN_INT_TXW interrupt flag
  ****************************************************************************/
 void CAN0_TXW_ISR(void)
 {
@@ -913,12 +952,28 @@ void CAN0_TXW_ISR(void)
                                                                                              // 参数：CAN模块序号、中断代码、MB0-31、MB32-63(中断代码为CAN_INT_MB时有效，1--清除中断标志位)
 }
 
+/*****************************************************************************
+ * Function:        CAN1_TXW_ISR
+ * Description:     CAN1 transmit warning interrupt service routine, 96 < ErrTimer <= 127
+ * Input:           None
+ * Output:          None
+ * Return:          None
+ * Others:          Clears CAN_INT_TXW interrupt flag
+ ****************************************************************************/
 void CAN1_TXW_ISR(void)
 {
     CAN_IntClear(CAN_ID_1, CAN_INT_TXW, 0x00000000U, 0x00000000U, 0x00000000U, 0x00000000U); // 清除CAN的发送报警中断标志位
                                                                                              // 参数：CAN模块序号、中断代码、MB0-31、MB32-63(中断代码为CAN_INT_MB时有效，1--清除中断标志位)
 }
 
+/*****************************************************************************
+ * Function:        CAN2_TXW_ISR
+ * Description:     CAN2 transmit warning interrupt service routine, 96 < ErrTimer <= 127
+ * Input:           None
+ * Output:          None
+ * Return:          None
+ * Others:          Clears CAN_INT_TXW interrupt flag
+ ****************************************************************************/
 void CAN2_TXW_ISR(void)
 {
     CAN_IntClear(CAN_ID_2, CAN_INT_TXW, 0x00000000U, 0x00000000U, 0x00000000U, 0x00000000U); // 清除CAN的发送报警中断标志位
@@ -926,11 +981,12 @@ void CAN2_TXW_ISR(void)
 }
 
 /*****************************************************************************
- * 函数: CAN0_RXW_ISR
- * 功能: CAN0 接收报警中断处理函数。96 <ErrTimer<= 127
- * 参数:
- * 返值:
- * 说明:
+ * Function:        CAN0_RXW_ISR
+ * Description:     CAN0 receive warning interrupt service routine, 96 < ErrTimer <= 127
+ * Input:           None
+ * Output:          None
+ * Return:          None
+ * Others:          Clears CAN_INT_RXW interrupt flag
  ****************************************************************************/
 void CAN0_RXW_ISR(void)
 {
@@ -938,12 +994,28 @@ void CAN0_RXW_ISR(void)
                                                                                              // 参数：CAN模块序号、中断代码、MB0-31、MB32-63(中断代码为CAN_INT_MB时有效，1--清除中断标志位)
 }
 
+/*****************************************************************************
+ * Function:        CAN1_RXW_ISR
+ * Description:     CAN1 receive warning interrupt service routine, 96 < ErrTimer <= 127
+ * Input:           None
+ * Output:          None
+ * Return:          None
+ * Others:          Clears CAN_INT_RXW interrupt flag
+ ****************************************************************************/
 void CAN1_RXW_ISR(void)
 {
     CAN_IntClear(CAN_ID_1, CAN_INT_RXW, 0x00000000U, 0x00000000U, 0x00000000U, 0x00000000U); // 清除CAN的接收报警中断标志位
                                                                                              // 参数：CAN模块序号、中断代码、MB0-31、MB32-63(中断代码为CAN_INT_MB时有效，1--清除中断标志位)
 }
 
+/*****************************************************************************
+ * Function:        CAN2_RXW_ISR
+ * Description:     CAN2 receive warning interrupt service routine, 96 < ErrTimer <= 127
+ * Input:           None
+ * Output:          None
+ * Return:          None
+ * Others:          Clears CAN_INT_RXW interrupt flag
+ ****************************************************************************/
 void CAN2_RXW_ISR(void)
 {
     CAN_IntClear(CAN_ID_2, CAN_INT_RXW, 0x00000000U, 0x00000000U, 0x00000000U, 0x00000000U); // 清除CAN的接收报警中断标志位
@@ -951,11 +1023,12 @@ void CAN2_RXW_ISR(void)
 }
 
 /*****************************************************************************
- * 函数: CAN0_BusOffDone_ISR
- * 功能: CAN0 BusOff事件已经自动/软件恢复中断处理函数
- * 参数:
- * 返值:
- * 说明:
+ * Function:        CAN0_BusOffDone_ISR
+ * Description:     CAN0 bus-off recovery done interrupt service routine (auto/software recovery)
+ * Input:           None
+ * Output:          None
+ * Return:          None
+ * Others:          Clears CAN_INT_BUS_OFF_DONE interrupt flag and clears CAN0_BusOffIntFlag
  ****************************************************************************/
 void CAN0_BusOffDone_ISR(void)
 {
@@ -964,45 +1037,79 @@ void CAN0_BusOffDone_ISR(void)
     CAN0_BusOffIntFlag = 0; // CAN0 的BusOff中断进入标志
 }
 
+/*****************************************************************************
+ * Function:        CAN1_BusOffDone_ISR
+ * Description:     CAN1 bus-off recovery done interrupt service routine (auto/software recovery)
+ * Input:           None
+ * Output:          None
+ * Return:          None
+ * Others:          Clears CAN_INT_BUS_OFF_DONE interrupt flag
+ ****************************************************************************/
 void CAN1_BusOffDone_ISR(void)
 {
     CAN_IntClear(CAN_ID_1, CAN_INT_BUS_OFF_DONE, 0x00000000U, 0x00000000U, 0x00000000U, 0x00000000U); // 清除CAN的BUS_OFF_DONE中断标志位
     //CAN1_BusOffIntFlag = 0;                                                                           // CAN0 的BusOff中断进入标志
 }
 
+/*****************************************************************************
+ * Function:        CAN2_BusOffDone_ISR
+ * Description:     CAN2 bus-off recovery done interrupt service routine (auto/software recovery)
+ * Input:           None
+ * Output:          None
+ * Return:          None
+ * Others:          Clears CAN_INT_BUS_OFF_DONE interrupt flag
+ ****************************************************************************/
 void CAN2_BusOffDone_ISR(void)
 {
     CAN_IntClear(CAN_ID_2, CAN_INT_BUS_OFF_DONE, 0x00000000U, 0x00000000U, 0x00000000U, 0x00000000U); // 清除CAN的BUS_OFF_DONE中断标志位
 }
 
 /*****************************************************************************
- * 函数: CAN0_ERR_FAST_ISR
- * 功能: CAN0 CAN FD 时，在数据时间段上出现错误中断处理函数
- * 参数:
- * 返值:
- * 说明:
+ * Function:        CAN0_ERR_FAST_ISR
+ * Description:     CAN0 CAN FD fast error interrupt service routine (data phase error)
+ * Input:           None
+ * Output:          None
+ * Return:          None
+ * Others:          Clears CAN_INT_ERR_FAST interrupt flag
  ****************************************************************************/
 void CAN0_ERR_FAST_ISR(void)
 {
     CAN_IntClear(CAN_ID_0, CAN_INT_ERR_FAST, 0x00000000U, 0x00000000U, 0x00000000U, 0x00000000U); // 清除CAN FD 时，在数据时间段上出现错误中断标志位
 }
 
+/*****************************************************************************
+ * Function:        CAN1_ERR_FAST_ISR
+ * Description:     CAN1 CAN FD fast error interrupt service routine (data phase error)
+ * Input:           None
+ * Output:          None
+ * Return:          None
+ * Others:          Clears CAN_INT_ERR_FAST interrupt flag
+ ****************************************************************************/
 void CAN1_ERR_FAST_ISR(void)
 {
     CAN_IntClear(CAN_ID_1, CAN_INT_ERR_FAST, 0x00000000U, 0x00000000U, 0x00000000U, 0x00000000U); // 清除CAN FD 时，在数据时间段上出现错误中断标志位
 }
 
+/*****************************************************************************
+ * Function:        CAN2_ERR_FAST_ISR
+ * Description:     CAN2 CAN FD fast error interrupt service routine (data phase error)
+ * Input:           None
+ * Output:          None
+ * Return:          None
+ * Others:          Clears CAN_INT_ERR_FAST interrupt flag
+ ****************************************************************************/
 void CAN2_ERR_FAST_ISR(void)
 {
     CAN_IntClear(CAN_ID_2, CAN_INT_ERR_FAST, 0x00000000U, 0x00000000U, 0x00000000U, 0x00000000U); // 清除CAN FD 时，在数据时间段上出现错误中断标志位
 }
 
 /*****************************************************************************
- * 函数: CAN0_HOST_MEM_ERR_ISR
- * 功能: CAN0 被CPU发现的不可矫正错误中断处理函数。清空邮箱中的数据，重新初始化邮箱
- * 参数:
- * 返值:
- * 说明:
+ * Function:        CAN0_HOST_MEM_ERR_ISR
+ * Description:     CAN0 host memory uncorrectable error interrupt service routine
+ * Input:           None
+ * Output:          None
+ * Return:          None
+ * Others:          Clears CAN_INT_HOST_MEM_ERR interrupt flag, clears MB0-13 and re-initializes MB configuration
  ****************************************************************************/
 void CAN0_HOST_MEM_ERR_ISR(void)
 {
@@ -1040,6 +1147,14 @@ void CAN0_HOST_MEM_ERR_ISR(void)
     }
 }
 
+/*****************************************************************************
+ * Function:        CAN1_HOST_MEM_ERR_ISR
+ * Description:     CAN1 host memory uncorrectable error interrupt service routine
+ * Input:           None
+ * Output:          None
+ * Return:          None
+ * Others:          Clears CAN_INT_HOST_MEM_ERR interrupt flag, clears MB0-13 and re-initializes MB configuration
+ ****************************************************************************/
 void CAN1_HOST_MEM_ERR_ISR(void)
 {
     unsigned int i;
@@ -1082,11 +1197,12 @@ void CAN2_HOST_MEM_ERR_ISR(void)
 }
 
 /*****************************************************************************
- * 函数: CAN0_CAN_MEM_ERR_ISR
- * 功能: 被CAN模块发现的不可矫正错误中断处理函数。清空邮箱中的数据，重新初始化邮箱
- * 参数:
- * 返值:
- * 说明:
+ * Function:        CAN0_CAN_MEM_ERR_ISR
+ * Description:     CAN0 CAN memory uncorrectable error interrupt service routine
+ * Input:           None
+ * Output:          None
+ * Return:          None
+ * Others:          Clears CAN_INT_CAN_MEM_ERR interrupt flag, clears MB0-13 and re-initializes MB configuration
  ****************************************************************************/
 void CAN0_CAN_MEM_ERR_ISR(void)
 {
@@ -1124,6 +1240,14 @@ void CAN0_CAN_MEM_ERR_ISR(void)
     }
 }
 
+/*****************************************************************************
+ * Function:        CAN1_CAN_MEM_ERR_ISR
+ * Description:     CAN1 CAN memory uncorrectable error interrupt service routine
+ * Input:           None
+ * Output:          None
+ * Return:          None
+ * Others:          Clears CAN_INT_CAN_MEM_ERR interrupt flag, clears MB0-13 and re-initializes MB configuration
+ ****************************************************************************/
 void CAN1_CAN_MEM_ERR_ISR(void)
 {
     unsigned int i;
@@ -1160,17 +1284,26 @@ void CAN1_CAN_MEM_ERR_ISR(void)
     }
 }
 
+/*****************************************************************************
+ * Function:        CAN2_CAN_MEM_ERR_ISR
+ * Description:     CAN2 CAN memory uncorrectable error interrupt service routine
+ * Input:           None
+ * Output:          None
+ * Return:          None
+ * Others:          Clears CAN_INT_CAN_MEM_ERR interrupt flag
+ ****************************************************************************/
 void CAN2_CAN_MEM_ERR_ISR(void)
 {
     CAN_IntClear(CAN_ID_2, CAN_INT_CAN_MEM_ERR, 0x00000000U, 0x00000000U, 0x00000000U, 0x00000000U); // 清除被CAN模块发现的不可矫正错误中断志位
 }
 
 /*****************************************************************************
- * 函数: CAN0_COR_MEM_ERR_ISR
- * 功能: CAN0 可矫正错误中断处理函数。清空邮箱中的数据，重新初始化邮箱
- * 参数:
- * 返值:
- * 说明:
+ * Function:        CAN0_COR_MEM_ERR_ISR
+ * Description:     CAN0 correctable memory error interrupt service routine
+ * Input:           None
+ * Output:          None
+ * Return:          None
+ * Others:          Clears CAN_INT_COR_MEM_ERR interrupt flag, clears MB0-13 and re-initializes MB configuration
  ****************************************************************************/
 void CAN0_COR_MEM_ERR_ISR(void)
 {
@@ -1208,6 +1341,14 @@ void CAN0_COR_MEM_ERR_ISR(void)
     }
 }
 
+/*****************************************************************************
+ * Function:        CAN1_COR_MEM_ERR_ISR
+ * Description:     CAN1 correctable memory error interrupt service routine
+ * Input:           None
+ * Output:          None
+ * Return:          None
+ * Others:          Clears CAN_INT_COR_MEM_ERR interrupt flag, clears MB0-13 and re-initializes MB configuration
+ ****************************************************************************/
 void CAN1_COR_MEM_ERR_ISR(void)
 {
     unsigned int i;
@@ -1244,21 +1385,31 @@ void CAN1_COR_MEM_ERR_ISR(void)
     }
 }
 
+/*****************************************************************************
+ * Function:        CAN2_COR_MEM_ERR_ISR
+ * Description:     CAN2 correctable memory error interrupt service routine
+ * Input:           None
+ * Output:          None
+ * Return:          None
+ * Others:          Clears CAN_INT_COR_MEM_ERR interrupt flag
+ ****************************************************************************/
 void CAN2_COR_MEM_ERR_ISR(void)
 {
     CAN_IntClear(CAN_ID_0, CAN_INT_COR_MEM_ERR, 0x00000000U, 0x00000000U, 0x00000000U, 0x00000000U); // 清除CAN的可矫正错误中断标志位
 }
 
 /*****************************************************************************
- * 函数: CAN0_MB0TO15_ISR
- * 功能: CAN0 邮箱0-15的中断处理函数
- * 参数:
- * 返值:
- * 说明:
+ * Function:        CAN0_MB0TO15_ISR
+ * Description:     CAN0 mailbox 0-15 interrupt service routine
+ * Input:           mbIdx - Mailbox index that triggered the interrupt
+ * Output:          None
+ * Return:          None
+ * Others:          1) For Tx MB (0-4), clears busErrorAppDiableFlag
+ *                  2) For Rx MB (5-15), reads message, converts to stc_canfd_msg_t and calls CanRxInterruptProcessMsg()
  ****************************************************************************/
 void CAN0_MB0TO15_ISR(uint32_t mbIdx)
 {
-    CAN_MsgBuf_t can0RxBuf; // 定义CAN0接收使用的缓存变量
+    CAN_MsgBuf_t can0RxBuf;
 
     if (mbIdx <= 4)
     {
@@ -1269,8 +1420,7 @@ void CAN0_MB0TO15_ISR(uint32_t mbIdx)
     {
         stc_canfd_msg_t stcCanFDmsg = {0};
 
-        CAN_GetMsgBuff(CAN_ID_0, mbIdx, &can0RxBuf); // 读取指定邮箱(MB)中的数据，放入 can0RxBuf 中,参数：CAN模块序号、邮箱序号、存储数据的数组
-        // CAN0_RxIntFlag = 1;    //CAN0接收一帧数据完成标志
+        CAN_GetMsgBuff(CAN_ID_0, mbIdx, &can0RxBuf);        // 读取指定邮箱(MB)中的数据，放入 can0RxBuf 中,参数：CAN模块序号、邮箱序号、存储数据的数组
 
         if (g_canTestModeFlag[0])
         {
@@ -1292,9 +1442,17 @@ void CAN0_MB0TO15_ISR(uint32_t mbIdx)
     }
 }
 
+/*****************************************************************************
+ * Function:        CAN1_MB0TO15_ISR
+ * Description:     CAN1 mailbox 0-15 interrupt service routine
+ * Input:           mbIdx - Mailbox index that triggered the interrupt
+ * Output:          None
+ * Return:          None
+ * Others:          For Rx MB (5-15), reads message, sets NM receive flag and calls CanRxInterruptProcessMsg()
+ ****************************************************************************/
 void CAN1_MB0TO15_ISR(uint32_t mbIdx)
 {
-    CAN_MsgBuf_t can1RxBuf; // 定义CAN1接收使用的缓存变量
+    CAN_MsgBuf_t can1RxBuf;
     if (mbIdx <= 4)
     {
         //g_driverCanManage[1].busErrorAppDiableFlag = 0x00;
@@ -1302,9 +1460,7 @@ void CAN1_MB0TO15_ISR(uint32_t mbIdx)
     if (mbIdx > 4)
     {
         stc_canfd_msg_t stcCanFDmsg = {0};
-        CAN_GetMsgBuff(CAN_ID_1, mbIdx, &can1RxBuf); // 读取指定邮箱(MB)中的数据，放入 can1RxBuf 中 ,参数：CAN模块序号、邮箱序号、存储数据的数组
-
-        // CAN1_RxIntFlag = 1;    //CAN1接收一帧数据完成标志
+        CAN_GetMsgBuff(CAN_ID_1, mbIdx, &can1RxBuf);    // 读取指定邮箱(MB)中的数据，放入 can1RxBuf 中 ,参数：CAN模块序号、邮箱序号、存储数据的数组
 
         if (g_canTestModeFlag[1])
         {
@@ -1326,13 +1482,21 @@ void CAN1_MB0TO15_ISR(uint32_t mbIdx)
     }
 }
 
+/*****************************************************************************
+ * Function:        CAN2_MB0TO15_ISR
+ * Description:     CAN2 mailbox 0-15 interrupt service routine
+ * Input:           mbIdx - Mailbox index that triggered the interrupt
+ * Output:          None
+ * Return:          None
+ * Others:          Reads message, converts to stc_canfd_msg_t and calls CanRxInterruptProcessMsg()
+ ****************************************************************************/
 void CAN2_MB0TO15_ISR(uint32_t mbIdx)
 {
-    CAN_MsgBuf_t can2RxBuf; // 定义CAN2接收使用的缓存变量
+    CAN_MsgBuf_t can2RxBuf;                         // 定义CAN2接收使用的缓存变量
     stc_canfd_msg_t stcCanFDmsg = {0};
 
-    CAN_GetMsgBuff(CAN_ID_2, mbIdx, &can2RxBuf); // 读取指定邮箱(MB)中的数据，放入 can2RxBuf 中 参数：CAN模块序号、邮箱序号、存储数据的数组
-    // CAN2_RxIntFlag = 1;    //CAN2接收一帧数据完成标志
+    CAN_GetMsgBuff(CAN_ID_2, mbIdx, &can2RxBuf);    // 读取指定邮箱(MB)中的数据，放入 can2RxBuf 中 参数：CAN模块序号、邮箱序号、存储数据的数组
+    // CAN2_RxIntFlag = 1;                          //CAN2接收一帧数据完成标志
 
     stcCanFDmsg.canFDFormatBrs = (can2RxBuf.cs >> 30) & 0x01;
     stcCanFDmsg.canFDFormat = (can2RxBuf.cs >> 3) & 0x01;
@@ -1345,15 +1509,17 @@ void CAN2_MB0TO15_ISR(uint32_t mbIdx)
 }
 
 /*****************************************************************************
- * 函数:    CAN0_SendNM
- * 功能:    CAN0发送一帧NM网络管理报文。只用MB0 发送NM网络管理报文。
- * 参数:
- * 返回:    SUCC--报文转移到发送邮箱中，ERR--报文错误，发送失败，BUSY--发送邮箱满，发送失败
- * 说明:    1, 发送过程描述：每当模块进入发送仲裁窗口时，都会自动开始一次发送仲裁过程，以找到在下一个发
- *         送请求时，需要发送的邮箱，最终找到的邮箱被称为仲裁胜者。如果全部邮箱的 CODE 域都为非 0xC，那么
- *         本次发送仲裁过程会失败，找不到仲裁胜者。
- *         2，一般的发送，使用带有重复发送功能的发送模式发送。
- *         3，经估算，波特率为500K时，正常发送一帧报文，占用时间大约0.256ms。
+ * Function:        CAN0_SendNM
+ * Description:     Send one NM (Network Management) message on CAN0 using MB0
+ * Input:           msg_id - CAN message identifier
+ *                  dataP  - Pointer to payload data
+ * Output:          None
+ * Return:          SUCC - Message transferred to TX mailbox successfully
+ *                  ERR  - Invalid message or transmit failed
+ *                  BUSY - TX mailbox full, transmit failed
+ * Others:          1) Arbitration selects a transmit mailbox (arbitration winner) when entering arbitration window
+ *                  2) Recommended to use transmit mode with repetition when required
+ *                  3) At 500 kbps, one normal CAN frame takes about 0.256 ms on the bus (estimated)
  ****************************************************************************/
 ResultStatus_t CAN0_SendNM(unsigned int msg_id, unsigned char *dataP)
 {
@@ -1386,15 +1552,15 @@ ResultStatus_t CAN2_SendNM(unsigned int msg_id, unsigned char *dataP)
 }
 
 /*****************************************************************************
- * 函数:    CAN0_SendDiag
- * 功能:    CAN0发送一帧诊断报文。只用MB1 发送诊断报文。
- * 参数:
- * 返回:    SUCC--报文转移到发送邮箱中，ERR--报文错误，发送失败，BUSY--发送邮箱满，发送失败
- * 说明:    1, 发送过程描述：每当模块进入发送仲裁窗口时，都会自动开始一次发送仲裁过程，以找到在下一个发
- *         送请求时，需要发送的邮箱，最终找到的邮箱被称为仲裁胜者。如果全部邮箱的 CODE 域都为非 0xC，那么
- *         本次发送仲裁过程会失败，找不到仲裁胜者。
- *         2，一般的发送，使用带有重复发送功能的发送模式发送。
- *         3，经估算，波特率为500K时，正常发送一帧报文，占用时间大约0.256ms。
+ * Function:        CAN0_SendDiag
+ * Description:     Send one diagnostic message on CAN0 using MB1
+ * Input:           msg_id - CAN message identifier
+ *                  dataP  - Pointer to payload data
+ * Output:          None
+ * Return:          SUCC - Message transferred to TX mailbox successfully
+ *                  ERR  - Invalid message or transmit failed
+ *                  BUSY - TX mailbox full, transmit failed
+ * Others:          Uses CAN_Send() with mailbox 1
  ****************************************************************************/
 ResultStatus_t CAN0_SendDiag(unsigned int msg_id, unsigned char *dataP)
 {
@@ -1407,15 +1573,15 @@ ResultStatus_t CAN0_SendDiag(unsigned int msg_id, unsigned char *dataP)
 }
 
 /*****************************************************************************
- * 函数:    CAN0_SendApp
- * 功能:    CAN0发送一帧APP应用报文。只用MB2、MB3、MB4 发送APP应用报文。
- * 参数:
- * 返回:    SUCC--报文转移到发送邮箱中，ERR--报文错误，发送失败，BUSY--发送邮箱满，发送失败
- * 说明:    1, 发送过程描述：每当模块进入发送仲裁窗口时，都会自动开始一次发送仲裁过程，以找到在下一个发
- *         送请求时，需要发送的邮箱，最终找到的邮箱被称为仲裁胜者。如果全部邮箱的 CODE 域都为非 0xC，那么
- *         本次发送仲裁过程会失败，找不到仲裁胜者。
- *         2，一般的发送，使用带有重复发送功能的发送模式发送。
- *         3，经估算，波特率为500K时，正常发送一帧报文，占用时间大约0.256ms。
+ * Function:        CAN0_SendApp
+ * Description:     Send one application message on CAN0 using MB2/MB3/MB4
+ * Input:           msg_id - CAN message identifier
+ *                  dataP  - Pointer to payload data
+ * Output:          None
+ * Return:          SUCC - Message transferred to TX mailbox successfully
+ *                  ERR  - Invalid message or transmit failed
+ *                  BUSY - All TX mailboxes (MB2/MB3/MB4) are busy
+ * Others:          Tries MB2 first, then falls back to MB3 and MB4 if BUSY
  ****************************************************************************/
 ResultStatus_t CAN0_SendApp(unsigned int msg_id, unsigned char *dataP)
 {
@@ -1438,39 +1604,16 @@ ResultStatus_t CAN0_SendApp(unsigned int msg_id, unsigned char *dataP)
     return can0_Ret;
 }
 
-#if 0
-static void T2GCanPortConfig(void)
-{
-    for (uint8_t i = 0; i < (sizeof(g_canPinCfg) / sizeof(g_canPinCfg[0])); i++)
-    {
-        Cy_GPIO_Pin_Init(g_canPinCfg[i].portReg, g_canPinCfg[i].pinNum, &g_canPinCfg[i].cfg);
-    }
-}
-
-
-static void CanStbInit(void)
-{
-    T2GCanPortConfig();
-    g_canFDStbPortPinCfg.hsiom = CAN0FD_STB_PIN_MUX;
-    Cy_GPIO_Pin_Init(CAN0FD_STB_PORT,CAN0FD_STB_PIN,&g_canFDStbPortPinCfg);
-
-    g_canFDStbPortPinCfg.hsiom = CAN1FD_STB_PIN_MUX;
-    Cy_GPIO_Pin_Init(CAN1FD_STB_PORT,CAN1FD_STB_PIN,&g_canFDStbPortPinCfg);
-
-    g_canFDStbPortPinCfg.hsiom = CAN2FD_STB_PIN_MUX;
-    Cy_GPIO_Pin_Init(CAN2FD_STB_PORT,CAN2FD_STB_PIN,&g_canFDStbPortPinCfg);
-
-    g_canFDStbPortPinCfg.hsiom = CAN3FD_STB_PIN_MUX;
-    Cy_GPIO_Pin_Init(CAN3FD_STB_PORT,CAN3FD_STB_PIN,&g_canFDStbPortPinCfg);
-
-    g_canFDStbPortPinCfg.hsiom = CAN4FD_STB_PIN_MUX;
-    Cy_GPIO_Pin_Init(CAN4FD_STB_PORT,CAN4FD_STB_PIN,&g_canFDStbPortPinCfg);
-
-    g_canFDStbPortPinCfg.hsiom = CAN5FD_STB_PIN_MUX;
-    Cy_GPIO_Pin_Init(CAN5FD_STB_PORT,CAN5FD_STB_PIN,&g_canFDStbPortPinCfg);
-}
-#endif
-
+/*****************************************************************************
+ * Function:        CheckCanIdIsSelfSend
+ * Description:     Check whether the CAN ID is in the self-transmit filter list
+ * Input:           canId - CAN identifier (standard ID assumed)
+ * Output:          None
+ * Return:          0 - CAN ID is in self-send list
+ *                  1 - CAN ID is NOT in self-send list
+ * Others:          Current self-send list includes: 0x316, 0x317, 0x36C, 0x406, 0x425,
+ *                  0x536, 0x537, 0x53C, 0x53D, 0x53E, 0x53F, 0x591, 0x686
+ ****************************************************************************/
 static int16_t CheckCanIdIsSelfSend(uint32_t canId)
 {
     if (canId == 0x316)
@@ -1528,6 +1671,26 @@ static int16_t CheckCanIdIsSelfSend(uint32_t canId)
     return 1;
 }
 
+/*************************************************
+   Function:        CanRxInterruptProcessMsg
+   Description:     CAN RX/TX interrupt message processing (ISR context)
+   Input:           canChannel   - CAN channel index
+                    pstcCanFDmsg - Pointer to received CANFD message structure
+                    txState      - 0: RX frame, non-zero: TX event/loopback indication
+   Output:          None
+   Return:          None
+   Others:          Builds unified CAN ID format (bit31 indicates extended ID)
+                    Copies payload into local buffer (max 64 bytes)
+                    RX path:
+                      - Updates load message counter
+                      - Applies optional channel RX filter callback
+                      - Invokes channel RX callback if registered
+                    TX path:
+                      - Invokes channel TX callback if registered
+                      - Invokes per-handle TX finished callbacks
+                    Enqueues message into global RX queue for task dispatching
+                    In TX path, self-send frames may be filtered by CheckCanIdIsSelfSend()
+ *************************************************/
 void CanRxInterruptProcessMsg(uint8_t canChannel, stc_canfd_msg_t *pstcCanFDmsg, uint8_t txState)
 {
     uint16_t data;
@@ -1607,6 +1770,17 @@ void CanRxInterruptProcessMsg(uint8_t canChannel, stc_canfd_msg_t *pstcCanFDmsg,
     }
 }
 
+/*************************************************
+   Function:        CanHalSetCANMode
+   Description:     Set CAN transceiver mode for specified channel
+   Input:           u8Channel - CAN channel index
+                    mode      - CAN mode (E_CAN_MODE_NORMAL / E_CAN_MODE_STANDBY)
+   Output:          None
+   Return:          0  - Success
+                    -1 - Invalid parameter
+   Others:          Controls transceiver standby pin via GPIO
+                    Mapping between channel and STB pin is platform dependent
+ *************************************************/
 static int16_t CanHalSetCANMode(uint8_t u8Channel, uint8_t mode)
 {
     // check parameter
@@ -1697,13 +1871,22 @@ static int16_t CanHalSetCANMode(uint8_t u8Channel, uint8_t mode)
     return 0;
 }
 
+/*************************************************
+   Function:        CanHalSetSleep
+   Description:     Apply CAN transceiver mode to all channels
+   Input:           mode - Target mode (E_CAN_MODE_NORMAL / E_CAN_MODE_STANDBY)
+   Output:          None
+   Return:          0  - Success
+                    -1 - One or more channels failed to switch mode
+   Others:          Iterates all channels and calls CanHalSetCANMode()
+                    Returns aggregated result (does not early-exit on failure)
+ *************************************************/
 static int16_t CanHalSetSleep(uint8_t mode)
 {
     uint8_t i;
     int16_t ret, tem;
 
     ret = 0;
-
     for (i = 0; i < CAN_CHANNEL_NUMBER_MAX; i++)
     {
         tem = CanHalSetCANMode(i, mode);
@@ -1715,6 +1898,15 @@ static int16_t CanHalSetSleep(uint8_t mode)
     return ret;
 }
 
+/*************************************************
+   Function:        SetCanControllerStop
+   Description:     Stop CAN controller and disable related interrupts for a channel
+   Input:           canChannel - CAN channel index
+   Output:          None
+   Return:          None
+   Others:          Clears CAN interrupts, disables CAN module clock/power
+                    Reconfigures RX pin mux for wake-up interrupt (platform specific)
+ *************************************************/
 static void SetCanControllerStop(uint8_t canChannel)
 {
     switch (canChannel)
@@ -1739,6 +1931,17 @@ static void SetCanControllerStop(uint8_t canChannel)
     }
 }
 
+/*************************************************
+   Function:        SetCanControllerStart
+   Description:     Start CAN controller and configure pins/modules for a channel
+   Input:           canChannel - CAN channel index
+   Output:          None
+   Return:          None
+   Others:          Configures RX/TX pin mux and disables RX pin interrupt flags
+                    Resets and enables CAN module in system controller
+                    Enables CAN controller instance (CAN_Enable)
+                    Platform-specific initialization for multi-channel variants
+ *************************************************/
 static void SetCanControllerStart(uint8_t canChannel)
 {
     switch (canChannel)
@@ -1799,13 +2002,21 @@ static void SetCanControllerStart(uint8_t canChannel)
 }
 
 /*************************************************
-  Function:     CanHalSetMode
-  Description:  set can sleep or awake
-  Input:        mode : 0 sleep; 1 awake
-  Output:       None
-  Return:       None
-  Others:       None
-*************************************************/
+   Function:        CanHalSetMode
+   Description:     Set CAN system mode (sleep or awake) with optional wake-up interrupt
+   Input:           mode - 0: sleep, 1: awake
+   Output:          None
+   Return:          0  - Success
+                    -1 - Invalid mode parameter
+   Others:          Sleep (mode=0):
+                      - Sets transceiver to standby for all channels
+                      - Stops CAN controller modules
+                      - If wake-up is enabled per channel, configures RX pin as GPIO
+                        and enables falling-edge interrupt for wake-up detection
+                    Awake (mode=1):
+                      - Starts CAN controller modules for all channels
+                      - Sets transceiver to normal mode for all channels
+ *************************************************/
 int16_t CanHalSetMode(uint8_t mode)
 {
     int i = 0;
@@ -1867,6 +2078,21 @@ int16_t CanHalSetMode(uint8_t mode)
     }
 }
 
+/*************************************************
+   Function:        CanInit
+   Description:     Initialize CAN controller instance with baudrate and mode
+   Input:           u8Channel     - CAN channel index
+                    canfdFlag     - CAN FD enable flag
+                    u8BaudType    - Arbitration phase baudrate selection
+                    dataBandType  - Data phase baudrate selection (CAN FD)
+                    mode          - CAN mode (E_CAN_MODE_NORMAL / E_CAN_MODE_STANDBY)
+   Output:          None
+   Return:          0  - Success
+                    -1 - Invalid parameter
+   Others:          Calls platform-specific CAN init function per channel
+                    Configures transceiver mode via CanHalSetCANMode()
+                    Some channels may be not implemented depending on platform
+ *************************************************/
 static int16_t CanInit(uint8_t u8Channel, uint8_t canfdFlag, CanBaudType_e u8BaudType, CanBaudType_e dataBandType, uint8_t mode)
 {
     // check parameter
@@ -1915,6 +2141,21 @@ static int16_t CanInit(uint8_t u8Channel, uint8_t canfdFlag, CanBaudType_e u8Bau
     return 0;
 }
 
+/*************************************************
+   Function:        CanHalInit
+   Description:     Initialize CAN HAL driver management and hardware channels
+   Input:           pCanConfig - CAN configuration table (array)
+                    CanNum     - Number of CAN configurations in table
+   Output:          None
+   Return:          0  - Success
+                    -1 - Invalid parameter (NULL config or invalid channel)
+                    -2 - TX mutex creation failure
+   Others:          Initializes per-channel management flags and callback pointers
+                    Creates per-channel TX mutex for thread-safe transmission
+                    Initializes CAN controller hardware using provided configuration
+                    Sets bus-off processing enable flag and bus-off event callback
+                    Initializes txStartTimeCount to 0xFFFFFFFF (timer stopped state)
+ *************************************************/
 int16_t CanHalInit(const CanConfigure_t *pCanConfig, uint8_t CanNum)
 {
     uint8_t i;
@@ -1960,6 +2201,17 @@ int16_t CanHalInit(const CanConfigure_t *pCanConfig, uint8_t CanNum)
     return 0;
 }
 
+/*************************************************
+   Function:        CanHalOpen
+   Description:     Open CAN HAL instance and allocate handle for specified channel
+   Input:           canChannel - CAN channel index
+   Output:          None
+   Return:          >=0 - Valid CAN handle (high byte: channel, low byte: instance index)
+                    -1  - Failed (invalid channel or no free instance)
+   Others:          Searches free instance in g_canDriverBufferList[canChannel][]
+                    Uses critical section to protect instance allocation
+                    Initializes instance fields (queue handle, loopback flag, filter callback)
+ *************************************************/
 int16_t CanHalOpen(uint8_t canChannel)
 {
     int16_t canHandle;
@@ -1987,6 +2239,21 @@ int16_t CanHalOpen(uint8_t canChannel)
     return canHandle;
 }
 
+/*************************************************
+   Function:        CanHalSetRxBuffer
+   Description:     Configure RX message buffer and RX queue for specified CAN handle
+   Input:           canHandle    - CAN driver handle
+                    pMsgBuf      - Message buffer array provided by caller
+                    bufMsgCount  - Number of messages in buffer
+   Output:          None
+   Return:          0  - Success
+                    -1 - Invalid handle or channel
+                    -2 - Invalid buffer size (bufMsgCount == 0)
+                    -3 - Queue creation failure
+   Others:          Creates per-instance RX queue with item size of uint8_t index token
+                    Initializes RX ring buffer index and assigns caller-provided buffer
+                    Caller is responsible for ensuring pMsgBuf has bufMsgCount entries
+ *************************************************/
 int16_t CanHalSetRxBuffer(int16_t canHandle, CanHalMsg_t *pMsgBuf, uint16_t bufMsgCount)
 {
     uint8_t canChannel;
@@ -2020,10 +2287,22 @@ int16_t CanHalSetRxBuffer(int16_t canHandle, CanHalMsg_t *pMsgBuf, uint16_t bufM
     return 0;
 }
 
+/*************************************************
+   Function:        CanHalSetFilter
+   Description:     Set CAN ID filter configuration for specified CAN handle instance
+   Input:           canHandle   - CAN driver handle
+                    pMsgFilter  - Filter configuration structure
+   Output:          None
+   Return:          0  - Success
+                    -1 - Invalid handle or channel
+                    -2 - NULL filter pointer
+   Others:          Copies filter configuration into instance context
+                    Filtering is applied in dispatch path when no custom filter function is set
+ *************************************************/
 int16_t CanHalSetFilter(int16_t canHandle, CanHalMsgFilter_t *pMsgFilter)
 {
     uint8_t canChannel;
-    // int i;
+
     if (canHandle < 0)
     {
         return -1;
@@ -2042,9 +2321,22 @@ int16_t CanHalSetFilter(int16_t canHandle, CanHalMsgFilter_t *pMsgFilter)
     return 0;
 }
 
+/*************************************************
+   Function:        CanHalSetFilterFun
+   Description:     Register custom CAN RX filter callback for specified handle instance
+   Input:           canHandle  - CAN driver handle
+                    pFilterFun - Filter callback function pointer
+   Output:          None
+   Return:          0  - Success
+                    -1 - Invalid handle or channel
+                    -2 - NULL callback pointer
+   Others:          When registered, callback is invoked to decide whether to accept message
+                    Custom filter has higher priority than static filter range configuration
+ *************************************************/
 int16_t CanHalSetFilterFun(int16_t canHandle, typeCanRxHalFilterCallBackPtr pFilterFun)
 {
     uint8_t canChannel;
+
     if (canHandle < 0)
     {
         return -1;
@@ -2064,10 +2356,20 @@ int16_t CanHalSetFilterFun(int16_t canHandle, typeCanRxHalFilterCallBackPtr pFil
     return 0;
 }
 
+/*************************************************
+   Function:        CanHalRegisterTxFinishedCallBackFunction
+   Description:     Register TX finished callback for specified CAN handle instance
+   Input:           canHandle   - CAN driver handle
+                    pCallBackFun - Callback function pointer for TX completion
+   Output:          None
+   Return:          0  - Success
+                    -1 - Invalid handle or channel
+   Others:          Stores callback pointer into instance context
+                    Callback is expected to be invoked by lower-level TX completion mechanism
+ *************************************************/
 int16_t CanHalRegisterTxFinishedCallBackFunction(int16_t canHandle, typeCanTxHalCallBackPtr pCallBackFun)
 {
     uint8_t canChannel;
-    // int i;
 
     if (canHandle < 0)
     {
@@ -2075,66 +2377,13 @@ int16_t CanHalRegisterTxFinishedCallBackFunction(int16_t canHandle, typeCanTxHal
     }
 
     canChannel = canHandle >> 8;
-    if (canChannel >= CAN_CHANNEL_NUMBER_MAX) // invalid channel
+    if (canChannel >= CAN_CHANNEL_NUMBER_MAX) 
     {
         return -1;
     }
     g_canDriverBufferList[canChannel][(canHandle & 0xFF)].pTxCallBackFun = pCallBackFun;
     return 0;
 }
-#if 0
-static void FillCanDriverMSgData(cy_stc_canfd_msg_t* pMsg,uint8_t u8Len, const uint8_t* pu8CmdData,uint8_t fdFlag)
-{
-    uint16_t wordNum,i,tem; 
-    wordNum = u8Len/4;
-    if((0==fdFlag)&&(u8Len>8))
-    {
-        u8Len = 8;
-    }
-    if(u8Len>=64)
-    {
-        pMsg->dataConfig.dataLengthCode = 15;
-    }
-    else if(u8Len>=48)
-    {
-        pMsg->dataConfig.dataLengthCode = 14;
-    }
-    else if(u8Len>=32)
-    {
-        pMsg->dataConfig.dataLengthCode = 13;
-    }
-    else if(u8Len>=24)
-    {
-        pMsg->dataConfig.dataLengthCode = 12;
-    }
-    else if(u8Len>=20)
-    {
-        pMsg->dataConfig.dataLengthCode = 11;
-    }
-    else if(u8Len>=16)
-    {
-        pMsg->dataConfig.dataLengthCode = 10;
-    }
-    else if(u8Len>=12)
-    {
-        pMsg->dataConfig.dataLengthCode = 9;
-    }
-    else if(u8Len>=8)
-    {
-        pMsg->dataConfig.dataLengthCode = 8;
-    }
-    else
-    {
-        wordNum = 2;
-        pMsg->dataConfig.dataLengthCode = u8Len;
-    }
-    for(i=0;i<wordNum;i++)
-    {
-        tem = i*4;
-        pMsg->dataConfig.data[i] = pu8CmdData[tem+3]<<24 | pu8CmdData[tem+2]<<16 | pu8CmdData[tem+1]<<8 | pu8CmdData[tem+0];
-    }    
-}
-#endif
 
 /*************************************************
     Function:        CanTransmit
@@ -2219,6 +2468,29 @@ static int16_t CanTransmit(uint8_t u8Channel, uint32_t id, uint8_t u8Len,
     return ret;
 }
 
+/*************************************************
+   Function:        CanHalTransmit
+   Description:     Transmit CAN message in task context with mutex protection
+   Input:           canHandle - CAN driver handle (high byte: channel, low byte: instance index)
+                    canId     - CAN identifier
+                    canData   - CAN payload buffer (read-only)
+                    dlc       - Data length code (0..64)
+                    fdFlag    - CAN FD / TX flag passed to driver
+   Output:          None
+   Return:          SUCC / 0 - Transmission successful (driver dependent)
+                    BUSY      - Driver busy (driver dependent)
+                    CAN_ERROR_INVALID_HANDLE   - Invalid handle or channel
+                    CAN_ERROR_MUTEX_NOT_INIT   - TX mutex not initialized
+                    CAN_ERROR_MUTEX_TIMEOUT    - Failed to acquire TX mutex within timeout
+                    CAN_ERROR_TX_DISABLE       - TX disabled by control flag
+                    CAN_ERROR_BUS_ERROR        - Bus error / no-ack / bus-off state blocks TX
+                    CAN_ERROR_TEST_MODE        - Test mode enabled, TX blocked
+                    CAN_ERROR_TX_BUFFER_FULL   - Driver TX buffer full (may retry once)
+   Others:          Protects driver transmit with per-channel mutex
+                    Retries once when TX buffer is full: releases mutex, delays 10 ms,
+                    reacquires mutex and transmits again
+                    On successful transmit, starts TX supervision counter (txStartTimeCount)
+ *************************************************/
 int16_t CanHalTransmit(int16_t canHandle, uint32_t canId, const uint8_t *canData, uint8_t dlc, uint8_t fdFlag)
 {
     uint8_t canChannel;
@@ -2320,6 +2592,18 @@ int16_t CanHalTransmit(int16_t canHandle, uint32_t canId, const uint8_t *canData
     return ret;
 }
 
+/*************************************************
+   Function:        CanHalReceive
+   Description:     Receive CAN message from per-instance RX queue
+   Input:           canHandle  - CAN driver handle (high byte: channel, low byte: instance index)
+                    timeOut_ms - Receive timeout in milliseconds (portMAX_DELAY for infinite wait)
+   Output:          pMsg       - Output buffer for received CAN message
+   Return:          0  - Receive successful
+                    CAN_ERROR_INVALID_HANDLE - Invalid handle or channel
+                    CAN_ERROR_TIMEOUT        - Timeout or queue not ready
+   Others:          Receives an index token from RxQueueHandle, then copies the message
+                    from instance RX buffer into pMsg
+ *************************************************/
 int16_t CanHalReceive(int16_t canHandle, CanHalMsg_t *pMsg, uint32_t timeOut_ms)
 {
     uint8_t canChannel, index;
@@ -2360,6 +2644,17 @@ int16_t CanHalReceive(int16_t canHandle, CanHalMsg_t *pMsg, uint32_t timeOut_ms)
     return 0;
 }
 
+/*************************************************
+   Function:        CanHalSetCanRxCallBack
+   Description:     Register CAN receive callback for specified channel
+   Input:           canChannel - CAN channel index
+                    rxCallBack - Callback function pointer
+   Output:          None
+   Return:          0  - Success
+                    -1 - Invalid parameter (NULL callback or invalid channel)
+   Others:          Stores callback into channel management structure
+                    Intended to be called during initialization phase
+ *************************************************/
 int16_t CanHalSetCanRxCallBack(uint8_t canChannel, typeCanTxRxHalCallBackPtr rxCallBack)
 {
     if (rxCallBack == NULL)
@@ -2376,6 +2671,17 @@ int16_t CanHalSetCanRxCallBack(uint8_t canChannel, typeCanTxRxHalCallBackPtr rxC
     return 0;
 }
 
+/*************************************************
+   Function:        CanHalSetCanTxCallBack
+   Description:     Register CAN transmit callback for specified channel
+   Input:           canChannel - CAN channel index
+                    txCallBack - Callback function pointer
+   Output:          None
+   Return:          0  - Success
+                    -1 - Invalid parameter (NULL callback or invalid channel)
+   Others:          Stores callback into channel management structure
+                    Intended to be called during initialization phase
+ *************************************************/
 int16_t CanHalSetCanTxCallBack(uint8_t canChannel, typeCanTxRxHalCallBackPtr txCallBack)
 {
     if (txCallBack == NULL)
@@ -2392,6 +2698,21 @@ int16_t CanHalSetCanTxCallBack(uint8_t canChannel, typeCanTxRxHalCallBackPtr txC
     return 0;
 }
 
+/*************************************************
+   Function:        CanHalNmTransmit
+   Description:     Transmit CAN Network Management (NM) message with strict gating
+   Input:           canHandle - CAN driver handle (high byte: channel, low byte: instance index)
+                    canId     - CAN identifier
+                    canData   - CAN payload buffer
+                    dlc       - Data length code (0..64)
+                    fdFlag    - CAN FD / TX flag passed to driver
+   Output:          None
+   Return:          0  - Transmission successful
+                    <0 / CAN_ERROR_* - Transmission rejected or driver error
+   Others:          Checks TX enable, bus error state, no-ack error state and test mode
+                    Retries once after 2 ms if TX buffer is full
+                    On successful transmit, starts TX supervision counter (txStartTimeCount)
+ *************************************************/
 int16_t CanHalNmTransmit(int16_t canHandle, uint32_t canId, uint8_t *canData, uint8_t dlc, uint8_t fdFlag)
 {
     uint8_t canChannel;
@@ -2441,14 +2762,26 @@ int16_t CanHalNmTransmit(int16_t canHandle, uint32_t canId, uint8_t *canData, ui
     return ret;
 }
 
+/*************************************************
+   Function:        CanHalNmReceive
+   Description:     Receive CAN Network Management (NM) message
+   Input:           canHandle  - CAN driver handle
+                    timeOut_ms - Receive timeout in milliseconds
+   Output:          pMsg       - Output buffer for received NM message
+   Return:          0  - Receive successful
+                    CAN_ERROR_INVALID_HANDLE - Invalid handle or channel
+                    CAN_ERROR_TIMEOUT        - Timeout or queue not ready
+   Others:          Receives message index from RX queue and copies
+                    message from internal RX buffer
+ *************************************************/
 int16_t CanHalNmReceive(int16_t canHandle, CanHalMsg_t *pMsg, uint32_t timeOut_ms)
 {
     uint8_t canChannel;
     uint8_t index;
-    // uint8_t canType;
     QueueHandle_t queHandle;
     TickType_t tickWait;
     uint8_t data;
+
     if (canHandle < 0)
     {
         return CAN_ERROR_INVALID_HANDLE;
@@ -2483,6 +2816,17 @@ int16_t CanHalNmReceive(int16_t canHandle, CanHalMsg_t *pMsg, uint32_t timeOut_m
     return 0;
 }
 
+/*************************************************
+   Function:        CanHalRecieveIsTimeOut
+   Description:     Check whether CAN message has been received since last check
+   Input:           canHandle - CAN driver handle
+   Output:          None
+   Return:          1  - Message received
+                    0  - No message received
+                    CAN_ERROR_INVALID_HANDLE - Invalid handle or channel
+   Others:          Clears internal canRxFlag after detection
+                    Typically used for timeout supervision
+ *************************************************/
 int16_t CanHalRecieveIsTimeOut(int16_t canHandle)
 {
     uint8_t canChannel;
@@ -2505,6 +2849,16 @@ int16_t CanHalRecieveIsTimeOut(int16_t canHandle)
     return 0;
 }
 
+/*************************************************
+   Function:        CanHalAppMsgEnable
+   Description:     Enable application-level CAN message processing
+   Input:           canHandle - CAN driver handle
+   Output:          None
+   Return:          0  - Success
+                    CAN_ERROR_INVALID_HANDLE - Invalid handle or channel
+   Others:          Increments AppMsgEnable counter in critical section
+                    Supports nested enable/disable usage
+ *************************************************/
 int16_t CanHalAppMsgEnable(int16_t canHandle)
 {
     uint8_t canChannel;
@@ -2523,9 +2877,19 @@ int16_t CanHalAppMsgEnable(int16_t canHandle)
     return 0;
 }
 
+/*************************************************
+   Function:        CanHalAppMsgDisable
+   Description:     Disable application-level CAN message processing
+   Input:           canHandle - CAN driver handle
+   Output:          None
+   Return:          0  - Success
+                    CAN_ERROR_INVALID_HANDLE - Invalid handle or channel
+   Others:          Decrements AppMsgEnable counter in critical section
+ *************************************************/
 int16_t CanHalAppMsgDisable(int16_t canHandle)
 {
     uint8_t canChannel;
+
     if (canHandle < 0)
     {
         return CAN_ERROR_INVALID_HANDLE;
@@ -2541,6 +2905,15 @@ int16_t CanHalAppMsgDisable(int16_t canHandle)
     return 0;
 }
 
+/*************************************************
+   Function:        CanHalTxMsgEnable
+   Description:     Enable CAN transmit messages for specified channel
+   Input:           canChannel - CAN channel index
+   Output:          None
+   Return:          0  - Success
+                    CAN_ERROR_INVALID_HANDLE - Invalid channel
+   Others:          Sets txMsgEnable flag in critical section
+ *************************************************/
 int16_t CanHalTxMsgEnable(uint8_t canChannel)
 {
     if (canChannel >= CAN_CHANNEL_NUMBER_MAX)
@@ -2553,6 +2926,15 @@ int16_t CanHalTxMsgEnable(uint8_t canChannel)
     return 0;
 }
 
+/*************************************************
+   Function:        CanHalTxMsgDisable
+   Description:     Disable CAN transmit messages for specified channel
+   Input:           canChannel - CAN channel index
+   Output:          None
+   Return:          0  - Success
+                    CAN_ERROR_INVALID_HANDLE - Invalid channel
+   Others:          Clears txMsgEnable flag in critical section
+ *************************************************/
 int16_t CanHalTxMsgDisable(uint8_t canChannel)
 {
     if (canChannel >= CAN_CHANNEL_NUMBER_MAX)
@@ -2565,10 +2947,21 @@ int16_t CanHalTxMsgDisable(uint8_t canChannel)
     return 0;
 }
 
+/*************************************************
+   Function:        CanHalGetTimeCountSinceLastCanTx
+   Description:     Get time counter since last CAN transmission
+   Input:           canHandle - CAN driver handle
+   Output:          None
+   Return:          Time count value
+                    0xFFFFFFFF - Invalid handle or channel
+   Others:          Value is read inside critical section
+                    Time base depends on periodic timer implementation
+ *************************************************/
 uint32_t CanHalGetTimeCountSinceLastCanTx(int16_t canHandle)
 {
     uint32_t timeCount;
     uint8_t canChannel;
+
     if (canHandle < 0)
     {
         return 0xFFFFFFFF;
@@ -2584,6 +2977,16 @@ uint32_t CanHalGetTimeCountSinceLastCanTx(int16_t canHandle)
     return timeCount;
 }
 
+/*************************************************
+   Function:        CanControllerBusOffError
+   Description:     Check CAN controller bus-off error status
+   Input:           canChannel - CAN channel index
+   Output:          None
+   Return:          0 - Bus-off error detected
+                    1 - No bus-off error
+   Others:          Reads platform-specific BusOff interrupt flags
+                    Sets BusErrorState and disables app messages on error
+ *************************************************/
 static int16_t CanControllerBusOffError(uint8_t canChannel)
 {
     uint8_t busErr = 0x00;
@@ -2624,9 +3027,19 @@ static int16_t CanControllerBusOffError(uint8_t canChannel)
     return 1;
 }
 
+/*************************************************
+   Function:        CanHalClearBusoffAppDisableFlag
+   Description:     Clear application disable flag caused by bus-off error
+   Input:           canHandle - CAN driver handle
+   Output:          None
+   Return:          0  - Success
+                    CAN_ERROR_INVALID_HANDLE - Invalid handle or channel
+   Others:          Clears busErrorAppDiableFlag for the channel
+ *************************************************/
 uint8_t CanHalClearBusoffAppDisableFlag(int16_t canHandle)
 {
     uint8_t canChannel;
+
     if (canHandle < 0)
     {
         return CAN_ERROR_INVALID_HANDLE;
@@ -2640,9 +3053,20 @@ uint8_t CanHalClearBusoffAppDisableFlag(int16_t canHandle)
     return 0;
 }
 
+/*************************************************
+   Function:        CanHalGetIsBusOffError
+   Description:     Check whether CAN bus-off error exists
+   Input:           canHandle - CAN driver handle
+   Output:          None
+   Return:          0 - Bus-off error detected
+                    1 - No bus-off error
+                    CAN_ERROR_INVALID_HANDLE - Invalid handle or channel
+   Others:          Internally calls CanControllerBusOffError()
+ *************************************************/
 int16_t CanHalGetIsBusOffError(int16_t canHandle)
 {
     uint8_t canChannel;
+
     if (canHandle < 0)
     {
         return CAN_ERROR_INVALID_HANDLE;
@@ -2656,16 +3080,26 @@ int16_t CanHalGetIsBusOffError(int16_t canHandle)
     return CanControllerBusOffError(canChannel);
 }
 
+/*************************************************
+   Function:        CanHalEnableTransmitLoopBack
+   Description:     Enable transmit loopback for specified CAN handle instance
+   Input:           canHandle - CAN driver handle (high byte: channel, low byte: instance index)
+   Output:          None
+   Return:          0  - Success
+                    -1 - Invalid handle or channel out of range
+   Others:          Enables send-loopback mode for the target CAN buffer instance
+                    Loopback frames can be dispatched to local RX path depending on configuration
+ *************************************************/
 int16_t CanHalEnableTransmitLoopBack(int16_t canHandle)
 {
     uint8_t canChannel;
+
     if (canHandle < 0)
     {
         return -1;
     }
-
     canChannel = canHandle >> 8;
-    if (canChannel >= CAN_CHANNEL_NUMBER_MAX) // invalid channel
+    if (canChannel >= CAN_CHANNEL_NUMBER_MAX) 
     {
         return -1;
     }
@@ -2673,10 +3107,26 @@ int16_t CanHalEnableTransmitLoopBack(int16_t canHandle)
     return 0;
 }
 
+/*************************************************
+   Function:        CanHalDiagnosticTransmit
+   Description:     Transmit diagnostic CAN message with basic gating and retry
+   Input:           canHandle - CAN driver handle (high byte: channel, low byte: instance index)
+                    canId     - CAN identifier (standard/extended as encoded by upper layer)
+                    canData   - CAN payload buffer
+                    dlc       - Data length code (0..64)
+                    fdFlag    - CAN FD flag / transmit flag passed to driver
+   Output:          None
+   Return:          0  - Transmission successful
+                    <0 / CAN_ERROR_* - Transmission rejected or driver error
+   Others:          Checks TX enable, bus error state and test mode before transmission
+                    Retries once after 10 ms if driver reports TX buffer full
+                    On successful transmission, starts TX timeout counter (txStartTimeCount) if stopped
+ *************************************************/
 int16_t CanHalDiagnosticTransmit(int16_t canHandle, uint32_t canId, uint8_t *canData, uint8_t dlc, uint8_t fdFlag)
 {
     uint8_t canChannel;
     int16_t ret;
+    
     if (canHandle < 0)
     {
         return -1;
@@ -2716,14 +3166,26 @@ int16_t CanHalDiagnosticTransmit(int16_t canHandle, uint32_t canId, uint8_t *can
     return ret;
 }
 
+/*************************************************
+   Function:        CanHalDiagnosticReceive
+   Description:     Receive diagnostic CAN message from per-instance RX queue
+   Input:           canHandle  - CAN driver handle (high byte: channel, low byte: instance index)
+                    timeOut_ms - Receive timeout in milliseconds (portMAX_DELAY for infinite wait)
+   Output:          pMsg       - Output buffer for received CAN message
+   Return:          0  - Receive successful
+                    CAN_ERROR_INVALID_HANDLE - Invalid handle or channel out of range
+                    CAN_ERROR_TIMEOUT        - Timeout or queue not ready
+   Others:          Receives an index token from RxQueueHandle, then copies the message
+                    from the instance RX buffer (ring) into pMsg
+ *************************************************/
 int16_t CanHalDiagnosticReceive(int16_t canHandle, CanHalMsg_t *pMsg, uint32_t timeOut_ms)
 {
     uint8_t canChannel;
     uint8_t index;
-    // uint8_t canType;
     QueueHandle_t queHandle;
     TickType_t tickWait;
     uint8_t data;
+
     if (canHandle < 0)
     {
         return CAN_ERROR_INVALID_HANDLE;
@@ -2733,7 +3195,7 @@ int16_t CanHalDiagnosticReceive(int16_t canHandle, CanHalMsg_t *pMsg, uint32_t t
     {
         return CAN_ERROR_INVALID_HANDLE;
     }
-    // receive
+
     index = canHandle & 0xFF;
     queHandle = g_canDriverBufferList[canChannel][index].RxQueueHandle;
     if (queHandle == NULL)
@@ -2755,9 +3217,9 @@ int16_t CanHalDiagnosticReceive(int16_t canHandle, CanHalMsg_t *pMsg, uint32_t t
     }
 
     memcpy(pMsg, &(g_canDriverBufferList[canChannel][index].pMsgBufferRx[data]), sizeof(CanHalMsg_t));
-
     return 0;
 }
+
 #if 0
 static int16_t CanTransmitFromIsr(uint8_t u8Channel, uint32_t id, uint8_t u8Len, uint8_t* pu8CmdData,uint8_t fdFlag)
 {
@@ -2872,6 +3334,17 @@ int16_t CanHalTransmitFromIsr(uint8_t canChannel,uint32_t canId,uint8_t *canData
     return ret;
 }
 #endif
+/*************************************************
+   Function:        CanControllerReset
+   Description:     Reset and re-initialize CAN controller after error recovery
+   Input:           canChannel - CAN channel index
+   Output:          None
+   Return:          None
+   Others:          Re-initializes CAN controller with configured bitrates and mode
+                    Clears bus-off interrupt flag (platform-specific)
+                    Resets BusErrorState for the specified channel
+                    Uploads "BusoffRecover" log for traceability
+ *************************************************/
 static void CanControllerReset(uint8_t canChannel)
 {
     CanInit(canChannel, CANFD_ENABLE_CONFIG, E_CAN_500K, E_CAN_2000K, E_CAN_MODE_NORMAL);
@@ -2880,11 +3353,19 @@ static void CanControllerReset(uint8_t canChannel)
     LogHalUpLoadLog("BusoffRecover");
 }
 
+/*************************************************
+   Function:        CanCancelTransmit
+   Description:     Cancel all pending CAN transmit requests for specified channel
+   Input:           canChannel - CAN channel index
+   Output:          None
+   Return:          None
+   Others:          Intended to abort all TX buffers/mailboxes of the target CAN controller
+                    Platform-dependent register mapping is currently commented out
+                    If enabled, TXBCR (Transmit Buffer Cancellation Request) would be set
+                    to cancel all pending transmit buffers
+ *************************************************/
 static void CanCancelTransmit(uint8_t canChannel)
 {
-    //     volatile stc_CANFD_CH_M_TTCAN_t* pstCanType = NULL;
-    //     // get can type
-
     switch (canChannel)
     {
 //     case 0:
@@ -2913,6 +3394,15 @@ static void CanCancelTransmit(uint8_t canChannel)
     //     pstCanType->unTXBCR.u32Register = 0xFFFFFFFFul;
 }
 
+/*************************************************
+   Function:        CanHalCanBusOffProcessDisalbe
+   Description:     Disable CAN bus-off recovery processing for specified channel
+   Input:           canChannel - CAN channel index
+   Output:          None
+   Return:          None
+   Others:          Clears bus-off process enable flag
+                    Channel boundary is checked internally
+ *************************************************/
 void CanHalCanBusOffProcessDisalbe(uint8_t canChannel)
 {
     if (canChannel > (CAN_CHANNEL_NUMBER_MAX - 1))
@@ -2922,6 +3412,15 @@ void CanHalCanBusOffProcessDisalbe(uint8_t canChannel)
     g_canBusOffProcessFlag[canChannel] = 0;
 }
 
+/*************************************************
+   Function:        CanHalCanBusOffProcessEnalbe
+   Description:     Enable CAN bus-off recovery processing for specified channel
+   Input:           canChannel - CAN channel index
+   Output:          None
+   Return:          None
+   Others:          Sets bus-off process enable flag
+                    Used by CAN error management logic
+ *************************************************/
 void CanHalCanBusOffProcessEnalbe(uint8_t canChannel)
 {
     if (canChannel > (CAN_CHANNEL_NUMBER_MAX - 1))
@@ -2932,6 +3431,16 @@ void CanHalCanBusOffProcessEnalbe(uint8_t canChannel)
     g_canBusOffProcessFlag[canChannel] = 1;
 }
 
+/*************************************************
+   Function:        CanHalCanBusOffRecover
+   Description:     Periodic CAN bus-off recovery handler
+   Input:           cycleTime_ms - Periodic task cycle time in milliseconds
+   Output:          None
+   Return:          None
+   Others:          Performs CAN controller reset on bus-off
+                    Counts bus-off occurrences and reports events
+                    Triggers user callback when threshold is exceeded
+ *************************************************/
 static void CanHalCanBusOffRecover(uint32_t cycleTime_ms)
 {
     static uint32_t cycleTimeCount = 0;
@@ -2981,6 +3490,16 @@ static void CanHalCanBusOffRecover(uint32_t cycleTime_ms)
         }
     }
 }
+
+/*************************************************
+   Function:        CanHalCanBusLoadCheck
+   Description:     Monitor CAN bus load and detect overload condition
+   Input:           cycleTime_ms - Periodic task cycle time in milliseconds
+   Output:          None
+   Return:          None
+   Others:          Counts received messages within 100 ms window
+                    Sets loadHighFlag when message count exceeds threshold
+ *************************************************/
 static void CanHalCanBusLoadCheck(uint32_t cycleTime_ms)
 {
     uint8_t i;
@@ -2995,10 +3514,7 @@ static void CanHalCanBusLoadCheck(uint32_t cycleTime_ms)
             msgCount = g_driverCanManage[i].loadMsgCount;
             g_driverCanManage[i].loadMsgCount = 0;
             taskEXIT_CRITICAL();
-            /*if(i==0)
-             {
-               TBOX_PRINT("can load %d \r\n",msgCount);
-             }        */
+
             if (msgCount > 300)
             {
                 g_driverCanManage[i].loadHighFlag = 1;
@@ -3010,24 +3526,31 @@ static void CanHalCanBusLoadCheck(uint32_t cycleTime_ms)
         }
     }
 }
+
+/*************************************************
+   Function:        CanHalCanBusOffCycleProcess
+   Description:     Periodic CAN error state machine processing
+   Input:           cycleTime_ms - Periodic task cycle time in milliseconds
+   Output:          None
+   Return:          None
+   Others:          Handles no-ACK, stuff error and overload conditions
+                    Controls TX cancel, timeout and recovery callbacks
+                    Integrates bus load and bus-off recovery logic
+ *************************************************/
 void CanHalCanBusOffCycleProcess(uint32_t cycleTime_ms)
 {
     uint8_t i;
-
     uint32_t txTimeOut;
-    // uint32_t txFailDelay;
 
     for (i = 0; i < CAN_CHANNEL_NUMBER_MAX; i++)
     {
         if (g_driverCanManage[i].txFailState)
         {
             txTimeOut = 10;
-            // txFailDelay = 200;
         }
         else
         {
             txTimeOut = 90;
-            // txFailDelay = 200;
         }
         if (g_driverCanManage[i].busNoAckErrorState == 0x00) // 无错误
         {
@@ -3041,17 +3564,10 @@ void CanHalCanBusOffCycleProcess(uint32_t cycleTime_ms)
                 }
                 else
                 {
-                    // uint8_t errorCode;
-                    // errorCode = GetCanControllerLastErrorCode(i);
-                    /*if(i==CAN_NOACK_DEBUG_CHANNEL)
-                    {
-                      TBOX_PRINT("g_driverCanManage[i].BusErrorState %d\r\n",i,g_driverCanManage[i].BusErrorState);
-                    }*/
                     taskEXIT_CRITICAL();
                     if (0 == g_driverCanManage[i].BusErrorState)
                     {
                         if (g_driverCanManage[i].noAckError) // no ack
-                        // if(3==errorCode)
                         {
                             g_driverCanManage[i].noAckError = 0x00;
 
@@ -3063,7 +3579,6 @@ void CanHalCanBusOffCycleProcess(uint32_t cycleTime_ms)
                             CanCancelTransmit(i);
                         }
                         else if (g_driverCanManage[i].stuffError) // can not connected
-                        // else if(1==errorCode)//can not connected
                         {
                             g_driverCanManage[i].busErrorAppDiableFlag = 0x00;
                             g_driverCanManage[i].stuffError = 0x00;
@@ -3090,8 +3605,6 @@ void CanHalCanBusOffCycleProcess(uint32_t cycleTime_ms)
         }
         else if (g_driverCanManage[i].busNoAckErrorState == 0x01) // error
         {
-            // TBOX_PRINT("can nack01 error txb is %d \r\n",g_can0TxBuffer.txCount);
-            // CanCearlTransmitBuf(i);
             if (g_driverCanManage[i].noAckTimeCount < 100)
             {
                 g_driverCanManage[i].noAckTimeCount += cycleTime_ms;
@@ -3131,12 +3644,19 @@ void CanHalCanBusOffCycleProcess(uint32_t cycleTime_ms)
             g_driverCanManage[i].busNoAckErrorState = 0;
         }
     }
-    //
     CanHalCanBusLoadCheck(cycleTime_ms);
-    //
     CanHalCanBusOffRecover(cycleTime_ms);
 }
 
+/*************************************************
+   Function:        CanHalSetCanTestMode
+   Description:     Enable or disable CAN test mode for specified channel
+   Input:           canChannel - CAN channel index
+                    modeFlag   - Test mode flag (0:disable, 1:enable)
+   Output:          None
+   Return:          None
+   Others:          Test mode disables normal CAN TX gating logic
+ *************************************************/
 void CanHalSetCanTestMode(uint8_t canChannel, uint8_t modeFlag)
 {
     if (canChannel >= CAN_CHANNEL_NUMBER_MAX)
@@ -3146,6 +3666,18 @@ void CanHalSetCanTestMode(uint8_t canChannel, uint8_t modeFlag)
     g_canTestModeFlag[canChannel] = modeFlag;
 }
 
+/*************************************************
+   Function:        CanMsgDispatch
+   Description:     Dispatch received CAN message to registered handlers
+   Input:           pMsg              - Received CAN message
+                    pCanDriverBuffer  - CAN driver buffer list
+                    maxCanInstanse    - Number of instances
+   Output:          None
+   Return:          None
+   Others:          Supports standard and extended ID filtering
+                    Optional user filter callback supported
+                    Copies message into RX ring buffer and notifies task
+ *************************************************/
 static void CanMsgDispatch(CanHalMsg_t *pMsg, CanBufferHal_t *pCanDriverBuffer, uint16_t maxCanInstanse)
 {
     uint16_t i;
@@ -3230,6 +3762,16 @@ static void CanMsgDispatch(CanHalMsg_t *pMsg, CanBufferHal_t *pCanDriverBuffer, 
     }
 }
 
+/*************************************************
+   Function:        CanHalReceiveTask
+   Description:     CAN receive task for message dispatching
+   Input:           pvParameters - FreeRTOS task parameter (unused)
+   Output:          None
+   Return:          None
+   Others:          Receives messages from RX queue
+                    Copies data from ISR buffer
+                    Dispatches messages to application buffers
+ *************************************************/
 void CanHalReceiveTask(void *pvParameters)
 {
     uint8_t canChannel;
@@ -3240,7 +3782,6 @@ void CanHalReceiveTask(void *pvParameters)
     g_allCanRxBuffer.msgRxIndexIn = 0;
     g_allCanRxBuffer.rxQueueHandle = xQueueCreate(ALL_CAN_RX_BUFFER_SIZE, // The number of items the queue can hold.
                                                   sizeof(uint16_t));
-
     while (1)
     {
         if (xQueueReceive(g_allCanRxBuffer.rxQueueHandle, &queueData, 0xFFFFFFFF) != pdPASS)
@@ -3254,26 +3795,26 @@ void CanHalReceiveTask(void *pvParameters)
 
         if (canChannel < CAN_CHANNEL_NUMBER_MAX)
         {
-            // can message dispatch  to app task
-            /*if(2==canChannel)
-            {
-              m_testCount++;
-            }*/
-            // ע��:�Ƚ��ж����յ��ı��Ĵ���g_allCanRxBuffer.msgRxBuffer[],���ö��з��ͽ�ͨ����,msgIndex����,���н��պ󽫱�������->canMsg
             CanMsgDispatch(&canMsg, g_canDriverBufferList[canChannel], CAN_DRIVER_HAL_HANDLE_INSTANSE_MAX);
         }
         else
         {
-            // TBOX_PRINT("can channel error\r\n");
+
         }
     }
 }
 
+/*************************************************
+   Function:        CanHalTimer1msCallBack
+   Description:     1 ms periodic timer callback for CAN timing statistics
+   Input:           None
+   Output:          None
+   Return:          None
+   Others:          Increments TX start time counters for all channels
+ *************************************************/
 void CanHalTimer1msCallBack(void)
 {
     uint8_t i;
-    // volatile pstc_canfd_type_t pstCanType = NULL;
-    //  get can type
 
     for (i = 0; i < CAN_CHANNEL_NUMBER_MAX; i++)
     {
@@ -3284,9 +3825,19 @@ void CanHalTimer1msCallBack(void)
     }
 }
 
+/*************************************************
+   Function:        CanHalResetHardware
+   Description:     Reset CAN controller hardware by handle
+   Input:           canHandle - CAN driver handle
+   Output:          None
+   Return:          0  - Reset successful
+                    CAN_ERROR_INVALID_HANDLE - Invalid handle
+   Others:          Extracts CAN channel from handle internally
+ *************************************************/
 int16_t CanHalResetHardware(int16_t canHandle)
 {
     uint8_t canChannel;
+
     if (canHandle < 0)
     {
         return CAN_ERROR_INVALID_HANDLE;
@@ -3300,6 +3851,14 @@ int16_t CanHalResetHardware(int16_t canHandle)
     return 0;
 }
 
+/*************************************************
+   Function:        CanHalEnableCanWakeup
+   Description:     Enable CAN wake-up detection for specified channel
+   Input:           canChannel - CAN channel index
+   Output:          None
+   Return:          None
+   Others:          Sets internal wake-up enable flag
+ *************************************************/
 void CanHalEnableCanWakeup(uint8_t canChannel)
 {
     if (canChannel >= CAN_CHANNEL_NUMBER_MAX)
@@ -3310,13 +3869,23 @@ void CanHalEnableCanWakeup(uint8_t canChannel)
 }
 
 extern void WDOG_Refresh(void);
+/*************************************************
+   Function:        CanHalTestMain
+   Description:     CAN transmission test routine
+   Input:           None
+   Output:          None
+   Return:          None
+   Others:          Demonstrates CAN send with retry on BUSY
+                    Used for validation and bring-up testing
+                    Not intended for production build
+ *************************************************/
 void CanHalTestMain(void)
 {
     unsigned char CAN0_TxData[64]; // 定义发送使用的数组
     unsigned int i;
     ResultStatus_t can0SendRet;
 
-    // System_Init();    //初始化系统的硬件和全局变量
+    // System_Init();               //初始化系统的硬件和全局变量
 
     for (i = 0; i < 64; i++)
     {
@@ -3327,10 +3896,7 @@ void CanHalTestMain(void)
     //  while(1)
     {
         WDOG_Refresh(); // 喂狗
-
         CAN0_TxData[0]++;
-
-        // COMMON_Delay_ms(100);    //延时100毫秒
 
         // 发送 CAN 报文的举例
         can0SendRet = CAN_Send(CAN_ID_0, 2, &g_Can0TxRxInfo, 0x389, CAN0_TxData); // 使用邮箱2发送报文
@@ -3346,10 +3912,8 @@ void CanHalTestMain(void)
                                                                                       // 参数：CAN模块序号、邮箱序号、信息类型数组、信息ID、存储数据的数组、本地优先级
         }
 
-        // COMMON_Delay_ms(100);    //延时100毫秒
         can0SendRet = CAN_Send(CAN_ID_0, 3, &g_Can0TxRxInfo, 0x589, CAN0_TxData); // 使用邮箱3发送报文
                                                                                   // 参数：CAN模块序号、邮箱序号、信息类型数组、信息ID、存储数据的数组、本地优先级
-
 #if 0
         if(CAN0_RxIntFlag > 0x00)    //CAN0接收一帧数据完成标志
         {
@@ -3368,6 +3932,18 @@ void CanHalTestMain(void)
     }
 }
 
+/*************************************************
+   Function:        CanHalSetReceiveCanNmFlag
+   Description:     Set CAN Network Management receive flag according to CAN ID
+   Input:           canId - Received CAN message identifier
+   Output:          None
+   Return:          None
+   Others:          If the received CAN ID falls within the NM wake-up ID range,
+                    the global NM receive flag will be set.
+                    Otherwise, the flag will be cleared.
+                    This flag is typically used to indicate reception of
+                    CAN NM wake-up or management frames.
+ *************************************************/
 static void CanHalSetReceiveCanNmFlag(uint32_t canId)
 {
     if((canId >= CAN_NM_WAKEUP_ID_MIN) && (canId <= CAN_NM_WAKEUP_ID_MAX))
@@ -3380,14 +3956,33 @@ static void CanHalSetReceiveCanNmFlag(uint32_t canId)
     }
 }
 
+/*************************************************
+ Function:        CanHalClearReceiveCanNmFlag
+ Description:     Clears the CAN NM (Network Management) receive flag
+ Input:           None
+ Output:          None
+ Return:          None
+ Others:          Resets the global flag g_receiveCanNmFlag to 0, typically used after processing NM messages to avoid repeated handling
+ *************************************************/
 void CanHalClearReceiveCanNmFlag(void)
 {
     g_receiveCanNmFlag = 0U;
 }
 
+/*************************************************
+   Function:        CanHalReceiveCanNmFlagCheck
+   Description:     Check whether CAN NM message has been received
+   Input:           None
+   Output:          None
+   Return:          1 - CAN NM message received
+                    0 - No CAN NM message received
+   Others:          Reads global CAN NM receive flag
+                    Typically used by NM state machine or wake-up logic
+ *************************************************/
 uint8_t CanHalReceiveCanNmFlagCheck(void)
 {
     uint8_t ret = 0U;
+
     if(g_receiveCanNmFlag != 0U)
     {
         ret = 1U;
@@ -3395,6 +3990,16 @@ uint8_t CanHalReceiveCanNmFlagCheck(void)
     return ret;
 }
 
+/*************************************************
+   Function:        CanHandleToChannel
+   Description:     Convert CAN driver handle to CAN channel index
+   Input:           canHandle - CAN driver handle
+   Output:          pOutCh    - Output CAN channel index
+   Return:          1 - Conversion successful
+                    0 - Invalid handle or channel out of range
+   Others:          CAN handle high byte represents channel number
+                    Used for TX/RX path channel resolution
+ *************************************************/
 static uint8_t CanHandleToChannel(int16_t canHandle, uint8_t *pOutCh)
 {
     uint8_t ch;
@@ -3414,6 +4019,16 @@ static uint8_t CanHandleToChannel(int16_t canHandle, uint8_t *pOutCh)
     return 1U;
 }
 
+/*************************************************
+   Function:        CanHalTxCanSendHook
+   Description:     Check whether CAN transmission is allowed for the channel
+   Input:           canChannel - CAN channel index
+   Output:          None
+   Return:          1 - Transmission allowed
+                    0 - Transmission forbidden
+   Others:          Checks TX enable flag, test mode and bus error states
+                    Can be overridden by project-specific logic
+ *************************************************/
 uint8_t CanHalTxCanSendHook(uint8_t canChannel)
 {
     if (g_driverCanManage[canChannel].txMsgEnable <= 0) return 0U;
@@ -3424,7 +4039,15 @@ uint8_t CanHalTxCanSendHook(uint8_t canChannel)
     return 1U;
 }
 
-
+/*************************************************
+   Function:        CanHalTxInit
+   Description:     Initialize CAN transmit buffer pool and queues
+   Input:           None
+   Output:          None
+   Return:          None
+   Others:          Creates TX message queue and free index pool
+                    Ensures one-time initialization
+ *************************************************/
 static void CanHalTxInit(void)
 {
     uint8_t i;
@@ -3446,6 +4069,15 @@ static void CanHalTxInit(void)
     g_allCanTxBuffer.inited = 1U;
 }
 
+/*************************************************
+   Function:        CanHalTxWaitInitDone
+   Description:     Wait for CAN TX task initialization completion
+   Input:           waitTicks - Maximum wait ticks
+   Output:          None
+   Return:          0  - Initialization done
+                    -1 - Timeout or failure
+   Others:          Uses event group synchronization
+ *************************************************/
 static int16_t CanHalTxWaitInitDone(TickType_t waitTicks)
 {
     EventBits_t bits;
@@ -3473,6 +4105,22 @@ static int16_t CanHalTxWaitInitDone(TickType_t waitTicks)
     return 0;
 }
 
+/*************************************************
+   Function:        CanHalTransmitQueued
+   Description:     Enqueue CAN message for transmission (task context)
+   Input:           canHandle - CAN driver handle
+                    canId     - CAN identifier
+                    canData   - CAN payload data
+                    dlc       - Data length
+                    txFlag    - TX attribute flags
+                    prio      - Transmission priority
+   Output:          None
+   Return:          0  - Enqueue successful
+                    <0 - Parameter or initialization error
+                    CAN_ERROR_TX_BUFFER_FULL - Buffer exhausted
+   Others:          Supports priority-based queue insertion
+                    Blocks until TX task initialization completed
+ *************************************************/
 int16_t CanHalTransmitQueued(int16_t canHandle,
                              uint32_t canId,
                              const uint8_t *canData,
@@ -3542,6 +4190,22 @@ int16_t CanHalTransmitQueued(int16_t canHandle,
     return 0;
 }
 
+/*************************************************
+   Function:        CanHalTransmitQueuedFromIsr
+   Description:     Enqueue CAN message for transmission (ISR context)
+   Input:           canHandle  - CAN driver handle
+                    canId      - CAN identifier
+                    canData    - CAN payload data
+                    dlc        - Data length
+                    txFlag     - TX attribute flags
+                    prio       - Transmission priority
+                    pHigherPriorityTaskWoken - Task wake flag
+   Output:          None
+   Return:          0  - Enqueue successful
+                    <0 - Initialization or parameter error
+                    CAN_ERROR_TX_BUFFER_FULL - Buffer exhausted
+   Others:          Non-blocking, ISR-safe implementation
+ *************************************************/
 int16_t CanHalTransmitQueuedFromIsr(int16_t canHandle,
                                    uint32_t canId,
                                    const uint8_t *canData,
@@ -3604,7 +4268,17 @@ int16_t CanHalTransmitQueuedFromIsr(int16_t canHandle,
     return 0;
 }
 
-
+/*************************************************
+ Function:        CanHalSendTask
+ Description:     CAN bus transmit task for handling message sending
+ Input:           pvParameters - FreeRTOS task parameter (not used)
+ Output:          None
+ Return:          None
+ Others:          Uses queue-based message management
+                  Initializes event group and transmit buffer pool
+                  Handles message transmission with retry mechanism
+                  Manages free buffer index recycling
+ *************************************************/
 void CanHalSendTask(void *pvParameters)
 {
     uint16_t    queueData;
@@ -3616,7 +4290,7 @@ void CanHalSendTask(void *pvParameters)
 
     (void)pvParameters;
 
-    /* 1) 事件组 */
+    /* 1) 初始化事件组 */
     if (g_canTxEvt == NULL)
     {
         g_canTxEvt = xEventGroupCreate();
@@ -3629,7 +4303,7 @@ void CanHalSendTask(void *pvParameters)
         }
     }
 
-    /* 2) 你要求：在 while(1) 前初始化队列/空闲池 */
+    /* 2) 初始化队列/空闲池 */
     CanHalTxInit();
 
     /* 3) 通知初始化完成 */
@@ -3655,7 +4329,7 @@ void CanHalSendTask(void *pvParameters)
         /* memcpy 到局部变量（与 RX 同风格，避免槽位被覆盖） */
         (void)memcpy(&txMsg, &g_allCanTxBuffer.msgTxBuffer[msgIndex], sizeof(CanHalMsg_t));
 
-        /* 发送 gating：可由工程覆盖 CanHalTxCanSendHook() */
+        /* 发送条件检测 */
         if (CanHalTxCanSendHook(canChannel) == 0U)
         {
             (void)xQueueSend(g_allCanTxBuffer.freeIdxQueueHandle, &msgIndex, 0U);

@@ -313,12 +313,28 @@ void TaskVehicleDataToCpu( void *pvParameters )
     }  	
 }
 
+/*****************************************************************************
+ * Function:        AcuResetModuleInit
+ * Description:     Initialize ACU reset module resources (CAN and timer handles)
+ * Input:           None
+ * Output:          None
+ * Return:          None
+ * Others:          Opens CAN channel TBOX_CAN_CHANNEL_2 and allocates a timer handle
+ ****************************************************************************/
 static void AcuResetModuleInit(void)
 {
     g_acuResetCanHandle = CanHalOpen(TBOX_CAN_CHANNEL_2);
     g_acuResetTimerHandle = TimerHalOpen();
 }
 
+/*****************************************************************************
+ * Function:        GetAcuStatusSignalValue
+ * Description:     Read ACU status signals from CAN parsing SDK and fill output structure
+ * Input:           stAcuStatusSignalVal - Pointer to ACU status signal value container
+ * Output:          stAcuStatusSignalVal - Updated with ACU_AuthRand/ACU_AuthKey/ACU_TelModuleResetReq
+ * Return:          None
+ * Others:          Internally uses GetCan0SignalConfigure() and CanParseSdkReadSignal()
+ ****************************************************************************/
 static void GetAcuStatusSignalValue(AcuStatusSignalInfo_t *stAcuStatusSignalVal)
 {
     double dataVaule = 0U;    
@@ -339,6 +355,16 @@ static void GetAcuStatusSignalValue(AcuStatusSignalInfo_t *stAcuStatusSignalVal)
 
 }
 
+/*****************************************************************************
+ * Function:        SetTbox10CanSignaToCanFrame
+ * Description:     Pack specified TBOX10 request signal into CAN frame payload buffer
+ * Input:           pMsgData     - Pointer to CAN payload buffer
+ *                  signalId     - Target signal ID to be packed
+ *                  signalValue  - Signal physical value
+ * Output:          pMsgData     - Updated payload buffer with packed signal bits
+ * Return:          None
+ * Others:          Currently supports TEL_RESET_FAIL_REASON and TEL_MODULE_RESET_ST
+ ****************************************************************************/
 static void SetTbox10CanSignaToCanFrame(uint8_t* pMsgData, AcuReqSignal076SignalId_t signalId, double signalValue)
 {
     uint8_t i = 0U;
@@ -379,6 +405,17 @@ static void SetTbox10CanSignaToCanFrame(uint8_t* pMsgData, AcuReqSignal076Signal
     }
 }
 
+/*****************************************************************************
+ * Function:        AcuResetTboxStateMachine
+ * Description:     ACU-triggered TBOX reset state machine
+ * Input:           None
+ * Output:          None
+ * Return:          None
+ * Others:          1) Performs simple auth check based on ACU_AuthRand and ACU_AuthKey
+ *                  2) Blocks reset in transport mode / OTA running / E-Call or B-Call running
+ *                  3) Uses WorkFlash flag E_PARAMETER_INFO_TBOX_RESET_FLAG for reset persistence
+ *                  4) Sends response frame ACU_RESET_TBOX_CAN_ID with TEL reset status and fail reason
+ ****************************************************************************/
 static void AcuResetTboxStateMachine(void)
 {
     static AcuResetTboxState_t acuResetTboxState = ACU_RESET_TBOX_STATE_IDLE;
@@ -554,11 +591,27 @@ static void AcuResetTboxStateMachine(void)
     }
 }
 
+/*****************************************************************************
+ * Function:        SetTelResetFailReason
+ * Description:     Set global TEL reset failure reason
+ * Input:           reason - TEL reset failure reason enum
+ * Output:          None
+ * Return:          None
+ * Others:          Updates g_telResetFailReason
+ ****************************************************************************/
 static void SetTelResetFailReason(TEL_ResetFailReason_t reason)
 {
     g_telResetFailReason = reason;
 }
 
+/*****************************************************************************
+ * Function:        SetTelModuleResetSt
+ * Description:     Set global TEL module reset state
+ * Input:           st - TEL module reset state enum
+ * Output:          None
+ * Return:          None
+ * Others:          Updates g_telModuleResetSt
+ ****************************************************************************/
 static void SetTelModuleResetSt(TEL_ModuleResetState_t st)
 {
     g_telModuleResetSt = st;

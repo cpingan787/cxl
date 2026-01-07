@@ -356,6 +356,9 @@ void RemoteDiagnosticSdkProcess(CanIdConfig_t *pEcuConfigure, MpuBuffer_t *pMpuB
                         (GetTesterPresenceStatus() == 1) && (isNonFactoryMode == 1))
                     {
                         // 插入诊断仪 禁用远程诊断和刷写
+                        LogHalUpLoadLog("GetTesterPresenceStatus%d", GetTesterPresenceStatus());
+                        LogHalUpLoadLog("isNonFactoryMode%d", isNonFactoryMode);
+
                         RemoteDiagnosticSdkSendAck(&rxMsg, DIAG_REJECT_TESTER_PRESENT);
 
                         g_udsFlag = 0;
