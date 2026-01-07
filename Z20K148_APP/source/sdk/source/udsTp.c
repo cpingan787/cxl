@@ -233,7 +233,7 @@ static int16_t UdsTpDataMultFramTransmit(int16_t tpHandle, int16_t canHandle, ui
         }
         ret = CanHalReceive(canHandle, &rxCanMsg, 0);
         memset(rxCanMsg.canData, 0, 8);
-        ret = CanHalTransmit(canHandle, txCanId, txCanData, 8, 1);
+        ret = CanHalTransmitQueued(canHandle, txCanId, txCanData, 8, 1, CAN_TX_PRIO_NORMAL);
         // TBOX_PRINT("can tp wait send %x\r\n",txCanId);
         if (ret != 0)
         {
@@ -296,7 +296,7 @@ int16_t UdsTpTransmitRaw(int16_t udsTpHandle, uint32_t canId, uint8_t *txData, u
 
     int16_t canHandle = g_udsTp[udsTpHandle].canHandle;
 
-    return CanHalTransmit(canHandle, canId, txData, dataLen, 1);
+    return CanHalTransmitQueued(canHandle, canId, txData, dataLen, 1, CAN_TX_PRIO_NORMAL);
 }
 
 /*************************************************
@@ -357,7 +357,7 @@ int16_t UdsTpTransmit(int16_t handle, uint8_t typeFlag, uint8_t *txData, uint16_
         {
             data[i + 1] = fillByte;
         }
-        return CanHalTransmit(canHandle, txCanId, data, 8, 1);
+        return CanHalTransmitQueued(canHandle, txCanId, data, 8, 1, CAN_TX_PRIO_NORMAL);
     }
     // 初始化及组装第一个包
     dlc = 0;
@@ -374,7 +374,7 @@ int16_t UdsTpTransmit(int16_t handle, uint8_t typeFlag, uint8_t *txData, uint16_
         data[i + 2] = txData[i];
     }
     dlc = 8;
-    ret = CanHalTransmit(canHandle, txCanId, data, dlc, 1);
+    ret = CanHalTransmitQueued(canHandle, txCanId, data, dlc, 1, CAN_TX_PRIO_NORMAL);
     if (ret != 0)
     {
         return -1;
@@ -649,7 +649,7 @@ static int16_t UdsTpMultiFrameRxFLowControlTransmit(int16_t canHandle, int16_t u
     canTxMsg.canData[7] = fillByte;
     canTxMsg.canId = g_udsTp[udsTpHandle].physicalRequestId;
 
-    ret = CanHalTransmit(canHandle, canTxMsg.canId, canTxMsg.canData, canTxMsg.dlc, 1);
+    ret = CanHalTransmitQueued(canHandle, canTxMsg.canId, canTxMsg.canData, canTxMsg.dlc, 1, CAN_TX_PRIO_NORMAL);
     if (ret != 0)
     {
         return -1;

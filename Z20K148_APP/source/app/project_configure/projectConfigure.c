@@ -4,8 +4,9 @@
 #define PARTNUMBER 24317098UL
 #define SOFTWARE_NUMBER 24317098UL
 #define MPU_SYSN_VERSION "000000000"
-#define MCU_SYSN_VERSION "008" // mcu内部版本号
+#define MCU_SYSN_VERSION "010" // mcu内部版本号
 #define MCU_MPU_ALL_VERSION MPU_SYSN_VERSION MCU_SYSN_VERSION
+
 // 0xF10B_cxl
 static const uint8_t g_didF10B[4] = {
     0x10,
@@ -13,10 +14,10 @@ static const uint8_t g_didF10B[4] = {
     0x01,
     0x01};
 
-static const uint8_t g_didF17F[17] = "87H6ADE060  H.E00"; // 硬件版本号                                                                                  // 0xF17F_cxl                                                                                //// 0xF17F_cxl                                                                                   // 0xF17F_cxl                                                                                   // 0xF17F_cxl                                                                                     // 0xF17F_cxl
+// static const uint8_t g_didF17F[17] = "87H6ADE060  H.E00"; // 硬件版本号                                                                                  // 0xF17F_cxl                                                                                //// 0xF17F_cxl                                                                                   // 0xF17F_cxl                                                                                   // 0xF17F_cxl                                                                                     // 0xF17F_cxl
 static const uint8_t g_didF180[17] = "000123456789B.100"; // 0xF180_cxl
-static const uint8_t g_didF187[14] = "8550003ADE0600";    // 零件号                                                                                     // 0xF187_cxl
-static const uint8_t g_didF189[17] = "8786ADE060  S.E01"; // 软件版本号                                                                                   // 0xF189_cxl
+static const uint8_t g_didF187[14] = "8550003ADE0500";    // 零件号                                                                                     // 0xF187_cxl
+static const uint8_t g_didF189[17] = "8786ADE050  S.E02"; // 软件版本号                                                                                   // 0xF189_cxl
 // static const uint8_t g_didF18E[14] = "GAVN1234567890";    // 0xF18E_cxl
 static const uint8_t g_didF193[6] = "V1.000";      // 0xF190_cxl
 static const uint8_t g_didF195[6] = "V1.000";      // 0xF195_cxl
@@ -41,6 +42,27 @@ extern const unsigned char g_softwareVersion[];
 static const uint8_t g_internalSoftwareVersion_Main[] = "00";
 static uint8_t g_internalSoftwareVersion_Cpu[5] = "017";
 static const uint8_t g_internalSoftwareVersion_Mcu[] = "016";*/
+
+extern const uint8_t __BOOT_INFO_BASE;
+
+const uint8_t *BootInfo_GetHardwareVersionPtr(void)
+{
+    return (const uint8_t *)(const void *)&__BOOT_INFO_BASE;
+}
+
+int32_t BootInfo_ReadHardwareVersion(uint8_t *buf, uint32_t bufLen)
+{
+    if ((buf == NULL) || (bufLen < BOOT_HW_VERSION_LEN))
+    {
+        return -1;
+    }
+
+    (void)memcpy(buf,
+                 BootInfo_GetHardwareVersionPtr(),
+                 BOOT_HW_VERSION_LEN);
+
+    return 0;
+}
 
 int16_t ProjectConfigGetDiagSoftwareVersion(uint8_t *pVersion, uint32_t *pLength)
 {
@@ -153,11 +175,11 @@ void ProjectConfigGetGacDiagParamVersion_F10B(uint8_t *pData, uint16_t *pLength)
     *pLength = sizeof(g_didF10B);
 }
 
-void ProjectConfigGetGacSparePartNumber_F17F(uint8_t *pData, uint16_t *pLength)
-{
-    memcpy(pData, g_didF17F, sizeof(g_didF17F));
-    *pLength = sizeof(g_didF17F);
-}
+// void ProjectConfigGetGacSparePartNumber_F17F(uint8_t *pData, uint16_t *pLength)
+// {
+//     memcpy(pData, g_didF17F, sizeof(g_didF17F));
+//     *pLength = sizeof(g_didF17F);
+// }
 
 void ProjectConfigGetBootSwPartNumber_F180(uint8_t *pData, uint16_t *pLength)
 {

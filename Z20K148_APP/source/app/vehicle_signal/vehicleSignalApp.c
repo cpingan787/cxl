@@ -4196,6 +4196,19 @@ static const can0_signal_configure_t m_can0SignalConfigure =
                 .useInvalidFlag = 1,
                 .InvalidData = 0xFFFFFFFF,
             }, // The flag that ECU need to be remote diagnosed
+        
+        .GWM_HazardLampSt = 
+            {
+                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_1_T),
+                .dataType = 0,
+                .startBit = 54,
+                .bitLength = 1,
+                .resulotion = 1,
+                .offset = 0,
+                .useInvalidFlag = 1,
+                .InvalidData = 0xFFFFFFFF,
+            },
 
         .NMData =
             {

@@ -83,6 +83,8 @@ typedef struct
     uint8_t PLGM_ModeSW;
     uint8_t PLGM_DoorSt;
     uint8_t PLGM_RemoteControlSt;
+    //GWM
+    uint8_t GWM_HazardLampSt;
 }RemoteControlStatusSignalInfo_t;
 
 typedef enum

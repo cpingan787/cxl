@@ -497,8 +497,8 @@ static void AcuResetTboxStateMachine(void)
             break;
 
         case ACU_RESET_TBOX_STATE_SEND_NORMAL:
-            ret = CanHalTransmit(g_acuResetCanHandle, ACU_RESET_TBOX_CAN_ID, g_acuReqSignal076MsgData, 
-                        sizeof(g_acuReqSignal076MsgData), ACU_RESET_TBOX_CAN_MSG_TYPE);
+            ret = CanHalTransmitQueued(g_acuResetCanHandle, ACU_RESET_TBOX_CAN_ID, g_acuReqSignal076MsgData, 
+                        sizeof(g_acuReqSignal076MsgData), ACU_RESET_TBOX_CAN_MSG_TYPE, CAN_TX_PRIO_NORMAL);
             if(ret != 0U)
             {
                 LogHalUpLoadLog("Tbox Reset nm trans error,ret=%d", ret);
@@ -526,8 +526,8 @@ static void AcuResetTboxStateMachine(void)
             break;
 
         case ACU_RESET_TBOX_STATE_SEND_DEFAULT:
-            ret = CanHalTransmit(g_acuResetCanHandle, ACU_RESET_TBOX_CAN_ID, g_acuReqSignal076MsgData, 
-                        sizeof(g_acuReqSignal076MsgData), ACU_RESET_TBOX_CAN_MSG_TYPE);
+            ret = CanHalTransmitQueued(g_acuResetCanHandle, ACU_RESET_TBOX_CAN_ID, g_acuReqSignal076MsgData, 
+                        sizeof(g_acuReqSignal076MsgData), ACU_RESET_TBOX_CAN_MSG_TYPE, CAN_TX_PRIO_NORMAL);
             if(ret != 0U)
             {
                 LogHalUpLoadLog("Tbox Reset default trans error,ret=%d", ret);

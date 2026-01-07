@@ -834,7 +834,7 @@ static void MsgCycleTimeOutProcess(uint8_t index)
         //7.WUP: fixed to the value 0x4C
         canData[7] = NM_WUP_VALUE;
 
-        ret = CanHalTransmit(g_netManage[index].canHandle, canId, canData, NM_MESSAGE_PDU_LENGTH, NM_TRANS_CANFD_ENABLE);
+        ret = CanHalTransmitQueued(g_netManage[index].canHandle, canId, canData, NM_MESSAGE_PDU_LENGTH, NM_TRANS_CANFD_ENABLE ,CAN_TX_PRIO_HIGH);
         if(ret == 0)
         {
             g_netManage[index].busOffTimeCount = 0;
@@ -1265,7 +1265,7 @@ static void BusOffErrorResetCanNMTransmit(uint8_t index)
         //7.WUP: fixed to the value 0x4C
         canData[7] = NM_WUP_VALUE;
 
-        ret = CanHalTransmit(g_netManage[index].canHandle, canId, canData, NM_MESSAGE_PDU_LENGTH, NM_TRANS_CANFD_ENABLE);
+        ret = CanHalTransmitQueued(g_netManage[index].canHandle, canId, canData, NM_MESSAGE_PDU_LENGTH, NM_TRANS_CANFD_ENABLE,CAN_TX_PRIO_NORMAL,CAN_TX_PRIO_HIGH);
         if(ret == 0)
         {
             g_netManage[index].busOffTimeCount = 0;

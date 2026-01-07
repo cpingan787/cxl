@@ -51,6 +51,7 @@
 #define MPU_UART_TASK_PRIORITY                          (tskIDLE_PRIORITY+7)
 #define TASK_TEST_STATIC_SIZE                           (256*1) 
 #define TASK_MPU_HAL_TX_STATIC_SIZE                     (configMINIMAL_STACK_SIZE*3)
+#define TASK_CAN_HAL_TX_STATIC_SIZE                     (configMINIMAL_STACK_SIZE*3)
 #define TASK_CAN_HAL_RX_STATIC_SIZE                     (configMINIMAL_STACK_SIZE*3)
 #define TASK_POWER_MANAGE_STATIC_SIZE					(configMINIMAL_STACK_SIZE*2)
 #define TASK_NET_MANAGE_STATIC_SIZE                     (configMINIMAL_STACK_SIZE*2)
@@ -61,7 +62,7 @@
 #define TASK_CAN_DATA_TO_CPU_STATIC_SIZE                (configMINIMAL_STACK_SIZE*6)
 #define TASK_TEST_PRESENT_STATIC_SIZE	                (configMINIMAL_STACK_SIZE*2)
 #define TASK_REMOTE_DIAGNOSTIC_STATIC_SIZE              (configMINIMAL_STACK_SIZE*2)
-#define TASK_REMOTE_CONTROL_STATIC_SIZE                 (configMINIMAL_STACK_SIZE*12)
+#define TASK_REMOTE_CONTROL_STATIC_SIZE                 (configMINIMAL_STACK_SIZE*8)
 #define TASK_CAN_PERIOD_STATIC_SIZE   	                (configMINIMAL_STACK_SIZE*3)
 #define TASK_MONITOR_STATIC_SIZE					    (configMINIMAL_STACK_SIZE)
 
@@ -116,6 +117,9 @@ StackType_t m_mpuHalSpiTxTaskStack[TASK_MPU_HAL_TX_STATIC_SIZE];
 
 StaticTask_t m_canHalRxTaskBuffer;
 StackType_t m_canHalRxTaskStack[TASK_CAN_HAL_RX_STATIC_SIZE];
+
+StaticTask_t m_canHalTxTaskBuffer;
+StackType_t m_canHalTxTaskStack[TASK_CAN_HAL_TX_STATIC_SIZE];
 
 StaticTask_t m_powerManageTaskBuffer;
 StackType_t m_powerManageTaskStack[TASK_POWER_MANAGE_STATIC_SIZE];
@@ -549,6 +553,7 @@ static void CreateDriverTasks(void)
     xTaskCreateStatic( MpuHalUartTxTask, "mpu_tx_t", TASK_MPU_HAL_TX_STATIC_SIZE, NULL, MPU_UART_TASK_PRIORITY, m_mpuHalUartTxTaskStack,&m_mpuHalUartTxTaskBuffer);
     xTaskCreateStatic( MpuHalSpiTxTask, "mpu_spi_tx_t", TASK_MPU_HAL_TX_STATIC_SIZE, NULL, DRIVER_TASK_PRIORITY, m_mpuHalSpiTxTaskStack,&m_mpuHalSpiTxTaskBuffer);
     xTaskCreateStatic( CanHalReceiveTask, "can_rx_t", TASK_CAN_HAL_RX_STATIC_SIZE, NULL, DRIVER_TASK_PRIORITY, m_canHalRxTaskStack,&m_canHalRxTaskBuffer); 
+    xTaskCreateStatic( CanHalSendTask, "can_tx_t",TASK_CAN_HAL_TX_STATIC_SIZE, NULL,DRIVER_TASK_PRIORITY, m_canHalTxTaskStack, &m_canHalTxTaskBuffer);
 }
 
 /*************************************************

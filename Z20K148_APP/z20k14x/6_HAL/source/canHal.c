@@ -21,19 +21,23 @@
 #include "logHal.h"
 #include <string.h>
 #include "int_drv.h"
-
+#include "event_groups.h"
 /****************************** Macro Definitions ******************************/
 #define CAN_DRIVER_HAL_HANDLE_INSTANSE_MAX  (10) //(sizeof(CanDriverBufferList)/sizeof(P_CanBufferHal_t))//
 #define CAN_CHANNEL_NUMBER_MAX              (2)
 #define ALL_CAN_RX_BUFFER_SIZE              (64)
+#define ALL_CAN_TX_BUFFER_SIZE              (64U)
 #define CAN_SEND_MAIL_MAX_NUMBER            (5)
 #define CAN_TX_BUFFER_SIZE                  (32)
 #define CANFD_ENABLE_CONFIG                 (0)
-
+#define CAN_TX_EVT_INIT_DONE                (1U << 0)
 #define CAN0RW                              ((can_reg_w_t *)CAN0_BASE_ADDR) // 定义CAN0模块的寄存器
 #define CAN1RW                              ((can_reg_w_t *)CAN1_BASE_ADDR) // 定义CAN1模块的寄存器
 #define CAN_NM_WAKEUP_ID_MIN                (0x500)
 #define CAN_NM_WAKEUP_ID_MAX                (0x5FF)
+#define CAN_TX_ENQUEUE_TIMEOUT_MS           (5U)
+#define CAN_TX_BUSY_MAX_RETRY               (2U)
+#define CAN_TX_BUSY_RETRY_DELAY_MS          (2U)
 /****************************** Type Definitions ******************************/
 typedef enum
 {
@@ -108,6 +112,18 @@ typedef struct
     stc_canfd_msg_t canMsg[CAN_TX_BUFFER_SIZE];
 } can_tx_msg_buffer_t;
 
+typedef struct
+{
+    CanHalMsg_t   msgTxBuffer[ALL_CAN_TX_BUFFER_SIZE];
+
+    /* queue item: uint16_t = (ch<<8)|idx */
+    QueueHandle_t txQueueHandle;
+
+    /* free idx pool: queue item uint8_t */
+    QueueHandle_t freeIdxQueueHandle;
+
+    uint8_t       inited;
+} CanHalTxBuffer_t;
 /****************************** Global Variables ******************************/
 CanManage_t g_driverCanManage[CAN_CHANNEL_NUMBER_MAX];
 static uint8_t g_canWakeUpFlag[CAN_CHANNEL_NUMBER_MAX];
@@ -356,6 +372,8 @@ static const unsigned int CAN2_MB_IDConfig[32][2] =
         {0x000, 0x7FF}, // MB13用于接收 ID 为 0 的信息帧
 };
 
+static EventGroupHandle_t g_canTxEvt = NULL;
+static CanHalTxBuffer_t g_allCanTxBuffer;
 /****************************** Function Declarations *************************/
 void CanRxInterruptProcessMsg(uint8_t canChannel, stc_canfd_msg_t *pstcCanFDmsg, uint8_t txState);
 void CAN0_BUS_OFF_ISR(void); // 声明BUS_OFF中断处理函数
@@ -391,6 +409,9 @@ void CAN2_CAN_MEM_ERR_ISR(void);       // 声明被CAN模块发现的不可矫�
 void CAN2_COR_MEM_ERR_ISR(void);       // 声明可矫正错误中断处理函数
 void CAN2_MB0TO15_ISR(uint32_t mbIdx); // 声明邮箱0-15的中断处理函数
 static void CanHalSetReceiveCanNmFlag(uint32_t canId);
+static uint8_t CanHandleToChannel(int16_t canHandle, uint8_t *pOutCh);
+static void CanHalTxInit(void);
+static int16_t CanHalTxWaitInitDone(TickType_t waitTicks);
 /****************************** Public Function Implementations ***************/
 /*****************************************************************************
  * 函数:CAN0_Init
@@ -2127,89 +2148,74 @@ static void FillCanDriverMSgData(cy_stc_canfd_msg_t* pMsg,uint8_t u8Len, const u
     Return:          0 on success, negative error code on failure
     Others:          Uses independent mail counter for each channel
   *************************************************/
-static int16_t CanTransmit(uint8_t u8Channel, uint32_t id, uint8_t u8Len, const uint8_t *pu8CmdData, uint8_t fdFlag)
+static int16_t CanTransmit(uint8_t u8Channel, uint32_t id, uint8_t u8Len,
+                           const uint8_t *pu8CmdData, uint8_t fdFlag)
 {
     CAN_Id_t pstCanType;
     CAN_MessageInfo_t *pCAN_MessageInfo = NULL;
+    CAN_MessageInfo_t txInfoLocal;
     ResultStatus_t canSendRet;
-    static uint8_t u8MailNum[CAN_CHANNEL_NUMBER_MAX] = {0}; // Use independent mail counter for each channel
-    int16_t ret = 0;
+    static uint8_t u8MailNum[CAN_CHANNEL_NUMBER_MAX] = {0};
+    int16_t ret = -1;
 
-    if (pu8CmdData == NULL || u8Channel >= CAN_CHANNEL_NUMBER_MAX)
+    if ((pu8CmdData == NULL) || (u8Channel >= CAN_CHANNEL_NUMBER_MAX))
     {
-        ret = -1;
+        return -1;
     }
-    else
+
+    switch (u8Channel)
     {
-        switch (u8Channel)
-        {
-        case 0:
-            pstCanType = CAN_ID_0;
-            pCAN_MessageInfo = &g_Can0TxRxInfo;
-            break;
-        case 1:
-            pstCanType = CAN_ID_1;
-            pCAN_MessageInfo = &g_Can1TxRxInfo;
-            break;
-        default:
-            break;
-        }
-
-        if (pCAN_MessageInfo == NULL)
-        {
-            ret = -2;
-        }
-        else
-        {
-            // Configure CAN FD parameters - Disable interrupts only when necessary
-            COMMON_DISABLE_INTERRUPTS();
-            if (fdFlag & 0x01)
-            {
-                pCAN_MessageInfo->fdEn = ENABLE;
-            }
-            else
-            {
-                pCAN_MessageInfo->fdEn = DISABLE;
-            }
-
-            if (fdFlag & (0x01 << 1))
-            {
-                pCAN_MessageInfo->brsEn = ENABLE;
-            }
-            else
-            {
-                pCAN_MessageInfo->brsEn = DISABLE;
-            }
-            pCAN_MessageInfo->idType = CAN_MSG_ID_STD;
-            pCAN_MessageInfo->dataLen = u8Len;
-
-            // Use static mail counter, manage each channel independently
-            canSendRet = CAN_Send(pstCanType, u8MailNum[u8Channel], pCAN_MessageInfo, id, pu8CmdData);
-            COMMON_ENABLE_INTERRUPTS();
-            // Cyclically update mail counter
-            if (++u8MailNum[u8Channel] >= CAN_SEND_MAIL_MAX_NUMBER)
-            {
-                u8MailNum[u8Channel] = 0;
-            }
-
-            if (canSendRet == SUCC)
-            {
-                taskENTER_CRITICAL();
-                g_driverCanManage[u8Channel].txTimeOutCount = 0;
-                taskEXIT_CRITICAL();
-                ret = 0;
-            }
-            if(canSendRet == BUSY)
-            {
-                //ret = CAN_ERROR_TX_BUFFER_FULL;
-            }
-            else if (canSendRet == ERR)
-            {
-                TBOX_PRINT("Can%d send error, driver layer error code:%d\r\n", u8Channel, canSendRet);
-                ret = canSendRet;
-            }
-        }
+    case 0:
+        pstCanType = CAN_ID_0;
+        pCAN_MessageInfo = &g_Can0TxRxInfo;
+        break;
+    case 1:
+        pstCanType = CAN_ID_1;
+        pCAN_MessageInfo = &g_Can1TxRxInfo;
+        break;
+    default:
+        return -1;
     }
+
+    if (pCAN_MessageInfo == NULL)
+    {
+        return -2;
+    }
+
+    txInfoLocal = *pCAN_MessageInfo;
+    txInfoLocal.fdEn    = (fdFlag & 0x01U) ? ENABLE : DISABLE;
+    txInfoLocal.brsEn   = (fdFlag & 0x02U) ? ENABLE : DISABLE;
+    txInfoLocal.idType  = CAN_MSG_ID_STD;
+    txInfoLocal.dataLen = u8Len;
+
+    COMMON_DISABLE_INTERRUPTS();
+    canSendRet = CAN_Send(pstCanType, u8MailNum[u8Channel], &txInfoLocal, id, pu8CmdData);
+    COMMON_ENABLE_INTERRUPTS();
+
+    if (canSendRet == SUCC)
+    {
+        /* 仅成功才推进 mailbox 索引 */
+        if (++u8MailNum[u8Channel] >= CAN_SEND_MAIL_MAX_NUMBER)
+        {
+            u8MailNum[u8Channel] = 0;
+        }
+
+        taskENTER_CRITICAL();
+        g_driverCanManage[u8Channel].txTimeOutCount = 0;
+        taskEXIT_CRITICAL();
+
+        ret = 0;
+    }
+    else if (canSendRet == BUSY)
+    {
+        ret = CAN_ERROR_TX_BUFFER_FULL;             
+    }
+    else 
+    {
+        TBOX_PRINT("Can%d send error, driver layer error code:%d\r\n", u8Channel, canSendRet);
+        ret = (int16_t)ERR;
+    }
+
     return ret;
 }
 
@@ -3385,4 +3391,303 @@ uint8_t CanHalReceiveCanNmFlagCheck(void)
         ret = 1U;
     }
     return ret;
+}
+
+static uint8_t CanHandleToChannel(int16_t canHandle, uint8_t *pOutCh)
+{
+    uint8_t ch;
+
+    if (canHandle < 0)
+    {
+        return 0U;
+    }
+
+    ch = (uint8_t)(((uint16_t)canHandle) >> 8);
+    if (ch >= (uint8_t)CAN_CHANNEL_NUMBER_MAX)
+    {
+        return 0U;
+    }
+
+    *pOutCh = ch;
+    return 1U;
+}
+
+uint8_t CanHalTxCanSendHook(uint8_t canChannel)
+{
+    if (g_driverCanManage[canChannel].txMsgEnable <= 0) return 0U;
+    if (g_canTestModeFlag[canChannel] != 0U) return 0U;
+    if ((g_driverCanManage[canChannel].busNoAckErrorState != 0U) ||
+        (g_driverCanManage[canChannel].busErrorAppDiableFlag != 0U) ||
+        (g_driverCanManage[canChannel].BusErrorState != 0U)) return 0U;
+    return 1U;
+}
+
+
+static void CanHalTxInit(void)
+{
+    uint8_t i;
+
+    if (g_allCanTxBuffer.inited != 0U)
+    {
+        return;
+    }
+
+    g_allCanTxBuffer.txQueueHandle = xQueueCreate(ALL_CAN_TX_BUFFER_SIZE, sizeof(uint16_t));
+    g_allCanTxBuffer.freeIdxQueueHandle = xQueueCreate(ALL_CAN_TX_BUFFER_SIZE, sizeof(uint8_t));
+
+    /* 填充 free idx 池 */
+    for (i = 0U; i < (uint8_t)ALL_CAN_TX_BUFFER_SIZE; i++)
+    {
+        (void)xQueueSend(g_allCanTxBuffer.freeIdxQueueHandle, &i, 0U);
+    }
+
+    g_allCanTxBuffer.inited = 1U;
+}
+
+static int16_t CanHalTxWaitInitDone(TickType_t waitTicks)
+{
+    EventBits_t bits;
+
+    if (g_canTxEvt == NULL)
+    {
+        g_canTxEvt = xEventGroupCreate();
+        if (g_canTxEvt == NULL)
+        {
+            return -1;
+        }
+    }
+
+    bits = xEventGroupWaitBits(g_canTxEvt,
+                              CAN_TX_EVT_INIT_DONE,
+                              pdFALSE,
+                              pdTRUE,
+                              waitTicks);
+
+    if ((bits & CAN_TX_EVT_INIT_DONE) == 0U)
+    {
+        return -1;
+    }
+
+    return 0;
+}
+
+int16_t CanHalTransmitQueued(int16_t canHandle,
+                             uint32_t canId,
+                             const uint8_t *canData,
+                             uint8_t dlc,
+                             uint8_t txFlag,
+                             CanTxPrio_e prio)
+{
+    uint8_t  ch;
+    uint8_t  idx;
+    uint16_t queueData;
+    BaseType_t qret;
+
+    if ((canData == NULL) || (dlc > 64U))
+    {
+        return -1;
+    }
+
+    if (CanHandleToChannel(canHandle, &ch) == 0U)
+    {
+        return -1;
+    }
+
+    if (CanHalTxWaitInitDone(pdMS_TO_TICKS(CAN_TX_ENQUEUE_TIMEOUT_MS)) != 0)
+    {
+        return -1;
+    }
+
+    if ((g_allCanTxBuffer.txQueueHandle == NULL) || (g_allCanTxBuffer.freeIdxQueueHandle == NULL))
+    {
+        return -1;
+    }
+
+    if (xQueueReceive(g_allCanTxBuffer.freeIdxQueueHandle,
+                      &idx,
+                      pdMS_TO_TICKS(CAN_TX_ENQUEUE_TIMEOUT_MS)) != pdPASS)
+    {
+        return CAN_ERROR_TX_BUFFER_FULL;
+    }
+
+    g_allCanTxBuffer.msgTxBuffer[idx].canId  = canId;
+    g_allCanTxBuffer.msgTxBuffer[idx].dlc    = dlc;
+    g_allCanTxBuffer.msgTxBuffer[idx].txFlag = txFlag;
+    (void)memset(g_allCanTxBuffer.msgTxBuffer[idx].canData, 0, sizeof(g_allCanTxBuffer.msgTxBuffer[idx].canData));
+    (void)memcpy(g_allCanTxBuffer.msgTxBuffer[idx].canData, canData, dlc);
+
+    queueData = (uint16_t)(((uint16_t)ch << 8) | (uint16_t)idx);
+
+    if (prio == CAN_TX_PRIO_HIGH)
+    {
+        qret = xQueueSendToFront(g_allCanTxBuffer.txQueueHandle,
+                                 &queueData,
+                                 pdMS_TO_TICKS(CAN_TX_ENQUEUE_TIMEOUT_MS));
+    }
+    else
+    {
+        qret = xQueueSendToBack(g_allCanTxBuffer.txQueueHandle,
+                                &queueData,
+                                pdMS_TO_TICKS(CAN_TX_ENQUEUE_TIMEOUT_MS));
+    }
+
+    if (qret != pdPASS)
+    {
+        (void)xQueueSend(g_allCanTxBuffer.freeIdxQueueHandle, &idx, 0U);
+        return CAN_ERROR_TX_BUFFER_FULL;
+    }
+
+    return 0;
+}
+
+int16_t CanHalTransmitQueuedFromIsr(int16_t canHandle,
+                                   uint32_t canId,
+                                   const uint8_t *canData,
+                                   uint8_t dlc,
+                                   uint8_t txFlag,
+                                   CanTxPrio_e prio,
+                                   BaseType_t *pHigherPriorityTaskWoken)
+{
+    uint8_t  ch;
+    uint8_t  idx;
+    uint16_t queueData;
+    BaseType_t qret;
+
+    if ((canData == NULL) || (dlc > 64U))
+    {
+        return -1;
+    }
+
+    if (CanHandleToChannel(canHandle, &ch) == 0U)
+    {
+        return -1;
+    }
+
+    /* ISR：不阻塞等待 INIT_DONE */
+    if ((g_canTxEvt == NULL) ||
+        ((xEventGroupGetBitsFromISR(g_canTxEvt) & CAN_TX_EVT_INIT_DONE) == 0U) ||
+        (g_allCanTxBuffer.txQueueHandle == NULL) ||
+        (g_allCanTxBuffer.freeIdxQueueHandle == NULL))
+    {
+        return -1;
+    }
+
+    if (xQueueReceiveFromISR(g_allCanTxBuffer.freeIdxQueueHandle, &idx, pHigherPriorityTaskWoken) != pdPASS)
+    {
+        return CAN_ERROR_TX_BUFFER_FULL;
+    }
+
+    g_allCanTxBuffer.msgTxBuffer[idx].canId  = canId;
+    g_allCanTxBuffer.msgTxBuffer[idx].dlc    = dlc;
+    g_allCanTxBuffer.msgTxBuffer[idx].txFlag = txFlag;
+    (void)memcpy(g_allCanTxBuffer.msgTxBuffer[idx].canData, canData, dlc);
+
+    queueData = (uint16_t)(((uint16_t)ch << 8) | (uint16_t)idx);
+
+    if (prio == CAN_TX_PRIO_HIGH)
+    {
+        qret = xQueueSendToFrontFromISR(g_allCanTxBuffer.txQueueHandle, &queueData, pHigherPriorityTaskWoken);
+    }
+    else
+    {
+        qret = xQueueSendToBackFromISR(g_allCanTxBuffer.txQueueHandle, &queueData, pHigherPriorityTaskWoken);
+    }
+
+    if (qret != pdPASS)
+    {
+        (void)xQueueSendToBackFromISR(g_allCanTxBuffer.freeIdxQueueHandle, &idx, pHigherPriorityTaskWoken);
+        return CAN_ERROR_TX_BUFFER_FULL;
+    }
+
+    return 0;
+}
+
+
+void CanHalSendTask(void *pvParameters)
+{
+    uint16_t    queueData;
+    uint8_t     canChannel;
+    uint8_t     msgIndex;
+    CanHalMsg_t txMsg;
+    int16_t     ret;
+    uint32_t    retry;
+
+    (void)pvParameters;
+
+    /* 1) 事件组 */
+    if (g_canTxEvt == NULL)
+    {
+        g_canTxEvt = xEventGroupCreate();
+        if (g_canTxEvt == NULL)
+        {
+            for (;;)
+            {
+                vTaskDelay(pdMS_TO_TICKS(1000U));
+            }
+        }
+    }
+
+    /* 2) 你要求：在 while(1) 前初始化队列/空闲池 */
+    CanHalTxInit();
+
+    /* 3) 通知初始化完成 */
+    (void)xEventGroupSetBits(g_canTxEvt, CAN_TX_EVT_INIT_DONE);
+
+    while (1)
+    {
+        if (xQueueReceive(g_allCanTxBuffer.txQueueHandle, &queueData, portMAX_DELAY) != pdPASS)
+        {
+            continue;
+        }
+
+        canChannel = (uint8_t)(queueData >> 8);
+        msgIndex   = (uint8_t)(queueData & 0xFFU);
+
+        if ((canChannel >= CAN_CHANNEL_NUMBER_MAX) || (msgIndex >= ALL_CAN_TX_BUFFER_SIZE))
+        {
+            /* 归还 idx，避免泄露 */
+            (void)xQueueSend(g_allCanTxBuffer.freeIdxQueueHandle, &msgIndex, 0U);
+            continue;
+        }
+
+        /* memcpy 到局部变量（与 RX 同风格，避免槽位被覆盖） */
+        (void)memcpy(&txMsg, &g_allCanTxBuffer.msgTxBuffer[msgIndex], sizeof(CanHalMsg_t));
+
+        /* 发送 gating：可由工程覆盖 CanHalTxCanSendHook() */
+        if (CanHalTxCanSendHook(canChannel) == 0U)
+        {
+            (void)xQueueSend(g_allCanTxBuffer.freeIdxQueueHandle, &msgIndex, 0U);
+            continue;
+        }
+
+        /* BUSY(-6) 重试发送 */
+        retry = 0U;
+        for (;;)
+        {
+            ret = CanTransmit(canChannel, txMsg.canId, txMsg.dlc, txMsg.canData, txMsg.txFlag);
+
+            if (ret == 0)
+            {
+                break;
+            }
+            else if (ret == (int16_t)CAN_ERROR_TX_BUFFER_FULL)
+            {
+                retry++;
+                if (retry >= (uint32_t)CAN_TX_BUSY_MAX_RETRY)
+                {
+                    /* 超限丢弃 */
+                    break;
+                }
+                vTaskDelay(pdMS_TO_TICKS(CAN_TX_BUSY_RETRY_DELAY_MS));
+            }
+            else
+            {
+                /* 其他错误：丢弃 */
+                break;
+            }
+        }
+
+        /* 归还槽位 idx（关键：否则很快耗尽导致“队列满/丢帧”） */
+        (void)xQueueSend(g_allCanTxBuffer.freeIdxQueueHandle, &msgIndex, 0U);
+    }
 }

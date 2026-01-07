@@ -7,6 +7,7 @@
 #include "projectConfigure.h"
 #include "parameterStoreManageApp.h"
 #include "mcuMpuSyncTask.h"
+#include "projectConfigure.h"
 #define PARAM_SYNC_SUNBCOMMAND_GET_REQ 0x01     // 参数请求sunbcommand
 #define PARAM_SYNC_SUNBCOMAND_GET_RES 0x02      // 参数请求响应sunbcommand
 #define PARAM_SYNC_SUNBCOMMAND_SET_REQ 0x03     // 参数设置请求sunbcommand
@@ -259,7 +260,16 @@ static int16_t ParameterSyncResponseGetParamPackage(MpuHalDataPack_t *recvDataPa
         switch (current_param_id)
         {
         case E_ParamId_HW_Version: // F17F_cxl
-            ProjectConfigGetGacSparePartNumber_F17F(pWrite + 2, &paramLenth);
+            {
+                if (BootInfo_ReadHardwareVersion(pWrite + 2, BOOT_HW_VERSION_LEN) == 0)
+                {
+                    paramLenth = BOOT_HW_VERSION_LEN;
+                }
+                else
+                {
+                    paramLenth = 0; 
+                }
+            }
             break;
 
         case E_ParamId_CustomSW_Version: // F189_cxl

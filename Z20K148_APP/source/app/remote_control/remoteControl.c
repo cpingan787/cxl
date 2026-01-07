@@ -41,6 +41,7 @@
 #define REMOTE_CONTROL_SEND_CAN_SIZE                (8U)
 #define REMOTE_CONTROL_DATA_UART_RECEIVE_BUF_SIZE   (200U)
 #define REMOTE_CONTROL_UART_SEND_BUF_SIZE           (64U)
+#define REMOTE_CONTROL_PRE_CHECK_CNT                (20U)
 
 #define REMOTE_CONTROL_AID                          (0x02U)
 #define REMOTE_CONTROL_MID                          (0x03U)
@@ -113,6 +114,7 @@ typedef enum
     REMOTE_CONTROL_PLGM_CLOSE_WAIT_TIME = 199U,
     REMOTE_CONTROL_CHECK_EXCUTE_TIME    = 15999U,
     REMOTE_CONTROL_SLEEP_FORBID_TIME    = 30000U,
+    REMOTE_CONTROL_PRE_CHECK_TIME       = 999U,
 }RemoteControlTimeout_t;
 typedef enum
 {
@@ -203,6 +205,7 @@ static RemoteControlProcessResult_t CheckBcmCommandResult(void);
 static RemoteControlProcessResult_t CheckPlgmCommandResult(void);
 static RemoteControlProcessResult_t RemoteControlCheckResCanSignal(void);
 static RemoteControlProcessResult_t RemoteControlCheckAcTempAutoSetFun(void);
+static RemoteControlProcessResult_t RemoteControlCheckHazardLampOffFun(void);
 static void RemoteControlCertificationProcess(void);
 static void RemoteControlHandleSignalProcess(void);
 static void RemoteControlSendResultProcess(void);
@@ -233,7 +236,8 @@ static RemoteControlStatusSignalInfo_t g_remoteControlSignalInfo;
 static int16_t g_remoteControlAuthTimerHandle = -1;
 static int16_t g_remoteControlTransTimerHandle = -1;
 static int16_t g_remoteControlSleepForrbidHandle = -1;
-static int16_t  g_remoteControlUartHandle = -1;
+static int16_t g_remoteControlPreCheckTimerHandle = -1;
+static int16_t g_remoteControlUartHandle = -1;
 static uint8_t g_remoteControlDataRcevBuf[REMOTE_CONTROL_DATA_UART_RECEIVE_BUF_SIZE] = {0};
 static uint8_t g_remoteControlDataBuffer[REMOTE_CONTROL_DATA_UART_RECEIVE_BUF_SIZE] = {0};
 static uint8_t g_remoteControlSendBuffer[REMOTE_CONTROL_UART_SEND_BUF_SIZE] = {0};
@@ -294,7 +298,7 @@ static RemoteControlTotalTable_t g_remoteControlLocalMap[REMOTE_CONTROL_ECU_MAX_
             {CMD_TRUNK_AJAR_E,          RemoteControlCheckTrunkAjarFun          ,RemoteControlBcmCertification},
             {CMD_WIN_VENTILATE_SET_E,   RemoteControlCheckWinVentilateSetFun    ,RemoteControlBcmCertification},
             {CMD_MID_CTRL_FBD_LOCK_E,   RemoteControlCheckMidCtrlFbdLockFun     ,RemoteControlBcmCertification},
-            //{CMD_HAZARD_LAMP_OFF_E,     RemoteControlCheckParkLampSetFun        ,RemoteControlBcmCertification},
+            {CMD_HAZARD_LAMP_OFF_E,     RemoteControlCheckHazardLampOffFun      ,RemoteControlBcmCertification},
         },
         REMOTE_CONTROL_BCM_CMD_NUM,
     },
@@ -345,6 +349,7 @@ void TaskAppVehicleRemoteControl( void *pvParameters )
     g_remoteControlAuthTimerHandle = TimerHalOpen();
     g_remoteControlTransTimerHandle = TimerHalOpen();
     g_remoteControlSleepForrbidHandle = TimerHalOpen();
+    g_remoteControlPreCheckTimerHandle = TimerHalOpen();
     filter.aid = 0x02;
     filter.midMin = 0x03;
     filter.midMax = 0x03;
@@ -565,6 +570,7 @@ static void RemoteControlStartStateMachine(void)
         AutosarNmSdkSetSubNetWakeupRequest(0x7F);
         RemoteControlSetTotalState(RemoteControlStatePreCheck);
         TimerHalStartTime(g_remoteControlSleepForrbidHandle, REMOTE_CONTROL_SLEEP_FORBID_TIME);
+        TimerHalStartTime(g_remoteControlPreCheckTimerHandle, REMOTE_CONTROL_PRE_CHECK_TIME);
     }
     else
     {
@@ -585,22 +591,24 @@ static void RemoteControlStartStateMachine(void)
 *******************************************************************************/
 static void RemoteControlPreCheckProcess(void)
 {
+    static uint8_t checkCounter = REMOTE_CONTROL_PRE_CHECK_CNT;
     RemoteControlProcessResult_t result = RemoteControlResult_Success_e;
     const RemoteControlEntry_t* entry = RemoteControlFindCmdEntry(g_remoteControlEcuId, g_remoteControlCmdId);
 
     LogHalUpLoadLog("RC start check");
     if (entry == NULL)
     {
-        TBOX_PRINT("Error: No entry found for ECU %d CMD %d\n", g_remoteControlEcuId, g_remoteControlCmdId);
+        LogHalUpLoadLog("Error: No entry found for ECU %d CMD %d\n", g_remoteControlEcuId, g_remoteControlCmdId);
         result = RemoteControlResult_Fail_e;
         g_remoteControlErrorCode = (uint16_t)REMOTE_CONTROL_ERR_CODE_INVALID_CMD;
     }
     else if (entry->checkFunc != NULL)
     {
-        result = entry->checkFunc();
-        if (result != RemoteControlResult_Success_e)
+        checkCounter++;
+        if(checkCounter >= REMOTE_CONTROL_PRE_CHECK_CNT)
         {
-            TBOX_PRINT("Check failed for ECU %d CMD %d\n", g_remoteControlEcuId, g_remoteControlCmdId);
+            result = entry->checkFunc();
+            checkCounter = 0U;
         }
     }
     
@@ -668,8 +676,10 @@ static void RemoteControlPreCheckProcess(void)
             }
         }
     }
-    else
+    else if(TimerHalIsTimeout(g_remoteControlPreCheckTimerHandle) == 0)
     {
+        TimerHalStopTime(g_remoteControlPreCheckTimerHandle);
+        LogHalUpLoadLog("Check failed for ECU %d CMD %d\n", g_remoteControlEcuId, g_remoteControlCmdId);
         RemoteControlSetTotalState(RemoteControlStateSendResult);
     }
 }
@@ -831,8 +841,8 @@ static void RemoteControlHandleSignalProcess(void)
             
         case PROCESS_SIGNAL_STATE_NORMAL_TRANS:
         {
-            ret = CanHalTransmit(g_remoteControlCan1Handle, s_canId, g_remoteControlCanBuf, 
-                        sizeof(g_remoteControlCanBuf), REMOTE_CONTROL_CAN_FD_USE);
+            ret = CanHalTransmitQueued(g_remoteControlCan1Handle, s_canId, g_remoteControlCanBuf, 
+                        sizeof(g_remoteControlCanBuf), REMOTE_CONTROL_CAN_FD_USE, CAN_TX_PRIO_HIGH);
             if(ret != 0U)
             {
                 LogHalUpLoadLog("RC nm trans error,ret=%d\n", ret);
@@ -912,8 +922,8 @@ static void RemoteControlHandleSignalProcess(void)
             
         case PROCESS_SIGNAL_STATE_SPECIAL_TRANS:
         {
-            ret = CanHalTransmit(g_remoteControlCan1Handle, s_canId, g_remoteControlCanBuf, 
-                          sizeof(g_remoteControlCanBuf), REMOTE_CONTROL_CAN_FD_USE);
+            ret = CanHalTransmitQueued(g_remoteControlCan1Handle, s_canId, g_remoteControlCanBuf, 
+                          sizeof(g_remoteControlCanBuf), REMOTE_CONTROL_CAN_FD_USE, CAN_TX_PRIO_HIGH);
             if(ret != 0U)
             {
                 LogHalUpLoadLog("RC spc trans error,ret=%d\n", ret);
@@ -2400,6 +2410,37 @@ static RemoteControlProcessResult_t RemoteControlCheckHazardLampSetFun(void)
 }
 
 /*************************************************
+ Function:        RemoteControlCheckHazardLampOffFun
+ Description:     Check conditions for hazard lamp control commands
+ Input:           None
+ Output:          None
+ Return:          RemoteControlProcessResult_t - Success or Failure
+ Others:          Validates command value (1)
+                 Performs level 1 pre-check
+                 Sets appropriate error codes on failure
+*************************************************/
+static RemoteControlProcessResult_t RemoteControlCheckHazardLampOffFun(void)
+{
+    RemoteControlProcessResult_t ret = RemoteControlResult_Fail_e;
+    
+    if(g_remoteControlParamValue == 1)
+    {
+        // Perform level 1 pre-check
+        ret = RemoteControlPreCheckLv1Fun();
+        if(ret != RemoteControlResult_Success_e)
+        {
+            g_remoteControlErrorCode = REMOTE_CONTROL_ERR_CODE_INVALID_CONDITION;
+        }
+    }
+    else
+    {
+        g_remoteControlErrorCode = REMOTE_CONTROL_ERR_CODE_INVALID_CMD;
+    }
+    
+    return ret;
+}
+
+/*************************************************
  Function:        RemoteControlCheckTrunkAjarFun
  Description:     Check conditions for trunk ajar control commands
  Input:           None
@@ -2799,7 +2840,7 @@ static RemoteControlProcessResult_t RemoteControlBcmCertification(void)
         
         case BCM_AUTU_REQ_E:
             memset(g_remoteControlCanBuf,0U,sizeof(g_remoteControlCanBuf));
-            canRet = CanHalTransmit(g_remoteControlCan1Handle,REMOTE_CONTROL_TEL_IMMOCode2_E,g_remoteControlCanBuf,sizeof(g_remoteControlCanBuf),REMOTE_CONTROL_CAN_FD_USE);
+            canRet = CanHalTransmitQueued(g_remoteControlCan1Handle,REMOTE_CONTROL_TEL_IMMOCode2_E,g_remoteControlCanBuf,sizeof(g_remoteControlCanBuf),REMOTE_CONTROL_CAN_FD_USE, CAN_TX_PRIO_HIGH);
             if(canRet != 0U)
             {
                 LogHalUpLoadLog("BCM autu req error,ret=%d", ret);
@@ -2841,7 +2882,7 @@ static RemoteControlProcessResult_t RemoteControlBcmCertification(void)
             g_randomBcmArray[6] = g_remoteControlSignalInfo.BCM_TEL_IMMOCode6;
             g_randomBcmArray[7] = g_remoteControlSignalInfo.BCM_TEL_IMMOCodeSt;
             BcmAuthCalcKey(g_randomBcmArray,g_remoteControlESK,g_remoteControlCanBuf);
-            canRet = CanHalTransmit(g_remoteControlCan1Handle,REMOTE_CONTROL_TEL_IMMOCode2_E,g_remoteControlCanBuf,sizeof(g_remoteControlCanBuf),REMOTE_CONTROL_CAN_FD_USE);
+            canRet = CanHalTransmitQueued(g_remoteControlCan1Handle,REMOTE_CONTROL_TEL_IMMOCode2_E,g_remoteControlCanBuf,sizeof(g_remoteControlCanBuf),REMOTE_CONTROL_CAN_FD_USE, CAN_TX_PRIO_HIGH);
             if(canRet != 0U)
             {
                 LogHalUpLoadLog("BCM cal key send error,ret=%d", ret);
@@ -2928,7 +2969,7 @@ static RemoteControlProcessResult_t RemoteControlPepsCertification(void)
         
         case PEPS_AUTU_REQ_E:
             memset(g_remoteControlCanBuf,0U,sizeof(g_remoteControlCanBuf));
-            canRet = CanHalTransmit(g_remoteControlCan1Handle,REMOTE_CONTROL_TEL_IMMOCode1_E,g_remoteControlCanBuf,sizeof(g_remoteControlCanBuf),REMOTE_CONTROL_CAN_FD_USE);
+            canRet = CanHalTransmitQueued(g_remoteControlCan1Handle,REMOTE_CONTROL_TEL_IMMOCode1_E,g_remoteControlCanBuf,sizeof(g_remoteControlCanBuf),REMOTE_CONTROL_CAN_FD_USE, CAN_TX_PRIO_HIGH);
             if(canRet != 0U)
             {
                 LogHalUpLoadLog("PEPS autu req error,ret=%d", ret);
@@ -2969,7 +3010,7 @@ static RemoteControlProcessResult_t RemoteControlPepsCertification(void)
             g_randomPepsArray[6] = g_remoteControlSignalInfo.PEPS_TEL_ChallengeCode6;
             g_randomPepsArray[7] = g_remoteControlSignalInfo.PEPS_TEL_ChallengeCode7;
             PepsAuthCalcKey8(g_randomPepsArray, g_remoteControlESK, g_remoteControlCanBuf);
-            canRet = CanHalTransmit(g_remoteControlCan1Handle,REMOTE_CONTROL_TEL_IMMOCode1_E,g_remoteControlCanBuf,sizeof(g_remoteControlCanBuf),REMOTE_CONTROL_CAN_FD_USE);
+            canRet = CanHalTransmitQueued(g_remoteControlCan1Handle,REMOTE_CONTROL_TEL_IMMOCode1_E,g_remoteControlCanBuf,sizeof(g_remoteControlCanBuf),REMOTE_CONTROL_CAN_FD_USE, CAN_TX_PRIO_HIGH);
             if(canRet != 0U)
             {
                 LogHalUpLoadLog("PEPS calc key error,ret=%d", ret);
@@ -3502,6 +3543,12 @@ static void RemoteControlNormalPackReqCanSignal(void)
                     }
                     break;
                     
+                case CMD_HAZARD_LAMP_OFF_E:
+                    if(g_remoteControlParamValue == 1)
+                    {
+                        RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_AllHazardLightOffReq,     0x1);
+                    }
+                    break;
                 default:
                     break;
             }
@@ -4012,13 +4059,14 @@ static RemoteControlProcessResult_t CheckBcmCommandResult(void)
         case CMD_HAZARD_LAMP_SET_E:
             if(g_remoteControlParamValue == 1)
             {
-                if((g_remoteControlSignalInfo.BCM_TEL_HazLampCtrlSt == 0x1)&&
-                   (g_remoteControlSignalInfo.BCM_HazardLampSt == 0x1))
+                if(((g_remoteControlSignalInfo.BCM_TEL_HazLampCtrlSt == 0x1)&&
+                   (g_remoteControlSignalInfo.BCM_HazardLampSt == 0x1)) ||
+                   (g_remoteControlSignalInfo.GWM_HazardLampSt == 0x1))
                 {
                     result = RemoteControlResult_Success_e;
                 }
                 else if((g_remoteControlSignalInfo.BCM_TEL_HazLampCtrlSt == 0x0)&&
-                        (g_remoteControlSignalInfo.BCM_HazardLampSt == 0x0))
+                        (g_remoteControlSignalInfo.BCM_HazardLampSt == 0x1))
                 {
                     g_remoteControlErrorCode = REMOTE_CONTROL_ERR_HAZARD_LAMP_ON;
                 }
@@ -4029,8 +4077,8 @@ static RemoteControlProcessResult_t CheckBcmCommandResult(void)
                 {
                     result = RemoteControlResult_Success_e;
                 }
-                else if((g_remoteControlSignalInfo.BCM_TEL_HazLampCtrlSt == 0x1)&&
-                        (g_remoteControlSignalInfo.BCM_HazardLampSt == 0x0))
+                else if((g_remoteControlSignalInfo.BCM_TEL_HazLampCtrlSt == 0x0)&&
+                        (g_remoteControlSignalInfo.BCM_HazardLampSt == 0x1))
                 {
                     g_remoteControlErrorCode = REMOTE_CONTROL_ERR_HAZARD_LAMP_ON;
                 }
@@ -4090,6 +4138,12 @@ static RemoteControlProcessResult_t CheckBcmCommandResult(void)
         case CMD_MID_CTRL_FBD_LOCK_E:
             if((g_remoteControlSignalInfo.BCM_DriverDoorLockSt == 0x1)&&
                (g_remoteControlSignalInfo.BCM_PsngrDoorLockSt == 0x1))
+            {
+                result = RemoteControlResult_Success_e;
+            }
+            break;
+        case CMD_HAZARD_LAMP_OFF_E:
+            if(g_remoteControlSignalInfo.BCM_TEL_HazLampCtrlSt == 0x0)
             {
                 result = RemoteControlResult_Success_e;
             }

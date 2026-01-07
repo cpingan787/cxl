@@ -38,6 +38,7 @@ finish date:2018.7.31
 #include "mcuMpuSyncTask.h"
 #include "parameterSyncSdk.h"
 #include "vehicleSignalApp.h"
+#include "projectConfigure.h"
 // #include "cy_mw_flash.h"
 
 #define UDS_SECURITY_ERROR_COUNT_IN_NONVOLATILE 1
@@ -368,7 +369,7 @@ static const uint16_t g_passthroughDidList_22[] = {
     0xB2E6,
     0x1014,
     //0x011F,
-    0x0124,
+    //0x0124,
 };
 static const RdidInfor_t g_Service22FunMapList[] =
     {
@@ -2827,7 +2828,7 @@ static int16_t Service0x2EProcess(uint8_t *udsData, uint16_t udsLen, uint8_t fun
   responseData[1] = udsData[1];
   responseData[2] = udsData[2];
 
-  if (did == 0xB2E5 || did == 0xF18C || did == 0xF187|| did == 0xB2B4 || did == 0x0120)
+  if (did == 0xB2E5 || did == 0xF187|| did == 0xB2B4 || did == 0x0120)
   {
     DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 3, 0);
   }

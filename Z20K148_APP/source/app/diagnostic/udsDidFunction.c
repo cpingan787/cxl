@@ -31,6 +31,9 @@
 #include "mpuHal.h"
 #include "remoteControl.h"
 #include "flashHal.h"
+
+#define DEC_TO_BCD(val) (uint8_t)((((val) / 10) << 4) | ((val) % 10))
+
 static uint8_t g_didF1A2[19] = {"P01       -V6.02.00"}; // CAN矩阵
 
 static uint8_t g_didF1B3[9] = {"CDONO-77E"};                        // 节点地址
@@ -5202,8 +5205,10 @@ int16_t Service22ReadGacDiagParamVersion(uint8_t *pData, uint16_t *pLength)
 // 0xF17F_cxl
 int16_t Service22ReadGacSparePartNumber(uint8_t *pData, uint16_t *pLength)
 {
-  ProjectConfigGetGacSparePartNumber_F17F(pData, pLength);
-  return 0;
+    uint16_t len = BOOT_HW_VERSION_LEN;
+    BootInfo_ReadHardwareVersion(pData, len);
+    *pLength = len;
+    return 0;
 }
 
 // 0xF180_cxl
@@ -5369,11 +5374,20 @@ int16_t Service22ReadGpsStatus(uint8_t *pData, uint16_t *pLength)
         memset(&status, 0xFF, sizeof(status));
     }
 
+    LocationInfoSync_t locationInfo;
+    memset(&locationInfo, 0, sizeof(LocationInfoSync_t));
+    StateSyncGetLocationInfo(&locationInfo); 
+
     uint16_t value = 0;
     value |= (status.gnssEnableState   & 0x1) << 0;
     value |= (status.modeMixed         & 0x1) << 1;
     value |= (status.beidouEnable      & 0x1) << 2;
-    value |= (status.gpsEnable         & 0x1) << 3;
+
+    uint8_t gpsEnableBit = (locationInfo.moduleState == 0) ? 1 : 0;
+
+
+    value |= (gpsEnableBit & 0x1) << 3;
+
     value |= (status.glonassEnable     & 0x1) << 4;
     value |= (status.fusionFront       & 0x1) << 5;
     value |= (status.agpsEnable        & 0x1) << 6;
@@ -5390,7 +5404,6 @@ int16_t Service22ReadGpsStatus(uint8_t *pData, uint16_t *pLength)
     pData[0] = (value & 0xFF);
     pData[1] = (value >> 8) & 0xFF;
     
-
     *pLength = 2;
 
     return 0;
@@ -5407,16 +5420,20 @@ int16_t Service22ReadSystemTime(uint8_t *pData, uint16_t *pLength)
     const TimeData_t *sourceTime = &ftyData->timeData;
     uint8_t *p_buf = pData;
 
+    *p_buf++ = DEC_TO_BCD(sourceTime->year / 100); 
+    
+    *p_buf++ = DEC_TO_BCD(sourceTime->year % 100);
 
-    *p_buf++ = (uint8_t)((sourceTime->year >> 8) & 0xFF);
-
-    *p_buf++ = (uint8_t)(sourceTime->year & 0xFF);
-
-    *p_buf++ = sourceTime->month;
-    *p_buf++ = sourceTime->day;
-    *p_buf++ = sourceTime->hour;
-    *p_buf++ = sourceTime->minute;
-    *p_buf++ = sourceTime->second;
+    // Month
+    *p_buf++ = DEC_TO_BCD(sourceTime->month);
+    // Day
+    *p_buf++ = DEC_TO_BCD(sourceTime->day);
+    // Hour
+    *p_buf++ = DEC_TO_BCD(sourceTime->hour);
+    // Minute
+    *p_buf++ = DEC_TO_BCD(sourceTime->minute);
+    // Second
+    *p_buf++ = DEC_TO_BCD(sourceTime->second);
   }
   else
   {

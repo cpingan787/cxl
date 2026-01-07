@@ -2,6 +2,7 @@
 #define _PROJECT_CONFIGURE_H
 
 #include <stdint.h>
+#define BOOT_HW_VERSION_LEN 17
 
 int16_t ProjectConfigGetDiagSoftwareVersion(uint8_t *pVersion, uint32_t *pLength);
 int16_t ProjectConfigGetSoftwareNumber(uint8_t *pNumber, uint16_t *pLength);
@@ -14,7 +15,8 @@ int16_t ProjectConfigGetPartName(uint8_t *pPartName, uint32_t *pLength);
 
 int16_t ProjectConfigGetPartNameBootSoftwareVersion(uint8_t *pData, uint32_t *pLength);
 int16_t ProjectConfigGetCustomVersion(uint8_t *pData, uint32_t *pLength);
-
+// 获取客户硬件版本号 BOOT
+int32_t BootInfo_ReadHardwareVersion(uint8_t *buf, uint32_t bufLen);
 //_cxl
 void ProjectConfigGetGacDiagParamVersion_F10B(uint8_t *pData, uint16_t *pLength);
 void ProjectConfigGetGacSparePartNumber_F17F(uint8_t *pData, uint16_t *pLength);

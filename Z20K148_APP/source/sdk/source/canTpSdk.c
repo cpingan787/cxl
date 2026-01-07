@@ -176,9 +176,9 @@ static int16_t TpDataMultiFrameRxFLowControlTransmit(int16_t tpHandle, int16_t c
     canTxMsg.canId = g_tpVariable[tpHandle].physicalTransmitCanId;
 
 #if (UDS_FRAME_CANFD == 0)
-    ret = CanHalTransmit(canHandle, canTxMsg.canId, canTxMsg.canData, canTxMsg.dlc, 1);
+    ret = CanHalTransmitQueued(canHandle, canTxMsg.canId, canTxMsg.canData, canTxMsg.dlc, 1, CAN_TX_PRIO_HIGH);
 #else
-    ret = CanHalTransmit(canHandle, canTxMsg.canId, canTxMsg.canData, canTxMsg.dlc, 1);
+    ret = CanHalTransmitQueued(canHandle, canTxMsg.canId, canTxMsg.canData, canTxMsg.dlc, 1, CAN_TX_PRIO_HIGH);
 #endif
     if (0 != ret)
     {
@@ -1068,7 +1068,7 @@ static int16_t CanTpDataMultFramTransmitFd(int16_t tpHandle, int16_t canHandle, 
         ret = CanHalDiagnosticReceive(canHandle, &rxCanMsg, 0); 
         memset(rxCanMsg.canData, 0, 8);
         
-        ret = CanHalTransmit(canHandle, txCanId, txCanData, 8, 1);
+        ret = CanHalTransmitQueued(canHandle, txCanId, txCanData, 8, 1, CAN_TX_PRIO_HIGH);
         
         if (ret != 0)
         {
@@ -1185,7 +1185,7 @@ int16_t CanTpSdkDataTransmit(int16_t tpHandle, uint32_t canId, uint8_t *txData, 
         {
             data[i + 1] = g_tpVariable[tpHandle].pTpParameter->fillByte;
         }
-        return CanHalTransmit(canHandle, txCanId, data, 8, 1);
+        return CanHalTransmitQueued(canHandle, txCanId, data, 8, 1, CAN_TX_PRIO_HIGH);
     }
 
     // if (txLength < 63) // single frame
@@ -1253,7 +1253,7 @@ int16_t CanTpSdkDataTransmit(int16_t tpHandle, uint32_t canId, uint8_t *txData, 
     }
     txCanDlc = 8;
 
-    int16_t ret = CanHalTransmit(canHandle, txCanId, txCanData, txCanDlc, 1);
+    int16_t ret = CanHalTransmitQueued(canHandle, txCanId, txCanData, txCanDlc, 1, CAN_TX_PRIO_NORMAL);
     if (ret != 0)
     {
         return -1;

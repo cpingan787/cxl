@@ -15,9 +15,9 @@
 #define PASSTHROUGH_SUB_MPU_TO_MCU 0x23
 
 static int16_t g_mpuHandle = -1;
-static uint8_t g_dataBuffer[300] = {0};
+static uint8_t g_dataBuffer[512] = {0};
 static MpuHalDataPack_t g_dataPack;
-static uint8_t g_recvDataBuffer[300] = {0};
+static uint8_t g_recvDataBuffer[512] = {0};
 
 static uint8_t g_mpuDataBuffer[512] = {0};
 static MpuHalDataPack_t g_mpuDataPack;
@@ -37,7 +37,7 @@ int16_t CanPassthrough_RequestAndGetResponse(const uint8_t *pUdsRequest, uint16_
 
     // if (reqLength >= 3 && pUdsRequest[0] == 0x2E && pUdsRequest[1] == 0xB2 && pUdsRequest[2] == 0x89)
     // {
-    //     maxRepeatCount = 10; 
+    //     maxRepeatCount = 10;
     // }
     // ---------------------------------------------------------
 
@@ -91,7 +91,7 @@ int16_t CanPassthrough_RequestAndGetResponse(const uint8_t *pUdsRequest, uint16_
             }
 
             MpuHalTransmit(g_mpuHandle, &g_mpuDataPack, MPU_HAL_UART_MODE);
-            vTaskDelay(50);
+            vTaskDelay(10);
         }
 
     } while (1);

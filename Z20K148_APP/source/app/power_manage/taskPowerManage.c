@@ -270,7 +270,7 @@ static void McuVoltageDtcCheckProcess(void)
     // 4. 读取麦克风电源电压
     if (PeripheralHalAdGet(AD_CHANNEL_MIC, &v_mic_mv) == 0)
     {
-        // TBOX_PRINT("mic voltage is %d mv\r\n", v_mic_mv);
+        // TBOX_PRINT("mic voltage is %d mv\r\n", v_mic_mv);//701
         //  检查 B32031F: 麦克风信号输入故障
         //  正常范围: 10mV < V < 550mV
         if (v_mic_mv <= 10 || v_mic_mv >= 550)
@@ -473,6 +473,8 @@ static void KL30DetectDtcProcess(uint32_t kl30Voltage)
         if (g_diagFaultTimerCount >= (g_diagFaultTime / 10))
         {
             SetDtcFaultState(E_DTC_ITEM_MAIN_POWER_OVER_RANGE);
+
+            ClearDtcFaultState(E_DTC_ITEM_MAIN_POWER_OVER_MAX_RANGE);
         }
     }
 

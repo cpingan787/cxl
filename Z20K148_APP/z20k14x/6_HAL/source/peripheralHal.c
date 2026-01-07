@@ -649,8 +649,6 @@ void PeripheralHalAdcStart(uint8_t sarNo)
     switch(sarNo)
     {
     case 0:
-        g_adBuffer[AD_CHANNEL_BCALL].adValid = 1;
-        g_adBuffer[AD_CHANNEL_ECALL].adValid = 1;
         g_adBuffer[AD_CHANNEL_BCALL_LIGHT].adValid = 1;
         g_adBuffer[AD_CHANNEL_ECALL_LIGHT].adValid = 1;
         g_adBuffer[AD_CHANNEL_SOS_KEY].adValid = 1;
@@ -717,24 +715,6 @@ int16_t PeripheralHalAdGet(uint8_t adChannel, uint32_t *pValue)
                 *pValue = PeripheralHalKl30RawTo_mV(adValue); /* mV */
                 result = 0;
             }
-            //            else if (AD_CHANNEL_BATTERY == adChannel)
-            //            {
-            //                temData = temData * AD_CHANNEL_BATTERY_FACTOR;
-            //                *pValue = temData;
-            //                result = 0;
-            //            }
-            //            else if (AD_CHANNEL_NTC == adChannel)
-            //            {
-            //                temData = temData * AD_CHANNEL_NTC_FACTOR;
-            //                *pValue = temData;
-            //                result = 0;
-            //            }
-            //            else if (AD_CHANNEL_MICP == adChannel)
-            //            {
-            //                temData = temData * AD_CHANNEL_MICP_FACTOR;
-            //                *pValue = temData;
-            //                result = 0;
-            //            }
             else if (AD_CHANNEL_SOS_KEY == adChannel)
             {
                 temData = temData * AD_CHANNEL_SOS_FACTOR;
@@ -771,38 +751,18 @@ int16_t PeripheralHalAdGet(uint8_t adChannel, uint32_t *pValue)
                 *pValue = temData;
                 result = 0;
             }
-            // else if (AD_CHANNEL_BCALL == adChannel)
-            // {
-            //     temData = temData * AD_CHANNEL_BCALL_FACTOR;
-            //     *pValue = temData;
-            //     result = 0;
-            // }
-            // else if (AD_CHANNEL_ECALL == adChannel)
-            // {
-            //     temData = temData * AD_CHANNEL_ECALL_FACTOR;
-            //     *pValue = temData;
-            //     result = 0;
-            // }
-            // else if (AD_CHANNEL_BCALL_LIGHT == adChannel)
-            // {
-            //     temData = temData * AD_CHANNEL_BCALL_LIGHT_FACTOR;
-            //     *pValue = temData;
-            //     result = 0;
-            // }
-            // else if (AD_CHANNEL_ECALL_LIGHT == adChannel)
-            // {
-            //     temData = temData * AD_CHANNEL_ECALL_LIGHT_FACTOR;
-            //     *pValue = temData;
-            //     result = 0;
-            // }
             else if (AD_CHANNEL_MIC_POWER == adChannel)
             {
                 temData = temData * AD_CHANNEL_MIC_POWER_FACTOR;
                 *pValue = temData;
                 result = 0;
             }
-            else if (AD_CHANNEL_BCALL == adChannel || AD_CHANNEL_ECALL == adChannel ||
-                     AD_CHANNEL_BCALL_LIGHT == adChannel || AD_CHANNEL_ECALL_LIGHT == adChannel)
+            else if (AD_CHANNEL_BCALL_LIGHT == adChannel)
+            {
+                *pValue = temData;
+                result = 0;
+            }
+            else if (AD_CHANNEL_ECALL_LIGHT == adChannel)
             {
                 *pValue = temData;
                 result = 0;

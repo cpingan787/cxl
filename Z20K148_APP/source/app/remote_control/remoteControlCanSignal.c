@@ -1846,6 +1846,10 @@ void RemoteControlGetSignalValue(RemoteControlStatusSignalInfo_t *stRemoteCtrlSi
 
     CanParseSdkReadSignal(g_CanSignalFormat, &pCan0SignalConfigure->PLGM_Remotecontrolst, &dataVaule);
     stRemoteCtrlSignalValTemp->PLGM_RemoteControlSt = (uint8_t)dataVaule;
+
+    /*GWM*/
+    CanParseSdkReadSignal(g_CanSignalFormat, &pCan0SignalConfigure->GWM_HazardLampSt, &dataVaule);
+    stRemoteCtrlSignalValTemp->GWM_HazardLampSt = (uint8_t)dataVaule;
 }
 
 

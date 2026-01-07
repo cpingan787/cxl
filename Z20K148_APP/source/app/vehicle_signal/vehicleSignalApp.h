@@ -355,6 +355,7 @@ typedef struct
     CanParseSignal_t GWM_NMDataField;
     CanParseSignal_t GW_LowBatPreWarning;
     CanParseSignal_t GW_RemoteDiagCode;
+    CanParseSignal_t GWM_HazardLampSt;
     CanParseSignal_t NMData;
     CanParseSignal_t EPB_SwitchSt;
     CanParseSignal_t EPB_SwitchStVD;

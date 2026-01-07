@@ -499,15 +499,12 @@ static int16_t CanPeriodMessage3C5(uint8_t *pCanData)
     uint16_t ret = 0U;
     if (pCanData != NULL)
     {
-        memset(pCanData, 0x00, 8); 
+        memset(pCanData, 0x00, 8);
         
-        const ftyCircleDataToMcu_t *ftyData = StateSyncGetFtyData();
-
-        if (ftyData != NULL)
+        LocationInfoSync_t locationInfo;
+        if (StateSyncGetLocationInfo(&locationInfo) == 0)
         {
-            const GpsPosition_t *gpsPos = &ftyData->gpsPosition;
-
-            if (gpsPos->fixState > 0)
+            if ((locationInfo.locationState & 0x1F) > 0)
             {
                 g_tbox11Message.DetailInfo.TEL_NaviPstVD = 1U;
             }
@@ -516,27 +513,32 @@ static int16_t CanPeriodMessage3C5(uint8_t *pCanData)
                 g_tbox11Message.DetailInfo.TEL_NaviPstVD = 0U;
             }
 
-            uint32_t lat_abs_1e6 = gpsPos->latitude / 10;
-            uint32_t lon_abs_1e6 = gpsPos->longitude / 10;
+            uint32_t lat_abs_1e6 = locationInfo.latitude / 10;
+            uint32_t lon_abs_1e6 = locationInfo.longitude / 10;
 
-            int32_t lat_signed = (gpsPos->northSouth == 0) ? (int32_t)lat_abs_1e6 : -(int32_t)lat_abs_1e6;
-            int32_t lon_signed = (gpsPos->eastWest == 0) ? (int32_t)lon_abs_1e6 : -(int32_t)lon_abs_1e6;
-
-            //TBOX_PRINT("lat_signed=0X%X, lon_signed=0X%X\r\n", lat_signed, lon_signed);
-
-            pCanData[0] = (uint8_t)((lon_signed >> 20) & 0xFF); // Bit 27-20
-            pCanData[1] = (uint8_t)((lon_signed >> 12) & 0xFF); // Bit 19-12
-            pCanData[2] = (uint8_t)((lon_signed >> 4) & 0xFF);  // Bit 11-4
+            int32_t lat_signed = ((locationInfo.locationState & 0x80) == 0) ? (int32_t)lat_abs_1e6 : -(int32_t)lat_abs_1e6;
             
-            pCanData[3] = (uint8_t)((lon_signed << 4) & 0xF0); 
+            int32_t lon_signed = ((locationInfo.locationState & 0x40) == 0) ? (int32_t)lon_abs_1e6 : -(int32_t)lon_abs_1e6;
 
-            pCanData[3] |= (uint8_t)((lat_signed >> 24) & 0x0F);
+            uint32_t lat_final = (uint32_t)lat_signed;
+            uint32_t lon_final = (uint32_t)lon_signed;
 
-            pCanData[4] = (uint8_t)((lat_signed >> 16) & 0xFF); // Bit 23-16
-            pCanData[5] = (uint8_t)((lat_signed >> 8) & 0xFF);  // Bit 15-8
-            pCanData[6] = (uint8_t)(lat_signed & 0xFF);         // Bit 7-0
+            g_tbox11Message.DetailInfo.TEL_Latitude_1 = (lat_final >> 20) & 0xFF;
+            g_tbox11Message.DetailInfo.TEL_Latitude_2 = (lat_final >> 12) & 0xFF;
+            g_tbox11Message.DetailInfo.TEL_Latitude_3 = (lat_final >> 4) & 0xFF;
+            g_tbox11Message.DetailInfo.TEL_Latitude_4 = lat_final & 0x0F;
 
-            pCanData[7] = (uint8_t)(g_tbox11Message.DetailInfo.TEL_NaviPstVD & 0x01);
+            g_tbox11Message.DetailInfo.TEL_Longitude_1 = (lon_final >> 24) & 0x0F;
+            g_tbox11Message.DetailInfo.TEL_Longitude_2 = (lon_final >> 16) & 0xFF;
+            g_tbox11Message.DetailInfo.TEL_Longitude_3 = (lon_final >> 8) & 0xFF;
+            g_tbox11Message.DetailInfo.TEL_Longitude_4 = lon_final & 0xFF;
+
+            memcpy(pCanData, &g_tbox11Message.data[0], sizeof(g_tbox11Message.data));
+        }
+        else
+        {
+            g_tbox11Message.DetailInfo.TEL_NaviPstVD = 0U;
+            memcpy(pCanData, &g_tbox11Message.data[0], sizeof(g_tbox11Message.data));
         }
     }
     else
@@ -571,24 +573,28 @@ static int16_t CanPeriodMessage35F(uint8_t *pCanData)
     if (pCanData != NULL)
     {
         memset(pCanData, 0x00, 8);
+
         const ftyCircleDataToMcu_t *ftyData = StateSyncGetFtyData();
+        
+        LocationInfoSync_t locationInfo;
+        memset(&locationInfo, 0, sizeof(LocationInfoSync_t)); 
+        int16_t locRet = StateSyncGetLocationInfo(&locationInfo);
+
+        if ((locRet == 0) && (locationInfo.moduleState == 1))
+        {
+            g_tbox3Message.DetailInfo.TEL_GPSCommSt = 1U;
+        }
+        else
+        {
+            g_tbox3Message.DetailInfo.TEL_GPSCommSt = 0U; 
+        }
 
         if (ftyData != NULL)
         {
-            if (ftyData->gnssModuleStatus.gpsEnable == 1)
-            {
-                g_tbox3Message.DetailInfo.TEL_GPSCommSt = 1U;
-            }
-            else
-            {
-                g_tbox3Message.DetailInfo.TEL_GPSCommSt = 0U;
-            }
-
             g_tbox3Message.DetailInfo.TEL_TelematicsRegisterSt = (uint64_t)(ftyData->lteNetworkStatus.b2_3.netState & 0x07);
         }
         else
         {
-            g_tbox3Message.DetailInfo.TEL_GPSCommSt = 0U;
             g_tbox3Message.DetailInfo.TEL_TelematicsRegisterSt = 0U;
         }
 
@@ -600,11 +606,14 @@ static int16_t CanPeriodMessage35F(uint8_t *pCanData)
         g_tbox3Message.DetailInfo.TEL_BTHandfreeSt = 0U;
         g_tbox3Message.DetailInfo.TEL_BTAvrcpPlayMode = 0U;
         g_tbox3Message.DetailInfo.TEL_BTAvrcpSt = 0U;
-        g_tbox3Message.DetailInfo.TEL_OTAState = RemoteControlGetOtaFlag();
+        
+        g_tbox3Message.DetailInfo.TEL_OTAState = RemoteControlGetOtaFlag(); 
+        
         g_tbox3Message.DetailInfo.TEL_BTManualMode = 0U;
 
         g_tbox3Message.DetailInfo.TEL_MsgCounter = g_TEL_MsgCounter;
         g_TEL_MsgCounter = (g_TEL_MsgCounter + 1U) % 16U;
+
         memcpy(pCanData, &g_tbox3Message.data[0], sizeof(g_tbox3Message.data));
     }
     else
@@ -883,7 +892,7 @@ static void CanPeriodSendCycleProcess(int16_t canHandle, const CanSendMsgConfigu
 #if (CYCLE_SEND_WITH_SECOC_SDK)
                     SecocSdkTransmit(canHandle, pMsgConfigure[i].canId, pMsgBuffer[i].canData, pMsgConfigure[i].dataLength, 3);
 #else
-                    CanHalTransmit(canHandle, pMsgConfigure[i].canId, pMsgBuffer[i].canData, pMsgConfigure[i].dataLength, CYCLE_SEND_WITH_CANFD);
+                    CanHalTransmitQueued(canHandle, pMsgConfigure[i].canId, pMsgBuffer[i].canData, pMsgConfigure[i].dataLength, CYCLE_SEND_WITH_CANFD,CAN_TX_PRIO_NORMAL);
 #endif
                 }
                 else
@@ -891,7 +900,7 @@ static void CanPeriodSendCycleProcess(int16_t canHandle, const CanSendMsgConfigu
 #if (CYCLE_SEND_WITH_SECOC_SDK)
                     SecocSdkTransmit(canHandle, pMsgConfigure[i].canId, pMsgBuffer[i].canData, pMsgConfigure[i].dataLength, 0);
 #else
-                    CanHalTransmit(canHandle, pMsgConfigure[i].canId, pMsgBuffer[i].canData, pMsgConfigure[i].dataLength, CYCLE_SEND_WITHOUT_CANFD);
+                    CanHalTransmitQueued(canHandle, pMsgConfigure[i].canId, pMsgBuffer[i].canData, pMsgConfigure[i].dataLength, CYCLE_SEND_WITHOUT_CANFD,CAN_TX_PRIO_NORMAL);
 #endif
                 }
             }

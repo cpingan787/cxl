@@ -10,6 +10,9 @@
  *   [0x2000..0x3FFF]  Digest/Metadata  (0x2000)
  *   [0x4000..end ]    App vectors/code (run)
  * Flash total size assumed 2 MB (0x0020_0000).
+ *
+ * Boot tail reserve:
+ *   Reserve last 128 bytes of Boot flash for version/info.
  * ============================================================ */
 
 /* -------- Enforce build target presence -------- */
@@ -21,6 +24,9 @@ define symbol FLASH_META_DATA_TOTAL_SIZE = 0x00010000;  /*  64 KB */
 define symbol FLASH_APP_SINGLE_SIZE      = 0x000C0000;  /* 768 KB */
 define symbol FLASH_RESERVE_REGION_SIZE  = 0x00040000;  /* 256 KB */
 
+/* -------- Boot tail reserved area (version/info) -------- */
+define symbol BOOT_INFO_SIZE             = 0x00000080;  /* 128 B */
+
 /* App slot reserved sub-areas (two 0x2000 regions), and run offset */
 define symbol APP_FLAG_SIZE              = 0x00002000;  /* 8 KB - integrity flag */
 define symbol APP_DIGEST_SIZE            = 0x00002000;  /* 8 KB - digest/metadata */
@@ -31,6 +37,10 @@ define symbol FLASH_BASE = 0x00000000;
 
 define symbol BOOT_BASE  = FLASH_BASE;
 define symbol BOOT_END   = BOOT_BASE + FLASH_BOOT_TOTAL_SIZE - 1;
+
+/* Reserve last 128 bytes of Boot region for version/info */
+define symbol BOOT_INFO_BASE = (BOOT_BASE + FLASH_BOOT_TOTAL_SIZE - BOOT_INFO_SIZE);
+define symbol BOOT_CODE_END  = (BOOT_INFO_BASE - 1);
 
 define symbol META_BASE  = BOOT_BASE + FLASH_BOOT_TOTAL_SIZE;
 define symbol META_END   = META_BASE + FLASH_META_DATA_TOTAL_SIZE - 1;
@@ -67,12 +77,15 @@ define symbol __ICFEDIT_size_heap__   = 0x00000200;  /* 512 B */
 /* -------- Exported RAM boundaries -------- */
 define exported symbol __RAM_START = __ICFEDIT_region_RAM_start__;
 define exported symbol __RAM_END   = RAM1_END;
+define exported symbol __BOOT_INFO_BASE = BOOT_INFO_BASE;
 
 /* -------- Logical memory space -------- */
 define memory mem with size = 4G;
 
 /* -------- Flash regions -------- */
-define region BOOT_region        = mem:[from BOOT_BASE to BOOT_END];
+define region BOOT_region        = mem:[from BOOT_BASE to BOOT_CODE_END];
+define region BOOT_INFO_region   = mem:[from BOOT_INFO_BASE to BOOT_END];
+
 define region META_region        = mem:[from META_BASE to META_END];
 
 /* ReleaseApp1: 0x2000 flag + 0x2000 digest, then code */
@@ -134,6 +147,14 @@ else {
  *   // place in APP2_FLAG_region   { section .appflag   };
  *   // place in APP2_DIGEST_region { section .appdigest };
  * -------------------------------------------------------------------- */
+
+/* -------- Optional Boot info placement ----------
+ * If you compile dedicated objects/sections for the reserved area:
+ *   Boot version/info -> section .bootinfo
+ * ----------------------------------------------- */
+
+place in BOOT_INFO_region { section .bootinfo };
+
 
 /* -------- Placement rules -------- */
 place at address mem:__INTVEC_ADDR__ { readonly section .intvec };   /* Vector table */

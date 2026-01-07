@@ -12,7 +12,8 @@
 /****************************** include ***************************************/
 #include <stdint.h>
 #include "platform_cfg.h"
-
+#include "FreeRTOS.h"
+#include "task.h"
 /****************************** Macro Definitions ******************************/
 #define CAN_ERROR_INVALID_HANDLE        (-1)
 #define CAN_ERROR_INVALID_PARAMETER     (-2)
@@ -124,9 +125,13 @@ typedef struct
     uint16_t canIdStdMax;
     uint8_t useStdFilter;
     uint8_t useExdtFilter;
-
 }CanHalMsgFilter_t;
 
+typedef enum
+{
+    CAN_TX_PRIO_NORMAL = 0,
+    CAN_TX_PRIO_HIGH   = 1
+} CanTxPrio_e;
 /****************************** Global Variables ******************************/
 /****************************** Function Declarations *************************/
 int16_t CanHalInit(const CanConfigure_t *pCanConfig,uint8_t CanNum);
@@ -164,4 +169,8 @@ void CanHalTestMain(void);
 void CanHalClearReceiveCanNmFlag(void);
 uint8_t CanHalReceiveCanNmFlagCheck(void);
 uint8_t CanHalClearBusoffAppDisableFlag(int16_t canHandle);
+void CanHalSendTask(void *pvParameters);
+int16_t CanHalTransmitQueued(int16_t canHandle, uint32_t canId, const uint8_t *canData, uint8_t dlc, uint8_t txFlag, CanTxPrio_e prio);
+int16_t CanHalTransmitQueuedFromIsr(int16_t canHandle,uint32_t canId, const uint8_t *canData, uint8_t dlc, uint8_t txFlag, CanTxPrio_e prio, BaseType_t *pHigherPriorityTaskWoken);
+uint8_t CanHalTxCanSendHook(uint8_t canChannel);
 #endif  // _CANHAL_H
