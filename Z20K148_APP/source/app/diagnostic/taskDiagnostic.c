@@ -1015,7 +1015,10 @@ static int16_t Service0x10Process(uint8_t *udsData, uint16_t udsLen, uint8_t fun
       {
         g_currentSession = E_EXTEND_SESSION;
         // g_currentSecurityLevel = E_UDS_NONE_SECURITY_LEVEL; // lock security
-        g_ecuOnlineFlag = 1;
+        if (RemoteDiagnosticSdkGetOnlineStatus() != 1)
+           {      
+                g_ecuOnlineFlag = 1;
+           }
         uint8_t factoryMode = UdsDidGetManufactoryMode();
         if (factoryMode < 0x10)
         {
@@ -3293,7 +3296,7 @@ void TaskEcuDiagnostic(void *pvParameters)
         }
       }
     }
-    uint8_t currentTesterPresent = ((g_currentSession != E_DEFAULT_SESSION) || (isS3ServerTimerActive == 1)) ? 1 : 0;
+    uint8_t currentTesterPresent = ( (isS3ServerTimerActive == 1)) ? 1 : 0;
 
     if (currentTesterPresent != g_isTesterPresent)
     {
@@ -3306,7 +3309,7 @@ void TaskEcuDiagnostic(void *pvParameters)
       }
       else
       {
-        RemoteDiagnosticSdkRecover(); // 恢复远程诊断
+        //RemoteDiagnosticSdkRecover(); // 恢复远程诊断
       }
     }
 
