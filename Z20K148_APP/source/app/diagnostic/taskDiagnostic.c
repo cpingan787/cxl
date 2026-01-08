@@ -597,6 +597,7 @@ static uint16_t g_udsRxDataLen = 0;
 /**********session control related variable*******************/
 static SessionState_e g_currentSession = E_DEFAULT_SESSION;
 static uint8_t g_ecuOnlineFlag = 0;
+static uint8_t g_isPhysicalOnline = 0; //0=非物理(远程/功能寻址), 1=物理诊断仪
 
 /**********security accessrelated variable*******************/
 static UdsSecurityLevel_e g_currentSecurityLevel = E_UDS_NONE_SECURITY_LEVEL;
@@ -1015,10 +1016,16 @@ static int16_t Service0x10Process(uint8_t *udsData, uint16_t udsLen, uint8_t fun
       {
         g_currentSession = E_EXTEND_SESSION;
         // g_currentSecurityLevel = E_UDS_NONE_SECURITY_LEVEL; // lock security
-        if (RemoteDiagnosticSdkGetOnlineStatus() != 1)
-           {      
-                g_ecuOnlineFlag = 1;
-           }
+        if ((functionAddressFlag == 0) && (g_virtualTpFlag == 0))
+        {
+            g_isPhysicalOnline = 1;
+        }
+        else
+        {
+            g_isPhysicalOnline = 0;
+        }
+
+        g_ecuOnlineFlag = 1;
         uint8_t factoryMode = UdsDidGetManufactoryMode();
         if (factoryMode < 0x10)
         {
@@ -1758,12 +1765,18 @@ static int16_t Service0x3EProcess(uint8_t *udsData, uint16_t udsLen, uint8_t fun
       case 0x80:
       {
         //TBOX_PRINT("456: 0x%X\r\n", g_ecuOnlineFlag);
-        if (functionAddressFlag == 0) 
+        if ((functionAddressFlag == 0) && (g_virtualTpFlag == 0)) 
         {
-            if (RemoteDiagnosticSdkGetOnlineStatus() != 1)
-           {      
-                g_ecuOnlineFlag = 1;
-           }
+             g_isPhysicalOnline = 1;
+        }
+        else
+        {
+             g_isPhysicalOnline = 0; 
+        }
+
+        if (RemoteDiagnosticSdkGetOnlineStatus() != 1)
+        {      
+             g_ecuOnlineFlag = 1;
         }
         if ((udsData[UDS_OFFSET_SUB_FUNC] >> 7) == 0)
         {
@@ -3296,23 +3309,6 @@ void TaskEcuDiagnostic(void *pvParameters)
         }
       }
     }
-    uint8_t currentTesterPresent = ( (isS3ServerTimerActive == 1)) ? 1 : 0;
-
-    if (currentTesterPresent != g_isTesterPresent)
-    {
-      g_isTesterPresent = currentTesterPresent;
-
-      if (currentTesterPresent)
-      {
-        LogHalUpLoadLog("Remote diagnostic connected.\r\n");
-        //RemoteDiagnosticSdkShortDisable(); // 暂时禁止远程诊断
-      }
-      else
-      {
-        //RemoteDiagnosticSdkRecover(); // 恢复远程诊断
-      }
-    }
-
     ret = -1;
     ret = VirtualTpSdkServerReceive(&g_virtualTpChanalId,g_udsRxData,sizeof(g_udsRxData),&g_udsRxDataLen);
     if(0==ret)
@@ -3325,7 +3321,22 @@ void TaskEcuDiagnostic(void *pvParameters)
         }
       }
     }
+    uint8_t currentTesterPresent = ( (isS3ServerTimerActive == 1) && (g_isPhysicalOnline == 1) ) ? 1 : 0;
+    
+    if (currentTesterPresent != g_isTesterPresent)
+    {
+      g_isTesterPresent = currentTesterPresent;
 
+      if (currentTesterPresent)
+      {
+        LogHalUpLoadLog("Remote diagnostic connected.\r\n");
+        //RemoteDiagnosticSdkShortDisable(); 
+      }
+      else
+      {
+        //RemoteDiagnosticSdkRecover(); 
+      }
+    }
     if (g_ecuOnlineFlag)
     {
       g_ecuOnlineFlag = 0;
@@ -3337,6 +3348,7 @@ void TaskEcuDiagnostic(void *pvParameters)
       TimerHalStopTime(ecuOnlineTimerHandle);
       ResetTboxStatusUpdate();
       isS3ServerTimerActive = 0;
+      g_isPhysicalOnline = 0;
     }
     if (TimerHalIsTimeout(g_ecuSecurityTimerHandle) == 0)
     {

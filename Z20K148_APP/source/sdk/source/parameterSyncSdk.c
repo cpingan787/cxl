@@ -260,16 +260,17 @@ static int16_t ParameterSyncResponseGetParamPackage(MpuHalDataPack_t *recvDataPa
         switch (current_param_id)
         {
         case E_ParamId_HW_Version: // F17F_cxl
-            {
-                if (BootInfo_ReadHardwareVersion(pWrite + 2, BOOT_HW_VERSION_LEN) == 0)
-                {
-                    paramLenth = BOOT_HW_VERSION_LEN;
-                }
-                else
-                {
-                    paramLenth = 0; 
-                }
-            }
+            // {
+            //     if (BootInfo_ReadHardwareVersion(pWrite + 2, BOOT_HW_VERSION_LEN) == 0)
+            //     {
+            //         paramLenth = BOOT_HW_VERSION_LEN;
+            //     }
+            //     else
+            //     {
+            //         paramLenth = 0; 
+            //     }
+            // }
+            ProjectConfigGetGacSparePartNumber_F17F(pWrite + 2, &paramLenth);
             break;
 
         case E_ParamId_CustomSW_Version: // F189_cxl

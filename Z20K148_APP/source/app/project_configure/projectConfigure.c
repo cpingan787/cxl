@@ -14,7 +14,7 @@ static const uint8_t g_didF10B[4] = {
     0x01,
     0x01};
 
-//static const uint8_t g_didF17F[17] = "87H6ADE060  H.E00"; // 硬件版本号                                                                                  // 0xF17F_cxl                                                                                //// 0xF17F_cxl                                                                                   // 0xF17F_cxl                                                                                   // 0xF17F_cxl                                                                                     // 0xF17F_cxl
+static const uint8_t g_didF17F[17] = "87H6ADE060  H.E00"; // 硬件版本号                                                                                  // 0xF17F_cxl                                                                                //// 0xF17F_cxl                                                                                   // 0xF17F_cxl                                                                                   // 0xF17F_cxl                                                                                     // 0xF17F_cxl
 static const uint8_t g_didF180[17] = "000123456789B.100"; // 0xF180_cxl
 static const uint8_t g_didF187[14] = "8550003ADE0600";    // 零件号                                                                                     // 0xF187_cxl
 static const uint8_t g_didF189[17] = "8786ADE060  S.E01"; // 软件版本号                                                                                   // 0xF189_cxl
@@ -176,11 +176,11 @@ void ProjectConfigGetGacDiagParamVersion_F10B(uint8_t *pData, uint16_t *pLength)
     *pLength = sizeof(g_didF10B);
 }
 
-// void ProjectConfigGetGacSparePartNumber_F17F(uint8_t *pData, uint16_t *pLength)
-// {
-//     memcpy(pData, g_didF17F, sizeof(g_didF17F));
-//     *pLength = sizeof(g_didF17F);
-// }
+void ProjectConfigGetGacSparePartNumber_F17F(uint8_t *pData, uint16_t *pLength)
+{
+    memcpy(pData, g_didF17F, sizeof(g_didF17F));
+    *pLength = sizeof(g_didF17F);
+}
 
 void ProjectConfigGetBootSwPartNumber_F180(uint8_t *pData, uint16_t *pLength)
 {

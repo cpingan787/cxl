@@ -352,12 +352,13 @@ void RemoteDiagnosticSdkProcess(CanIdConfig_t *pEcuConfigure, MpuBuffer_t *pMpuB
                 g_remoteDiagnosticOnlineStatus = 1;                        // 设为在线
                 if ((rxMsg.subcommand & 0x7F) == COMMAND_UDS_TRANSMIT_REQ) // 0x01
                 {
+                    LogHalUpLoadLog("GetTesterPresenceStatus%d", GetTesterPresenceStatus());
+                    LogHalUpLoadLog("isNonFactoryMode%d", isNonFactoryMode);
                     if ((rxMsg.mid == COMMAND_UDS_REMOTE_DIAG_MID || rxMsg.mid == COMMAND_UDS_FLASHER_MID) &&
-                        (GetTesterPresenceStatus() == 1) && (isNonFactoryMode == 1))
+                        0 && (isNonFactoryMode == 1))
                     {
                         // 插入诊断仪 禁用远程诊断和刷写
-                        LogHalUpLoadLog("GetTesterPresenceStatus%d", GetTesterPresenceStatus());
-                        LogHalUpLoadLog("isNonFactoryMode%d", isNonFactoryMode);
+                        
 
                         RemoteDiagnosticSdkSendAck(&rxMsg, DIAG_REJECT_TESTER_PRESENT);
 
@@ -464,9 +465,17 @@ void RemoteDiagnosticSdkProcess(CanIdConfig_t *pEcuConfigure, MpuBuffer_t *pMpuB
                     if (ret == 0)
                     {
                         responseId = pEcuConfigure->pEcuList[ecuId].responseId;
-                        RemoteDiagnosticSdkSendResponse(&rxMsg, responseId, udsRxbuf, udsRecvLen);
-                        LogHalUpLoadLog("[MCU] Success. Len: %d, ResID: 0x%X\r\n", udsRecvLen, responseId);
-                        g_udsReceiveFlag = 0;
+                        RemoteDiagnosticSdkSendResponse(&rxMsg, responseId, udsRxbuf, udsRecvLen);                   
+                        if ((udsRecvLen == 3) && (udsRxbuf[0] == 0x7F) && (udsRxbuf[2] == 0x78))
+                        {
+                            LogHalUpLoadLog("[MCU] Sent 0x78 to MPU. Waiting for final response...\r\n");
+                            g_udsTimeCount = 0; 
+                        }
+                        else
+                        {
+                            LogHalUpLoadLog("[MCU] Success. Len: %d, ResID: 0x%X\r\n", udsRecvLen, responseId);
+                            g_udsReceiveFlag = 0;
+                        }
                     }
                     else
                     {

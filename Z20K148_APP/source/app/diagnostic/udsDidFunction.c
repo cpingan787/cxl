@@ -5205,9 +5205,10 @@ int16_t Service22ReadGacDiagParamVersion(uint8_t *pData, uint16_t *pLength)
 // 0xF17F_cxl
 int16_t Service22ReadGacSparePartNumber(uint8_t *pData, uint16_t *pLength)
 {
-    uint16_t len = BOOT_HW_VERSION_LEN;
-    BootInfo_ReadHardwareVersion(pData, len);
-    *pLength = len;
+    // uint16_t len = BOOT_HW_VERSION_LEN;
+    // BootInfo_ReadHardwareVersion(pData, len);
+    // *pLength = len;
+    ProjectConfigGetGacSparePartNumber_F17F(pData, pLength);
     return 0;
 }
 
