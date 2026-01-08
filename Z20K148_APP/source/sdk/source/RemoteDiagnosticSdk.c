@@ -147,7 +147,13 @@ static uint8_t RemoteDiagnosticSdkTpTransmit(CanIdConfig_t *pEcuConfigure, MpuHa
             udsDataLen = rxMsg->dataLength - 7;
         }
     }
-
+    if (pUdsData != NULL && udsDataLen > 0)
+    {
+        if (pUdsData[0] == 0x36)
+        {
+            LogHalUpLoadLog("[OTA-TX] 36 Service Data Len: %d, Block: 0x%02X\r\n", udsDataLen, pUdsData[1]);
+        }
+    }
     if (udsDataLen == 0 && pUdsData == NULL)
     {
         return 0xFF;
@@ -236,15 +242,13 @@ static uint8_t RemoteDiagnosticSdkTpTransmit(CanIdConfig_t *pEcuConfigure, MpuHa
 
                 UdsTpSetFilter(g_udsTpHandle[pEcuConfigure->pEcuList[ecuId].channel], 0);
                 UdsTpClearRecvBuffer(g_udsTpHandle[pEcuConfigure->pEcuList[ecuId].channel]);
-
+                LogHalUpLoadLog("[MCU-TX] Transmit ID:0x%X. Enable RecvFlag.\r\n", canId);
                 if (canId == 0x067 || canId == 0x069)
                 {
-                    LogHalUpLoadLog("[MCU] Special ID (0x%X) -> Raw Mode (Keep Headers)\r\n", canId);
                     UdsTpTransmitRaw(g_udsTpHandle[pEcuConfigure->pEcuList[ecuId].channel], canId, pUdsData, udsDataLen);
                 }
                 else
                 {
-                    LogHalUpLoadLog("[MCU] Std ID (0x%X) -> Standard Mode (Strip Headers)\r\n", canId);
                     UdsTpTransmit(g_udsTpHandle[pEcuConfigure->pEcuList[ecuId].channel], canId, pUdsData, udsDataLen);
                 }
 
@@ -358,7 +362,6 @@ void RemoteDiagnosticSdkProcess(CanIdConfig_t *pEcuConfigure, MpuBuffer_t *pMpuB
                         0 && (isNonFactoryMode == 1))
                     {
                         // 插入诊断仪 禁用远程诊断和刷写
-                        
 
                         RemoteDiagnosticSdkSendAck(&rxMsg, DIAG_REJECT_TESTER_PRESENT);
 
@@ -452,28 +455,28 @@ void RemoteDiagnosticSdkProcess(CanIdConfig_t *pEcuConfigure, MpuBuffer_t *pMpuB
                     uint32_t currentReqId = pEcuConfigure->pEcuList[ecuId].requestId;
                     if (currentReqId == 0x067 || currentReqId == 0x069)
                     {
-                        LogHalUpLoadLog("[MCU] Special ID (0x%X) -> Raw Mode (Keep Headers)\r\n", currentReqId);
                         ret = UdsTpReceiveRaw(g_udsTpHandle[pEcuConfigure->pEcuList[ecuId].channel], udsRxbuf, &udsRecvLen);
                     }
                     else
                     {
-                        LogHalUpLoadLog("[MCU] Std ID (0x%X) -> Standard Mode (Strip Headers)\r\n", currentReqId);
-
                         ret = UdsTpReceive(g_udsTpHandle[pEcuConfigure->pEcuList[ecuId].channel], udsRxbuf, &udsRecvLen, 0);
                     }
 
                     if (ret == 0)
                     {
+                        LogHalUpLoadLog("[MCU-RX] UdsTpReceive OK! Len:%d, Data: %02X %02X %02X\r\n",
+                                        udsRecvLen, udsRxbuf[0], udsRxbuf[1], udsRxbuf[2]);
+
                         responseId = pEcuConfigure->pEcuList[ecuId].responseId;
-                        RemoteDiagnosticSdkSendResponse(&rxMsg, responseId, udsRxbuf, udsRecvLen);                   
+                        RemoteDiagnosticSdkSendResponse(&rxMsg, responseId, udsRxbuf, udsRecvLen);
                         if ((udsRecvLen == 3) && (udsRxbuf[0] == 0x7F) && (udsRxbuf[2] == 0x78))
                         {
-                            LogHalUpLoadLog("[MCU] Sent 0x78 to MPU. Waiting for final response...\r\n");
-                            g_udsTimeCount = 0; 
+                            LogHalUpLoadLog("[MCU-RX] Got 0x78 (Pending). KEEPING RecvFlag=1. Reset Timeout.\r\n");
+                            g_udsTimeCount = 0;
                         }
                         else
                         {
-                            LogHalUpLoadLog("[MCU] Success. Len: %d, ResID: 0x%X\r\n", udsRecvLen, responseId);
+                            LogHalUpLoadLog("[MCU-RX] Final Response. Stop Recv.\r\n");
                             g_udsReceiveFlag = 0;
                         }
                     }
@@ -509,7 +512,15 @@ void RemoteDiagnosticSdkProcess(CanIdConfig_t *pEcuConfigure, MpuBuffer_t *pMpuB
 
             if (g_udsTimeCount > 2000)
             {
+                if (g_udsReceiveFlag == 1)
+                {
+                    LogHalUpLoadLog("[MCU-ERR] UDS Receive Timeout! Force Stop.\r\n");
+                }
                 g_udsFlag = 1;
+                if (g_udsReceiveFlag == 1)
+                {
+                    g_udsReceiveFlag = 0;
+                }
                 g_udsTimeCount = 0;
             }
         }
