@@ -5,11 +5,11 @@
 #include "logHal.h"
 #include "virtualTpSdk.h"
 
-#define VIRTUAL_TP_HANDLE_MAX  10
+#define VIRTUAL_TP_HANDLE_MAX 10
 
-static uint8_t g_handleList[VIRTUAL_TP_HANDLE_MAX]  = {0};
+static uint8_t g_handleList[VIRTUAL_TP_HANDLE_MAX] = {0};
 
-//static QueueHandle_t g_queueHandleList[VIRTUAL_TP_HANDLE_MAX];
+// static QueueHandle_t g_queueHandleList[VIRTUAL_TP_HANDLE_MAX];
 typedef struct
 {
     SemaphoreHandle_t mutexHandle;
@@ -19,7 +19,7 @@ typedef struct
     uint8_t *txBuffer;
     uint16_t txBufferSize;
     uint16_t txBufferLenth;
-}VirtualTpBuffer_t;
+} VirtualTpBuffer_t;
 
 static VirtualTpBuffer_t g_bufferList[VIRTUAL_TP_HANDLE_MAX];
 
@@ -33,30 +33,30 @@ static VirtualTpBuffer_t g_bufferList[VIRTUAL_TP_HANDLE_MAX];
   Output:         无
   Return:         >=0：返回一个正确的句柄
                   -1：获取句柄失败
-  Others:         
+  Others:
 *************************************************/
-int16_t VirtualTpSdkClientOpen(uint8_t *rxBuffer,uint16_t rxBufLength,uint8_t *txBuffer,uint16_t txBufLength)
+int16_t VirtualTpSdkClientOpen(uint8_t *rxBuffer, uint16_t rxBufLength, uint8_t *txBuffer, uint16_t txBufLength)
 {
     int16_t i = 0;
-    
-    if(rxBuffer == NULL || txBuffer == NULL || rxBufLength == 0 || txBufLength == 0)
+
+    if (rxBuffer == NULL || txBuffer == NULL || rxBufLength == 0 || txBufLength == 0)
     {
         return -1;
     }
-    
-    for(i = 0;i < VIRTUAL_TP_HANDLE_MAX;i++)
+
+    for (i = 0; i < VIRTUAL_TP_HANDLE_MAX; i++)
     {
-        if(g_handleList[i] != 0x5A)
+        if (g_handleList[i] != 0x5A)
         {
             g_handleList[i] = 0x5A;
             break;
-        } 
+        }
     }
-    if(i == VIRTUAL_TP_HANDLE_MAX)
+    if (i == VIRTUAL_TP_HANDLE_MAX)
     {
         return -1;
     }
-    //g_queueHandleList = xQueueCreate(5,64);
+    // g_queueHandleList = xQueueCreate(5,64);
     g_bufferList[i].mutexHandle = xSemaphoreCreateMutex();
     g_bufferList[i].rxBuffer = rxBuffer;
     g_bufferList[i].rxBufferSize = rxBufLength;
@@ -78,24 +78,24 @@ int16_t VirtualTpSdkClientOpen(uint8_t *rxBuffer,uint16_t rxBufLength,uint8_t *t
   Return:         结果
                   0：成功
                   -1：失败
-  Others:         
+  Others:
 *************************************************/
-int16_t VirtualTpSdkClientReceive(int16_t handle,uint8_t *pBuffer,uint16_t bufLength,uint16_t *pLengthOut)
+int16_t VirtualTpSdkClientReceive(int16_t handle, uint8_t *pBuffer, uint16_t bufLength, uint16_t *pLengthOut)
 {
-    if(handle >= VIRTUAL_TP_HANDLE_MAX)
+    if (handle >= VIRTUAL_TP_HANDLE_MAX)
     {
         return -1;
     }
-    if(g_handleList[handle] != 0x5A)
+    if (g_handleList[handle] != 0x5A)
     {
         return -1;
     }
-    
-    xSemaphoreTake(g_bufferList[handle].mutexHandle, portMAX_DELAY );
-    
-    if((g_bufferList[handle].rxBufferLenth > 0) && (g_bufferList[handle].rxBufferLenth <= bufLength))
+
+    xSemaphoreTake(g_bufferList[handle].mutexHandle, portMAX_DELAY);
+
+    if ((g_bufferList[handle].rxBufferLenth > 0) && (g_bufferList[handle].rxBufferLenth <= bufLength))
     {
-        memcpy(pBuffer,g_bufferList[handle].rxBuffer,g_bufferList[handle].rxBufferLenth);
+        memcpy(pBuffer, g_bufferList[handle].rxBuffer, g_bufferList[handle].rxBufferLenth);
         *pLengthOut = g_bufferList[handle].rxBufferLenth;
         g_bufferList[handle].rxBufferLenth = 0;
     }
@@ -103,17 +103,17 @@ int16_t VirtualTpSdkClientReceive(int16_t handle,uint8_t *pBuffer,uint16_t bufLe
     {
         *pLengthOut = 0;
     }
-    
+
     xSemaphoreGive(g_bufferList[handle].mutexHandle);
-    
-    if(*pLengthOut > 0)
+
+    if (*pLengthOut > 0)
     {
-        TBOX_PRINT("client recv :");
-        for(uint8_t i = 0;i<*pLengthOut;i++)
-        {
-            TBOX_PRINT("%02x ",pBuffer[i]);
-        }
-        TBOX_PRINT("\r\n");
+        // TBOX_PRINT("client recv :");
+        // for(uint8_t i = 0;i<*pLengthOut;i++)
+        // {
+        //     TBOX_PRINT("%02x ",pBuffer[i]);
+        // }
+        // TBOX_PRINT("\r\n");
     }
     return 0;
 }
@@ -127,36 +127,36 @@ int16_t VirtualTpSdkClientReceive(int16_t handle,uint8_t *pBuffer,uint16_t bufLe
   Output:         无
   Return:         0：成功
                   -1：失败
-  Others:         
+  Others:
 *************************************************/
-int16_t VirtualTpSdkClientTransmit(int16_t handle,const uint8_t *pData,uint16_t bufLength)
+int16_t VirtualTpSdkClientTransmit(int16_t handle, const uint8_t *pData, uint16_t bufLength)
 {
-    if(handle >= VIRTUAL_TP_HANDLE_MAX)
+    if (handle >= VIRTUAL_TP_HANDLE_MAX)
     {
         return -1;
     }
-    if(g_handleList[handle] != 0x5A)
+    if (g_handleList[handle] != 0x5A)
     {
         return -1;
     }
-    if((pData == NULL) || (bufLength == 0))
+    if ((pData == NULL) || (bufLength == 0))
     {
         return -1;
     }
     TBOX_PRINT("client transmit :");
-    for(uint8_t i = 0;i<bufLength;i++)
-    {
-        TBOX_PRINT("%02x ",pData[i]);
-    }
+    // for(uint8_t i = 0;i<bufLength;i++)
+    // {
+    //     TBOX_PRINT("%02x ",pData[i]);
+    // }
     TBOX_PRINT("\r\n");
-    xSemaphoreTake(g_bufferList[handle].mutexHandle, portMAX_DELAY );
-    
-    if(g_bufferList[handle].txBufferSize >= bufLength)
+    xSemaphoreTake(g_bufferList[handle].mutexHandle, portMAX_DELAY);
+
+    if (g_bufferList[handle].txBufferSize >= bufLength)
     {
-        memcpy(g_bufferList[handle].txBuffer,pData,bufLength);
+        memcpy(g_bufferList[handle].txBuffer, pData, bufLength);
         g_bufferList[handle].txBufferLenth = bufLength;
     }
-    
+
     xSemaphoreGive(g_bufferList[handle].mutexHandle);
     return 0;
 }
@@ -170,38 +170,38 @@ int16_t VirtualTpSdkClientTransmit(int16_t handle,const uint8_t *pData,uint16_t 
   Output:         无
   Return:         0：成功
                   -1：失败
-  Others:         
+  Others:
 *************************************************/
-int16_t VirtualTpSdkServerTransmit(uint8_t channelId,const uint8_t *pData,uint16_t bufLength)
+int16_t VirtualTpSdkServerTransmit(uint8_t channelId, const uint8_t *pData, uint16_t bufLength)
 {
-    if(channelId >= VIRTUAL_TP_HANDLE_MAX)
+    if (channelId >= VIRTUAL_TP_HANDLE_MAX)
     {
         return -1;
     }
-    if(g_handleList[channelId] != 0x5A)
+    if (g_handleList[channelId] != 0x5A)
     {
         return -1;
     }
-    if((pData == NULL) || (bufLength == 0))
+    if ((pData == NULL) || (bufLength == 0))
     {
         return -1;
     }
-    
+
     TBOX_PRINT("server transmit :");
-    for(uint8_t i = 0;i<bufLength;i++)
-    {
-        TBOX_PRINT("%02x ",pData[i]);
-    }
+    // for(uint8_t i = 0;i<bufLength;i++)
+    // {
+    //     TBOX_PRINT("%02x ",pData[i]);
+    // }
     TBOX_PRINT("\r\n");
-    
-    xSemaphoreTake(g_bufferList[channelId].mutexHandle, portMAX_DELAY );
-    
-    if(g_bufferList[channelId].rxBufferSize >= bufLength)
+
+    xSemaphoreTake(g_bufferList[channelId].mutexHandle, portMAX_DELAY);
+
+    if (g_bufferList[channelId].rxBufferSize >= bufLength)
     {
-        memcpy(g_bufferList[channelId].rxBuffer,pData,bufLength);
+        memcpy(g_bufferList[channelId].rxBuffer, pData, bufLength);
         g_bufferList[channelId].rxBufferLenth = bufLength;
     }
-    
+
     xSemaphoreGive(g_bufferList[channelId].mutexHandle);
     return 0;
 }
@@ -216,39 +216,39 @@ int16_t VirtualTpSdkServerTransmit(uint8_t channelId,const uint8_t *pData,uint16
   Output:         无
   Return:         0：成功
                   -1：失败
-  Others:         
+  Others:
 *************************************************/
-int16_t VirtualTpSdkServerReceive(uint8_t *pChannelId,uint8_t *pBuffer,uint16_t bufLength,uint16_t *pLengthOut)
+int16_t VirtualTpSdkServerReceive(uint8_t *pChannelId, uint8_t *pBuffer, uint16_t bufLength, uint16_t *pLengthOut)
 {
     uint8_t i = 0;
-    if((pBuffer == NULL) || (bufLength == 0))
+    if ((pBuffer == NULL) || (bufLength == 0))
     {
         return -1;
     }
-    for(i = 0;i < VIRTUAL_TP_HANDLE_MAX;i++)
+    for (i = 0; i < VIRTUAL_TP_HANDLE_MAX; i++)
     {
-        if(g_handleList[i] == 0x5A)
+        if (g_handleList[i] == 0x5A)
         {
-            xSemaphoreTake(g_bufferList[i].mutexHandle, portMAX_DELAY );
-            
-            if((g_bufferList[i].txBufferLenth > 0) && (g_bufferList[i].txBufferLenth <= bufLength))
+            xSemaphoreTake(g_bufferList[i].mutexHandle, portMAX_DELAY);
+
+            if ((g_bufferList[i].txBufferLenth > 0) && (g_bufferList[i].txBufferLenth <= bufLength))
             {
-                memcpy(pBuffer,g_bufferList[i].txBuffer,g_bufferList[i].txBufferLenth);
+                memcpy(pBuffer, g_bufferList[i].txBuffer, g_bufferList[i].txBufferLenth);
                 *pLengthOut = g_bufferList[i].txBufferLenth;
                 g_bufferList[i].txBufferLenth = 0;
                 *pChannelId = i;
                 xSemaphoreGive(g_bufferList[i].mutexHandle);
-                
+
                 TBOX_PRINT("server recv :");
-                for(uint8_t j = 0;j<*pLengthOut;j++)
-                {
-                    TBOX_PRINT("%02x ",pBuffer[j]);
-                }
+                // for(uint8_t j = 0;j<*pLengthOut;j++)
+                // {
+                //     TBOX_PRINT("%02x ",pBuffer[j]);
+                // }
                 TBOX_PRINT("\r\n");
-                
+
                 return 0;
             }
-            
+
             xSemaphoreGive(g_bufferList[i].mutexHandle);
         }
         else
@@ -256,10 +256,6 @@ int16_t VirtualTpSdkServerReceive(uint8_t *pChannelId,uint8_t *pBuffer,uint16_t 
             *pLengthOut = 0;
         }
     }
-    
+
     return -1;
 }
-
-
-
-

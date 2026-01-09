@@ -51,10 +51,6 @@ static uint8_t g_txData[256] = {0};
 static MpuHalDataPack_t g_txPack;
 static CanChanel_t *g_canChannelList = NULL;
 
-static uint8_t g_currentUdsSeqNum = 0; // 保存当前请求的序列号
-static uint8_t g_currentUdsAid = 0;    // 保存 AID
-static uint8_t g_currentUdsMid = 0;    // 保存 MID
-
 static int16_t RemoteDiagnosticSdkSendAck(MpuHalDataPack_t *recvPack, uint8_t result)
 {
     if (recvPack == NULL)
@@ -87,16 +83,14 @@ static int16_t RemoteDiagnosticSdkSendResponse(MpuHalDataPack_t *recvPack, uint3
         return -1;
     }
 
-    // g_txPack.aid = recvPack->aid;
-    // g_txPack.mid = recvPack->mid;
-    g_txPack.aid = g_currentUdsAid;
-    g_txPack.mid = g_currentUdsMid;
+    g_txPack.aid = recvPack->aid;
+    g_txPack.mid = recvPack->mid;
     g_txPack.subcommand = COMMAND_UDS_RESPONSE_REQ; // 0x03
 
     g_txData[0] = 0;
     g_txData[1] = 0;
-    // g_txData[2] = recvPack->pDataBuffer[2]; // 序列号 Index
-    g_txData[2] = g_currentUdsSeqNum;
+    g_txData[2] = recvPack->pDataBuffer[2]; // 序列号 Index
+
     g_txData[3] = (canId >> 24) & 0xFF;
     g_txData[4] = (canId >> 16) & 0xFF;
     g_txData[5] = (canId >> 8) & 0xFF;
@@ -167,7 +161,7 @@ static uint8_t RemoteDiagnosticSdkTpTransmit(CanIdConfig_t *pEcuConfigure, MpuHa
 
     if (canId == pEcuConfigure->functionalId)
     {
-        LogHalUpLoadLog("[MCU] RemoteDiagnosticSdkTpTransmit Functional ID: 0x%X\r\n", canId);
+        // LogHalUpLoadLog("[MCU] RemoteDiagnosticSdkTpTransmit Functional ID: 0x%X\r\n", canId);
         if (responseId != 0)
         {
             for (i = 0; i < pEcuConfigure->ecuListSize; i++)
@@ -191,7 +185,7 @@ static uint8_t RemoteDiagnosticSdkTpTransmit(CanIdConfig_t *pEcuConfigure, MpuHa
         }
         else
         {
-            g_udsReceiveFlag = 0;
+            // g_udsReceiveFlag = 0;
         }
 
         for (i = 0; i < canChannelList->canChanelListSize; i++)
@@ -199,6 +193,7 @@ static uint8_t RemoteDiagnosticSdkTpTransmit(CanIdConfig_t *pEcuConfigure, MpuHa
             UdsTpTransmit(g_udsTpHandle[canChannelList->canChanelList[i]], canId, pUdsData, udsDataLen);
         }
         VirtualTpSdkClientTransmit(virtualTpHandle, pUdsData, udsDataLen);
+        
         // LogHalUpLoadLog("[MCU] RemoteDiagnosticSdkTpTransmit Data:");
         // for (i = 0; i < udsDataLen; i++)
         // {
@@ -248,7 +243,7 @@ static uint8_t RemoteDiagnosticSdkTpTransmit(CanIdConfig_t *pEcuConfigure, MpuHa
 
                 UdsTpSetFilter(g_udsTpHandle[pEcuConfigure->pEcuList[ecuId].channel], 0);
                 UdsTpClearRecvBuffer(g_udsTpHandle[pEcuConfigure->pEcuList[ecuId].channel]);
-                LogHalUpLoadLog("[MCU-TX] Transmit ID:0x%X. Enable RecvFlag.\r\n", canId);
+                // LogHalUpLoadLog("[MCU-TX] Transmit ID:0x%X. Enable RecvFlag.\r\n", canId);
                 if (canId == 0x067 || canId == 0x069)
                 {
                     UdsTpTransmitRaw(g_udsTpHandle[pEcuConfigure->pEcuList[ecuId].channel], canId, pUdsData, udsDataLen);
@@ -321,7 +316,7 @@ void RemoteDiagnosticSdkProcess(CanIdConfig_t *pEcuConfigure, MpuBuffer_t *pMpuB
 
     while (1)
     {
-        ret = MpuHalReceive(g_mpuHandle, &rxMsg, 5);
+        ret = MpuHalReceive(g_mpuHandle, &rxMsg, 3);
 
         uint8_t currentMode = UdsDidGetManufactoryMode();
         uint8_t isNonFactoryMode = (currentMode <= 0x0F) ? 1 : 0;
@@ -362,8 +357,8 @@ void RemoteDiagnosticSdkProcess(CanIdConfig_t *pEcuConfigure, MpuBuffer_t *pMpuB
                 g_remoteDiagnosticOnlineStatus = 1;                        // 设为在线
                 if ((rxMsg.subcommand & 0x7F) == COMMAND_UDS_TRANSMIT_REQ) // 0x01
                 {
-                    LogHalUpLoadLog("GetTesterPresenceStatus%d", GetTesterPresenceStatus());
-                    LogHalUpLoadLog("isNonFactoryMode%d", isNonFactoryMode);
+                    // LogHalUpLoadLog("GetTesterPresenceStatus%d", GetTesterPresenceStatus());
+                    // LogHalUpLoadLog("isNonFactoryMode%d", isNonFactoryMode);
                     if ((rxMsg.mid == COMMAND_UDS_REMOTE_DIAG_MID || rxMsg.mid == COMMAND_UDS_FLASHER_MID) &&
                         0 && (isNonFactoryMode == 1))
                     {
@@ -383,10 +378,6 @@ void RemoteDiagnosticSdkProcess(CanIdConfig_t *pEcuConfigure, MpuBuffer_t *pMpuB
                         }
                         else
                         {
-                            g_currentUdsAid = rxMsg.aid;
-                            g_currentUdsMid = rxMsg.mid;
-                            g_currentUdsSeqNum = rxMsg.pDataBuffer[2]; // 保存序列号
-
                             RemoteDiagnosticSdkSendAck(&rxMsg, 0);
                             oldIndex = rxMsg.pDataBuffer[2];
                             ecuId = RemoteDiagnosticSdkTpTransmit(pEcuConfigure, &rxMsg, virtualTpHandle);
@@ -401,7 +392,6 @@ void RemoteDiagnosticSdkProcess(CanIdConfig_t *pEcuConfigure, MpuBuffer_t *pMpuB
                     uint8_t ota_flag = RemoteControlGetOtaFlag();
                     if (ota_flag == 1)
                     {
-                        TBOX_PRINT("[RemoteDiag] OTA Active! Ignore Reset Command.\r\n");
                     }
                     else
                     {
@@ -474,19 +464,17 @@ void RemoteDiagnosticSdkProcess(CanIdConfig_t *pEcuConfigure, MpuBuffer_t *pMpuB
 
                     if (ret == 0)
                     {
-                        LogHalUpLoadLog("[MCU-RX] UdsTpReceive OK! Len:%d, Data: %02X %02X %02X\r\n",
-                                        udsRecvLen, udsRxbuf[0], udsRxbuf[1], udsRxbuf[2]);
+                        // LogHalUpLoadLog("[MCU-RX] UdsTpReceive OK! Len:%d, Data: %02X %02X %02X\r\n",
+                        //                 udsRecvLen, udsRxbuf[0], udsRxbuf[1], udsRxbuf[2]);
 
                         responseId = pEcuConfigure->pEcuList[ecuId].responseId;
                         RemoteDiagnosticSdkSendResponse(&rxMsg, responseId, udsRxbuf, udsRecvLen);
                         if ((udsRecvLen == 3) && (udsRxbuf[0] == 0x7F) && (udsRxbuf[2] == 0x78))
                         {
-                            LogHalUpLoadLog("[MCU-RX] Got 0x78 (Pending). KEEPING RecvFlag=1. Reset Timeout.\r\n");
                             g_udsTimeCount = 0;
                         }
                         else
                         {
-                            LogHalUpLoadLog("[MCU-RX] Final Response. Stop Recv.\r\n");
                             g_udsReceiveFlag = 0;
                         }
                     }

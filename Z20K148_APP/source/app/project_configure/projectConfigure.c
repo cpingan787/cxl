@@ -14,7 +14,7 @@ static const uint8_t g_didF10B[4] = {
     0x01,
     0x01};
 
-static const uint8_t g_didF17F[17] = "87H6ADE060  H.E00"; // 硬件版本号
+static const uint8_t g_didF17F[17] = "87H6ADE060  H.E09"; // 硬件版本号
 static const uint8_t g_didF187[14] = "8550003ADE0500";    // 零件号                                                                                     // 0xF187_cxl
 static const uint8_t g_didF189[17] = "8786ADE050  S.E01"; // 软件版本号       
 
