@@ -51,6 +51,10 @@ static uint8_t g_txData[256] = {0};
 static MpuHalDataPack_t g_txPack;
 static CanChanel_t *g_canChannelList = NULL;
 
+static uint8_t g_currentUdsSeqNum = 0; // 保存当前请求的序列号
+static uint8_t g_currentUdsAid = 0;    // 保存 AID
+static uint8_t g_currentUdsMid = 0;    // 保存 MID
+
 static int16_t RemoteDiagnosticSdkSendAck(MpuHalDataPack_t *recvPack, uint8_t result)
 {
     if (recvPack == NULL)
@@ -83,14 +87,16 @@ static int16_t RemoteDiagnosticSdkSendResponse(MpuHalDataPack_t *recvPack, uint3
         return -1;
     }
 
-    g_txPack.aid = recvPack->aid;
-    g_txPack.mid = recvPack->mid;
+    // g_txPack.aid = recvPack->aid;
+    // g_txPack.mid = recvPack->mid;
+    g_txPack.aid = g_currentUdsAid;
+    g_txPack.mid = g_currentUdsMid;
     g_txPack.subcommand = COMMAND_UDS_RESPONSE_REQ; // 0x03
 
     g_txData[0] = 0;
     g_txData[1] = 0;
-    g_txData[2] = recvPack->pDataBuffer[2]; // 序列号 Index
-
+    // g_txData[2] = recvPack->pDataBuffer[2]; // 序列号 Index
+    g_txData[2] = g_currentUdsSeqNum;
     g_txData[3] = (canId >> 24) & 0xFF;
     g_txData[4] = (canId >> 16) & 0xFF;
     g_txData[5] = (canId >> 8) & 0xFF;
@@ -377,6 +383,10 @@ void RemoteDiagnosticSdkProcess(CanIdConfig_t *pEcuConfigure, MpuBuffer_t *pMpuB
                         }
                         else
                         {
+                            g_currentUdsAid = rxMsg.aid;
+                            g_currentUdsMid = rxMsg.mid;
+                            g_currentUdsSeqNum = rxMsg.pDataBuffer[2]; // 保存序列号
+
                             RemoteDiagnosticSdkSendAck(&rxMsg, 0);
                             oldIndex = rxMsg.pDataBuffer[2];
                             ecuId = RemoteDiagnosticSdkTpTransmit(pEcuConfigure, &rxMsg, virtualTpHandle);
