@@ -1,0 +1,12 @@
+vehicleSignalApp.pbi: \
+  G:\CODE\duola_cv01_tr2\tviibe1m\source\app\vehicle_signal\vehicleSignalApp.c \
+  G:\CODE\duola_cv01_tr2\tviibe1m\source\app\vehicle_signal/vehicleSignalApp.h \
+  C:\Program\ Files\ (x86)\IAR\ Systems\Embedded\ Workbench\ 8.4\arm\inc\c\stdint.h \
+  C:\Program\ Files\ (x86)\IAR\ Systems\Embedded\ Workbench\ 8.4\arm\inc\c\ycheck.h \
+  C:\Program\ Files\ (x86)\IAR\ Systems\Embedded\ Workbench\ 8.4\arm\inc\c\yvals.h \
+  C:\Program\ Files\ (x86)\IAR\ Systems\Embedded\ Workbench\ 8.4\arm\inc\c\DLib_Defaults.h \
+  C:\Program\ Files\ (x86)\IAR\ Systems\Embedded\ Workbench\ 8.4\arm\inc\c\DLib_Config_Normal.h \
+  C:\Program\ Files\ (x86)\IAR\ Systems\Embedded\ Workbench\ 8.4\arm\inc\c\DLib_Product.h \
+  G:\CODE\duola_cv01_tr2\tviibe1m\tools\iar\flash\cm4_mc\..\..\..\..\source\sdk\include\canParseSDK.h \
+  G:\CODE\duola_cv01_tr2\tviibe1m\tools\iar\flash\cm4_mc\..\..\..\..\source\hal\include\logHal.h \
+  G:\CODE\duola_cv01_tr2\tviibe1m\tools\iar\flash\cm4_mc\..\..\..\..\source\app\diagnostic\taskDtcProcess.h

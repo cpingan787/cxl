@@ -1,0 +1,15 @@
+"D:\Program Files (x86)\IAR Systems\Embedded Workbench 8.4\arm\bin\armproc.dll" 
+
+"D:\Program Files (x86)\IAR Systems\Embedded Workbench 8.4\arm\bin\armJET.dll" 
+
+"D:\work\sourcecode\4Gopen_source\4G-C3\mcu_lv2_cyt2b75_base\tviibe1m\tools\iar\flash\cm4_mc\starter_kit\Exe\cm4.out" 
+
+--plugin="D:\Program Files (x86)\IAR Systems\Embedded Workbench 8.4\arm\bin\armbat.dll" 
+
+--device_macro="D:\Program Files (x86)\IAR Systems\Embedded Workbench 8.4\arm\config\debugger\Cypress\CYTVII_M4.dmac" 
+
+--flash_loader="D:\Program Files (x86)\IAR Systems\Embedded Workbench 8.4\arm\config\flashloader\Cypress\FlashCYT2_CF1M_WF96K_CM4.board" 
+
+
+
+
