@@ -52,40 +52,40 @@ typedef int16_t (*pService31_DIDFunction)(uint8_t *pDataIn, uint16_t lengthIn, u
 
 typedef enum
 {
-    E_SUBFUN_GET_OK,
-    E_SUBFUN_GET_INVALID_DID,
-    E_SUBFUN_GET_INVALID_SECURITY,
-    E_SUBFUN_GET_INVALID_LENGTH,
+  E_SUBFUN_GET_OK,
+  E_SUBFUN_GET_INVALID_DID,
+  E_SUBFUN_GET_INVALID_SECURITY,
+  E_SUBFUN_GET_INVALID_LENGTH,
 } SeriveGetSubFunState_e;
 
 typedef enum
 {
-    E_SECURITYTIMER_NONE,
-    E_SECURITYTIMER_RESETDELAY,
-    E_SECURITYTIMER_ACCESSERRORDELAY,
-    E_SECURITYTIMER_KEYDELAY,
+  E_SECURITYTIMER_NONE,
+  E_SECURITYTIMER_RESETDELAY,
+  E_SECURITYTIMER_ACCESSERRORDELAY,
+  E_SECURITYTIMER_KEYDELAY,
 } SecurityTimerDelayType_e;
 
 typedef struct
 {
-    uint16_t u16DID;
-    uint16_t u16Len;
-    pService22_DIDFunction pFun;
+  uint16_t u16DID;
+  uint16_t u16Len;
+  pService22_DIDFunction pFun;
 } RdidInfor_t;
 
 typedef struct _WdidInfor_t
 {
-    uint16_t u16DID;
-    uint16_t u16Len;
-    pService2E_DIDFunction pFun;
-    UdsSecurityLevel_e u8SecurityLevel;
+  uint16_t u16DID;
+  uint16_t u16Len;
+  pService2E_DIDFunction pFun;
+  UdsSecurityLevel_e u8SecurityLevel;
 } WdidInfor_t;
 
 typedef struct
 {
-    uint16_t u16DID;
-    pService31_DIDFunction pFun;
-    UdsSecurityLevel_e u8SecurityLevel;
+  uint16_t u16DID;
+  pService31_DIDFunction pFun;
+  UdsSecurityLevel_e u8SecurityLevel;
 } S31DidInfor_t;
 
 #define UDS_OFFSET_SID 0
@@ -101,10 +101,10 @@ typedef struct
 
 typedef struct
 {
-    uint8_t SID;
-    uint8_t sessionSupport;
-    uint8_t addressingSupport;
-    pServiceFunction pFun;
+  uint8_t SID;
+  uint8_t sessionSupport;
+  uint8_t addressingSupport;
+  pServiceFunction pFun;
 } Diagnostic_t;
 
 static int16_t Service0x10Process(uint8_t *udsData, uint16_t udsLen, uint8_t functionAddressFlag);
@@ -217,7 +217,7 @@ static const WdidInfor_t g_Service2EFunMapList[] =
         {0xB2CB, 50, Service2EWriteOtaDomainName, E_UDS_SECURITY_LEVEL1},      // 0xB2CB_cxl //104F_cxl
         //{0x104F, 50, Service2EWriteOtaDomainName, E_UDS_SECURITY_LEVEL1},      // 0xB2CB_cxl //104F_cxl
 
-        {0xB2CC, 8, Service2EWriteOtaPort, E_UDS_SECURITY_LEVEL1}, // 0xB2CC_cxl
+        {0xB2CC, 8, Service2EWriteOtaPort, E_UDS_SECURITY_LEVEL1},               // 0xB2CC_cxl
         //{0x1050, 8, Service2EWriteOtaPort, E_UDS_SECURITY_LEVEL1},               // 0x1050_cxl B2CC_cxl
         {0x1052, 50, Service2EWritePkiDomainName, E_UDS_SECURITY_LEVEL1},        // 0x1052_cxl
         {0x1053, 8, Service2EWritePkiPort, E_UDS_SECURITY_LEVEL1},               // 0x1053_cxl
@@ -251,13 +251,13 @@ static const WdidInfor_t g_Service2EFunMapList[] =
         {0xB2CA, 6, Service2EWriteOtaBookingTime, E_UDS_SECURITY_LEVEL1},            // 0xB2CA_cxl
         {0xB2CD, 1, Service2EWriteOtaSwAcqTime, E_UDS_SECURITY_LEVEL1},              // 0xB2CD_cxl
 
-        {0xB2E6, 64, Service2EWriteFunctionConfig, E_UDS_SECURITY_LEVEL1},    // 0xB2E6_cxl
-        {0x0110, 1, Service2EWriteManufactoryMode, E_UDS_SECURITY_LEVEL1},    // 0x0110_cxl
-        {0xB2B4, 1, Service2EWriteTransportMode, E_UDS_SECURITY_LEVEL1},      // 0xB2B4_cxl
+        {0xB2E6, 64, Service2EWriteFunctionConfig, E_UDS_SECURITY_LEVEL1}, // 0xB2E6_cxl
+        {0x0110, 1, Service2EWriteManufactoryMode, E_UDS_SECURITY_LEVEL1}, // 0x0110_cxl
+        {0xB2B4, 1, Service2EWriteTransportMode, E_UDS_SECURITY_LEVEL1},   // 0xB2B4_cxl
         {0x0120, 12, Service2EWriteDtcSettingControl, E_UDS_SECURITY_LEVEL1}, // 0x0120_cxl
-        {0x0111, 20, Service2EWriteICCID, E_UDS_SECURITY_LEVEL1},             // 0x0111_cxl
-        {0X010E, 15, Service2EWriteIMEI, E_UDS_SECURITY_LEVEL1},              // 0x010E_cxl
-        {0X010F, 15, Service2EWriteIMSI, E_UDS_SECURITY_LEVEL1},              // 0x010F_cxl
+        {0x0111, 20, Service2EWriteICCID, E_UDS_SECURITY_LEVEL1}, // 0x0111_cxl
+        {0X010E, 15, Service2EWriteIMEI, E_UDS_SECURITY_LEVEL1},  // 0x010E_cxl
+        {0X010F, 15, Service2EWriteIMSI, E_UDS_SECURITY_LEVEL1},  // 0x010F_cxl
         //{0xF187,14,Service2EWriteGacEcuPartNumber,E_UDS_SECURITY_LEVEL1}, // 0xF187_cxl
         {0xB208, 2, Service2EWriteRtcWakeupSet, E_UDS_SECURITY_LEVEL1},
         {0xB25F, 1, Service2EWrite4GModuleRsetTime, E_UDS_SECURITY_LEVEL1},
@@ -368,8 +368,8 @@ static const uint16_t g_passthroughDidList_22[] = {
     0x2111,
     0xB2E6,
     0x1014,
-    // 0x011F,
-    // 0x0124,
+    //0x011F,
+    //0x0124,
 };
 static const RdidInfor_t g_Service22FunMapList[] =
     {
@@ -472,16 +472,16 @@ static const RdidInfor_t g_Service22FunMapList[] =
         {0xB257, 2, Service22ReadEthLineFaultInfo},                                               // 0xB257_cxl
         {0xB2CB, 50, Service22ReadOtaDomainName},                                                 //   0xB2CB_cxl //104F_cxl
         //{0x104F, 50, Service22ReadOtaDomainName},                                                 // 0xB2CB_cxl //104F_cxl
-        {0xB2CC, 8, Service22ReadOtaPort}, //   0xB2CC_cxl
+        {0xB2CC, 8, Service22ReadOtaPort},                                                        //   0xB2CC_cxl
         //{0x1050, 8, Service22ReadOtaPort},                                                        // 0x1050_cxl B2CC_cxl
-        {0x1052, 50, Service22ReadPkiDomainName},          //   0x1052_cxl
-        {0x1053, 8, Service22ReadPkiPort},                 //    0x1053_cxl
-        {0x0110, 1, Service22ReadManufactoryMode},         // 工厂模式 0x0110_cxl
-        {0xB2B4, 1, Service22ReadTransportMode},           // 运输模式   0xB2B4_cxl
-        {0xB2B5, 1, Service22ReadKeySt},                   // 电子钥匙状态   0xB2B5_cxl
-        {0x0120, 12, Service22ReadDtcSettingControl},      // DTC使能控制 0x0120_cxl
-        {0xF186, 1, Service22ReadActiveDiagnosticSession}, // 0xF186_cxl
-        {0x031C, 50, Service22ReadTspDomain1},             // 0x031C_cxl
+        {0x1052, 50, Service22ReadPkiDomainName},                                                 //   0x1052_cxl
+        {0x1053, 8, Service22ReadPkiPort},                                                        //    0x1053_cxl
+        {0x0110, 1, Service22ReadManufactoryMode},                                                // 工厂模式 0x0110_cxl
+        {0xB2B4, 1, Service22ReadTransportMode},                                                  // 运输模式   0xB2B4_cxl
+        {0xB2B5, 1, Service22ReadKeySt},                                                          // 电子钥匙状态   0xB2B5_cxl
+        {0x0120, 12, Service22ReadDtcSettingControl},                                             // DTC使能控制 0x0120_cxl
+        {0xF186, 1, Service22ReadActiveDiagnosticSession},    // 0xF186_cxl
+        {0x031C, 50, Service22ReadTspDomain1},                // 0x031C_cxl
         //{0x5001, 1, Service22ReadVehicleMode},                // 车辆模式 0x5001_cxl
         {0xB26B, 1, Service22ReadSpiCommunicationBetweenMCU}, // MCU与SPI通信状态 0xB26B_cxl
         {0xB271, 1, Service22ReadOpenCpuTemperature},
@@ -548,12 +548,12 @@ static const S31DidInfor_t g_routineStartDidMap[] =
         {0xDFD6, Service31StartRoutineGetLearn, E_UDS_SECURITY_LEVEL1},
         {0xDF75, Service31StartRoutineVerifyEolPIN, E_UDS_SECURITY_LEVEL1},
         {0xDF78, Service31StartRoutineClearPINSK, E_UDS_SECURITY_LEVEL1},
-        {0xCE01, Service31StartRoutinePKI, E_UDS_SECURITY_LEVEL1},           // PKI触发流程
-                                                                             //  {0xF002, Service31StopApplication             , E_UDS_SECURITY_LEVEL1 },
-                                                                             //  {0xF005, Service31WriteDiagnosticCanReport01  ,     E_UDS_SECURITY_LEVEL1 },
-                                                                             //{0xB2D0, Service31StartRoutineDiagDefault, E_UDS_SECURITY_LEVEL1}, // DID,DTC恢复默认值
-        {0xB2D3, Service31StartRoutineDTC, E_UDS_SECURITY_LEVEL1},           // DTC计数器
-                                                                             //{0xB2E5, Service31StartRoutineJTAG, E_UDS_SECURITY_LEVEL1},        // JTAG调试口状态控制
+        {0xCE01, Service31StartRoutinePKI, E_UDS_SECURITY_LEVEL1},               // PKI触发流程
+                                                                                 //  {0xF002, Service31StopApplication             , E_UDS_SECURITY_LEVEL1 },
+                                                                                 //  {0xF005, Service31WriteDiagnosticCanReport01  ,     E_UDS_SECURITY_LEVEL1 },
+                                                                                 //{0xB2D0, Service31StartRoutineDiagDefault, E_UDS_SECURITY_LEVEL1}, // DID,DTC恢复默认值
+        {0xB2D3, Service31StartRoutineDTC, E_UDS_SECURITY_LEVEL1},               // DTC计数器
+                                                                                 //{0xB2E5, Service31StartRoutineJTAG, E_UDS_SECURITY_LEVEL1},        // JTAG调试口状态控制
         {0x1101, Service31StartRoutineReadEthStatus, E_UDS_SECURITY_LEVEL1}, // 读取ETH收发器状态
         //{0x1104, Service31StartRoutineEthMode, E_UDS_SECURITY_LEVEL1},           // 设置ETH通信模式
         //{0x1107, Service31StartRoutineEthTestMode, E_UDS_SECURITY_LEVEL1},       // 设置ETH测试模式
@@ -597,7 +597,6 @@ static uint16_t g_udsRxDataLen = 0;
 /**********session control related variable*******************/
 static SessionState_e g_currentSession = E_DEFAULT_SESSION;
 static uint8_t g_ecuOnlineFlag = 0;
-static uint8_t g_isPhysicalOnline = 0; // 0=非物理(远程/功能寻址), 1=物理诊断仪
 
 /**********security accessrelated variable*******************/
 static UdsSecurityLevel_e g_currentSecurityLevel = E_UDS_NONE_SECURITY_LEVEL;
@@ -642,24 +641,24 @@ static int16_t ProcessWriteDidESKey(uint8_t *udsData, uint16_t udsLen);
 *************************************************/
 SessionState_e GetCurrentSession(void) // 0xF186_cxl
 {
-    return g_currentSession;
+  return g_currentSession;
 }
 
 static bool IsDidPassthrough_22(uint16_t did)
 {
-    for (int i = 0; i < (sizeof(g_passthroughDidList_22) / sizeof(g_passthroughDidList_22[0])); ++i)
+  for (int i = 0; i < (sizeof(g_passthroughDidList_22) / sizeof(g_passthroughDidList_22[0])); ++i)
+  {
+    if (g_passthroughDidList_22[i] == did)
     {
-        if (g_passthroughDidList_22[i] == did)
-        {
-            return true;
-        }
+      return true;
     }
-    return false;
+  }
+  return false;
 }
 // 诊断仪是否连接
 uint8_t GetTesterPresenceStatus(void)
 {
-    return g_isTesterPresent;
+  return g_isTesterPresent;
 }
 // static SeriveGetSubFunState_e Service2EGetDidFunction(uint16_t WDID, pService2E_DIDFunction *pfun, uint16_t u16Validlen)
 // {
@@ -703,118 +702,118 @@ uint8_t GetTesterPresenceStatus(void)
 // }
 static SeriveGetSubFunState_e Service2EGetDidFunction(uint16_t WDID, pService2E_DIDFunction *pfun, uint16_t u16Validlen)
 {
-    SeriveGetSubFunState_e ret;
-    uint16_t i = 0;
-    uint16_t listSize;
-    UdsSecurityLevel_e requiredLevel;
-    uint8_t factoryMode;
-    bool securityBypassed = false;
+  SeriveGetSubFunState_e ret;
+  uint16_t i = 0;
+  uint16_t listSize;
+  UdsSecurityLevel_e requiredLevel;
+  uint8_t factoryMode;
+  bool securityBypassed = false;
 
-    listSize = sizeof(g_Service2EFunMapList) / sizeof(g_Service2EFunMapList[0]);
-    ret = E_SUBFUN_GET_INVALID_DID;
-    *pfun = NULL;
+  listSize = sizeof(g_Service2EFunMapList) / sizeof(g_Service2EFunMapList[0]);
+  ret = E_SUBFUN_GET_INVALID_DID;
+  *pfun = NULL;
 
-    for (i = 0; i < listSize; i++)
+  for (i = 0; i < listSize; i++)
+  {
+    if (g_Service2EFunMapList[i].u16DID == WDID)
     {
-        if (g_Service2EFunMapList[i].u16DID == WDID)
+      requiredLevel = g_Service2EFunMapList[i].u8SecurityLevel;
+      factoryMode = UdsDidGetManufactoryMode();
+
+      // 工厂模式下，安全级别1和2的DID可以直接访问
+      if (factoryMode >= 0x10 && (requiredLevel == E_UDS_SECURITY_LEVEL1 || requiredLevel == E_UDS_SECURITY_LEVEL2_STD))
+      {
+        securityBypassed = true;
+      }
+      if (securityBypassed || (g_currentSecurityLevel == requiredLevel))
+      {
+        if (g_Service2EFunMapList[i].u16Len == (u16Validlen - 3))
         {
-            requiredLevel = g_Service2EFunMapList[i].u8SecurityLevel;
-            factoryMode = UdsDidGetManufactoryMode();
-
-            // 工厂模式下，安全级别1和2的DID可以直接访问
-            if (factoryMode >= 0x10 && (requiredLevel == E_UDS_SECURITY_LEVEL1 || requiredLevel == E_UDS_SECURITY_LEVEL2_STD))
-            {
-                securityBypassed = true;
-            }
-            if (securityBypassed || (g_currentSecurityLevel == requiredLevel))
-            {
-                if (g_Service2EFunMapList[i].u16Len == (u16Validlen - 3))
-                {
-                    if (g_Service2EFunMapList[i].pFun != NULL)
-                    {
-                        *pfun = g_Service2EFunMapList[i].pFun;
-                        ret = E_SUBFUN_GET_OK;
-                    }
-                }
-                else
-                {
-                    ret = E_SUBFUN_GET_INVALID_LENGTH;
-                }
-            }
-            else
-            {
-                ret = E_SUBFUN_GET_INVALID_SECURITY;
-            }
-            break;
+          if (g_Service2EFunMapList[i].pFun != NULL)
+          {
+            *pfun = g_Service2EFunMapList[i].pFun;
+            ret = E_SUBFUN_GET_OK;
+          }
         }
+        else
+        {
+          ret = E_SUBFUN_GET_INVALID_LENGTH;
+        }
+      }
+      else
+      {
+        ret = E_SUBFUN_GET_INVALID_SECURITY;
+      }
+      break;
     }
+  }
 
-    return ret;
+  return ret;
 }
 
 static SeriveGetSubFunState_e Service22GetDidFunction(uint16_t RDID, pService22_DIDFunction *pfun)
 {
-    uint16_t i;
-    uint16_t listSize;
-    SeriveGetSubFunState_e ret;
+  uint16_t i;
+  uint16_t listSize;
+  SeriveGetSubFunState_e ret;
 
-    *pfun = NULL;
-    ret = E_SUBFUN_GET_INVALID_DID;
-    listSize = sizeof(g_Service22FunMapList) / sizeof(g_Service22FunMapList[0]);
+  *pfun = NULL;
+  ret = E_SUBFUN_GET_INVALID_DID;
+  listSize = sizeof(g_Service22FunMapList) / sizeof(g_Service22FunMapList[0]);
 
-    for (i = 0; i < listSize; i++)
+  for (i = 0; i < listSize; i++)
+  {
+    if (g_Service22FunMapList[i].u16DID == RDID)
     {
-        if (g_Service22FunMapList[i].u16DID == RDID)
-        {
-            if (g_Service22FunMapList[i].pFun != NULL)
-            {
-                *pfun = g_Service22FunMapList[i].pFun;
-                ret = E_SUBFUN_GET_OK;
-            }
-            break;
-        }
+      if (g_Service22FunMapList[i].pFun != NULL)
+      {
+        *pfun = g_Service22FunMapList[i].pFun;
+        ret = E_SUBFUN_GET_OK;
+      }
+      break;
     }
+  }
 
-    return ret;
+  return ret;
 }
 
 static SeriveGetSubFunState_e ServiceGetRoutineStartDidFunction(uint16_t DID, pService31_DIDFunction *pfun)
 {
-    SeriveGetSubFunState_e ret;
+  SeriveGetSubFunState_e ret;
 
-    uint16_t i = 0;
-    uint16_t listSize;
+  uint16_t i = 0;
+  uint16_t listSize;
 
-    listSize = sizeof(g_routineStartDidMap) / sizeof(g_routineStartDidMap[0]);
-    ret = E_SUBFUN_GET_INVALID_DID; // invalid did
-    *pfun = NULL;
+  listSize = sizeof(g_routineStartDidMap) / sizeof(g_routineStartDidMap[0]);
+  ret = E_SUBFUN_GET_INVALID_DID; // invalid did
+  *pfun = NULL;
 
-    for (i = 0; i < listSize; i++)
+  for (i = 0; i < listSize; i++)
+  {
+    if (g_routineStartDidMap[i].u16DID == DID)
     {
-        if (g_routineStartDidMap[i].u16DID == DID)
-        {
-            if (g_routineStartDidMap[i].pFun != NULL)
-            {
-                *pfun = g_routineStartDidMap[i].pFun;
-                ret = E_SUBFUN_GET_OK;
-            }
-            // if (g_currentSecurityLevel == g_routineStartDidMap[i].u8SecurityLevel)
-            // {
-            //   if (g_routineStartDidMap[i].pFun != NULL)
-            //   {
-            //     *pfun = g_routineStartDidMap[i].pFun;
-            //     ret = E_SUBFUN_GET_OK;
-            //   }
-            // }
-            else
-            {
-                return E_SUBFUN_GET_INVALID_SECURITY; // 返回安全错误
-            }
-            break;
-        }
+      if (g_routineStartDidMap[i].pFun != NULL)
+      {
+        *pfun = g_routineStartDidMap[i].pFun;
+        ret = E_SUBFUN_GET_OK;
+      }
+      // if (g_currentSecurityLevel == g_routineStartDidMap[i].u8SecurityLevel)
+      // {
+      //   if (g_routineStartDidMap[i].pFun != NULL)
+      //   {
+      //     *pfun = g_routineStartDidMap[i].pFun;
+      //     ret = E_SUBFUN_GET_OK;
+      //   }
+      // }
+      else
+      {
+        return E_SUBFUN_GET_INVALID_SECURITY; // 返回安全错误
+      }
+      break;
     }
+  }
 
-    return ret;
+  return ret;
 }
 
 // static  SeriveGetSubFunState_e ServiceGetRoutineStopDidFunction(uint16_t DID,pService31_DIDFunction *pfun)
@@ -846,33 +845,33 @@ static SeriveGetSubFunState_e ServiceGetRoutineStartDidFunction(uint16_t DID, pS
 // 31服务-03-请求例程结果
 static SeriveGetSubFunState_e ServiceGetRoutineResultDidFunction(uint16_t DID, pService31_DIDFunction *pfun)
 {
-    SeriveGetSubFunState_e ret;
+  SeriveGetSubFunState_e ret;
 
-    uint16_t i = 0;
-    uint16_t listSize;
+  uint16_t i = 0;
+  uint16_t listSize;
 
-    listSize = sizeof(g_routineResultDidMap) / sizeof(g_routineResultDidMap[0]);
-    ret = E_SUBFUN_GET_INVALID_DID; // invalid did
-    *pfun = NULL;
+  listSize = sizeof(g_routineResultDidMap) / sizeof(g_routineResultDidMap[0]);
+  ret = E_SUBFUN_GET_INVALID_DID; // invalid did
+  *pfun = NULL;
 
-    for (i = 0; i < listSize; i++)
+  for (i = 0; i < listSize; i++)
+  {
+    if (g_routineResultDidMap[i].u16DID == DID)
     {
-        if (g_routineResultDidMap[i].u16DID == DID)
+        if (g_routineResultDidMap[i].pFun != NULL)
         {
-            if (g_routineResultDidMap[i].pFun != NULL)
-            {
-                *pfun = g_routineResultDidMap[i].pFun;
-                ret = E_SUBFUN_GET_OK;
-            }
-            else
-            {
-                return E_SUBFUN_GET_INVALID_SECURITY;
-            }
-            break;
+          *pfun = g_routineResultDidMap[i].pFun;
+          ret = E_SUBFUN_GET_OK;
         }
+      else
+      {
+        return E_SUBFUN_GET_INVALID_SECURITY;
+      }
+      break;
     }
+  }
 
-    return ret;
+  return ret;
 }
 
 /*************************************
@@ -881,28 +880,28 @@ return:
 **************************************/
 static int16_t CheckSessionIsValid(SessionState_e currentSession, uint8_t supportedSession)
 {
-    int16_t ret;
-    uint8_t sessionBit;
-    ret = 1;
-    sessionBit = 0;
-    if (E_DEFAULT_SESSION == currentSession)
-    {
-        sessionBit = SESSION_BIT_DEFAULT;
-    }
-    else if (E_PROGROM_SESSION == currentSession)
-    {
-        sessionBit = SESSION_BIT_PROGRAMMING;
-    }
-    else if (E_EXTEND_SESSION == currentSession)
-    {
-        sessionBit = SESSION_BIT_EXTENDED;
-    }
+  int16_t ret;
+  uint8_t sessionBit;
+  ret = 1;
+  sessionBit = 0;
+  if (E_DEFAULT_SESSION == currentSession)
+  {
+    sessionBit = SESSION_BIT_DEFAULT;
+  }
+  else if (E_PROGROM_SESSION == currentSession)
+  {
+    sessionBit = SESSION_BIT_PROGRAMMING;
+  }
+  else if (E_EXTEND_SESSION == currentSession)
+  {
+    sessionBit = SESSION_BIT_EXTENDED;
+  }
 
-    if (sessionBit & supportedSession)
-    {
-        ret = 0;
-    }
-    return ret;
+  if (sessionBit & supportedSession)
+  {
+    ret = 0;
+  }
+  return ret;
 }
 
 // int16_t Service22ReadSeesionStatus(uint8_t* buf, uint16_t *len)
@@ -918,10 +917,10 @@ static int16_t CheckSessionIsValid(SessionState_e currentSession, uint8_t suppor
 
 static void SaveSeedAccessCountToNonVolatile(uint8_t *data)
 {
-    uint8_t *dataTem;
-    dataTem = data;
-    // WorkFlashUserInfoStore(E_SECURITY_INFO,dataTem,3);
-    WorkFlashVehicleInforStore(E_PARAMETER_INFO_UDS_SECURITY_ERROR_COUNT, dataTem, 4);
+  uint8_t *dataTem;
+  dataTem = data;
+  // WorkFlashUserInfoStore(E_SECURITY_INFO,dataTem,3);
+  WorkFlashVehicleInforStore(E_PARAMETER_INFO_UDS_SECURITY_ERROR_COUNT, dataTem, 4);
 }
 #if 0
 static uint8_t GetSeedAccessCountFromVolatile(uint8_t *data)
@@ -934,22 +933,22 @@ static uint8_t GetSeedAccessCountFromVolatile(uint8_t *data)
 #endif
 static void SessionChangeToDefaultProcess(void)
 {
-    if (g_bDtcControlFlag)
-    {
-        g_bDtcControlFlag = 0;
-        // reset DTC control setting
-        DtcProcessEnable();
-    }
-    if (g_bCommunicationControlFlag)
-    {
-        g_bCommunicationControlFlag = 0;
-        /*SgmwGWNm_AllEnableCommunication();
-        CycleSendEnableAll();*/
-        CanPeriodSendEnableAll();
-        AutosarNmSdkEnableCommunication(0);
-    }
-    Service31StopApplicationSetDefault();
-    Service31WriteDiagnosticCanReportSetDefault();
+  if (g_bDtcControlFlag)
+  {
+    g_bDtcControlFlag = 0;
+    // reset DTC control setting
+    DtcProcessEnable();
+  }
+  if (g_bCommunicationControlFlag)
+  {
+    g_bCommunicationControlFlag = 0;
+    /*SgmwGWNm_AllEnableCommunication();
+    CycleSendEnableAll();*/
+    CanPeriodSendEnableAll();
+    AutosarNmSdkEnableCommunication(0);
+  }
+  Service31StopApplicationSetDefault();
+  Service31WriteDiagnosticCanReportSetDefault();
 }
 
 static void SessionChangeToExtendedProcess(void)
@@ -958,16 +957,16 @@ static void SessionChangeToExtendedProcess(void)
 
 static int16_t DiagnosticDataTransmit(int16_t tpHandle, uint32_t canId, uint8_t *txData, uint16_t txLength, uint8_t functionAddFlag)
 {
-    if (g_virtualTpFlag == 0)
-    {
+  if (g_virtualTpFlag == 0)
+  {
 
-        CanTpSdkDataTransmit(tpHandle, canId, txData, txLength, functionAddFlag);
-    }
-    else
-    {
-        VirtualTpSdkServerTransmit(g_virtualTpChanalId, (const uint8_t *)txData, txLength);
-    }
-    return 0;
+    CanTpSdkDataTransmit(tpHandle, canId, txData, txLength, functionAddFlag);
+  }
+  else
+  {
+    VirtualTpSdkServerTransmit(g_virtualTpChanalId, (const uint8_t *)txData, txLength);
+  }
+  return 0;
 }
 /*********************************************************************
 session control
@@ -975,611 +974,602 @@ session control
 ********************************************************************/
 static int16_t Service0x10Process(uint8_t *udsData, uint16_t udsLen, uint8_t functionAddressFlag)
 {
-    uint8_t negativeNum = 0;
-    uint8_t responseData[32];
-    uint8_t subFun;
-    uint8_t suppressPosRsp;
-    responseData[0] = 0x50;
-    responseData[1] = udsData[1];
-    responseData[2] = 0x00; // P2 Server
-    responseData[3] = 0x32; // P2 Server
-    responseData[4] = 0x01; // P2*Server
-    responseData[5] = 0xF4; // P2*Server
+  uint8_t negativeNum = 0;
+  uint8_t responseData[32];
+  uint8_t subFun;
+  uint8_t suppressPosRsp;
+  responseData[0] = 0x50;
+  responseData[1] = udsData[1];
+  responseData[2] = 0x00; // P2 Server
+  responseData[3] = 0x32; // P2 Server
+  responseData[4] = 0x01; // P2*Server
+  responseData[5] = 0xF4; // P2*Server
 
-    subFun = udsData[1] & 0x7F;
-    suppressPosRsp = udsData[1] >> 7;
-    if (0X02 == udsLen)
+  subFun = udsData[1] & 0x7F;
+  suppressPosRsp = udsData[1] >> 7;
+  if (0X02 == udsLen)
+  {
+    if (0x01 == subFun) // default session
     {
-        if (0x01 == subFun) // default session
+      g_currentSession = E_DEFAULT_SESSION;
+      g_currentSecurityLevel = E_UDS_NONE_SECURITY_LEVEL; // lock security
+      SessionChangeToDefaultProcess();
+    }
+    // else if (0x02 == subFun) // programing session
+    // {
+    //   if ((g_currentSession == E_EXTEND_SESSION) || (g_currentSession == E_PROGROM_SESSION))
+    //   {
+    //     g_currentSession = E_PROGROM_SESSION;
+    //     g_currentSecurityLevel = E_UDS_NONE_SECURITY_LEVEL; // lock security
+    //     g_ecuOnlineFlag = 1;
+    //     CanTpSdkSetBootMode(g_tpHandle, 1);
+    //   }
+    //   else
+    //   {
+    //     negativeNum = 0x7E;
+    //   }
+    // }
+    else if (0x03 == subFun) // extended session
+    {
+      if ((g_currentSession == E_DEFAULT_SESSION) || (g_currentSession == E_EXTEND_SESSION))
+      {
+        g_currentSession = E_EXTEND_SESSION;
+        // g_currentSecurityLevel = E_UDS_NONE_SECURITY_LEVEL; // lock security
+        g_ecuOnlineFlag = 1;
+        uint8_t factoryMode = UdsDidGetManufactoryMode();
+        if (factoryMode < 0x10)
         {
-            g_currentSession = E_DEFAULT_SESSION;
-            g_currentSecurityLevel = E_UDS_NONE_SECURITY_LEVEL; // lock security
-            SessionChangeToDefaultProcess();
+          g_currentSecurityLevel = E_UDS_NONE_SECURITY_LEVEL; // lock security
         }
-        // else if (0x02 == subFun) // programing session
-        // {
-        //   if ((g_currentSession == E_EXTEND_SESSION) || (g_currentSession == E_PROGROM_SESSION))
-        //   {
-        //     g_currentSession = E_PROGROM_SESSION;
-        //     g_currentSecurityLevel = E_UDS_NONE_SECURITY_LEVEL; // lock security
-        //     g_ecuOnlineFlag = 1;
-        //     CanTpSdkSetBootMode(g_tpHandle, 1);
-        //   }
-        //   else
-        //   {
-        //     negativeNum = 0x7E;
-        //   }
-        // }
-        else if (0x03 == subFun) // extended session
-        {
-            if ((g_currentSession == E_DEFAULT_SESSION) || (g_currentSession == E_EXTEND_SESSION))
-            {
-                g_currentSession = E_EXTEND_SESSION;
-                // g_currentSecurityLevel = E_UDS_NONE_SECURITY_LEVEL; // lock security
-                if ((functionAddressFlag == 0) && (g_virtualTpFlag == 0))
-                {
-                    g_isPhysicalOnline = 1;
-                }
-                else
-                {
-                    g_isPhysicalOnline = 0;
-                }
-
-                g_ecuOnlineFlag = 1;
-                uint8_t factoryMode = UdsDidGetManufactoryMode();
-                if (factoryMode < 0x10)
-                {
-                    g_currentSecurityLevel = E_UDS_NONE_SECURITY_LEVEL; // lock security
-                }
-                SessionChangeToExtendedProcess();
-            }
-            else
-            {
-                negativeNum = 0x7E;
-            }
-        }
-        else
-        {
-            negativeNum = 0x12; // sub function not supported
-        }
-        if (negativeNum == 0)
-        {
-            if (suppressPosRsp == 0)
-            {
-                DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 6, 0);
-            }
-            /*if(g_currentSession==E_PROGROM_SESSION)
-            {
-              PeripheralDriverHal_WriteBootFlag(0x00002211);
-              PeripheralHalMcuHardReset();
-            }      */
-        }
+        SessionChangeToExtendedProcess();
+      }
+      else
+      {
+        negativeNum = 0x7E;
+      }
     }
     else
     {
-        negativeNum = 0x13;
+      negativeNum = 0x12; // sub function not supported
     }
-
-    /*if(functionAddressFlag)
+    if (negativeNum == 0)
     {
-      if(0x12==negativeNum)//not
-      }
+      if (suppressPosRsp == 0)
       {
-        negativeNum = 0;
-    }*/
-    return negativeNum;
+        DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 6, 0);
+      }
+      /*if(g_currentSession==E_PROGROM_SESSION)
+      {
+        PeripheralDriverHal_WriteBootFlag(0x00002211);
+        PeripheralHalMcuHardReset();
+      }      */
+    }
+  }
+  else
+  {
+    negativeNum = 0x13;
+  }
+
+  /*if(functionAddressFlag)
+  {
+    if(0x12==negativeNum)//not
+    }
+    {
+      negativeNum = 0;
+  }*/
+  return negativeNum;
 }
 
 static int16_t Service0x11Process(uint8_t *udsData, uint16_t udsLen, uint8_t functionAddressFlag)
 {
-    // uint8_t i = 0;
-    uint8_t negativeNum = 0;
-    uint8_t subFun;
-    uint8_t suppressPosRsp;
-    const Diagnostic_t *psDignostic = NULL;
-    uint8_t responseData[32];
+  // uint8_t i = 0;
+  uint8_t negativeNum = 0;
+  uint8_t subFun;
+  uint8_t suppressPosRsp;
+  const Diagnostic_t *psDignostic = NULL;
+  uint8_t responseData[32];
 
-    responseData[0] = 0x51;
-    responseData[1] = udsData[1];
+  responseData[0] = 0x51;
+  responseData[1] = udsData[1];
 
-    subFun = udsData[1] & 0x7F;
-    suppressPosRsp = udsData[1] >> 7;
+  subFun = udsData[1] & 0x7F;
+  suppressPosRsp = udsData[1] >> 7;
 
-    psDignostic = (g_serviceECUFunGroup + g_currentServiceNum);
+  psDignostic = (g_serviceECUFunGroup + g_currentServiceNum);
 
-    if (CheckSessionIsValid(g_currentSession, psDignostic->sessionSupport) == 0)
+  if (CheckSessionIsValid(g_currentSession, psDignostic->sessionSupport) == 0)
+  {
+    if (0X02 == udsLen)
     {
-        if (0X02 == udsLen)
+      if (0x01 == subFun) // hardware reset
+      {
+        ;
+      }
+      else if (0x02 == subFun) // keyOffOnReset
+      {
+        ;
+      }
+      else if (0x03 == subFun) // software reset
+      {
+        ;
+      }
+      else
+      {
+        // if(functionAddressFlag)
+        negativeNum = 0x12;
+      }
+      if (negativeNum == 0)
+      {
+        if (suppressPosRsp == 0)
         {
-            if (0x01 == subFun) // hardware reset
-            {
-                ;
-            }
-            else if (0x02 == subFun) // keyOffOnReset
-            {
-                ;
-            }
-            else if (0x03 == subFun) // software reset
-            {
-                ;
-            }
-            else
-            {
-                // if(functionAddressFlag)
-                negativeNum = 0x12;
-            }
-            if (negativeNum == 0)
-            {
-                if (suppressPosRsp == 0)
-                {
-                    DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 2, 0);
-                }
-            }
+          DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 2, 0);
+        }
+      }
 
-            if (0x01 == subFun) // hardware reset
-            {
-                // PeripheralDriverHal_GsmModuleGsmEnable(0);
-                vTaskDelay(100);
-                PeripheralHalMcuHardReset();
-            }
-            else if (0x02 == subFun) // keyOffOnReset
-            {
-                ResetTboxStatusUpdate();
-            }
-            else if (0x03 == subFun) // software reset
-            {
-                MpuHalPowerOff();
-                vTaskDelay(100);
-                PeripheralHalMcuHardReset();
-            }
-        }
-        else
-        {
-            negativeNum = 0x13;
-        }
+      if (0x01 == subFun) // hardware reset
+      {
+        // PeripheralDriverHal_GsmModuleGsmEnable(0);
+        vTaskDelay(100);
+        PeripheralHalMcuHardReset();
+      }
+      else if (0x02 == subFun) // keyOffOnReset
+      {
+        ResetTboxStatusUpdate();
+      }
+      else if (0x03 == subFun) // software reset
+      {
+        MpuHalPowerOff();
+        vTaskDelay(100);
+        PeripheralHalMcuHardReset();
+      }
     }
     else
     {
-        negativeNum = 0x7F;
+      negativeNum = 0x13;
     }
+  }
+  else
+  {
+    negativeNum = 0x7F;
+  }
 
-    return negativeNum;
+  return negativeNum;
 }
 
 static int16_t Service0x14Process(uint8_t *udsData, uint16_t udsLen, uint8_t functionAddressFlag)
 {
-    uint8_t negativeNum = 0;
-    uint32_t groupOfDTC;
-    const Diagnostic_t *psDignostic = NULL;
+  uint8_t negativeNum = 0;
+  uint32_t groupOfDTC;
+  const Diagnostic_t *psDignostic = NULL;
 
-    uint8_t responseData[32];
+  uint8_t responseData[32];
 
-    psDignostic = (g_serviceECUFunGroup + g_currentServiceNum);
+  psDignostic = (g_serviceECUFunGroup + g_currentServiceNum);
 
-    responseData[0] = 0x54;
-    groupOfDTC = ((uint32_t)udsData[1] << 16) + ((uint32_t)udsData[2] << 8) + (uint32_t)udsData[3];
-    if (CheckSessionIsValid(g_currentSession, psDignostic->sessionSupport) == 0)
+  responseData[0] = 0x54;
+  groupOfDTC = ((uint32_t)udsData[1] << 16) + ((uint32_t)udsData[2] << 8) + (uint32_t)udsData[3];
+  if (CheckSessionIsValid(g_currentSession, psDignostic->sessionSupport) == 0)
+  {
+    if (0x04 == udsLen)
     {
-        if (0x04 == udsLen)
-        {
-            if (0x100000 == groupOfDTC) // Powertrain group
-            {
-                DtcProcessClearAll();
-            }
-            else if (0x400000 == groupOfDTC) // Chassis group
-            {
-                DtcProcessClearAll();
-            }
-            else if (0x800000 == groupOfDTC) // Body group
-            {
-                DtcProcessClearAll();
-            }
-            else if (0xC00000 == groupOfDTC) // Network communication group
-            {
-                DtcProcessClearAll();
-            }
-            else if (0xFFFFFF == groupOfDTC) // all dtc
-            {
-                DtcProcessClearAll();
-            }
-            else
-            {
-                negativeNum = 0x31;
-            }
-            if (negativeNum == 0)
-            {
-                DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 1, 0);
-            }
-        }
-        else
-        {
-            negativeNum = 0x13;
-        }
+      if (0x100000 == groupOfDTC) // Powertrain group
+      {
+        DtcProcessClearAll();
+      }
+      else if (0x400000 == groupOfDTC) // Chassis group
+      {
+        DtcProcessClearAll();
+      }
+      else if (0x800000 == groupOfDTC) // Body group
+      {
+        DtcProcessClearAll();
+      }
+      else if (0xC00000 == groupOfDTC) // Network communication group
+      {
+        DtcProcessClearAll();
+      }
+      else if (0xFFFFFF == groupOfDTC) // all dtc
+      {
+        DtcProcessClearAll();
+      }
+      else
+      {
+        negativeNum = 0x31;
+      }
+      if (negativeNum == 0)
+      {
+        DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 1, 0);
+      }
     }
     else
     {
-        negativeNum = 0x7F;
+      negativeNum = 0x13;
     }
+  }
+  else
+  {
+    negativeNum = 0x7F;
+  }
 
-    return negativeNum;
+  return negativeNum;
 }
 static uint8_t Service0x19Process0x0A(uint8_t *udsData, uint16_t udsLen)
 {
-    uint8_t negativeNum = 0;
-    uint32_t dtcNum = 0;
-    if (udsLen == 2)
-    {
-        DtcProcessGetSupportedDtc(g_udsTxBuffer + 3, &dtcNum, &g_udsTxBuffer[2]);
+  uint8_t negativeNum = 0;
+  uint32_t dtcNum = 0;
+  if (udsLen == 2)
+  {
+    DtcProcessGetSupportedDtc(g_udsTxBuffer + 3, &dtcNum, &g_udsTxBuffer[2]);
 
-        DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, g_udsTxBuffer, 3 + (dtcNum * 4), 0);
-    }
-    else
-    {
-        negativeNum = 0x13; // incorrect length
-    }
-    return negativeNum;
+    DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, g_udsTxBuffer, 3 + (dtcNum * 4), 0);
+  }
+  else
+  {
+    negativeNum = 0x13; // incorrect length
+  }
+  return negativeNum;
 }
 static uint8_t Service0x19Process0x06(uint8_t *udsData, uint16_t udsLen)
 {
-    uint32_t length = 0;
-    int16_t ret;
-    uint8_t negativeNum = 0;
-    if (udsLen == 6)
+  uint32_t length = 0;
+  int16_t ret;
+  uint8_t negativeNum = 0;
+  if (udsLen == 6)
+  {
+    ret = DtcProcessGetExtendedData((udsData[2] << 16) + (udsData[3] << 8) + (udsData[4] << 0), udsData[5], g_udsTxBuffer + 6, &length, &g_udsTxBuffer[5]);
+    if (ret == 0)
     {
-        ret = DtcProcessGetExtendedData((udsData[2] << 16) + (udsData[3] << 8) + (udsData[4] << 0), udsData[5], g_udsTxBuffer + 6, &length, &g_udsTxBuffer[5]);
-        if (ret == 0)
-        {
-            // dtc
-            g_udsTxBuffer[2] = udsData[2];
-            g_udsTxBuffer[3] = udsData[3];
-            g_udsTxBuffer[4] = udsData[4];
+      // dtc
+      g_udsTxBuffer[2] = udsData[2];
+      g_udsTxBuffer[3] = udsData[3];
+      g_udsTxBuffer[4] = udsData[4];
 
-            DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, g_udsTxBuffer, length + 6, 0);
-        }
-        else
-        {
-            negativeNum = 0x31; // request out of range
-        }
+      DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, g_udsTxBuffer, length + 6, 0);
     }
     else
     {
-        negativeNum = 0x13; // incorrect length
+      negativeNum = 0x31; // request out of range
     }
-    return negativeNum;
+  }
+  else
+  {
+    negativeNum = 0x13; // incorrect length
+  }
+  return negativeNum;
 }
 static uint8_t Service0x19Process0x04(uint8_t *udsData, uint16_t udsLen)
 {
-    uint32_t length = 0;
-    int16_t ret;
-    uint8_t negativeNum = 0;
-    if (udsLen == 6)
+  uint32_t length = 0;
+  int16_t ret;
+  uint8_t negativeNum = 0;
+  if (udsLen == 6)
+  {
+    if ((udsData[5] == 0x01) || (udsData[5] == 0x05) || (udsData[5] == 0x02) || (udsData[5] == 0xFF)) // dtc snapshot record number
     {
-        if ((udsData[5] == 0x01) || (udsData[5] == 0x05) || (udsData[5] == 0x02) || (udsData[5] == 0xFF)) // dtc snapshot record number
-        {
-            // 获取快照数据，读取出现故障后的快照数据，
-            //(udsData[2]<<16)+(udsData[3]<<8)+(udsData[4]<<0)：故障编码
-            // udsData[5]：快照记录号
-            // m_udsTxBuffer+7：从第七位开始存放快照数据
-            // length：快照数据长度
-            ret = DtcProcessGetReportSnapshotRecordByDtcNumber((udsData[2] << 16) + (udsData[3] << 8) + (udsData[4] << 0), udsData[5], g_udsTxBuffer + 6, &length, &g_udsTxBuffer[5]);
-            if (ret == 0)
-            {
-                // dtc
-                g_udsTxBuffer[2] = udsData[2];
-                g_udsTxBuffer[3] = udsData[3];
-                g_udsTxBuffer[4] = udsData[4];
-                // DTCSnapshotRecordNumber
-                // g_udsTxBuffer[6] = 0x01;
-                //
-                // g_udsTxBuffer[7] = 0x05;//dtc snapshot record number of identifiers
+      // 获取快照数据，读取出现故障后的快照数据，
+      //(udsData[2]<<16)+(udsData[3]<<8)+(udsData[4]<<0)：故障编码
+      // udsData[5]：快照记录号
+      // m_udsTxBuffer+7：从第七位开始存放快照数据
+      // length：快照数据长度
+      ret = DtcProcessGetReportSnapshotRecordByDtcNumber((udsData[2] << 16) + (udsData[3] << 8) + (udsData[4] << 0), udsData[5], g_udsTxBuffer + 6, &length, &g_udsTxBuffer[5]);
+      if (ret == 0)
+      {
+        // dtc
+        g_udsTxBuffer[2] = udsData[2];
+        g_udsTxBuffer[3] = udsData[3];
+        g_udsTxBuffer[4] = udsData[4];
+        // DTCSnapshotRecordNumber
+        // g_udsTxBuffer[6] = 0x01;
+        //
+        // g_udsTxBuffer[7] = 0x05;//dtc snapshot record number of identifiers
 
-                DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, g_udsTxBuffer, length + 6, 0);
-            }
-            else
-            {
-                negativeNum = 0x31; // request out of range
-            }
-        }
-        else
-        {
-            negativeNum = 0x31; // request out of range
-        }
+        DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, g_udsTxBuffer, length + 6, 0);
+      }
+      else
+      {
+        negativeNum = 0x31; // request out of range
+      }
     }
     else
     {
-        negativeNum = 0x13; // incorrect length
+      negativeNum = 0x31; // request out of range
     }
-    return negativeNum;
+  }
+  else
+  {
+    negativeNum = 0x13; // incorrect length
+  }
+  return negativeNum;
 }
 static uint8_t Service0x19Process0x02(uint8_t *udsData, uint16_t udsLen)
 {
-    uint8_t negativeNum = 0;
-    uint32_t dtcNum = 0;
-    if (udsLen == 0x03)
-    {
-        dtcNum = 0;
-        DtcProcessGetListByMask(udsData[2], &g_udsTxBuffer[3], &dtcNum, &(g_udsTxBuffer[2]));
-        DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, g_udsTxBuffer, 3 + (dtcNum * 4), 0);
-    }
-    else
-    {
-        negativeNum = 0x13; // invlid length
-    }
-    return negativeNum;
+  uint8_t negativeNum = 0;
+  uint32_t dtcNum = 0;
+  if (udsLen == 0x03)
+  {
+    dtcNum = 0;
+    DtcProcessGetListByMask(udsData[2], &g_udsTxBuffer[3], &dtcNum, &(g_udsTxBuffer[2]));
+    DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, g_udsTxBuffer, 3 + (dtcNum * 4), 0);
+  }
+  else
+  {
+    negativeNum = 0x13; // invlid length
+  }
+  return negativeNum;
 }
 static uint8_t Service0x19Process0x01(uint8_t *udsData, uint16_t udsLen)
 {
-    uint8_t negativeNum = 0;
-    uint32_t dtcNum = 0;
-    uint8_t MaskValue = 0;
+  uint8_t negativeNum = 0;
+  uint32_t dtcNum = 0;
+  uint8_t MaskValue = 0;
 
-    if (udsLen == 0x03)
-    {
-        g_udsTxBuffer[0] = 0x59;
-        g_udsTxBuffer[1] = 0x01;
+  if (udsLen == 0x03)
+  {
+    g_udsTxBuffer[0] = 0x59; 
+    g_udsTxBuffer[1] = 0x01;
 
-        DtcProcessDtcGetCountByMask(udsData[2], &dtcNum, &MaskValue);
-        g_udsTxBuffer[2] = MaskValue;
-        g_udsTxBuffer[3] = 0x01;
-        g_udsTxBuffer[4] = (uint8_t)((dtcNum >> 8) & 0xFF);
-        g_udsTxBuffer[5] = (uint8_t)(dtcNum & 0xFF);
+    DtcProcessDtcGetCountByMask(udsData[2], &dtcNum, &MaskValue);
+    g_udsTxBuffer[2] = MaskValue;
+    g_udsTxBuffer[3] = 0x01; 
+    g_udsTxBuffer[4] = (uint8_t)((dtcNum >> 8) & 0xFF);
+    g_udsTxBuffer[5] = (uint8_t)(dtcNum & 0xFF);
 
-        DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, g_udsTxBuffer, 6, 0);
-    }
-    else
-    {
-        negativeNum = 0x13;
-    }
+    DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, g_udsTxBuffer, 6, 0);
+  }
+  else
+  {
+    negativeNum = 0x13;
+  }
 
-    return negativeNum;
+  return negativeNum;
 }
 
 static int16_t Service0x19Process(uint8_t *udsData, uint16_t udsLen, uint8_t functionAddressFlag)
 {
-    uint8_t negativeNum = 0;
-    uint8_t subFun;
-    const Diagnostic_t *psDignostic = NULL;
-    // dtc_snapshot_record_global_t snapRecord;
-    // dtc_extended_data_t extendedData;
-    // uint32_t dtcNum = 0;
-    // uint8_t MaskValue = 0;
-    // uint32_t length = 0;
-    // int16_t ret;
-    psDignostic = (g_serviceECUFunGroup + g_currentServiceNum);
-    g_udsTxBuffer[0] = 0x59;
-    g_udsTxBuffer[1] = udsData[1];
+  uint8_t negativeNum = 0;
+  uint8_t subFun;
+  const Diagnostic_t *psDignostic = NULL;
+  // dtc_snapshot_record_global_t snapRecord;
+  // dtc_extended_data_t extendedData;
+  // uint32_t dtcNum = 0;
+  // uint8_t MaskValue = 0;
+  // uint32_t length = 0;
+  // int16_t ret;
+  psDignostic = (g_serviceECUFunGroup + g_currentServiceNum);
+  g_udsTxBuffer[0] = 0x59;
+  g_udsTxBuffer[1] = udsData[1];
 
-    subFun = udsData[1];
-    if (CheckSessionIsValid(g_currentSession, psDignostic->sessionSupport) == 0)
+  subFun = udsData[1];
+  if (CheckSessionIsValid(g_currentSession, psDignostic->sessionSupport) == 0)
+  {
+    if (0x02 <= udsLen)
     {
-        if (0x02 <= udsLen)
+      switch (subFun)
+      {
+      case 0x01:
+      {
+        // if(udsLen==0x03)
+        //{
+        //   if (udsData [2] & 0x09)
+        //   {
+        //       //read dtc num
+        //       DtcProcessDtcGetCountByMask(udsData [2], &dtcNum, &MaskValue);
+        //       g_udsTxBuffer[2] = MaskValue;
+        //       g_udsTxBuffer[3] = 0x00;
+        //       g_udsTxBuffer[4] = (uint8_t)((dtcNum >> 8) & 0XFF);
+        //       g_udsTxBuffer[5] = (uint8_t)(dtcNum & 0XFF);;
+        //   }
+        //   else
+        //   {
+        //       g_udsTxBuffer[2] = 0x00;
+        //       g_udsTxBuffer[3] = 0x00;
+        //       g_udsTxBuffer[4] = 0;
+        //       g_udsTxBuffer[5] = 0;
+        //   }
+        //   DiagnosticDataTransmit(g_tpHandle,g_physicalTransmitCanId,g_udsTxBuffer,6,0);
+        // }
+        // else
+        //{
+        //   negativeNum = 0x13;//invlid length
+        // }
+        negativeNum = Service0x19Process0x01(udsData, udsLen);
+      }
+      break;
+      case 0x02:
+      {
+        // if(udsLen==0x03)
+        //{
+        //   dtcNum = 0;
+        //   DtcProcessGetListByMask(udsData[2],&g_udsTxBuffer[3],&dtcNum,&(g_udsTxBuffer[2]));
+        //   DiagnosticDataTransmit(g_tpHandle,g_physicalTransmitCanId,g_udsTxBuffer,3+(dtcNum*4),0);
+        // }
+        // else
+        //{
+        //   negativeNum = 0x13;//invlid length
+        // }
+        negativeNum = Service0x19Process0x02(udsData, udsLen);
+      }
+      break;
+      case 0x04: // reportDTCSnapshotRecordByDTCNumber
+      {
+        // if(udsLen==6)
+        //{
+        //   if((udsData[5]==0x01) ||(udsData[5]==0x05) || (udsData[5]==0xFF))//dtc snapshot record number
+        //   {
+        //     //获取快照数据，读取出现故障后的快照数据，
+        //     //(udsData[2]<<16)+(udsData[3]<<8)+(udsData[4]<<0)：故障编码
+        //     //udsData[5]：快照记录号
+        //     //m_udsTxBuffer+7：从第七位开始存放快照数据
+        //     //length：快照数据长度
+        //     ret = DtcProcessGetReportSnapshotRecordByDtcNumber((udsData[2]<<16)+(udsData[3]<<8)+(udsData[4]<<0),udsData[5],g_udsTxBuffer+6,&length,&g_udsTxBuffer[5]);
+        //     if(ret==0)
+        //     {
+        //       //dtc
+        //       g_udsTxBuffer[2] = udsData[2];
+        //       g_udsTxBuffer[3] = udsData[3];
+        //       g_udsTxBuffer[4] = udsData[4];
+        //       //DTCSnapshotRecordNumber
+        //       //g_udsTxBuffer[6] = 0x01;
+        //       //
+        //       //g_udsTxBuffer[7] = 0x05;//dtc snapshot record number of identifiers
+        //
+        //       DiagnosticDataTransmit(g_tpHandle,g_physicalTransmitCanId,g_udsTxBuffer,length+6,0);
+        //     }
+        //     else
+        //     {
+        //       negativeNum = 0x31;//request out of range
+        //     }
+        //   }
+        //   else
+        //   {
+        //     negativeNum = 0x31;//request out of range
+        //   }
+        //
+        // }
+        // else
+        //{
+        //   negativeNum = 0x13;//incorrect length
+        // }
+        negativeNum = Service0x19Process0x04(udsData, udsLen);
+      }
+      break;
+      case 0x06: // report dtc extended data record by dtc number 19 06 xx xx xx FF    (XX XX XX为DTC编号)
+      {
+        // if(udsLen==6)
+        //{
+        //     ret = DtcProcessGetExtendedData((udsData[2]<<16)+(udsData[3]<<8)+(udsData[4]<<0),udsData[5],g_udsTxBuffer+6,&length,&g_udsTxBuffer[5]);
+        //     if(ret==0)
+        //     {
+        //       //dtc
+        //       g_udsTxBuffer[2] = udsData[2];
+        //       g_udsTxBuffer[3] = udsData[3];
+        //       g_udsTxBuffer[4] = udsData[4];
+        //
+        //       DiagnosticDataTransmit(g_tpHandle,g_physicalTransmitCanId,g_udsTxBuffer,length+6,0);
+        //     }
+        //     else
+        //     {
+        //       negativeNum = 0x31;//request out of range
+        //     }
+        // }
+        // else
+        //{
+        //   negativeNum = 0x13;//incorrect length
+        // }
+        negativeNum = Service0x19Process0x06(udsData, udsLen);
+      }
+      break;
+      case 0x0A: // 读取支持的DTC
+      {
+        // if(udsLen==2)
+        //{
+        //	ret = DtcProcessGetSupportedDtc(g_udsTxBuffer+3,&dtcNum,&g_udsTxBuffer[2]);
+        //	DiagnosticDataTransmit(g_tpHandle,g_physicalTransmitCanId,g_udsTxBuffer,3+(dtcNum*4),0);
+        // }
+        // else
+        //{
+        //	negativeNum = 0x13;//incorrect length
+        // }
+        negativeNum = Service0x19Process0x0A(udsData, udsLen);
+      }
+      break;
+      default:
+        if (functionAddressFlag)
         {
-            switch (subFun)
-            {
-            case 0x01:
-            {
-                // if(udsLen==0x03)
-                //{
-                //   if (udsData [2] & 0x09)
-                //   {
-                //       //read dtc num
-                //       DtcProcessDtcGetCountByMask(udsData [2], &dtcNum, &MaskValue);
-                //       g_udsTxBuffer[2] = MaskValue;
-                //       g_udsTxBuffer[3] = 0x00;
-                //       g_udsTxBuffer[4] = (uint8_t)((dtcNum >> 8) & 0XFF);
-                //       g_udsTxBuffer[5] = (uint8_t)(dtcNum & 0XFF);;
-                //   }
-                //   else
-                //   {
-                //       g_udsTxBuffer[2] = 0x00;
-                //       g_udsTxBuffer[3] = 0x00;
-                //       g_udsTxBuffer[4] = 0;
-                //       g_udsTxBuffer[5] = 0;
-                //   }
-                //   DiagnosticDataTransmit(g_tpHandle,g_physicalTransmitCanId,g_udsTxBuffer,6,0);
-                // }
-                // else
-                //{
-                //   negativeNum = 0x13;//invlid length
-                // }
-                negativeNum = Service0x19Process0x01(udsData, udsLen);
-            }
-            break;
-            case 0x02:
-            {
-                // if(udsLen==0x03)
-                //{
-                //   dtcNum = 0;
-                //   DtcProcessGetListByMask(udsData[2],&g_udsTxBuffer[3],&dtcNum,&(g_udsTxBuffer[2]));
-                //   DiagnosticDataTransmit(g_tpHandle,g_physicalTransmitCanId,g_udsTxBuffer,3+(dtcNum*4),0);
-                // }
-                // else
-                //{
-                //   negativeNum = 0x13;//invlid length
-                // }
-                negativeNum = Service0x19Process0x02(udsData, udsLen);
-            }
-            break;
-            case 0x04: // reportDTCSnapshotRecordByDTCNumber
-            {
-                // if(udsLen==6)
-                //{
-                //   if((udsData[5]==0x01) ||(udsData[5]==0x05) || (udsData[5]==0xFF))//dtc snapshot record number
-                //   {
-                //     //获取快照数据，读取出现故障后的快照数据，
-                //     //(udsData[2]<<16)+(udsData[3]<<8)+(udsData[4]<<0)：故障编码
-                //     //udsData[5]：快照记录号
-                //     //m_udsTxBuffer+7：从第七位开始存放快照数据
-                //     //length：快照数据长度
-                //     ret = DtcProcessGetReportSnapshotRecordByDtcNumber((udsData[2]<<16)+(udsData[3]<<8)+(udsData[4]<<0),udsData[5],g_udsTxBuffer+6,&length,&g_udsTxBuffer[5]);
-                //     if(ret==0)
-                //     {
-                //       //dtc
-                //       g_udsTxBuffer[2] = udsData[2];
-                //       g_udsTxBuffer[3] = udsData[3];
-                //       g_udsTxBuffer[4] = udsData[4];
-                //       //DTCSnapshotRecordNumber
-                //       //g_udsTxBuffer[6] = 0x01;
-                //       //
-                //       //g_udsTxBuffer[7] = 0x05;//dtc snapshot record number of identifiers
-                //
-                //       DiagnosticDataTransmit(g_tpHandle,g_physicalTransmitCanId,g_udsTxBuffer,length+6,0);
-                //     }
-                //     else
-                //     {
-                //       negativeNum = 0x31;//request out of range
-                //     }
-                //   }
-                //   else
-                //   {
-                //     negativeNum = 0x31;//request out of range
-                //   }
-                //
-                // }
-                // else
-                //{
-                //   negativeNum = 0x13;//incorrect length
-                // }
-                negativeNum = Service0x19Process0x04(udsData, udsLen);
-            }
-            break;
-            case 0x06: // report dtc extended data record by dtc number 19 06 xx xx xx FF    (XX XX XX为DTC编号)
-            {
-                // if(udsLen==6)
-                //{
-                //     ret = DtcProcessGetExtendedData((udsData[2]<<16)+(udsData[3]<<8)+(udsData[4]<<0),udsData[5],g_udsTxBuffer+6,&length,&g_udsTxBuffer[5]);
-                //     if(ret==0)
-                //     {
-                //       //dtc
-                //       g_udsTxBuffer[2] = udsData[2];
-                //       g_udsTxBuffer[3] = udsData[3];
-                //       g_udsTxBuffer[4] = udsData[4];
-                //
-                //       DiagnosticDataTransmit(g_tpHandle,g_physicalTransmitCanId,g_udsTxBuffer,length+6,0);
-                //     }
-                //     else
-                //     {
-                //       negativeNum = 0x31;//request out of range
-                //     }
-                // }
-                // else
-                //{
-                //   negativeNum = 0x13;//incorrect length
-                // }
-                negativeNum = Service0x19Process0x06(udsData, udsLen);
-            }
-            break;
-            case 0x0A: // 读取支持的DTC
-            {
-                // if(udsLen==2)
-                //{
-                //	ret = DtcProcessGetSupportedDtc(g_udsTxBuffer+3,&dtcNum,&g_udsTxBuffer[2]);
-                //	DiagnosticDataTransmit(g_tpHandle,g_physicalTransmitCanId,g_udsTxBuffer,3+(dtcNum*4),0);
-                // }
-                // else
-                //{
-                //	negativeNum = 0x13;//incorrect length
-                // }
-                negativeNum = Service0x19Process0x0A(udsData, udsLen);
-            }
-            break;
-            default:
-                if (functionAddressFlag)
-                {
-                    return negativeNum;
-                }
-                negativeNum = 0x12;
-                break;
-            }
+          return negativeNum;
         }
-        else
-        {
-            negativeNum = 0x13;
-        }
+        negativeNum = 0x12;
+        break;
+      }
     }
     else
     {
-        if (functionAddressFlag)
-        {
-            return negativeNum;
-        }
-        negativeNum = 0x7F;
+      negativeNum = 0x13;
     }
+  }
+  else
+  {
+    if (functionAddressFlag)
+    {
+      return negativeNum;
+    }
+    negativeNum = 0x7F;
+  }
 
-    return negativeNum;
+  return negativeNum;
 }
 /*启用和关闭TX和RX*/
 static int16_t Service0x28Process(uint8_t *udsData, uint16_t udsLen, uint8_t functionAddressFlag)
 {
-    uint8_t negativeNum = 0;
-    const Diagnostic_t *psDignostic = NULL;
-    uint8_t responseData[32];
+  uint8_t negativeNum = 0;
+  const Diagnostic_t *psDignostic = NULL;
+  uint8_t responseData[32];
 
-    psDignostic = (g_serviceECUFunGroup + g_currentServiceNum);
+  psDignostic = (g_serviceECUFunGroup + g_currentServiceNum);
 
-    responseData[0] = 0x68;
-    responseData[1] = udsData[1];
-    if (udsLen < 3)
+  responseData[0] = 0x68;
+  responseData[1] = udsData[1];
+  if (udsLen < 3)
+  {
+    return 0x13;
+  }
+  if (CheckSessionIsValid(g_currentSession, psDignostic->sessionSupport) == 0)
+  {
+    if (0x03 == udsLen)
     {
-        return 0x13;
-    }
-    if (CheckSessionIsValid(g_currentSession, psDignostic->sessionSupport) == 0)
-    {
-        if (0x03 == udsLen)
+      switch (udsData[UDS_OFFSET_SUB_FUNC])
+      {
+      case 0x83:
+      case 0x00:
+      case 0x80:
+      case 0x03:
+      {
+        if ((udsData[UDS_OFFSET_SUB_FUNC + 1] == 0x01) || (udsData[UDS_OFFSET_SUB_FUNC + 1] == 0x02) || (udsData[UDS_OFFSET_SUB_FUNC + 1] == 0x03))
         {
-            switch (udsData[UDS_OFFSET_SUB_FUNC])
-            {
-            case 0x83:
-            case 0x00:
-            case 0x80:
-            case 0x03:
-            {
-                if ((udsData[UDS_OFFSET_SUB_FUNC + 1] == 0x01) || (udsData[UDS_OFFSET_SUB_FUNC + 1] == 0x02) || (udsData[UDS_OFFSET_SUB_FUNC + 1] == 0x03))
-                {
-                    negativeNum = CommunicationControl((udsData[UDS_OFFSET_SUB_FUNC] & 0x7F), udsData[UDS_OFFSET_SUB_FUNC + 1]);
+          negativeNum = CommunicationControl((udsData[UDS_OFFSET_SUB_FUNC] & 0x7F), udsData[UDS_OFFSET_SUB_FUNC + 1]);
 
-                    if (negativeNum != 0)
-                    {
-                        return negativeNum;
-                    }
-                    if ((udsData[UDS_OFFSET_SUB_FUNC] >> 7) == 0)
-                    {
-                        DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 2, 0);
-                    }
-                }
-                else
-                {
-                    if (functionAddressFlag)
-                    {
-                        return negativeNum;
-                    }
-                    negativeNum = 0x31;
-                }
-            }
-            break;
-            default:
-                if (functionAddressFlag)
-                {
-                    return negativeNum;
-                }
-                negativeNum = 0x12;
-                break;
-            }
+          if (negativeNum != 0)
+          {
+            return negativeNum;
+          }
+          if ((udsData[UDS_OFFSET_SUB_FUNC] >> 7) == 0)
+          {
+            DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 2, 0);
+          }
         }
         else
         {
-            negativeNum = 0x13;
+          if (functionAddressFlag)
+          {
+            return negativeNum;
+          }
+          negativeNum = 0x31;
         }
+      }
+      break;
+      default:
+        if (functionAddressFlag)
+        {
+          return negativeNum;
+        }
+        negativeNum = 0x12;
+        break;
+      }
     }
     else
     {
-        /*if(functionAddressFlag)
-        {
-                return negativeNum;
-        }*/
-        negativeNum = 0x7F;
+      negativeNum = 0x13;
     }
-    return negativeNum;
+  }
+  else
+  {
+    /*if(functionAddressFlag)
+    {
+            return negativeNum;
+    }*/
+    negativeNum = 0x7F;
+  }
+  return negativeNum;
 }
 
 /*******************************************************
@@ -1591,222 +1581,219 @@ ControlDTCSetting (85 hex) service
 ***************************************************/
 static int16_t Service0x85Process(uint8_t *udsData, uint16_t udsLen, uint8_t functionAddressFlag)
 {
-    uint8_t negativeNum = 0;
-    uint8_t responseData[32];
+  uint8_t negativeNum = 0;
+  uint8_t responseData[32];
 
-    const Diagnostic_t *psDignostic = NULL;
+  const Diagnostic_t *psDignostic = NULL;
 
-    psDignostic = (g_serviceECUFunGroup + g_currentServiceNum);
+  psDignostic = (g_serviceECUFunGroup + g_currentServiceNum);
 
-    responseData[0] = udsData[0] + 0x40;
-    responseData[1] = udsData[1];
+  responseData[0] = udsData[0] + 0x40;
+  responseData[1] = udsData[1];
 
-    if (CheckSessionIsValid(g_currentSession, psDignostic->sessionSupport) == 0)
+  if (CheckSessionIsValid(g_currentSession, psDignostic->sessionSupport) == 0)
+  {
+    if (0x02 == udsLen)
     {
-        if (0x02 == udsLen)
+      switch (udsData[UDS_OFFSET_SUB_FUNC])
+      {
+      case 0x81:
+      case 0x01:
+      case 0x82:
+      case 0x02:
+      {
+        if ((0x01 == udsData[UDS_OFFSET_SUB_FUNC]) || (0x81 == udsData[UDS_OFFSET_SUB_FUNC]))
         {
-            switch (udsData[UDS_OFFSET_SUB_FUNC])
-            {
-            case 0x81:
-            case 0x01:
-            case 0x82:
-            case 0x02:
-            {
-                if ((0x01 == udsData[UDS_OFFSET_SUB_FUNC]) || (0x81 == udsData[UDS_OFFSET_SUB_FUNC]))
-                {
-                    g_bDtcControlFlag = 0;
-                    DtcProcessEnable();
-                }
-                else
-                {
-                    g_bDtcControlFlag = 1;
-                    DtcProcessDisable();
-                }
-                if (0 == (udsData[UDS_OFFSET_SUB_FUNC] >> 7))
-                {
-                    DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 2, 0);
-                }
-            }
-            break;
-            default:
-            {
-                if (functionAddressFlag)
-                {
-                    return negativeNum;
-                }
-                negativeNum = 0x12;
-            }
-            break;
-            }
+          g_bDtcControlFlag = 0;
+          DtcProcessEnable();
         }
         else
         {
-            negativeNum = 0x13;
+          g_bDtcControlFlag = 1;
+          DtcProcessDisable();
         }
+        if (0 == (udsData[UDS_OFFSET_SUB_FUNC] >> 7))
+        {
+          DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 2, 0);
+        }
+      }
+      break;
+      default:
+      {
+        if (functionAddressFlag)
+        {
+          return negativeNum;
+        }
+        negativeNum = 0x12;
+      }
+      break;
+      }
     }
     else
     {
-        /*if(functionAddressFlag)
-        {
-                return negativeNum;
-        }*/
-        negativeNum = 0x7F;
+      negativeNum = 0x13;
     }
-    return negativeNum;
+  }
+  else
+  {
+    /*if(functionAddressFlag)
+    {
+            return negativeNum;
+    }*/
+    negativeNum = 0x7F;
+  }
+  return negativeNum;
 }
 
 static int16_t Service0x31Process(uint8_t *udsData, uint16_t udsLen, uint8_t functionAddressFlag)
 {
-    uint8_t negativeNum;
-    uint8_t subFunction;
-    uint8_t responseData[32];
-    uint16_t did;
-    pService31_DIDFunction pFun;
-    SeriveGetSubFunState_e ret;
-    uint16_t lengOut;
-    const Diagnostic_t *psDignostic = NULL;
+  uint8_t negativeNum;
+  uint8_t subFunction;
+  uint8_t responseData[32];
+  uint16_t did;
+  pService31_DIDFunction pFun;
+  SeriveGetSubFunState_e ret;
+  uint16_t lengOut;
+  const Diagnostic_t *psDignostic = NULL;
 
-    psDignostic = (g_serviceECUFunGroup + g_currentServiceNum);
-    negativeNum = 0;
-    subFunction = udsData[1];
+  psDignostic = (g_serviceECUFunGroup + g_currentServiceNum);
+  negativeNum = 0;
+  subFunction = udsData[1];
 
-    did = ((uint16_t)udsData[2] << 8) + (uint16_t)udsData[3];
-    responseData[0] = 0x71;
-    responseData[1] = udsData[1];
-    responseData[2] = udsData[2];
-    responseData[3] = udsData[3];
-    // TBOX_PRINT("Service0x31Process did=%04X subFunction=%02X\r\n", did, subFunction);
-    if (udsLen < 4)
-    {
-        return 0x13;
-    }
-    uint8_t factoryMode = UdsDidGetManufactoryMode();
+  did = ((uint16_t)udsData[2] << 8) + (uint16_t)udsData[3];
+  responseData[0] = 0x71;
+  responseData[1] = udsData[1];
+  responseData[2] = udsData[2];
+  responseData[3] = udsData[3];
+  // TBOX_PRINT("Service0x31Process did=%04X subFunction=%02X\r\n", did, subFunction);
+  if (udsLen < 4)
+  {
+    return 0x13;
+  }
+  uint8_t factoryMode = UdsDidGetManufactoryMode();
+  
+  if ( (factoryMode < 0x10) && (g_currentSecurityLevel != E_UDS_SECURITY_LEVEL1) )
+  {
+    negativeNum = 0x33;
+    return negativeNum;
+  }
 
-    if ((factoryMode < 0x10) && (g_currentSecurityLevel != E_UDS_SECURITY_LEVEL1))
+  if (CheckSessionIsValid(g_currentSession, psDignostic->sessionSupport) != 0)
+  {
+    negativeNum = 0x7E;
+    return negativeNum;
+  }
+  if (0x01 == subFunction)
+  {
+    ret = ServiceGetRoutineStartDidFunction(did, &pFun);
+    if (ret == E_SUBFUN_GET_OK)
     {
-        negativeNum = 0x33;
-        return negativeNum;
-    }
-
-    if (CheckSessionIsValid(g_currentSession, psDignostic->sessionSupport) != 0)
-    {
-        negativeNum = 0x7E;
-        return negativeNum;
-    }
-    if (0x01 == subFunction)
-    {
-        ret = ServiceGetRoutineStartDidFunction(did, &pFun);
-        if (ret == E_SUBFUN_GET_OK)
-        {
-            //("Service0x31Process start did=%04X\r\n", did);
-            lengOut = 0;
-            negativeNum = pFun(&udsData[4], udsLen - 4, &responseData[4], &lengOut);
-            if (negativeNum == 0)
-            {
-                DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, lengOut + 4, 0);
-            }
-        }
-        else
-        {
-            negativeNum = 0x31; // did not supported
-        }
-    }
-    else if (0x02 == subFunction)
-    {
-        negativeNum = 12; // sub function not supported
-    }
-    else if (0x03 == subFunction)
-    {
-        ret = ServiceGetRoutineResultDidFunction(did, &pFun);
-        if (ret == E_SUBFUN_GET_OK)
-        {
-            lengOut = 0;
-            negativeNum = pFun(&udsData[4], udsLen - 4, &responseData[4], &lengOut);
-            if (negativeNum == 0)
-            {
-                DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, lengOut + 4, 0);
-            }
-        }
-        else if (ret == E_SUBFUN_GET_INVALID_LENGTH)
-        {
-            negativeNum = 0x13;
-        }
-        else
-        {
-            negativeNum = 0x31; // did not supported
-        }
+      //("Service0x31Process start did=%04X\r\n", did);
+      lengOut = 0;
+      negativeNum = pFun(&udsData[4], udsLen - 4, &responseData[4], &lengOut);
+      if (negativeNum == 0)
+      {
+        DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, lengOut + 4, 0);
+      }
     }
     else
     {
-        negativeNum = 0x12; // sub function not supported
+      negativeNum = 0x31; // did not supported
     }
-    return negativeNum;
+  }
+  else if (0x02 == subFunction)
+  {
+    negativeNum = 12; // sub function not supported
+  }
+  else if (0x03 == subFunction)
+  {
+    ret = ServiceGetRoutineResultDidFunction(did, &pFun);
+    if (ret == E_SUBFUN_GET_OK)
+    {
+      lengOut = 0;
+      negativeNum = pFun(&udsData[4], udsLen - 4, &responseData[4], &lengOut);
+      if (negativeNum == 0)
+      {
+        DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, lengOut + 4, 0);
+      }
+    }
+    else if (ret == E_SUBFUN_GET_INVALID_LENGTH)
+    {
+      negativeNum = 0x13;
+    }
+    else
+    {
+      negativeNum = 0x31; // did not supported
+    }
+  }
+  else
+  {
+    negativeNum = 0x12; // sub function not supported
+  }
+  return negativeNum;
 }
 
 static int16_t Service0x3EProcess(uint8_t *udsData, uint16_t udsLen, uint8_t functionAddressFlag)
 {
-    uint8_t negativeNum = 0;
-    uint8_t responseData[32];
+  uint8_t negativeNum = 0;
+  uint8_t responseData[32];
 
-    // const Diagnostic_t *psDignostic = NULL;
-    // psDignostic = ( g_serviceECUFunGroup + g_currentServiceNum );
+  // const Diagnostic_t *psDignostic = NULL;
+  // psDignostic = ( g_serviceECUFunGroup + g_currentServiceNum );
 
-    responseData[0] = udsData[0] + 0x40;
-    responseData[1] = udsData[1];
+  responseData[0] = udsData[0] + 0x40;
+  responseData[1] = udsData[1];
 
-    // if (CheckSessionIsValid(g_currentSession,psDignostic->sessionSupport)==0)
+  // if (CheckSessionIsValid(g_currentSession,psDignostic->sessionSupport)==0)
+  {
+    //TBOX_PRINT("AAA\r\n");
+    if (0x02 == udsLen)
     {
-        // TBOX_PRINT("AAA\r\n");
-        if (0x02 == udsLen)
+      switch (udsData[UDS_OFFSET_SUB_FUNC])
+      {
+      case 0x00:
+      case 0x80:
+      {
+        //TBOX_PRINT("456: 0x%X\r\n", g_ecuOnlineFlag);
+        if (RemoteDiagnosticSdkGetOnlineStatus() != 1)
         {
-            switch (udsData[UDS_OFFSET_SUB_FUNC])
+            if (functionAddressFlag == 0) 
             {
-            case 0x00:
-            case 0x80:
-            {
-                // TBOX_PRINT("456: 0x%X\r\n", g_ecuOnlineFlag);
-                if ((functionAddressFlag == 0) && (g_virtualTpFlag == 0))
-                {
-                    g_isPhysicalOnline = 1;
-                }
-                else
-                {
-                    g_isPhysicalOnline = 0;
-                }
+                g_ecuOnlineFlag = 1;
+            }
+          //LogHalUpLoadLog("[MCU] RemoteDiagnosticSdkGetOnlineStatus: 0x%X\r\n", g_ecuOnlineFlag);
+          //TBOX_PRINT("123: 0x%X\r\n", g_ecuOnlineFlag);
+        }
 
-                if (RemoteDiagnosticSdkGetOnlineStatus() != 1)
-                {
-                    g_ecuOnlineFlag = 1;
-                }
-                if ((udsData[UDS_OFFSET_SUB_FUNC] >> 7) == 0)
-                {
-                    DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 2, 0);
-                }
-            }
-            break;
-            default:
-                if (functionAddressFlag)
-                {
-                    return negativeNum;
-                }
-                negativeNum = 0x12;
-                break;
-            }
-        }
-        else
+        if ((udsData[UDS_OFFSET_SUB_FUNC] >> 7) == 0)
         {
-            negativeNum = 0x13;
+          DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 2, 0);
         }
+      }
+      break;
+      default:
+        if (functionAddressFlag)
+        {
+          return negativeNum;
+        }
+        negativeNum = 0x12;
+        break;
+      }
     }
-    //    else
-    //    {
-    //        /*if(functionAddressFlag)
-    //        {
-    //                return negativeNum;
-    //        }*/
-    //        negativeNum = 0x7F;
-    //    }
-    return negativeNum;
+    else
+    {
+      negativeNum = 0x13;
+    }
+  }
+  //    else
+  //    {
+  //        /*if(functionAddressFlag)
+  //        {
+  //                return negativeNum;
+  //        }*/
+  //        negativeNum = 0x7F;
+  //    }
+  return negativeNum;
 }
 
 /************************************************
@@ -1843,14 +1830,14 @@ InputOutputControlByIdentifier (2F hex) service
 // }
 static int16_t Service0x2FProcess(uint8_t *udsData, uint16_t udsLen, uint8_t functionAddressFlag)
 {
-    // uint8_t nrc = 0;
+    //uint8_t nrc = 0;
     uint8_t responseData[32];
     uint16_t did;
     uint8_t controlParameter;
 
-    responseData[0] = 0x6F;       // Positive Response SID
-    responseData[1] = udsData[1]; // DID MSB
-    responseData[2] = udsData[2]; // DID LSB
+    responseData[0] = 0x6F;         // Positive Response SID
+    responseData[1] = udsData[1];   // DID MSB
+    responseData[2] = udsData[2];   // DID LSB
 
     if (udsLen < 4)
         return 0x13; // Incorrect message length
@@ -1861,73 +1848,67 @@ static int16_t Service0x2FProcess(uint8_t *udsData, uint16_t udsLen, uint8_t fun
 
     switch (did)
     {
-    case 0xB2A0: // Call control
-    {
-        if (controlParameter == 0x03)
+        case 0xB2A0: // Call control
         {
-            if (udsLen != 5)
-                return 0x13;
-            uint8_t callType = udsData[4];
-
-            if (callType == 0x00)
+            if (controlParameter == 0x03)
             {
-                // EcallHalTriggerBcall_placeholder();
-            }
-            else if (callType == 0x01)
-            {
-                // EcallHalTriggerEcall_placeholder();
-            }
-            else
-                return 0x31;
+                if (udsLen != 5) return 0x13;
+                uint8_t callType = udsData[4];
 
-            responseData[4] = callType;
-            DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 5, 0);
-        }
-        else if (controlParameter == 0x00)
-        {
-            if (udsLen != 4)
-            {
-                return 0x13;
-            }
-            DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 4, 0);
-        }
-        else
-            return 0x31;
+                if (callType == 0x00)
+                {
+                    // EcallHalTriggerBcall_placeholder();
+                }
+                else if (callType == 0x01)
+                {
+                    // EcallHalTriggerEcall_placeholder();
+                }
+                else return 0x31;
 
-        break;
-    }
-
-    case 0xB2A1: // EMMC detection
-    {
-        if (controlParameter == 0x03)
-        {
-            if (udsLen != 5)
-                return 0x13;
-            uint8_t emmcState = 0;
-            uint16_t len = 0;
-            if (Service22ReadEmmcState(&emmcState, &len) == 0)
-            {
-                responseData[4] = emmcState;
+                responseData[4] = callType;
                 DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 5, 0);
             }
-            else
-                return 0x22;
-        }
-        else if (controlParameter == 0x00)
-        {
-            if (udsLen != 4)
+            else if (controlParameter == 0x00)
             {
-                return 0x13;
+                if (udsLen != 4)
+                {
+                    return 0x13;
+                }
+                DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 4, 0);
             }
-            DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 4, 0);
-        }
-        else
-            return 0x31;
-        break;
-    }
+            else return 0x31;
 
-    default:
-        return 0x31; // RequestOutOfRange
+            break;
+        }
+
+        case 0xB2A1: // EMMC detection
+        {
+            if (controlParameter == 0x03)
+            {
+                if (udsLen != 5) return 0x13;
+                uint8_t emmcState = 0;
+                uint16_t len = 0;
+                if (Service22ReadEmmcState(&emmcState, &len) == 0)
+                {
+                    responseData[4] = emmcState;
+                    DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 5, 0);
+                }
+                else return 0x22;
+            }
+            else if (controlParameter == 0x00)
+            {
+                if (udsLen != 4)
+                {
+                    return 0x13;
+                }
+                DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 4, 0);
+            }
+            else return 0x31;
+            break;
+        }
+
+        default:
+            return 0x31; // RequestOutOfRange
     }
 
     return 0x00; // success
@@ -1944,19 +1925,19 @@ return:
 **********************************************************/
 static int16_t ByteArrayCheckIsSame(uint8_t *pArray1, uint8_t *pArray2, uint16_t arrayLength)
 {
-    int16_t ret;
-    uint16_t i;
+  int16_t ret;
+  uint16_t i;
 
-    ret = 0;
-    for (i = 0; i < arrayLength; i++)
+  ret = 0;
+  for (i = 0; i < arrayLength; i++)
+  {
+    if (pArray1[i] != pArray2[i])
     {
-        if (pArray1[i] != pArray2[i])
-        {
-            ret = 1;
-            break;
-        }
+      ret = 1;
+      break;
     }
-    return ret;
+  }
+  return ret;
 }
 /*********************************************************
 Security Access /send key
@@ -2021,369 +2002,369 @@ Security Access /send key
 // }
 static uint8_t Service0x27Process0x01(uint8_t *udsData, uint16_t udsLen, uint8_t functionAddressFlag)
 {
-    uint8_t responseData[32];
-    uint8_t negativeNum = 0;
-    const int level_index = 0;
+  uint8_t responseData[32];
+  uint8_t negativeNum = 0;
+  const int level_index = 0;
 
-    responseData[0] = udsData[0] + 0x40;
-    responseData[1] = udsData[1];
+  responseData[0] = udsData[0] + 0x40;
+  responseData[1] = udsData[1];
 
-    if (udsLen != 2)
-        return 0x13;
+  if (udsLen != 2)
+    return 0x13;
 
-    uint8_t factoryMode = UdsDidGetManufactoryMode();
-    if (factoryMode >= 0x10)
+  uint8_t factoryMode = UdsDidGetManufactoryMode();
+  if (factoryMode >= 0x10)
+  {
+    // 0x10-0xFF 返回全0的种子
+    memset(g_securitySeed, 0, sizeof(g_securitySeed));
+    g_securitySeedLength = 4;
+
+    memcpy((responseData + 2), g_securitySeed, g_securitySeedLength);
+    DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 2 + g_securitySeedLength, functionAddressFlag);
+
+    g_currentSecurityLevel = E_UDS_SECURITY_LEVEL1; // 自动解锁
+    g_securitySendSeedLevel = E_UDS_NONE_SECURITY_LEVEL;
+
+    return 0;
+  }
+
+  if (g_ecuResetFlag[level_index])
+  {
+    negativeNum = 0x37;
+  }
+  else if (g_currentSecurityLevel == E_UDS_SECURITY_LEVEL1)
+  {
+    UdsGetSeed(g_securitySeed, &g_securitySeedLength);
+    memcpy((responseData + 2), g_securitySeed, g_securitySeedLength); // 修正2701 0x01-0xFF 返回全0种子
+    DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 2 + g_securitySeedLength, 0);
+  }
+  else
+  {
+    if (g_u8ConsecutiveSeedCount[level_index] < 3)
     {
-        // 0x10-0xFF 返回全0的种子
-        memset(g_securitySeed, 0, sizeof(g_securitySeed));
-        g_securitySeedLength = 4;
+      UdsGetSeed(g_securitySeed, &g_securitySeedLength);
+      unsigned int key_len_uint = 0;
 
+      int result = Seed2Key(g_securitySeed, g_securitySeedLength, 0x01, NULL, g_securityKey, sizeof(g_securityKey), &key_len_uint);
+
+      if (result == 1)
+      {
+        g_securityKeyLength = (uint8_t)key_len_uint;
         memcpy((responseData + 2), g_securitySeed, g_securitySeedLength);
         DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 2 + g_securitySeedLength, functionAddressFlag);
-
-        g_currentSecurityLevel = E_UDS_SECURITY_LEVEL1; // 自动解锁
-        g_securitySendSeedLevel = E_UDS_NONE_SECURITY_LEVEL;
-
-        return 0;
-    }
-
-    if (g_ecuResetFlag[level_index])
-    {
-        negativeNum = 0x37;
-    }
-    else if (g_currentSecurityLevel == E_UDS_SECURITY_LEVEL1)
-    {
-        UdsGetSeed(g_securitySeed, &g_securitySeedLength);
-        memcpy((responseData + 2), g_securitySeed, g_securitySeedLength); // 修正2701 0x01-0xFF 返回全0种子
-        DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 2 + g_securitySeedLength, 0);
+        g_securitySendSeedLevel = E_UDS_SECURITY_LEVEL1;
+      }
+      else
+      {
+        negativeNum = 0x24;
+      }
     }
     else
     {
-        if (g_u8ConsecutiveSeedCount[level_index] < 3)
-        {
-            UdsGetSeed(g_securitySeed, &g_securitySeedLength);
-            unsigned int key_len_uint = 0;
-
-            int result = Seed2Key(g_securitySeed, g_securitySeedLength, 0x01, NULL, g_securityKey, sizeof(g_securityKey), &key_len_uint);
-
-            if (result == 1)
-            {
-                g_securityKeyLength = (uint8_t)key_len_uint;
-                memcpy((responseData + 2), g_securitySeed, g_securitySeedLength);
-                DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 2 + g_securitySeedLength, functionAddressFlag);
-                g_securitySendSeedLevel = E_UDS_SECURITY_LEVEL1;
-            }
-            else
-            {
-                negativeNum = 0x24;
-            }
-        }
-        else
-        {
-            if (g_securityTimerDelayType != E_SECURITYTIMER_ACCESSERRORDELAY)
-            {
-                negativeNum = 0x36;
-                TimerHalStartTime(g_ecuSecurityTimerHandle, 10000);
-                g_securityTimerDelayType = E_SECURITYTIMER_ACCESSERRORDELAY;
-            }
-            else
-            {
-                negativeNum = 0x37;
-            }
-        }
+      if (g_securityTimerDelayType != E_SECURITYTIMER_ACCESSERRORDELAY)
+      {
+        negativeNum = 0x36;
+        TimerHalStartTime(g_ecuSecurityTimerHandle, 10000);
+        g_securityTimerDelayType = E_SECURITYTIMER_ACCESSERRORDELAY;
+      }
+      else
+      {
+        negativeNum = 0x37;
+      }
     }
-    return negativeNum;
+  }
+  return negativeNum;
 }
 
 static uint8_t Service0x27Process0x02(uint8_t *udsData, uint16_t udsLen, uint8_t functionAddressFlag)
 {
-    uint8_t negativeNum = 0;
-    uint8_t responseData[32];
-    const int level_index = 0;
+  uint8_t negativeNum = 0;
+  uint8_t responseData[32];
+  const int level_index = 0;
 
-    responseData[0] = udsData[0] + 0x40;
-    responseData[1] = udsData[1];
+  responseData[0] = udsData[0] + 0x40;
+  responseData[1] = udsData[1];
 
-    if (udsLen != 6)
-        return 0x13;
+  if (udsLen != 6)
+    return 0x13;
 
-    if (E_UDS_SECURITY_LEVEL1 == g_securitySendSeedLevel)
+  if (E_UDS_SECURITY_LEVEL1 == g_securitySendSeedLevel)
+  {
+    if (ByteArrayCheckIsSame(&udsData[2], g_securityKey, g_securityKeyLength) == 0)
     {
-        if (ByteArrayCheckIsSame(&udsData[2], g_securityKey, g_securityKeyLength) == 0)
-        {
-            DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 2, 0);
-            g_currentSecurityLevel = E_UDS_SECURITY_LEVEL1;
-            g_u8ConsecutiveSeedCount[level_index] = 0;
-            SaveSeedAccessCountToNonVolatile(g_u8ConsecutiveSeedCount);
-        }
-        else
-        {
-            if (g_u8ConsecutiveSeedCount[level_index] < 3)
-            {
-                g_u8ConsecutiveSeedCount[level_index] += 1;
-                SaveSeedAccessCountToNonVolatile(g_u8ConsecutiveSeedCount);
-            }
-            if (g_u8ConsecutiveSeedCount[level_index] < 3)
-            {
-                negativeNum = 0x35;
-            }
-            else
-            {
-                negativeNum = 0x36;
-                TimerHalStartTime(g_ecuSecurityTimerHandle, 10000);
-                g_securityTimerDelayType = E_SECURITYTIMER_ACCESSERRORDELAY;
-            }
-        }
-        g_securitySendSeedLevel = E_UDS_NONE_SECURITY_LEVEL;
+      DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 2, 0);
+      g_currentSecurityLevel = E_UDS_SECURITY_LEVEL1;
+      g_u8ConsecutiveSeedCount[level_index] = 0;
+      SaveSeedAccessCountToNonVolatile(g_u8ConsecutiveSeedCount);
     }
     else
     {
-        negativeNum = 0x24;
+      if (g_u8ConsecutiveSeedCount[level_index] < 3)
+      {
+        g_u8ConsecutiveSeedCount[level_index] += 1;
+        SaveSeedAccessCountToNonVolatile(g_u8ConsecutiveSeedCount);
+      }
+      if (g_u8ConsecutiveSeedCount[level_index] < 3)
+      {
+        negativeNum = 0x35;
+      }
+      else
+      {
+        negativeNum = 0x36;
+        TimerHalStartTime(g_ecuSecurityTimerHandle, 10000);
+        g_securityTimerDelayType = E_SECURITYTIMER_ACCESSERRORDELAY;
+      }
     }
-    return negativeNum;
+    g_securitySendSeedLevel = E_UDS_NONE_SECURITY_LEVEL;
+  }
+  else
+  {
+    negativeNum = 0x24;
+  }
+  return negativeNum;
 }
 
 // --- Level 2 (Standard: 0x03/0x04) ---
 static uint8_t Service0x27Process0x03(uint8_t *udsData, uint16_t udsLen, uint8_t functionAddressFlag)
 {
-    uint8_t responseData[32];
-    uint8_t negativeNum = 0;
-    const int level_index = 2;
+  uint8_t responseData[32];
+  uint8_t negativeNum = 0;
+  const int level_index = 2;
 
-    responseData[0] = udsData[0] + 0x40;
-    responseData[1] = udsData[1];
+  responseData[0] = udsData[0] + 0x40;
+  responseData[1] = udsData[1];
 
-    if (udsLen != 2)
-        return 0x13;
-    uint8_t factoryMode = UdsDidGetManufactoryMode();
+  if (udsLen != 2)
+    return 0x13;
+  uint8_t factoryMode = UdsDidGetManufactoryMode();
 
-    if (factoryMode >= 0x10)
+  if (factoryMode >= 0x10)
+  {
+    // 0x10-0xFF 返回全0的种子
+    memset(g_securitySeed, 0, sizeof(g_securitySeed));
+    g_securitySeedLength = 4;
+
+    memcpy((responseData + 2), g_securitySeed, g_securitySeedLength);
+    DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 2 + g_securitySeedLength, functionAddressFlag);
+
+    g_currentSecurityLevel = E_UDS_SECURITY_LEVEL2_STD; // 解锁到Level 2
+    g_securitySendSeedLevel = E_UDS_NONE_SECURITY_LEVEL;
+
+    return 0;
+  }
+  if (g_ecuResetFlag[level_index])
+  {
+    negativeNum = 0x37;
+  }
+  else if (g_currentSecurityLevel == E_UDS_SECURITY_LEVEL2_STD)
+  {
+    UdsGetSeed(g_securitySeed, &g_securitySeedLength);
+
+    memcpy((responseData + 2), g_securitySeed, g_securitySeedLength);
+    DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 2 + g_securitySeedLength, 0);
+  }
+  else
+  {
+    if (g_u8ConsecutiveSeedCount[level_index] < 3)
     {
-        // 0x10-0xFF 返回全0的种子
-        memset(g_securitySeed, 0, sizeof(g_securitySeed));
-        g_securitySeedLength = 4;
+      UdsGetSeed(g_securitySeed, &g_securitySeedLength);
 
+      unsigned int key_len_uint = 0;
+
+      int result = Seed2Key(g_securitySeed, g_securitySeedLength, 0x03, NULL, g_securityKey, sizeof(g_securityKey), &key_len_uint);
+
+      if (result == 1)
+      {
+        g_securityKeyLength = (uint8_t)key_len_uint;
         memcpy((responseData + 2), g_securitySeed, g_securitySeedLength);
         DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 2 + g_securitySeedLength, functionAddressFlag);
-
-        g_currentSecurityLevel = E_UDS_SECURITY_LEVEL2_STD; // 解锁到Level 2
-        g_securitySendSeedLevel = E_UDS_NONE_SECURITY_LEVEL;
-
-        return 0;
-    }
-    if (g_ecuResetFlag[level_index])
-    {
-        negativeNum = 0x37;
-    }
-    else if (g_currentSecurityLevel == E_UDS_SECURITY_LEVEL2_STD)
-    {
-        UdsGetSeed(g_securitySeed, &g_securitySeedLength);
-
-        memcpy((responseData + 2), g_securitySeed, g_securitySeedLength);
-        DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 2 + g_securitySeedLength, 0);
+        g_securitySendSeedLevel = E_UDS_SECURITY_LEVEL2_STD;
+      }
+      else
+      {
+        negativeNum = 0x24;
+      }
     }
     else
     {
-        if (g_u8ConsecutiveSeedCount[level_index] < 3)
-        {
-            UdsGetSeed(g_securitySeed, &g_securitySeedLength);
-
-            unsigned int key_len_uint = 0;
-
-            int result = Seed2Key(g_securitySeed, g_securitySeedLength, 0x03, NULL, g_securityKey, sizeof(g_securityKey), &key_len_uint);
-
-            if (result == 1)
-            {
-                g_securityKeyLength = (uint8_t)key_len_uint;
-                memcpy((responseData + 2), g_securitySeed, g_securitySeedLength);
-                DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 2 + g_securitySeedLength, functionAddressFlag);
-                g_securitySendSeedLevel = E_UDS_SECURITY_LEVEL2_STD;
-            }
-            else
-            {
-                negativeNum = 0x24;
-            }
-        }
-        else
-        {
-            if (g_securityTimerDelayType_3 != E_SECURITYTIMER_ACCESSERRORDELAY)
-            {
-                negativeNum = 0x36;
-                TimerHalStartTime(g_ecuSecurityTimerHandle_3, 10000);
-                g_securityTimerDelayType_3 = E_SECURITYTIMER_ACCESSERRORDELAY;
-            }
-            else
-            {
-                negativeNum = 0x37;
-            }
-        }
+      if (g_securityTimerDelayType_3 != E_SECURITYTIMER_ACCESSERRORDELAY)
+      {
+        negativeNum = 0x36;
+        TimerHalStartTime(g_ecuSecurityTimerHandle_3, 10000);
+        g_securityTimerDelayType_3 = E_SECURITYTIMER_ACCESSERRORDELAY;
+      }
+      else
+      {
+        negativeNum = 0x37;
+      }
     }
-    return negativeNum;
+  }
+  return negativeNum;
 }
 
 static uint8_t Service0x27Process0x04(uint8_t *udsData, uint16_t udsLen, uint8_t functionAddressFlag)
 {
-    uint8_t negativeNum = 0;
-    uint8_t responseData[32];
-    const int level_index = 2;
+  uint8_t negativeNum = 0;
+  uint8_t responseData[32];
+  const int level_index = 2;
 
-    responseData[0] = udsData[0] + 0x40;
-    responseData[1] = udsData[1];
+  responseData[0] = udsData[0] + 0x40;
+  responseData[1] = udsData[1];
 
-    if (udsLen != 6)
-        return 0x13;
+  if (udsLen != 6)
+    return 0x13;
 
-    if (E_UDS_SECURITY_LEVEL2_STD == g_securitySendSeedLevel)
+  if (E_UDS_SECURITY_LEVEL2_STD == g_securitySendSeedLevel)
+  {
+    if (ByteArrayCheckIsSame(&udsData[2], g_securityKey, g_securityKeyLength) == 0)
     {
-        if (ByteArrayCheckIsSame(&udsData[2], g_securityKey, g_securityKeyLength) == 0)
-        {
-            DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 2, 0);
-            g_currentSecurityLevel = E_UDS_SECURITY_LEVEL2_STD;
-            g_u8ConsecutiveSeedCount[level_index] = 0;
-            SaveSeedAccessCountToNonVolatile(g_u8ConsecutiveSeedCount);
-        }
-        else
-        {
-            if (g_u8ConsecutiveSeedCount[level_index] < 3)
-            {
-                g_u8ConsecutiveSeedCount[level_index] += 1;
-                SaveSeedAccessCountToNonVolatile(g_u8ConsecutiveSeedCount);
-            }
-            if (g_u8ConsecutiveSeedCount[level_index] < 3)
-            {
-                negativeNum = 0x35;
-            }
-            else
-            {
-                negativeNum = 0x36;
-                TimerHalStartTime(g_ecuSecurityTimerHandle_3, 180000);
-                g_securityTimerDelayType_3 = E_SECURITYTIMER_ACCESSERRORDELAY;
-            }
-        }
-        g_securitySendSeedLevel = E_UDS_NONE_SECURITY_LEVEL;
+      DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 2, 0);
+      g_currentSecurityLevel = E_UDS_SECURITY_LEVEL2_STD;
+      g_u8ConsecutiveSeedCount[level_index] = 0;
+      SaveSeedAccessCountToNonVolatile(g_u8ConsecutiveSeedCount);
     }
     else
     {
-        negativeNum = 0x24;
+      if (g_u8ConsecutiveSeedCount[level_index] < 3)
+      {
+        g_u8ConsecutiveSeedCount[level_index] += 1;
+        SaveSeedAccessCountToNonVolatile(g_u8ConsecutiveSeedCount);
+      }
+      if (g_u8ConsecutiveSeedCount[level_index] < 3)
+      {
+        negativeNum = 0x35;
+      }
+      else
+      {
+        negativeNum = 0x36;
+        TimerHalStartTime(g_ecuSecurityTimerHandle_3, 180000);
+        g_securityTimerDelayType_3 = E_SECURITYTIMER_ACCESSERRORDELAY;
+      }
     }
-    return negativeNum;
+    g_securitySendSeedLevel = E_UDS_NONE_SECURITY_LEVEL;
+  }
+  else
+  {
+    negativeNum = 0x24;
+  }
+  return negativeNum;
 }
 
 // --- Reprogramming (0x11/0x12) ---
 static uint8_t Service0x27Process0x11(uint8_t *udsData, uint16_t udsLen, uint8_t functionAddressFlag)
 {
-    uint8_t responseData[32];
-    uint8_t negativeNum = 0;
-    const int level_index = 3;
-    if (g_currentSession != E_PROGROM_SESSION)
+  uint8_t responseData[32];
+  uint8_t negativeNum = 0;
+  const int level_index = 3;
+if (g_currentSession != E_PROGROM_SESSION)
     {
         return 0x7E;
     }
-    responseData[0] = udsData[0] + 0x40;
-    responseData[1] = udsData[1];
+  responseData[0] = udsData[0] + 0x40;
+  responseData[1] = udsData[1];
 
-    if (udsLen != 2)
-        return 0x13;
+  if (udsLen != 2)
+    return 0x13;
 
-    if (g_ecuResetFlag[level_index])
+  if (g_ecuResetFlag[level_index])
+  {
+    negativeNum = 0x37;
+  }
+  else if (g_currentSecurityLevel == E_UDS_SECURITY_LEVEL_REPROG)
+  {
+    UdsGetSeed(g_securitySeed, &g_securitySeedLength);
+    memset((responseData + 2), 0, g_securitySeedLength);
+    DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 2 + g_securitySeedLength, 0);
+  }
+  else
+  {
+    if (g_u8ConsecutiveSeedCount[level_index] < 3)
     {
-        negativeNum = 0x37;
-    }
-    else if (g_currentSecurityLevel == E_UDS_SECURITY_LEVEL_REPROG)
-    {
-        UdsGetSeed(g_securitySeed, &g_securitySeedLength);
-        memset((responseData + 2), 0, g_securitySeedLength);
-        DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 2 + g_securitySeedLength, 0);
+
+      UdsGetSeed(g_securitySeed, &g_securitySeedLength);
+
+      unsigned int key_len_uint = 0;
+
+      int result = Seed2Key(g_securitySeed, g_securitySeedLength, 0x11, NULL, g_securityKey, sizeof(g_securityKey), &key_len_uint);
+
+      if (result == 1)
+      {
+        g_securityKeyLength = (uint8_t)key_len_uint;
+        memcpy((responseData + 2), g_securitySeed, g_securitySeedLength);
+        DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 2 + g_securitySeedLength, functionAddressFlag);
+        g_securitySendSeedLevel = E_UDS_SECURITY_LEVEL_REPROG;
+      }
+      else
+      {
+        negativeNum = 0x24;
+      }
     }
     else
     {
-        if (g_u8ConsecutiveSeedCount[level_index] < 3)
-        {
-
-            UdsGetSeed(g_securitySeed, &g_securitySeedLength);
-
-            unsigned int key_len_uint = 0;
-
-            int result = Seed2Key(g_securitySeed, g_securitySeedLength, 0x11, NULL, g_securityKey, sizeof(g_securityKey), &key_len_uint);
-
-            if (result == 1)
-            {
-                g_securityKeyLength = (uint8_t)key_len_uint;
-                memcpy((responseData + 2), g_securitySeed, g_securitySeedLength);
-                DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 2 + g_securitySeedLength, functionAddressFlag);
-                g_securitySendSeedLevel = E_UDS_SECURITY_LEVEL_REPROG;
-            }
-            else
-            {
-                negativeNum = 0x24;
-            }
-        }
-        else
-        {
-            if (g_securityTimerDelayType_Reprog != E_SECURITYTIMER_ACCESSERRORDELAY)
-            {
-                negativeNum = 0x36;
-                TimerHalStartTime(g_ecuSecurityTimerHandle_Reprog, 10000);
-                g_securityTimerDelayType_Reprog = E_SECURITYTIMER_ACCESSERRORDELAY;
-            }
-            else
-            {
-                negativeNum = 0x37;
-            }
-        }
+      if (g_securityTimerDelayType_Reprog != E_SECURITYTIMER_ACCESSERRORDELAY)
+      {
+        negativeNum = 0x36;
+        TimerHalStartTime(g_ecuSecurityTimerHandle_Reprog, 10000);
+        g_securityTimerDelayType_Reprog = E_SECURITYTIMER_ACCESSERRORDELAY;
+      }
+      else
+      {
+        negativeNum = 0x37;
+      }
     }
-    return negativeNum;
+  }
+  return negativeNum;
 }
 
 static uint8_t Service0x27Process0x12(uint8_t *udsData, uint16_t udsLen, uint8_t functionAddressFlag)
 {
-    uint8_t negativeNum = 0;
-    uint8_t responseData[32];
-    const int level_index = 3;
-    if (g_currentSession != E_PROGROM_SESSION)
+  uint8_t negativeNum = 0;
+  uint8_t responseData[32];
+  const int level_index = 3;
+  if (g_currentSession != E_PROGROM_SESSION)
     {
         return 0x7E;
     }
-    responseData[0] = udsData[0] + 0x40;
-    responseData[1] = udsData[1];
+  responseData[0] = udsData[0] + 0x40;
+  responseData[1] = udsData[1];
 
-    if (udsLen != 6)
-        return 0x13;
+  if (udsLen != 6)
+    return 0x13;
 
-    if (E_UDS_SECURITY_LEVEL_REPROG == g_securitySendSeedLevel)
+  if (E_UDS_SECURITY_LEVEL_REPROG == g_securitySendSeedLevel)
+  {
+    if (ByteArrayCheckIsSame(&udsData[2], g_securityKey, g_securityKeyLength) == 0)
     {
-        if (ByteArrayCheckIsSame(&udsData[2], g_securityKey, g_securityKeyLength) == 0)
-        {
-            DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 2, 0);
-            g_currentSecurityLevel = E_UDS_SECURITY_LEVEL_REPROG;
-            g_u8ConsecutiveSeedCount[level_index] = 0;
-            SaveSeedAccessCountToNonVolatile(g_u8ConsecutiveSeedCount);
-        }
-        else
-        {
-            if (g_u8ConsecutiveSeedCount[level_index] < 3)
-            {
-                g_u8ConsecutiveSeedCount[level_index] += 1;
-                SaveSeedAccessCountToNonVolatile(g_u8ConsecutiveSeedCount);
-            }
-            if (g_u8ConsecutiveSeedCount[level_index] < 3)
-            {
-                negativeNum = 0x35;
-            }
-            else
-            {
-                negativeNum = 0x36;
-                TimerHalStartTime(g_ecuSecurityTimerHandle_Reprog, 180000);
-                g_securityTimerDelayType_Reprog = E_SECURITYTIMER_ACCESSERRORDELAY;
-            }
-        }
-        g_securitySendSeedLevel = E_UDS_NONE_SECURITY_LEVEL;
+      DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 2, 0);
+      g_currentSecurityLevel = E_UDS_SECURITY_LEVEL_REPROG;
+      g_u8ConsecutiveSeedCount[level_index] = 0;
+      SaveSeedAccessCountToNonVolatile(g_u8ConsecutiveSeedCount);
     }
     else
     {
-        negativeNum = 0x24;
+      if (g_u8ConsecutiveSeedCount[level_index] < 3)
+      {
+        g_u8ConsecutiveSeedCount[level_index] += 1;
+        SaveSeedAccessCountToNonVolatile(g_u8ConsecutiveSeedCount);
+      }
+      if (g_u8ConsecutiveSeedCount[level_index] < 3)
+      {
+        negativeNum = 0x35;
+      }
+      else
+      {
+        negativeNum = 0x36;
+        TimerHalStartTime(g_ecuSecurityTimerHandle_Reprog, 180000);
+        g_securityTimerDelayType_Reprog = E_SECURITYTIMER_ACCESSERRORDELAY;
+      }
     }
-    return negativeNum;
+    g_securitySendSeedLevel = E_UDS_NONE_SECURITY_LEVEL;
+  }
+  else
+  {
+    negativeNum = 0x24;
+  }
+  return negativeNum;
 }
 
 //// --- Level 3 (Standard: 0x21/0x22) ---
@@ -2497,61 +2478,61 @@ static uint8_t Service0x27Process0x12(uint8_t *udsData, uint16_t udsLen, uint8_t
 // }
 static int16_t Service0x27Process(uint8_t *udsData, uint16_t udsLen, uint8_t functionAddressFlag)
 {
-    uint8_t negativeNum = 0;
-    const Diagnostic_t *psDignostic = (g_serviceECUFunGroup + g_currentServiceNum);
+  uint8_t negativeNum = 0;
+  const Diagnostic_t *psDignostic = (g_serviceECUFunGroup + g_currentServiceNum);
 
-    if (CheckSessionIsValid(g_currentSession, psDignostic->sessionSupport) == 0)
+  if (CheckSessionIsValid(g_currentSession, psDignostic->sessionSupport) == 0)
+  {
+    if (udsLen < 2)
     {
-        if (udsLen < 2)
-        {
-            return 0x13;
-        }
-        switch (udsData[UDS_OFFSET_SUB_FUNC])
-        {
-        case 0x01:
-            negativeNum = Service0x27Process0x01(udsData, udsLen, functionAddressFlag);
-            break;
-        case 0x02:
-            negativeNum = Service0x27Process0x02(udsData, udsLen, functionAddressFlag);
-            break;
-
-        case 0x03:
-            negativeNum = Service0x27Process0x03(udsData, udsLen, functionAddressFlag);
-            break;
-        case 0x04:
-            negativeNum = Service0x27Process0x04(udsData, udsLen, functionAddressFlag);
-            break;
-
-        case 0x11:
-            negativeNum = Service0x27Process0x11(udsData, udsLen, functionAddressFlag);
-            break;
-        case 0x12:
-            negativeNum = Service0x27Process0x12(udsData, udsLen, functionAddressFlag);
-            break;
-
-            // case 0x21:
-            //   negativeNum = Service0x27Process0x21(udsData, udsLen, functionAddressFlag);
-            //   break;
-            // case 0x22:
-            //   negativeNum = Service0x27Process0x22(udsData, udsLen, functionAddressFlag);
-            //   break;
-            // case 0x09:
-            //   negativeNum = Service0x27Process0x09(udsData, udsLen, functionAddressFlag);
-            //   break;
-            // case 0x0A:
-            //   negativeNum = Service0x27Process0x0A(udsData, udsLen, functionAddressFlag);
-            //   break;
-
-        default:
-            negativeNum = 0x12;
-            break;
-        }
+      return 0x13;
     }
-    else
+    switch (udsData[UDS_OFFSET_SUB_FUNC])
     {
-        negativeNum = 0x7F;
+    case 0x01:
+      negativeNum = Service0x27Process0x01(udsData, udsLen, functionAddressFlag);
+      break;
+    case 0x02:
+      negativeNum = Service0x27Process0x02(udsData, udsLen, functionAddressFlag);
+      break;
+
+    case 0x03:
+      negativeNum = Service0x27Process0x03(udsData, udsLen, functionAddressFlag);
+      break;
+    case 0x04:
+      negativeNum = Service0x27Process0x04(udsData, udsLen, functionAddressFlag);
+      break;
+
+    case 0x11:
+      negativeNum = Service0x27Process0x11(udsData, udsLen, functionAddressFlag);
+      break;
+    case 0x12:
+      negativeNum = Service0x27Process0x12(udsData, udsLen, functionAddressFlag);
+      break;
+
+      // case 0x21:
+      //   negativeNum = Service0x27Process0x21(udsData, udsLen, functionAddressFlag);
+      //   break;
+      // case 0x22:
+      //   negativeNum = Service0x27Process0x22(udsData, udsLen, functionAddressFlag);
+      //   break;
+      // case 0x09:
+      //   negativeNum = Service0x27Process0x09(udsData, udsLen, functionAddressFlag);
+      //   break;
+      // case 0x0A:
+      //   negativeNum = Service0x27Process0x0A(udsData, udsLen, functionAddressFlag);
+      //   break;
+
+    default:
+      negativeNum = 0x12;
+      break;
     }
-    return negativeNum;
+  }
+  else
+  {
+    negativeNum = 0x7F;
+  }
+  return negativeNum;
 }
 
 /*********************************************
@@ -2660,90 +2641,90 @@ read data by identifier
 //
 static int16_t Service0x22Process(uint8_t *udsData, uint16_t udsLen, uint8_t functionAddressFlag)
 {
-    const Diagnostic_t *psDignostic = g_serviceECUFunGroup + g_currentServiceNum;
-    uint8_t negativeNum = 0;
-    uint16_t first_did;
+  const Diagnostic_t *psDignostic = g_serviceECUFunGroup + g_currentServiceNum;
+  uint8_t negativeNum = 0;
+  uint16_t first_did;
 
-    if (CheckSessionIsValid(g_currentSession, psDignostic->sessionSupport) != 0)
-    {
-        return 0x7F; // 会话不支持
-    }
+  if (CheckSessionIsValid(g_currentSession, psDignostic->sessionSupport) != 0)
+  {
+    return 0x7F; // 会话不支持
+  }
 
-    if (udsLen < 3 || ((udsLen - 1) % 2) != 0)
-    {
-        return 0x13;
-    }
-    // 不支持一次请求多个DID
-    if ((udsLen - 1) / 2 > 1)
-    {
-        return 0x12;
-    }
-    first_did = (udsData[1] << 8) | udsData[2];
+  if (udsLen < 3 || ((udsLen - 1) % 2) != 0)
+  {
+    return 0x13;
+  }
+  // 不支持一次请求多个DID
+  if ((udsLen - 1) / 2 > 1)
+  {
+    return 0x12;
+  }
+  first_did = (udsData[1] << 8) | udsData[2];
 
-    if (IsDidPassthrough_22(first_did))
+  if (IsDidPassthrough_22(first_did))
+  {
+    uint8_t mpu_response_buffer[512];
+    uint16_t mpu_response_length = 0;
+    int16_t ret;
+    // TBOX_PRINT("22 passthrough DID: %04X\n", first_did);
+    ret = CanPassthrough_RequestAndGetResponse(udsData, udsLen, mpu_response_buffer, &mpu_response_length);
+    if (ret == 0 && mpu_response_length > 0)
     {
-        uint8_t mpu_response_buffer[512];
-        uint16_t mpu_response_length = 0;
-        int16_t ret;
-        // TBOX_PRINT("22 passthrough DID: %04X\n", first_did);
-        ret = CanPassthrough_RequestAndGetResponse(udsData, udsLen, mpu_response_buffer, &mpu_response_length);
-        if (ret == 0 && mpu_response_length > 0)
-        {
-            DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, mpu_response_buffer, mpu_response_length, 0);
-            return 0;
-        }
-        else
-        {
-            negativeNum = 0x31;
-        }
+      DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, mpu_response_buffer, mpu_response_length, 0);
+      return 0;
     }
     else
     {
+      negativeNum = 0x31;
+    }
+  }
+  else
+  {
 
-        uint16_t Rdid_len = 0;
-        uint16_t Rdid = 0;
-        uint16_t didNum = 0;
-        uint16_t i;
-        uint16_t txLength;
-        pService22_DIDFunction pReadFun;
+    uint16_t Rdid_len = 0;
+    uint16_t Rdid = 0;
+    uint16_t didNum = 0;
+    uint16_t i;
+    uint16_t txLength;
+    pService22_DIDFunction pReadFun;
 
-        g_udsTxBuffer[0] = udsData[0] + 0x40;
-        txLength = 1;
-        didNum = (udsLen - 1) / 2;
+    g_udsTxBuffer[0] = udsData[0] + 0x40;
+    txLength = 1;
+    didNum = (udsLen - 1) / 2;
 
-        for (i = 0; i < didNum; i++)
+    for (i = 0; i < didNum; i++)
+    {
+      Rdid = ((udsData[i * 2 + 1] << 8) | udsData[i * 2 + 2]);
+
+      if (Service22GetDidFunction(Rdid, &pReadFun) == E_SUBFUN_GET_OK)
+      {
+        if (pReadFun(&g_udsTxBuffer[txLength + 2], &Rdid_len) == 0)
         {
-            Rdid = ((udsData[i * 2 + 1] << 8) | udsData[i * 2 + 2]);
-
-            if (Service22GetDidFunction(Rdid, &pReadFun) == E_SUBFUN_GET_OK)
-            {
-                if (pReadFun(&g_udsTxBuffer[txLength + 2], &Rdid_len) == 0)
-                {
-                    g_udsTxBuffer[txLength] = (uint8_t)(Rdid >> 8);
-                    g_udsTxBuffer[txLength + 1] = (uint8_t)(Rdid & 0xFF);
-                    txLength += (Rdid_len + 2);
-                }
-                else
-                {
-                    negativeNum = 0x22; // ConditionsNotCorrect
-                    break;
-                }
-            }
-            else
-            {
-                // 如果DID不在透传列表，也不在本地总列表，则为无效DID
-                negativeNum = 0x31; // RequestOutOfRange
-                break;
-            }
+          g_udsTxBuffer[txLength] = (uint8_t)(Rdid >> 8);
+          g_udsTxBuffer[txLength + 1] = (uint8_t)(Rdid & 0xFF);
+          txLength += (Rdid_len + 2);
         }
-
-        if (negativeNum == 0)
+        else
         {
-            DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, g_udsTxBuffer, txLength, 0);
+          negativeNum = 0x22; // ConditionsNotCorrect
+          break;
         }
+      }
+      else
+      {
+        // 如果DID不在透传列表，也不在本地总列表，则为无效DID
+        negativeNum = 0x31; // RequestOutOfRange
+        break;
+      }
     }
 
-    return negativeNum;
+    if (negativeNum == 0)
+    {
+      DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, g_udsTxBuffer, txLength, 0);
+    }
+  }
+
+  return negativeNum;
 }
 /**********************************
 write data by identifier
@@ -2754,124 +2735,124 @@ write data by identifier
 // 针对ES Key的写入做特殊处理
 static int16_t ProcessWriteDidESKey(uint8_t *udsData, uint16_t udsLen)
 {
-    uint8_t factoryMode = UdsDidGetManufactoryMode();
-    bool securityCheckPassed = false;
+  uint8_t factoryMode = UdsDidGetManufactoryMode();
+  bool securityCheckPassed = false;
 
-    if (factoryMode >= 0x10)
+  if (factoryMode >= 0x10)
+  {
+    // 工厂模式下，不需要任何安全等级即可写入
+    securityCheckPassed = true;
+    // TBOX_PRINT("Factory mode, no security check for ES Key write\n");
+  }
+  else
+  {
+    if (g_currentSecurityLevel == E_UDS_SECURITY_LEVEL2_STD)
     {
-        // 工厂模式下，不需要任何安全等级即可写入
-        securityCheckPassed = true;
-        // TBOX_PRINT("Factory mode, no security check for ES Key write\n");
+      securityCheckPassed = true;
     }
-    else
-    {
-        if (g_currentSecurityLevel == E_UDS_SECURITY_LEVEL2_STD)
-        {
-            securityCheckPassed = true;
-        }
-    }
+  }
 
-    if (!securityCheckPassed)
-    {
-        return 0x33;
-    }
-    if (udsLen - 3 != 16)
-    {
-        return 0x13;
-    }
-    if (Service2EWriteESKey(&udsData[3], 16) == 0)
-    {
-        uint8_t responseData[3];
-        responseData[0] = udsData[0] + 0x40;
-        responseData[1] = udsData[1];
-        responseData[2] = udsData[2];
-        DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 3, 0);
+  if (!securityCheckPassed)
+  {
+    return 0x33;
+  }
+  if (udsLen - 3 != 16)
+  {
+    return 0x13;
+  }
+  if (Service2EWriteESKey(&udsData[3], 16) == 0)
+  {
+    uint8_t responseData[3];
+    responseData[0] = udsData[0] + 0x40;
+    responseData[1] = udsData[1];
+    responseData[2] = udsData[2];
+    DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 3, 0);
 
-        return 0;
-    }
-    else
-    {
-        return 0x72;
-    }
+    return 0;
+  }
+  else
+  {
+    return 0x72;
+  }
 }
 // mpu那边不成功 诊断仪不成功
 static int16_t Service0x2EProcess(uint8_t *udsData, uint16_t udsLen, uint8_t functionAddressFlag)
 {
-    const Diagnostic_t *pDiagnostic;
-    uint16_t did;
-    uint8_t negativeNum = 0;
-    pService2E_DIDFunction pWriteFun;
+  const Diagnostic_t *pDiagnostic;
+  uint16_t did;
+  uint8_t negativeNum = 0;
+  pService2E_DIDFunction pWriteFun;
 
-    pDiagnostic = g_serviceECUFunGroup + g_currentServiceNum;
+  pDiagnostic = g_serviceECUFunGroup + g_currentServiceNum;
 
-    if (udsLen < 3)
+  if (udsLen < 3)
+  {
+    return 0x13;
+  }
+  did = (udsData[UDS_OFFSET_SUB_FUNC] << 8) | udsData[UDS_OFFSET_SUB_FUNC + 1];
+  if (CheckSessionIsValid(g_currentSession, pDiagnostic->sessionSupport) != 0)
+  {
+    return 0x7F;
+  }
+  if (did == 0x010D)
+  {
+    return ProcessWriteDidESKey(udsData, udsLen);
+  }
+
+  switch (Service2EGetDidFunction(did, &pWriteFun, udsLen))
+  {
+  case E_SUBFUN_GET_OK:
+    break;
+  case E_SUBFUN_GET_INVALID_LENGTH:
+    return 0x13;
+  case E_SUBFUN_GET_INVALID_DID:
+    return 0x31;
+  case E_SUBFUN_GET_INVALID_SECURITY:
+    return 0x33;
+  default:
+    return 0x11;
+  }
+
+  // uint8_t u8Busy7f78CMD[8] = {0x03, 0x7f, 0x2e, 0x78, 0x00, 0x00, 0x00, 0x00};
+  // DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, &u8Busy7f78CMD[1], 3, 0);
+
+  int16_t localWriteRet = pWriteFun(&udsData[3], udsLen - 3);
+
+  if (localWriteRet != 0)
+  {
+    return (localWriteRet > 0) ? localWriteRet : 0x72;
+  }
+
+  uint8_t responseData[32];
+  responseData[0] = udsData[0] + 0x40;
+  responseData[1] = udsData[1];
+  responseData[2] = udsData[2];
+
+  if (did == 0xB2E5 || did == 0xF187|| did == 0xB2B4 || did == 0x0120)
+  {
+    DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 3, 0);
+  }
+  else
+  {
+    uint8_t mpu_response_buffer[64]; // mpu会给我回什么
+    uint16_t mpu_response_length = 0;
+    int8_t passthroughRet;
+    if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
     {
-        return 0x13;
+      return 0x72;
     }
-    did = (udsData[UDS_OFFSET_SUB_FUNC] << 8) | udsData[UDS_OFFSET_SUB_FUNC + 1];
-    if (CheckSessionIsValid(g_currentSession, pDiagnostic->sessionSupport) != 0)
+    passthroughRet = CanPassthrough_RequestAndGetResponse(udsData, udsLen, mpu_response_buffer, &mpu_response_length);
+
+    if (passthroughRet == 0 && mpu_response_length > 0)
     {
-        return 0x7F;
-    }
-    if (did == 0x010D)
-    {
-        return ProcessWriteDidESKey(udsData, udsLen);
-    }
-
-    switch (Service2EGetDidFunction(did, &pWriteFun, udsLen))
-    {
-    case E_SUBFUN_GET_OK:
-        break;
-    case E_SUBFUN_GET_INVALID_LENGTH:
-        return 0x13;
-    case E_SUBFUN_GET_INVALID_DID:
-        return 0x31;
-    case E_SUBFUN_GET_INVALID_SECURITY:
-        return 0x33;
-    default:
-        return 0x11;
-    }
-
-    // uint8_t u8Busy7f78CMD[8] = {0x03, 0x7f, 0x2e, 0x78, 0x00, 0x00, 0x00, 0x00};
-    // DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, &u8Busy7f78CMD[1], 3, 0);
-
-    int16_t localWriteRet = pWriteFun(&udsData[3], udsLen - 3);
-
-    if (localWriteRet != 0)
-    {
-        return (localWriteRet > 0) ? localWriteRet : 0x72;
-    }
-
-    uint8_t responseData[32];
-    responseData[0] = udsData[0] + 0x40;
-    responseData[1] = udsData[1];
-    responseData[2] = udsData[2];
-
-    if (did == 0xB2E5 || did == 0xF187 || did == 0xB2B4 || did == 0x0120)
-    {
-        DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 3, 0);
+      DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, mpu_response_buffer, mpu_response_length, 0);
     }
     else
     {
-        uint8_t mpu_response_buffer[64]; // mpu会给我回什么
-        uint16_t mpu_response_length = 0;
-        int8_t passthroughRet;
-        if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
-        {
-            return 0x72;
-        }
-        passthroughRet = CanPassthrough_RequestAndGetResponse(udsData, udsLen, mpu_response_buffer, &mpu_response_length);
-
-        if (passthroughRet == 0 && mpu_response_length > 0)
-        {
-            DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, mpu_response_buffer, mpu_response_length, 0);
-        }
-        else
-        {
-            negativeNum = 0x72;
-        }
+      negativeNum = 0x72;
     }
-    return negativeNum;
+  }
+  return negativeNum;
 }
 // static int16_t Service0x2EProcess(uint8_t *udsData, uint16_t udsLen, uint8_t functionAddressFlag)
 // {
@@ -2959,16 +2940,16 @@ self defined uds service used for EOL test
 ******************************************************/
 static int16_t Service0xBAProcess(uint8_t *udsData, uint16_t udsLen, uint8_t functionAddressFlag)
 {
-    uint8_t negativeNum = 0;
-    uint8_t responseData[32];
-    uint16_t responseDataLength;
+  uint8_t negativeNum = 0;
+  uint8_t responseData[32];
+  uint16_t responseDataLength;
 
-    negativeNum = ServiceTestSecurityProcess(udsData, udsLen, responseData, &responseDataLength);
-    if (negativeNum == 0)
-    {
-        DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, responseDataLength, 0);
-    }
-    return negativeNum;
+  negativeNum = ServiceTestSecurityProcess(udsData, udsLen, responseData, &responseDataLength);
+  if (negativeNum == 0)
+  {
+    DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, responseDataLength, 0);
+  }
+  return negativeNum;
 }
 
 /**************************************************
@@ -2978,108 +2959,108 @@ self defined uds service used for EOL test
 ******************************************************/
 int16_t Service0xBBProcess(uint8_t *udsData, uint16_t udsLen, uint8_t functionAddressFlag)
 {
-    uint8_t negativeNum = 0;
-    uint8_t responseData[128];
-    uint16_t responseDataLength;
+  uint8_t negativeNum = 0;
+  uint8_t responseData[128];
+  uint16_t responseDataLength;
 
-    negativeNum = ServiceTestProcess(udsData, udsLen, responseData, &responseDataLength);
-    if (negativeNum == 0)
-    {
-        DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, responseDataLength, 0);
-    }
-    return negativeNum;
+  negativeNum = ServiceTestProcess(udsData, udsLen, responseData, &responseDataLength);
+  if (negativeNum == 0)
+  {
+    DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, responseDataLength, 0);
+  }
+  return negativeNum;
 }
 
 static int16_t ServiceNoDefinitionProcess(uint8_t *udsData, uint16_t udsLen, uint8_t functionAddressFlag)
 {
-    int16_t negativeNum;
-    negativeNum = 1;
+  int16_t negativeNum;
+  negativeNum = 1;
 
-    if (!functionAddressFlag)
-    {
-        negativeNum = 0x11;
-    }
-    return negativeNum;
+  if (!functionAddressFlag)
+  {
+    negativeNum = 0x11;
+  }
+  return negativeNum;
 }
 
 static int16_t NegativeResponseProcess(uint8_t negativeNum, uint8_t ServiceId, uint8_t functionAddressFlag)
 {
-    uint8_t responseData[8];
-    responseData[0] = 0x7F;
-    responseData[1] = ServiceId;
-    responseData[2] = negativeNum;
+  uint8_t responseData[8];
+  responseData[0] = 0x7F;
+  responseData[1] = ServiceId;
+  responseData[2] = negativeNum;
 
-    if (functionAddressFlag && ((negativeNum == 0x11) || (negativeNum == 0x7F) ||
-                                (negativeNum == 0x12) || (negativeNum == 0x7E) || (negativeNum == 0x31)))
-    {
-        return 0;
-    }
-
-    DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 3, 0);
-
+  if (functionAddressFlag && ((negativeNum == 0x11) || (negativeNum == 0x7F) ||
+                              (negativeNum == 0x12) || (negativeNum == 0x7E) || (negativeNum == 0x31)))
+  {
     return 0;
+  }
+
+  DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 3, 0);
+
+  return 0;
 }
 
 static pServiceFunction GetEcuServiceFunction(uint8_t ServiceId)
 {
-    uint16_t i;
+  uint16_t i;
 
-    for (i = 0; i < (sizeof(g_serviceECUFunGroup) / sizeof(g_serviceECUFunGroup[0])); i++)
+  for (i = 0; i < (sizeof(g_serviceECUFunGroup) / sizeof(g_serviceECUFunGroup[0])); i++)
+  {
+    if (ServiceId == g_serviceECUFunGroup[i].SID)
     {
-        if (ServiceId == g_serviceECUFunGroup[i].SID)
-        {
-            g_currentServiceNum = i;
-            return g_serviceECUFunGroup[i].pFun;
-        }
+      g_currentServiceNum = i;
+      return g_serviceECUFunGroup[i].pFun;
     }
-    return ServiceNoDefinitionProcess;
+  }
+  return ServiceNoDefinitionProcess;
 }
 static uint16_t GetVehicleSpeed(void)
 {
 
-    uint16_t motolSpeed = 0;
-    double dataValue = 0;
-    const can0_signal_configure_t *pCan0SignalConfigure = GetCan0SignalConfigure();
+  uint16_t motolSpeed = 0;
+  double dataValue = 0;
+  const can0_signal_configure_t *pCan0SignalConfigure = GetCan0SignalConfigure();
 
-    // 获取车速物理值km/h
-    CanParseSdkReadSignal(VEHICLE_CAN_UNPACK_FORMAT_MOTO_LSB, &pCan0SignalConfigure->BCS_VehSpd, &dataValue);
+  // 获取车速物理值km/h
+  CanParseSdkReadSignal(VEHICLE_CAN_UNPACK_FORMAT_INTEL, &pCan0SignalConfigure->BCS_VehSpd, &dataValue);
 
-    motolSpeed = (uint16_t)dataValue;
-    return motolSpeed;
+  motolSpeed = (uint16_t)dataValue;
+  return motolSpeed;
 }
 static int16_t DiagnosticResponseProcess(uint8_t *udsData, uint16_t udsLen, uint8_t functionAddressFlag)
 {
-    uint8_t funNum = 0;
-    uint8_t negativeNum = 0;
-    pServiceFunction pFun;
+  uint8_t funNum = 0;
+  uint8_t negativeNum = 0;
+  pServiceFunction pFun;
 
-    funNum = udsData[UDS_OFFSET_SID];
-    if ((funNum == 0x11) ||
-        ((funNum == 0x10) && (0x02 == udsData[UDS_OFFSET_SID + 1])))
-    {
+  funNum = udsData[UDS_OFFSET_SID];
+  if ((funNum == 0x11) ||
+      ((funNum == 0x10) && (0x02 == udsData[UDS_OFFSET_SID + 1])))
+  {
 #if TEST_CODE
-        if (0)
+    if (0)
 #else
-        if ((GetVehicleSpeed() >= 5) && (GetVehicleSpeed() != 0xFFFF))
+    if ((GetVehicleSpeed() >= 5) && (GetVehicleSpeed() != 0xFFFF))
 #endif
-        {
-            negativeNum = 0x22;
-            NegativeResponseProcess(negativeNum, funNum, functionAddressFlag);
-            return 0;
-        }
-    }
-
-    pFun = GetEcuServiceFunction(funNum);
-    negativeNum = pFun(udsData, udsLen, functionAddressFlag);
-
-    if (0 != negativeNum)
     {
-        if (negativeNum == 1)
-        {
-            return 0;
-        }
-        NegativeResponseProcess(negativeNum, funNum, functionAddressFlag);
+      negativeNum = 0x22;
+      NegativeResponseProcess(negativeNum, funNum, functionAddressFlag);
+      return 0;
     }
+  }
+
+  pFun = GetEcuServiceFunction(funNum);
+  negativeNum = pFun(udsData, udsLen, functionAddressFlag);
+
+  if (0 != negativeNum)
+  {
+    if (negativeNum == 1)
+    {
+      return 0;
+    }
+    NegativeResponseProcess(negativeNum, funNum, functionAddressFlag);
+  }
 #if 0  
   else
   {    
@@ -3090,17 +3071,17 @@ static int16_t DiagnosticResponseProcess(uint8_t *udsData, uint16_t udsLen, uint
   }
 #endif
 
-    //   if (g_currentSession != E_DEFAULT_SESSION)
-    //   {
-    //     g_ecuOnlineFlag = 1;
-    //   }
+  if (g_currentSession != E_DEFAULT_SESSION)
+  {
+    g_ecuOnlineFlag = 1;
+  }
 
-    return 0;
+  return 0;
 }
 
 int16_t TaskEcuDiagnosticInit(void)
 {
-    return 0;
+  return 0;
 }
 
 // Place following data in section SYS_RAM
@@ -3144,22 +3125,22 @@ const CanTpSdkParameter_t g_tpParameter =
 
 static void ResetTboxStatusUpdate(void)
 {
-    g_currentSession = E_DEFAULT_SESSION;
-    g_currentSecurityLevel = E_UDS_NONE_SECURITY_LEVEL;
-    g_securitySendSeedLevel = E_UDS_NONE_SECURITY_LEVEL;
-    CanTpSdkSetBootMode(g_tpHandle, 0);
-    /*if(g_bDtcControlFlag)
-    {
-      g_bDtcControlFlag = 0;
-      //reset DTC control setting
-      DtcProcessEnable();
-    }
-    if(g_bCommunicationControlFlag)
-    {
-      g_bCommunicationControlFlag = 0;
-      //reset Communication control setting
-    }*/
-    SessionChangeToDefaultProcess();
+  g_currentSession = E_DEFAULT_SESSION;
+  g_currentSecurityLevel = E_UDS_NONE_SECURITY_LEVEL;
+  g_securitySendSeedLevel = E_UDS_NONE_SECURITY_LEVEL;
+  CanTpSdkSetBootMode(g_tpHandle, 0);
+  /*if(g_bDtcControlFlag)
+  {
+    g_bDtcControlFlag = 0;
+    //reset DTC control setting
+    DtcProcessEnable();
+  }
+  if(g_bCommunicationControlFlag)
+  {
+    g_bCommunicationControlFlag = 0;
+    //reset Communication control setting
+  }*/
+  SessionChangeToDefaultProcess();
 }
 #if 0
 static int16_t DiagnosticWorkingModeInit(void)
@@ -3264,177 +3245,177 @@ static void DiagnosticSeedAccessInit(void)
 void TaskEcuDiagnostic(void *pvParameters)
 {
 
-    int16_t ecuOnlineTimerHandle;
-    int16_t ret;
-    uint8_t functionalFlag = 0;
-    // int16_t tpHandle;
-    uint8_t isS3ServerTimerActive = 0;
+  int16_t ecuOnlineTimerHandle;
+  int16_t ret;
+  uint8_t functionalFlag = 0;
+  // int16_t tpHandle;
+  uint8_t isS3ServerTimerActive = 0;
 
-    g_tpHandle = CanTpSdkInitialize(TBOX_CAN_CHANNEL_2, &g_tpParameter, &g_tpBuffer);
+  g_tpHandle = CanTpSdkInitialize(TBOX_CAN_CHANNEL_2, &g_tpParameter, &g_tpBuffer);
 
-    if (g_tpHandle < 0)
+  if (g_tpHandle < 0)
+  {
+    return;
+  }
+  //ServiceTestSetDiagnosticCan(TBOX_CAN_CHANNEL_2);
+
+  CanTpSdkSetCanId(g_tpHandle, g_physicalReceiveCanId, g_functionalReceiveCanId, g_physicalTransmitCanId);
+
+  g_ecuSecurityTimerHandle = TimerHalOpen();
+  g_ecuSecurityTimerHandle_2 = TimerHalOpen();
+  g_ecuSecurityTimerHandle_3 = TimerHalOpen();
+  ecuOnlineTimerHandle = TimerHalOpen();
+
+  g_ecuSecurityTimerHandle_Reprog = TimerHalOpen();
+  // g_ecuSecurityTimerHandle_L3 = TimerHalOpen();
+  EolTestSyncWithCpuInit();
+  // RemoteSyncWithCpuInit();
+  //  EolConfigureInit();
+  //  //DiagCanReportValueInit();
+  //  VinInit();
+  EskkeyCheckInit();
+
+  // CopyMcuAppSoftWareVersionToFlash();// save app software version
+  // CopyMcuAppSoftWareNumberToFlash(); // save app software Number
+  // CopyMcuAppPartNumberToFlash(); // save app PartNumber
+  //  DiagnosticSeedAccessInit();
+
+  // //工作模式初始化
+  // DiagnosticWorkingModeInit();
+
+  while (1)
+  {
+    ret = CanTpSdkDataReceive(g_tpHandle, g_udsRxData, &g_udsRxDataLen, &functionalFlag);
+    if (0 == ret)
     {
-        return;
+      if (g_sleepFlag == 0)
+      {
+        g_virtualTpFlag = 0;
+        {
+          DiagnosticResponseProcess(g_udsRxData, g_udsRxDataLen, functionalFlag);
+        }
+      }
     }
-    // ServiceTestSetDiagnosticCan(TBOX_CAN_CHANNEL_2);
+    uint8_t currentTesterPresent = ((g_currentSession != E_DEFAULT_SESSION) || (isS3ServerTimerActive == 1)) ? 1 : 0;
 
-    CanTpSdkSetCanId(g_tpHandle, g_physicalReceiveCanId, g_functionalReceiveCanId, g_physicalTransmitCanId);
-
-    g_ecuSecurityTimerHandle = TimerHalOpen();
-    g_ecuSecurityTimerHandle_2 = TimerHalOpen();
-    g_ecuSecurityTimerHandle_3 = TimerHalOpen();
-    ecuOnlineTimerHandle = TimerHalOpen();
-
-    g_ecuSecurityTimerHandle_Reprog = TimerHalOpen();
-    // g_ecuSecurityTimerHandle_L3 = TimerHalOpen();
-    EolTestSyncWithCpuInit();
-    // RemoteSyncWithCpuInit();
-    //  EolConfigureInit();
-    //  //DiagCanReportValueInit();
-    //  VinInit();
-    EskkeyCheckInit();
-
-    // CopyMcuAppSoftWareVersionToFlash();// save app software version
-    // CopyMcuAppSoftWareNumberToFlash(); // save app software Number
-    // CopyMcuAppPartNumberToFlash(); // save app PartNumber
-    //  DiagnosticSeedAccessInit();
-
-    // //工作模式初始化
-    // DiagnosticWorkingModeInit();
-
-    while (1)
+    if (currentTesterPresent != g_isTesterPresent)
     {
-        ret = CanTpSdkDataReceive(g_tpHandle, g_udsRxData, &g_udsRxDataLen, &functionalFlag);
-        if (0 == ret)
-        {
-            if (g_sleepFlag == 0)
-            {
-                g_virtualTpFlag = 0;
-                {
-                    DiagnosticResponseProcess(g_udsRxData, g_udsRxDataLen, functionalFlag);
-                }
-            }
-        }
-        ret = -1;
-        ret = VirtualTpSdkServerReceive(&g_virtualTpChanalId, g_udsRxData, sizeof(g_udsRxData), &g_udsRxDataLen);
-        if (0 == ret)
-        {
-            if (g_sleepFlag == 0)
-            {
-                g_virtualTpFlag = 1;
-                {
-                    DiagnosticResponseProcess(g_udsRxData, g_udsRxDataLen, 0);
-                }
-            }
-        }
-        uint8_t currentTesterPresent = ((isS3ServerTimerActive == 1) && (g_isPhysicalOnline == 1)) ? 1 : 0;
+      g_isTesterPresent = currentTesterPresent;
 
-        if (currentTesterPresent != g_isTesterPresent)
-        {
-            g_isTesterPresent = currentTesterPresent;
-
-            if (currentTesterPresent)
-            {
-                LogHalUpLoadLog("Remote diagnostic connected.\r\n");
-                // RemoteDiagnosticSdkShortDisable();
-            }
-            else
-            {
-                // RemoteDiagnosticSdkRecover();
-            }
-        }
-        if (g_ecuOnlineFlag)
-        {
-            g_ecuOnlineFlag = 0;
-            TimerHalStartTime(ecuOnlineTimerHandle, 5000);
-            isS3ServerTimerActive = 1;
-        }
-        if (TimerHalIsTimeout(ecuOnlineTimerHandle) == 0)
-        {
-            TimerHalStopTime(ecuOnlineTimerHandle);
-            ResetTboxStatusUpdate();
-            isS3ServerTimerActive = 0;
-            g_isPhysicalOnline = 0;
-        }
-        if (TimerHalIsTimeout(g_ecuSecurityTimerHandle) == 0)
-        {
-            TBOX_PRINT("Timer out!!!\r\n");
-            TimerHalStopTime(g_ecuSecurityTimerHandle);
-            if (E_SECURITYTIMER_RESETDELAY == g_securityTimerDelayType)
-            {
-                g_ecuResetFlag[0] = 0;
-                g_u8ConsecutiveSeedCount[0] = 0;
-                SaveSeedAccessCountToNonVolatile(g_u8ConsecutiveSeedCount);
-            }
-            if (E_SECURITYTIMER_ACCESSERRORDELAY == g_securityTimerDelayType)
-            {
-                // g_u8ConsecutiveSeedCount--;
-                g_u8ConsecutiveSeedCount[0] = 0;
-                SaveSeedAccessCountToNonVolatile(g_u8ConsecutiveSeedCount);
-            }
-            g_securityTimerDelayType = E_SECURITYTIMER_NONE;
-        }
-        if (TimerHalIsTimeout(g_ecuSecurityTimerHandle_2) == 0)
-        {
-            TBOX_PRINT("Timer out!!!\r\n");
-            TimerHalStopTime(g_ecuSecurityTimerHandle_2);
-            if (E_SECURITYTIMER_RESETDELAY == g_securityTimerDelayType_2)
-            {
-                g_ecuResetFlag[1] = 0;
-                g_u8ConsecutiveSeedCount[1] = 0;
-                SaveSeedAccessCountToNonVolatile(g_u8ConsecutiveSeedCount);
-            }
-            if (E_SECURITYTIMER_ACCESSERRORDELAY == g_securityTimerDelayType_2)
-            {
-                // g_u8ConsecutiveSeedCount--;
-                g_u8ConsecutiveSeedCount[1] = 0;
-                SaveSeedAccessCountToNonVolatile(g_u8ConsecutiveSeedCount);
-            }
-            g_securityTimerDelayType_2 = E_SECURITYTIMER_NONE;
-        }
-        if (TimerHalIsTimeout(g_ecuSecurityTimerHandle_3) == 0)
-        {
-            TBOX_PRINT("Timer out!!!\r\n");
-            TimerHalStopTime(g_ecuSecurityTimerHandle_3);
-            if (E_SECURITYTIMER_RESETDELAY == g_securityTimerDelayType_3)
-            {
-                g_ecuResetFlag[2] = 0;
-                g_u8ConsecutiveSeedCount[2] = 0;
-                SaveSeedAccessCountToNonVolatile(g_u8ConsecutiveSeedCount);
-            }
-            if (E_SECURITYTIMER_ACCESSERRORDELAY == g_securityTimerDelayType_3)
-            {
-                // g_u8ConsecutiveSeedCount--;
-                g_u8ConsecutiveSeedCount[2] = 0;
-                SaveSeedAccessCountToNonVolatile(g_u8ConsecutiveSeedCount);
-            }
-            g_securityTimerDelayType_3 = E_SECURITYTIMER_NONE;
-        }
-        if (TimerHalIsTimeout(g_ecuSecurityTimerHandle_Reprog) == 0)
-        {
-            TimerHalStopTime(g_ecuSecurityTimerHandle_Reprog);
-
-            if (E_SECURITYTIMER_RESETDELAY == g_securityTimerDelayType_Reprog)
-            {
-                g_ecuResetFlag[3] = 0;
-                g_u8ConsecutiveSeedCount[3] = 0;
-                SaveSeedAccessCountToNonVolatile(g_u8ConsecutiveSeedCount);
-            }
-            if (E_SECURITYTIMER_ACCESSERRORDELAY == g_securityTimerDelayType_Reprog)
-            {
-                g_u8ConsecutiveSeedCount[3] = 0;
-                SaveSeedAccessCountToNonVolatile(g_u8ConsecutiveSeedCount);
-            }
-            g_securityTimerDelayType_Reprog = E_SECURITYTIMER_NONE;
-        }
-        vTaskDelay(5);
-        ServiceTestCycleProcess(5); // 5ms
-                                    // PrintTaskInfo();
-                                    // CheckEolConfigureState();
-                                    // CheckCanReportState();
-                                    // CheckVinCyleProcess();
-                                    // CheckEskValidtateDtc();
+      if (currentTesterPresent)
+      {
+        RemoteDiagnosticSdkShortDisable(); // 暂时禁止远程诊断
+      }
+      else
+      {
+        RemoteDiagnosticSdkRecover(); // 恢复远程诊断
+      }
     }
+
+    ret = -1;
+    ret = VirtualTpSdkServerReceive(&g_virtualTpChanalId,g_udsRxData,sizeof(g_udsRxData),&g_udsRxDataLen);
+    if(0==ret)
+    {
+      if(g_sleepFlag==0)
+      {
+        g_virtualTpFlag = 1;
+        {
+            DiagnosticResponseProcess(g_udsRxData, g_udsRxDataLen, 0);
+        }
+      }
+    }
+
+    if (g_ecuOnlineFlag)
+    {
+      g_ecuOnlineFlag = 0;
+      TimerHalStartTime(ecuOnlineTimerHandle, 5000);
+      isS3ServerTimerActive = 1;
+    }
+    if (TimerHalIsTimeout(ecuOnlineTimerHandle) == 0)
+    {
+      TimerHalStopTime(ecuOnlineTimerHandle);
+      ResetTboxStatusUpdate();
+      isS3ServerTimerActive = 0;
+    }
+    if (TimerHalIsTimeout(g_ecuSecurityTimerHandle) == 0)
+    {
+      TBOX_PRINT("Timer out!!!\r\n");
+      TimerHalStopTime(g_ecuSecurityTimerHandle);
+      if (E_SECURITYTIMER_RESETDELAY == g_securityTimerDelayType)
+      {
+        g_ecuResetFlag[0] = 0;
+        g_u8ConsecutiveSeedCount[0] = 0;
+        SaveSeedAccessCountToNonVolatile(g_u8ConsecutiveSeedCount);
+      }
+      if (E_SECURITYTIMER_ACCESSERRORDELAY == g_securityTimerDelayType)
+      {
+        // g_u8ConsecutiveSeedCount--;
+        g_u8ConsecutiveSeedCount[0] = 0;
+        SaveSeedAccessCountToNonVolatile(g_u8ConsecutiveSeedCount);
+      }
+      g_securityTimerDelayType = E_SECURITYTIMER_NONE;
+    }
+    if (TimerHalIsTimeout(g_ecuSecurityTimerHandle_2) == 0)
+    {
+      TBOX_PRINT("Timer out!!!\r\n");
+      TimerHalStopTime(g_ecuSecurityTimerHandle_2);
+      if (E_SECURITYTIMER_RESETDELAY == g_securityTimerDelayType_2)
+      {
+        g_ecuResetFlag[1] = 0;
+        g_u8ConsecutiveSeedCount[1] = 0;
+        SaveSeedAccessCountToNonVolatile(g_u8ConsecutiveSeedCount);
+      }
+      if (E_SECURITYTIMER_ACCESSERRORDELAY == g_securityTimerDelayType_2)
+      {
+        // g_u8ConsecutiveSeedCount--;
+        g_u8ConsecutiveSeedCount[1] = 0;
+        SaveSeedAccessCountToNonVolatile(g_u8ConsecutiveSeedCount);
+      }
+      g_securityTimerDelayType_2 = E_SECURITYTIMER_NONE;
+    }
+    if (TimerHalIsTimeout(g_ecuSecurityTimerHandle_3) == 0)
+    {
+      TBOX_PRINT("Timer out!!!\r\n");
+      TimerHalStopTime(g_ecuSecurityTimerHandle_3);
+      if (E_SECURITYTIMER_RESETDELAY == g_securityTimerDelayType_3)
+      {
+        g_ecuResetFlag[2] = 0;
+        g_u8ConsecutiveSeedCount[2] = 0;
+        SaveSeedAccessCountToNonVolatile(g_u8ConsecutiveSeedCount);
+      }
+      if (E_SECURITYTIMER_ACCESSERRORDELAY == g_securityTimerDelayType_3)
+      {
+        // g_u8ConsecutiveSeedCount--;
+        g_u8ConsecutiveSeedCount[2] = 0;
+        SaveSeedAccessCountToNonVolatile(g_u8ConsecutiveSeedCount);
+      }
+      g_securityTimerDelayType_3 = E_SECURITYTIMER_NONE;
+    }
+    if (TimerHalIsTimeout(g_ecuSecurityTimerHandle_Reprog) == 0)
+    {
+      TimerHalStopTime(g_ecuSecurityTimerHandle_Reprog);
+      
+      if (E_SECURITYTIMER_RESETDELAY == g_securityTimerDelayType_Reprog)
+      {
+        g_ecuResetFlag[3] = 0;
+        g_u8ConsecutiveSeedCount[3] = 0;
+        SaveSeedAccessCountToNonVolatile(g_u8ConsecutiveSeedCount);
+      }
+      if (E_SECURITYTIMER_ACCESSERRORDELAY == g_securityTimerDelayType_Reprog)
+      {
+        g_u8ConsecutiveSeedCount[3] = 0;
+        SaveSeedAccessCountToNonVolatile(g_u8ConsecutiveSeedCount);
+      }
+      g_securityTimerDelayType_Reprog = E_SECURITYTIMER_NONE;
+    }
+    vTaskDelay(5);
+    ServiceTestCycleProcess(5); // 5ms
+    // PrintTaskInfo();
+    // CheckEolConfigureState();
+    // CheckCanReportState();
+    // CheckVinCyleProcess();
+    // CheckEskValidtateDtc();
+  }
 }
 
 /**************************************************************
@@ -3447,70 +3428,70 @@ Others:
 ***************************************************************/
 static uint8_t CommunicationControl(uint8_t ContolType, uint8_t SubService)
 {
-    uint8_t ret = 0;
+  uint8_t ret = 0;
 
-    if (ContolType == 0x00)
+  if (ContolType == 0x00)
+  {
+    switch (SubService)
     {
-        switch (SubService)
-        {
-        case 01:
-            CanPeriodSendEnableAll(); // 启用周期性应用报文发送
-            break;
-        case 02:
-            AutosarNmSdkEnableCommunication(0); // 启用网络管理报文发送/接收
-            break;
-        case 03:
-            // CycleSendEnable(TBOX_CAN_CHANNEL_E);
-            if (g_bCommunicationControlFlag == 1)
-            {
-                /*CycleSendEnableAll();
-                SgmwGWNm_AllEnableCommunication();   */
-                CanPeriodSendEnableAll();
-                AutosarNmSdkEnableCommunication(0);
-                g_bCommunicationControlFlag = 0;
-            }
-            break;
+    case 01:
+      CanPeriodSendEnableAll(); // 启用周期性应用报文发送
+      break;
+    case 02:
+      AutosarNmSdkEnableCommunication(0); // 启用网络管理报文发送/接收
+      break;
+    case 03:
+      // CycleSendEnable(TBOX_CAN_CHANNEL_E);
+      if (g_bCommunicationControlFlag == 1)
+      {
+        /*CycleSendEnableAll();
+        SgmwGWNm_AllEnableCommunication();   */
+        CanPeriodSendEnableAll();
+        AutosarNmSdkEnableCommunication(0);
+        g_bCommunicationControlFlag = 0;
+      }
+      break;
 
-        default:
-            ret = 0x31;
-            break;
-        }
+    default:
+      ret = 0x31;
+      break;
     }
-    else if (ContolType == 0x03)
+  }
+  else if (ContolType == 0x03)
+  {
+    switch (SubService)
     {
-        switch (SubService)
-        {
-        case 01:
-            CanPeriodSendDisableAll(); // 停止周期性应用报文发送
-            g_bCommunicationControlFlag = 1;
-            break;
-        case 02:
-            AutosarNmSdkDisableCommunication(0); // 停止网络管理报文发送/接收
-            g_bCommunicationControlFlag = 1;
-            break;
-        case 03:
-            // CycleSendDisable(TBOX_CAN_CHANNEL_E);
-            if (g_bCommunicationControlFlag == 0)
-            {
-                /*CycleSendDisableAll();
-                SgmwGWNm_AllDisableCommunication();*/
-                CanPeriodSendDisableAll();           // 应用报文
-                AutosarNmSdkDisableCommunication(0); // 网管报文
-                g_bCommunicationControlFlag = 1;
-            }
-            break;
+    case 01:
+      CanPeriodSendDisableAll(); // 停止周期性应用报文发送
+      g_bCommunicationControlFlag = 1;
+      break;
+    case 02:
+      AutosarNmSdkDisableCommunication(0); // 停止网络管理报文发送/接收
+      g_bCommunicationControlFlag = 1;
+      break;
+    case 03:
+      // CycleSendDisable(TBOX_CAN_CHANNEL_E);
+      if (g_bCommunicationControlFlag == 0)
+      {
+        /*CycleSendDisableAll();
+        SgmwGWNm_AllDisableCommunication();*/
+        CanPeriodSendDisableAll();           // 应用报文
+        AutosarNmSdkDisableCommunication(0); // 网管报文
+        g_bCommunicationControlFlag = 1;
+      }
+      break;
 
-        default:
-            ret = 0x31;
-            break;
-        }
+    default:
+      ret = 0x31;
+      break;
     }
-    else
-    {
-        ret = 0x12;
-    }
+  }
+  else
+  {
+    ret = 0x12;
+  }
 
-    return ret;
+  return ret;
 }
 
 /**************************************************************
@@ -3534,14 +3515,14 @@ return
 *******************************************************/
 int16_t writeToRam(uint32_t address, uint8_t *pData, uint32_t dataLength)
 {
-    // uint8_t *pRam;
-    // uint32_t i;
-    // pRam = (uint8_t *)address;
-    // for(i=0;i<dataLength;i++)
-    //{
-    //   pRam[i] = pData[i];
-    // }
-    return 0;
+  // uint8_t *pRam;
+  // uint32_t i;
+  // pRam = (uint8_t *)address;
+  // for(i=0;i<dataLength;i++)
+  //{
+  //   pRam[i] = pData[i];
+  // }
+  return 0;
 }
 
 // static int8_t FlashErase(uint32_t address, uint32_t size)
@@ -3596,41 +3577,41 @@ int16_t writeToRam(uint32_t address, uint8_t *pData, uint32_t dataLength)
 
 static uint8_t CharToHex(uint8_t charData)
 {
-    uint8_t value;
-    if ((charData >= '0') && (charData <= '9'))
-    {
-        value = charData - '0';
-    }
-    else if ((charData >= 'a') && (charData <= 'f'))
-    {
-        value = charData - 'a' + 10;
-    }
-    else if ((charData >= 'A') && (charData <= 'F'))
-    {
-        value = charData - 'A' + 10;
-    }
-    else
-    {
-        value = 0;
-    }
-    return value;
+  uint8_t value;
+  if ((charData >= '0') && (charData <= '9'))
+  {
+    value = charData - '0';
+  }
+  else if ((charData >= 'a') && (charData <= 'f'))
+  {
+    value = charData - 'a' + 10;
+  }
+  else if ((charData >= 'A') && (charData <= 'F'))
+  {
+    value = charData - 'A' + 10;
+  }
+  else
+  {
+    value = 0;
+  }
+  return value;
 }
 
 int16_t CharArrayToHexArray(uint8_t *pCharIn, uint16_t charLengthIn, uint8_t *pHexOut, uint32_t *pHexLenthOut)
 {
-    uint16_t hexLength, i;
+  uint16_t hexLength, i;
 
-    if (charLengthIn == 0)
-    {
-        return -1;
-    }
-    hexLength = charLengthIn / 2;
-    for (i = 0; i < hexLength; i++)
-    {
-        pHexOut[i] = (CharToHex(pCharIn[2 * i]) << 4) + CharToHex(pCharIn[2 * i + 1]);
-    }
-    *pHexLenthOut = hexLength;
-    return 0;
+  if (charLengthIn == 0)
+  {
+    return -1;
+  }
+  hexLength = charLengthIn / 2;
+  for (i = 0; i < hexLength; i++)
+  {
+    pHexOut[i] = (CharToHex(pCharIn[2 * i]) << 4) + CharToHex(pCharIn[2 * i + 1]);
+  }
+  *pHexLenthOut = hexLength;
+  return 0;
 }
 
 ///***************************************
@@ -3752,95 +3733,95 @@ int16_t CharArrayToHexArray(uint8_t *pCharIn, uint16_t charLengthIn, uint8_t *pH
 #if (0)
 static uint8_t BootService0x11Process(uint8_t *pTpData, uint32_t dataLength, uint8_t functionalAddress)
 {
-    uint8_t negativeNum;
-    uint8_t subFunction;
-    uint8_t posRspMsgIndication;
-    uint8_t responseData[20];
+  uint8_t negativeNum;
+  uint8_t subFunction;
+  uint8_t posRspMsgIndication;
+  uint8_t responseData[20];
 
-    negativeNum = 0;
-    subFunction = pTpData[1] & 0x7F;
-    posRspMsgIndication = (pTpData[1] >> 7) & 0x01;
+  negativeNum = 0;
+  subFunction = pTpData[1] & 0x7F;
+  posRspMsgIndication = (pTpData[1] >> 7) & 0x01;
 
-    if (0x01 == subFunction)
+  if (0x01 == subFunction)
+  {
+    if (posRspMsgIndication == 0)
     {
-        if (posRspMsgIndication == 0)
-        {
-            responseData[0] = 0x51;
-            responseData[1] = 0x01;
-            DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 2, functionalAddress);
-            // alter,2023-1-3
-            vTaskDelay(100);
-            PeripheralHalMcuHardReset();
-        }
+      responseData[0] = 0x51;
+      responseData[1] = 0x01;
+      DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 2, functionalAddress);
+      // alter,2023-1-3
+      vTaskDelay(100);
+      PeripheralHalMcuHardReset();
     }
-    else if (0x02 == subFunction)
+  }
+  else if (0x02 == subFunction)
+  {
+    if (posRspMsgIndication == 0)
     {
-        if (posRspMsgIndication == 0)
-        {
-            responseData[0] = 0x51;
-            responseData[1] = 0x02;
-            DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 2, functionalAddress);
-        }
+      responseData[0] = 0x51;
+      responseData[1] = 0x02;
+      DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 2, functionalAddress);
     }
-    else if (0x03 == subFunction)
+  }
+  else if (0x03 == subFunction)
+  {
+    if (posRspMsgIndication == 0)
     {
-        if (posRspMsgIndication == 0)
-        {
-            responseData[0] = 0x51;
-            responseData[1] = 0x03;
-            DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 2, functionalAddress);
-            vTaskDelay(100);
-            PeripheralHalMcuHardReset();
-        }
+      responseData[0] = 0x51;
+      responseData[1] = 0x03;
+      DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 2, functionalAddress);
+      vTaskDelay(100);
+      PeripheralHalMcuHardReset();
     }
-    else
-    {
-        negativeNum = 0x12; // sub function not supported
-    }
+  }
+  else
+  {
+    negativeNum = 0x12; // sub function not supported
+  }
 
-    return negativeNum;
+  return negativeNum;
 }
 
 static uint8_t BootService0x27Process(uint8_t *udsData, uint32_t udsLen, uint8_t functionAddressFlag)
 {
-    uint8_t negativeNum;
-    uint8_t subFunction;
-    uint8_t responseData[20];
-    negativeNum = 0;
-    subFunction = udsData[1];
+  uint8_t negativeNum;
+  uint8_t subFunction;
+  uint8_t responseData[20];
+  negativeNum = 0;
+  subFunction = udsData[1];
 #if (1)
-    if (0x35 == subFunction) // FBL seed
+  if (0x35 == subFunction) // FBL seed
+  {
+    UdsGetSeed(g_securitySeed, &g_securitySeedLength);
+    UdsSeedtoKey(g_securitySeed, g_securitySeedLength, g_securityKey, &g_securityKeyLength, E_SECURITY_CALCULATE_LEVEL3);
+    responseData[0] = 0x67;
+    responseData[1] = 0x35;
+    memcpy(&responseData[2], g_securitySeed, 4);
+    DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 6, functionAddressFlag);
+  }
+  else if (0x36 == subFunction) // FBL key
+  {
+    if (ByteArrayCheckIsSame(g_securityKey, udsData + 2, 4) == 0) // key is valid
     {
-        UdsGetSeed(g_securitySeed, &g_securitySeedLength);
-        UdsSeedtoKey(g_securitySeed, g_securitySeedLength, g_securityKey, &g_securityKeyLength, E_SECURITY_CALCULATE_LEVEL3);
-        responseData[0] = 0x67;
-        responseData[1] = 0x35;
-        memcpy(&responseData[2], g_securitySeed, 4);
-        DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 6, functionAddressFlag);
+      // m_currentSecurityLevel = udsSecurityLevel_Programing;
+      responseData[0] = 0x67;
+      responseData[1] = 0x36;
+      DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 2, functionAddressFlag);
     }
-    else if (0x36 == subFunction) // FBL key
+    else // key invalid
     {
-        if (ByteArrayCheckIsSame(g_securityKey, udsData + 2, 4) == 0) // key is valid
-        {
-            // m_currentSecurityLevel = udsSecurityLevel_Programing;
-            responseData[0] = 0x67;
-            responseData[1] = 0x36;
-            DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 2, functionAddressFlag);
-        }
-        else // key invalid
-        {
-            negativeNum = 0x35; // invalid key
-        }
+      negativeNum = 0x35; // invalid key
     }
+  }
 #endif
-    else
-    {
-        // negativeNum = 0x12;//sub function not supported
-        negativeNum = 0x7F;
-    }
+  else
+  {
+    // negativeNum = 0x12;//sub function not supported
+    negativeNum = 0x7F;
+  }
 
-    // ResetSessionTimer();
-    return negativeNum;
+  // ResetSessionTimer();
+  return negativeNum;
 }
 
 /**************************************************************************
@@ -3849,350 +3830,350 @@ routine control
 **************************************************************************/
 static uint8_t BootSerivice0x31ProcessCheckPrograming(uint8_t *pTpData, uint32_t dataLength, uint8_t functionalAddress)
 {
-    uint8_t negativeNum = 0;
-    uint32_t checkSum;
-    uint8_t responseData[20];
-    responseData[0] = 0x71;
-    responseData[1] = pTpData[1];
-    responseData[2] = pTpData[2];
-    responseData[3] = pTpData[3];
+  uint8_t negativeNum = 0;
+  uint32_t checkSum;
+  uint8_t responseData[20];
+  responseData[0] = 0x71;
+  responseData[1] = pTpData[1];
+  responseData[2] = pTpData[2];
+  responseData[3] = pTpData[3];
 
-    if (g_currentSession == E_DEFAULT_SESSION)
-    {
-        negativeNum = 0x33;
-        return negativeNum;
-    }
-    if (g_currentSecurityLevel == E_UDS_NONE_SECURITY_LEVEL)
-    {
-        negativeNum = 0x33;
-        return negativeNum;
-    }
-    // alter,2023-1-3??עҢ:ϖԚ?ĳrecʇ?Ķ??󵄬˹Ҕ΄??֐?ģhecksum«ӫ?Ƌ�???ģhecksum«Ξ??ƥŤ
-    checkSum = ((uint32_t)pTpData[4] << 24) + ((uint32_t)pTpData[5] << 16) + ((uint32_t)pTpData[6] << 8) + ((uint32_t)pTpData[7] << 0);
-    TransmitNegative78ResponseData(pTpData[0]);
-
-    // if (FlashCheckSumIsOk(checkSum) == 0)
-    // {
-    //     if ((g_flashAddress >= CFLASH_FLASH_DRIVER_START_ADDRESS) && (g_flashAddress <= CFLASH_FLASH_DRIVER_END_ADDRESS))
-    //     {
-    //         g_flashDriverDownLoadFlag = 1;
-    //     }
-    //     else if ((g_flashAddress >= CFLASH_BANKB_CM4_START_ADDRESS) && (g_flashAddress < CFLASH_BANKB_CM4_END_ADDRESS))
-    //     {
-    //         //FOTA_BankAPPIntegrityFlagUpdate(1);
-    //         FlashHalOtaIntegrityFlagUpdate(1);
-
-    //         if(FlashHalOtaGetActiveBank() == 1)
-    //         {
-    //             FlashHalOtaSetActiveBank(0);
-    //         }
-    //         else
-    //         {
-    //             FlashHalOtaSetActiveBank(1);
-    //         }
-    //     }
-    //     responseData[4] = 0x00; //correct result
-    // }
-    // else
-    // {
-    //     responseData[4] = 0x01; //incorrect result
-    // }
-    DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 5, functionalAddress);
-
+  if (g_currentSession == E_DEFAULT_SESSION)
+  {
+    negativeNum = 0x33;
     return negativeNum;
+  }
+  if (g_currentSecurityLevel == E_UDS_NONE_SECURITY_LEVEL)
+  {
+    negativeNum = 0x33;
+    return negativeNum;
+  }
+  // alter,2023-1-3??עҢ:ϖԚ?ĳrecʇ?Ķ??󵄬˹Ҕ΄??֐?ģhecksum«ӫ?Ƌ�???ģhecksum«Ξ??ƥŤ
+  checkSum = ((uint32_t)pTpData[4] << 24) + ((uint32_t)pTpData[5] << 16) + ((uint32_t)pTpData[6] << 8) + ((uint32_t)pTpData[7] << 0);
+  TransmitNegative78ResponseData(pTpData[0]);
+
+  // if (FlashCheckSumIsOk(checkSum) == 0)
+  // {
+  //     if ((g_flashAddress >= CFLASH_FLASH_DRIVER_START_ADDRESS) && (g_flashAddress <= CFLASH_FLASH_DRIVER_END_ADDRESS))
+  //     {
+  //         g_flashDriverDownLoadFlag = 1;
+  //     }
+  //     else if ((g_flashAddress >= CFLASH_BANKB_CM4_START_ADDRESS) && (g_flashAddress < CFLASH_BANKB_CM4_END_ADDRESS))
+  //     {
+  //         //FOTA_BankAPPIntegrityFlagUpdate(1);
+  //         FlashHalOtaIntegrityFlagUpdate(1);
+
+  //         if(FlashHalOtaGetActiveBank() == 1)
+  //         {
+  //             FlashHalOtaSetActiveBank(0);
+  //         }
+  //         else
+  //         {
+  //             FlashHalOtaSetActiveBank(1);
+  //         }
+  //     }
+  //     responseData[4] = 0x00; //correct result
+  // }
+  // else
+  // {
+  //     responseData[4] = 0x01; //incorrect result
+  // }
+  DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 5, functionalAddress);
+
+  return negativeNum;
 }
 
 static uint8_t BootSerivice0x31ProcessEraseMemory(uint8_t *pTpData, uint32_t dataLength, uint8_t functionalAddress)
 {
-    int8_t lengthFormat;
-    int8_t addressFormat;
-    int8_t i, index;
-    uint32_t eraseAddress;
-    uint32_t eraseSize;
-    lengthFormat = (pTpData[4] >> 4) & 0x0F;
-    addressFormat = pTpData[4] & 0x0F;
-    eraseAddress = 0;
-    eraseSize = 0;
-    uint8_t negativeNum = 0;
-    uint8_t responseData[20];
-    responseData[0] = 0x71;
-    responseData[1] = pTpData[1];
-    responseData[2] = pTpData[2];
-    responseData[3] = pTpData[3];
+  int8_t lengthFormat;
+  int8_t addressFormat;
+  int8_t i, index;
+  uint32_t eraseAddress;
+  uint32_t eraseSize;
+  lengthFormat = (pTpData[4] >> 4) & 0x0F;
+  addressFormat = pTpData[4] & 0x0F;
+  eraseAddress = 0;
+  eraseSize = 0;
+  uint8_t negativeNum = 0;
+  uint8_t responseData[20];
+  responseData[0] = 0x71;
+  responseData[1] = pTpData[1];
+  responseData[2] = pTpData[2];
+  responseData[3] = pTpData[3];
 
-    if ((lengthFormat == 4) && (addressFormat == 4))
-    {
-        index = 5;
-    }
-    else
-    {
-        lengthFormat = 4;
-        addressFormat = 4;
-        index = 4;
-    }
+  if ((lengthFormat == 4) && (addressFormat == 4))
+  {
+    index = 5;
+  }
+  else
+  {
+    lengthFormat = 4;
+    addressFormat = 4;
+    index = 4;
+  }
 
-    if (g_currentSession == E_DEFAULT_SESSION)
-    {
-        negativeNum = 0x33;
-        return negativeNum;
-    }
-    if (g_currentSecurityLevel == E_UDS_NONE_SECURITY_LEVEL)
-    {
-        negativeNum = 0x33;
-        return negativeNum;
-    }
-
-    if ((addressFormat > 0) && (addressFormat <= 4))
-    {
-        if ((lengthFormat > 0) && (lengthFormat <= 4))
-        {
-            for (i = addressFormat - 1; i >= 0; i--)
-            {
-                eraseAddress |= (uint32_t)pTpData[index] << (i * 8);
-                index++;
-            }
-            for (i = lengthFormat - 1; i >= 0; i--)
-            {
-                eraseSize |= (uint32_t)pTpData[index] << (i * 8);
-                index++;
-            }
-            TransmitNegative78ResponseData(pTpData[0]);
-            // erase flash function
-            if (eraseAddress == FLASH_APP_BANKA_CM4_BASE_ADDRESS)
-            {
-                // FOTA_BankAPPIntegrityFlagUpdate(0);
-                // FlashHalOtaIntegrityFlagUpdate(0);
-            }
-
-            if (g_flashDriverDownLoadFlag == 0)
-            {
-                // alter
-                // MemMpu_Init();
-            }
-            // alter,2023-1-2
-
-            if (FlashErase(eraseAddress, eraseSize) == 0)
-            {
-                // responseData[4] = 0x00;//correct result
-                DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 4, functionalAddress);
-                // OtaCrc32Init(&g_flashCrc32Value);
-                Crc32Init(&g_crc32Object, 0x04C11DB7);
-                g_flashCrc32Value = 0xFFFFFFFF;
-            }
-            else
-            {
-                // responseData[4] = 0x01;//incorrect result
-                negativeNum = 0x72; //
-            }
-        }
-        else
-        {
-            negativeNum = 0x13; // frame length error
-        }
-    }
-    else
-    {
-        negativeNum = 0x13; // frame length error
-    }
+  if (g_currentSession == E_DEFAULT_SESSION)
+  {
+    negativeNum = 0x33;
     return negativeNum;
+  }
+  if (g_currentSecurityLevel == E_UDS_NONE_SECURITY_LEVEL)
+  {
+    negativeNum = 0x33;
+    return negativeNum;
+  }
+
+  if ((addressFormat > 0) && (addressFormat <= 4))
+  {
+    if ((lengthFormat > 0) && (lengthFormat <= 4))
+    {
+      for (i = addressFormat - 1; i >= 0; i--)
+      {
+        eraseAddress |= (uint32_t)pTpData[index] << (i * 8);
+        index++;
+      }
+      for (i = lengthFormat - 1; i >= 0; i--)
+      {
+        eraseSize |= (uint32_t)pTpData[index] << (i * 8);
+        index++;
+      }
+      TransmitNegative78ResponseData(pTpData[0]);
+      // erase flash function
+      if (eraseAddress == FLASH_APP_BANKA_CM4_BASE_ADDRESS)
+      {
+        // FOTA_BankAPPIntegrityFlagUpdate(0);
+        // FlashHalOtaIntegrityFlagUpdate(0);
+      }
+
+      if (g_flashDriverDownLoadFlag == 0)
+      {
+        // alter
+        // MemMpu_Init();
+      }
+      // alter,2023-1-2
+
+      if (FlashErase(eraseAddress, eraseSize) == 0)
+      {
+        // responseData[4] = 0x00;//correct result
+        DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 4, functionalAddress);
+        // OtaCrc32Init(&g_flashCrc32Value);
+        Crc32Init(&g_crc32Object, 0x04C11DB7);
+        g_flashCrc32Value = 0xFFFFFFFF;
+      }
+      else
+      {
+        // responseData[4] = 0x01;//incorrect result
+        negativeNum = 0x72; //
+      }
+    }
+    else
+    {
+      negativeNum = 0x13; // frame length error
+    }
+  }
+  else
+  {
+    negativeNum = 0x13; // frame length error
+  }
+  return negativeNum;
 }
 
 // alter
 static uint8_t BootSerivice0x31Process(uint8_t *pTpData, uint32_t dataLength, uint8_t functionalAddress)
 {
-    uint8_t negativeNum;
-    uint8_t subFunction;
-    uint8_t responseData[20];
-    uint16_t did;
-    negativeNum = 0;
-    subFunction = pTpData[1];
+  uint8_t negativeNum;
+  uint8_t subFunction;
+  uint8_t responseData[20];
+  uint16_t did;
+  negativeNum = 0;
+  subFunction = pTpData[1];
 
-    did = ((uint16_t)pTpData[2] << 8) + (uint16_t)pTpData[3];
-    responseData[0] = 0x71;
-    responseData[1] = pTpData[1];
-    responseData[2] = pTpData[2];
-    responseData[3] = pTpData[3];
+  did = ((uint16_t)pTpData[2] << 8) + (uint16_t)pTpData[3];
+  responseData[0] = 0x71;
+  responseData[1] = pTpData[1];
+  responseData[2] = pTpData[2];
+  responseData[3] = pTpData[3];
 
-    if (0x01 == subFunction) // startRoutine
+  if (0x01 == subFunction) // startRoutine
+  {
+    if ((0x0202 == did) || (0xFD02 == did)) // check programing Interity
     {
-        if ((0x0202 == did) || (0xFD02 == did)) // check programing Interity
-        {
-            // uint32_t checkSum;
-            //
-            // if (g_currentSession == E_DEFAULT_SESSION)
-            //{
-            //     negativeNum = 0x33;
-            //     return negativeNum;
-            // }
-            // if (g_currentSecurityLevel == E_UDS_NONE_SECURITY_LEVEL)
-            //{
-            //     negativeNum = 0x33;
-            //     return negativeNum;
-            // }
-            ////alter,2023-1-3??עҢ:ϖԚ?ĳrecʇ?Ķ??󵄬˹Ҕ΄??֐?ģhecksum«ӫ?Ƌ�???ģhecksum«Ξ??ƥŤ
-            // checkSum = ((uint32_t)pTpData[4] << 24) + ((uint32_t)pTpData[5] << 16) + ((uint32_t)pTpData[6] << 8) + ((uint32_t)pTpData[7] << 0);
-            // TransmitNegative78ResponseData(pTpData[0]);
-            //
-            // if (FlashCheckSumIsOk(checkSum) == 0)
-            //{
-            //     if ((g_flashAddress >= CFLASH_FLASH_DRIVER_START_ADDRESS) && (g_flashAddress <= CFLASH_FLASH_DRIVER_END_ADDRESS))
-            //     {
-            //         g_flashDriverDownLoadFlag = 1;
-            //     }
-            //     else if ((g_flashAddress >= CFLASH_BANKB_CM4_START_ADDRESS) && (g_flashAddress < CFLASH_BANKB_CM4_END_ADDRESS))
-            //     {
-            //         //FOTA_BankAPPIntegrityFlagUpdate(1);
-            //         FlashHalOtaIntegrityFlagUpdate(1);
-            //
-            //         if(FlashHalOtaGetActiveBank() == 1)
-            //         {
-            //             FlashHalOtaSetActiveBank(0);
-            //         }
-            //         else
-            //         {
-            //             FlashHalOtaSetActiveBank(1);
-            //         }
-            //     }
-            //     responseData[4] = 0x00; //correct result
-            // }
-            // else
-            //{
-            //     responseData[4] = 0x01; //incorrect result
-            // }
-            // DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 5, functionalAddress);
-            negativeNum = BootSerivice0x31ProcessCheckPrograming(pTpData, dataLength, functionalAddress);
-            if (negativeNum != 0)
-            {
-                return negativeNum;
-            }
-        }
-        else if (0xFD03 == did) // check programing preconditions
-        {
-            if (g_currentSession != E_EXTEND_SESSION)
-            {
-                negativeNum = 0x33;
-                return negativeNum;
-            }
-            // g_flashCrc32Value = m_Crc32InitValue;
-            // responseData[4] = 0x00;//correct result
-            DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 4, functionalAddress);
-        }
-        else if (0xFD00 == did) // erase memory()
-        {
-            negativeNum = BootSerivice0x31ProcessEraseMemory(pTpData, dataLength, functionalAddress);
-            if (negativeNum != 0)
-            {
-                return negativeNum;
-            }
-        }
-        else if (0xFD01 == did) // check programing dependencies
-        {
-            if (g_currentSession == E_DEFAULT_SESSION)
-            {
-                negativeNum = 0x33;
-                return negativeNum;
-            }
-            if (g_currentSecurityLevel == E_UDS_NONE_SECURITY_LEVEL)
-            {
-                negativeNum = 0x33;
-                return negativeNum;
-            }
-            responseData[4] = 0x00; // correct result
-            DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 5, functionalAddress);
-        }
-        else
-        {
-            negativeNum = 0x31; // did not supported
-        }
+      // uint32_t checkSum;
+      //
+      // if (g_currentSession == E_DEFAULT_SESSION)
+      //{
+      //     negativeNum = 0x33;
+      //     return negativeNum;
+      // }
+      // if (g_currentSecurityLevel == E_UDS_NONE_SECURITY_LEVEL)
+      //{
+      //     negativeNum = 0x33;
+      //     return negativeNum;
+      // }
+      ////alter,2023-1-3??עҢ:ϖԚ?ĳrecʇ?Ķ??󵄬˹Ҕ΄??֐?ģhecksum«ӫ?Ƌ�???ģhecksum«Ξ??ƥŤ
+      // checkSum = ((uint32_t)pTpData[4] << 24) + ((uint32_t)pTpData[5] << 16) + ((uint32_t)pTpData[6] << 8) + ((uint32_t)pTpData[7] << 0);
+      // TransmitNegative78ResponseData(pTpData[0]);
+      //
+      // if (FlashCheckSumIsOk(checkSum) == 0)
+      //{
+      //     if ((g_flashAddress >= CFLASH_FLASH_DRIVER_START_ADDRESS) && (g_flashAddress <= CFLASH_FLASH_DRIVER_END_ADDRESS))
+      //     {
+      //         g_flashDriverDownLoadFlag = 1;
+      //     }
+      //     else if ((g_flashAddress >= CFLASH_BANKB_CM4_START_ADDRESS) && (g_flashAddress < CFLASH_BANKB_CM4_END_ADDRESS))
+      //     {
+      //         //FOTA_BankAPPIntegrityFlagUpdate(1);
+      //         FlashHalOtaIntegrityFlagUpdate(1);
+      //
+      //         if(FlashHalOtaGetActiveBank() == 1)
+      //         {
+      //             FlashHalOtaSetActiveBank(0);
+      //         }
+      //         else
+      //         {
+      //             FlashHalOtaSetActiveBank(1);
+      //         }
+      //     }
+      //     responseData[4] = 0x00; //correct result
+      // }
+      // else
+      //{
+      //     responseData[4] = 0x01; //incorrect result
+      // }
+      // DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 5, functionalAddress);
+      negativeNum = BootSerivice0x31ProcessCheckPrograming(pTpData, dataLength, functionalAddress);
+      if (negativeNum != 0)
+      {
+        return negativeNum;
+      }
+    }
+    else if (0xFD03 == did) // check programing preconditions
+    {
+      if (g_currentSession != E_EXTEND_SESSION)
+      {
+        negativeNum = 0x33;
+        return negativeNum;
+      }
+      // g_flashCrc32Value = m_Crc32InitValue;
+      // responseData[4] = 0x00;//correct result
+      DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 4, functionalAddress);
+    }
+    else if (0xFD00 == did) // erase memory()
+    {
+      negativeNum = BootSerivice0x31ProcessEraseMemory(pTpData, dataLength, functionalAddress);
+      if (negativeNum != 0)
+      {
+        return negativeNum;
+      }
+    }
+    else if (0xFD01 == did) // check programing dependencies
+    {
+      if (g_currentSession == E_DEFAULT_SESSION)
+      {
+        negativeNum = 0x33;
+        return negativeNum;
+      }
+      if (g_currentSecurityLevel == E_UDS_NONE_SECURITY_LEVEL)
+      {
+        negativeNum = 0x33;
+        return negativeNum;
+      }
+      responseData[4] = 0x00; // correct result
+      DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 5, functionalAddress);
     }
     else
     {
-        negativeNum = 0x12; // sub function not supported
+      negativeNum = 0x31; // did not supported
     }
-    g_ecuOnlineFlag = 1;
-    return negativeNum;
+  }
+  else
+  {
+    negativeNum = 0x12; // sub function not supported
+  }
+  g_ecuOnlineFlag = 1;
+  return negativeNum;
 }
 
 /***************************************************************************
 request download,կ?ϒǍ???ط?α4????ӕﶏ҇ϲECUςԘ?Ċ?�?*************************************************************************/
 static uint8_t BootSerivice0x34Process(uint8_t *pTpData, uint32_t dataLength, uint8_t functionalAddress)
 {
-    uint8_t negativeNum;
-    uint8_t responseData[20];
-    int8_t lengthFormat;
-    int8_t addressFormat;
-    uint32_t address;
-    uint32_t size;
-    negativeNum = 0;
+  uint8_t negativeNum;
+  uint8_t responseData[20];
+  int8_t lengthFormat;
+  int8_t addressFormat;
+  uint32_t address;
+  uint32_t size;
+  negativeNum = 0;
 
-    lengthFormat = (pTpData[2] >> 4) & 0x0F;
-    addressFormat = pTpData[2] & 0x0F;
-    responseData[0] = 0x74;
+  lengthFormat = (pTpData[2] >> 4) & 0x0F;
+  addressFormat = pTpData[2] & 0x0F;
+  responseData[0] = 0x74;
 
-    if (g_currentSession == E_DEFAULT_SESSION)
+  if (g_currentSession == E_DEFAULT_SESSION)
+  {
+    negativeNum = 0x33;
+    return negativeNum;
+  }
+
+  if (g_currentSecurityLevel == E_UDS_NONE_SECURITY_LEVEL)
+  {
+    negativeNum = 0x33;
+    return negativeNum;
+  }
+
+  if ((addressFormat > 0) && (addressFormat <= 4))
+  {
+    if ((lengthFormat > 0) && (lengthFormat <= 4))
     {
-        negativeNum = 0x33;
-        return negativeNum;
-    }
+      int8_t i, index;
+      uint16_t maxNumberOfBlockLength;
+      address = 0;
+      size = 0;
+      index = 3;
+      for (i = addressFormat - 1; i >= 0; i--)
+      {
+        address |= (uint32_t)pTpData[index] << (i * 8); // memoryAddress
+        index++;
+      }
+      for (i = lengthFormat - 1; i >= 0; i--)
+      {
+        size |= (uint32_t)pTpData[index] << (i * 8); // memorySize
+        index++;
+      }
+      g_blockSequenceCounter = 0x01;
 
-    if (g_currentSecurityLevel == E_UDS_NONE_SECURITY_LEVEL)
-    {
-        negativeNum = 0x33;
-        return negativeNum;
-    }
+      // if (Cy_Flashc_GetMainMap() == CY_FLASH_MAPPING_A)
+      // {
+      //     TBOX_PRINT("Updata APP2!----------------------------------->\r\n");
+      // }
+      // else
+      // {
+      //     TBOX_PRINT("Updata APP1!----------------------------------->\r\n");
+      // }
+      // 升级包为BANKA的APP地址，升级时需要写到另一个失活Bank区，需要偏移地址
+      g_flashAddress = address + 0x2000000;
+      g_flashSize = size; // memorySize
+      g_requestDownLoadFlag = 1;
 
-    if ((addressFormat > 0) && (addressFormat <= 4))
-    {
-        if ((lengthFormat > 0) && (lengthFormat <= 4))
-        {
-            int8_t i, index;
-            uint16_t maxNumberOfBlockLength;
-            address = 0;
-            size = 0;
-            index = 3;
-            for (i = addressFormat - 1; i >= 0; i--)
-            {
-                address |= (uint32_t)pTpData[index] << (i * 8); // memoryAddress
-                index++;
-            }
-            for (i = lengthFormat - 1; i >= 0; i--)
-            {
-                size |= (uint32_t)pTpData[index] << (i * 8); // memorySize
-                index++;
-            }
-            g_blockSequenceCounter = 0x01;
+      responseData[1] = 0x20;
+      maxNumberOfBlockLength = 0x0202; // to be changed
+      responseData[2] = (maxNumberOfBlockLength >> 8) & 0xFF;
+      responseData[3] = maxNumberOfBlockLength & 0xFF;
 
-            // if (Cy_Flashc_GetMainMap() == CY_FLASH_MAPPING_A)
-            // {
-            //     TBOX_PRINT("Updata APP2!----------------------------------->\r\n");
-            // }
-            // else
-            // {
-            //     TBOX_PRINT("Updata APP1!----------------------------------->\r\n");
-            // }
-            // 升级包为BANKA的APP地址，升级时需要写到另一个失活Bank区，需要偏移地址
-            g_flashAddress = address + 0x2000000;
-            g_flashSize = size; // memorySize
-            g_requestDownLoadFlag = 1;
-
-            responseData[1] = 0x20;
-            maxNumberOfBlockLength = 0x0202; // to be changed
-            responseData[2] = (maxNumberOfBlockLength >> 8) & 0xFF;
-            responseData[3] = maxNumberOfBlockLength & 0xFF;
-
-            DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 4, functionalAddress); //?????????
-        }
-        else
-        {
-            negativeNum = 0x13; // frame length error
-        }
+      DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 4, functionalAddress); //?????????
     }
     else
     {
-        negativeNum = 0x13; // frame length error
+      negativeNum = 0x13; // frame length error
     }
-    g_ecuOnlineFlag = 1; // m_sessionTimerCount = 5000; ?UdsTimerCallBack?,????????m_sessionTimerCount--,5s?????????????
-    return negativeNum;
+  }
+  else
+  {
+    negativeNum = 0x13; // frame length error
+  }
+  g_ecuOnlineFlag = 1; // m_sessionTimerCount = 5000; ?UdsTimerCallBack?,????????m_sessionTimerCount--,5s?????????????
+  return negativeNum;
 }
 
 /*****************************************************************************
@@ -4200,87 +4181,87 @@ transfer data
 ****************************************************************************/
 static uint8_t BootSerivice0x36Process(uint8_t *pTpData, uint32_t dataLength, uint8_t functionalAddress) //?ъ????????ECU
 {
-    uint8_t negativeNum;
-    uint8_t responseData[20];
-    uint8_t blockSequenceCounter;
-    negativeNum = 0;
-    blockSequenceCounter = pTpData[1]; //???鼆??
-    // alter,2023-1-2
-    // uint32_t *pProgramData;
+  uint8_t negativeNum;
+  uint8_t responseData[20];
+  uint8_t blockSequenceCounter;
+  negativeNum = 0;
+  blockSequenceCounter = pTpData[1]; //???鼆??
+  // alter,2023-1-2
+  // uint32_t *pProgramData;
 
-    if (g_currentSession == E_DEFAULT_SESSION)
-    {
-        negativeNum = 0x33;
-        return negativeNum;
-    }
-
-    if (g_currentSecurityLevel == E_UDS_NONE_SECURITY_LEVEL)
-    {
-        negativeNum = 0x33;
-        return negativeNum;
-    }
-
-    if (!g_requestDownLoadFlag) //?0x34?n?g_requestDownLoadFlag=1
-    {
-        negativeNum = 0x24; // requestSequenceError
-        return negativeNum;
-    }
-    //     if (g_blockSequenceCounter == blockSequenceCounter) //?0x34?n??_blockSequenceCounter=1,??0x36?n??????,
-    //     {
-    //         //uint32_t address;
-    //         g_blockSequenceCounter++; //?????0x36?n???lockSequenceCounter++,?????lockSequenceCounter??????
-    //         //flash data function
-    //         /*if(g_blockSequenceCounter==4)
-    //         {
-    //           address = 100;
-    //         }*/
-    //         //alter,??,?????????0x10010000~~0x10088000
-    //         if ((g_flashAddress >= CFLASH_BANKB_CM4_START_ADDRESS) && (g_flashAddress < CFLASH_BANKB_CM4_END_ADDRESS)) //
-    //         {
-    //             TransmitNegative78ResponseData(pTpData[0]); //???
-    //             //alter,???????资???,??codeflash???,
-    //             //pProgramData = (uint32_t*)pTpData;
-    //             pTpData = pTpData + 2;
-    //             //pProgramData = (uint32_t *)pTpData;
-
-    //             //FOTA_ProgramFlash(g_flashAddress, dataLength - 2, pProgramData); //program 512 byte
-    //             FlashHalOtaFlashWrite(g_flashAddress,pTpData,dataLength - 2);
-    //             //pProgramData = pProgramData + (dataLength - 2) / 4; //4x128
-
-    //             g_flashAddress += dataLength - 2;
-    //             responseData[0] = 0x76;
-    //             responseData[1] = blockSequenceCounter;
-    //             //responseData[2] = 0x00;//??
-    //             DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 2, functionalAddress);
-    //         }
-    //         else if ((g_flashAddress >= CFLASH_FLASH_DRIVER_START_ADDRESS) && (g_flashAddress < CFLASH_FLASH_DRIVER_END_ADDRESS))
-    //         {
-    //             if (writeToRam(g_flashAddress, &pTpData[2], dataLength - 2) == 0)
-    //             {
-    // //              g_flashCrc32Value = crc32(g_flashCrc32Value,(uint8_t *)g_flashAddress,dataLength-2);
-    //                 g_flashAddress += dataLength - 2;
-    //                 responseData[0] = 0x76;
-    //                 responseData[1] = blockSequenceCounter;
-
-    //                 //responseData[2] = 0x00;//??
-    //                 DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 2, functionalAddress);
-    //             }
-    //             else
-    //             {
-    //                 negativeNum = 0x22;
-    //             }
-    //         }
-    //         else
-    //         {
-    //             negativeNum = 0x72; //generalProgrammingFailure
-    //         }
-    // }
-    // else
-    // {
-    //     negativeNum = 0x73; //wrong Block Sequence Counter
-    // }
-    g_ecuOnlineFlag = 1;
+  if (g_currentSession == E_DEFAULT_SESSION)
+  {
+    negativeNum = 0x33;
     return negativeNum;
+  }
+
+  if (g_currentSecurityLevel == E_UDS_NONE_SECURITY_LEVEL)
+  {
+    negativeNum = 0x33;
+    return negativeNum;
+  }
+
+  if (!g_requestDownLoadFlag) //?0x34?n?g_requestDownLoadFlag=1
+  {
+    negativeNum = 0x24; // requestSequenceError
+    return negativeNum;
+  }
+  //     if (g_blockSequenceCounter == blockSequenceCounter) //?0x34?n??_blockSequenceCounter=1,??0x36?n??????,
+  //     {
+  //         //uint32_t address;
+  //         g_blockSequenceCounter++; //?????0x36?n???lockSequenceCounter++,?????lockSequenceCounter??????
+  //         //flash data function
+  //         /*if(g_blockSequenceCounter==4)
+  //         {
+  //           address = 100;
+  //         }*/
+  //         //alter,??,?????????0x10010000~~0x10088000
+  //         if ((g_flashAddress >= CFLASH_BANKB_CM4_START_ADDRESS) && (g_flashAddress < CFLASH_BANKB_CM4_END_ADDRESS)) //
+  //         {
+  //             TransmitNegative78ResponseData(pTpData[0]); //???
+  //             //alter,???????资???,??codeflash???,
+  //             //pProgramData = (uint32_t*)pTpData;
+  //             pTpData = pTpData + 2;
+  //             //pProgramData = (uint32_t *)pTpData;
+
+  //             //FOTA_ProgramFlash(g_flashAddress, dataLength - 2, pProgramData); //program 512 byte
+  //             FlashHalOtaFlashWrite(g_flashAddress,pTpData,dataLength - 2);
+  //             //pProgramData = pProgramData + (dataLength - 2) / 4; //4x128
+
+  //             g_flashAddress += dataLength - 2;
+  //             responseData[0] = 0x76;
+  //             responseData[1] = blockSequenceCounter;
+  //             //responseData[2] = 0x00;//??
+  //             DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 2, functionalAddress);
+  //         }
+  //         else if ((g_flashAddress >= CFLASH_FLASH_DRIVER_START_ADDRESS) && (g_flashAddress < CFLASH_FLASH_DRIVER_END_ADDRESS))
+  //         {
+  //             if (writeToRam(g_flashAddress, &pTpData[2], dataLength - 2) == 0)
+  //             {
+  // //              g_flashCrc32Value = crc32(g_flashCrc32Value,(uint8_t *)g_flashAddress,dataLength-2);
+  //                 g_flashAddress += dataLength - 2;
+  //                 responseData[0] = 0x76;
+  //                 responseData[1] = blockSequenceCounter;
+
+  //                 //responseData[2] = 0x00;//??
+  //                 DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 2, functionalAddress);
+  //             }
+  //             else
+  //             {
+  //                 negativeNum = 0x22;
+  //             }
+  //         }
+  //         else
+  //         {
+  //             negativeNum = 0x72; //generalProgrammingFailure
+  //         }
+  // }
+  // else
+  // {
+  //     negativeNum = 0x73; //wrong Block Sequence Counter
+  // }
+  g_ecuOnlineFlag = 1;
+  return negativeNum;
 }
 
 /****************************************************************************
@@ -4288,144 +4269,144 @@ request transfer exit
 *****************************************************************************/
 static uint8_t BootSerivice0x37Process(uint8_t *pTpData, uint32_t dataLength, uint8_t functionalAddress)
 {
-    uint8_t negativeNum;
-    uint8_t responseData[20];
-    negativeNum = 0;
+  uint8_t negativeNum;
+  uint8_t responseData[20];
+  negativeNum = 0;
 
-    if (g_currentSession == E_DEFAULT_SESSION)
-    {
-        negativeNum = 0x33;
-        return negativeNum;
-    }
-
-    if (g_currentSecurityLevel == E_UDS_NONE_SECURITY_LEVEL)
-    {
-        negativeNum = 0x33;
-        return negativeNum;
-    }
-
-    if (!g_requestDownLoadFlag)
-    {
-        negativeNum = 0x24; // requestSequenceError
-        return negativeNum;
-    }
-    g_requestDownLoadFlag = 0;
-    responseData[0] = 0x77;
-    DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 1, functionalAddress);
-
-    g_ecuOnlineFlag = 1;
+  if (g_currentSession == E_DEFAULT_SESSION)
+  {
+    negativeNum = 0x33;
     return negativeNum;
+  }
+
+  if (g_currentSecurityLevel == E_UDS_NONE_SECURITY_LEVEL)
+  {
+    negativeNum = 0x33;
+    return negativeNum;
+  }
+
+  if (!g_requestDownLoadFlag)
+  {
+    negativeNum = 0x24; // requestSequenceError
+    return negativeNum;
+  }
+  g_requestDownLoadFlag = 0;
+  responseData[0] = 0x77;
+  DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 1, functionalAddress);
+
+  g_ecuOnlineFlag = 1;
+  return negativeNum;
 }
 
 static uint8_t BootSerivice0x2EProcess(uint8_t *pTpData, uint32_t dataLength, uint8_t functionalAddress)
 {
-    uint8_t negativeNum;
-    // uint8_t responseData[50];
-    // uint16_t did;
-    // uint8_t posRspMsgIndication;
+  uint8_t negativeNum;
+  // uint8_t responseData[50];
+  // uint16_t did;
+  // uint8_t posRspMsgIndication;
 
-    negativeNum = 0;
+  negativeNum = 0;
 
-    if (g_currentSession != E_PROGROM_SESSION)
-    {
-        negativeNum = 0x33;
-        return negativeNum;
-    }
-
-    if (g_currentSecurityLevel != E_UDS_SECURITY_LEVEL3)
-    {
-        negativeNum = 0x33;
-        return negativeNum;
-    }
-    // did = ((uint16_t)pTpData[1] << 8) + (uint16_t)pTpData[2];
-    negativeNum = 0x31;
-    g_ecuOnlineFlag = 1;
+  if (g_currentSession != E_PROGROM_SESSION)
+  {
+    negativeNum = 0x33;
     return negativeNum;
+  }
+
+  if (g_currentSecurityLevel != E_UDS_SECURITY_LEVEL3)
+  {
+    negativeNum = 0x33;
+    return negativeNum;
+  }
+  // did = ((uint16_t)pTpData[1] << 8) + (uint16_t)pTpData[2];
+  negativeNum = 0x31;
+  g_ecuOnlineFlag = 1;
+  return negativeNum;
 }
 
 static uint8_t BootSerivice0x22Process(uint8_t *pTpData, uint32_t dataLength, uint8_t functionalAddress)
 {
-    uint8_t negativeNum;
-    uint8_t responseData[64];
-    uint16_t did;
-    uint32_t length = 0;
+  uint8_t negativeNum;
+  uint8_t responseData[64];
+  uint16_t did;
+  uint32_t length = 0;
 
-    did = (pTpData[1] << 8) + pTpData[2];
-    negativeNum = 0;
-    if (0xF1C1 == did) // app software version
-    {
-        Service22ReadAppSoftwareVersion(&responseData[3], (uint16_t *)&length);
-    }
-    else
-    {
-        negativeNum = 0x31;
-    }
-    if (0 == negativeNum)
-    {
-        responseData[0] = 0x62;
-        responseData[1] = pTpData[1];
-        responseData[2] = pTpData[2];
-        DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, length + 3, functionalAddress);
-    }
+  did = (pTpData[1] << 8) + pTpData[2];
+  negativeNum = 0;
+  if (0xF1C1 == did) // app software version
+  {
+    Service22ReadAppSoftwareVersion(&responseData[3], (uint16_t *)&length);
+  }
+  else
+  {
+    negativeNum = 0x31;
+  }
+  if (0 == negativeNum)
+  {
+    responseData[0] = 0x62;
+    responseData[1] = pTpData[1];
+    responseData[2] = pTpData[2];
+    DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, length + 3, functionalAddress);
+  }
 
-    g_ecuOnlineFlag = 1;
-    return negativeNum;
+  g_ecuOnlineFlag = 1;
+  return negativeNum;
 }
 
 static void UdsServiceProcess(uint8_t *pTpData, uint32_t tpDataLength, uint8_t FunctionalAddress)
 {
-    uint8_t serviceId;
-    uint8_t negativeNum;
-    serviceId = pTpData[0];
-    negativeNum = 0;
-    if (0x10 == serviceId) // 0x10,???????(????˙???0km?10 02,??????????А)
-    {
-        negativeNum = BootSerivice0x10Process(pTpData, tpDataLength, FunctionalAddress); // BootSerivice0x10Process(pTpData, tpDataLength, FunctionalAddress);
-    }
-    else if (0x11 == serviceId) // ECU RESET;11 01??hardReset: ????????????????1 02??keyOffOnReset?? ?????????????? 11 03??softReset
-    {
-        negativeNum = BootService0x11Process(pTpData, tpDataLength, FunctionalAddress); //
-    }
-    else if (0x22 == serviceId) //????
-    {
-        negativeNum = BootSerivice0x22Process(pTpData, tpDataLength, FunctionalAddress);
-    }
-    else if (0x27 == serviceId) //??????
-    {
-        negativeNum = BootService0x27Process(pTpData, tpDataLength, FunctionalAddress);
-    }
-    else if (0x2E == serviceId) //????
-    {
-        negativeNum = BootSerivice0x2EProcess(pTpData, tpDataLength, FunctionalAddress);
-    }
-    else if (0x31 == serviceId) // 31??α???CUě??ē?Щ???е?????lash?????
-    {
-        negativeNum = BootSerivice0x31Process(pTpData, tpDataLength, FunctionalAddress);
-    }
-    else if (0x34 == serviceId) // RequestDownload,??g_flashAddress????31??А
-    {
-        negativeNum = BootSerivice0x34Process(pTpData, tpDataLength, FunctionalAddress);
-    }
-    else if (0x36 == serviceId) // TransferData
-    {
-        negativeNum = BootSerivice0x36Process(pTpData, tpDataLength, FunctionalAddress);
-    }
-    else if (0x37 == serviceId) // RequestTransferExit
-    {
-        negativeNum = BootSerivice0x37Process(pTpData, tpDataLength, FunctionalAddress);
-    }
-    else if (0x3E == serviceId) //????α
-    {
-        negativeNum = Service0x3EProcess(pTpData, tpDataLength, FunctionalAddress);
-    }
-    else // unsupported service
-    {
-        negativeNum = ServiceNoDefinitionProcess(pTpData, tpDataLength, FunctionalAddress);
-    }
-    if (negativeNum != 0)
-    {
-        // transmit negative response
-        NegativeResponseProcess(negativeNum, serviceId, FunctionalAddress);
-    }
+  uint8_t serviceId;
+  uint8_t negativeNum;
+  serviceId = pTpData[0];
+  negativeNum = 0;
+  if (0x10 == serviceId) // 0x10,???????(????˙???0km?10 02,??????????А)
+  {
+    negativeNum = BootSerivice0x10Process(pTpData, tpDataLength, FunctionalAddress); // BootSerivice0x10Process(pTpData, tpDataLength, FunctionalAddress);
+  }
+  else if (0x11 == serviceId) // ECU RESET;11 01??hardReset: ????????????????1 02??keyOffOnReset?? ?????????????? 11 03??softReset
+  {
+    negativeNum = BootService0x11Process(pTpData, tpDataLength, FunctionalAddress); //
+  }
+  else if (0x22 == serviceId) //????
+  {
+    negativeNum = BootSerivice0x22Process(pTpData, tpDataLength, FunctionalAddress);
+  }
+  else if (0x27 == serviceId) //??????
+  {
+    negativeNum = BootService0x27Process(pTpData, tpDataLength, FunctionalAddress);
+  }
+  else if (0x2E == serviceId) //????
+  {
+    negativeNum = BootSerivice0x2EProcess(pTpData, tpDataLength, FunctionalAddress);
+  }
+  else if (0x31 == serviceId) // 31??α???CUě??ē?Щ???е?????lash?????
+  {
+    negativeNum = BootSerivice0x31Process(pTpData, tpDataLength, FunctionalAddress);
+  }
+  else if (0x34 == serviceId) // RequestDownload,??g_flashAddress????31??А
+  {
+    negativeNum = BootSerivice0x34Process(pTpData, tpDataLength, FunctionalAddress);
+  }
+  else if (0x36 == serviceId) // TransferData
+  {
+    negativeNum = BootSerivice0x36Process(pTpData, tpDataLength, FunctionalAddress);
+  }
+  else if (0x37 == serviceId) // RequestTransferExit
+  {
+    negativeNum = BootSerivice0x37Process(pTpData, tpDataLength, FunctionalAddress);
+  }
+  else if (0x3E == serviceId) //????α
+  {
+    negativeNum = Service0x3EProcess(pTpData, tpDataLength, FunctionalAddress);
+  }
+  else // unsupported service
+  {
+    negativeNum = ServiceNoDefinitionProcess(pTpData, tpDataLength, FunctionalAddress);
+  }
+  if (negativeNum != 0)
+  {
+    // transmit negative response
+    NegativeResponseProcess(negativeNum, serviceId, FunctionalAddress);
+  }
 }
 #endif

@@ -1749,11 +1749,40 @@ void CanRxInterruptProcessMsg(uint8_t canChannel, stc_canfd_msg_t *pstcCanFDmsg,
     }
     if (g_allCanRxBuffer.rxQueueHandle != NULL) // rx buffer is  ready
     {
-        if (canId == 0x765) 
-        {
-            return; // 直接返回，不入队
-        }
-        
+        if (canId == 0x727) return; // SRS
+        if (canId == 0x710) return; // BCS
+        if (canId == 0x7E0) return; // EMS
+        if (canId == 0x765) return; // MFS (您当前遇到的问题ID)
+        if (canId == 0x7E1) return; // TCU
+
+        // ACAN Nodes
+        if (canId == 0x731) return; // PAS
+        if (canId == 0x714) return; // EPS
+        if (canId == 0x73E) return; // FR
+        if (canId == 0x740) return; // IFC
+
+        // BCAN Nodes
+        if (canId == 0x72C) return; // HVACF
+        if (canId == 0x72B) return; // AVNT
+        if (canId == 0x755) return; // ETC
+        if (canId == 0x728) return; // IID
+        if (canId == 0x720) return; // IBCM
+        if (canId == 0x748) return; // WCM
+        if (canId == 0x718) return; // FLDCM
+        if (canId == 0x719) return; // FRDCM
+        if (canId == 0x73B) return; // HVSM
+        if (canId == 0x73A) return; // RCP
+        if (canId == 0x724) return; // PLGM
+
+        // TCAN Nodes
+        if (canId == 0x72D) return; // TBOX (自测用?)
+
+        // DCAN Nodes
+        if (canId == 0x74F) return; // GWM
+
+        // 功能寻址 (必须加，通常用于 0x3E 服务维持会话)
+        if (canId == 0x7DF) return;
+
         if (txState)
         {
             if (CheckCanIdIsSelfSend(canId) != 0)
