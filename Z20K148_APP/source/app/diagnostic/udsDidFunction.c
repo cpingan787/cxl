@@ -5479,7 +5479,7 @@ int16_t Service22ReadVehicleSpeed(uint8_t *pData, uint16_t *pLength)
   const can0_signal_configure_t *pCan0SignalConfigure = GetCan0SignalConfigure();
 
   // 获取车速物理值km/h
-  CanParseSdkReadSignal(VEHICLE_CAN_UNPACK_FORMAT_INTEL, &pCan0SignalConfigure->BCS_VehSpd, &physical_speed_kph);
+  CanParseSdkReadSignal(VEHICLE_CAN_UNPACK_FORMAT_MOTO_LSB, &pCan0SignalConfigure->BCS_VehSpd, &physical_speed_kph);
 
   // Raw Value
   raw_value = (uint16_t)(physical_speed_kph / 0.05625f);
@@ -5499,7 +5499,7 @@ int16_t Service22ReadEngineMotorSpeed(uint8_t *pData, uint16_t *pLength)
   uint16_t raw_value = 0;
   const can0_signal_configure_t *pCan0SignalConfigure = GetCan0SignalConfigure();
 
-  CanParseSdkReadSignal(VEHICLE_CAN_UNPACK_FORMAT_INTEL, &pCan0SignalConfigure->EMS_EngSpd, &physical_speed_rpm);
+  CanParseSdkReadSignal(VEHICLE_CAN_UNPACK_FORMAT_MOTO_LSB, &pCan0SignalConfigure->EMS_EngSpd, &physical_speed_rpm);
 
   raw_value = (uint16_t)physical_speed_rpm;
 
@@ -6979,7 +6979,7 @@ int16_t Service22ReadKeySt(uint8_t *pData, uint16_t *pLength)
   int16_t ret = 0;
   const can0_signal_configure_t *pCan0SignalConfigure = GetCan0SignalConfigure();
 
-  ret = CanParseSdkReadSignal(VEHICLE_CAN_UNPACK_FORMAT_INTEL, &pCan0SignalConfigure->BCM_KeySt, &powerMode);
+  ret = CanParseSdkReadSignal(VEHICLE_CAN_UNPACK_FORMAT_MOTO_LSB, &pCan0SignalConfigure->BCM_KeySt, &powerMode);
 
   if (ret != 0)
   {

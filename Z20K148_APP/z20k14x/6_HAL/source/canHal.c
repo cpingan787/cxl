@@ -1752,7 +1752,7 @@ void CanRxInterruptProcessMsg(uint8_t canChannel, stc_canfd_msg_t *pstcCanFDmsg,
         if (canId == 0x727) return; // SRS
         if (canId == 0x710) return; // BCS
         if (canId == 0x7E0) return; // EMS
-        if (canId == 0x765) return; // MFS (您当前遇到的问题ID)
+        if (canId == 0x765) return; // MFS 
         if (canId == 0x7E1) return; // TCU
 
         // ACAN Nodes
@@ -1774,14 +1774,8 @@ void CanRxInterruptProcessMsg(uint8_t canChannel, stc_canfd_msg_t *pstcCanFDmsg,
         if (canId == 0x73A) return; // RCP
         if (canId == 0x724) return; // PLGM
 
-        // TCAN Nodes
-        if (canId == 0x72D) return; // TBOX (自测用?)
-
         // DCAN Nodes
         if (canId == 0x74F) return; // GWM
-
-        // 功能寻址 (必须加，通常用于 0x3E 服务维持会话)
-        if (canId == 0x7DF) return;
 
         if (txState)
         {

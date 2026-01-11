@@ -231,7 +231,7 @@ static int16_t UdsTpDataMultFramTransmit(int16_t tpHandle, int16_t canHandle, ui
         {
             vTaskDelay(pdMS_TO_TICKS(STmin));
         }
-        //ret = CanHalReceive(canHandle, &rxCanMsg, 0);
+        ret = CanHalReceive(canHandle, &rxCanMsg, 0);
         memset(rxCanMsg.canData, 0, 8);
         ret = CanHalTransmitQueued(canHandle, txCanId, txCanData, 8, 1, CAN_TX_PRIO_NORMAL);
         // TBOX_PRINT("can tp wait send %x\r\n",txCanId);
@@ -277,7 +277,7 @@ static int16_t UdsTpDataMultFramTransmit(int16_t tpHandle, int16_t canHandle, ui
     // canHandle = g_tpVariable[tpHandle].functionalCanHandle;
     // ret = CanHalDiagnosticReceive(canHandle,&rxCanMsg, 0);//wait 150 ms
     // memset(rxCanMsg.canData, 0, 8);
-    //CanHalReceive(canHandle, &rxCanMsg, 0);
+    CanHalReceive(canHandle, &rxCanMsg, 0);
 
     /*if (txFrameCount >= multiFrameNum)
     {

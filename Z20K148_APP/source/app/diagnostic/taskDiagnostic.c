@@ -3023,7 +3023,7 @@ static uint16_t GetVehicleSpeed(void)
   const can0_signal_configure_t *pCan0SignalConfigure = GetCan0SignalConfigure();
 
   // 获取车速物理值km/h
-  CanParseSdkReadSignal(VEHICLE_CAN_UNPACK_FORMAT_INTEL, &pCan0SignalConfigure->BCS_VehSpd, &dataValue);
+  CanParseSdkReadSignal(VEHICLE_CAN_UNPACK_FORMAT_MOTO_LSB, &pCan0SignalConfigure->BCS_VehSpd, &dataValue);
 
   motolSpeed = (uint16_t)dataValue;
   return motolSpeed;
