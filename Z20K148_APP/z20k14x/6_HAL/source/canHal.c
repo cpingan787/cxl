@@ -27,7 +27,7 @@
 #define CAN_CHANNEL_NUMBER_MAX              (2)
 #define ALL_CAN_RX_BUFFER_SIZE              (64)
 #define ALL_CAN_TX_BUFFER_SIZE              (64U)
-#define CAN_SEND_MAIL_MAX_NUMBER            (5)
+#define CAN_SEND_MAIL_MAX_NUMBER            (4)
 #define CAN_TX_BUFFER_SIZE                  (32)
 #define CANFD_ENABLE_CONFIG                 (0)
 #define CAN_TX_EVT_INIT_DONE                (1U << 0)
@@ -37,7 +37,8 @@
 #define CAN_NM_WAKEUP_ID_MAX                (0x5FF)
 #define CAN_TX_ENQUEUE_TIMEOUT_MS           (5U)
 #define CAN_TX_BUSY_MAX_RETRY               (2U)
-#define CAN_TX_BUSY_RETRY_DELAY_MS          (3U)
+#define CAN_TX_BUSY_RETRY_DELAY_MS          (1U)
+#define CAN_OTA_TX_MB_IDX                   (0U)
 /****************************** Type Definitions ******************************/
 typedef enum
 {
@@ -157,6 +158,7 @@ uint8_t g_canTestModeFlag[CAN_CHANNEL_NUMBER_MAX] = {0};
 static volatile unsigned int CAN0_BusOffIntFlag = 0U; // 定义CAN0 的BusOff中断进入标志
 static volatile unsigned int CAN1_BusOffIntFlag = 0U; // 定义CAN0 的BusOff中断进入标志
 static uint32_t g_receiveCanNmFlag = 0U;
+static uint8_t g_canOtaMode = 0U;
 #if 0
 static const CAN_Config_t g_Can0Config =
 {                                                    
@@ -1749,34 +1751,6 @@ void CanRxInterruptProcessMsg(uint8_t canChannel, stc_canfd_msg_t *pstcCanFDmsg,
     }
     if (g_allCanRxBuffer.rxQueueHandle != NULL) // rx buffer is  ready
     {
-        if (canId == 0x727) return; // SRS
-        if (canId == 0x710) return; // BCS
-        if (canId == 0x7E0) return; // EMS
-        if (canId == 0x765) return; // MFS 
-        if (canId == 0x7E1) return; // TCU
-
-        // ACAN Nodes
-        if (canId == 0x731) return; // PAS
-        if (canId == 0x714) return; // EPS
-        if (canId == 0x73E) return; // FR
-        if (canId == 0x740) return; // IFC
-
-        // BCAN Nodes
-        if (canId == 0x72C) return; // HVACF
-        if (canId == 0x72B) return; // AVNT
-        if (canId == 0x755) return; // ETC
-        if (canId == 0x728) return; // IID
-        if (canId == 0x720) return; // IBCM
-        if (canId == 0x748) return; // WCM
-        if (canId == 0x718) return; // FLDCM
-        if (canId == 0x719) return; // FRDCM
-        if (canId == 0x73B) return; // HVSM
-        if (canId == 0x73A) return; // RCP
-        if (canId == 0x724) return; // PLGM
-
-        // DCAN Nodes
-        if (canId == 0x74F) return; // GWM
-
         if (txState)
         {
             if (CheckCanIdIsSelfSend(canId) != 0)
@@ -2425,14 +2399,19 @@ int16_t CanHalRegisterTxFinishedCallBackFunction(int16_t canHandle, typeCanTxHal
     Return:          0 on success, negative error code on failure
     Others:          Uses independent mail counter for each channel
   *************************************************/
-static int16_t CanTransmit(uint8_t u8Channel, uint32_t id, uint8_t u8Len,
-                           const uint8_t *pu8CmdData, uint8_t fdFlag)
+static int16_t CanTransmit(uint8_t u8Channel,
+                           uint32_t id,
+                           uint8_t u8Len,
+                           const uint8_t *pu8CmdData,
+                           uint8_t fdFlag,
+                           uint8_t isOta)
 {
     CAN_Id_t pstCanType;
     CAN_MessageInfo_t *pCAN_MessageInfo = NULL;
     CAN_MessageInfo_t txInfoLocal;
     ResultStatus_t canSendRet;
     static uint8_t u8MailNum[CAN_CHANNEL_NUMBER_MAX] = {0};
+    uint8_t mbIdx = 0U;
     int16_t ret = -1;
 
     if ((pu8CmdData == NULL) || (u8Channel >= CAN_CHANNEL_NUMBER_MAX))
@@ -2465,16 +2444,31 @@ static int16_t CanTransmit(uint8_t u8Channel, uint32_t id, uint8_t u8Len,
     txInfoLocal.idType  = CAN_MSG_ID_STD;
     txInfoLocal.dataLen = u8Len;
 
+    /* ---------- mailbox selection ----------
+     * OTA: 固定单邮箱；非 OTA: 维持原轮换逻辑
+     */
+    if (isOta != 0U)
+    {
+        mbIdx = (uint8_t)CAN_OTA_TX_MB_IDX;
+    }
+    else
+    {
+        mbIdx = u8MailNum[u8Channel];
+    }
+
     COMMON_DISABLE_INTERRUPTS();
-    canSendRet = CAN_Send(pstCanType, u8MailNum[u8Channel], &txInfoLocal, id, pu8CmdData);
+    canSendRet = CAN_Send(pstCanType, mbIdx, &txInfoLocal, id, pu8CmdData);
     COMMON_ENABLE_INTERRUPTS();
 
     if (canSendRet == SUCC)
     {
-        /* 仅成功才推进 mailbox 索引 */
-        if (++u8MailNum[u8Channel] >= CAN_SEND_MAIL_MAX_NUMBER)
+        /* 仅非 OTA 才推进 mailbox 索引（保持原行为：成功才推进） */
+        if (isOta == 0U)
         {
-            u8MailNum[u8Channel] = 0;
+            if (++u8MailNum[u8Channel] >= CAN_SEND_MAIL_MAX_NUMBER)
+            {
+                u8MailNum[u8Channel] = 0;
+            }
         }
 
         taskENTER_CRITICAL();
@@ -2485,9 +2479,9 @@ static int16_t CanTransmit(uint8_t u8Channel, uint32_t id, uint8_t u8Len,
     }
     else if (canSendRet == BUSY)
     {
-        ret = CAN_ERROR_TX_BUFFER_FULL;             
+        ret = CAN_ERROR_TX_BUFFER_FULL;
     }
-    else 
+    else
     {
         TBOX_PRINT("Can%d send error, driver layer error code:%d\r\n", u8Channel, canSendRet);
         ret = (int16_t)ERR;
@@ -2574,7 +2568,7 @@ int16_t CanHalTransmit(int16_t canHandle, uint32_t canId, const uint8_t *canData
                     }
                     else
                     {
-                        ret = CanTransmit(canChannel, canId, dlc, canData, fdFlag);
+                        //ret = CanTransmit(canChannel, canId, dlc, canData, fdFlag);
                         if (ret == CAN_ERROR_TX_BUFFER_FULL)
                         {
                             xSemaphoreGive(g_canTxMutex[canChannel]);
@@ -2584,7 +2578,7 @@ int16_t CanHalTransmit(int16_t canHandle, uint32_t canId, const uint8_t *canData
                             if (xResult == pdTRUE)
                             {
                                 retryMutexAcquired = 1;
-                                ret = CanTransmit(canChannel, canId, dlc, canData, fdFlag);
+                                //ret = CanTransmit(canChannel, canId, dlc, canData, fdFlag);
                             }
                             else
                             {
@@ -2744,7 +2738,7 @@ int16_t CanHalSetCanTxCallBack(uint8_t canChannel, typeCanTxRxHalCallBackPtr txC
 int16_t CanHalNmTransmit(int16_t canHandle, uint32_t canId, uint8_t *canData, uint8_t dlc, uint8_t fdFlag)
 {
     uint8_t canChannel;
-    int16_t ret;
+    int16_t ret = 0U;
     if (canHandle < 0)
     {
         return -1;
@@ -2772,11 +2766,11 @@ int16_t CanHalNmTransmit(int16_t canHandle, uint32_t canId, uint8_t *canData, ui
     {
         return CAN_ERROR_TEST_MODE;
     }
-    ret = CanTransmit(canChannel, canId, dlc, canData, fdFlag);
+    //ret = CanTransmit(canChannel, canId, dlc, canData, fdFlag);
     if (ret == CAN_ERROR_TX_BUFFER_FULL)
     {
         vTaskDelay(pdMS_TO_TICKS(2));
-        ret = CanTransmit(canChannel, canId, dlc, canData, fdFlag);
+        //ret = CanTransmit(canChannel, canId, dlc, canData, fdFlag);
     }
     if (ret == 0)
     {
@@ -3153,7 +3147,7 @@ int16_t CanHalEnableTransmitLoopBack(int16_t canHandle)
 int16_t CanHalDiagnosticTransmit(int16_t canHandle, uint32_t canId, uint8_t *canData, uint8_t dlc, uint8_t fdFlag)
 {
     uint8_t canChannel;
-    int16_t ret;
+    int16_t ret = 0U;
     
     if (canHandle < 0)
     {
@@ -3176,11 +3170,11 @@ int16_t CanHalDiagnosticTransmit(int16_t canHandle, uint32_t canId, uint8_t *can
     {
         return CAN_ERROR_TEST_MODE;
     }
-    ret = CanTransmit(canChannel, canId, dlc, canData, fdFlag);
+    //ret = CanTransmit(canChannel, canId, dlc, canData, fdFlag);
     if (ret == CAN_ERROR_TX_BUFFER_FULL)
     {
         vTaskDelay(pdMS_TO_TICKS(10));
-        ret = CanTransmit(canChannel, canId, dlc, canData, fdFlag);
+        //ret = CanTransmit(canChannel, canId, dlc, canData, fdFlag);
     }
     if (ret == 0)
     {
@@ -4368,7 +4362,7 @@ void CanHalSendTask(void *pvParameters)
         retry = 0U;
         for (;;)
         {
-            ret = CanTransmit(canChannel, txMsg.canId, txMsg.dlc, txMsg.canData, txMsg.txFlag);
+            ret = CanTransmit(canChannel, txMsg.canId, txMsg.dlc, txMsg.canData, txMsg.txFlag , g_canOtaMode);
 
             if (ret == 0)
             {
@@ -4394,4 +4388,9 @@ void CanHalSendTask(void *pvParameters)
         /* 归还槽位 idx（关键：否则很快耗尽导致“队列满/丢帧”） */
         (void)xQueueSend(g_allCanTxBuffer.freeIdxQueueHandle, &msgIndex, 0U);
     }
+}
+
+void CanHal_SetOtaMode(uint8_t enable)
+{
+    g_canOtaMode = (enable != 0U) ? 1U : 0U;
 }

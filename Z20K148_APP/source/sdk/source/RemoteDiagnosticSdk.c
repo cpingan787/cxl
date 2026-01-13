@@ -14,9 +14,6 @@
 #include "timerHal.h"
 #define COMMAND_UDS_TRANSMIT_AID 0x05
 
-/* *
- * 修改: 定义三个不同的MID，以支持所有协议
- */
 #define COMMAND_UDS_REMOTE_DIAG_MID 0x01 // 远程诊断 (协议 1)
 #define COMMAND_UDS_RESET_MID 0x10       // 复位命令 (协议 3)
 #define COMMAND_UDS_FLASHER_MID 0x20     // 诊断刷写 (协议 2)
@@ -89,7 +86,7 @@ static int16_t RemoteDiagnosticSdkSendResponse(MpuHalDataPack_t *recvPack, uint3
 
     g_txData[0] = 0;
     g_txData[1] = 0;
-    g_txData[2] = recvPack->pDataBuffer[2]; // 序列号 Index
+    g_txData[2] = recvPack->pDataBuffer[2];
 
     g_txData[3] = (canId >> 24) & 0xFF;
     g_txData[4] = (canId >> 16) & 0xFF;
@@ -122,10 +119,8 @@ static uint8_t RemoteDiagnosticSdkTpTransmit(CanIdConfig_t *pEcuConfigure, MpuHa
     uint8_t ecuId = 0xFF;
     CanChanel_t *canChannelList = g_canChannelList;
 
-    // 1. 解析 CAN ID
     canId = (rxMsg->pDataBuffer[3] << 24) + (rxMsg->pDataBuffer[4] << 16) + (rxMsg->pDataBuffer[5] << 8) + rxMsg->pDataBuffer[6];
 
-    // 2. 解析 UDS 数据指针和长度
     uint8_t *pUdsData = NULL;
     uint16_t udsDataLen = 0;
 
@@ -157,12 +152,12 @@ static uint8_t RemoteDiagnosticSdkTpTransmit(CanIdConfig_t *pEcuConfigure, MpuHa
     {
         for (i = 0; i < canChannelList->canChanelListSize; i++)
         {
-            UdsTpTransmit(g_udsTpHandle[canChannelList->canChanelList[i]], canId, pUdsData, udsDataLen);
+            UdsTpTransmit(g_udsTpHandle[canChannelList->canChanelList[i]], 1, pUdsData, udsDataLen); // 1表示7df广播
         }
 
         VirtualTpSdkClientTransmit(virtualTpHandle, pUdsData, udsDataLen);
 
-        return 0xFF; 
+        return 0xFF;
     }
 
     if (canId == pEcuConfigure->functionalId)
@@ -191,9 +186,9 @@ static uint8_t RemoteDiagnosticSdkTpTransmit(CanIdConfig_t *pEcuConfigure, MpuHa
             }
         }
 
-        for (i = 0; i < canChannelList->canChanelListSize; i++)
+        for (i = 0; i < canChannelList->canChanelListSize; i++) // 只有1路can
         {
-            UdsTpTransmit(g_udsTpHandle[canChannelList->canChanelList[i]], canId, pUdsData, udsDataLen);
+            UdsTpTransmit(g_udsTpHandle[canChannelList->canChanelList[i]], 1, pUdsData, udsDataLen); // 1表示7df广播
         }
         VirtualTpSdkClientTransmit(virtualTpHandle, pUdsData, udsDataLen);
 
@@ -243,14 +238,15 @@ static uint8_t RemoteDiagnosticSdkTpTransmit(CanIdConfig_t *pEcuConfigure, MpuHa
 
                 UdsTpClearRecvBuffer(g_udsTpHandle[pEcuConfigure->pEcuList[ecuId].channel]);
 
-                
                 if (canId == 0x067 || canId == 0x069)
                 {
                     UdsTpTransmitRaw(g_udsTpHandle[pEcuConfigure->pEcuList[ecuId].channel], canId, pUdsData, udsDataLen);
                 }
                 else
                 {
+                    CanHal_SetOtaMode(1);
                     UdsTpTransmit(g_udsTpHandle[pEcuConfigure->pEcuList[ecuId].channel], canId, pUdsData, udsDataLen);
+                    CanHal_SetOtaMode(0);
                 }
                 g_udsFlag = 1;
                 g_udsTimeCount = 0;
@@ -379,7 +375,6 @@ void RemoteDiagnosticSdkProcess(CanIdConfig_t *pEcuConfigure, MpuBuffer_t *pMpuB
                             oldIndex = rxMsg.pDataBuffer[2];
                             ecuId = RemoteDiagnosticSdkTpTransmit(pEcuConfigure, &rxMsg, virtualTpHandle);
 
-                            /* [修改] 发送成功后，立即保存当前 ECU ID 到静态变量，防止循环中丢失 */
                             if (ecuId != 0xFF)
                             {
                                 s_pendingEcuId = ecuId;
@@ -453,7 +448,6 @@ void RemoteDiagnosticSdkProcess(CanIdConfig_t *pEcuConfigure, MpuBuffer_t *pMpuB
         {
             if (g_udsReceiveFlag == 1)
             {
-                /* [修改] 使用保存的 s_pendingEcuId 进行接收，而不是不稳定的局部变量 ecuId */
                 uint8_t currentTargetEcu = s_pendingEcuId;
 
                 if (currentTargetEcu != 0xFF)
@@ -478,7 +472,6 @@ void RemoteDiagnosticSdkProcess(CanIdConfig_t *pEcuConfigure, MpuBuffer_t *pMpuB
                         responseId = pEcuConfigure->pEcuList[currentTargetEcu].responseId;
                         RemoteDiagnosticSdkSendResponse(&rxMsg, responseId, udsRxbuf, udsRecvLen);
 
-                        /* [修改] 如果收到 0x78 Pending，保持 ReceiveFlag=1，也保持 s_pendingEcuId 不变 */
                         if ((udsRecvLen == 3) && (udsRxbuf[0] == 0x7F) && (udsRxbuf[2] == 0x78))
                         {
                             g_udsTimeCount = 0;
@@ -520,7 +513,7 @@ void RemoteDiagnosticSdkProcess(CanIdConfig_t *pEcuConfigure, MpuBuffer_t *pMpuB
 
             if (g_udsTimeCount > 20000)
             {
-                // LogHalUpLoadLog("[MCU-ERR] UDS Receive Timeout! Force Stop.\r\n");
+                LogHalUpLoadLog("[cxl6");
                 if (g_udsReceiveFlag == 1)
                 {
                     // LogHalUpLoadLog("[MCU-ERR] UDS Receive Timeout! Force Stop.\r\n");
@@ -528,6 +521,7 @@ void RemoteDiagnosticSdkProcess(CanIdConfig_t *pEcuConfigure, MpuBuffer_t *pMpuB
                 g_udsFlag = 1;
                 if (g_udsReceiveFlag == 1)
                 {
+                    LogHalUpLoadLog("[cxl7");
                     g_udsReceiveFlag = 0;
                 }
                 g_udsTimeCount = 0;

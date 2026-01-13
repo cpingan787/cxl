@@ -2004,7 +2004,7 @@ static uint8_t Service0x27Process0x01(uint8_t *udsData, uint16_t udsLen, uint8_t
 {
   uint8_t responseData[32];
   uint8_t negativeNum = 0;
-  const int level_index = 0;
+  const int level_index = 0; // Level 1 对应索引
 
   responseData[0] = udsData[0] + 0x40;
   responseData[1] = udsData[1];
@@ -2015,16 +2015,13 @@ static uint8_t Service0x27Process0x01(uint8_t *udsData, uint16_t udsLen, uint8_t
   uint8_t factoryMode = UdsDidGetManufactoryMode();
   if (factoryMode >= 0x10)
   {
-    // 0x10-0xFF 返回全0的种子
     memset(g_securitySeed, 0, sizeof(g_securitySeed));
     g_securitySeedLength = 4;
-
     memcpy((responseData + 2), g_securitySeed, g_securitySeedLength);
     DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 2 + g_securitySeedLength, functionAddressFlag);
 
-    g_currentSecurityLevel = E_UDS_SECURITY_LEVEL1; // 自动解锁
+    g_currentSecurityLevel = E_UDS_SECURITY_LEVEL1;
     g_securitySendSeedLevel = E_UDS_NONE_SECURITY_LEVEL;
-
     return 0;
   }
 
@@ -2034,15 +2031,20 @@ static uint8_t Service0x27Process0x01(uint8_t *udsData, uint16_t udsLen, uint8_t
   }
   else if (g_currentSecurityLevel == E_UDS_SECURITY_LEVEL1)
   {
-    UdsGetSeed(g_securitySeed, &g_securitySeedLength);
-    memcpy((responseData + 2), g_securitySeed, g_securitySeedLength); // 修正2701 0x01-0xFF 返回全0种子
+    memset(g_securitySeed, 0, sizeof(g_securitySeed));
+    g_securitySeedLength = 4;
+    memcpy((responseData + 2), g_securitySeed, g_securitySeedLength);
     DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 2 + g_securitySeedLength, 0);
   }
   else
   {
     if (g_u8ConsecutiveSeedCount[level_index] < 3)
     {
-      UdsGetSeed(g_securitySeed, &g_securitySeedLength);
+      if (g_u8ConsecutiveSeedCount[level_index] == 0 || g_securitySendSeedLevel != E_UDS_SECURITY_LEVEL1)
+      {
+          UdsGetSeed(g_securitySeed, &g_securitySeedLength);
+      }
+      
       unsigned int key_len_uint = 0;
 
       int result = Seed2Key(g_securitySeed, g_securitySeedLength, 0x01, NULL, g_securityKey, sizeof(g_securityKey), &key_len_uint);
@@ -2052,7 +2054,11 @@ static uint8_t Service0x27Process0x01(uint8_t *udsData, uint16_t udsLen, uint8_t
         g_securityKeyLength = (uint8_t)key_len_uint;
         memcpy((responseData + 2), g_securitySeed, g_securitySeedLength);
         DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 2 + g_securitySeedLength, functionAddressFlag);
+        
         g_securitySendSeedLevel = E_UDS_SECURITY_LEVEL1;
+
+        g_u8ConsecutiveSeedCount[level_index]++;
+        SaveSeedAccessCountToNonVolatile(g_u8ConsecutiveSeedCount);
       }
       else
       {
@@ -2063,7 +2069,7 @@ static uint8_t Service0x27Process0x01(uint8_t *udsData, uint16_t udsLen, uint8_t
     {
       if (g_securityTimerDelayType != E_SECURITYTIMER_ACCESSERRORDELAY)
       {
-        negativeNum = 0x36;
+        negativeNum = 0x37;
         TimerHalStartTime(g_ecuSecurityTimerHandle, 10000);
         g_securityTimerDelayType = E_SECURITYTIMER_ACCESSERRORDELAY;
       }
@@ -2129,37 +2135,35 @@ static uint8_t Service0x27Process0x03(uint8_t *udsData, uint16_t udsLen, uint8_t
 {
   uint8_t responseData[32];
   uint8_t negativeNum = 0;
-  const int level_index = 2;
+  const int level_index = 2; // Level 2 索引
 
   responseData[0] = udsData[0] + 0x40;
   responseData[1] = udsData[1];
 
   if (udsLen != 2)
     return 0x13;
-  uint8_t factoryMode = UdsDidGetManufactoryMode();
 
+  uint8_t factoryMode = UdsDidGetManufactoryMode();
   if (factoryMode >= 0x10)
   {
-    // 0x10-0xFF 返回全0的种子
     memset(g_securitySeed, 0, sizeof(g_securitySeed));
     g_securitySeedLength = 4;
-
     memcpy((responseData + 2), g_securitySeed, g_securitySeedLength);
     DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 2 + g_securitySeedLength, functionAddressFlag);
 
-    g_currentSecurityLevel = E_UDS_SECURITY_LEVEL2_STD; // 解锁到Level 2
+    g_currentSecurityLevel = E_UDS_SECURITY_LEVEL2_STD;
     g_securitySendSeedLevel = E_UDS_NONE_SECURITY_LEVEL;
-
     return 0;
   }
+
   if (g_ecuResetFlag[level_index])
   {
     negativeNum = 0x37;
   }
   else if (g_currentSecurityLevel == E_UDS_SECURITY_LEVEL2_STD)
   {
-    UdsGetSeed(g_securitySeed, &g_securitySeedLength);
-
+    memset(g_securitySeed, 0, sizeof(g_securitySeed));
+    g_securitySeedLength = 4;
     memcpy((responseData + 2), g_securitySeed, g_securitySeedLength);
     DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 2 + g_securitySeedLength, 0);
   }
@@ -2167,7 +2171,10 @@ static uint8_t Service0x27Process0x03(uint8_t *udsData, uint16_t udsLen, uint8_t
   {
     if (g_u8ConsecutiveSeedCount[level_index] < 3)
     {
-      UdsGetSeed(g_securitySeed, &g_securitySeedLength);
+      if (g_u8ConsecutiveSeedCount[level_index] == 0 || g_securitySendSeedLevel != E_UDS_SECURITY_LEVEL2_STD)
+      {
+          UdsGetSeed(g_securitySeed, &g_securitySeedLength);
+      }
 
       unsigned int key_len_uint = 0;
 
@@ -2178,7 +2185,11 @@ static uint8_t Service0x27Process0x03(uint8_t *udsData, uint16_t udsLen, uint8_t
         g_securityKeyLength = (uint8_t)key_len_uint;
         memcpy((responseData + 2), g_securitySeed, g_securitySeedLength);
         DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 2 + g_securitySeedLength, functionAddressFlag);
+        
         g_securitySendSeedLevel = E_UDS_SECURITY_LEVEL2_STD;
+
+        g_u8ConsecutiveSeedCount[level_index]++;
+        SaveSeedAccessCountToNonVolatile(g_u8ConsecutiveSeedCount);
       }
       else
       {
@@ -2189,7 +2200,7 @@ static uint8_t Service0x27Process0x03(uint8_t *udsData, uint16_t udsLen, uint8_t
     {
       if (g_securityTimerDelayType_3 != E_SECURITYTIMER_ACCESSERRORDELAY)
       {
-        negativeNum = 0x36;
+        negativeNum = 0x37;
         TimerHalStartTime(g_ecuSecurityTimerHandle_3, 10000);
         g_securityTimerDelayType_3 = E_SECURITYTIMER_ACCESSERRORDELAY;
       }
@@ -2775,6 +2786,38 @@ static int16_t ProcessWriteDidESKey(uint8_t *udsData, uint16_t udsLen)
     return 0x72;
   }
 }
+static int16_t Service2EWriteDataBase(uint8_t *udsData, uint16_t udsLen)
+{
+    uint8_t mpu_response_buffer[64];
+    uint16_t mpu_response_length = 0;
+    int8_t passthroughRet;
+
+    if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+    {
+        return 0x72;
+    }
+
+    passthroughRet = CanPassthrough_RequestAndGetResponse(udsData, udsLen, mpu_response_buffer, &mpu_response_length);
+
+    if (passthroughRet == 0 && mpu_response_length > 0)
+    {
+        DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, mpu_response_buffer, mpu_response_length, 0);
+
+        if (mpu_response_buffer[0] == 0x6E)
+        {
+
+            vTaskDelay(50); 
+            
+            MpuHalReset();
+        }
+        
+        return 0; // 成功处理
+    }
+    else
+    {
+        return 0x72; // 透传失败
+    }
+} 
 // mpu那边不成功 诊断仪不成功
 static int16_t Service0x2EProcess(uint8_t *udsData, uint16_t udsLen, uint8_t functionAddressFlag)
 {
@@ -2797,6 +2840,11 @@ static int16_t Service0x2EProcess(uint8_t *udsData, uint16_t udsLen, uint8_t fun
   if (did == 0x010D)
   {
     return ProcessWriteDidESKey(udsData, udsLen);
+  }
+
+  if (did == 0xFFFE)
+  {
+      return Service2EWriteDataBase(udsData, udsLen);
   }
 
   switch (Service2EGetDidFunction(did, &pWriteFun, udsLen))

@@ -173,4 +173,5 @@ void CanHalSendTask(void *pvParameters);
 int16_t CanHalTransmitQueued(int16_t canHandle, uint32_t canId, const uint8_t *canData, uint8_t dlc, uint8_t txFlag, CanTxPrio_e prio);
 int16_t CanHalTransmitQueuedFromIsr(int16_t canHandle,uint32_t canId, const uint8_t *canData, uint8_t dlc, uint8_t txFlag, CanTxPrio_e prio, BaseType_t *pHigherPriorityTaskWoken);
 uint8_t CanHalTxCanSendHook(uint8_t canChannel);
+void CanHal_SetOtaMode(uint8_t enable);
 #endif  // _CANHAL_H

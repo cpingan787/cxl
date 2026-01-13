@@ -9,8 +9,10 @@
 #include "logHal.h"
 #include "ecallHal.h"
 #include "taskEcallProcess.h"
+#include "timerHal.h"
 /****************************** Macro Definitions ******************************/
-
+#define ECALL_HANG_ON_TIME_MS   (90U)
+#define ECALL_OVER_TIME_MS      (2000U)
 /****************************** Type Definitions ******************************/
 
 /****************************** Global Variables ******************************/
@@ -27,6 +29,7 @@ static uint8_t g_ecallTriggerType = 0U;
 static uint8_t g_bcallTriggerType = 0U;
 static uint8_t g_ecallCallState = 0U;
 static uint8_t g_bcallCallState = 0U;
+static int16_t ebcallTimeHandle = -1;
 /****************************** Function Declarations *************************/
 static void AlarmSdkSetEcallCallState(uint8_t state);
 static void AlarmSdkSetBcallCallState(uint8_t state);
@@ -226,6 +229,7 @@ int16_t AlarmSdkInit(void)
     MpuHalSetRxBuffer(g_mpuHandle,g_recvDataBuffer,sizeof(g_recvDataBuffer));
     g_dataPack.pDataBuffer = g_dataBuffer;
     g_dataPack.dataBufferSize = sizeof(g_dataBuffer); 
+    ebcallTimeHandle = TimerHalOpen();
     return 0;
 }
 
@@ -314,11 +318,13 @@ void AlarmSdkCycleProcess(void)
                         case E_ECALL_STATE_END_CALL:
                             XCallSetPhoneCallState(E_ECALL_STATE_HANG_UP);
                             EcallHalSosLedControlSend(E_SOS_LED_STATE_END);        /*ECALL通话结束LED状态指示灯关*/
+                            TimerHalStartTime(ebcallTimeHandle, ECALL_HANG_ON_TIME_MS);
                             break;
 
                         case E_ECALL_STATE_END_CALL_ABNORM:
                             XCallSetPhoneCallState(E_ECALL_STATE_HANG_UP);
                             EcallHalSosLedControlSend(E_SOS_LED_STATE_END);        /*ECALL通话异常结束LED状态指示灯关*/
+                            TimerHalStartTime(ebcallTimeHandle, ECALL_HANG_ON_TIME_MS);
                             break;
 
                         case E_ECALL_STATE_WAIT_PSPA_CALLBACK:
@@ -343,6 +349,11 @@ void AlarmSdkCycleProcess(void)
                 // nothing
             }
         }
+    }
+    if(TimerHalIsTimeout(ebcallTimeHandle) == 0)
+    {
+        XCallSetPhoneCallState(E_ECALL_STATE_CALL_OVER);
+        TimerHalStopTime(ebcallTimeHandle);
     }
 }
 

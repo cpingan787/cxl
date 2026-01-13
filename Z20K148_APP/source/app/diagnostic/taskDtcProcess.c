@@ -600,10 +600,10 @@ static void SnapshotSaveLogicProcess(uint8_t *pDtcStatus, uint8_t *pFaultStateCh
 
 static void DtcNormalProcess(void)
 {
-    if (GetDtcProcessSetStatus() == 0) 
-    {
-        return;
-    }
+  if ((GetDtcProcessSetStatus() == 0) && (g_dtcClearRequestFlag == 0)) 
+  {
+      return;
+  }
   uint32_t i;
   uint32_t size;
   uint8_t dtcEnabled = 1;
@@ -1517,21 +1517,18 @@ int16_t DtcProcessGetExtendedData(uint32_t dtcCode, uint8_t recordNum, uint8_t *
       {
         uint32_t len = 0;
 
-        // Record 0x01 (Length 2 Data)
-        extendedData[len++] = 0x01;
-        extendedData[len++] = 0x00; // High
-        extendedData[len++] = g_dtcState[i].extendData.FaultOccurrenceCounter; // Low
+        extendedData[len++] = 0xFF; 
 
-        // Record 0x02 (Length 2 Data)
-        extendedData[len++] = 0x02;
-        extendedData[len++] = 0x00; // High
-        extendedData[len++] = g_dtcState[i].extendData.DtcAgingCounter; // Low
+        extendedData[len++] = 0x00; // High Byte
+        extendedData[len++] = g_dtcState[i].extendData.FaultOccurrenceCounter; // Low Byte
 
-        // Record 0x03 (Length 1 Data)
-        extendedData[len++] = 0x03;
+        extendedData[len++] = 0x00; // High Byte
+        extendedData[len++] = g_dtcState[i].extendData.DtcAgingCounter; // Low Byte
+
         extendedData[len++] = g_dtcState[i].extendData.DtcAgedCounter; 
 
-        *pExtendedDataLength = len; //8 字节
+        *pExtendedDataLength = len; 
+        
         *statusOut = g_dtcState[i].dtcStatus;
         ret = 0x00;
       }

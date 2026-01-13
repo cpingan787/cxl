@@ -232,11 +232,11 @@ static uint8_t g_TEL_MsgCounter = 0U;
 static TEL_TimeVD_e g_timeVdValue = E_TEL_TIME_INVALID;
 CAN_CYCLE_SEND_CONFIGURE_BEGIN(2)
 /****************************    Time,  Id,       FdFlag    Length  CanllBack******/
-CAN_CYCLE_SEND_CONFIGURE_CAN(500, 0x3C5, 1, 8, CanPeriodMessage3C5)
-CAN_CYCLE_SEND_CONFIGURE_CAN(100, 0x35F, 1, 8, CanPeriodMessage35F)
-CAN_CYCLE_SEND_CONFIGURE_CAN(200, 0x35C, 1, 8, CanPeriodMessage35C)
-CAN_CYCLE_SEND_CONFIGURE_CAN(500, 0x39E, 1, 8, CanPeriodMessage39E)
-CAN_CYCLE_SEND_CONFIGURE_CAN(500, 0x273, 1, 8, CanPeriodMessage273)
+CAN_CYCLE_SEND_CONFIGURE_CAN(480, 0x3C5, 1, 8, CanPeriodMessage3C5)         //GAC need 90%《= time <= 110%
+CAN_CYCLE_SEND_CONFIGURE_CAN(90,  0x35F, 1, 8, CanPeriodMessage35F)
+CAN_CYCLE_SEND_CONFIGURE_CAN(180, 0x35C, 1, 8, CanPeriodMessage35C)
+CAN_CYCLE_SEND_CONFIGURE_CAN(480, 0x39E, 1, 8, CanPeriodMessage39E)
+CAN_CYCLE_SEND_CONFIGURE_CAN(480, 0x273, 1, 8, CanPeriodMessage273)
 CAN_CYCLE_SEND_CONFIGURE_END(2)
 
 const CanChannelCycleSendConfigure_t g_canCycleConfigureList[] =
