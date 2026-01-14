@@ -252,16 +252,16 @@ void StateSyncSdkCycleProcess(MpuHalDataPack_t *msgData)
                     else
                         ClearDtcFaultState(E_DTC_ITEM_MPU_4G_INTERNAL_COMM_FAULT);
 
-                    /* ================== 6. 以太网相关故障 ================== */
-                    if (dtcTable->ethState == 1 || dtcTable->ethState == 2 || dtcTable->ethState == 3)
-                        SetDtcFaultState(E_DTC_ITEM_MPU_ETH_LINE_FAULT); // 初始化失败/链路失败/SMI控制失败
-                    else
-                        ClearDtcFaultState(E_DTC_ITEM_MPU_ETH_LINE_FAULT);
+                    // /* ================== 6. 以太网相关故障 ================== */
+                    // if (dtcTable->ethState == 1 || dtcTable->ethState == 2 || dtcTable->ethState == 3)
+                    //     SetDtcFaultState(E_DTC_ITEM_MPU_ETH_LINE_FAULT); // 初始化失败/链路失败/SMI控制失败
+                    // else
+                    //     ClearDtcFaultState(E_DTC_ITEM_MPU_ETH_LINE_FAULT);
 
-                    if (dtcTable->ethState == 4)
-                        SetDtcFaultState(E_DTC_ITEM_MPU_ETH_COMM_FAULT); // 通信错误
-                    else
-                        ClearDtcFaultState(E_DTC_ITEM_MPU_ETH_COMM_FAULT);
+                    // if (dtcTable->ethState == 4)
+                    //     SetDtcFaultState(E_DTC_ITEM_MPU_ETH_COMM_FAULT); // 通信错误
+                    // else
+                    //     ClearDtcFaultState(E_DTC_ITEM_MPU_ETH_COMM_FAULT);
 
                     /* ================== 7. DDR 故障 ================== */
                     if (dtcTable->ddrState == 1)

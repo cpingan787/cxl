@@ -592,7 +592,7 @@ static void RemoteControlStartStateMachine(void)
 static void RemoteControlPreCheckProcess(void)
 {
     static uint8_t checkCounter = REMOTE_CONTROL_PRE_CHECK_CNT;
-    RemoteControlProcessResult_t result = RemoteControlResult_Success_e;
+    RemoteControlProcessResult_t result = RemoteControlResult_Fail_e;
     const RemoteControlEntry_t* entry = RemoteControlFindCmdEntry(g_remoteControlEcuId, g_remoteControlCmdId);
 
     LogHalUpLoadLog("RC start check");

@@ -244,9 +244,7 @@ static uint8_t RemoteDiagnosticSdkTpTransmit(CanIdConfig_t *pEcuConfigure, MpuHa
                 }
                 else
                 {
-                    CanHal_SetOtaMode(1);
                     UdsTpTransmit(g_udsTpHandle[pEcuConfigure->pEcuList[ecuId].channel], canId, pUdsData, udsDataLen);
-                    CanHal_SetOtaMode(0);
                 }
                 g_udsFlag = 1;
                 g_udsTimeCount = 0;
@@ -346,7 +344,8 @@ void RemoteDiagnosticSdkProcess(CanIdConfig_t *pEcuConfigure, MpuBuffer_t *pMpuB
                  (rxMsg.mid == COMMAND_UDS_FLASHER_MID) ||                                       // 0x20
                  ((rxMsg.mid == COMMAND_UDS_RESET_MID) && ((rxMsg.subcommand & 0x7F) == 0x24)))) // 0x10
             {
-                TimerHalStartTime(g_remoteDiagnosticTimerHandle, 3000);
+                TimerHalStartTime(g_remoteDiagnosticTimerHandle, 5000);
+                CanHal_SetOtaMode(1);
                 g_remoteDiagnosticOnlineStatus = 1;                        // 设为在线
                 if ((rxMsg.subcommand & 0x7F) == COMMAND_UDS_TRANSMIT_REQ) // 0x01
                 {
@@ -406,10 +405,12 @@ void RemoteDiagnosticSdkProcess(CanIdConfig_t *pEcuConfigure, MpuBuffer_t *pMpuB
                         }
                     }
                 }
+                vTaskDelay(1);
             }
         }
         if ((g_remoteDiagnosticTimerHandle > 0) && (TimerHalIsTimeout(g_remoteDiagnosticTimerHandle) == 0))
         {
+            CanHal_SetOtaMode(0);
             g_remoteDiagnosticOnlineStatus = 0; // 超时设为离线
         }
         VirtualTpSdkClientReceive(virtualTpHandle, virtualRxbuf, sizeof(virtualRxbuf), &recvLen);
@@ -466,8 +467,8 @@ void RemoteDiagnosticSdkProcess(CanIdConfig_t *pEcuConfigure, MpuBuffer_t *pMpuB
 
                     if (ret == 0)
                     {
-                        LogHalUpLoadLog("cxl2:%d,%02X %02X %02X\r\n",
-                                        udsRecvLen, udsRxbuf[0], udsRxbuf[1], udsRxbuf[2]);
+                        // LogHalUpLoadLog("cxl2:%d,%02X %02X %02X\r\n",
+                        //                 udsRecvLen, udsRxbuf[0], udsRxbuf[1], udsRxbuf[2]);
 
                         responseId = pEcuConfigure->pEcuList[currentTargetEcu].responseId;
                         RemoteDiagnosticSdkSendResponse(&rxMsg, responseId, udsRxbuf, udsRecvLen);
