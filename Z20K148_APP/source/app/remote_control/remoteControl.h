@@ -71,7 +71,7 @@ typedef enum
 #define CMD_MID_CTRL_FBD_LOCK_E     (11U)
 #define CMD_HAZARD_LAMP_OFF_E       (12U)
 //max command number
-#define CMD_REMOTE_CTRL_MAX_NUM_E   (13U)
+#define CMD_REMOTE_CTRL_MAX_NUM_E   (14U)
 
 // Command ID type definition for backward compatibility
 typedef uint8_t RemoteControlCmdId_t;

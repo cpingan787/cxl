@@ -24,7 +24,7 @@
 #define WORKFLASH_BASE_ADDRESS                      FLASH_DATA_BASE_ADDR
 #define WORKFLASH_PARAMETER_ADDRESS_OFFSET          (0U)
 #define ERASE_ADDRESS_INC                           (0x8000U)                // 32kbyte for 1M device
-#define FLASH_YIELD_EVERY_PHRASES                   (32U)
+#define FLASH_YIELD_EVERY_PHRASES                   (16U)
 /****************************** Type Definitions ******************************/
 typedef union
 {

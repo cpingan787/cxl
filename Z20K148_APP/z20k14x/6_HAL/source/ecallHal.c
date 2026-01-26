@@ -262,7 +262,6 @@ void EcallGpioInit(void)
     /******** ECALL_BUTTON ***************************/
     PORT_PinmuxConfig(ECALL_BUTTON_PORT, ECALL_BUTTON_PIN, ECALL_BUTTON_PIN_MUX);
     GPIO_SetPinDir(ECALL_BUTTON_PORT, ECALL_BUTTON_PIN, GPIO_INPUT);
-    GPIO_SetPinOutput(ECALL_BUTTON_PORT, ECALL_BUTTON_PIN);
 
     /******** vehicle mute (reserved) ***************************/
     PORT_PinmuxConfig(VEHICLE_MUTE_PORT, VEHICLE_MUTE_PIN, VEHICLE_MUTE_PIN_MUX);
@@ -380,18 +379,18 @@ void EcallHalSetVehicleMute(uint8_t flag)
 uint8_t EcallHalGetSosButtonStatus(void)
 {
     uint32_t voltage;
-    
-    PeripheralHalAdGet(AD_CHANNEL_SOS_KEY, &voltage);  //AD采样电压
-    // TBOX_PRINT("sos button voltage is %d\r\n",voltage);    
-    if((voltage > 1900) && (voltage < 2300))     // test normal 2150
-    {
-        return 0;
-    }
-    else if((voltage > 1500) && (voltage < 1900)) //test 1710
+    uint8_t buttonStatus;
+
+    PeripheralHalAdGet(AD_CHANNEL_SOS_KEY, &voltage);  
+    buttonStatus = GPIO_ReadPinLevel(ECALL_BUTTON_PORT, ECALL_BUTTON_PIN);
+    if((buttonStatus == GPIO_HIGH) && (voltage > 1000) &&(voltage < 2300))         //HIGH LEVEL AND NOT SHORT  (2.52v open,2.15v normal,1.71v press,0.35v short)
     {
         return 1;
     }
-    return 2;
+    else
+    {
+        return 0;
+    };
 }
 
 /**
@@ -1088,7 +1087,6 @@ void EcallHalSetMode(uint8_t wakeMode)
         EcallHalSetVehicleMute(0);
         GPIO_ClearPinOutput(ECALL_PWR_EN_PORT, ECALL_PWR_EN_PIN);
         GPIO_ClearPinOutput(CODEC_MIC_PWR_EN_PORT, CODEC_MIC_PWR_EN_PIN);
-        GPIO_ClearPinOutput(ECALL_BUTTON_PORT, ECALL_BUTTON_PIN);
     }
     else if(1 == wakeMode)
     {
@@ -1097,7 +1095,6 @@ void EcallHalSetMode(uint8_t wakeMode)
         EcallHalSetVehicleMute(1);
         GPIO_SetPinOutput(ECALL_PWR_EN_PORT, ECALL_PWR_EN_PIN);
         GPIO_SetPinOutput(CODEC_MIC_PWR_EN_PORT, CODEC_MIC_PWR_EN_PIN);
-        GPIO_SetPinOutput(ECALL_BUTTON_PORT, ECALL_BUTTON_PIN);
     }  
 }
 

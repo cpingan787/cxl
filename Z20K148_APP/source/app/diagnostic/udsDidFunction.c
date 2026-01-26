@@ -3846,6 +3846,33 @@ int16_t Service2EWriteTspDomain1(uint8_t *pData, uint16_t dataLength)
   }
   return 0;
 }
+
+int16_t Service2EWriteF1A1(uint8_t *pData, uint16_t dataLength)
+{
+  if (dataLength != 7)
+  {
+    return 0x13;
+  }
+  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  {
+    return -1;
+  }
+  return 0;
+}
+
+int16_t Service2EWriteF1A2(uint8_t *pData, uint16_t dataLength)
+{
+  if (dataLength != 7)
+  {
+    return 0x13;
+  }
+  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  {
+    return -1;
+  }
+  return 0;
+}
+
 // 0cx1061_cxl
 int16_t Service2EWriteApn3(uint8_t *pData, uint16_t dataLength)
 {
@@ -6913,6 +6940,14 @@ int16_t Service22ReadPkiDomainName(uint8_t *pData, uint16_t *pLength)
   return 0;
 }
 
+int16_t Service22ReadF1A1(uint8_t *pData, uint16_t *pLength)
+{
+    return 0;
+}
+int16_t Service22ReadF1A2(uint8_t *pData, uint16_t *pLength)
+{
+    return 0;
+}
 // 1053_cxl
 int16_t Service22ReadPkiPort(uint8_t *pData, uint16_t *pLength)
 {

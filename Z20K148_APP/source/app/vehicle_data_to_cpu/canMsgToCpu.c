@@ -59,6 +59,7 @@ static void StackPush(StackBuffer_t *pStack,int16_t value);
 static int16_t StackPop(StackBuffer_t *pStack);
 static int16_t StackTop(StackBuffer_t *pStack);
 static int16_t  StackIsEmpty(StackBuffer_t *pStack);
+static bool IsMultiFrameUploadCanId(uint32_t canId);
 /****************************** Private Function Implementations ***************/
 /*=================================================
    Function:        StackInit
@@ -305,6 +306,27 @@ int16_t SaveCanMsgToBuffer(uint8_t canChannel,const CanHalMsg_t *pCanMsg)
         return result;
     }
 
+    if (IsMultiFrameUploadCanId(pCanMsg->canId) != false)
+    {
+        g_canMsgTxBuffer.txBuffer[g_txByteOffset++] = canChannel;
+        g_canMsgTxBuffer.txBuffer[g_txByteOffset++] = (uint8_t)((pCanMsg->canId >> 24) & 0xFFU);
+        g_canMsgTxBuffer.txBuffer[g_txByteOffset++] = (uint8_t)((pCanMsg->canId >> 16) & 0xFFU);
+        g_canMsgTxBuffer.txBuffer[g_txByteOffset++] = (uint8_t)((pCanMsg->canId >> 8)  & 0xFFU);
+        g_canMsgTxBuffer.txBuffer[g_txByteOffset++] = (uint8_t)( pCanMsg->canId        & 0xFFU);
+        g_canMsgTxBuffer.txBuffer[g_txByteOffset++] = pCanMsg->dlc;
+
+        for (uint32_t i = 0U; i < pCanMsg->dlc; i++)
+        {
+            g_canMsgTxBuffer.txBuffer[g_txByteOffset++] = pCanMsg->canData[i];
+        }
+
+        /* 逐帧追加：每写入一帧就计数 +1 */
+        g_txBufferCount++;
+
+        taskEXIT_CRITICAL();
+        return 0;
+    }
+
     if (g_canMsgTxBuffer.index[bufferIndex] != 0)
     {
         uint32_t idex = g_canMsgTxBuffer.index[bufferIndex];
@@ -318,7 +340,9 @@ int16_t SaveCanMsgToBuffer(uint8_t canChannel,const CanHalMsg_t *pCanMsg)
         {
             g_canMsgTxBuffer.txBuffer[idex++] = pCanMsg->canData[i];
         }
-    } else {
+    } 
+    else 
+    {
         g_canMsgTxBuffer.index[bufferIndex] = g_txByteOffset;
         g_canMsgTxBuffer.txBuffer[g_txByteOffset++] = canChannel;
         g_canMsgTxBuffer.txBuffer[g_txByteOffset++] = (pCanMsg->canId>>24)&0xFF;
@@ -508,3 +532,17 @@ uint8_t CanMsgConfigureBufferDataIsValid(void)
     }
 }
 
+
+/*=================================================
+   Function:        IsMultiFrameUploadCanId
+   Description:     Check if the CAN ID needs multi-frame upload
+   Input:           canId - CAN ID value to check
+   Output:          None
+   Return:          true if CAN ID is 0x1CF (needs multi-frame upload), false otherwise
+   Others:          Special requirement: CAN ID 0x1CF must upload every frame
+=================================================*/
+static bool IsMultiFrameUploadCanId(uint32_t canId)
+{
+    /* special requirement：CAN ID 0x1CF must every frame upload */
+    return (canId == 0x000001CFU) ? true : false;
+}

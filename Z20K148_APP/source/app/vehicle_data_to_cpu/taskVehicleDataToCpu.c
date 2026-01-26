@@ -95,6 +95,13 @@ typedef struct
     CanParseSignal_t signalInfo;
 }SignalInfo_t;
 #pragma pack(pop)
+
+typedef struct
+{
+    SignalInfo_t TEL_RESET_FAIL_REASON_INFO;
+    SignalInfo_t TEL_MODULE_RESET_ST_INFO;
+}Acu_ResetReqInfo_t;
+
 /****************************** Global Variables ******************************/
 static CanHalMsg_t g_can2DriverRxBuffer[CAN2_DRIVER_RX_BUFFER_SIZE];
 static uint8_t g_mpuDriverRxBuffer[MPU_DRIVER_RX_BUFFER_SIZE];
@@ -108,33 +115,39 @@ static AcuStatusSignalInfo_t g_acuSignalVal;
 static TEL_ResetFailReason_t g_telResetFailReason = TEL_RESET_FAIL_REASON_NONE;
 static TEL_ModuleResetState_t g_telModuleResetSt = TEL_MODULE_RESET_ST_DEFAULT;
 static uint8_t g_acuReqSignal076MsgData[TEL_10_CAN_MESSAGE_LENGTH] = {0U};
-static SignalInfo_t g_acuReqSignal076 = 
+static Acu_ResetReqInfo_t g_acuReqSignal076 = 
 {
-    .reqId = TEL_RESET_FAIL_REASON,
-    .signalInfo =
+    .TEL_RESET_FAIL_REASON_INFO = 
     {
-        .msgBufferPointer = NULL,
-        .canBufferIdIndex = 0,
-        .dataType = (uint16_t)0,
-        .startBit = (uint16_t)0,
-        .bitLength = (uint16_t)8,
-        .resulotion = (float)1.0,
-        .offset = (float)0.0,
-        .useInvalidFlag = 1,
-        .InvalidData = 0,
+      .reqId = TEL_RESET_FAIL_REASON,
+      .signalInfo =
+      {
+          .msgBufferPointer = NULL,
+          .canBufferIdIndex = 0,
+          .dataType = (uint16_t)0,
+          .startBit = (uint16_t)0,
+          .bitLength = (uint16_t)8,
+          .resulotion = (float)1.0,
+          .offset = (float)0.0,
+          .useInvalidFlag = 1,
+          .InvalidData = 0,
+      },
     },
-    .reqId = TEL_MODULE_RESET_ST,
-    .signalInfo =
-    {
-        .msgBufferPointer = NULL,
-        .canBufferIdIndex = 0,
-        .dataType = (uint16_t)0,
-        .startBit = (uint16_t)8,
-        .bitLength = (uint16_t)2,
-        .resulotion = (float)1.0,
-        .offset = (float)0.0,
-        .useInvalidFlag = 1,
-        .InvalidData = 0,
+    .TEL_MODULE_RESET_ST_INFO = 
+    {  
+      .reqId = TEL_MODULE_RESET_ST,
+      .signalInfo =
+      {
+          .msgBufferPointer = NULL,
+          .canBufferIdIndex = 0,
+          .dataType = (uint16_t)0,
+          .startBit = (uint16_t)8,
+          .bitLength = (uint16_t)2,
+          .resulotion = (float)1.0,
+          .offset = (float)0.0,
+          .useInvalidFlag = 1,
+          .InvalidData = 0,
+      },
     },
 };
 /****************************** Function Declarations *************************/
@@ -377,7 +390,7 @@ static void SetTbox10CanSignaToCanFrame(uint8_t* pMsgData, AcuReqSignal076Signal
         case TEL_RESET_FAIL_REASON:
         case TEL_MODULE_RESET_ST:
             pSignalConfig =  (SignalInfo_t *)&g_acuReqSignal076;
-            signalSize = (uint8_t)(sizeof(g_acuReqSignal076) / sizeof(pSignalConfig));
+            signalSize = (uint8_t)(sizeof(g_acuReqSignal076) / sizeof(SignalInfo_t));
             ret = 0U;
             break;
 
@@ -515,7 +528,6 @@ static void AcuResetTboxStateMachine(void)
         case ACU_RESET_TBOX_STATE_WAIT:
             if(MpuPowerSyncSdkGetNadModuleStatus() == 0)
             {
-                TBOX_PRINT("Tbox Reset Sucess\n");
                 LogHalUpLoadLog("Tbox Reset Sucess");
                 tboxResetFlag = 0x00;
                 length = WORKFLASH_TBOX_RESET_FLAG_LEN;
@@ -582,7 +594,7 @@ static void AcuResetTboxStateMachine(void)
             {
                 acuResetTboxSendCnt = 0U;
                 acuResetTboxState = ACU_RESET_TBOX_STATE_IDLE;
-                TBOX_PRINT("Tbox Reset Done\n");
+                LogHalUpLoadLog("Tbox Reset Done");
             }
             break;
 

@@ -1940,6 +1940,7 @@ void RemoteCtrlSignalValToCanFrame(uint8_t* pMsgData, RemoteControlReqSignalId_t
         case TEL_PLGMCloseReqVD:
         case TEL_EngForceStartVD:
         case TEL_EngForceStart:
+        case TEL_AllHazardLightOffReq:
             pSignalConfig = (SignalConfig_t *)&g_047Configure;
             signalSize = sizeof(g_047Configure)/sizeof(SignalConfig_t);
             g_remoteControlReqCanId = REMOTE_CONTROL_TEL_RemoteControlReq_1_E;

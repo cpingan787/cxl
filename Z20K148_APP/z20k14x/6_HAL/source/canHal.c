@@ -22,11 +22,12 @@
 #include <string.h>
 #include "int_drv.h"
 #include "event_groups.h"
+#include "autosarNmSdk.h"
 /****************************** Macro Definitions ******************************/
 #define CAN_DRIVER_HAL_HANDLE_INSTANSE_MAX  (10) //(sizeof(CanDriverBufferList)/sizeof(P_CanBufferHal_t))//
 #define CAN_CHANNEL_NUMBER_MAX              (2)
 #define ALL_CAN_RX_BUFFER_SIZE              (64)
-#define ALL_CAN_TX_BUFFER_SIZE              (64U)
+#define ALL_CAN_TX_BUFFER_SIZE              (120U)
 #define CAN_SEND_MAIL_MAX_NUMBER            (4)
 #define CAN_TX_BUFFER_SIZE                  (32)
 #define CANFD_ENABLE_CONFIG                 (0)
@@ -39,6 +40,8 @@
 #define CAN_TX_BUSY_MAX_RETRY               (2U)
 #define CAN_TX_BUSY_RETRY_DELAY_MS          (1U)
 #define CAN_OTA_TX_MB_IDX                   (0U)
+#define CAN_TX_MB_IDLE_POLL_DELAY_MS        (1U)
+#define CAN_TX_MB_IDLE_TIMEOUT_MS           (50U) 
 /****************************** Type Definitions ******************************/
 typedef enum
 {
@@ -412,6 +415,10 @@ static void CanHalSetReceiveCanNmFlag(uint32_t canId);
 static uint8_t CanHandleToChannel(int16_t canHandle, uint8_t *pOutCh);
 static void CanHalTxInit(void);
 static int16_t CanHalTxWaitInitDone(TickType_t waitTicks);
+static int16_t Can_WaitMbWritable(CAN_Id_t canId,
+                                  uint8_t mbIdx,
+                                  uint32_t timeoutMs);
+static uint8_t Can_IsMbWritableCode(uint32_t code);
 /****************************** Public Function Implementations ***************/
 /*****************************************************************************
  * Function:        CAN0_Init
@@ -466,7 +473,6 @@ void CAN0_Init(uint8_t canIndex, uint8_t canfdFlag, CanBaudType_e idBandrate, Ca
         CAN_ConfigTxMb(CAN_ID_0, 3, &g_Can0TxRxInfo, 0x000, 0); // 设置邮箱3用作发送常规报文
         CAN_ConfigTxMb(CAN_ID_0, 4, &g_Can0TxRxInfo, 0x000, 0); // 设置邮箱4用作发送常规报文
                                                                 // 参数：CAN模块序号、邮箱序号、附加信息、报文的ID、本地发送优先级
-
         // 初始化MB5-13，用于接收报文
         for (i = 5; i < 14; i++)
         {
@@ -605,7 +611,7 @@ void CAN0_Init(uint8_t canIndex, uint8_t canfdFlag, CanBaudType_e idBandrate, Ca
         CAN_ConfigTxMb(CAN_ID_1, 3, &g_Can1TxRxInfo, 0x000, 0); // 设置邮箱3用作发送常规报文
         CAN_ConfigTxMb(CAN_ID_1, 4, &g_Can1TxRxInfo, 0x000, 0); // 设置邮箱4用作发送常规报文
                                                                 // 参数：CAN模块序号、邮箱序号、附加信息、报文的ID、本地发送优先级
-
+        CAN_SelectTxPriorityMode(CAN_ID_1, CAN_TX_PRI_LOCAL_PRI_EN);
         // 初始化MB5-13，用于接收报文
         for (i = 5; i < 14; i++)
         {
@@ -680,7 +686,7 @@ void CAN0_Init(uint8_t canIndex, uint8_t canfdFlag, CanBaudType_e idBandrate, Ca
         INT_DisableIRQ(CAN1_RxWarn_IRQn);       // 禁止 CAN1_RxWarn_IRQn 中断
 
         INT_SetPriority(CAN1_Err_IRQn, 0x3); // 设置 CAN1_Err_IRQn 的中断优先级。(高)0--15(低)
-        INT_EnableIRQ(CAN1_Err_IRQn);        // 使能 CAN1_Err_IRQn 中断
+        INT_DisableIRQ(CAN1_Err_IRQn);        // 使能 CAN1_Err_IRQn 中断
 
         INT_SetPriority(CAN1_ErrFd_IRQn, 0x3); // 设置 CAN1_ErrFd_IRQn 的中断优先级。(高)0--15(低)
         INT_DisableIRQ(CAN1_ErrFd_IRQn);       // 禁止 CAN1_ErrFd_IRQn 中断
@@ -692,7 +698,7 @@ void CAN0_Init(uint8_t canIndex, uint8_t canfdFlag, CanBaudType_e idBandrate, Ca
         INT_DisableIRQ(CAN1_SelfWakeup_IRQn);       // 禁止 CAN1_SelfWakeup_IRQn 中断
 
         INT_SetPriority(CAN1_Ecc_IRQn, 0x3); // 设置 CAN1_Ecc_IRQn 的中断优先级，包含三个 MEM_ERR。(高)0--15(低)
-        INT_EnableIRQ(CAN1_Ecc_IRQn);        // 使能 CAN1_Ecc_IRQn 中断
+        INT_DisableIRQ(CAN1_Ecc_IRQn);        // 使能 CAN1_Ecc_IRQn 中断
 
         INT_SetPriority(CAN1_Mb0To15_IRQn, 0x3); // 设置 CAN1_Mb0To15_IRQn 的中断优先级。(高)0--15(低)
         INT_EnableIRQ(CAN1_Mb0To15_IRQn);        // 使能 CAN1_Mb0To15_IRQn 的IRQ中断
@@ -707,7 +713,7 @@ void CAN0_Init(uint8_t canIndex, uint8_t canfdFlag, CanBaudType_e idBandrate, Ca
         INT_DisableIRQ(CAN1_Mb48To63_IRQn);       // 禁止 CAN1_Mb48To63_IRQn 中断
 
         // 初始化全局变量
-        //CAN1_BusOffIntFlag = 0; // CAN0的BusOff中断进入标志
+        CAN1_BusOffIntFlag = 0; // CAN0的BusOff中断进入标志
 
         // 使能CAN模块，使其进入工作状态
         CAN_Enable(CAN_ID_1);
@@ -881,6 +887,7 @@ void CAN1_BUS_OFF_ISR(void)
 {
     CAN_IntClear(CAN_ID_1, CAN_INT_BUS_OFF, 0x00000000U, 0x00000000U, 0x00000000U, 0x00000000U); // 清除CAN的BUS_OFF中断标志位
     CAN1_BusOffIntFlag = 1;                                                                      // CAN1 的BusOff中断进入标志
+    AutosarNmSdkStartBusOffTimer();
 }
 
 /*****************************************************************************
@@ -1176,10 +1183,10 @@ void CAN1_HOST_MEM_ERR_ISR(void)
 
     // 初始化MB0-4，用于发送报文
     CAN_ConfigTxMb(CAN_ID_1, 0, &g_Can1TxRxInfo, 0x000, 0); // 设置邮箱0用作发送网络管理报文
-    CAN_ConfigTxMb(CAN_ID_1, 1, &g_Can1TxRxInfo, 0x000, 1); // 设置邮箱1用作发送网络诊断报文
-    CAN_ConfigTxMb(CAN_ID_1, 2, &g_Can1TxRxInfo, 0x000, 2); // 设置邮箱2用作发送常规报文
-    CAN_ConfigTxMb(CAN_ID_1, 3, &g_Can1TxRxInfo, 0x000, 3); // 设置邮箱3用作发送常规报文
-    CAN_ConfigTxMb(CAN_ID_1, 4, &g_Can1TxRxInfo, 0x000, 3); // 设置邮箱4用作发送常规报文
+    CAN_ConfigTxMb(CAN_ID_1, 1, &g_Can1TxRxInfo, 0x000, 0); // 设置邮箱1用作发送网络诊断报文
+    CAN_ConfigTxMb(CAN_ID_1, 2, &g_Can1TxRxInfo, 0x000, 0); // 设置邮箱2用作发送常规报文
+    CAN_ConfigTxMb(CAN_ID_1, 3, &g_Can1TxRxInfo, 0x000, 0); // 设置邮箱3用作发送常规报文
+    CAN_ConfigTxMb(CAN_ID_1, 4, &g_Can1TxRxInfo, 0x000, 0); // 设置邮箱4用作发送常规报文
                                                             // 参数：CAN模块序号、邮箱序号、附加信息、报文的ID、本地发送优先级
 
     // 初始化MB5-13，用于接收报文
@@ -1225,10 +1232,10 @@ void CAN0_CAN_MEM_ERR_ISR(void)
 
     // 初始化MB0-4，用于发送报文
     CAN_ConfigTxMb(CAN_ID_0, 0, &g_Can0TxRxInfo, 0x000, 0); // 设置邮箱0用作发送网络管理报文
-    CAN_ConfigTxMb(CAN_ID_0, 1, &g_Can0TxRxInfo, 0x000, 1); // 设置邮箱1用作发送网络诊断报文
-    CAN_ConfigTxMb(CAN_ID_0, 2, &g_Can0TxRxInfo, 0x000, 2); // 设置邮箱2用作发送常规报文
-    CAN_ConfigTxMb(CAN_ID_0, 3, &g_Can0TxRxInfo, 0x000, 3); // 设置邮箱3用作发送常规报文
-    CAN_ConfigTxMb(CAN_ID_0, 4, &g_Can0TxRxInfo, 0x000, 3); // 设置邮箱4用作发送常规报文
+    CAN_ConfigTxMb(CAN_ID_0, 1, &g_Can0TxRxInfo, 0x000, 0); // 设置邮箱1用作发送网络诊断报文
+    CAN_ConfigTxMb(CAN_ID_0, 2, &g_Can0TxRxInfo, 0x000, 0); // 设置邮箱2用作发送常规报文
+    CAN_ConfigTxMb(CAN_ID_0, 3, &g_Can0TxRxInfo, 0x000, 0); // 设置邮箱3用作发送常规报文
+    CAN_ConfigTxMb(CAN_ID_0, 4, &g_Can0TxRxInfo, 0x000, 0); // 设置邮箱4用作发送常规报文
                                                             // 参数：CAN模块序号、邮箱序号、附加信息、报文的ID、本地发送优先级
 
     // 初始化MB5-13，用于接收报文
@@ -1269,10 +1276,10 @@ void CAN1_CAN_MEM_ERR_ISR(void)
 
     // 初始化MB0-4，用于发送报文
     CAN_ConfigTxMb(CAN_ID_1, 0, &g_Can1TxRxInfo, 0x000, 0); // 设置邮箱0用作发送网络管理报文
-    CAN_ConfigTxMb(CAN_ID_1, 1, &g_Can1TxRxInfo, 0x000, 1); // 设置邮箱1用作发送网络诊断报文
-    CAN_ConfigTxMb(CAN_ID_1, 2, &g_Can1TxRxInfo, 0x000, 2); // 设置邮箱2用作发送常规报文
-    CAN_ConfigTxMb(CAN_ID_1, 3, &g_Can1TxRxInfo, 0x000, 3); // 设置邮箱3用作发送常规报文
-    CAN_ConfigTxMb(CAN_ID_1, 4, &g_Can1TxRxInfo, 0x000, 3); // 设置邮箱4用作发送常规报文
+    CAN_ConfigTxMb(CAN_ID_1, 1, &g_Can1TxRxInfo, 0x000, 0); // 设置邮箱1用作发送网络诊断报文
+    CAN_ConfigTxMb(CAN_ID_1, 2, &g_Can1TxRxInfo, 0x000, 0); // 设置邮箱2用作发送常规报文
+    CAN_ConfigTxMb(CAN_ID_1, 3, &g_Can1TxRxInfo, 0x000, 0); // 设置邮箱3用作发送常规报文
+    CAN_ConfigTxMb(CAN_ID_1, 4, &g_Can1TxRxInfo, 0x000, 0); // 设置邮箱4用作发送常规报文
                                                             // 参数：CAN模块序号、邮箱序号、附加信息、报文的ID、本地发送优先级
 
     // 初始化MB5-13，用于接收报文
@@ -2413,6 +2420,7 @@ static int16_t CanTransmit(uint8_t u8Channel,
     static uint8_t u8MailNum[CAN_CHANNEL_NUMBER_MAX] = {0};
     uint8_t mbIdx = 0U;
     int16_t ret = -1;
+    int16_t wret;
 
     if ((pu8CmdData == NULL) || (u8Channel >= CAN_CHANNEL_NUMBER_MAX))
     {
@@ -2444,12 +2452,19 @@ static int16_t CanTransmit(uint8_t u8Channel,
     txInfoLocal.idType  = CAN_MSG_ID_STD;
     txInfoLocal.dataLen = u8Len;
 
-    /* ---------- mailbox selection ----------
-     * OTA: 固定单邮箱；非 OTA: 维持原轮换逻辑
-     */
+    /* ---------- mailbox selection ---------- */
     if (isOta != 0U)
     {
         mbIdx = (uint8_t)CAN_OTA_TX_MB_IDX;
+
+        /* 关键优化：BUSY 时先等邮箱可写 */
+        wret = Can_WaitMbWritable(pstCanType,
+                                  mbIdx,
+                                  CAN_TX_MB_IDLE_TIMEOUT_MS);
+        if (wret != 0)
+        {
+            return wret; /* 超时或错误，交由外部重试 */
+        }
     }
     else
     {
@@ -2462,7 +2477,6 @@ static int16_t CanTransmit(uint8_t u8Channel,
 
     if (canSendRet == SUCC)
     {
-        /* 仅非 OTA 才推进 mailbox 索引（保持原行为：成功才推进） */
         if (isOta == 0U)
         {
             if (++u8MailNum[u8Channel] >= CAN_SEND_MAIL_MAX_NUMBER)
@@ -2479,11 +2493,13 @@ static int16_t CanTransmit(uint8_t u8Channel,
     }
     else if (canSendRet == BUSY)
     {
+        /* 理论上 OTA 已等待到可写，这里 BUSY 只会是极端竞争 */
         ret = CAN_ERROR_TX_BUFFER_FULL;
     }
     else
     {
-        TBOX_PRINT("Can%d send error, driver layer error code:%d\r\n", u8Channel, canSendRet);
+        LogHalUpLoadLog("Can%d send error, driver layer error code:%d\r\n",
+                   u8Channel, canSendRet);
         ret = (int16_t)ERR;
     }
 
@@ -4393,4 +4409,46 @@ void CanHalSendTask(void *pvParameters)
 void CanHal_SetOtaMode(uint8_t enable)
 {
     g_canOtaMode = (enable != 0U) ? 1U : 0U;
+}
+
+static int16_t Can_WaitMbWritable(CAN_Id_t canId,
+                                  uint8_t mbIdx,
+                                  uint32_t timeoutMs)
+{
+    uint32_t code = 0U;
+    uint32_t waited = 0U;
+    ResultStatus_t rs;
+
+    for (;;)
+    {
+        rs = CAN_GetMbCode(canId, (uint32_t)mbIdx, &code);
+        if (rs != SUCC)
+        {
+            return (int16_t)ERR;
+        }
+
+        if (Can_IsMbWritableCode(code) != 0U)
+        {
+            return 0;   /* 可写 */
+        }
+
+        if (waited >= timeoutMs)
+        {
+            return (int16_t)CAN_ERROR_TX_BUFFER_FULL; /* 语义保持一致 */
+        }
+
+        vTaskDelay(pdMS_TO_TICKS(CAN_TX_MB_IDLE_POLL_DELAY_MS));
+        waited += CAN_TX_MB_IDLE_POLL_DELAY_MS;
+    }
+}
+
+static uint8_t Can_IsMbWritableCode(uint32_t code)
+{
+    if ((code == (uint32_t)CAN_MB_RX_INACTIVE) ||
+        (code == (uint32_t)CAN_MB_TX_INACTIVE) ||
+        (code == (uint32_t)CAN_MB_TX_ABORT))
+    {
+        return 1U;
+    }
+    return 0U;
 }

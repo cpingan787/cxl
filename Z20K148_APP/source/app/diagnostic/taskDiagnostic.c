@@ -39,6 +39,7 @@ finish date:2018.7.31
 #include "parameterSyncSdk.h"
 #include "vehicleSignalApp.h"
 #include "projectConfigure.h"
+#include "alarmSdk.h"
 // #include "cy_mw_flash.h"
 
 #define UDS_SECURITY_ERROR_COUNT_IN_NONVOLATILE 1
@@ -268,7 +269,9 @@ static const WdidInfor_t g_Service2EFunMapList[] =
         {0xB261, 1, Service2EWritePKIapply, E_UDS_SECURITY_LEVEL1},
         {0xB25C, 1, Service2ETboxCurrentRunningMode, E_UDS_SECURITY_LEVEL1},
         {0xB2E5, 1, Service2EWriteJtagStatus, E_UDS_SECURITY_LEVEL1},
-};
+        {0xF1A1, 7, Service2EWriteF1A1, E_UDS_SECURITY_LEVEL1},
+        {0xF1A2, 7, Service2EWriteF1A2, E_UDS_SECURITY_LEVEL1},
+    };
 // 读需要透传
 static const uint16_t g_passthroughDidList_22[] = {
     // 0xB2B4,
@@ -368,11 +371,13 @@ static const uint16_t g_passthroughDidList_22[] = {
     0x2111,
     0xB2E6,
     0x1014,
+    0xF1A1,
+    0xF1A2,
     //0x011F,
     //0x0124,
 };
 static const RdidInfor_t g_Service22FunMapList[] =
-    {
+    {   
         {0xF0FF, 48, Service22ReadFingerprintEthernetF0FF},                                       // ethernet fingerprint	ASCII	48
         {0xF10B, 4, Service22ReadGacDiagParamVersion},                                            // 0xF10B_cxl
         {0xF17F, 17, Service22ReadGacSparePartNumber},                                            // 0xF17F_cxl
@@ -480,6 +485,8 @@ static const RdidInfor_t g_Service22FunMapList[] =
         {0xB2B4, 1, Service22ReadTransportMode},                                                  // 运输模式   0xB2B4_cxl
         {0xB2B5, 1, Service22ReadKeySt},                                                          // 电子钥匙状态   0xB2B5_cxl
         {0x0120, 12, Service22ReadDtcSettingControl},                                             // DTC使能控制 0x0120_cxl
+        {0xF1A1, 7, Service22ReadF1A1},                                               // 重编程计数器 0x0200_cxl
+        {0xF1A2, 7, Service22ReadF1A2},                                        // 重编程尝试计数器 0x0201_cxl
         {0xF186, 1, Service22ReadActiveDiagnosticSession},    // 0xF186_cxl
         {0x031C, 50, Service22ReadTspDomain1},                // 0x031C_cxl
         //{0x5001, 1, Service22ReadVehicleMode},                // 车辆模式 0x5001_cxl
@@ -1834,6 +1841,7 @@ static int16_t Service0x2FProcess(uint8_t *udsData, uint16_t udsLen, uint8_t fun
     uint8_t responseData[32];
     uint16_t did;
     uint8_t controlParameter;
+    int16_t retSdk = 0;
 
     responseData[0] = 0x6F;         // Positive Response SID
     responseData[1] = udsData[1];   // DID MSB
@@ -1857,13 +1865,20 @@ static int16_t Service0x2FProcess(uint8_t *udsData, uint16_t udsLen, uint8_t fun
 
                 if (callType == 0x00)
                 {
+                    retSdk = AlarmSdkBcallTriger(E_ECALL_TRIGGER_BTN_MANN);
                     // EcallHalTriggerBcall_placeholder();
                 }
                 else if (callType == 0x01)
                 {
+                    retSdk = AlarmSdkEcallTriger(E_ECALL_TRIGGER_CAN_AUTO);
                     // EcallHalTriggerEcall_placeholder();
                 }
                 else return 0x31;
+
+                if (retSdk != 0)
+                {
+                    return 0x22;
+                }
 
                 responseData[4] = callType;
                 DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 5, 0);

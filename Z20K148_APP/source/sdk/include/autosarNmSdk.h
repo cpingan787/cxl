@@ -56,5 +56,5 @@ void NetManageAutosarCycleProcess(void);
 uint8_t AutosarNmSdkGetBusState(void);
 int16_t AutosarNmSdkSetSubNetWakeupRequest(uint8_t wakeupRequestFlags);
 int16_t AutosarNmSdkClearSubNetWakeupRequest(void);
-
+void AutosarNmSdkStartBusOffTimer(void);
 #endif  //_AUTOSARNMSDK_H

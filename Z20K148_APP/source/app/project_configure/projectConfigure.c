@@ -4,7 +4,7 @@
 #define PARTNUMBER 24317098UL
 #define SOFTWARE_NUMBER 24317098UL
 #define MPU_SYSN_VERSION "000000000"
-#define MCU_SYSN_VERSION "011" // mcu内部版本号
+#define MCU_SYSN_VERSION "013" // mcu内部版本号
 #define MCU_MPU_ALL_VERSION MPU_SYSN_VERSION MCU_SYSN_VERSION
 
 // 0xF10B_cxl
@@ -14,9 +14,9 @@ static const uint8_t g_didF10B[4] = {
     0x01,
     0x01};
 
-static const uint8_t g_didF17F[17] = "87H6ADE050  H.000"; // 硬件版本号
-static const uint8_t g_didF187[14] = "8550003ADE0500";    // 零件号                                                                                     // 0xF187_cxl
-static const uint8_t g_didF189[17] = "8786ADE050  S.000"; // 软件版本号       
+static const uint8_t g_didF17F[17] = "87H6ADE060  H.000"; // 硬件版本号
+static const uint8_t g_didF187[14] = "8550003ADE0600";    // 零件号                                                                                     // 0xF187_cxl
+static const uint8_t g_didF189[17] = "8786ADE060  S.000"; // 软件版本号       
 
 static const uint8_t g_didF180[17] = "000123456789B.100"; // 0xF180_cxl
 // static const uint8_t g_didF18E[14] = "GAVN1234567890";    // 0xF18E_cxl

@@ -35,9 +35,10 @@ static MpuErrorCbFun_t g_mpuErrorCallBackFunc = NULL;
 static uint8_t mpuPowerSysnWakeFlag = 0U; // mpu 唤醒源设置标记 0：允许休眠 1：不允许休眠
 typedef struct
 {
-    uint8_t setFlag;     // 0:没有设置  1：需要设置
-    uint8_t setData;     // 设置数据
-    uint8_t successFlag; // 设置成功标记
+    uint8_t setFlag;        // 0:没有设置  1：需要设置
+    uint8_t wakeupSource;   // 唤醒源
+    uint8_t setData;        // 设置数据
+    uint8_t successFlag;    // 设置成功标记
 } WakeUpSourceSet_t;
 
 static WakeUpSourceSet_t g_wakeUpSource; // 设置唤醒源
@@ -355,6 +356,7 @@ void MpuPowerSyncSdkCycleProcess(MpuHalDataPack_t *msgData)
                     {
                         g_wakeUpSource.setFlag = 0;
                         g_wakeUpSource.successFlag = 1;
+                        g_wakeUpSource.wakeupSource = msgData->pDataBuffer[2];
                         wakeSourceSyncTimeCount = 0;
                     }
                 }
@@ -511,16 +513,18 @@ void MpuPowerSyncSdkSetDeepSleepFlag(uint8_t deepSleepFlag)
 *************************************************/
 int16_t MpuPowerSyncSdkGetWakeStatus(uint8_t *pWakeSource)
 {
+    int16_t ret = -1;
     if (g_wakeUpSource.successFlag == 0)
-    {
-        *pWakeSource = 1;
-    }
-    else
     {
         *pWakeSource = 0;
     }
+    else
+    {
+        ret = 0;
+        *pWakeSource = g_wakeUpSource.wakeupSource;
+    }
 
-    return 0;
+    return ret;
 }
 
 /*************************************************

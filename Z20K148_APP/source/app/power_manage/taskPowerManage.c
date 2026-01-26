@@ -22,6 +22,7 @@
 #include "taskDtcProcess.h"
 #include "canPeriodTask.h"
 #include "gpio_drv.h"
+#include "ecallHal.h"
 /****************************** Macro Definitions ******************************/
 
 /****************************** Type Definitions ******************************/
@@ -65,7 +66,7 @@ static const AutosarNmParameter_t g_netManageAutosarConfigure[] =
             .BaseAddress = 0x500,
             .NodeIdMin = 0x00,               // Minimum node value for CAN network management messages
             .NodeIdMax = 0xFF,               // Maximum node value for CAN network management messages
-            .startUpTime = 800,             // Maximum time the node stays in RMS (Start Up State) mode. T_REPEAT_MESSAGE unit: ms    GAC need 800~1000ms
+            .startUpTime = 820,             // Maximum time the node stays in RMS (Start Up State) mode. T_REPEAT_MESSAGE unit: ms    GAC need 800~1000ms
             .nmTimeOutTime = 1000,           // Maximum time the node stays in NM (Network Mode) state. T_NM_TIMEOUT unit: ms.
             .waitBusSleepTime = 4900,       // Ensure all nodes have time to stop their network activities. T_WAIT_BUS_SLEEP unit: ms   GAC need 4900~5100ms
             .startTXTime = 10,               // Maximum time interval from leaving BSM (Bus Sleep Mode) to entering RMS (Repeat Message State) mode and starting to send the first NM message
@@ -75,7 +76,7 @@ static const AutosarNmParameter_t g_netManageAutosarConfigure[] =
             .wakeupTime = 100,               // Maximum time to start sending network management messages repeatedly after transitioning from sleep mode to network mode
             .immediateTimes = 10,            // Number of network management messages sent at immediateCycleTime in the sub-state mode
             .busOffQuickTime = 0,            // Time for quick recovery after bus-off in milliseconds
-            .busOffSlowTime = 180,             // Time for slow recovery after bus-off in milliseconds
+            .busOffSlowTime = 0,             // Time for slow recovery after bus-off in milliseconds
             .busOffQuickTimes = 0,           // Number of quick recovery attempts after bus-off
             .busOffErrorEventLimitCount = 2, // Minimum number of bus-off DTC occurrences required
             .canBusErrorCallBack = Can1BusErrorEvent,
@@ -213,7 +214,7 @@ static void McuVoltageDtcCheckProcess(void)
     //uint32_t v_ecall_adc_mv = 0;
     const uint32_t STUCK_LIMIT_1MIN = 6000;
     static uint32_t s_ecall_stuck_cnt = 0;
-    static uint32_t s_bcall_stuck_cnt = 0;
+    //static uint32_t s_bcall_stuck_cnt = 0;
     // 1. 读取主电源电压 (KL30)
     // if (PeripheralHalAdGet(AD_CHANNEL_KL30, &kl30_voltage_mv) == 0)
     // {
@@ -338,6 +339,7 @@ static void McuVoltageDtcCheckProcess(void)
             ClearDtcFaultState(E_DTC_ITEM_ECALL_LIGHT_SHORT_GND);
         }
     }
+#if(0)
     // 8. B-Call 按键电气故障诊断 (DTC B320707)
     if (GPIO_ReadPinLevel(PORT_C, GPIO_1) == 1)
     {
@@ -355,9 +357,10 @@ static void McuVoltageDtcCheckProcess(void)
         s_bcall_stuck_cnt = 0;
         ClearDtcFaultState(E_DTC_ITEM_MPU_BCALL_KEY_STUCK);
     }
+#endif
 
     // 9. E-Call 按键电气故障诊断 (DTC B320807)
-    if (GPIO_ReadPinLevel(PORT_C, GPIO_0) == 1) 
+    if (GPIO_ReadPinLevel(ECALL_BUTTON_PORT, ECALL_BUTTON_PIN) == 1) 
     {
         if (s_ecall_stuck_cnt < STUCK_LIMIT_1MIN)
         {
@@ -665,7 +668,7 @@ void WatchDogCycleProcess(void)
 void TaskPowerManage(void *pvParameters)
 {
     TickType_t xLastWakeTime;
-    uint8_t timeCount;
+    uint8_t timeCount = 0U;
     AutosarNmSdkConfig(g_netManageAutosarConfigure, sizeof(g_netManageAutosarConfigure) / sizeof(g_netManageAutosarConfigure[0]));
     PowerManageSdkInit(&g_pmCondg);
     // BatterySdkInit(&g_batterConfig,10,E_BATTERY_XYSR);
@@ -673,20 +676,8 @@ void TaskPowerManage(void *pvParameters)
     // PowerManageSdkPowerOn();
     MpuHalStart();
     xLastWakeTime = xTaskGetTickCount();
-    timeCount = 0;
-    uint8_t bleRestFlag = 0;
     while (1)
     {
-        if (bleRestFlag < 2)
-        {
-            //             BleHalRestSet(1);
-            bleRestFlag++;
-        }
-        else if (bleRestFlag == 2)
-        {
-            //             BleHalRestSet(0);
-            bleRestFlag++;
-        }
         vTaskDelayUntil(&xLastWakeTime, 5);
         PowerManageSdkCycleProcess(5);
         NetManageAutosarCycleProcess();

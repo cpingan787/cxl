@@ -25,8 +25,8 @@
 #define	SOS_LED_TRIG_MSG_QUEUE_DEPTH	    ( 5 )
 #define SOS_KEY_DEBANCE_TIME                ( 100 )                         /*按键消除去抖动的时间*/
 #define SOS_KEY_PRESS_MIN_TIME              ( 500 )                         /*按键被按下最短时间*/
-#define SOS_KEY_PRESS_MAX_TIME              ( 10000 )                        /*按键被按下最长时间*/
-#define SOS_KEY_RELEASED_TIME               ( 2000 )                        /*按键被释放的时间*/
+#define SOS_KEY_PRESS_MAX_TIME              ( 10000 )                       /*按键被按下最长时间*/
+#define SOS_KEY_RELEASED_TIME               ( 1000 )                        /*按键被释放的时间*/
 #define SOS_KEY_ECALL_TEST_TIME             ( 10000 )                       /*按键ECALL测试模式的时间*/
 #define SOS_KEY_RESET_TBOX_TIME             ( 20000 )                       /*按键复位TBOX的时间*/    
 #define SOS_KEY_HARD_FAULT_TIME             ( 30000 )                       /*按键硬件故障的时间*/    
@@ -184,25 +184,14 @@ static uint8_t SosButtonPressAction( uint32_t presstime, uint8_t* saveBtnState, 
     btnState = *saveBtnState;
     ledState = *saveLedState;
 
-    if( presstime >= SOS_KEY_HARD_FAULT_TIME )
-    {
-        if(btnState == 2)
-        {
-            btnState = 3;
-            ledState = GetSosLedState();
-            TBOX_PRINT("SOS button press over 30S, cur led mode:%d.\r\n", ledState);
-            EcallHalSosLedControlSend( E_SOS_LED_STATE_WARNING );
-            g_SosButtonClickMsg.hardFault = 1;
-        }
-    }
-    else if( presstime >= SOS_KEY_ECALL_TEST_TIME )
+    if( presstime >= SOS_KEY_RESET_TBOX_TIME )
     {
         if(btnState == 0)
         {
-            btnState = 1;
+            //btnState = 1;
             ledState = GetSosLedState();
-            TBOX_PRINT("SOS button press over 10S, cur led mode:%d.\r\n", ledState);
-            EcallHalSosLedControlSend( E_SOS_LED_STATE_WARNING );
+            LogHalUpLoadLog("SOS key press over 20S");
+            //EcallHalSosLedControlSend( E_SOS_LED_STATE_WARNING );
         }
     }
 
@@ -226,7 +215,7 @@ static uint8_t SosButtonReleaseAction( uint32_t presskeeptime, SosButtonState_e 
 
     if( presskeeptime >= SOS_KEY_HARD_FAULT_TIME )
     {
-        TBOX_PRINT("SOS button is released, Into idle mode: [E_SOS_BUTTON_STATE_IDLE]\r\n");
+        LogHalUpLoadLog("SOS key released 30s");
         SosButtonState = E_SOS_BUTTON_STATE_IDLE;
         memset( (uint8_t *)&g_SosButtonClickMsg, 0x00, sizeof( SosButtonClickMsg_t ));
     }
@@ -234,7 +223,7 @@ static uint8_t SosButtonReleaseAction( uint32_t presskeeptime, SosButtonState_e 
     {
         AlarmSdkEcallTriger(E_ECALL_TRIGGER_TEST_MODE);
         EcallHalSetVehicleMute(1);
-        TBOX_PRINT("SOS button triggers the test mode, Into idle mode : [E_SOS_BUTTON_STATE_IDLE]\r\n");
+        LogHalUpLoadLog("SOS key test mode");
         SosButtonState = E_SOS_BUTTON_STATE_IDLE;
         memset( (uint8_t *)&g_SosButtonClickMsg, 0x00, sizeof( SosButtonClickMsg_t ));
     }
@@ -242,12 +231,12 @@ static uint8_t SosButtonReleaseAction( uint32_t presskeeptime, SosButtonState_e 
     {
         g_SosButtonClickMsg.releasedTime = xTaskGetTickCount();
         SosButtonState = E_SOS_BUTTON_STATE_RELEASED;
-        TBOX_PRINT("SOS button is confirmed to be released : [E_SOS_BUTTON_STATE_RELEASED]\r\n");
+        LogHalUpLoadLog("SOS key released normal");
     }
     else
     {
         SosButtonState = E_SOS_BUTTON_STATE_IDLE;
-        TBOX_PRINT("SOS button is pressed less than 0.5S : [E_SOS_BUTTON_STATE_RELEASED]\r\n");
+        LogHalUpLoadLog("SOS key pressed < 0.5S");
     }
 
     *st = SosButtonState;
@@ -287,12 +276,12 @@ static void SosButtonDetection( void )
             if( key_time >= SOS_KEY_DEBANCE_TIME )
             {
                 SosButtonState = E_SOS_BUTTON_STATE_PRESS;           /*按键确认被按下*/
-                TBOX_PRINT("SOS button is confirmed to be pressed : [E_SOS_BUTTON_STATE_PRESS]\r\n", 0);
+                LogHalUpLoadLog("SOS key confirmed pressed");
             }
         }
         else
         {
-            TBOX_PRINT("SOS button jitters, Into idle mode : [E_SOS_BUTTON_STATE_IDLE]\r\n");
+            LogHalUpLoadLog("SOS key jitters");
             SosButtonState = E_SOS_BUTTON_STATE_IDLE;
             memset( (uint8_t *)&g_SosButtonClickMsg, 0x00, sizeof( SosButtonClickMsg_t ));
         }
@@ -326,7 +315,7 @@ static void SosButtonDetection( void )
                 if( key_time < SOS_KEY_RELEASED_TIME )                  /*规定时间内再次按压按键进行取消*/
                 {
                     SosButtonState = E_SOS_BUTTON_STATE_CANCELLED;
-                    TBOX_PRINT("SOS button ECALL has been cancelled : [E_SOS_BUTTON_STATE_CANCELLED]\r\n");
+                    LogHalUpLoadLog("SOS key cancelled");
                 }
             }
         }
@@ -335,21 +324,20 @@ static void SosButtonDetection( void )
             key_time = osElapsedTimeGet( g_SosButtonClickMsg.releasedTime, g_SosButtonClickMsg.pressTime );
             if( key_time >= SOS_KEY_RELEASED_TIME )                     /*触发按键成功*/    
             {
-                AlarmSdkEcallTriger(E_ECALL_TRIGGER_BTN_MANN);
-                EcallHalSetVehicleMute(1);
-                TBOX_PRINT("SOS button triggers ECALL, Into idle mode: [E_SOS_BUTTON_STATE_IDLE]\r\n");
-                SosButtonState = E_SOS_BUTTON_STATE_IDLE;
-                memset( (uint8_t *)&g_SosButtonClickMsg, 0x00, sizeof( SosButtonClickMsg_t ));
-            }
-            if(AlarmSdkGetEcallCallState() != 0)
-            {
-                if( key_time <= SOS_KEY_RELEASED_TIME )                     /*触发按键成功*/    
+                if(AlarmSdkGetEcallCallState() == 0)
+                {
+                    AlarmSdkEcallTriger(E_ECALL_TRIGGER_BTN_MANN);
+                    EcallHalSetVehicleMute(1);
+                    LogHalUpLoadLog("SOS key tri EC");
+                }
+                else
                 {
                     AlarmSdkEcallClose(E_ECALL_TRIGGER_BTN_MANN);
-                    TBOX_PRINT("SOS button close ECALL, Into idle mode: [E_SOS_BUTTON_STATE_IDLE]\r\n");
-                    SosButtonState = E_SOS_BUTTON_STATE_IDLE;
-                    memset( (uint8_t *)&g_SosButtonClickMsg, 0x00, sizeof( SosButtonClickMsg_t ));
+                    EcallHalSetVehicleMute(0);
+                    LogHalUpLoadLog("SOS key cls EC");
                 }
+                SosButtonState = E_SOS_BUTTON_STATE_IDLE;
+                memset( (uint8_t *)&g_SosButtonClickMsg, 0x00, sizeof( SosButtonClickMsg_t ));
             }
         }
     }
@@ -357,7 +345,7 @@ static void SosButtonDetection( void )
     {
         if( EcallHalGetSosButtonStatus() == 0 )
         {
-            TBOX_PRINT("SOS button is released, Into idle mode: [E_SOS_BUTTON_STATE_IDLE]\r\n");
+            LogHalUpLoadLog("SOS key recover");
             SosButtonState = E_SOS_BUTTON_STATE_IDLE;
             memset( (uint8_t *)&g_SosButtonClickMsg, 0x00, sizeof( SosButtonClickMsg_t ));
         }
@@ -653,7 +641,7 @@ static void AirbagSingleProcess(void)
         {
             AlarmSdkEcallTriger(E_ECALL_TRIGGER_CAN_AUTO);
             EcallHalSetVehicleMute(1);
-            TBOX_PRINT("Airbag can triggers ECALL, signal = %02x\r\n", airbagSingal);
+            LogHalUpLoadLog("srs can tri EC,signal = %02x", airbagSingal);
             airbagCanFlag = 1;
         }
     }
@@ -671,7 +659,7 @@ static void AirbagSingleProcess(void)
         {
           AlarmSdkEcallTriger(E_ECALL_TRIGGER_SRS_AUTO);
           EcallHalSetVehicleMute(1);
-          TBOX_PRINT("Airbag srs triggers ECALL, signal = %02x\r\n", airbagSingal);
+          LogHalUpLoadLog("srs hd tri EC,signal = %02x", airbagSingal);
           airbagHardwareFlag = 1;
         }
       }
@@ -705,11 +693,11 @@ static void BcallSignalProcess(void)
             AlarmSdkBcallTriger(E_ECALL_TRIGGER_CAN_AUTO);
             EcallHalSetVehicleMute(1);
             bcallCanFlag = 1;
-            TBOX_PRINT("Bcall can triggers BCALL, signal = %02x\r\n", bcallSingal);
+            LogHalUpLoadLog("Bc can tri BC, signal = %02x", bcallSingal);
         }
         else if((bcallCanFlag == 0)&&(AlarmSdkGetEcallCallState() != 0))
         {
-            TBOX_PRINT("Ecall still run,bcall is forbiden\r\n");
+            LogHalUpLoadLog("Ec still run,bcall is forbiden");
         }
     }
     else
@@ -752,12 +740,14 @@ static void XCallCloseSignalProcess(void)
                 triggerType = AlarmSdkGetEcallTriggerType();
                 AlarmSdkEcallClose(triggerType -1);    
                 acuCanFlag = 1;
+                LogHalUpLoadLog("ACU close EC");
             }
             else if(bcallStatus != 0)
             {
                 triggerType = AlarmSdkGetBcallTriggerType();
                 AlarmSdkBcallClose(triggerType -1);    
                 acuCanFlag = 1;
+                LogHalUpLoadLog("ACU close BC");
             }
         }
     }

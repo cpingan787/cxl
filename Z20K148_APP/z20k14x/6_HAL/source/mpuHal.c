@@ -764,6 +764,7 @@ static void MpuHalSetPowerkey(uint8_t flag)
 static void MpuHalSetVbus(uint8_t flag)
 {
     MpuHalSetGpio(PORT_A, GPIO_1, flag);
+    LogHalUpLoadLog("Set Vbus %d", flag);
 }
 
 /*************************************************

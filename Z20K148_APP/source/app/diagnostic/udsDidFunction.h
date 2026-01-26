@@ -283,6 +283,8 @@ int16_t Service2EWriteTspPlatformConnectionStatus(uint8_t *pData, uint16_t dataL
 int16_t Service2EWritePKIapply(uint8_t *pData, uint16_t dataLength);                    // 0xB261_cxl
 int16_t Service2ETboxCurrentRunningMode(uint8_t *pData, uint16_t dataLength);           // 0xB25c_cxl
 int16_t Service2EWriteGacEcuPartNumber(uint8_t *pData, uint16_t dataLength);              // 0xF187
+int16_t Service2EWriteF1A1(uint8_t *pData, uint16_t len);
+int16_t Service2EWriteF1A2(uint8_t *pData, uint16_t len);
 // service 31 start routinue function
 // int16_t Service31CheckPreFlashConditon(uint8_t *pDataIn,uint16_t lengthIn,uint8_t *pDataOut,uint16_t *pLengthOut);
 int16_t Service31StopApplication(uint8_t *pDataIn, uint16_t lengthIn, uint8_t *pDataOut, uint16_t *pLengthOut);
@@ -471,7 +473,10 @@ int16_t Service22ReadDtcSettingControl(uint8_t *pData, uint16_t *pLength);      
 int16_t Service22ReadActiveDiagnosticSession(uint8_t *pData, uint16_t *pLength);                                       // 0xF186_cxl
 int16_t Service22ReadTspDomain1(uint8_t *pData, uint16_t *pLength);                                                    // 0x031C_cxl
 int16_t Service22ReadVehicleMode(uint8_t *pData, uint16_t *pLength);                                                   // 0x5001_cxl
-int16_t Service22ReadSpiCommunicationBetweenMCU(uint8_t *pData, uint16_t *pLength);                                    // 0xB26B_cxl
+int16_t Service22ReadF1A1(uint8_t *pData, uint16_t *pLength);
+int16_t Service22ReadF1A2(uint8_t *pData, uint16_t *pLength);
+int16_t Service22ReadSpiCommunicationBetweenMCU(uint8_t *pData, uint16_t *pLength);   
+// 0xB26B_cxl
 /*31 01*/
 int16_t Service31StartRoutineWritePIN(uint8_t *pDataIn, uint16_t lengthIn, uint8_t *pDataOut, uint16_t *pLengthOut);
 int16_t Service31StartRoutineWriteSK(uint8_t *pDataIn, uint16_t lengthIn, uint8_t *pDataOut, uint16_t *pLengthOut);

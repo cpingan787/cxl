@@ -37,6 +37,7 @@
 #define PM_NM_RESET_WAKE_BLE_PARK       4
 #define PM_NM_LOCAL_WAKE_DELAY_TIME     150
 #define PM_MCU_SEND_SLEEP_CMD_TIMEOUT   2000
+#define PM_NM_WAKEUP_SOURCE_MPU_NO_CAN  43U             //wake up no network msg send
 /****************************** Type Definitions ******************************/
 typedef struct 
 {
@@ -1175,7 +1176,7 @@ static void PmStateWakeDelayProcess(uint32_t cycleTime)
         if((g_pmManage.wakeupSource == PM_HAL_WAKEUP_SOURCE_MPU) || (PowerManageSdkGetMpuWakeUpFlag() == 0x01))
         {
            g_pmManage.wakeDelayCount += cycleTime;
-            if(g_pmManage.wakeDelayCount >= 1000)               //delay for remote control cmd
+            if(g_pmManage.wakeDelayCount >= 2000)               //delay for remote control cmd
             {
                 g_pmManage.wakeDelayCount = 0;
                 g_pmManage.pmState = E_PM_STATE_CHECK_NM_STATUS;
@@ -1496,6 +1497,7 @@ static void PmStatePreSleepWaitProcess(uint32_t cycleTime)
 *************************************************/
 static void PmStateMcuSleepProcess(uint32_t cycleTime)
 {
+    LogHalUpLoadLog("Mcu Ready Sleep");
     PowerManageSdkSetMpuWakeUpFlag(0x00);
     /*MPU进入低功耗*/
     MpuHalSetMode(0);
@@ -1655,8 +1657,11 @@ static void PmStateGetMpuWakeSourceProcess(uint32_t cycleTime)
         /*获取MPU唤醒源完成，执行MCU唤醒*/
         g_pmNmLocalWakeupTime = 0U;
         g_pmManage.mpuWakeSource = PM_HAL_WAKEUP_SOURCE_MPU;
-        PmNmGotoAwakeMode(g_pmManage.wakeupSource);
-        PmAwakeInitProcess(g_pmManage.wakeupSource);
+        if(cpuWakeSource != PM_NM_WAKEUP_SOURCE_MPU_NO_CAN)
+        {
+            PmNmGotoAwakeMode(g_pmManage.wakeupSource);
+            PmAwakeInitProcess(g_pmManage.wakeupSource);
+        }
         WakeDelayProcess(g_pmManage.wakeupSource,g_pmManage.mpuWakeSource ,&g_pmManage.wakeDelayTime);
         g_pmManage.wakeDelayCount = 0;
         g_pmManage.pmState = E_PM_STATE_WAKE_DELAY;

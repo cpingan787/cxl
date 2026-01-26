@@ -595,7 +595,6 @@ static void RemoteControlPreCheckProcess(void)
     RemoteControlProcessResult_t result = RemoteControlResult_Fail_e;
     const RemoteControlEntry_t* entry = RemoteControlFindCmdEntry(g_remoteControlEcuId, g_remoteControlCmdId);
 
-    LogHalUpLoadLog("RC start check");
     if (entry == NULL)
     {
         LogHalUpLoadLog("Error: No entry found for ECU %d CMD %d\n", g_remoteControlEcuId, g_remoteControlCmdId);
@@ -607,6 +606,7 @@ static void RemoteControlPreCheckProcess(void)
         checkCounter++;
         if(checkCounter >= REMOTE_CONTROL_PRE_CHECK_CNT)
         {
+            LogHalUpLoadLog("RC start check");
             result = entry->checkFunc();
             checkCounter = 0U;
         }
@@ -733,13 +733,13 @@ static void RemoteControlCertificationProcess(void)
             RemoteControlProcessResult_t certResult = cachedCertificationFunc();
             if (certResult == RemoteControlResult_Success_e)
             {
-                TBOX_PRINT("Certification passed for ECU %d CMD %d\n", g_remoteControlEcuId, g_remoteControlCmdId);
+                LogHalUpLoadLog("Certification passed");
                 RemoteControlSetTotalState(RemoteControlStateProcessSignal);
                 isInitialized = 0; 
             }
             else if (certResult == RemoteControlResult_Fail_e)
             {
-                TBOX_PRINT("Certification failed for ECU %d CMD %d\n", g_remoteControlEcuId, g_remoteControlCmdId);
+                LogHalUpLoadLog("Certification failed");
                 g_remoteControlErrorCode = REMOTE_CONTROL_ERR_CODE_INVALID_CONDITION;
                 RemoteControlSetTotalState(RemoteControlStateSendResult);
                 isInitialized = 0; 
@@ -845,7 +845,7 @@ static void RemoteControlHandleSignalProcess(void)
                         sizeof(g_remoteControlCanBuf), REMOTE_CONTROL_CAN_FD_USE, CAN_TX_PRIO_HIGH);
             if(ret != 0U)
             {
-                LogHalUpLoadLog("RC nm trans error,ret=%d\n", ret);
+                LogHalUpLoadLog("RC nm trans error,ret = %d", ret);
             }
             if(g_remoteControlTransTimerHandle >= 0)
             {
@@ -926,7 +926,7 @@ static void RemoteControlHandleSignalProcess(void)
                           sizeof(g_remoteControlCanBuf), REMOTE_CONTROL_CAN_FD_USE, CAN_TX_PRIO_HIGH);
             if(ret != 0U)
             {
-                LogHalUpLoadLog("RC spc trans error,ret=%d\n", ret);
+                LogHalUpLoadLog("RC spc trans error,ret = %d", ret);
             }
             
             if(g_remoteControlTransTimerHandle >= 0)
@@ -1023,7 +1023,7 @@ static void RemoteControlHandleSignalProcess(void)
                     }
                     //RemoteControlSetKeepWakeFlag(RemoteControlWakeUpFlag_NotKeep_e);
                     RemoteControlSetTotalState(RemoteControlStateSendResult);
-                    TBOX_PRINT("Remote control exec success!\n");
+                    LogHalUpLoadLog("Remote control exec success");
                 }
                 s_state = PROCESS_SIGNAL_STATE_IDLE;
             }
@@ -1557,6 +1557,7 @@ static RemoteControlProcessResult_t RemoteControlPreCheckLv3MidCtrlLockFunc(void
     return ret;
 }
 
+#if(0)
 /*************************************************
  Function:        RemoteControlPreCheckLv3WinSetFunc
  Description:     Perform level 3 pre-check for window control operation
@@ -1574,7 +1575,7 @@ static RemoteControlProcessResult_t RemoteControlPreCheckLv3WinSetFunc(void)
     }
     return ret;
 }
-
+#endif
 /*************************************************
  Function:        RemoteControlPreCheckLv3WinVentilateOnFunc
  Description:     Perform level 3 pre-check for window ventilation ON operation
@@ -2361,15 +2362,16 @@ static RemoteControlProcessResult_t RemoteControlCheckWinSetFun(void)
         if(ret != RemoteControlResult_Success_e)
         {
             g_remoteControlErrorCode = REMOTE_CONTROL_ERR_CODE_INVALID_CONDITION;
-        }
-        else
-        {
-            ret = RemoteControlPreCheckLv3WinSetFunc();
-            if(ret != RemoteControlResult_Success_e)
-            {
-                g_remoteControlErrorCode = REMOTE_CONTROL_ERR_CODE_INVALID_CONDITION;
-            }
-        }
+        }   
+        //GAC change requirement
+        // else
+        // {
+        //     ret = RemoteControlPreCheckLv3WinSetFunc();
+        //     if(ret != RemoteControlResult_Success_e)
+        //     {
+        //         g_remoteControlErrorCode = REMOTE_CONTROL_ERR_CODE_INVALID_CONDITION;
+        //     }
+        // }
     }  
     else
     {
@@ -4143,7 +4145,7 @@ static RemoteControlProcessResult_t CheckBcmCommandResult(void)
             }
             break;
         case CMD_HAZARD_LAMP_OFF_E:
-            if(g_remoteControlSignalInfo.BCM_TEL_HazLampCtrlSt == 0x0)
+            if(g_remoteControlSignalInfo.BCM_TEL_HazLampCtrlSt == 0x1)
             {
                 result = RemoteControlResult_Success_e;
             }

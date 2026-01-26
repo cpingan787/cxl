@@ -233,7 +233,7 @@ static int16_t UdsTpDataMultFramTransmit(int16_t tpHandle, int16_t canHandle, ui
         }
         ret = CanHalReceive(canHandle, &rxCanMsg, 0);
         memset(rxCanMsg.canData, 0, 8);
-        ret = CanHalTransmitQueued(canHandle, txCanId, txCanData, 8, 1, CAN_TX_PRIO_HIGH);
+        ret = CanHalTransmitQueued(canHandle, txCanId, txCanData, 8, 1, CAN_TX_PRIO_NORMAL);
         // TBOX_PRINT("can tp wait send %x\r\n",txCanId);
         if (ret != 0)
         {

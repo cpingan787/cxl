@@ -94,6 +94,7 @@ void HardFault_Handler(void)
     read_fault_registers();
     // 打印故障信息
     TBOX_PRINT("\r\n===== Hard Fault Occurred! =====\r\n");
+    LogHalUpLoadLog("Hard Fault Occurred!");
     print_fault_registers();
     // 栈回溯（传入栈指针）
     stack_backtrace((uint32_t*)sp);
@@ -265,13 +266,17 @@ static void stack_backtrace(uint32_t *sp)
     TBOX_PRINT("Stack Backtrace:\r\n");
     TBOX_PRINT("  PC: 0x%08X (Fault Address)\r\n", pc);
     TBOX_PRINT("  LR: 0x%08X\r\n", lr);
+
+    LogHalUpLoadLog("Stack Backtrace");
+    LogHalUpLoadLog("PC: 0x%08X ", pc);
+    LogHalUpLoadLog("LR: 0x%08X ", lr);
     // 初始栈指针（异常发生时的SP）
     uint32_t current_sp = (uint32_t)sp;
     // 第一层返回地址是LR（当前函数返回至上一层的地址）
     uint32_t ret_addr = lr;
     for (int i = 0; i < 3; i++) {
         TBOX_PRINT("  Frame %d: Return Addr = 0x%08X\r\n", i, ret_addr);
-
+        LogHalUpLoadLog("Frame %d: Return Addr = 0x%08X ", i, ret_addr);
         // 2. 计算下一层栈指针（SP = 当前SP + 已使用的栈空间）
         // 栈帧中至少包含返回地址（4字节），额外空间由参数/局部变量决定
         // 这里采用保守策略：每次增加4字节（返回地址）+ 最大可能的参数空间（16字节）
@@ -364,5 +369,41 @@ static void print_fault_registers(void)
     TBOX_PRINT("AFSR: 0x%08X (Auxiliary Fault Status Register)\r\n", faultRegs.AFSR);
     TBOX_PRINT("MMFAR: 0x%08X (Memory Management Fault Address Register)\r\n", faultRegs.MMFAR);
     TBOX_PRINT("BFAR: 0x%08X (Bus Fault Address Register)\r\n", faultRegs.BFAR);
+
+    LogHalUpLoadLog("Fault Registers");
+    LogHalUpLoadLog("HFSR: 0x%08X ", faultRegs.HFSR);
+    LogHalUpLoadLog("DEBUGEVT: %d ", (faultRegs.HFSR >> 31) & 1);
+    LogHalUpLoadLog("FORCED: %d ", (faultRegs.HFSR >> 30) & 1);
+    LogHalUpLoadLog("VECTTBL: %d ", (faultRegs.HFSR >> 1) & 1);
+
+    LogHalUpLoadLog("CFSR: 0x%08X ", faultRegs.CFSR);
+
+    LogHalUpLoadLog("MMSR: 0x%02X ", faultRegs.MMSR);
+    LogHalUpLoadLog("IACCVIOL: %d ", (faultRegs.MMSR >> 0) & 1);
+    LogHalUpLoadLog("DACCVIOL: %d ", (faultRegs.MMSR >> 1) & 1);
+    LogHalUpLoadLog("MUNSTKERR: %d ", (faultRegs.MMSR >> 3) & 1);
+    LogHalUpLoadLog("MSTKERR: %d ", (faultRegs.MMSR >> 4) & 1);
+    LogHalUpLoadLog("MMARVALID: %d ", (faultRegs.MMSR >> 7) & 1);
+
+    LogHalUpLoadLog("BFSR: 0x%02X ", faultRegs.BFSR);
+    LogHalUpLoadLog("IBUSERR: %d ", (faultRegs.BFSR >> 0) & 1);
+    LogHalUpLoadLog("PRECISERR: %d ", (faultRegs.BFSR >> 1) & 1);
+    LogHalUpLoadLog("IMPRECISERR: %d ", (faultRegs.BFSR >> 2) & 1);
+    LogHalUpLoadLog("UNSTKERR: %d ", (faultRegs.BFSR >> 3) & 1);
+    LogHalUpLoadLog("STKERR: %d ", (faultRegs.BFSR >> 4) & 1);
+    LogHalUpLoadLog("BFARVALID: %d ", (faultRegs.BFSR >> 7) & 1);
+
+    LogHalUpLoadLog("UFSR: 0x%04X ", faultRegs.UFSR);
+    LogHalUpLoadLog("UNDEFINSTR: %d ", (faultRegs.UFSR >> 0) & 1);
+    LogHalUpLoadLog("INVSTATE: %d ", (faultRegs.UFSR >> 1) & 1);
+    LogHalUpLoadLog("INVPC: %d ", (faultRegs.UFSR >> 2) & 1);
+    LogHalUpLoadLog("NOCP: %d ", (faultRegs.UFSR >> 3) & 1);
+    LogHalUpLoadLog("UNALIGNED: %d ", (faultRegs.UFSR >> 8) & 1);
+    LogHalUpLoadLog("DIVBYZERO: %d ", (faultRegs.UFSR >> 9) & 1);
+
+    LogHalUpLoadLog("DFSR: 0x%08X ", faultRegs.DFSR);
+    LogHalUpLoadLog("AFSR: 0x%08X ", faultRegs.AFSR);
+    LogHalUpLoadLog("MMFAR: 0x%08X ", faultRegs.MMFAR);
+    LogHalUpLoadLog("BFAR: 0x%08X ", faultRegs.BFAR);
 }
 

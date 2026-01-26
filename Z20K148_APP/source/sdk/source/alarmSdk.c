@@ -57,7 +57,7 @@ int16_t AlarmSdkEcallTriger(uint8_t type)
     g_alarmPack.dataLength = 1;
     
     MpuHalTransmit(g_mpuHandle, &g_alarmPack, MPU_HAL_UART_MODE);
-    LogHalUpLoadLog("Ec sed type=%d",type);
+    LogHalUpLoadLog("Ec sed type = %d",type);
     return 0;
 }
 
@@ -83,7 +83,7 @@ int16_t AlarmSdkBcallTriger(uint8_t type)
     g_alarmPack.dataLength = 1;
     
     MpuHalTransmit(g_mpuHandle, &g_alarmPack, MPU_HAL_UART_MODE);
-    LogHalUpLoadLog("Bc sed type=%d",type);
+    LogHalUpLoadLog("Bc sed type = %d",type);
 
     return 0;
 }
@@ -110,7 +110,7 @@ int16_t AlarmSdkEcallClose(uint8_t type)
     g_alarmPack.dataLength = 1;
     
     MpuHalTransmit(g_mpuHandle, &g_alarmPack, MPU_HAL_UART_MODE);
-    LogHalUpLoadLog("Ec cls type=%d",type);
+    LogHalUpLoadLog("Ec cls type = %d",type);
     return 0;
 }
 
@@ -136,7 +136,7 @@ int16_t AlarmSdkBcallClose(uint8_t type)
     g_alarmPack.dataLength = 1;
     
     MpuHalTransmit(g_mpuHandle, &g_alarmPack, MPU_HAL_UART_MODE);
-    LogHalUpLoadLog("Bc cls type=%d",type);
+    LogHalUpLoadLog("Bc cls type = %d",type);
     return 0;
 }
 
@@ -268,12 +268,14 @@ void AlarmSdkCycleProcess(void)
                     {
                         XCallSetTelemataticsMode(TELEMATICS_MODE_NOT_ACTIVE);
                         XCallSetPhoneCallState(E_ECALL_STATE_HANG_UP);
+                        EcallHalSosLedControlSend(E_SOS_LED_STATE_END); 
                         LogHalUpLoadLog("Ec cs suc");
                     }
                     else if((g_dataPack.mid == 0x14)&&(AlarmSdkGetBcallCallState() == 0))
                     {
                         XCallSetTelemataticsMode(TELEMATICS_MODE_NOT_ACTIVE);
                         XCallSetPhoneCallState(E_ECALL_STATE_HANG_UP);
+                        EcallHalSosLedControlSend(E_SOS_LED_STATE_END); 
                         LogHalUpLoadLog("Bc cls suc");
                     }
                 }
@@ -283,21 +285,19 @@ void AlarmSdkCycleProcess(void)
                     switch (g_dataPack.pDataBuffer[1])
                     {
                         case E_ECALL_STATE_NO_ECALL:
-                            if(g_ecallTriggerType != 0)
+                            if((g_dataPack.mid == 0x10) && (g_ecallTriggerType != 0))
                             {
                                 EcallHalSetVehicleMute(0);
                                 AlarmSdkSetEcallCallState(0U);
-                                EcallHalSosLedControlSend(E_SOS_LED_STATE_END); 
                                 EcallHalSosLedControlSend(E_SOS_LED_STATE_INIT);
                                 XCallSetTelemataticsMode(TELEMATICS_MODE_NOT_ACTIVE);
                                 XCallSetPhoneCallState(E_ECALL_STATE_NOT_ACTIVE);
                                 g_ecallTriggerType = 0;
                             }
-                            if(g_bcallTriggerType != 0)
+                            if((g_dataPack.mid == 0x14) && (g_bcallTriggerType != 0) && (AlarmSdkGetEcallCallState() == 0))     //no ecall,bcall close
                             {
                                 EcallHalSetVehicleMute(0);
                                 AlarmSdkSetBcallCallState(0U);
-                                EcallHalSosLedControlSend(E_SOS_LED_STATE_END); 
                                 EcallHalSosLedControlSend(E_SOS_LED_STATE_INIT);
                                 XCallSetTelemataticsMode(TELEMATICS_MODE_NOT_ACTIVE);
                                 XCallSetPhoneCallState(E_ECALL_STATE_NOT_ACTIVE);
@@ -352,6 +352,7 @@ void AlarmSdkCycleProcess(void)
     }
     if(TimerHalIsTimeout(ebcallTimeHandle) == 0)
     {
+        LogHalUpLoadLog("Xc hang on time out");
         XCallSetPhoneCallState(E_ECALL_STATE_CALL_OVER);
         TimerHalStopTime(ebcallTimeHandle);
     }

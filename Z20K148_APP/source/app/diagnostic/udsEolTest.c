@@ -108,6 +108,9 @@ static int16_t ToolReadVehicleSoftwareVersion(uint8_t *pData, uint16_t *pLength)
 static int16_t ToolRead4GAntennaStatus(uint8_t *pData, uint16_t *pLength);
 static int16_t ToolReadGNSSAntennaStatus(uint8_t *pData, uint16_t *pLength);
 static int16_t ToolReadSerialNumber(uint8_t *pData, uint16_t *pLength);
+
+static int16_t Service2EWriteSN_PassThrough(uint8_t *pData, uint16_t dataLength); 
+static int16_t ToolReadSN_Result_PassThrough(uint8_t *pData, uint16_t *pLength);
 // static int16_t Service2EWriteBluetoothName(uint8_t *Data, uint16_t len);
 static int16_t ToolWriteSleepStatus(uint8_t *pData, uint16_t dataLength);
 static const struc_ReadDidMap m_readDidMap[] =
@@ -130,6 +133,7 @@ static const struc_ReadDidMap m_readDidMap[] =
         {0x1216, ToolRead4GAntennaStatus},        // 19. 4G天线
         {0x1217, ToolReadGNSSAntennaStatus},      // 20. GNSS天线
         {0x1218, ToolReadSerialNumber}, // 21. SN
+        {0x1220, ToolReadSN_Result_PassThrough}, // 22. SN 读结果透传
 
                                                   //    {0xF1B0, Service22ReadEcuMask                 },       //安全访问掩码
                                                   //    {0x1201, Service22ReadTboxCallNumber          },       //tbox电话号码
@@ -189,6 +193,7 @@ static const struc_WriteDidMap m_writeDidMap[] =
     {
         /*RDID  Lenth   point_store*/
         {0x1218, Service2EWriteSerialNumber},     // sn
+        {0x1219, Service2EWriteSN_PassThrough},
         //{0x1219, Service2EWriteGacEcuPartNumber}, // pn
         {0x1213, ToolWriteSleepStatus},
         //{0xF195, Service2EWriteSoftwareVersion,     },
@@ -1448,6 +1453,66 @@ static int16_t ToolReadSerialNumber(uint8_t *pData, uint16_t *pLength)
    if (ret != 0)
        return 0x22;
    return 0;
+}
+
+static int16_t Service2EWriteSN_PassThrough(uint8_t *pData, uint16_t dataLength)
+{
+    if (dataLength > 60) 
+    {
+        return 0x13;
+    }
+
+    uint8_t mpuRequest[64 + 3];
+    uint8_t mpuResponse[10];
+    uint16_t respLen = 0;
+    int16_t ret;
+
+    mpuRequest[0] = 0x2E;
+    mpuRequest[1] = 0x12;
+    mpuRequest[2] = 0x19;
+    memcpy(&mpuRequest[3], pData, dataLength);
+
+    ret = CanPassthrough_RequestAndGetResponse(mpuRequest, dataLength + 3, mpuResponse, &respLen);
+
+    if (ret != 0)
+    {
+        return 0x72;
+    }
+
+    if (respLen >= 3 && mpuResponse[0] == 0x6E && mpuResponse[1] == 0x12 && mpuResponse[2] == 0x19)
+    {
+        return 0;
+    }
+    else if (respLen >= 3 && mpuResponse[0] == 0x7F && mpuResponse[1] == 0x2E)
+    {
+        return mpuResponse[2];
+    }
+
+    return 0x72;
+}
+
+static int16_t ToolReadSN_Result_PassThrough(uint8_t *pData, uint16_t *pLength)
+{
+    uint8_t mpuRequest[3] = {0x22, 0x12, 0x20};
+    uint8_t mpuResponse[64];
+    uint16_t respLen = 0;
+    int16_t ret;
+
+    ret = CanPassthrough_RequestAndGetResponse(mpuRequest, 3, mpuResponse, &respLen);
+
+    if (ret != 0)
+    {
+        return -1;
+    }
+
+    if (respLen > 3 && mpuResponse[0] == 0x62 && mpuResponse[1] == 0x12 && mpuResponse[2] == 0x20)
+    {
+        *pLength = respLen - 3;
+        memcpy(pData, &mpuResponse[3], *pLength);
+        return 0;
+    }
+    
+    return -1;
 }
 #if 0
 static int16_t ServiceReadPinIN_1Status(uint8_t *pData, uint16_t *pLength)

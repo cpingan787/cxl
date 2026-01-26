@@ -31,6 +31,7 @@ static UdsTpParameter_t g_canTpParameter =
 static EcuId_t g_ecuList[] = {
     /* PCAN Nodes (Mapped to TBOX_CAN_CHANNEL_2 based on your example) */
     {0x727, 0x7A7, TBOX_CAN_CHANNEL_2}, // ECU_PCAN_SRS
+    {0x7F1, 0x7F9, TBOX_CAN_CHANNEL_2}, // ECU_PCAN_SRS
     {0x710, 0x790, TBOX_CAN_CHANNEL_2}, // ECU_PCAN_BCS
     {0x7E0, 0x7E8, TBOX_CAN_CHANNEL_2}, // ECU_PCAN_EMS
     {0x765, 0x76D, TBOX_CAN_CHANNEL_2}, // ECU_PCAN_MFS
