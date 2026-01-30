@@ -651,6 +651,11 @@ SessionState_e GetCurrentSession(void) // 0xF186_cxl
   return g_currentSession;
 }
 
+void SetEcuOnlineFlag(void)
+{
+    g_ecuOnlineFlag = 1;
+}
+
 static bool IsDidPassthrough_22(uint16_t did)
 {
   for (int i = 0; i < (sizeof(g_passthroughDidList_22) / sizeof(g_passthroughDidList_22[0])); ++i)
@@ -1022,7 +1027,7 @@ static int16_t Service0x10Process(uint8_t *udsData, uint16_t udsLen, uint8_t fun
       {
         g_currentSession = E_EXTEND_SESSION;
         // g_currentSecurityLevel = E_UDS_NONE_SECURITY_LEVEL; // lock security
-        g_ecuOnlineFlag = 1;
+        //g_ecuOnlineFlag = 1;
         uint8_t factoryMode = UdsDidGetManufactoryMode();
         if (factoryMode < 0x10)
         {
@@ -1761,17 +1766,6 @@ static int16_t Service0x3EProcess(uint8_t *udsData, uint16_t udsLen, uint8_t fun
       case 0x00:
       case 0x80:
       {
-        //TBOX_PRINT("456: 0x%X\r\n", g_ecuOnlineFlag);
-        if (RemoteDiagnosticSdkGetOnlineStatus() != 1)
-        {
-            if (functionAddressFlag == 0) 
-            {
-                g_ecuOnlineFlag = 1;
-            }
-          //LogHalUpLoadLog("[MCU] RemoteDiagnosticSdkGetOnlineStatus: 0x%X\r\n", g_ecuOnlineFlag);
-          //TBOX_PRINT("123: 0x%X\r\n", g_ecuOnlineFlag);
-        }
-
         if ((udsData[UDS_OFFSET_SUB_FUNC] >> 7) == 0)
         {
           DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 2, 0);
@@ -3133,12 +3127,6 @@ static int16_t DiagnosticResponseProcess(uint8_t *udsData, uint16_t udsLen, uint
     }      
   }
 #endif
-
-  if (g_currentSession != E_DEFAULT_SESSION)
-  {
-    g_ecuOnlineFlag = 1;
-  }
-
   return 0;
 }
 

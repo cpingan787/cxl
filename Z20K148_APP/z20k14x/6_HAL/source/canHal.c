@@ -23,6 +23,7 @@
 #include "int_drv.h"
 #include "event_groups.h"
 #include "autosarNmSdk.h"
+#include "taskDiagnostic.h"
 /****************************** Macro Definitions ******************************/
 #define CAN_DRIVER_HAL_HANDLE_INSTANSE_MAX  (10) //(sizeof(CanDriverBufferList)/sizeof(P_CanBufferHal_t))//
 #define CAN_CHANNEL_NUMBER_MAX              (2)
@@ -48,6 +49,11 @@ typedef enum
     E_CAN_MODE_STANDBY = 0,
     E_CAN_MODE_NORMAL = 1,
 } CanModeType_e;
+
+typedef struct {
+    uint32_t reqId;
+    uint8_t  channel;
+} EcuMonitorNode_t;
 
 typedef struct
 {
@@ -135,6 +141,7 @@ static CanBufferHal_t g_can0DriverBuffer[CAN_DRIVER_HAL_HANDLE_INSTANSE_MAX];
 static CanBufferHal_t g_can1DriverBuffer[CAN_DRIVER_HAL_HANDLE_INSTANSE_MAX];
 // Mutex for CAN transmit protection
 static SemaphoreHandle_t g_canTxMutex[CAN_CHANNEL_NUMBER_MAX];
+
 #if (CAN_CHANNEL_NUMBER_MAX == 6)
 static CanBufferHal_t g_can1DriverBuffer[CAN_DRIVER_HAL_HANDLE_INSTANSE_MAX];
 static CanBufferHal_t g_can2DriverBuffer[CAN_DRIVER_HAL_HANDLE_INSTANSE_MAX];
@@ -376,7 +383,35 @@ static const unsigned int CAN2_MB_IDConfig[32][2] =
         {0x000, 0x7FF}, // MB12用于接收 ID 为 0 的信息帧
         {0x000, 0x7FF}, // MB13用于接收 ID 为 0 的信息帧
 };
-
+static const EcuMonitorNode_t g_monitorEcuList[] = {
+    // PCAN
+    {0x727, TBOX_CAN_CHANNEL_2}, // SRS
+    {0x7F1, TBOX_CAN_CHANNEL_2}, 
+    {0x710, TBOX_CAN_CHANNEL_2}, // BCS
+    {0x7E0, TBOX_CAN_CHANNEL_2}, // EMS
+    {0x765, TBOX_CAN_CHANNEL_2}, // MFS
+    {0x7E1, TBOX_CAN_CHANNEL_2}, // TCU
+    // ACAN
+    {0x731, TBOX_CAN_CHANNEL_2}, // PAS
+    {0x714, TBOX_CAN_CHANNEL_2}, // EPS
+    {0x73E, TBOX_CAN_CHANNEL_2}, // FR
+    {0x740, TBOX_CAN_CHANNEL_2}, // IFC
+    // BCAN
+    {0x72C, TBOX_CAN_CHANNEL_2}, // HVACF
+    {0x72B, TBOX_CAN_CHANNEL_2}, // AVNT
+    {0x755, TBOX_CAN_CHANNEL_2}, // ETC
+    {0x728, TBOX_CAN_CHANNEL_2}, // IID
+    {0x720, TBOX_CAN_CHANNEL_2}, // IBCM
+    {0x748, TBOX_CAN_CHANNEL_2}, // WCM
+    {0x718, TBOX_CAN_CHANNEL_2}, // FLDCM
+    {0x719, TBOX_CAN_CHANNEL_2}, // FRDCM
+    {0x73B, TBOX_CAN_CHANNEL_2}, // HVSM
+    {0x73A, TBOX_CAN_CHANNEL_2}, // RCP
+    {0x724, TBOX_CAN_CHANNEL_2}, // PLGM
+    // TCAN & DCAN
+    {0x72D, TBOX_CAN_CHANNEL_2}, // TBOX
+    {0x74F, TBOX_CAN_CHANNEL_2}, // GWM
+};
 static EventGroupHandle_t g_canTxEvt = NULL;
 static CanHalTxBuffer_t g_allCanTxBuffer;
 /****************************** Function Declarations *************************/
@@ -419,6 +454,7 @@ static int16_t Can_WaitMbWritable(CAN_Id_t canId,
                                   uint8_t mbIdx,
                                   uint32_t timeoutMs);
 static uint8_t Can_IsMbWritableCode(uint32_t code);
+static void CheckAndSetExternalTester(uint32_t canId, uint8_t channel, uint8_t txFlag);
 /****************************** Public Function Implementations ***************/
 /*****************************************************************************
  * Function:        CAN0_Init
@@ -3830,7 +3866,7 @@ void CanHalReceiveTask(void *pvParameters)
         msgIndex = queueData & 0xFF;
         // receive from can interrupt
         memcpy(&canMsg, &(g_allCanRxBuffer.msgRxBuffer[msgIndex]), sizeof(CanHalMsg_t));
-
+        CheckAndSetExternalTester(canMsg.canId, canChannel, canMsg.txFlag);
         if (canChannel < CAN_CHANNEL_NUMBER_MAX)
         {
             CanMsgDispatch(&canMsg, g_canDriverBufferList[canChannel], CAN_DRIVER_HAL_HANDLE_INSTANSE_MAX);
@@ -4451,4 +4487,19 @@ static uint8_t Can_IsMbWritableCode(uint32_t code)
         return 1U;
     }
     return 0U;
+}
+
+static void CheckAndSetExternalTester(uint32_t canId, uint8_t channel, uint8_t txFlag)
+{
+    uint32_t i;
+    uint32_t listSize = sizeof(g_monitorEcuList) / sizeof(g_monitorEcuList[0]);
+
+    for (i = 0; i < listSize; i++)
+    {
+        if ((g_monitorEcuList[i].reqId == canId) && (g_monitorEcuList[i].channel == channel))
+        {
+            SetEcuOnlineFlag(); 
+            return;
+        }
+    }
 }

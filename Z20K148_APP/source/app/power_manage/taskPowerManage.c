@@ -26,6 +26,16 @@
 /****************************** Macro Definitions ******************************/
 
 /****************************** Type Definitions ******************************/
+#define VOLTAGE_FILTER_SIZE 10
+
+typedef struct
+{
+    uint32_t buffer[VOLTAGE_FILTER_SIZE]; // 历史数据缓存
+    uint8_t index;                        // 当前写入位置
+    uint8_t count;                        // 当前缓存的数据量
+    uint32_t sum;                         // 当前总和
+} VoltageFilter_t;
+
 typedef enum
 {
     E_KL30_DETECT_NORMAL,
@@ -41,6 +51,15 @@ typedef enum
 } VoltageStatus_e;
 /****************************** Function Declarations *************************/
 static void Can1BusErrorEvent(uint8_t flag);
+
+static VoltageFilter_t s_filter_4g = {0};
+static VoltageFilter_t s_filter_can = {0};
+static VoltageFilter_t s_filter_mic = {0};
+static VoltageFilter_t s_filter_gps = {0};
+static VoltageFilter_t s_filter_gps1 = {0};
+static VoltageFilter_t s_filter_bcall_led = {0};
+static VoltageFilter_t s_filter_ecall_led = {0};
+static VoltageFilter_t s_filter_mic_power = {0};
 
 /****************************** Global Variables ******************************/
 static uint8_t g_lastMcuWakeupSource = PM_HAL_WAKEUP_SOURCE_NONE; // 存储最近一次的唤醒源 0xB245_cxl
@@ -151,6 +170,31 @@ static void PowerWakeUpProcess(uint8_t mcuWakeUpSource, uint8_t cpuWakeUpSource,
     }
 }
 
+static uint32_t GetMovingAverage(VoltageFilter_t *filter, uint32_t new_val)
+{
+    if (filter->count < VOLTAGE_FILTER_SIZE)
+    {
+        filter->buffer[filter->count] = new_val;
+        filter->sum += new_val;
+        filter->count++;
+        return (filter->sum / filter->count);
+    }
+    else
+    {
+        filter->sum -= filter->buffer[filter->index]; 
+        filter->buffer[filter->index] = new_val;      
+        filter->sum += new_val;                       
+        
+        filter->index++;
+        if (filter->index >= VOLTAGE_FILTER_SIZE)
+        {
+            filter->index = 0;
+        }
+        
+        return (filter->sum / VOLTAGE_FILTER_SIZE);
+    }
+}
+
 const PmSdkConfig_t g_pmCondg =
     {
         .degInfo = 1,
@@ -210,40 +254,25 @@ static void McuVoltageDtcCheckProcess(void)
     uint32_t v_bcall_led_mv = 0;
     uint32_t v_ecall_led_mv = 0;
     uint32_t v_mic_power_mv = 0;
-    //uint32_t v_bcall_adc_mv = 0;
-    //uint32_t v_ecall_adc_mv = 0;
+    
     const uint32_t STUCK_LIMIT_1MIN = 6000;
     static uint32_t s_ecall_stuck_cnt = 0;
     //static uint32_t s_bcall_stuck_cnt = 0;
+
     // 1. 读取主电源电压 (KL30)
     // if (PeripheralHalAdGet(AD_CHANNEL_KL30, &kl30_voltage_mv) == 0)
     // {
-    //     //   检查 B11001C: 主电源超限
-    //     kl30_voltage_mv = kl30_voltage_mv / 11;
-    //     if (kl30_voltage_mv < 800 || kl30_voltage_mv > 1480)
-    //     {
-    //         SetDtcFaultState(E_DTC_ITEM_MAIN_POWER_OVER_RANGE);
-    //     }
-    //     else
-    //     {
-    //         ClearDtcFaultState(E_DTC_ITEM_MAIN_POWER_OVER_RANGE);
-    //     }
-
-    //     // 检查 B110091: 主电源超极限
-    //     if (kl30_voltage_mv < 630 || kl30_voltage_mv > 1670)
-    //     {
-    //         SetDtcFaultState(E_DTC_ITEM_MAIN_POWER_OVER_MAX_RANGE);
-    //     }
-    //     else
-    //     {
-    //         ClearDtcFaultState(E_DTC_ITEM_MAIN_POWER_OVER_MAX_RANGE);
-    //     }
+    //     // kl30_voltage_mv = kl30_voltage_mv / 11;
+    //     // if (kl30_voltage_mv < 800 || kl30_voltage_mv > 1480) ...
     // }
+
     // 2. 读取4G模块电压
     if (PeripheralHalAdGet(AD_CHANNEL_4G, &v_4g_mv) == 0)
     {
+        v_4g_mv = GetMovingAverage(&s_filter_4g, v_4g_mv);
+
         // TBOX_PRINT("4g voltage is %d mv\r\n", v_4g_mv);
-        //  检查 B32011C: 4G 模块电压异常
+        // 检查 B32011C: 4G 模块电压异常
         if (v_4g_mv < 1800 || v_4g_mv > 2050)
         {
             SetDtcFaultState(E_DTC_ITEM_4G_MODULE_VOLTAGE);
@@ -257,6 +286,8 @@ static void McuVoltageDtcCheckProcess(void)
     // 3. 读取CAN收发器电源电压
     if (PeripheralHalAdGet(AD_CHANNEL_CAN_POWER, &v_can_mv) == 0)
     {
+        v_can_mv = GetMovingAverage(&s_filter_can, v_can_mv);
+
         // TBOX_PRINT("can power voltage is %d mv\r\n", v_can_mv);
         // 检查 B33001C: CAN 电源电压超限
         if (v_can_mv < 2380 || v_can_mv > 2650)
@@ -268,12 +299,15 @@ static void McuVoltageDtcCheckProcess(void)
             ClearDtcFaultState(E_DTC_ITEM_CAN_POWER_ABNORMAL);
         }
     }
-    // 4. 读取麦克风电源电压
+
+    // 4. 读取麦克风信号电压 (注意区分 MIC信号 和 MIC_POWER)
     if (PeripheralHalAdGet(AD_CHANNEL_MIC, &v_mic_mv) == 0)
     {
-        // TBOX_PRINT("mic voltage is %d mv\r\n", v_mic_mv);//701
-        //  检查 B32031F: 麦克风信号输入故障
-        //  正常范围: 10mV < V < 550mV
+        v_mic_mv = GetMovingAverage(&s_filter_mic, v_mic_mv);
+
+        // TBOX_PRINT("mic voltage is %d mv\r\n", v_mic_mv);
+        // 检查 B32031F: 麦克风信号输入故障
+        // 正常范围: 10mV < V < 550mV
         if (v_mic_mv <= 10 || v_mic_mv >= 550)
         {
             SetDtcFaultState(E_DTC_ITEM_MPU_MIC_SIGNAL_FAULT);
@@ -283,11 +317,16 @@ static void McuVoltageDtcCheckProcess(void)
             ClearDtcFaultState(E_DTC_ITEM_MPU_MIC_SIGNAL_FAULT);
         }
     }
-    // 5. 读取GPS天线电压
+
+    // 5. 读取GPS天线电压 (双路)
     if (PeripheralHalAdGet(AD_CHANNEL_GPS, &v_gps_mv) == 0 &&
         PeripheralHalAdGet(AD_CHANNEL_GPS1, &v_gps1_mv) == 0)
     {
+        v_gps_mv = GetMovingAverage(&s_filter_gps, v_gps_mv);
+        v_gps1_mv = GetMovingAverage(&s_filter_gps1, v_gps1_mv);
+
         // TBOX_PRINT("gps voltage is %d mv, gps1 voltage is %d mv\r\n", v_gps_mv, v_gps1_mv);
+        
         // 检查 B320411: GPS天线对地短路
         if (v_gps_mv < 100 && v_gps1_mv < 100)
         {
@@ -312,11 +351,14 @@ static void McuVoltageDtcCheckProcess(void)
             ClearDtcFaultState(E_DTC_ITEM_MPU_GPS_ANTENNA_OPEN_SHORT);
         }
     }
+
     // 6. 读取 B-Call LED 电压
     if (PeripheralHalAdGet(AD_CHANNEL_BCALL_LIGHT, &v_bcall_led_mv) == 0)
     {
+        v_bcall_led_mv = GetMovingAverage(&s_filter_bcall_led, v_bcall_led_mv);
+
         // TBOX_PRINT("bcall led voltage is %d mv\r\n", v_bcall_led_mv);
-        //  检查 B320D11: B_Call指示灯短路到地
+        // 检查 B320D11: B_Call指示灯短路到地
         if (v_bcall_led_mv < 100) // 阈值 0.1V = 100mV
         {
         //    SetDtcFaultState(E_DTC_ITEM_BCALL_LIGHT_SHORT_GND);
@@ -330,6 +372,8 @@ static void McuVoltageDtcCheckProcess(void)
     // 7. 读取 E-Call LED 电压
     if (PeripheralHalAdGet(AD_CHANNEL_ECALL_LIGHT, &v_ecall_led_mv) == 0)
     {
+        v_ecall_led_mv = GetMovingAverage(&s_filter_ecall_led, v_ecall_led_mv);
+
         if (v_ecall_led_mv < 100)
         {
         //    SetDtcFaultState(E_DTC_ITEM_ECALL_LIGHT_SHORT_GND);
@@ -339,6 +383,7 @@ static void McuVoltageDtcCheckProcess(void)
             ClearDtcFaultState(E_DTC_ITEM_ECALL_LIGHT_SHORT_GND);
         }
     }
+
 #if(0)
     // 8. B-Call 按键电气故障诊断 (DTC B320707)
     if (GPIO_ReadPinLevel(PORT_C, GPIO_1) == 1)
@@ -377,11 +422,12 @@ static void McuVoltageDtcCheckProcess(void)
         ClearDtcFaultState(E_DTC_ITEM_MPU_ECALL_KEY_STUCK);
     }
 
-    // 10.麦克风电源监测
+    // 10.麦克风电源监测 (MIC_POWER)
     if (PeripheralHalAdGet(AD_CHANNEL_MIC_POWER, &v_mic_power_mv) == 0)
     {
-        // TBOX_PRINT("mic power voltage is %d mv\r\n", v_mic_power_mv);
+        v_mic_power_mv = GetMovingAverage(&s_filter_mic_power, v_mic_power_mv);
 
+        // TBOX_PRINT("mic power voltage is %d mv\r\n", v_mic_power_mv);
         if (v_mic_power_mv < 2400 || v_mic_power_mv > 2800)
         {
             SetDtcFaultState(E_DTC_ITEM_MPU_MIC_POWER_FAULT);

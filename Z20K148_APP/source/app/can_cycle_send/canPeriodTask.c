@@ -522,7 +522,7 @@ static int16_t CanPeriodMessage3C5(uint8_t *pCanData)
 
             uint32_t lat_final = (uint32_t)lat_signed;
             uint32_t lon_final = (uint32_t)lon_signed;
-
+            LogHalUpLoadLog("can3C5 lat:%d lon:%d\r\n", lat_signed, lon_signed);
             g_tbox11Message.DetailInfo.TEL_Latitude_1 = (lat_final >> 20) & 0xFF;
             g_tbox11Message.DetailInfo.TEL_Latitude_2 = (lat_final >> 12) & 0xFF;
             g_tbox11Message.DetailInfo.TEL_Latitude_3 = (lat_final >> 4) & 0xFF;
