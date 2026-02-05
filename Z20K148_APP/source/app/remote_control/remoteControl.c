@@ -212,7 +212,7 @@ static void RemoteControlSendResultProcess(void);
 static void RemoteControlPreCheckProcess(void);
 static void RemoteControlSendAck(void);
 static void RemoteControlNormalPackReqCanSignal(void);
-static void RemoteControlSendResult(uint8_t msgtype, uint16_t errorcode, uint16_t ecuid, uint8_t cmdid, uint8_t paravalue);
+static void RemoteControlSendResult(uint8_t msgtype, uint16_t errorcode, uint8_t ecuid, uint8_t cmdid, uint8_t paravalue);
 static void RemoteControlSpecialPackReqCanSignal(void);
 static void RemoteControlStartStateMachine(void);
 static void RemoteControlSetKeepWakeFlag(uint8_t keepWakeFlag);
@@ -225,12 +225,17 @@ static void RemoteConreolReqWakeStateMachine(void);
 static void RemoteControlSendReqWakeUpResult(void);
 static void RemoteControlSendIntoOtaModeResult(void);
 static void RemoteControlSetTotalState(RemoteControlState_t state);
+static void RemoteControlLoadCurrentCmdByIndex(uint8_t idx);
+static void RemoteControlClearCmdList(void);
 //static uint64_t BytesToU64Le(const uint8_t in[8]);
 /****************************** Global Variables ******************************/
 static uint8_t g_remoteControlCanBuf[REMOTE_CONTROL_SEND_CAN_SIZE] = {0};
 static volatile RemoteControlEcuId_t g_remoteControlEcuId = ECU_NULL_E;
+static volatile uint8_t g_remoteControlCmdNums = 0U;
+static volatile RemoteControlCmdId_t g_remoteControlCmdIdList[REMOTE_CONTROL_ECU_CMD_MAX_NUM];
+static volatile uint8_t g_remoteControlParamValueList[REMOTE_CONTROL_ECU_CMD_MAX_NUM];
 static volatile RemoteControlCmdId_t g_remoteControlCmdId = CMD_DEFAULT_E;
-static uint8_t g_remoteControlParamValue = 0U;
+static volatile uint8_t g_remoteControlParamValue = 0U;
 static RemoteControlState_t g_remoteControlTotalState = RemoteControlStateIdle;
 static RemoteControlStatusSignalInfo_t g_remoteControlSignalInfo;
 static int16_t g_remoteControlAuthTimerHandle = -1;
@@ -424,31 +429,135 @@ static void RemoteControlStateMachine(void)
 *************************************************/
 static void RemoteControlCmdProcess(void)
 {
-    uint8_t messageType = 0xFFU;
-    uint16_t ecuId = 0U;   
-    uint8_t cmdId = 0U;
+    uint8_t  messageType = 0xFFU;
+    uint8_t  ecuId       = 0U;
+    uint8_t  cmdNums     = 0U;
+    uint16_t needLen     = 0U;
+    uint8_t  i           = 0U;
+    uint8_t  valid       = 0U;
+    uint8_t  errCmdId    = 0U;
+    uint8_t  errParam    = 0U;
 
     if((g_remoteControlReceivePack.aid == REMOTE_CONTROL_AID) && 
     (g_remoteControlReceivePack.mid == REMOTE_CONTROL_MID)&&
     ((g_remoteControlReceivePack.subcommand & 0x7f)== REMOTE_CONTROL_SUBCMD))
     {
         messageType = g_remoteControlReceivePack.pDataBuffer[0];
-        LogHalUpLoadLog("RC rcv =%d", messageType);
+        LogHalUpLoadLog("RC rcv =%d ", messageType);
         RemoteControlSendAck();
         
-        if(messageType == REMOTE_CONTROL_CMD_CONTROL_TYPE)
-        {    
-            ecuId = ((uint16_t)g_remoteControlReceivePack.pDataBuffer[2] << 8) | g_remoteControlReceivePack.pDataBuffer[1];
-            cmdId = g_remoteControlReceivePack.pDataBuffer[3];
-            if((ecuId >= (ECU_HVAC_E) && (ecuId <= (ECU_PLGM_E))) &&
-               ((cmdId > CMD_DEFAULT_E) && (cmdId < CMD_REMOTE_CTRL_MAX_NUM_E)))
+        if (messageType == REMOTE_CONTROL_CMD_CONTROL_TYPE)
+        {
+            ecuId   = g_remoteControlReceivePack.pDataBuffer[1];
+            cmdNums = g_remoteControlReceivePack.pDataBuffer[2];
+
+            /* 长度需求：Byte0..2 + 2*cmdNums */
+            needLen = (uint16_t)(3U + (2U * (uint16_t)cmdNums));
+            valid = 1U;
+
+            /* 1) ECU 范围检查 */
+            if ((ecuId < (uint8_t)ECU_HVAC_E) || (ecuId > (uint8_t)ECU_PLGM_E))
+            {
+                valid = 0U;
+            }
+
+            /* 2) cmdNums 检查 */
+            if (valid != 0U)
+            {
+                if ((cmdNums == 0U) || (cmdNums > (uint8_t)REMOTE_CONTROL_ECU_CMD_MAX_NUM))
+                {
+                    valid = 0U;
+                }
+            }
+
+            /* 3) 长度检查（字段名按你工程替换：dataLength/len/payloadLen...） */
+            if (valid != 0U)
+            {
+                if (g_remoteControlReceivePack.dataLength < needLen)
+                {
+                    valid = 0U;
+                }
+            }
+
+            /* 4) 检查 cmdNums 是否符合要求
+             *    - HVAC/HVSM 支持一次多指令，其它 ECU 仍要求 cmdNums==1
+             */
+            if (valid != 0U)
+            {
+                if ((((RemoteControlEcuId_t)ecuId != ECU_HVAC_E) &&
+                     ((RemoteControlEcuId_t)ecuId != ECU_HVSM_E)) &&
+                    (cmdNums != 1U))
+                {
+                    valid = 0U;
+                }
+            }
+
+            /* 5) 如果上面已经失败，尽量给一个可回的 errCmdId/errParam
+             *    - 若长度至少够到 Byte4，则回第一条
+             *    - 否则回 0/0
+             */
+            if (valid == 0U)
+            {
+                if ((cmdNums > 0U) && (g_remoteControlReceivePack.dataLength >= 5U))
+                {
+                    errCmdId = g_remoteControlReceivePack.pDataBuffer[3];
+                    errParam = g_remoteControlReceivePack.pDataBuffer[4];
+                }
+                else
+                {
+                    errCmdId = 0U;
+                    errParam = 0U;
+                }
+            }
+
+            /* 6) 逐条检查 cmdId 是否在范围、是否能查到映射条目
+             *    一旦失败：errCmdId/errParam 就是“出错的那一条”
+             */
+            if (valid != 0U)
+            {
+                for (i = 0U; i < cmdNums; i++)
+                {
+                    uint8_t curCmdId = g_remoteControlReceivePack.pDataBuffer[(uint8_t)(3U + (2U * i))];
+                    uint8_t curParam = g_remoteControlReceivePack.pDataBuffer[(uint8_t)(4U + (2U * i))];
+
+                    /* 先记录本条，若本条失败就回它 */
+                    errCmdId = curCmdId;
+                    errParam = curParam;
+
+                    /* cmdId 范围 */
+                    if ((curCmdId <= (uint8_t)CMD_DEFAULT_E) || (curCmdId >= (uint8_t)CMD_REMOTE_CTRL_MAX_NUM_E))
+                    {
+                        valid = 0U;
+                        break;
+                    }
+
+                    /* 查表：确保该 ecu 支持该 cmdId */
+                    if (RemoteControlFindCmdEntry((RemoteControlEcuId_t)ecuId, (RemoteControlCmdId_t)curCmdId) == NULL)
+                    {
+                        valid = 0U;
+                        break;
+                    }
+
+                    /* param 合法性检查，可在这里加：
+                     * if (RemoteControlParamCheck((RemoteControlEcuId_t)ecuId, (RemoteControlCmdId_t)curCmdId, curParam) != 0)
+                     * { valid = 0U; break; }
+                     */
+                }
+            }
+
+            /* 7) 最终：合法则启动状态机，否则回“出错的那一条” */
+            if (valid != 0U)
             {
                 RemoteControlStartStateMachine();
             }
             else
             {
-                RemoteControlSendResult((uint8_t)REMOTE_CONTROL_CMD_CONTROL_TYPE, (uint16_t)REMOTE_CONTROL_ERR_CODE_INVALID_CMD, ecuId, cmdId, g_remoteControlReceivePack.pDataBuffer[4]);
-            } 
+                RemoteControlSendResult((uint8_t)REMOTE_CONTROL_CMD_CONTROL_TYPE,
+                                        (uint16_t)REMOTE_CONTROL_ERR_CODE_INVALID_CMD,
+                                        (uint16_t)ecuId,
+                                        errCmdId,
+                                        errParam);
+            }
         }
         else if(messageType == REMOTE_CONTROL_CMD_WAKE_TYPE)
         {
@@ -503,10 +612,7 @@ static void RemoteControlForbidSleepCheck(void)
         {
             g_remoteControlErrorCode = REMOTE_CONTROL_ERR_CODE_TIME_OUT;
             RemoteControlSendResult((uint8_t)REMOTE_CONTROL_CMD_CONTROL_TYPE, (uint16_t)g_remoteControlErrorCode, g_remoteControlEcuId, g_remoteControlCmdId, g_remoteControlParamValue);
-            g_remoteControlErrorCode = REMOTE_CONTROL_ERR_CODE_SUCCESS;
-            g_remoteControlEcuId = ECU_NULL_E;
-            g_remoteControlCmdId = CMD_DEFAULT_E;
-            g_remoteControlParamValue = 0U;
+            RemoteControlClearCmdList();
             AutosarNmSdkClearSubNetWakeupRequest();
             RemoteControlSetTotalState(RemoteControlStateIdle);
         }
@@ -560,21 +666,56 @@ RemoteControlState_t RemoteControlGetTotalState(void)
 *******************************************************************************/
 static void RemoteControlStartStateMachine(void)
 {
-    if(RemoteControlGetTotalState() == RemoteControlStateIdle)
+    uint8_t i = 0U;
+    uint8_t ecuId = 0U;
+    uint8_t cmdNums = 0U;
+
+    if (RemoteControlGetTotalState() == RemoteControlStateIdle)
     {
-        g_remoteControlEcuId = (RemoteControlEcuId_t)(((uint16_t)g_remoteControlReceivePack.pDataBuffer[2] << 8) | g_remoteControlReceivePack.pDataBuffer[1]);
-        g_remoteControlCmdId = g_remoteControlReceivePack.pDataBuffer[3];
-        g_remoteControlParamValue = g_remoteControlReceivePack.pDataBuffer[4];
-        LogHalUpLoadLog("Rc valid cmd,ecu:%d,cmd:%d,param:%d", g_remoteControlEcuId, g_remoteControlCmdId, g_remoteControlParamValue);
+        ecuId = g_remoteControlReceivePack.pDataBuffer[1];
+        cmdNums = g_remoteControlReceivePack.pDataBuffer[2];
+
+        g_remoteControlEcuId   = (RemoteControlEcuId_t)ecuId;
+        g_remoteControlCmdNums = cmdNums;
+
+        (void)memset((void*)g_remoteControlCmdIdList, 0, sizeof(g_remoteControlCmdIdList));
+        (void)memset((void*)g_remoteControlParamValueList, 0, sizeof(g_remoteControlParamValueList));
+
+        for (i = 0U; (i < cmdNums) && (i < (uint8_t)REMOTE_CONTROL_ECU_CMD_MAX_NUM); i++)
+        {
+            g_remoteControlCmdIdList[i]      = (RemoteControlCmdId_t)g_remoteControlReceivePack.pDataBuffer[(uint8_t)(3U + (2U * i))];
+            g_remoteControlParamValueList[i] = g_remoteControlReceivePack.pDataBuffer[(uint8_t)(4U + (2U * i))];
+        }
+
+        RemoteControlLoadCurrentCmdByIndex(0U);
+        LogHalUpLoadLog("Rc valid cmd, ecu:%d, cmdNums:%d",
+                        (uint8_t)g_remoteControlEcuId,
+                        (uint8_t)g_remoteControlCmdNums);
+
+        for (i = 0U; (i < g_remoteControlCmdNums) && (i < (uint8_t)REMOTE_CONTROL_ECU_CMD_MAX_NUM); i++)
+        {
+            LogHalUpLoadLog("Rc cmd[%d]: cmdId:%d, param:%d",
+                            i,
+                            (uint8_t)g_remoteControlCmdIdList[i],
+                            (uint8_t)g_remoteControlParamValueList[i]);
+        }
         RemoteControlSetKeepWakeFlag(RemoteControlWakeUpFlag_Keep_e);
-        AutosarNmSdkSetSubNetWakeupRequest(0x7F);
+        AutosarNmSdkSetSubNetWakeupRequest(0x7FU);
         RemoteControlSetTotalState(RemoteControlStatePreCheck);
         TimerHalStartTime(g_remoteControlSleepForrbidHandle, REMOTE_CONTROL_SLEEP_FORBID_TIME);
         TimerHalStartTime(g_remoteControlPreCheckTimerHandle, REMOTE_CONTROL_PRE_CHECK_TIME);
     }
     else
     {
-        RemoteControlSendResult((uint8_t)REMOTE_CONTROL_CMD_CONTROL_TYPE, (uint16_t)REMOTE_CONTROL_ERR_CODE_EXCUTE_ERROR, ((uint16_t)g_remoteControlReceivePack.pDataBuffer[2] << 8) | g_remoteControlReceivePack.pDataBuffer[1], g_remoteControlReceivePack.pDataBuffer[3], g_remoteControlReceivePack.pDataBuffer[4]);
+        /* 忙：回包（保持你原逻辑：回第一条） */
+        uint8_t firstCmdId  = g_remoteControlReceivePack.pDataBuffer[3];
+        uint8_t firstParam  = g_remoteControlReceivePack.pDataBuffer[4];
+
+        RemoteControlSendResult((uint8_t)REMOTE_CONTROL_CMD_CONTROL_TYPE,
+                                (uint16_t)REMOTE_CONTROL_ERR_CODE_EXCUTE_ERROR,
+                                (uint16_t)g_remoteControlReceivePack.pDataBuffer[1],
+                                firstCmdId,
+                                firstParam);
     }
 }
 
@@ -591,70 +732,110 @@ static void RemoteControlStartStateMachine(void)
 *******************************************************************************/
 static void RemoteControlPreCheckProcess(void)
 {
-    static uint8_t checkCounter = REMOTE_CONTROL_PRE_CHECK_CNT;
-    RemoteControlProcessResult_t result = RemoteControlResult_Fail_e;
-    const RemoteControlEntry_t* entry = RemoteControlFindCmdEntry(g_remoteControlEcuId, g_remoteControlCmdId);
+    static uint8_t s_preCheckCounter = 0U;
 
-    if (entry == NULL)
+    RemoteControlProcessResult_t result = RemoteControlResult_Processing_e;
+
+    uint8_t i = 0U;
+    uint8_t anyParamNonZero = 0U;
+
+    /* 防御：没有命令直接失败（理论上CmdProcess已保证>0） */
+    if (g_remoteControlCmdNums == 0U)
     {
-        LogHalUpLoadLog("Error: No entry found for ECU %d CMD %d\n", g_remoteControlEcuId, g_remoteControlCmdId);
-        result = RemoteControlResult_Fail_e;
         g_remoteControlErrorCode = (uint16_t)REMOTE_CONTROL_ERR_CODE_INVALID_CMD;
+        RemoteControlSetTotalState(RemoteControlStateSendResult);
+        return;
     }
-    else if (entry->checkFunc != NULL)
+
+    /* 聚合判断：本次多条指令里，只要有一条 param>0，就认为是“开启类动作” */
+    for (i = 0U; i < g_remoteControlCmdNums; i++)
     {
-        checkCounter++;
-        if(checkCounter >= REMOTE_CONTROL_PRE_CHECK_CNT)
+        if (g_remoteControlParamValueList[i] > 0U)
         {
-            LogHalUpLoadLog("RC start check");
-            result = entry->checkFunc();
-            checkCounter = 0U;
+            anyParamNonZero = 1U;
+            break;
         }
     }
-    
-    if(result == RemoteControlResult_Success_e)
+
+    /* 仍按原逻辑：每 REMOTE_CONTROL_PRE_CHECK_CNT 次触发一次真正检查 */
+    s_preCheckCounter++;
+    if (s_preCheckCounter >= REMOTE_CONTROL_PRE_CHECK_CNT)
     {
-        if(g_remoteControlEcuId == ECU_HVAC_E)
+        s_preCheckCounter = 0U;
+
+        /* 多指令逐条检查：复用你原来 entry->checkFunc() */
+        result = RemoteControlResult_Success_e;
+
+        for (i = 0U; i < g_remoteControlCmdNums; i++)
         {
-            if((g_remoteControlSignalInfo.EMS_EngSt == 0x1) && (g_remoteControlSignalInfo.BCM_KeySt == 2) && (g_remoteControlParamValue > 0))
+            const RemoteControlEntry_t *entry;
+            /* g_remoteControlCmdId = g_remoteControlCmdIdList[i]; */
+            /* g_remoteControlParamValue = g_remoteControlParamValueList[i]; */
+            RemoteControlLoadCurrentCmdByIndex(i);
+
+            entry = RemoteControlFindCmdEntry(g_remoteControlEcuId, g_remoteControlCmdId);
+            if (entry == NULL)
             {
-                RemoteControlSetTotalState(RemoteControlStateProcessSignal);
-                g_remoteControlHvacPepsCheck = 1;
+                /* 找不到映射：这条失败 */
+                g_remoteControlErrorCode = (uint16_t)REMOTE_CONTROL_ERR_CODE_INVALID_CMD;
+                result = RemoteControlResult_Fail_e;
+                break;
             }
-            else if(g_remoteControlParamValue == 0)
+
+            if (entry->checkFunc != NULL)
             {
+                result = entry->checkFunc();
+                if (result != RemoteControlResult_Success_e)
+                {
+                    /* 任意一条不满足 -> 整体不通过（最小侵入策略） */
+                    break;
+                }
+            }
+            else
+            {
+                /* 没有checkFunc：视为通过 */
+            }
+        }
+    }
+    else
+    {
+        result = RemoteControlResult_Processing_e;
+    }
+
+    if (result == RemoteControlResult_Success_e)
+    {
+        if (g_remoteControlEcuId == ECU_HVAC_E)
+        {
+            if ((g_remoteControlSignalInfo.EMS_EngSt == 0x1U) &&
+                (g_remoteControlSignalInfo.BCM_KeySt == 2U))
+            {
+                g_remoteControlHvacPepsCheck = 1U;
                 RemoteControlSetTotalState(RemoteControlStateProcessSignal);
-                g_remoteControlHvacPepsCheck = 1;
-            } 
+            }
+            else
+            {
+                /* 需要认证/唤醒 */
+                RemoteControlSetTotalState(RemoteControlStateCertification);
+            }
+        }
+        else if (g_remoteControlEcuId == ECU_HVSM_E)
+        {
+            if ((g_remoteControlSignalInfo.EMS_EngSt == 0x1U) &&
+                (g_remoteControlSignalInfo.BCM_KeySt == 2U) &&
+                (anyParamNonZero != 0U))
+            {
+                g_remoteControlHvsmPepsCheck = 1U;
+                RemoteControlSetTotalState(RemoteControlStateProcessSignal);
+            }
+            else if (anyParamNonZero == 0U)
+            {
+                g_remoteControlHvsmPepsCheck = 1U;
+                RemoteControlSetTotalState(RemoteControlStateProcessSignal);
+            }
             else
             {
                 RemoteControlSetTotalState(RemoteControlStateCertification);
             }
-        }
-        else if(g_remoteControlEcuId == ECU_HVSM_E)
-        {
-            if((g_remoteControlSignalInfo.EMS_EngSt == 0x1) && (g_remoteControlSignalInfo.BCM_KeySt == 2) && (g_remoteControlParamValue > 0))
-            {
-                g_remoteControlHvsmPepsCheck = 1;
-                RemoteControlSetTotalState(RemoteControlStateProcessSignal);
-            }
-            else if(g_remoteControlParamValue == 0)
-            {
-                g_remoteControlHvsmPepsCheck = 1;
-                RemoteControlSetTotalState(RemoteControlStateProcessSignal);
-            } 
-            else
-            {
-                RemoteControlSetTotalState(RemoteControlStateCertification);
-            }
-        }
-        else if(g_remoteControlEcuId == ECU_PLGM_E)
-        {
-            RemoteControlSetTotalState(RemoteControlStateCertification);
-        }
-        else if(g_remoteControlEcuId == ECU_BCM_E)
-        {
-            RemoteControlSetTotalState(RemoteControlStateCertification);
         }
         else if(g_remoteControlEcuId == ECU_PEPS_E)
         {
@@ -675,13 +856,21 @@ static void RemoteControlPreCheckProcess(void)
                 RemoteControlSetTotalState(RemoteControlStateCertification);
             }
         }
+        else
+        {
+            /* 其他ECU：保持你原来的路径 */
+            RemoteControlSetTotalState(RemoteControlStateCertification);
+        }
     }
-    else if(TimerHalIsTimeout(g_remoteControlPreCheckTimerHandle) == 0)
+
+    if (TimerHalIsTimeout(g_remoteControlPreCheckTimerHandle) == 0)
     {
+        LogHalUpLoadLog("RC PreCheck Timeout");
         TimerHalStopTime(g_remoteControlPreCheckTimerHandle);
-        LogHalUpLoadLog("Check failed for ECU %d CMD %d\n", g_remoteControlEcuId, g_remoteControlCmdId);
         RemoteControlSetTotalState(RemoteControlStateSendResult);
     }
+
+    return;
 }
 
 /*******************************************************************************
@@ -1078,10 +1267,7 @@ static void RemoteControlHandleSignalProcess(void)
 static void RemoteControlSendResultProcess(void)
 {
     RemoteControlSendResult((uint8_t)REMOTE_CONTROL_CMD_CONTROL_TYPE, (uint16_t)g_remoteControlErrorCode, g_remoteControlEcuId, g_remoteControlCmdId, g_remoteControlParamValue);
-    g_remoteControlErrorCode = REMOTE_CONTROL_ERR_CODE_SUCCESS;
-    g_remoteControlEcuId = ECU_NULL_E;
-    g_remoteControlCmdId = CMD_DEFAULT_E;
-    g_remoteControlParamValue = 0U;
+    RemoteControlClearCmdList();
     AutosarNmSdkClearSubNetWakeupRequest();
     RemoteControlSetTotalState(RemoteControlStateIdle);
 }
@@ -1095,7 +1281,7 @@ static void RemoteControlSendResultProcess(void)
  * Others      This function prepares the response packet with error code, ECU ID and command ID,
  *              then transmits it through MPU HAL UART interface
 *******************************************************************************/
-static void RemoteControlSendResult(uint8_t msgtype, uint16_t errorcode, uint16_t ecuid, uint8_t cmdid, uint8_t paravalue)
+static void RemoteControlSendResult(uint8_t msgtype, uint16_t errorcode, uint8_t ecuid, uint8_t cmdid, uint8_t paravalue)
 {
     g_remoteControlSendPack.aid = REMOTE_CONTROL_AID;
     g_remoteControlSendPack.mid = REMOTE_CONTROL_MID;
@@ -1106,16 +1292,15 @@ static void RemoteControlSendResult(uint8_t msgtype, uint16_t errorcode, uint16_
     g_remoteControlSendBuffer[0] = msgtype;
     g_remoteControlSendBuffer[1] = (uint8_t)errorcode;        
     g_remoteControlSendBuffer[2] = (uint8_t)(errorcode >> 8);  
-    g_remoteControlSendBuffer[3] = (uint8_t)ecuid;             
-    g_remoteControlSendBuffer[4] = (uint8_t)(ecuid >> 8);      
-    g_remoteControlSendBuffer[5] = cmdid;
-    g_remoteControlSendBuffer[6] = paravalue;
+    g_remoteControlSendBuffer[3] = (uint8_t)ecuid;                   
+    g_remoteControlSendBuffer[4] = cmdid;
+    g_remoteControlSendBuffer[5] = paravalue;
 
     TBOX_PRINT("RemoteControlSendResult: msgtype=%d, errorcode=0x%X, ecuid=0x%X, cmdid=%d, paravalue=%d\r\n", 
                msgtype, errorcode, ecuid, cmdid, paravalue);
 
     g_remoteControlSendPack.pDataBuffer = g_remoteControlSendBuffer;
-    g_remoteControlSendPack.dataLength = 7U;
+    g_remoteControlSendPack.dataLength = 6U;
     MpuHalTransmit(g_remoteControlUartHandle,&g_remoteControlSendPack,MPU_HAL_UART_MODE);
 }
 
@@ -3124,7 +3309,15 @@ static RemoteControlProcessResult_t RemoteControlPepsCertification(void)
  *************************************************/
 static void RemoteControlNormalPackReqCanSignal(void)
 {
-    memset(g_remoteControlCanBuf, 0x0, sizeof(g_remoteControlCanBuf));
+    uint8_t i = 0U;
+
+    (void)memset(g_remoteControlCanBuf, 0x0, sizeof(g_remoteControlCanBuf));
+
+    if (g_remoteControlCmdNums == 0U)
+    {
+        return;
+    }
+
     switch(g_remoteControlEcuId)
     {
         case ECU_PEPS_E: 
@@ -3195,82 +3388,72 @@ static void RemoteControlNormalPackReqCanSignal(void)
             else
             {
                 (void)memset(g_hvacSignalSet, 0, sizeof(g_hvacSignalSet));
-                switch (g_remoteControlCmdId)
+                for (i = 0U; (i < g_remoteControlCmdNums) && (i < (uint8_t)REMOTE_CONTROL_ECU_CMD_MAX_NUM); i++)
                 {
-                    case CMD_AC_SPEED_SET_E:
-                        RemoteCtrlSignalValSet(g_remoteControlCanBuf,
-                                            TEL_HVACF_WindExitSpdReq,
-                                            (g_remoteControlParamValue > 0) ? g_remoteControlParamValue : 0);
-                        break;
+                    RemoteControlCmdId_t cmdId = g_remoteControlCmdIdList[i];
+                    uint8_t param = g_remoteControlParamValueList[i];
 
-                    case CMD_AC_FRONT_DEF_SET_E:
-                        RemoteCtrlSignalValSet(g_remoteControlCanBuf,
-                                            TEL_HVACF_FrontDefReq,
-                                            (g_remoteControlParamValue > 0) ? g_remoteControlParamValue : 0);
-                        break;
+                    g_remoteControlCmdId = cmdId;
+                    g_remoteControlParamValue = param;
 
-                    case CMD_AC_REAR_DEF_SET_E:
-                        RemoteCtrlSignalValSet(g_remoteControlCanBuf,
-                                            TEL_HVACF_RearDefrostReq,
-                                            (g_remoteControlParamValue > 0) ? g_remoteControlParamValue : 0);
-                        break;
+                    switch (cmdId)
+                    {
+                        case CMD_AC_SPEED_SET_E:
+                            RemoteCtrlSignalValSet(g_remoteControlCanBuf, TEL_HVACF_WindExitSpdReq,
+                                                   (param > 0U) ? param : 0U);
+                            break;
 
-                    case CMD_AC_TEMP_SET_E:
-                        RemoteCtrlSignalValSet(g_remoteControlCanBuf,
-                                            TEL_HVACF_DrTempSelectReq,
-                                            g_remoteControlParamValue);
-                        /* 温度指令下强制单/三区关闭 */
-                        RemoteCtrlSignalValSet(g_remoteControlCanBuf, TEL_HVACF_DualReq,        0);
-                        RemoteCtrlSignalValSet(g_remoteControlCanBuf, TEL_HVACF_TripleZoneReq,  0);
-                        break;
+                        case CMD_AC_FRONT_DEF_SET_E:
+                            RemoteCtrlSignalValSet(g_remoteControlCanBuf, TEL_HVACF_FrontDefReq,
+                                                   (param > 0U) ? param : 0U);
+                            break;
 
-                    case CMD_AC_AIR_CAL_REQ_E:
-                        RemoteCtrlSignalValSet(g_remoteControlCanBuf,
-                                            TEL_HVACF_AirCirculationReq,
-                                            (g_remoteControlParamValue == 1) ? 2 : 1);
-                        break;
+                        case CMD_AC_REAR_DEF_SET_E:
+                            RemoteCtrlSignalValSet(g_remoteControlCanBuf, TEL_HVACF_RearDefrostReq,
+                                                   (param > 0U) ? param : 0U);
+                            break;
 
-                    case CMD_AC_WIND_EXIT_MODE_E:
-                        if (g_remoteControlParamValue > 0)
-                        {
-                            RemoteCtrlSignalValSet(g_remoteControlCanBuf,
-                                                TEL_HVACF_WindExitModeReq,
-                                                g_remoteControlParamValue);
-                        }
-                        break;
+                        case CMD_AC_TEMP_SET_E:
+                            RemoteCtrlSignalValSet(g_remoteControlCanBuf, TEL_HVACF_DrTempSelectReq, param);
+                            RemoteCtrlSignalValSet(g_remoteControlCanBuf, TEL_HVACF_DualReq, 0U);
+                            RemoteCtrlSignalValSet(g_remoteControlCanBuf, TEL_HVACF_TripleZoneReq, 0U);
+                            break;
 
-                    case CMD_AC_REQ_E:
-                        RemoteCtrlSignalValSet(g_remoteControlCanBuf,
-                                            TEL_HVACF_ACReq,
-                                            (g_remoteControlParamValue > 0) ? g_remoteControlParamValue : 0);
-                        break;
+                        case CMD_AC_AIR_CAL_REQ_E:
+                            RemoteCtrlSignalValSet(g_remoteControlCanBuf, TEL_HVACF_AirCirculationReq,
+                                                   (param == 1U) ? 2U : 1U);
+                            break;
 
-                    case CMD_AC_AUTOST_E:
-                        RemoteCtrlSignalValSet(g_remoteControlCanBuf,
-                                            TEL_HVACF_AutoSt,
-                                            (g_remoteControlParamValue > 0) ? g_remoteControlParamValue : 0);
-                        break;
+                        case CMD_AC_WIND_EXIT_MODE_E:
+                            if (param > 0U)
+                            {
+                                RemoteCtrlSignalValSet(g_remoteControlCanBuf, TEL_HVACF_WindExitModeReq, param);
+                            }
+                            break;
 
-                    case CMD_AC_ION_REQ_E:
-                        RemoteCtrlSignalValSet(g_remoteControlCanBuf,
-                                            TEL_HVACF_IonReq,
-                                            (g_remoteControlParamValue > 0) ? g_remoteControlParamValue : 0);
-                        break;
-                    
-                    case CMD_AC_TIME_SET_E:
-                        break;
+                        case CMD_AC_REQ_E:
+                            RemoteCtrlSignalValSet(g_remoteControlCanBuf, TEL_HVACF_ACReq,
+                                                   (param > 0U) ? param : 0U);
+                            break;
 
-                    case CMD_AC_FRAG_ST_E:
-                        break;
-                    
-                    case CMD_AC_TEMP_AUTO_SET_E:
-                        RemoteCtrlSignalValSet(g_remoteControlCanBuf,
-                                            TEL_HVACF_TempSelectManualReq,
-                                            (g_remoteControlParamValue > 0) ? g_remoteControlParamValue : 0);
-                    
-                    default:
-                        /* 本次命令不需要特定覆盖，就只走默认值 */
-                        break;
+                        case CMD_AC_AUTOST_E:
+                            RemoteCtrlSignalValSet(g_remoteControlCanBuf, TEL_HVACF_AutoSt,
+                                                   (param > 0U) ? param : 0U);
+                            break;
+
+                        case CMD_AC_ION_REQ_E:
+                            RemoteCtrlSignalValSet(g_remoteControlCanBuf, TEL_HVACF_IonReq,
+                                                   (param > 0U) ? param : 0U);
+                            break;
+
+                        case CMD_AC_TEMP_AUTO_SET_E:
+                            RemoteCtrlSignalValSet(g_remoteControlCanBuf, TEL_HVACF_TempSelectManualReq,
+                                                   (param > 0U) ? param : 0U);
+                            break;
+
+                        default:
+                            break;
+                    }
                 }
                 if (g_hvacSignalSet[TEL_HVACF_ControlSt - TEL_HVACF_TempSelectManualReq] == 0U)
                 {
@@ -3358,50 +3541,126 @@ static void RemoteControlNormalPackReqCanSignal(void)
             }
             else
             {
-                switch(g_remoteControlCmdId)
+                uint8_t i = 0U;
+
+                /* 1) 先扫描：本次命令里哪些座椅/功能会被“显式设置” */
+                uint8_t setFLHeat = 0U, setFRHeat = 0U, setRLHeat = 0U, setRRHeat = 0U;
+                uint8_t setFLVent = 0U, setFRVent = 0U, setRLVent = 0U, setRRVent = 0U;
+
+                for (i = 0U; (i < g_remoteControlCmdNums) && (i < (uint8_t)REMOTE_CONTROL_ECU_CMD_MAX_NUM); i++)
                 {
-                    case CMD_M_SEAT_HEAT_SET_E:
-                        RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_FLHeatingLevelReq,    g_remoteControlParamValue);
-                        RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_HVSMCtrlModeSt,       0x1);
-                        break;
-                        
-                    case CMD_M_SEAT_VENTILATE_E:
-                        RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_FLVentilatingLevelReq, g_remoteControlParamValue);
-                        RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_HVSMCtrlModeSt,        0x1);
-                        break;
-                        
-                    case CMD_S_SEAT_HEAT_SET_E:
-                        RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_FRHeatingLevelReq, g_remoteControlParamValue);
-                        RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_HVSMCtrlModeSt,    0x1);
-                        break;
-                        
-                    case CMD_S_SEAT_VENTILATE_E:
-                        RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_FRVentilatingLevelReq, g_remoteControlParamValue);
-                        RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_HVSMCtrlModeSt,        0x1);
-                        break;
-                    
-                    case CMD_RL_SEAT_HEAT_SET_E:
-                        RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_RLHeatingLevelReq, g_remoteControlParamValue);
-                        RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_HVSMCtrlModeSt,    0x1);
-                        break;
-                        
-                    case CMD_RL_SEAT_VENTILATE_E:
-                        RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_RLVentilatingLevelReq, g_remoteControlParamValue);
-                        RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_HVSMCtrlModeSt,        0x1);
-                        break;
-                        
-                    case CMD_RR_SEAT_HEAT_SET_E:
-                        RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_RRHeatingLevelReq, g_remoteControlParamValue);
-                        RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_HVSMCtrlModeSt,    0x1);
-                        break;
-                        
-                    case CMD_RR_SEAT_VENTILATE_E:
-                        RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_RRVentilatingLevelReq, g_remoteControlParamValue);
-                        RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_HVSMCtrlModeSt,        0x1);
-                        break;
-                        
-                    default:
-                        break;
+                    switch (g_remoteControlCmdIdList[i])
+                    {
+                        case CMD_M_SEAT_HEAT_SET_E:       setFLHeat = 1U; break;
+                        case CMD_S_SEAT_HEAT_SET_E:       setFRHeat = 1U; break;
+                        case CMD_RL_SEAT_HEAT_SET_E:      setRLHeat = 1U; break;
+                        case CMD_RR_SEAT_HEAT_SET_E:      setRRHeat = 1U; break;
+
+                        case CMD_M_SEAT_VENTILATE_E:      setFLVent = 1U; break;
+                        case CMD_S_SEAT_VENTILATE_E:      setFRVent = 1U; break;
+                        case CMD_RL_SEAT_VENTILATE_E:     setRLVent = 1U; break;
+                        case CMD_RR_SEAT_VENTILATE_E:     setRRVent = 1U; break;
+
+                        default:
+                            break;
+                    }
+                }
+
+                /* 2) 控制模式：一次置位 */
+                RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_HVSMCtrlModeSt, 0x1);
+
+                /* 3) “保持原状态”只对本次未涉及的信号生效
+                    关键点：本次涉及的座椅(可能要写0关闭)不再预填 ActLevel，避免关不掉 */
+                if (setFLHeat == 0U)
+                {
+                    RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf,
+                                                TEL_FLHeatingLevelReq,
+                                                g_remoteControlSignalInfo.HVSM_FLHeatingActLevel);
+                }
+                if (setFRHeat == 0U)
+                {
+                    RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf,
+                                                TEL_FRHeatingLevelReq,
+                                                g_remoteControlSignalInfo.HVSM_FRHeatingActLevel);
+                }
+                if (setRLHeat == 0U)
+                {
+                    RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf,
+                                                TEL_RLHeatingLevelReq,
+                                                g_remoteControlSignalInfo.HVSMR_RLHeatingActLevel);
+                }
+                if (setRRHeat == 0U)
+                {
+                    RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf,
+                                                TEL_RRHeatingLevelReq,
+                                                g_remoteControlSignalInfo.HVSMR_RRHeatingActLevel);
+                }
+
+                if (setFLVent == 0U)
+                {
+                    RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf,
+                                                TEL_FLVentilatingLevelReq,
+                                                g_remoteControlSignalInfo.HVSM_FLVentilatingActLevel);
+                }
+                if (setFRVent == 0U)
+                {
+                    RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf,
+                                                TEL_FRVentilatingLevelReq,
+                                                g_remoteControlSignalInfo.HVSM_FRVentilatingActLevel);
+                }
+                if (setRLVent == 0U)
+                {
+                    RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf,
+                                                TEL_RLVentilatingLevelReq,
+                                                g_remoteControlSignalInfo.HVSMR_RLVentilatingActLevel);
+                }
+                if (setRRVent == 0U)
+                {
+                    RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf,
+                                                TEL_RRVentilatingLevelReq,
+                                                g_remoteControlSignalInfo.HVSMR_RRVentilatingActLevel);
+                }
+
+                /* 4) 叠加写本次命令（允许写0表示关闭） */
+                for (i = 0U; (i < g_remoteControlCmdNums) && (i < (uint8_t)REMOTE_CONTROL_ECU_CMD_MAX_NUM); i++)
+                {
+                    RemoteControlCmdId_t cmdId = g_remoteControlCmdIdList[i];
+                    uint8_t param = g_remoteControlParamValueList[i];
+
+                    g_remoteControlCmdId = cmdId;
+                    g_remoteControlParamValue = param;
+
+                    switch (cmdId)
+                    {
+                        case CMD_M_SEAT_HEAT_SET_E:
+                            RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_FLHeatingLevelReq, param);
+                            break;
+                        case CMD_S_SEAT_HEAT_SET_E:
+                            RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_FRHeatingLevelReq, param);
+                            break;
+                        case CMD_RL_SEAT_HEAT_SET_E:
+                            RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_RLHeatingLevelReq, param);
+                            break;
+                        case CMD_RR_SEAT_HEAT_SET_E:
+                            RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_RRHeatingLevelReq, param);
+                            break;
+
+                        case CMD_M_SEAT_VENTILATE_E:
+                            RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_FLVentilatingLevelReq, param);
+                            break;
+                        case CMD_S_SEAT_VENTILATE_E:
+                            RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_FRVentilatingLevelReq, param);
+                            break;
+                        case CMD_RL_SEAT_VENTILATE_E:
+                            RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_RLVentilatingLevelReq, param);
+                            break;
+                        case CMD_RR_SEAT_VENTILATE_E:
+                            RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_RRVentilatingLevelReq, param);
+                            break;
+
+                        default:
+                            break;
+                    }
                 }
             }
         }
@@ -3613,68 +3872,15 @@ static void RemoteControlSpecialPackReqCanSignal(void)
             }
             else
             {
-                switch(g_remoteControlCmdId)
-                {
-                    case CMD_M_SEAT_HEAT_SET_E:
-                    {
-                        RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_FLHeatingLevelReq,    0x4);
-                        RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_HVSMCtrlModeSt,       0x0);
-                        break;
-                    }
-                    
-                    case CMD_M_SEAT_VENTILATE_E:
-                    {
-                        RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_FLVentilatingLevelReq,    0x4);
-                        RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_HVSMCtrlModeSt,           0x0);
-                        break;
-                    }
-                    
-                    case CMD_S_SEAT_HEAT_SET_E:
-                    {
-                        RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_FRHeatingLevelReq,        0x4);
-                        RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_HVSMCtrlModeSt,           0x0);
-                        break;
-                    }
-                    
-                    case CMD_S_SEAT_VENTILATE_E:
-                    {
-                        RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_FRVentilatingLevelReq,    0x4);
-                        RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_HVSMCtrlModeSt,           0x0);
-                        break;
-                    }
-                    
-                    case CMD_RL_SEAT_HEAT_SET_E:
-                    {
-                        RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_RLHeatingLevelReq,        0x4);
-                        RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_HVSMCtrlModeSt,           0x0);
-                        break;
-                    }
-                    
-                    case CMD_RL_SEAT_VENTILATE_E:
-                    {
-                        RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_RLVentilatingLevelReq,    0x4);
-                        RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_HVSMCtrlModeSt,           0x0);
-                        break;
-                    }
-
-                    case CMD_RR_SEAT_HEAT_SET_E:
-                    {
-                        RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_RRHeatingLevelReq,        0x4);
-                        RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_HVSMCtrlModeSt,           0x0);
-                        break;
-                    }
-                    
-                    case CMD_RR_SEAT_VENTILATE_E:
-                    {
-                        RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_RRVentilatingLevelReq,    0x4);
-                        RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_HVSMCtrlModeSt,           0x0);
-                        break;
-                    }
-
-                    
-                    default:
-                        break;
-                }
+                RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_HVSMCtrlModeSt,            0x0);
+                RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_FLHeatingLevelReq,         0x4);
+                RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_FLVentilatingLevelReq,     0x4);              
+                RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_FRHeatingLevelReq,         0x4);    
+                RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_FRVentilatingLevelReq,     0x4);
+                RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_RLHeatingLevelReq,         0x4);
+                RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_RLVentilatingLevelReq,     0x4);
+                RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_RRHeatingLevelReq,         0x4);
+                RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_RRVentilatingLevelReq,     0x4);
             }
         }
         break;
@@ -3813,81 +4019,60 @@ static RemoteControlProcessResult_t CheckPepsCommandResult(void)
  *************************************************/
 static RemoteControlProcessResult_t CheckHvsmCommandResult(void)
 {
-    RemoteControlProcessResult_t result = RemoteControlResult_Fail_e;
-    
-    if(g_remoteControlHvsmPepsCheck == 0U)
+    uint8_t i = 0U;
+
+    if (g_remoteControlHvsmPepsCheck == 0U)
     {
-        if(g_remoteControlSignalInfo.EMS_EngSt == 1U)
-        {
-            result = RemoteControlResult_Success_e;
-        }
+        return (g_remoteControlSignalInfo.EMS_EngSt == 1U) ?
+               RemoteControlResult_Success_e : RemoteControlResult_Fail_e;
     }
-    else
+
+    for (i = 0U; i < g_remoteControlCmdNums; i++)
     {
-        switch(g_remoteControlCmdId)
+        RemoteControlCmdId_t cmdId = g_remoteControlCmdIdList[i];
+        uint8_t param = g_remoteControlParamValueList[i];
+        uint8_t ok = 0U;  
+
+        switch (cmdId)
         {
             case CMD_M_SEAT_HEAT_SET_E:
-                if(g_remoteControlSignalInfo.HVSM_FLHeatingActLevel == g_remoteControlParamValue)
-                {
-                    result = RemoteControlResult_Success_e;
-                }
+                ok = (g_remoteControlSignalInfo.HVSM_FLHeatingActLevel == param) ? 1U : 0U;
                 break;
-                
-            case CMD_M_SEAT_VENTILATE_E:
-                if(g_remoteControlSignalInfo.HVSM_FLVentilatingActLevel == g_remoteControlParamValue)
-                {
-                    result = RemoteControlResult_Success_e;
-                }
-                break;
-                
             case CMD_S_SEAT_HEAT_SET_E:
-                if(g_remoteControlSignalInfo.HVSM_FRHeatingActLevel == g_remoteControlParamValue)
-                {
-                    result = RemoteControlResult_Success_e;
-                }
+                ok = (g_remoteControlSignalInfo.HVSM_FRHeatingActLevel == param) ? 1U : 0U;
                 break;
-                
-            case CMD_S_SEAT_VENTILATE_E:
-                if(g_remoteControlSignalInfo.HVSM_FRVentilatingActLevel == g_remoteControlParamValue)
-                {
-                    result = RemoteControlResult_Success_e;
-                }
-                break;
-            
             case CMD_RL_SEAT_HEAT_SET_E:
-                if(g_remoteControlSignalInfo.HVSMR_RLHeatingActLevel == g_remoteControlParamValue)
-                {
-                    result = RemoteControlResult_Success_e;
-                }
+                ok = (g_remoteControlSignalInfo.HVSMR_RLHeatingActLevel == param) ? 1U : 0U;
                 break;
-                
-            case CMD_RL_SEAT_VENTILATE_E:
-                if(g_remoteControlSignalInfo.HVSMR_RLVentilatingActLevel == g_remoteControlParamValue)
-                {
-                    result = RemoteControlResult_Success_e;
-                }
-                break;
-            
             case CMD_RR_SEAT_HEAT_SET_E:
-                if(g_remoteControlSignalInfo.HVSMR_RRHeatingActLevel == g_remoteControlParamValue)
-                {
-                    result = RemoteControlResult_Success_e;
-                }
+                ok = (g_remoteControlSignalInfo.HVSMR_RRHeatingActLevel == param) ? 1U : 0U;
                 break;
 
-            case CMD_RR_SEAT_VENTILATE_E:
-                if(g_remoteControlSignalInfo.HVSMR_RRVentilatingActLevel == g_remoteControlParamValue)
-                {
-                    result = RemoteControlResult_Success_e;
-                }
+            case CMD_M_SEAT_VENTILATE_E:
+                ok = (g_remoteControlSignalInfo.HVSM_FLVentilatingActLevel == param) ? 1U : 0U;
                 break;
-                
+            case CMD_S_SEAT_VENTILATE_E:
+                ok = (g_remoteControlSignalInfo.HVSM_FRVentilatingActLevel == param) ? 1U : 0U;
+                break;
+            case CMD_RL_SEAT_VENTILATE_E:
+                ok = (g_remoteControlSignalInfo.HVSMR_RLVentilatingActLevel == param) ? 1U : 0U;
+                break;
+            case CMD_RR_SEAT_VENTILATE_E:
+                ok = (g_remoteControlSignalInfo.HVSMR_RRVentilatingActLevel == param) ? 1U : 0U;
+                break;
+
             default:
+                ok = 0U;
                 break;
         }
+
+        if (ok == 0U)
+        {
+            return RemoteControlResult_Fail_e; 
+        }
     }
-    
-    return result;
+
+    return RemoteControlResult_Success_e;
 }
 
 /*************************************************
@@ -3902,107 +4087,126 @@ static RemoteControlProcessResult_t CheckHvsmCommandResult(void)
  *************************************************/
 static RemoteControlProcessResult_t CheckHvacCommandResult(void)
 {
-    RemoteControlProcessResult_t result = RemoteControlResult_Fail_e;
-    if(g_remoteControlHvacPepsCheck == 0U)
+    uint8_t i = 0U;
+
+    if (g_remoteControlHvacPepsCheck == 0U)
     {
-        if(g_remoteControlSignalInfo.EMS_EngSt == 1U)
+        return (g_remoteControlSignalInfo.EMS_EngSt == 1U) ?
+               RemoteControlResult_Success_e : RemoteControlResult_Fail_e;
+    }
+
+    if (g_remoteControlSignalInfo.HVACF_TelematicsSt != 1U)
+    {
+        return RemoteControlResult_Fail_e;
+    }
+
+    /* 多指令：列表里的每一条都必须成功 */
+    for (i = 0U; i < g_remoteControlCmdNums; i++)
+    {
+        RemoteControlCmdId_t cmdId = g_remoteControlCmdIdList[i];
+        uint8_t param = g_remoteControlParamValueList[i];
+        uint8_t ok = 0U; 
+
+        switch (cmdId)
         {
-            result = RemoteControlResult_Success_e;
+            case CMD_AC_SPEED_SET_E:
+                if (g_remoteControlSignalInfo.HVACF_WindExitSpd == param)
+                {
+                    ok = 1U;
+                }
+                break;
+
+            case CMD_AC_FRONT_DEF_SET_E:
+                if ((param == 0x1U) && (g_remoteControlSignalInfo.HVACF_WindExitMode == 5U))
+                {
+                    ok = 1U;
+                }
+                else if ((param == 0x0U) && (g_remoteControlSignalInfo.HVACF_WindExitMode == 0U))
+                {
+                    ok = 1U;
+                }
+                else
+                {
+                    ok = 0U;
+                }
+                break;
+
+            case CMD_AC_REAR_DEF_SET_E:
+                if (param == g_remoteControlSignalInfo.HVACF_RearDefrostSt)
+                {
+                    ok = 1U;
+                }
+                break;
+
+            case CMD_AC_TEMP_SET_E:
+                if (param == g_remoteControlSignalInfo.HVACF_DriverTempSelect)
+                {
+                    ok = 1U;
+                }
+                break;
+
+            case CMD_AC_AIR_CAL_REQ_E:
+                if ((param == 0U) && (g_remoteControlSignalInfo.HVACF_AirCirculationSt == 1U))
+                {
+                    ok = 1U;
+                }
+                else if ((param == 1U) && (g_remoteControlSignalInfo.HVACF_AirCirculationSt == 2U))
+                {
+                    ok = 1U;
+                }
+                else
+                {
+                    ok = 0U;
+                }
+                break;
+
+            case CMD_AC_WIND_EXIT_MODE_E:
+                if (param == g_remoteControlSignalInfo.HVACF_WindExitMode)
+                {
+                    ok = 1U;
+                }
+                break;
+
+            case CMD_AC_REQ_E:
+                if (param == g_remoteControlSignalInfo.HVACF_ACSt)
+                {
+                    ok = 1U;
+                }
+                break;
+
+            case CMD_AC_AUTOST_E:
+                if (param == g_remoteControlSignalInfo.HVACF_AutoSt)
+                {
+                    ok = 1U;
+                }
+                break;
+
+            case CMD_AC_ION_REQ_E:
+                if (param == g_remoteControlSignalInfo.HVACF_IonMode)
+                {
+                    ok = 1U;
+                }
+                break;
+
+            case CMD_AC_TEMP_AUTO_SET_E:
+                if (param == g_remoteControlSignalInfo.HVACF_TempSelectAuto)
+                {
+                    ok = 1U;
+                }
+                break;
+
+            default:
+                ok = 0U;
+                break;
+        }
+
+        if (ok == 0U)
+        {
+            return RemoteControlResult_Fail_e;
         }
     }
-    else
-    {
-        if(g_remoteControlSignalInfo.HVACF_TelematicsSt == 1U)
-        {
-            switch(g_remoteControlCmdId)
-            {
-                case CMD_AC_SPEED_SET_E:
-                    if(g_remoteControlSignalInfo.HVACF_WindExitSpd == g_remoteControlParamValue)
-                    {
-                        result = RemoteControlResult_Success_e;
-                    }
-                    break;
 
-                case CMD_AC_FRONT_DEF_SET_E:
-                    if((g_remoteControlParamValue == 0x1) &&
-                    (g_remoteControlSignalInfo.HVACF_WindExitMode == 5U))
-                    {
-                        result = RemoteControlResult_Success_e;
-                    }
-                    if((g_remoteControlParamValue == 0x0) &&
-                    (g_remoteControlSignalInfo.HVACF_WindExitMode == 0U))
-                    {
-                        result = RemoteControlResult_Success_e;
-                    }
-                    break;
-
-                case CMD_AC_REAR_DEF_SET_E:
-                    if(g_remoteControlParamValue == g_remoteControlSignalInfo.HVACF_RearDefrostSt)
-                    {
-                        result = RemoteControlResult_Success_e;
-                    }
-                    break;
-                
-                case CMD_AC_TEMP_SET_E:
-                    if(g_remoteControlParamValue == g_remoteControlSignalInfo.HVACF_DriverTempSelect)
-                    {
-                        result = RemoteControlResult_Success_e;
-                    }
-                    break;
-
-                case CMD_AC_AIR_CAL_REQ_E:
-                    if((g_remoteControlParamValue == 0) && (g_remoteControlSignalInfo.HVACF_AirCirculationSt == 1U))
-                    {
-                        result = RemoteControlResult_Success_e;
-                    }
-                    else if((g_remoteControlParamValue == 1) && (g_remoteControlSignalInfo.HVACF_AirCirculationSt == 2U))
-                    {
-                        result = RemoteControlResult_Success_e;
-                    }
-                    break;
-                    
-                case CMD_AC_WIND_EXIT_MODE_E:
-                    if(g_remoteControlParamValue == g_remoteControlSignalInfo.HVACF_WindExitMode)
-                    {
-                        result = RemoteControlResult_Success_e;
-                    }
-                    break;
-                
-                case CMD_AC_REQ_E:
-                    if(g_remoteControlParamValue == g_remoteControlSignalInfo.HVACF_ACSt)
-                    {
-                        result = RemoteControlResult_Success_e;
-                    }
-                
-                    break;
-                
-                case CMD_AC_AUTOST_E:
-                    if(g_remoteControlParamValue == g_remoteControlSignalInfo.HVACF_AutoSt)
-                    {
-                        result = RemoteControlResult_Success_e;
-                    }
-                    break;
-
-                case CMD_AC_ION_REQ_E:
-                    if(g_remoteControlParamValue == g_remoteControlSignalInfo.HVACF_IonMode)
-                    {
-                        result = RemoteControlResult_Success_e;
-                    }
-                    break;
-                
-                case CMD_AC_TEMP_AUTO_SET_E:
-                    if(g_remoteControlParamValue == g_remoteControlSignalInfo.HVACF_TempSelectAuto)
-                    {
-                        result = RemoteControlResult_Success_e;
-                    }
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
-    
-    return result;
+    return RemoteControlResult_Success_e;
 }
 
 /*************************************************
@@ -4522,3 +4726,41 @@ static void RemoteControlSendIntoOtaModeResult(void)
     LogHalUpLoadLog("RC Send Into Ota Mode Ack");
 }
 
+/*******************************************************************************
+* Function    : RemoteControlLoadCurrentCmdByIndex
+* Description : Loads the current command and parameter value by index
+*               Retrieves the command ID and parameter value from the global
+*               command lists at the specified index and sets them as the
+*               current active command for processing.
+* Input       : idx - Index of the command in the command list (0 to cmdNums-1)
+* Output      : None
+* Return      : None
+* Others      : Updates g_remoteControlCmdId and g_remoteControlParamValue
+*******************************************************************************/
+static void RemoteControlLoadCurrentCmdByIndex(uint8_t idx)
+{
+    g_remoteControlCmdId      = g_remoteControlCmdIdList[idx];
+    g_remoteControlParamValue = g_remoteControlParamValueList[idx];
+}
+
+/*******************************************************************************
+* Function    : RemoteControlClearCmdList
+* Description : Clears all remote control command list and related variables
+*               Resets error code, ECU ID, command ID, command numbers, and
+*               parameter value to their default states. Also clears the
+*               command ID list and parameter value list arrays.
+* Input       : None
+* Output      : None
+* Return      : None
+* Others      : Resets all command-related global variables to initial state
+*******************************************************************************/
+static void RemoteControlClearCmdList(void)
+{
+    g_remoteControlErrorCode = REMOTE_CONTROL_ERR_CODE_SUCCESS;
+    g_remoteControlEcuId = ECU_NULL_E;
+    g_remoteControlCmdId = CMD_DEFAULT_E;
+    g_remoteControlCmdNums = 0U;
+    g_remoteControlParamValue = 0U;
+    (void)memset((void*)g_remoteControlCmdIdList, 0, sizeof(g_remoteControlCmdIdList));
+    (void)memset((void*)g_remoteControlParamValueList, 0, sizeof(g_remoteControlParamValueList));
+}

@@ -26,6 +26,7 @@
 #include "string.h"
 #include "taskPowerManage.h"
 #include "powerManageHal.h"
+#include "powerManageSdk.h"
 #include "canPeriodTask.h"
 #include "osTimerSdk.h"
 /****************************** Macro Definitions ******************************/
@@ -807,8 +808,8 @@ static void MsgCycleTimeOutProcess(uint8_t index)
         canData[1] = CBV;    //GAC reserve this byte 
 
         //2: Origin of the wake up 
-        wakeupSource = PowerManageHalGetWakeupSource();
-        if(ignStatus == NM_IGN_ON)                          //15 prio level 1
+        wakeupSource = PowerManageSdkGetFirstWakeSource();
+        if(wakeupSource == PM_HAL_WAKEUP_SOURCE_KL15)                          //15 prio level 1
         {
             canData[2] = NM_IGN_ON_WAKEUP_VALUE;
         }
@@ -816,7 +817,7 @@ static void MsgCycleTimeOutProcess(uint8_t index)
         {
             canData[2] = NM_TSP_MESSAGE_WAKEUP_VALUE;
         }
-        else if(canStatus == 1)
+        else if(wakeupSource == PM_HAL_WAKEUP_SOURCE_CAN2)
         {
             canData[2] = NM_CAN_MESSAGE_WAKEUP_VALUE;
         }
@@ -1238,8 +1239,8 @@ static void BusOffErrorResetCanNMTransmit(uint8_t index)
         canData[1] = CBV;    //GAC reserve this byte 
 
         //2: Origin of the wake up 
-        wakeupSource = PowerManageGetLastWakeupSource();
-        if(ignStatus == NM_IGN_ON)                          //15 prio level 1
+        wakeupSource = PowerManageSdkGetFirstWakeSource();
+        if(wakeupSource == PM_HAL_WAKEUP_SOURCE_KL15)                       //15 prio level 1
         {
             canData[2] = NM_IGN_ON_WAKEUP_VALUE;
         }
@@ -1247,7 +1248,7 @@ static void BusOffErrorResetCanNMTransmit(uint8_t index)
         {
             canData[2] = NM_TSP_MESSAGE_WAKEUP_VALUE;
         }
-        else if(canStatus == 1)
+        else if(wakeupSource == PM_HAL_WAKEUP_SOURCE_CAN2)
         {
             canData[2] = NM_CAN_MESSAGE_WAKEUP_VALUE;
         }
@@ -1255,6 +1256,7 @@ static void BusOffErrorResetCanNMTransmit(uint8_t index)
         {
             canData[2] = wakeupSource;                      //for special situation find problem
         }
+
 
         //3:SubNet wake up request
         canData[3] = g_nmSubNetWakeupRequestValue;

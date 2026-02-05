@@ -411,6 +411,7 @@ static const EcuMonitorNode_t g_monitorEcuList[] = {
     // TCAN & DCAN
     {0x72D, TBOX_CAN_CHANNEL_2}, // TBOX
     {0x74F, TBOX_CAN_CHANNEL_2}, // GWM
+    {0x7DF, TBOX_CAN_CHANNEL_2},
 };
 static EventGroupHandle_t g_canTxEvt = NULL;
 static CanHalTxBuffer_t g_allCanTxBuffer;

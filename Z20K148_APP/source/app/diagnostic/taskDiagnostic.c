@@ -269,8 +269,8 @@ static const WdidInfor_t g_Service2EFunMapList[] =
         {0xB261, 1, Service2EWritePKIapply, E_UDS_SECURITY_LEVEL1},
         {0xB25C, 1, Service2ETboxCurrentRunningMode, E_UDS_SECURITY_LEVEL1},
         {0xB2E5, 1, Service2EWriteJtagStatus, E_UDS_SECURITY_LEVEL1},
-        {0xF1A1, 7, Service2EWriteF1A1, E_UDS_SECURITY_LEVEL1},
-        {0xF1A2, 7, Service2EWriteF1A2, E_UDS_SECURITY_LEVEL1},
+        // {0xF1A1, 7, Service2EWriteF1A1, E_UDS_SECURITY_LEVEL1},
+        // {0xF1A2, 7, Service2EWriteF1A2, E_UDS_SECURITY_LEVEL1},
     };
 // 读需要透传
 static const uint16_t g_passthroughDidList_22[] = {
@@ -371,8 +371,8 @@ static const uint16_t g_passthroughDidList_22[] = {
     0x2111,
     0xB2E6,
     0x1014,
-    0xF1A1,
-    0xF1A2,
+    // 0xF1A1,
+    // 0xF1A2,
     //0x011F,
     //0x0124,
 };
@@ -485,8 +485,8 @@ static const RdidInfor_t g_Service22FunMapList[] =
         {0xB2B4, 1, Service22ReadTransportMode},                                                  // 运输模式   0xB2B4_cxl
         {0xB2B5, 1, Service22ReadKeySt},                                                          // 电子钥匙状态   0xB2B5_cxl
         {0x0120, 12, Service22ReadDtcSettingControl},                                             // DTC使能控制 0x0120_cxl
-        {0xF1A1, 7, Service22ReadF1A1},                                               // 重编程计数器 0x0200_cxl
-        {0xF1A2, 7, Service22ReadF1A2},                                        // 重编程尝试计数器 0x0201_cxl
+        // {0xF1A1, 7, Service22ReadF1A1},                                               // 重编程计数器 0x0200_cxl
+        // {0xF1A2, 7, Service22ReadF1A2},                                        // 重编程尝试计数器 0x0201_cxl
         {0xF186, 1, Service22ReadActiveDiagnosticSession},    // 0xF186_cxl
         {0x031C, 50, Service22ReadTspDomain1},                // 0x031C_cxl
         //{0x5001, 1, Service22ReadVehicleMode},                // 车辆模式 0x5001_cxl
@@ -3347,20 +3347,19 @@ void TaskEcuDiagnostic(void *pvParameters)
         }
       }
     }
-    uint8_t currentTesterPresent = ((g_currentSession != E_DEFAULT_SESSION) || (isS3ServerTimerActive == 1)) ? 1 : 0;
+    uint8_t currentTesterPresent = ((isS3ServerTimerActive == 1)) ? 1 : 0;
 
     if (currentTesterPresent != g_isTesterPresent)
     {
       g_isTesterPresent = currentTesterPresent;
-
-      if (currentTesterPresent)
-      {
-        RemoteDiagnosticSdkShortDisable(); // 暂时禁止远程诊断
-      }
-      else
-      {
-        RemoteDiagnosticSdkRecover(); // 恢复远程诊断
-      }
+    //   if (currentTesterPresent)
+    //   {
+    //     RemoteDiagnosticSdkShortDisable(); // 暂时禁止远程诊断
+    //   }
+    //   else
+    //   {
+    //     RemoteDiagnosticSdkRecover(); // 恢复远程诊断
+    //   }
     }
 
     ret = -1;

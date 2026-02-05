@@ -93,9 +93,10 @@ typedef union TEL_11_A_T
         uint64_t TEL_Latitude_1 : 8;
         uint64_t TEL_Latitude_2 : 8;
         uint64_t TEL_Latitude_3 : 8;
-        uint64_t TEL_Latitude_4 : 4;
 
         uint64_t TEL_Longitude_1 : 4;
+        uint64_t TEL_Latitude_4 : 4;
+
         uint64_t TEL_Longitude_2 : 8;
         uint64_t TEL_Longitude_3 : 8;
         uint64_t TEL_Longitude_4 : 8;
@@ -522,7 +523,7 @@ static int16_t CanPeriodMessage3C5(uint8_t *pCanData)
 
             uint32_t lat_final = (uint32_t)lat_signed;
             uint32_t lon_final = (uint32_t)lon_signed;
-            LogHalUpLoadLog("can3C5 lat:%d lon:%d\r\n", lat_signed, lon_signed);
+
             g_tbox11Message.DetailInfo.TEL_Latitude_1 = (lat_final >> 20) & 0xFF;
             g_tbox11Message.DetailInfo.TEL_Latitude_2 = (lat_final >> 12) & 0xFF;
             g_tbox11Message.DetailInfo.TEL_Latitude_3 = (lat_final >> 4) & 0xFF;

@@ -241,6 +241,32 @@ static int16_t MpuPowerSyncSdkSendKeepWakeAck(void)
     return 0;
 }
 
+int16_t MpuPowerSyncSdkSendNoSleepFlag(uint8_t noSleepFlag)
+{
+    if (g_mpuHandle < 0)
+    {
+        return -1;
+    }
+    g_powerSyncPack.aid = 0x01;
+    g_powerSyncPack.mid = 0x04;
+    g_powerSyncPack.subcommand = 0x08;
+
+    memset(g_packData, 0, sizeof(g_packData));
+
+    g_powerSyncPack.dataBufferSize = sizeof(g_packData);
+
+    xSemaphoreTake(g_mutexHandle, portMAX_DELAY);
+    g_packData[0] = noSleepFlag;                        //01:mcu nosleep  02:mcu much wakeup
+    xSemaphoreGive(g_mutexHandle);
+
+    g_powerSyncPack.pDataBuffer = g_packData;
+    g_powerSyncPack.dataLength = 1;
+
+    MpuHalTransmit(g_mpuHandle, &g_powerSyncPack, MPU_HAL_UART_MODE);
+    
+    return 0;
+}
+
 #if (SYNC_GSENSOR_ENABLE == 1)
 static int16_t MpuPowerSyncSdkSendGsensorState(void)
 {

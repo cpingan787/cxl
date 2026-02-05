@@ -311,10 +311,10 @@ void RemoteDiagnosticSdkProcess(CanIdConfig_t *pEcuConfigure, MpuBuffer_t *pMpuB
 
         uint8_t currentMode = UdsDidGetManufactoryMode();
         uint8_t isNonFactoryMode = (currentMode <= 0x0F) ? 1 : 0;
-        rxMsg.aid = COMMAND_UDS_TRANSMIT_AID;
-        rxMsg.mid = COMMAND_UDS_FLASHER_MID;
-        rxMsg.subcommand = COMMAND_UDS_TRANSMIT_REQ;
-
+        // rxMsg.aid = COMMAND_UDS_TRANSMIT_AID;
+        // rxMsg.mid = COMMAND_UDS_FLASHER_MID;
+        // rxMsg.subcommand = COMMAND_UDS_TRANSMIT_REQ;
+        //LogHalUpLoadLog("cxl1%d  ", GetTesterPresenceStatus());
         // rxMsg.pDataBuffer[0] = 0U;
         // rxMsg.pDataBuffer[1] = 0U;
 
@@ -336,7 +336,7 @@ void RemoteDiagnosticSdkProcess(CanIdConfig_t *pEcuConfigure, MpuBuffer_t *pMpuB
         // rxMsg.pDataBuffer[17] = 0U;
         // rxMsg.pDataBuffer[18] = 0U;
         // rxMsg.dataLength = 19;
-        ret = MPU_HAL_STATUS_OK;
+        // ret = MPU_HAL_STATUS_OK;
         if (ret == MPU_HAL_STATUS_OK)
         {
             if ((rxMsg.aid == COMMAND_UDS_TRANSMIT_AID) &&
@@ -355,12 +355,12 @@ void RemoteDiagnosticSdkProcess(CanIdConfig_t *pEcuConfigure, MpuBuffer_t *pMpuB
                         GetTesterPresenceStatus() && (isNonFactoryMode == 1))
                     {
                         // 插入诊断仪 禁用远程诊断和刷写
-                        LogHalUpLoadLog("cxlc%d  ", GetTesterPresenceStatus());
+                        LogHalUpLoadLog("cxl2%d  ", GetTesterPresenceStatus());
                         RemoteDiagnosticSdkSendAck(&rxMsg, DIAG_REJECT_TESTER_PRESENT);
 
                         g_udsFlag = 0;
                         g_udsReceiveFlag = 0;
-                        LogHalUpLoadLog("[MCU] RemoteDiagnosticSdkReject...");
+                        //LogHalUpLoadLog("[MCU] RemoteDiagnosticSdkReject...");
                     }
                     else
                     {
@@ -422,7 +422,6 @@ void RemoteDiagnosticSdkProcess(CanIdConfig_t *pEcuConfigure, MpuBuffer_t *pMpuB
                 g_selfDiagPending = 0;
             }
         }
-
         if (g_remoteDiagnosticShortDisableFlag == 1)
         {
             g_remoteDiagnosticDisableTimeCount++;
@@ -440,9 +439,9 @@ void RemoteDiagnosticSdkProcess(CanIdConfig_t *pEcuConfigure, MpuBuffer_t *pMpuB
         }
         if (g_remoteDiagnosticDisableFlag == 1 && (isNonFactoryMode == 1))
         {
-            LogHalUpLoadLog("cxl3");
-            g_udsFlag = 0;
-            g_udsReceiveFlag = 0;
+            // LogHalUpLoadLog("cxl3");
+            // g_udsFlag = 0;
+            // g_udsReceiveFlag = 0;
         }
 
         if (g_udsFlag == 1)

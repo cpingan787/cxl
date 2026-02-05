@@ -13,10 +13,7 @@ typedef enum
 	E_SOS_BUTTON_STATE_IDLE	= 0x00,	    	/*按键未被操作*/
 	E_SOS_BUTTON_STATE_CLICK,				/*按键被触发*/
 	E_SOS_BUTTON_STATE_PRESS,				/*按键被按下未放开*/
-	E_SOS_BUTTON_STATE_RELEASED,			/*按键被松开*/
-	E_SOS_BUTTON_STATE_CANCELLED,			/*按键被取消*/
-	E_SOS_BUTTON_STATE_TESTMODE,			/*按键测试模式*/
-	E_SOS_BUTTON_STATE_HARDFAULT,			/*按键故障*/
+	E_SOS_BUTTON_STATE_WAIT_RELEASE,		/*按键被松开*/
 }SosButtonState_e;
 
 typedef struct

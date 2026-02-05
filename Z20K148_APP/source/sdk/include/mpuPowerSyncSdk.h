@@ -148,4 +148,5 @@ uint8_t MpuPowerSyncSdkGetNadModuleStatus(void);
 
 uint8_t MpuPowerSyncSdkGetWakeFlag(void);
 
+int16_t MpuPowerSyncSdkSendNoSleepFlag(uint8_t noSleepFlag);
 #endif

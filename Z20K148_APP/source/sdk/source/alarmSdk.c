@@ -11,8 +11,8 @@
 #include "taskEcallProcess.h"
 #include "timerHal.h"
 /****************************** Macro Definitions ******************************/
-#define ECALL_HANG_ON_TIME_MS   (90U)
-#define ECALL_OVER_TIME_MS      (2000U)
+#define ECALL_HANG_ON_TIME_MS       (90U)
+#define ECALL_OVER_TIME_MS          (2000U)
 /****************************** Type Definitions ******************************/
 
 /****************************** Global Variables ******************************/
@@ -30,6 +30,7 @@ static uint8_t g_bcallTriggerType = 0U;
 static uint8_t g_ecallCallState = 0U;
 static uint8_t g_bcallCallState = 0U;
 static int16_t ebcallTimeHandle = -1;
+static int16_t g_ebcallStatusClearTimeHandle = -1;
 /****************************** Function Declarations *************************/
 static void AlarmSdkSetEcallCallState(uint8_t state);
 static void AlarmSdkSetBcallCallState(uint8_t state);
@@ -230,6 +231,7 @@ int16_t AlarmSdkInit(void)
     g_dataPack.pDataBuffer = g_dataBuffer;
     g_dataPack.dataBufferSize = sizeof(g_dataBuffer); 
     ebcallTimeHandle = TimerHalOpen();
+    g_ebcallStatusClearTimeHandle = TimerHalOpen();
     return 0;
 }
 
@@ -355,6 +357,13 @@ void AlarmSdkCycleProcess(void)
         LogHalUpLoadLog("Xc hang on time out");
         XCallSetPhoneCallState(E_ECALL_STATE_CALL_OVER);
         TimerHalStopTime(ebcallTimeHandle);
+        TimerHalStartTime(g_ebcallStatusClearTimeHandle, ECALL_OVER_TIME_MS);
+    }
+    if(TimerHalIsTimeout(g_ebcallStatusClearTimeHandle) == 0)
+    {
+        LogHalUpLoadLog("Xc status clear time out");
+        TimerHalStopTime(g_ebcallStatusClearTimeHandle);
+        XCallSetPhoneCallState(E_ECALL_STATE_NOT_ACTIVE);
     }
 }
 

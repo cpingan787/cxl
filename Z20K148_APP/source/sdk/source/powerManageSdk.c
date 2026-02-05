@@ -38,6 +38,8 @@
 #define PM_NM_LOCAL_WAKE_DELAY_TIME     150
 #define PM_MCU_SEND_SLEEP_CMD_TIMEOUT   2000
 #define PM_NM_WAKEUP_SOURCE_MPU_NO_CAN  43U             //wake up no network msg send
+#define PM_MCU_NO_SLEEP_FLAG            0x01
+#define PM_MCU_MUCH_WAKEUP_FLAG         0x02
 /****************************** Type Definitions ******************************/
 typedef struct 
 {
@@ -90,15 +92,24 @@ typedef struct
     uint32_t remoteControlWakeTimeoutCount;
     uint32_t preSleepNoticeCount;
     uint8_t fastSleepFlag; /*快速休眠标志*/
+    int16_t noSleepTimerHandle;
     const PmSdkConfig_t *pPmConfig;
-    
+    uint8_t firstWakeSource;
 }PmSdkManage_t;
 #pragma pack(pop)
 
+typedef enum
+    {
+        CHECK_STATE_IDLE = 0U,
+        CHECK_STATE_WAIT = 1U,
+        CHECK_STATE_SEND = 2U,
+        CHECK_STATE_CLEAR = 3U,
+    }CheckSleepWakeState_t;
 /****************************** Global Variables ******************************/
 static PmSdkManage_t g_pmManage;
 static uint16_t g_pmNmLocalWakeupTime = 0U;
 static uint8_t g_pmMpuWakeUpFlag = 0U;
+static CheckSleepWakeState_t g_checkNoSleepState = CHECK_STATE_IDLE;
 /****************************** Function Declarations *************************/
 static uint8_t CanWakeUpSourceIsValid(uint8_t wakeSource);
 static void WakeDelayProcess(uint8_t mcuWakeSource, uint8_t mpuWakeSource,uint32_t *pWakeDelayTime);
@@ -134,7 +145,10 @@ static void PmStateMcuSleepProcess(uint32_t cycleTime);
 static void PmStatePreCheckCanProcess(uint32_t cycleTime);
 static void PmStateGetMpuWakeSourceProcess(uint32_t cycleTime);
 static uint8_t PowerManageSdkGetMpuWakeUpFlag(void);
-
+static void PowerManageSdkCheckSleepWakeModeProcess(void);
+static void PowerManageSdkNoSleepCheck(void);
+static void PowerManageSdkMuchWakeUpCheck(void);
+static void PowerManageSdkClearNoSleepFlag(void);
 /****************************** Public Function Implementations ***************/
 /*************************************************
   Function:       PowerManageSdkInit
@@ -159,16 +173,18 @@ int16_t PowerManageSdkInit(const PmSdkConfig_t* pmConfig)
         g_pmManage.wakeDelayTime = pmConfig->wakeDelayTime;
         g_pmManage.pPmConfig = pmConfig;
         g_pmManage.pmState = E_PM_STATE_UNPOWED;
-        g_pmManage.wakeupSource = 0;
-        g_pmManage.wakeupCount = 0;
-        g_pmManage.testMode = 0;
-        g_pmManage.forceSleepFlag = 0;
-        g_pmManage.sleepOpenCount = 0;
-        g_pmManage.kl30OffFlag = 0;
-        g_pmManage.sleepState = 1;
-        g_pmManage.mpuWakeSource = 0;
-        g_pmManage.preSleepNoticeCount = 0;
-        g_pmManage.fastSleepFlag = 0; 
+        g_pmManage.wakeupSource = 0U;
+        g_pmManage.wakeupCount = 0U;
+        g_pmManage.testMode = 0U;
+        g_pmManage.forceSleepFlag = 0U;
+        g_pmManage.sleepOpenCount = 0U;
+        g_pmManage.kl30OffFlag = 0U;
+        g_pmManage.sleepState = 1U;
+        g_pmManage.mpuWakeSource = 0U;
+        g_pmManage.preSleepNoticeCount = 0U;
+        g_pmManage.fastSleepFlag = 0U; 
+        g_pmManage.firstWakeSource = PM_HAL_WAKEUP_SOURCE_KL15;
+        g_pmManage.noSleepTimerHandle = TimerHalOpen();
         result = PM_SDK_STATUS_OK;
     }
     
@@ -250,6 +266,7 @@ void PowerManageSdkCycleProcess(uint32_t cycleTime)
     {
         //PeripheralHalMcuHardReset();
     }
+    PowerManageSdkCheckSleepWakeModeProcess();
 }
 
 /*************************************************
@@ -1499,6 +1516,7 @@ static void PmStateMcuSleepProcess(uint32_t cycleTime)
 {
     LogHalUpLoadLog("Mcu Ready Sleep");
     PowerManageSdkSetMpuWakeUpFlag(0x00);
+    PowerManageSdkClearNoSleepFlag();
     /*MPU进入低功耗*/
     MpuHalSetMode(0);
     /*设置peripheral模块进入低功耗*/
@@ -1531,11 +1549,11 @@ static void PmStateMcuSleepProcess(uint32_t cycleTime)
 //    GSensorHalInit(1);
     /*获取唤醒源*/
     g_pmManage.wakeupSource = PowerManageHalGetWakeupSource();
+    g_pmManage.firstWakeSource = PowerManageHalGetWakeupSource();
     TBOX_PRINT("Wakeup source is : %d\r\n",g_pmManage.wakeupSource);
     TimerHalSetMode(1);
     /*MPU进入正常模式*/
     MpuHalSetMode(1);
-    LogHalUpLoadLog("wakeup source is %d\r\n", g_pmManage.wakeupSource);
     /*设置can进入正常模式*/
     CanHalSetMode(1);
     /*设置peripheral模块进入正常模式*/
@@ -1698,4 +1716,176 @@ static void PmStateGetMpuWakeSourceProcess(uint32_t cycleTime)
 static uint8_t PowerManageSdkGetMpuWakeUpFlag(void)
 {
     return g_pmMpuWakeUpFlag;
+}
+
+/*************************************************
+  Function:       PowerManageSdkCheckSleepWakeModeProcess
+  Description:    Periodic process entry for sleep/wake abnormal behavior checks
+                  including "no-sleep too long" in local mode and "frequent wake-up"
+                  between low-power and local mode.
+  Input:          None
+  Output:         None
+  Return:         None
+  Others:         - Calls PowerManageSdkNoSleepCheck() and PowerManageSdkMuchWakeUpCheck() in sequence
+                  - It is recommended to keep both checks in the same periodic cycle
+                  - If PmNmGetSleepStatus() value may change quickly, consider reading once
+                    and passing status into sub-checks to avoid inconsistency
+*************************************************/
+static void PowerManageSdkCheckSleepWakeModeProcess(void)
+{
+    PowerManageSdkNoSleepCheck();
+    PowerManageSdkMuchWakeUpCheck();
+}
+
+/*************************************************
+  Function:       PowerManageSdkNoSleepCheck
+  Description:    Detect "no-sleep too long" condition in local mode.
+                  When NM indicates sleep is COMPLETE continuously longer than configured
+                  noSleepTime, report NO_SLEEP flag to MCU once, and latch until leaving
+                  COMPLETE status.
+  Input:          None
+  Output:         None
+  Return:         None
+  Others:         - State machine uses g_checkNoSleepState:
+                    * CHECK_STATE_IDLE : waiting for sleepStatus == COMPLETE
+                    * CHECK_STATE_WAIT : timer running, waiting for timeout while COMPLETE holds
+                    * CHECK_STATE_SEND : send PM_MCU_NO_SLEEP_FLAG once
+                    * CHECK_STATE_CLEAR: latch, do not re-trigger until sleepStatus != COMPLETE
+                  - Timer behavior:
+                    * TimerHalStartTime() starts counting noSleepTime
+                    * TimerHalIsTimeout() == 0U means timeout occurred (per TimerHal contract)
+                    * TimerHalStopTime() stops timer on exit/trigger
+                  - This mechanism prevents repeated reports while NM stays COMPLETE
+*************************************************/
+static void PowerManageSdkNoSleepCheck(void)
+{
+    uint8_t sleepStatus = 0U;
+    uint8_t wakeChannel = 0U;
+
+    PmNmGetSleepStatus(&sleepStatus ,&wakeChannel);
+    switch (g_checkNoSleepState)
+    {
+    case CHECK_STATE_IDLE:
+        if(sleepStatus == PM_NM_SLEEP_STATUS_COMPLETE)
+        {
+            TimerHalStartTime(g_pmManage.noSleepTimerHandle, g_pmManage.pPmConfig->noSleepTime);
+            g_checkNoSleepState = CHECK_STATE_WAIT;
+        }
+        break;
+
+    case CHECK_STATE_WAIT:
+        if(sleepStatus == PM_NM_SLEEP_STATUS_COMPLETE)
+        {
+            if(TimerHalIsTimeout(g_pmManage.noSleepTimerHandle) == 0U)
+            {
+                TimerHalStopTime(g_pmManage.noSleepTimerHandle);
+                g_checkNoSleepState = CHECK_STATE_SEND;
+            }
+        }
+        else
+        {
+            TimerHalStopTime(g_pmManage.noSleepTimerHandle);
+            g_checkNoSleepState = CHECK_STATE_IDLE;
+        }
+        break;
+    case CHECK_STATE_SEND:
+        MpuPowerSyncSdkSendNoSleepFlag(PM_MCU_NO_SLEEP_FLAG);
+        g_checkNoSleepState = CHECK_STATE_CLEAR;
+        break;
+
+    case CHECK_STATE_CLEAR:
+        if(sleepStatus != PM_NM_SLEEP_STATUS_COMPLETE)
+        {
+            g_checkNoSleepState = CHECK_STATE_IDLE;
+        }
+    break;
+
+    default:
+
+        break;
+    }
+}
+
+/*************************************************
+  Function:       PowerManageSdkMuchWakeUpCheck
+  Description:    Detect "frequent wake-up" condition (too many transitions between
+                  low-power and local mode).
+                  When wakeupCount reaches configured threshold, report MUCH_WAKEUP flag
+                  to MCU once, and block re-trigger until leaving COMPLETE status.
+  Input:          None
+  Output:         None
+  Return:         None
+  Others:         - Trigger behavior:
+                    * When muchWakeTriggerFlag == 0U and sleepStatus == COMPLETE,
+                      checks wakeupCount >= muchWakeUpCount
+                    * On trigger: sends PM_MCU_MUCH_WAKEUP_FLAG once, sets trigger flag,
+                      and clears wakeupCount
+                    * When sleepStatus != COMPLETE, clears trigger flag to allow next trigger
+                  - wakeupCount accumulation is assumed to be maintained by other logic
+                    (e.g. increment on low-power <-> local transitions). Ensure its update
+                    is consistent with this check; if wakeupCount is updated from ISR/other
+                    thread, protect read/clear to avoid race conditions.
+                  - NOTE: current implementation clears wakeupCount when sleepStatus != COMPLETE.
+                    Confirm this matches the intended counting window; otherwise it may erase
+                    counts before reaching threshold depending on where wakeupCount is incremented.
+*************************************************/
+static void PowerManageSdkMuchWakeUpCheck(void)
+{
+    uint8_t sleepStatus = 0U;
+    uint8_t wakeChannel = 0U;
+    static uint8_t muchWakeTriggerFlag = 0U;
+    PmNmGetSleepStatus(&sleepStatus ,&wakeChannel);
+    if(muchWakeTriggerFlag == 0U)
+    {
+        if(sleepStatus == PM_NM_SLEEP_STATUS_COMPLETE)
+        {
+            if(g_pmManage.wakeupCount >= g_pmManage.pPmConfig->muchWakeUpCount)
+            {
+                MpuPowerSyncSdkSendNoSleepFlag(PM_MCU_MUCH_WAKEUP_FLAG);
+                muchWakeTriggerFlag = 1U;
+                g_pmManage.wakeupCount = 0U;
+            }
+        }
+        else
+        {
+            g_pmManage.wakeupCount = 0U;
+        }
+    }
+    else if(sleepStatus != PM_NM_SLEEP_STATUS_COMPLETE)
+    {
+        muchWakeTriggerFlag = 0U;
+    }
+}
+
+/*************************************************
+  Function:       PowerManageSdkClearNoSleepFlag
+  Description:    Clear "no-sleep too long" detection state and stop its timer.
+                  Used for recovery/reset scenarios to restart detection from IDLE state.
+  Input:          None
+  Output:         None
+  Return:         None
+  Others:         - Resets g_checkNoSleepState to CHECK_STATE_IDLE
+                  - Stops noSleepTimerHandle to avoid stale timeout affecting next cycle
+*************************************************/
+static void PowerManageSdkClearNoSleepFlag(void)
+{
+    g_checkNoSleepState = CHECK_STATE_IDLE;
+    TimerHalStopTime(g_pmManage.noSleepTimerHandle);
+}
+
+/*************************************************
+  Function:       PowerManageSdkGetFirstWakeSource
+  Description:    Get the first wake-up source recorded by power management module.
+                  This wake source indicates the initial reason that caused the system
+                  to exit low-power state after power-on or sleep.
+  Input:          None
+  Output:         None
+  Return:         uint8_t
+                  - First wake-up source value stored in g_pmManage.firstWakeSource
+  Others:         - The value is set during wake-up handling flow and remains unchanged
+                    until next sleep/power cycle or explicit reset by power management logic
+*************************************************/
+uint8_t PowerManageSdkGetFirstWakeSource(void)
+{
+    return g_pmManage.firstWakeSource;
 }

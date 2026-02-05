@@ -27,11 +27,12 @@ typedef struct
     uint8_t degInfo;
     uint8_t canNmType;
     uint32_t wakeDelayTime;
+    uint32_t noSleepTime;
+    uint32_t muchWakeUpCount;
     PmWakeCallFun_t wakeupFun;
     uint32_t kl30OffWakeDelay;
     DeepSleepConfig_t deepSleepConfig;
     CustomSleepConfig_t customSleepConfig;
-    
 }PmSdkConfig_t;
 
 
@@ -63,7 +64,7 @@ void PowerManageSdkSetFastSleep(uint8_t fastSleepFlag);
 
 uint8_t PowerManageSdkGetFastSleep(void);
 
-
+uint8_t PowerManageSdkGetFirstWakeSource(void);
 
 
 

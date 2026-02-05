@@ -24,9 +24,9 @@
 #define ECALL_PROCESS_CYCLE_TIME            10 //ms
 #define	SOS_LED_TRIG_MSG_QUEUE_DEPTH	    ( 5 )
 #define SOS_KEY_DEBANCE_TIME                ( 100 )                         /*按键消除去抖动的时间*/
-#define SOS_KEY_PRESS_MIN_TIME              ( 500 )                         /*按键被按下最短时间*/
-#define SOS_KEY_PRESS_MAX_TIME              ( 10000 )                       /*按键被按下最长时间*/
-#define SOS_KEY_RELEASED_TIME               ( 1000 )                        /*按键被释放的时间*/
+#define SOS_KEY_PRESS_MIN_TIME              ( 2000 )                         /*按键被按下最短时间*/
+#define SOS_KEY_PRESS_MAX_TIME              ( 40000 )                       /*按键被按下最长时间*/
+#define SOS_KEY_CONFIRM_PRESS_TIME          ( 100 )                        /*按键被释放的时间*/
 #define SOS_KEY_ECALL_TEST_TIME             ( 10000 )                       /*按键ECALL测试模式的时间*/
 #define SOS_KEY_RESET_TBOX_TIME             ( 20000 )                       /*按键复位TBOX的时间*/    
 #define SOS_KEY_HARD_FAULT_TIME             ( 30000 )                       /*按键硬件故障的时间*/    
@@ -54,8 +54,7 @@ typedef struct
     uint8_t lastLevel;
 } PwmRuntime_t;
 
-/****************************** Global Variables ******************************/
-static SosLledState_e g_SosLedState;        
+/****************************** Global Variables ******************************/      
 static SosButtonClickMsg_t g_SosButtonClickMsg;
 static const uint8_t g_CanSignalFormat = VEHICLE_CAN_UNPACK_FORMAT_MOTO_LSB;
 #if(0)
@@ -83,33 +82,6 @@ static void BcallSignalProcess(void);
 static void AirbagSingleProcess(void);
 static void XCallCloseSignalProcess(void);
 /****************************** Public Function Implementations ***************/
-
-/** ****************************************************************************
-* @remarks       static void SetSosLedState( ecall_led_flash_e st )
-* @brief         设置SOS led灯显示的状态
-* @param[in]     st led flash 显示状态
-* @param[out]    无
-* @return        无
-* @attention     无
-*******************************************************************************/
-static void SetSosLedState( SosLledState_e st )
-{
-    g_SosLedState = st;
-}
-
-/** ****************************************************************************
-* @remarks       static SosLledState_e GetSosLedState( void )
-* @brief         获取SOS led灯显示的状态
-* @param[in]     无
-* @param[out]    无
-* @return        LED显示的状态
-* @attention     无
-*******************************************************************************/
-static SosLledState_e GetSosLedState( void )
-{
-    return g_SosLedState;
-}
-
 /** ****************************************************************************
 * @remarks       static void SosLedControlProcess(void)
 * @brief         SOS led闪烁控制函数
@@ -126,122 +98,42 @@ static void SosLedControlProcess(void)
     {
         switch( sos_led_msg )
         {
+            case E_SOS_LED_STATE_INIT:          /*ECALL事件结束 LED灯关闭时全部为 0*/
+                EcallHalSetSosLedMode( E_ECALL_LED_MODE_KEEP_OFF , 0 , 0 );
+            break;
+            
             case E_SOS_LED_STATE_RING:         /*ECALL拨号中LED状态指示灯 100ms开100ms关*/
                 EcallHalSetSosLedMode( E_ECALL_LED_MODE_FLASH , 100 , 100 );
-                SetSosLedState( E_SOS_LED_STATE_RING );
             break;
 
             case E_SOS_LED_STATE_CALL:         /*ECALL正在通话中LED状态指示灯常亮*/
                 EcallHalSetSosLedMode( E_ECALL_LED_MODE_KEEP_ON , 0 , 0 );
-                SetSosLedState( E_SOS_LED_STATE_CALL );
             break;
 
             case E_SOS_LED_STATE_WAIT_BACK:    /*ECALL等待PSAP应答时 500ms开500ms关*/
                 EcallHalSetSosLedMode( E_ECALL_LED_MODE_FLASH , 500 , 500 );
-                SetSosLedState( E_SOS_LED_STATE_WAIT_BACK );
             break;
 
             case E_SOS_LED_STATE_END:          /*ECALL事件结束 LED灯关闭时全部为 0*/
                 EcallHalSetSosLedMode( E_ECALL_LED_MODE_KEEP_OFF , 0 , 0 );
-                SetSosLedState( E_SOS_LED_STATE_END );
             break;
 
             case E_SOS_LED_STATE_SELFCHECK_ERR:      /*设备自检失败，LED状态指示灯 200ms开1800ms关*/
                 EcallHalSetSosLedMode( E_ECALL_LED_MODE_FLASH , 200 , 1800 );
-                SetSosLedState( E_SOS_LED_STATE_SELFCHECK_ERR );
             break;
 
             case E_SOS_LED_STATE_WARNING:         /*中断故障，LED状态指示灯 125ms开125ms关*/
                 EcallHalSetSosLedMode( E_ECALL_LED_MODE_FLASH , 125 , 125 );
-                SetSosLedState( E_SOS_LED_STATE_WARNING );
             break;  
 
             case E_SOS_LED_STATE_SELFCHECK_ON:           /*ECALL事件结束 LED灯打开时全部为 0*/
                 EcallHalSetSosLedMode( E_ECALL_LED_MODE_KEEP_ON , 0 , 0 );
-                SetSosLedState( E_SOS_LED_STATE_SELFCHECK_ON );
             break;
             
             default:
             break;
         }
     }
-}
-
-/** ****************************************************************************
-* @remarks       static uint8_t SosButtonPressAction( uint32_t presstime, uint8_t* saveBtnState, SosLledState_e* saveLedState)
-* @brief         SOS按键按下动作处理函数
-* @param[in]     presstime - 按键按下的时间
-* @param[out]    saveBtnState - 保存按键状态的指针
-* @param[out]    saveLedState - 保存LED状态的指针
-* @return        成功返回0
-* @attention     根据按键按下的时间长度执行不同的动作
-*******************************************************************************/
-static uint8_t SosButtonPressAction( uint32_t presstime, uint8_t* saveBtnState, SosLledState_e* saveLedState)
-{
-    uint8_t btnState;
-    SosLledState_e ledState;
-
-    btnState = *saveBtnState;
-    ledState = *saveLedState;
-
-    if( presstime >= SOS_KEY_RESET_TBOX_TIME )
-    {
-        if(btnState == 0)
-        {
-            //btnState = 1;
-            ledState = GetSosLedState();
-            LogHalUpLoadLog("SOS key press over 20S");
-            //EcallHalSosLedControlSend( E_SOS_LED_STATE_WARNING );
-        }
-    }
-
-    *saveBtnState = btnState;
-    *saveLedState = ledState;
-
-    return 0;
-}
-
-/** ****************************************************************************
-* @remarks       static uint8_t SosButtonReleaseAction( uint32_t presskeeptime, SosButtonState_e *st )
-* @brief         SOS按键释放动作处理函数
-* @param[in]     presskeeptime - 按键按下的持续时间
-* @param[out]    st - 按键状态指针
-* @return        成功返回0
-* @attention     根据按键按下的时间长度执行不同的动作，如触发测试模式、重置TBOX等
-*******************************************************************************/
-static uint8_t SosButtonReleaseAction( uint32_t presskeeptime, SosButtonState_e *st )
-{
-    SosButtonState_e SosButtonState = *st;
-
-    if( presskeeptime >= SOS_KEY_HARD_FAULT_TIME )
-    {
-        LogHalUpLoadLog("SOS key released 30s");
-        SosButtonState = E_SOS_BUTTON_STATE_IDLE;
-        memset( (uint8_t *)&g_SosButtonClickMsg, 0x00, sizeof( SosButtonClickMsg_t ));
-    }
-    else if( presskeeptime >= SOS_KEY_ECALL_TEST_TIME )
-    {
-        AlarmSdkEcallTriger(E_ECALL_TRIGGER_TEST_MODE);
-        EcallHalSetVehicleMute(1);
-        LogHalUpLoadLog("SOS key test mode");
-        SosButtonState = E_SOS_BUTTON_STATE_IDLE;
-        memset( (uint8_t *)&g_SosButtonClickMsg, 0x00, sizeof( SosButtonClickMsg_t ));
-    }
-    else if(( presskeeptime >= SOS_KEY_PRESS_MIN_TIME ) && ( presskeeptime <= SOS_KEY_PRESS_MAX_TIME ))
-    {
-        g_SosButtonClickMsg.releasedTime = xTaskGetTickCount();
-        SosButtonState = E_SOS_BUTTON_STATE_RELEASED;
-        LogHalUpLoadLog("SOS key released normal");
-    }
-    else
-    {
-        SosButtonState = E_SOS_BUTTON_STATE_IDLE;
-        LogHalUpLoadLog("SOS key pressed < 0.5S");
-    }
-
-    *st = SosButtonState;
-
-    return 0;
 }
 
 /** ****************************************************************************
@@ -252,102 +144,93 @@ static uint8_t SosButtonReleaseAction( uint32_t presskeeptime, SosButtonState_e 
 * @return        pdPASS 成功，pdFAIL 失败
 * @attention     无
 *******************************************************************************/
-static void SosButtonDetection( void )
+static void SosButtonDetection(void)
 {
-    uint32_t key_time = 0;
-    static SosLledState_e ledState = E_SOS_LED_STATE_INIT;
-    static uint8_t btnState = 0;
+    uint32_t key_time = 0U;
     static SosButtonState_e SosButtonState = E_SOS_BUTTON_STATE_IDLE;
 
-    if( SosButtonState == E_SOS_BUTTON_STATE_IDLE )            /*检测按键*/
+    if (SosButtonState == E_SOS_BUTTON_STATE_IDLE)
     {
-        if( EcallHalGetSosButtonStatus() == 1 )
+        if (EcallHalGetSosButtonStatus() == 1)
         {
             g_SosButtonClickMsg.clickTime = xTaskGetTickCount();
             SosButtonState = E_SOS_BUTTON_STATE_CLICK;
         }
     }
-    else if(SosButtonState == E_SOS_BUTTON_STATE_CLICK )            /*按键去抖*/
+    else if (SosButtonState == E_SOS_BUTTON_STATE_CLICK)
     {
-        if( EcallHalGetSosButtonStatus() == 1 )
+        if (EcallHalGetSosButtonStatus() == 1)
         {
             g_SosButtonClickMsg.pressTime = xTaskGetTickCount();
-            key_time = osElapsedTimeGet( g_SosButtonClickMsg.pressTime, g_SosButtonClickMsg.clickTime );
-            if( key_time >= SOS_KEY_DEBANCE_TIME )
+            key_time = osElapsedTimeGet(
+                g_SosButtonClickMsg.pressTime,
+                g_SosButtonClickMsg.clickTime);
+
+            if (key_time >= SOS_KEY_DEBANCE_TIME)
             {
-                SosButtonState = E_SOS_BUTTON_STATE_PRESS;           /*按键确认被按下*/
+                SosButtonState = E_SOS_BUTTON_STATE_PRESS;
                 LogHalUpLoadLog("SOS key confirmed pressed");
             }
         }
         else
         {
-            LogHalUpLoadLog("SOS key jitters");
             SosButtonState = E_SOS_BUTTON_STATE_IDLE;
-            memset( (uint8_t *)&g_SosButtonClickMsg, 0x00, sizeof( SosButtonClickMsg_t ));
+            memset((uint8_t *)&g_SosButtonClickMsg, 0,
+                   sizeof(SosButtonClickMsg_t));
         }
     }
-    else if(SosButtonState == E_SOS_BUTTON_STATE_PRESS )           /*按键确认被按下*/
+    else if (SosButtonState == E_SOS_BUTTON_STATE_PRESS)
     {
         g_SosButtonClickMsg.pressTime = xTaskGetTickCount();
-        if( EcallHalGetSosButtonStatus() == 1 )
+
+        if (EcallHalGetSosButtonStatus() == 1)
         {
-            key_time = osElapsedTimeGet( g_SosButtonClickMsg.pressTime, g_SosButtonClickMsg.clickTime );
-            SosButtonPressAction(key_time, &btnState, &ledState);
-        }
-        else
-        {
-            btnState = 0;
-            EcallHalSosLedControlSend( ledState );
-            key_time = osElapsedTimeGet( g_SosButtonClickMsg.pressTime, g_SosButtonClickMsg.clickTime );
-            SosButtonReleaseAction(key_time, &SosButtonState);
-        }
-    }
-    else if(SosButtonState == E_SOS_BUTTON_STATE_RELEASED )
-    {
-        g_SosButtonClickMsg.releasedTime = xTaskGetTickCount();
-        if( EcallHalGetSosButtonStatus() == 1 )
-        {
-            g_SosButtonClickMsg.cancelTime = xTaskGetTickCount();
-            key_time = osElapsedTimeGet( g_SosButtonClickMsg.cancelTime, g_SosButtonClickMsg.pressTime );
-            if( key_time >= SOS_KEY_DEBANCE_TIME )
+            key_time = osElapsedTimeGet(
+                g_SosButtonClickMsg.pressTime,
+                g_SosButtonClickMsg.clickTime);
+
+            /* ===== 未通话：按住 >= 2s 立即拨打 ===== */
+            if (AlarmSdkGetEcallCallState() == 0)
             {
-                key_time = osElapsedTimeGet( g_SosButtonClickMsg.releasedTime, g_SosButtonClickMsg.pressTime );
-                if( key_time < SOS_KEY_RELEASED_TIME )                  /*规定时间内再次按压按键进行取消*/
-                {
-                    SosButtonState = E_SOS_BUTTON_STATE_CANCELLED;
-                    LogHalUpLoadLog("SOS key cancelled");
-                }
-            }
-        }
-        else
-        {
-            key_time = osElapsedTimeGet( g_SosButtonClickMsg.releasedTime, g_SosButtonClickMsg.pressTime );
-            if( key_time >= SOS_KEY_RELEASED_TIME )                     /*触发按键成功*/    
-            {
-                if(AlarmSdkGetEcallCallState() == 0)
+                if (key_time >= SOS_KEY_PRESS_MIN_TIME)
                 {
                     AlarmSdkEcallTriger(E_ECALL_TRIGGER_BTN_MANN);
                     EcallHalSetVehicleMute(1);
-                    LogHalUpLoadLog("SOS key tri EC");
+                    SosButtonState = E_SOS_BUTTON_STATE_WAIT_RELEASE;
                 }
-                else
+            }
+            /* 通话中：按住阶段不处理，等松开判断 */
+        }
+        else
+        {
+            /* ===== 松开 ===== */
+            key_time = osElapsedTimeGet(
+                xTaskGetTickCount(),
+                g_SosButtonClickMsg.clickTime);
+
+            /* 通话中：按住 < 2s 挂断 */
+            if (AlarmSdkGetEcallCallState() != 0)
+            {
+                if (key_time < SOS_KEY_PRESS_MIN_TIME)
                 {
                     AlarmSdkEcallClose(E_ECALL_TRIGGER_BTN_MANN);
                     EcallHalSetVehicleMute(0);
-                    LogHalUpLoadLog("SOS key cls EC");
                 }
-                SosButtonState = E_SOS_BUTTON_STATE_IDLE;
-                memset( (uint8_t *)&g_SosButtonClickMsg, 0x00, sizeof( SosButtonClickMsg_t ));
             }
+
+            SosButtonState = E_SOS_BUTTON_STATE_IDLE;
+            memset((uint8_t *)&g_SosButtonClickMsg, 0,
+                   sizeof(SosButtonClickMsg_t));
         }
     }
-    else if(SosButtonState == E_SOS_BUTTON_STATE_CANCELLED )
+    else if (SosButtonState == E_SOS_BUTTON_STATE_WAIT_RELEASE)
     {
-        if( EcallHalGetSosButtonStatus() == 0 )
+        /* 已触发拨打，只等松开 */
+        if (EcallHalGetSosButtonStatus() == 0)
         {
-            LogHalUpLoadLog("SOS key recover");
             SosButtonState = E_SOS_BUTTON_STATE_IDLE;
-            memset( (uint8_t *)&g_SosButtonClickMsg, 0x00, sizeof( SosButtonClickMsg_t ));
+            memset((uint8_t *)&g_SosButtonClickMsg, 0,
+                   sizeof(SosButtonClickMsg_t));
         }
     }
 }
@@ -773,7 +656,6 @@ void TaskEcallProcess( void *pvParameters )
     uint16_t cycleTimeCount = 0;
     AlarmSdkInit();
     AirbagPwmInit();
-    SetSosLedState(E_SOS_LED_STATE_INIT);
     AlarmSdkSetSelfcheckState(E_SELFCHECK_RUN_INIT);
     memset( (uint8_t *)&g_SosButtonClickMsg, 0x00, sizeof( SosButtonClickMsg_t ));
 

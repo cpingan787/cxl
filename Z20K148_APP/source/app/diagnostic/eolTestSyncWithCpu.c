@@ -28,7 +28,7 @@ int16_t CanPassthrough_RequestAndGetResponse(const uint8_t *pUdsRequest, uint16_
     int16_t ret;
     uint16_t repeatCount = 0;
     uint8_t rxSuccess = 0;
-    uint16_t maxRepeatCount = 2;
+    uint16_t maxRepeatCount = 5;
 
     if (pUdsRequest == NULL || pUdsResponse == NULL || pRespLength == NULL)
     {
