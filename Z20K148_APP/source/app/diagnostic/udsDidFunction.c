@@ -418,29 +418,29 @@ static int16_t CheckVinIsAsciiZero(uint8_t *pVin)
 
 int16_t Service22ReadVIN(uint8_t *pData, uint16_t *pLength)
 {
-//   uint32_t length;
-//   int16_t ret;
-//   uint8_t vinTem[40];
-//   // uint8_t i;
-//   ret = WorkFlashVehicleInforRead(E_PARAMETER_INFO_VIN, vinTem, &length);
-//   if (ret != 0)
-//   {
-//     return -1;
-//   }
-//   if (CheckVinIsAsciiZero(vinTem) != 0)
-//   {
-//     memcpy(pData, vinTem, 17);
-//     *pLength = 17;
-//     return 0;
-//   }
-// #if (0)
-//   ret = WorkFlashVehicleInforRead(E_PARAMETER_INFO_VIN_hex, pData, &length);
-//   if (ret != 0)
-//   {
-//     return -1;
-//   }
-// #endif
-//   *pLength = 17;
+  uint32_t length;
+  int16_t ret;
+  uint8_t vinTem[40];
+  // uint8_t i;
+  ret = WorkFlashVehicleInforRead(E_PARAMETER_INFO_VIN, vinTem, &length);
+  if (ret != 0)
+  {
+    return -1;
+  }
+  if (CheckVinIsAsciiZero(vinTem) != 0)
+  {
+    memcpy(pData, vinTem, 17);
+    *pLength = 17;
+    return 0;
+  }
+#if (0)
+  ret = WorkFlashVehicleInforRead(E_PARAMETER_INFO_VIN_hex, pData, &length);
+  if (ret != 0)
+  {
+    return -1;
+  }
+#endif
+  *pLength = 17;
 
   return 0;
 }
@@ -2378,16 +2378,16 @@ int16_t Service2EWriteVIN(uint8_t *pData, uint16_t dataLength)
   {
     return 0x13;
   }
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
-  {
-    return -1;
-  }
+  // if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  // {
+  //   return -1;
+  // }
 
-//   int16_t storeResult = WorkFlashVehicleInforStore(E_PARAMETER_INFO_VIN, pData, dataLength);
-//   if (storeResult < 0)
-//   {
-//     return 0x72;
-//   }
+  int16_t storeResult = WorkFlashVehicleInforStore(E_PARAMETER_INFO_VIN, pData, dataLength);
+  if (storeResult < 0)
+  {
+    return 0x72;
+  }
 //   if (storeResult == 0)
 //   {
 //    ParameterSyncSdkSetToCpu(E_ParamId_VIN, pData, dataLength);
@@ -3283,10 +3283,7 @@ int16_t Service2EWriteESKey(uint8_t *pData, uint16_t dataLength)
   // uint32_t len;
 
   ret = WorkFlashVehicleInforStore(E_PARAMETER_INFO_ESK_KEY, pData, dataLength);
-  if (ret != 0)
-  {
-    return -1;
-  }
+
   if (CheckEskValid(pData) == 0)
   {
     g_eskKeyValid = 0x01;
@@ -3305,15 +3302,15 @@ int16_t Service2EWriteApn1(uint8_t *pData, uint16_t dataLength)
   {
     return 0x13;
   }
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
-  {
-    return -1;
-  }
-  // int16_t storeResult = WorkFlashVehicleInforStore(E_PARAMETER_INFO_APN1, pData, dataLength);
-  // if (storeResult < 0)
+  // if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
   // {
-  //   return 0x72;
+  //   return -1;
   // }
+  int16_t storeResult = WorkFlashVehicleInforStore(E_PARAMETER_INFO_APN1, pData, dataLength);
+  if (storeResult < 0)
+  {
+    return 0x72;
+  }
   return 0;
 }
 
@@ -3324,15 +3321,15 @@ int16_t Service2EWriteIp1Addr(uint8_t *pData, uint16_t dataLength)
   {
     return 0x13;
   }
-  // int16_t storeResult = WorkFlashVehicleInforStore(E_PARAMETER_INFO_IP1_ADDR, pData, dataLength);
-  // if (storeResult < 0)
-  // {
-  //   return 0x72;
-  // }
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  int16_t storeResult = WorkFlashVehicleInforStore(E_PARAMETER_INFO_IP1_ADDR, pData, dataLength);
+  if (storeResult < 0)
   {
-    return -1;
+    return 0x72;
   }
+  // if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  // {
+  //   return -1;
+  // }
   return 0;
 }
 
@@ -3343,11 +3340,11 @@ int16_t Service2EWriteTspPort(uint8_t *pData, uint16_t dataLength)
   {
     return 0x13;
   }
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
-  {
-    return -1;
-  }
-  // int16_t storeResult = WorkFlashVehicleInforStore(E_PARAMETER_INFO_PORT1, pData, dataLength);
+  // if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  // {
+  //   return -1;
+  // }
+  int16_t storeResult = WorkFlashVehicleInforStore(E_PARAMETER_INFO_PORT1, pData, dataLength);
   //  TBOX_PRINT("Service2EWriteTspPort storeResult=%d\r\n", storeResult);
   return 0;
 }
@@ -3373,15 +3370,15 @@ int16_t Service2EWriteECallNum1(uint8_t *pData, uint16_t dataLength)
   {
     return 0x13;
   }
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  // if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  // {
+  //   return -1;
+  // }
+  int16_t storeResult = WorkFlashVehicleInforStore(E_PARAMETER_INFO_ECALL_NUM1, pData, dataLength);
+  if (storeResult < 0)
   {
-    return -1;
+    return 0x72;
   }
-//   int16_t storeResult = WorkFlashVehicleInforStore(E_PARAMETER_INFO_ECALL_NUM1, pData, dataLength);
-//   if (storeResult < 0)
-//   {
-//     return 0x72;
-//   }
 //   if (storeResult == 0)
 //   {
 //     ParameterSyncSdkSetToCpu(E_ParamId_ECallNumber, pData, dataLength);
@@ -3397,15 +3394,15 @@ int16_t Service2EWriteBCallNum1(uint8_t *pData, uint16_t dataLength)
   {
     return 0x13;
   }
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  // if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  // {
+  //   return -1;
+  // }
+  int16_t storeResult = WorkFlashVehicleInforStore(E_PARAMETER_INFO_BCALL_NUM1, pData, dataLength);
+  if (storeResult < 0)
   {
-    return -1;
+    return 0x72;
   }
-//   int16_t storeResult = WorkFlashVehicleInforStore(E_PARAMETER_INFO_BCALL_NUM1, pData, dataLength);
-//   if (storeResult < 0)
-//   {
-//     return 0x72;
-//   }
 //   if (storeResult == 0)
 //   {
      //ParameterSyncSdkSetToCpu(E_ParamId_BCallNumber, pData, dataLength);
@@ -3516,15 +3513,15 @@ int16_t Service2EWriteApn2(uint8_t *pData, uint16_t dataLength)
   {
     return 0x13;
   }
-  // int16_t storeResult = WorkFlashVehicleInforStore(E_PARAMETER_INFO_APN2, pData, dataLength);
-  // if (storeResult < 0)
-  // {
-  //   return 0x72;
-  // }
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  int16_t storeResult = WorkFlashVehicleInforStore(E_PARAMETER_INFO_APN2, pData, dataLength);
+  if (storeResult < 0)
   {
-    return -1;
+    return 0x72;
   }
+  // if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  // {
+  //   return -1;
+  // }
   return 0;
 }
 
@@ -3573,15 +3570,15 @@ int16_t Service2EWriteIp3Addr(uint8_t *pData, uint16_t dataLength)
   {
     return 0x13;
   }
-  // int16_t storeResult = WorkFlashVehicleInforStore(E_PARAMETER_INFO_IP3_ADDR, pData, dataLength);
-  // if (storeResult < 0)
-  // {
-  //   return 0x72;
-  // }
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  int16_t storeResult = WorkFlashVehicleInforStore(E_PARAMETER_INFO_IP3_ADDR, pData, dataLength);
+  if (storeResult < 0)
   {
-    return -1;
+    return 0x72;
   }
+  // if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  // {
+  //   return -1;
+  // }
   return 0;
 }
 
@@ -3697,15 +3694,15 @@ int16_t Service2EWritePublicTspDomain(uint8_t *pData, uint16_t dataLength)
   {
     return 0x13;
   }
-  // int16_t storeResult = WorkFlashVehicleInforStore(E_PARAMETER_INFO_PUBLIC_TSP_DOMAIN, pData, dataLength);
-  // if (storeResult < 0)
-  // {
-  //   return 0x72;
-  // }
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  int16_t storeResult = WorkFlashVehicleInforStore(E_PARAMETER_INFO_PUBLIC_TSP_DOMAIN, pData, dataLength);
+  if (storeResult < 0)
   {
-    return -1;
+    return 0x72;
   }
+  // if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  // {
+  //   return -1;
+  // }
   return 0;
 }
 
@@ -3835,15 +3832,15 @@ int16_t Service2EWriteTspDomain1(uint8_t *pData, uint16_t dataLength)
     return 0x13;
   }
 
-  // int16_t storeResult = WorkFlashVehicleInforStore(E_PARAMETER_INFO_TSP_DOMAIN_1, pData, dataLength);
-  // if (storeResult < 0)
-  // {
-  //   return 0x72;
-  // }
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  int16_t storeResult = WorkFlashVehicleInforStore(E_PARAMETER_INFO_TSP_DOMAIN_1, pData, dataLength);
+  if (storeResult < 0)
   {
-    return -1;
+    return 0x72;
   }
+  // if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  // {
+  //   return -1;
+  // }
   return 0;
 }
 
@@ -3882,15 +3879,15 @@ int16_t Service2EWriteApn3(uint8_t *pData, uint16_t dataLength)
     return 0x13;
   }
 
-  // int16_t storeResult = WorkFlashVehicleInforStore(E_PARAMETER_INFO_APN3, pData, dataLength);
-  // if (storeResult < 0)
-  // {
-  //   return 0x72;
-  // }
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  int16_t storeResult = WorkFlashVehicleInforStore(E_PARAMETER_INFO_APN3, pData, dataLength);
+  if (storeResult < 0)
   {
-    return -1;
+    return 0x72;
   }
+  // if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  // {
+  //   return -1;
+  // }
   return 0;
 }
 // 0xB2CB_cxl   104F_cxl
@@ -3939,15 +3936,15 @@ int16_t Service2EWritePkiDomainName(uint8_t *pData, uint16_t dataLength)
     return 0x13;
   }
 
-  // int16_t storeResult = WorkFlashVehicleInforStore(E_PARAMETER_INFO_PKI_DOMAIN_NAME, pData, dataLength);
-  // if (storeResult < 0)
-  // {
-  //   return 0x72;
-  // }
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  int16_t storeResult = WorkFlashVehicleInforStore(E_PARAMETER_INFO_PKI_DOMAIN_NAME, pData, dataLength);
+  if (storeResult < 0)
   {
-    return -1;
+    return 0x72;
   }
+  // if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  // {
+  //   return -1;
+  // }
   return 0;
 }
 
@@ -3958,15 +3955,15 @@ int16_t Service2EWritePkiPort(uint8_t *pData, uint16_t dataLength)
   {
     return 0x13;
   }
-  // int16_t storeResult = WorkFlashVehicleInforStore(E_PARAMETER_INFO_PKI_PORT, pData, dataLength);
-  // if (storeResult < 0)
-  // {
-  //   return 0x72;
-  // }
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  int16_t storeResult = WorkFlashVehicleInforStore(E_PARAMETER_INFO_PKI_PORT, pData, dataLength);
+  if (storeResult < 0)
   {
-    return -1;
+    return 0x72;
   }
+  // if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  // {
+  //   return -1;
+  // }
   return 0;
 }
 int16_t Service22ReadFingerprintEthernetF0FF(uint8_t *pData, uint16_t *pLength) // 指纹	ASCII	48
@@ -3989,15 +3986,15 @@ int16_t Service2EWriteTspPort3(uint8_t *pData, uint16_t dataLength)
     return 0x13;
   }
 
-  // int16_t storeResult = WorkFlashVehicleInforStore(E_PARAMETER_INFO_TSP_PORT_3, pData, dataLength);
-  // if (storeResult < 0)
-  // {
-  //   return 0x72;
-  // }
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  int16_t storeResult = WorkFlashVehicleInforStore(E_PARAMETER_INFO_TSP_PORT_3, pData, dataLength);
+  if (storeResult < 0)
   {
-    return -1;
+    return 0x72;
   }
+  // if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  // {
+  //   return -1;
+  // }
   return 0;
 }
 
@@ -5681,17 +5678,15 @@ int16_t Service2EWriteICCID(uint8_t *pData, uint16_t dataLength)
 // 0x011B_cxl
 int16_t Service22ReadApn1(uint8_t *pData, uint16_t *pLength)
 {
-  // uint32_t length;
-  // int16_t ret;
-
-  // ret = WorkFlashVehicleInforRead(E_PARAMETER_INFO_APN1, pData, &length);
+  uint32_t length;
+  WorkFlashVehicleInforRead(E_PARAMETER_INFO_APN1, pData, &length);
 
   // if (ret != 0 || length == 0)
   // {
   //   memset(pData, 0x00, 32);
   // }
 
-  // *pLength = 32;
+  *pLength = 32;
   return 0;
 }
 
@@ -5699,13 +5694,8 @@ int16_t Service22ReadApn1(uint8_t *pData, uint16_t *pLength)
 int16_t Service22ReadIp1Addr(uint8_t *pData, uint16_t *pLength)
 {
   uint32_t length;
-  int16_t ret;
 
-  ret = WorkFlashVehicleInforRead(E_PARAMETER_INFO_IP1_ADDR, pData, &length);
-  if (ret != 0 || length == 0)
-  {
-    memset(pData, 0x00, 16);
-  }
+  WorkFlashVehicleInforRead(E_PARAMETER_INFO_IP1_ADDR, pData, &length);
 
   *pLength = 16;
   return 0;
@@ -5715,17 +5705,7 @@ int16_t Service22ReadIp1Addr(uint8_t *pData, uint16_t *pLength)
 int16_t Service22ReadTspPort(uint8_t *pData, uint16_t *pLength)
 {
   uint32_t length;
-  int16_t ret;
-
-  ret = WorkFlashVehicleInforRead(E_PARAMETER_INFO_PORT1, pData, &length);
-
-  if (ret != 0 || length == 0)
-  {
-    memset(pData, 0x00, 8);
-    pData[6] = 0x22;
-    pData[7] = 0xB8;
-  }
-
+  WorkFlashVehicleInforRead(E_PARAMETER_INFO_PORT1, pData, &length);
   *pLength = 8;
   return 0;
 }
@@ -5751,15 +5731,7 @@ int16_t Service22ReadTspTimeout(uint8_t *pData, uint16_t *pLength)
 int16_t Service22ReadECallNum1(uint8_t *pData, uint16_t *pLength)
 {
   uint32_t length;
-  int16_t ret;
-
-  ret = WorkFlashVehicleInforRead(E_PARAMETER_INFO_ECALL_NUM1, pData, &length);
-
-  if (ret != 0 || length == 0)
-  {
-    memset(pData, 0x00, 14);
-  }
-
+  WorkFlashVehicleInforRead(E_PARAMETER_INFO_ECALL_NUM1, pData, &length);
   *pLength = 14;
   return 0;
 }
@@ -5768,15 +5740,7 @@ int16_t Service22ReadECallNum1(uint8_t *pData, uint16_t *pLength)
 int16_t Service22ReadBCallNum1(uint8_t *pData, uint16_t *pLength)
 {
   uint32_t length;
-  int16_t ret;
-
-  ret = WorkFlashVehicleInforRead(E_PARAMETER_INFO_BCALL_NUM1, pData, &length);
-
-  if (ret != 0 || length == 0)
-  {
-    memset(pData, 0x00, 14);
-  }
-
+  WorkFlashVehicleInforRead(E_PARAMETER_INFO_BCALL_NUM1, pData, &length);
   *pLength = 14;
   return 0;
 }
@@ -5851,10 +5815,6 @@ int16_t Service22ReadApn2(uint8_t *pData, uint16_t *pLength)
 {
   uint32_t length;
   int16_t ret = WorkFlashVehicleInforRead(E_PARAMETER_INFO_APN2, pData, &length);
-  if (ret != 0 || length == 0)
-  {
-    memset(pData, 0x00, 32);
-  }
   *pLength = 32;
   return 0;
 }
@@ -5924,10 +5884,6 @@ int16_t Service22ReadIp3Addr(uint8_t *pData, uint16_t *pLength)
 {
   uint32_t length;
   int16_t ret = WorkFlashVehicleInforRead(E_PARAMETER_INFO_IP3_ADDR, pData, &length);
-  if (ret != 0 || length == 0)
-  {
-    memset(pData, 0x00, 16);
-  }
   *pLength = 16;
   return 0;
 }
@@ -6030,11 +5986,7 @@ int16_t Service22ReadTspPortNumeric(uint8_t *pData, uint16_t *pLength)
 int16_t Service22ReadPublicTspDomain(uint8_t *pData, uint16_t *pLength)
 {
   uint32_t length;
-  int16_t ret = WorkFlashVehicleInforRead(E_PARAMETER_INFO_PUBLIC_TSP_DOMAIN, pData, &length);
-  if (ret != 0 || length == 0)
-  {
-    memset(pData, 0x00, 50);
-  }
+  WorkFlashVehicleInforRead(E_PARAMETER_INFO_PUBLIC_TSP_DOMAIN, pData, &length);
   *pLength = 50;
   return 0;
 }
@@ -6594,11 +6546,6 @@ int16_t Service22ReadTspPort3(uint8_t *pData, uint16_t *pLength)
   uint32_t length;
   int16_t ret = WorkFlashVehicleInforRead(E_PARAMETER_INFO_TSP_PORT_3, pData, &length);
 
-  if (ret != 0 || length == 0)
-  {
-    memset(pData, 0x00, 8);
-  }
-
   *pLength = 8;
   return 0;
 }
@@ -6608,15 +6555,7 @@ int16_t Service22ReadApn3(uint8_t *pData, uint16_t *pLength)
 {
   uint32_t length;
   int16_t ret = WorkFlashVehicleInforRead(E_PARAMETER_INFO_APN3, pData, &length);
-  if (ret != 0 || length == 0)
-  {
-    memset(pData, 0x00, 32);
-    *pLength = 32;
-  }
-  else
-  {
-    *pLength = length;
-  }
+  *pLength = length;
   return 0;
 }
 
@@ -7077,16 +7016,7 @@ int16_t Service22ReadTspDomain1(uint8_t *pData, uint16_t *pLength)
   uint32_t length;
   int16_t ret = WorkFlashVehicleInforRead(E_PARAMETER_INFO_TSP_DOMAIN_1, pData, &length);
 
-  // 如果读取失败或长度为0，则返回默认值（全0）
-  if (ret != 0 || length == 0)
-  {
-    memset(pData, 0x00, 50);
-    *pLength = 50;
-  }
-  else
-  {
-    *pLength = length;
-  }
+  *pLength = length;
   return 0;
 }
 // 0x5001_cxl

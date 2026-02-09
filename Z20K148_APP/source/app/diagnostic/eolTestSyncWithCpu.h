@@ -45,4 +45,8 @@ int16_t EolTestSyncWithCpuRecv(uint8_t item, uint8_t *pData, uint16_t *pLength);
  *******************************************************************************/
 int16_t CanPassthrough_RequestAndGetResponse(const uint8_t *pUdsRequest, uint16_t reqLength,
                                              uint8_t *pUdsResponse, uint16_t *pRespLength);
+                                             
+int16_t CanPassthrough_SendOnly(const uint8_t *pUdsRequest, uint16_t reqLength);
+int16_t CanPassthrough_ReceiveOnly(uint8_t *pUdsResponse, uint16_t *pRespLength, uint32_t timeoutMs);
+                                             
 #endif

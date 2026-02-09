@@ -22,13 +22,57 @@ static uint8_t g_recvDataBuffer[512] = {0};
 static uint8_t g_mpuDataBuffer[512] = {0};
 static MpuHalDataPack_t g_mpuDataPack;
 
+int16_t CanPassthrough_SendOnly(const uint8_t *pUdsRequest, uint16_t reqLength)
+{
+    if (pUdsRequest == NULL) return -1;
+
+    g_mpuDataPack.aid = PASSTHROUGH_AID;
+    g_mpuDataPack.mid = PASSTHROUGH_MID;
+    g_mpuDataPack.subcommand = PASSTHROUGH_SUB_MCU_TO_MPU;
+    memcpy(g_mpuDataBuffer, pUdsRequest, reqLength);
+    g_mpuDataPack.pDataBuffer = g_mpuDataBuffer;
+    g_mpuDataPack.dataLength = reqLength;
+
+    g_dataPack.pDataBuffer = g_dataBuffer;
+    g_dataPack.dataBufferSize = sizeof(g_dataBuffer);
+    while (MpuHalReceive(g_mpuHandle, &g_dataPack, 0) == 0) {}
+
+    MpuHalTransmit(g_mpuHandle, &g_mpuDataPack, MPU_HAL_UART_MODE);
+    return 0;
+}
+
+int16_t CanPassthrough_ReceiveOnly(uint8_t *pUdsResponse, uint16_t *pRespLength, uint32_t timeoutMs)
+{
+    int16_t ret;
+    g_dataPack.pDataBuffer = g_dataBuffer;
+    g_dataPack.dataBufferSize = sizeof(g_dataBuffer);
+
+    ret = MpuHalReceive(g_mpuHandle, &g_dataPack, timeoutMs); 
+
+    if (ret == 0) 
+    {
+        uint8_t subCommand = g_dataPack.subcommand & 0x7F;
+        if (g_dataPack.aid == PASSTHROUGH_AID &&
+            g_dataPack.mid == PASSTHROUGH_MID &&
+            subCommand == PASSTHROUGH_SUB_MPU_TO_MCU &&
+            g_mpuDataBuffer[2] == g_dataBuffer[2] && 
+            g_mpuDataBuffer[1] == g_dataBuffer[1])   
+        {
+            memcpy(pUdsResponse, g_dataPack.pDataBuffer, g_dataPack.dataLength);
+            *pRespLength = g_dataPack.dataLength;
+            return 0;
+        }
+    }
+    return -1;
+}
+
 int16_t CanPassthrough_RequestAndGetResponse(const uint8_t *pUdsRequest, uint16_t reqLength,
                                              uint8_t *pUdsResponse, uint16_t *pRespLength)
 {
     int16_t ret;
     uint16_t repeatCount = 0;
     uint8_t rxSuccess = 0;
-    uint16_t maxRepeatCount = 5;
+    uint16_t maxRepeatCount = 1;
 
     if (pUdsRequest == NULL || pUdsResponse == NULL || pRespLength == NULL)
     {

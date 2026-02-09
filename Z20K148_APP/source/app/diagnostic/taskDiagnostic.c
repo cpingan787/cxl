@@ -279,8 +279,8 @@ static const uint16_t g_passthroughDidList_22[] = {
     // 0x0110,
     // 0xF193,
     // 0xF195,
-    0x031C,
-    0xF190,
+    //0x031C, 
+    //0xF190,
     0xF18C,
     // 0xB205,
     // 0xB206,
@@ -291,21 +291,21 @@ static const uint16_t g_passthroughDidList_22[] = {
     0x0200,
     0x0201,
     0xB208,
-    0x011B,
-    0x011C,
-    0x011D,
+    //0x011B,
+    //0x011C,
+    //0x011D,
     0xB209,
-    0x011F,
-    0x0124,
+    //0x011F,
+    //0x0124,
     0xB20A,
     0xB20B,
     0xB20C,
     0XB20D,
     0x0129,
-    0x013C,
+    //0x013C,
     0xB20E,
     0xB20F,
-    0x105F,
+    //0x105F,
     0xB211,
     0xB212,
     0x1014,
@@ -323,8 +323,8 @@ static const uint16_t g_passthroughDidList_22[] = {
     0xB260, // 4G Reset Count
     0XB261,
     0xB262, // PKI Certificate Status
-    0x1052,
-    0x1053,
+    //0x1052,
+    //0x1053,
     // 0XB271,
     0xB275,
     0xB276,
@@ -341,8 +341,8 @@ static const uint16_t g_passthroughDidList_22[] = {
     0xB284,
     0xB285,
     0xB286,
-    0x105E,
-    0x1061,
+    //0x105E,
+    //0x1061,
     0xB28B,
     0xB2C5,
     0xB2C6,
@@ -2848,7 +2848,26 @@ static int16_t Service0x2EProcess(uint8_t *udsData, uint16_t udsLen, uint8_t fun
   }
   if (did == 0x010D)
   {
-    return ProcessWriteDidESKey(udsData, udsLen);
+      uint8_t pendingResponse[3] = {0x7F, 0x2E, 0x78};
+      DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, pendingResponse, 3, 0);
+
+      int16_t esKeyRet = ProcessWriteDidESKey(udsData, udsLen);
+
+      if (esKeyRet == 0)
+      {
+          uint8_t positiveResponse[3];
+          positiveResponse[0] = 0x6E;         
+          positiveResponse[1] = udsData[1];   
+          positiveResponse[2] = udsData[2];   
+          DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, positiveResponse, 3, 0);
+      }
+      else
+      {
+          uint8_t errorCode = (esKeyRet > 0 && esKeyRet <= 0xFF) ? (uint8_t)esKeyRet : 0x72;
+          uint8_t negativeResponse[3] = {0x7F, 0x2E, errorCode};
+          DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, negativeResponse, 3, 0);
+      }
+      return 0;
   }
 
   if (did == 0xFFFE)
@@ -2869,7 +2888,30 @@ static int16_t Service0x2EProcess(uint8_t *udsData, uint16_t udsLen, uint8_t fun
   default:
     return 0x11;
   }
+  if ((did == 0x011B || did == 0x011C || did == 0x011D || did == 0x031C || did == 0x013C || did == 0x105F 
+    || did == 0x105E || did == 0x1061 || did == 0x1053 || did == 0x1052 || did == 0xF190 || did == 0x011F || did == 0x0124)) 
+  {
+      uint8_t pendingResponse[3] = {0x7F, 0x2E, 0x78};
+      DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, pendingResponse, 3, 0);
 
+      int16_t localWriteRet = pWriteFun(&udsData[3], udsLen - 3);
+
+      if (localWriteRet == 0)
+      {
+          uint8_t positiveResponse[3];
+          positiveResponse[0] = 0x6E;         // Service ID + 0x40
+          positiveResponse[1] = udsData[1];   // DID High
+          positiveResponse[2] = udsData[2];   // DID Low
+          DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, positiveResponse, 3, 0);
+      }
+      else
+      {
+          uint8_t errorCode = (localWriteRet > 0 && localWriteRet <= 0xFF) ? (uint8_t)localWriteRet : 0x72;
+          uint8_t negativeResponse[3] = {0x7F, 0x2E, errorCode};
+          DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, negativeResponse, 3, 0);
+      }
+      return 0;
+  }
   // uint8_t u8Busy7f78CMD[8] = {0x03, 0x7f, 0x2e, 0x78, 0x00, 0x00, 0x00, 0x00};
   // DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, &u8Busy7f78CMD[1], 3, 0);
 
@@ -2891,24 +2933,66 @@ static int16_t Service0x2EProcess(uint8_t *udsData, uint16_t udsLen, uint8_t fun
   }
   else
   {
-    uint8_t mpu_response_buffer[64]; // mpu会给我回什么
+    uint8_t mpu_response_buffer[64]; 
     uint16_t mpu_response_length = 0;
-    int8_t passthroughRet;
+    
+    static int16_t s_p2TimerHandle = -1; 
+    uint8_t pendingSent = 0; 
+
     if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
     {
       return 0x72;
     }
-    passthroughRet = CanPassthrough_RequestAndGetResponse(udsData, udsLen, mpu_response_buffer, &mpu_response_length);
 
-    if (passthroughRet == 0 && mpu_response_length > 0)
+    if (s_p2TimerHandle < 0) 
     {
-      DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, mpu_response_buffer, mpu_response_length, 0);
+        s_p2TimerHandle = TimerHalOpen();
     }
-    else
+    
+    CanPassthrough_SendOnly(udsData, udsLen);
+
+    TimerHalStartTime(s_p2TimerHandle, 50);
+
+    while (1)
     {
-      negativeNum = 0x72;
+        // 4. 尝试接收 (每次只等 2ms，不阻塞主流程，确保能及时检查定时器)
+        if (CanPassthrough_ReceiveOnly(mpu_response_buffer, &mpu_response_length, 2) == 0)
+        {
+            if (mpu_response_length > 0)
+            {
+                // 收到响应 -> 停止计时，发送正响应，退出
+                TimerHalStopTime(s_p2TimerHandle);
+                DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, mpu_response_buffer, mpu_response_length, 0);
+                return 0; 
+            }
+        }
+
+        // 5. 检查是否超时 (TimerHalIsTimeout 返回 0 表示超时)
+        if (TimerHalIsTimeout(s_p2TimerHandle) == 0)
+        {
+            if (pendingSent == 0)
+            {
+                // [P2 超时] -> 发送 0x78
+                uint8_t pendingResponse[3] = {0x7F, 0x2E, 0x78};
+                DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, pendingResponse, 3, 0);
+                
+                pendingSent = 1; // 标记已发 78
+
+                // 停止当前计时，立即重新启动 P2* 定时器 (5000ms)
+                TimerHalStopTime(s_p2TimerHandle);
+                TimerHalStartTime(s_p2TimerHandle, 5000);
+            }
+            else
+            {
+                // [P2* 超时] -> MPU 彻底没响应，报错退出
+                TimerHalStopTime(s_p2TimerHandle);
+                negativeNum = 0x72;
+                break;
+            }
+        }
     }
   }
+  
   return negativeNum;
 }
 // static int16_t Service0x2EProcess(uint8_t *udsData, uint16_t udsLen, uint8_t functionAddressFlag)

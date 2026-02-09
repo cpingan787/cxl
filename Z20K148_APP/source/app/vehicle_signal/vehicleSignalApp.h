@@ -659,6 +659,14 @@ typedef struct
     CanParseSignal_t ACU_AuthRand;
     CanParseSignal_t ACU_AuthKey;
     CanParseSignal_t ACU_TelModuleResetReq;
+    CanParseSignal_t ACU_TEL_GNSSclletAuthorStartMonReq;
+    CanParseSignal_t ACU_TEL_GNSSclletAuthorStartDayReq;
+    CanParseSignal_t ACU_TEL_GNSSclletAuthorStopMonReq;
+    CanParseSignal_t ACU_TEL_GNSSclletAuthorStopDayReq;
+    CanParseSignal_t ACU_TEL_GNSSclletAuthorStartYearReq;
+    CanParseSignal_t ACU_TEL_GNSSclletAuthorStopYearReq;
+    CanParseSignal_t ACU_TEL_GNSSclletAuthorModeReq;
+    CanParseSignal_t ACU_TEL_GNSS_APPTypeStSetReq;
 } can0_signal_configure_t;
 
 /****************************** Function Declarations *************************/

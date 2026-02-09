@@ -32,19 +32,28 @@ static uint8_t g_syncParamList[] = {
     E_ParamId_ManufactureData,
     E_ParamId_ParatNumber,
     E_ParamId_SupIdentifier,
+    
+    // //下线参数
     // E_ParamId_APN1,               // 0x011B_cxl
     // E_ParamId_IP1_ADDR,           // 0x011C_cxl
     // E_ParamId_TSPPort1,           // 0x011D_cxl
+    // E_ParamId_TspDomain1,         // 0x031C_cxl
+    // E_ParamId_Apn2,               // 0x013C_cxl
+    // E_ParamId_Ip3Addr,            // 0x105F_cxl
+    // E_ParamId_TspPort3,           // 0x105E_Cxl
+    // E_ParamId_Apn3,               // 0x1061_cxl
+    // E_ParamId_PkiPort,            // 0x1053_Cxl
+
     // E_ParamId_TspTimeout,         // 0xB209_cxl
     // E_ParamId_ECallNumber1,       // 0x011F_cxl
     // E_ParamId_BCallNumber1,       // 0x0124_cxl
     // E_ParamId_OfficialServiceNum, // 0xB20A_cxl
     // E_ParamId_EmergencyAsNum,     // 0xB20B_cxl
     // E_ParamId_TboxPhoneNum,       // 0x0129_cxl
-    // E_ParamId_Apn2,               // 0x013C_cxl
+    
     // E_ParamId_Ip2Addr,            // 0xB20E_cxl
     // E_ParamId_Port2,              // 0xB20F_cxl
-    // E_ParamId_Ip3Addr,            // 0x105F_cxl
+    
     // E_ParamId_LongConnCycle,      // 0xB211_cxl
     // E_ParamId_NormalUploadPeriod, // 0xB229_cxl
     // E_ParamId_AlarmUploadPeriod,  // 0xB22A_cxl
@@ -56,11 +65,11 @@ static uint8_t g_syncParamList[] = {
     // E_ParamId_Apn2Type,           // APN2类型 0xB248_cxl
     // E_ParamId_TspConnectSetting,  // TSP连接设置 0xB258_cxl
     // E_ParamId_PkiApplyRequest,    // 0xB261_cxl
-    // E_ParamId_Apn3,               // 0x1061_cxl
-    // E_ParamId_TspDomain1,         // 031C_cxl
+     
+     
     // E_ParamId_OtaPort,            // 0xB2CC_cxl
-    // E_ParamId_PkiPort,            // 0x1052_Cxl
-    // E_ParamId_TspPort3,           // 0x1053_Cxl
+     
+     
     // // E_ParamId_DtcSettingControl            //0x0120_cxl
     // E_ParamId_TransportMode,   // 0xB2B4_cxl
     // E_ParamId_ManufactoryMode, // 0x0110_cxl

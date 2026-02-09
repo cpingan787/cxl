@@ -19,7 +19,7 @@ static pMcuParametReadFun_t g_mcuParameterReadCbFunc = NULL;   // 提供写MCU�
 static pMcuParametWriteFun_t g_mcuParameterWriteCbFunc = NULL; // 读取MCU参数函数
 static uint16_t g_cycleTime = 0;                               // 周期调用时间
 // static uint8_t g_maxParametNumbr=0 ;                      //paramID最大值
-static uint8_t g_syncMpuParamIdList[26] = {0};  // mcu请求获取CPU参数ID列表
+static uint8_t g_syncMpuParamIdList[30] = {0};  // mcu请求获取CPU参数ID列表
 static uint8_t g_syncMpuParamSize = 0;          // mcu请求获取CPU参数的参数个数
 static uint8_t g_syncMpuParamRequstFlag = 0;    // mcu请求获取CPU参数请求发送标记0:未发送，1：发送
 static uint8_t g_syncMpuParamResultFlag = 0;    // mcu请求获取CPU参数结果标记0:未成功,1:成功
@@ -29,8 +29,45 @@ static uint16_t g_syncParamToMpuTimeCount = 0;  // Mcu请求同步参数至Mpu�
 static uint8_t g_syncParamToMpuRequstCount = 0; // Mcu请求同步参数至Mpu重复请求计数
 static uint8_t g_syncParamToMpuData[64] = {0};  // Mcu请求同步参数至Mpu请求数据缓存
 static MpuHalDataPack_t g_syncParamToMpuPack;   // Mcu请求同步参数至Mpu请求数据缓存结构体
-static uint8_t g_mpuDataBuffer[200] = {0};      // 用来存储MCU请求和响应数据的缓存buffer
+static uint8_t g_mpuDataBuffer[600] = {0};      // 用来存储MCU请求和响应数据的缓存buffer
 static MpuHalDataPack_t g_mpuDataPack;          // 用来存储要发送的请求和响应数据的缓存结构体
+
+typedef struct
+{
+    uint16_t did;
+    uint8_t  paramId;
+} DidMapping_t;
+
+static const DidMapping_t g_OfflineDidMap[] = {
+    {0x011B, E_ParamId_APN1},
+    {0x011C, E_ParamId_IP1_ADDR},
+    {0x011D, E_ParamId_TSPPort1},
+    {0x031C, E_ParamId_TspDomain1},
+    {0x013C, E_ParamId_Apn2},
+    {0x105F, E_ParamId_Ip3Addr},
+    {0x105E, E_ParamId_TspPort3},
+    {0x1061, E_ParamId_Apn3},
+    {0x1053, E_ParamId_PkiPort},
+    {0x1052, E_ParamId_PkiDomainName},
+    {0xF190, E_ParamId_VIN},
+    {0x011F, E_ParamId_ECallNumber},
+    {0x0124, E_ParamId_BCallNumber},
+    {0x1014, E_ParamId_PublicTspDomain},
+
+};
+
+static uint8_t GetParamIdByDid(uint16_t did)
+{
+    uint8_t i;
+    for(i = 0; i < sizeof(g_OfflineDidMap)/sizeof(DidMapping_t); i++)
+    {
+        if(g_OfflineDidMap[i].did == did)
+        {
+            return g_OfflineDidMap[i].paramId;
+        }
+    }
+    return 0xFF;
+}
 
 static const ParamLengthEntry_t g_paramLengthTable[] = {
     {E_ParamId_SN, 45},
@@ -254,6 +291,13 @@ static int16_t ParameterSyncResponseGetParamPackage(MpuHalDataPack_t *recvDataPa
     for (i = 0; i < num_of_params; i++)
     {
         uint8_t current_param_id = recvDataPack->pDataBuffer[1 + i];
+
+        // if (current_param_id == E_ParamId_VIN || 
+        //     current_param_id == E_ParamId_ECallNumber || 
+        //     current_param_id == E_ParamId_BCallNumber)
+        // {
+        //     continue;
+        // }
         uint8_t *pWrite = g_mpuDataBuffer + total_length;
         paramLenth = 0;
 
@@ -481,6 +525,197 @@ static uint8_t IsValidParamData(uint8_t paramId, uint8_t *data, uint16_t length)
     return 1;
 }
 
+static uint8_t IsOfflineDataValid(uint8_t *data, uint16_t len)
+{
+    if (len == 0) return 0;
+    uint8_t isAllFF = 1;
+    uint16_t k;
+
+    for (k = 0; k < len; k++)
+    {
+        if (data[k] != 0xFF) isAllFF = 0;
+        
+        if (isAllFF == 0)
+        {
+            return 1;
+        }
+    }
+    if (isAllFF)
+    {
+        return 0; 
+    }
+
+    return 1;
+}
+
+/* 根据 DID 获取标准长度 (直接用 DID 判断，避开 ParamId 枚举映射错误) */
+static uint16_t GetParamStandardLength(uint16_t did)
+{
+    switch (did)
+    {
+        // === 14字节 (电话号码) ===
+        case 0x011F: // ECallNumber
+        case 0x0124: // BCallNumber
+            return 14;
+
+        // === 17字节 (VIN) ===
+        case 0xF190: 
+            return 17;
+
+        // === 16字节 (IP & ESK) ===
+        case 0x011C: // IP1
+        case 0x105F: // IP3
+            return 16;
+
+        // === 32字节 (APN) ===
+        case 0x011B: // APN1
+        case 0x013C: // APN2
+        case 0x1061: // APN3
+            return 32;
+
+        // === 8字节 (端口) ===
+        case 0x011D: // Port1
+        case 0x105E: // Port3
+        case 0x1053: // PkiPort
+            return 8;
+
+        // === 50字节 (域名) ===
+        case 0x031C: // Domain1
+        case 0x1052: // PkiDomain
+        case 0x1014: // PublicDomain
+            return 50;
+
+        default: 
+            return 0; 
+    }
+}
+
+/*************************************************
+  Function:       ParameterSyncResponseOfflineDidPackage
+  Description:    处理 SubCmd 07 (Req)，回复 SubCmd 08 (Resp)
+                  解析 MPU 发来的 DID 列表，通过映射读取本地参数，
+                  并按 [DID(2)] [Len(1)] [Value] 格式回复
+  Input:          recvDataPack: MPU 发来的请求包
+  Output:         无
+  Return:         0: 成功
+*************************************************/
+static int16_t ParameterSyncResponseOfflineDidPackage(MpuHalDataPack_t *recvDataPack)
+{
+    uint8_t i = 0;
+    uint16_t total_length = 0;
+    uint16_t paramLenth = 0;
+    
+    if (recvDataPack == NULL || recvDataPack->dataLength < 1)
+    {
+        return -1;
+    }
+
+    // 1. 设置响应包头 AID=01, MID=03, SubCmd=08
+    g_mpuDataPack.aid = 0x01;
+    g_mpuDataPack.mid = 0x03;       
+    g_mpuDataPack.subcommand = 0x08; 
+
+    memset(g_mpuDataBuffer, 0, sizeof(g_mpuDataBuffer));
+    g_mpuDataPack.dataBufferSize = sizeof(g_mpuDataBuffer);
+
+    // 获取请求中的参数个数
+    uint8_t reqNum = recvDataPack->pDataBuffer[0];
+    
+    // g_mpuDataBuffer[0] 填实际回复的有效参数个数
+    g_mpuDataBuffer[0] = 0; 
+    total_length = 1;
+
+    uint8_t valid_count = 0;
+    uint16_t readOffset = 1; // 从请求包的第2个字节开始读 DID
+
+    // 2. 遍历请求中的每一个 DID
+    for (i = 0; i < reqNum; i++)
+    {
+        // 检查请求包是否有足够数据读下一个 DID (2 bytes)
+        if (readOffset + 2 > recvDataPack->dataLength)
+        {
+            break; 
+        }
+
+        // 提取 DID (Request 格式: DID High + DID Low)
+        uint16_t did = (uint16_t)(recvDataPack->pDataBuffer[readOffset] << 8) | recvDataPack->pDataBuffer[readOffset + 1];
+        readOffset += 2;
+
+        // 查找映射
+        uint8_t paramId = GetParamIdByDid(did);
+
+        if (paramId == 0xFF) 
+        {
+            continue; // 未知 DID，跳过
+        }
+
+        // 预计算写入指针位置
+        // Header占用 4字节: DID(2) + Len(2)
+        // Data 从 g_mpuDataBuffer + total_length + 4 开始写
+        uint8_t *pWriteDataPtr = g_mpuDataBuffer + total_length + 4;
+        paramLenth = 0;
+
+        // 读取本地参数数据
+        if (g_mcuParameterReadCbFunc != NULL)
+        {
+            g_mcuParameterReadCbFunc(paramId, pWriteDataPtr, &paramLenth);
+        }
+        uint16_t stdLen = GetParamStandardLength(did); // 传入 DID
+
+        if (stdLen > 0) 
+        {
+            // 如果读出来长度(10) < 标准(14)
+            if (paramLenth < stdLen)
+            {
+                // 补 00 (注意：这意味着你会得到 10字节数据 + 4字节00)
+                memset(pWriteDataPtr + paramLenth, 0x00, stdLen - paramLenth);
+                paramLenth = stdLen;
+            }
+            else if (paramLenth > stdLen)
+            {
+                 paramLenth = stdLen;
+            }
+        }
+        // === 数据校验逻辑 ===
+        // 如果数据长度为0，或数据是全00/全01/全FF，则认为是无效数据，不打包
+        if (IsOfflineDataValid(pWriteDataPtr, paramLenth) == 0)
+        {
+            // 数据无效，直接 continue。
+            // total_length 没有增加，下一次循环的数据会覆盖当前位置，相当于丢弃。
+            continue; 
+        }
+
+        // 检查 Buffer 溢出
+        // 需要空间: DID(2) + Len(2) + Data(paramLenth)
+        if (total_length + 4 + paramLenth > sizeof(g_mpuDataBuffer))
+        {
+            break; // 空间不足
+        }
+
+        // === 打包响应数据 ===
+        // 格式: [DID_H] [DID_L] [Len_H] [Len_L] [Value...]
+        uint8_t *pWriteHead = g_mpuDataBuffer + total_length;
+        
+        pWriteHead[0] = (uint8_t)(did >> 8);   // DID High
+        pWriteHead[1] = (uint8_t)(did & 0xFF); // DID Low
+        
+        // 【修改点】Length 改为 2 Bytes
+        pWriteHead[2] = (uint8_t)(paramLenth >> 8);   // Length High
+        pWriteHead[3] = (uint8_t)(paramLenth & 0xFF); // Length Low
+        
+        // Data 已经在 g_mcuParameterReadCbFunc 中写入到了 pWriteHead + 4 的位置
+
+        total_length += (4 + paramLenth);
+        valid_count++;
+    }
+
+    // 更新实际回复的参数个数
+    g_mpuDataBuffer[0] = valid_count;
+    g_mpuDataPack.pDataBuffer = g_mpuDataBuffer;
+    g_mpuDataPack.dataLength = total_length;
+
+    return 0;
+}
 /*************************************************
   Function:       ParameterSyncSdkCycleProcess
   Description:    参数同步模块周期调用接口
@@ -505,6 +740,14 @@ void ParameterSyncSdkCycleProcess(MpuHalDataPack_t *recvDataPack)
             offsetLen = 1;
             for (i = 0; i < recvDataPack->pDataBuffer[0]; i++)
             {
+                // if (recvDataPack->pDataBuffer[offsetLen] == E_ParamId_VIN || 
+                //     recvDataPack->pDataBuffer[offsetLen] == E_ParamId_ECallNumber || 
+                //     recvDataPack->pDataBuffer[offsetLen] == E_ParamId_BCallNumber)
+                // {
+                //     offsetLen = offsetLen + 2 + recvDataPack->pDataBuffer[offsetLen + 1];
+                //     continue;
+                // }
+
                 if (recvDataPack->pDataBuffer[offsetLen] == g_syncMpuParamIdList[14])
                 {
                     ProjectConfigGetMcuMpuTotalVersion(paramData, &length);
@@ -519,39 +762,59 @@ void ParameterSyncSdkCycleProcess(MpuHalDataPack_t *recvDataPack)
                 }
                 else
                 {
+                    // 1. 读取本地 Flash 数据
                     g_mcuParameterReadCbFunc(recvDataPack->pDataBuffer[offsetLen], paramData, &length);
-                    // if (recvDataPack->pDataBuffer[offsetLen] == E_ParamId_SN)
-                    // {
-                    //     for (uint16_t j = 0; j < recvDataPack->pDataBuffer[offsetLen + 1]; j++)
-                    //     {
-                    //         TBOX_PRINT("MCU SN Param Data[%d]: 0x%02X\r", j, recvDataPack->pDataBuffer[offsetLen + 2 + j]);
-                    //     }
-                    //     TBOX_PRINT("\r\n");
-                    //     for (uint16_t j = 0; j < length; j++)
-                    //     {
 
-                    //         TBOX_PRINT("Local SN Param Data[%d]: 0x%02X\r", j, paramData[j]);
-                    //     }
-                    //     TBOX_PRINT("\r\n");
-                    // }
-                    if (IsValidParamData(recvDataPack->pDataBuffer[offsetLen],
-                                         &(recvDataPack->pDataBuffer[offsetLen + 2]),
-                                         recvDataPack->pDataBuffer[offsetLen + 1]) == 1)
+                    // --- 新增逻辑开始 ---
+                    uint8_t allowWrite = 1; // 默认允许写入
+                    uint8_t currentParamId = recvDataPack->pDataBuffer[offsetLen];
+
+                    // 判断是否为需要保护的 3 个 ID (VIN, ECall, BCall)
+                    if (currentParamId == E_ParamId_VIN || 
+                        currentParamId == E_ParamId_ECallNumber || 
+                        currentParamId == E_ParamId_BCallNumber)
                     {
-                        // TBOX_PRINT("Param ID %d valid data received for write.\r\n", recvDataPack->pDataBuffer[offsetLen]);
+                        uint8_t isLocalAllFF = 1; // 假设本地全是 FF
+                        uint16_t k;
 
-                        if (memcmp(paramData, &(recvDataPack->pDataBuffer[offsetLen + 2]), recvDataPack->pDataBuffer[offsetLen + 1]) != 0)
+                        // 检查本地读取到的 paramData 是否全为 0xFF
+                        // length 是 g_mcuParameterReadCbFunc 返回的本地数据长度
+                        for (k = 0; k < length; k++)
                         {
+                            if (paramData[k] != 0xFF)
+                            {
+                                isLocalAllFF = 0; // 发现非 FF 字节，说明本地已有有效数据
+                                break;
+                            }
+                        }
 
-                            g_mcuParameterWriteCbFunc(recvDataPack->pDataBuffer[offsetLen],
-                                                      recvDataPack->pDataBuffer + offsetLen + 2,
-                                                      recvDataPack->pDataBuffer[offsetLen + 1]);
+                        // 如果本地不是全 FF (即已有数据)，则禁止覆盖写入
+                        if (isLocalAllFF == 0)
+                        {
+                            allowWrite = 0;
+                            // TBOX_PRINT("Param ID %d exists locally, sync skipped.\r\n", currentParamId);
                         }
                     }
-                    // else
-                    // {
-                    //     TBOX_PRINT("Invalid Param ID %d received, write skipped.\r\n", recvDataPack->pDataBuffer[offsetLen]);
-                    // }
+                    // --- 新增逻辑结束 ---
+
+                    if (allowWrite == 1)
+                    {
+                        // 校验 MPU 发来的新数据是否合法
+                        if (IsValidParamData(recvDataPack->pDataBuffer[offsetLen],
+                                             &(recvDataPack->pDataBuffer[offsetLen + 2]),
+                                             recvDataPack->pDataBuffer[offsetLen + 1]) == 1)
+                        {
+                            // 对比数据是否发生变化 (本地 vs MPU)
+                            if (memcmp(paramData, &(recvDataPack->pDataBuffer[offsetLen + 2]), recvDataPack->pDataBuffer[offsetLen + 1]) != 0)
+                            {
+                                // 执行写入
+                                g_mcuParameterWriteCbFunc(recvDataPack->pDataBuffer[offsetLen],
+                                                          recvDataPack->pDataBuffer + offsetLen + 2,
+                                                          recvDataPack->pDataBuffer[offsetLen + 1]);
+                            }
+                        }
+                    }
+                    // else { TBOX_PRINT("Skipped write for protected param.\r\n"); }
                 }
                 offsetLen = offsetLen + 2 + recvDataPack->pDataBuffer[offsetLen + 1];
             }
@@ -565,6 +828,7 @@ void ParameterSyncSdkCycleProcess(MpuHalDataPack_t *recvDataPack)
                 ParameterSyncResponseGetParamPackage(recvDataPack);
                 MpuHalTransmit(g_mpuHandle, &g_mpuDataPack, MPU_HAL_UART_MODE);
             }
+            
         }
         else if ((recvDataPack->subcommand & 0x7F) == 4)
         {
@@ -586,6 +850,7 @@ void ParameterSyncSdkCycleProcess(MpuHalDataPack_t *recvDataPack)
                 {
                     g_mcuParameterWriteCbFunc(recvDataPack->pDataBuffer[0], &recvDataPack->pDataBuffer[2], recvDataPack->pDataBuffer[1]);
                     ParameterSyncResponseSyncParamPackage(1, recvDataPack->pDataBuffer[0]);
+                        
                 }
                 else
                 {
@@ -598,6 +863,14 @@ void ParameterSyncSdkCycleProcess(MpuHalDataPack_t *recvDataPack)
                 ParameterSyncResponseSyncParamPackage(0, recvDataPack->pDataBuffer[0]);
                 MpuHalTransmit(g_mpuHandle, &g_mpuDataPack, MPU_HAL_UART_MODE);
             }
+        }
+        else if ((recvDataPack->subcommand & 0x7F) == 7)
+        {
+            if (g_syncMpuParamResultFlag == 1)
+            {
+                ParameterSyncResponseOfflineDidPackage(recvDataPack);
+                MpuHalTransmit(g_mpuHandle, &g_mpuDataPack, MPU_HAL_UART_MODE);
+            }    
         }
         else
         {
