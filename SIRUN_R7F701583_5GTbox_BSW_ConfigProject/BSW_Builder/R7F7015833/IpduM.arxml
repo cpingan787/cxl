@@ -1,0 +1,600 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AUTOSAR xmlns="http://autosar.org/schema/r4.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://autosar.org/schema/r4.0 AUTOSAR_00048.xsd">
+  <AR-PACKAGES>
+    <AR-PACKAGE>
+      <SHORT-NAME>R7F7015833</SHORT-NAME>
+      <ELEMENTS>
+        <ECUC-MODULE-CONFIGURATION-VALUES UUID="c522946d-8d06-445c-be2c-ef83ba69c76b">
+          <SHORT-NAME>IpduM</SHORT-NAME>
+          <ADMIN-DATA>
+            <SDGS>
+              <SDG GID="iSoft::ModuleOptions">
+                <SD GID="GENERATE_AND_VALIDATE">true</SD>
+                <SD GID="ISOFT_EDITOR_VERSION"/>
+              </SDG>
+            </SDGS>
+          </ADMIN-DATA>
+          <DEFINITION-REF DEST="ECUC-MODULE-DEF">/AUTOSAR/IpduM</DEFINITION-REF>
+          <CONTAINERS>
+            <ECUC-CONTAINER-VALUE UUID="4d0738e6-7445-45ff-8a17-20e0bbc17f5d">
+              <SHORT-NAME>IpduMGeneral</SHORT-NAME>
+              <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/AUTOSAR/IpduM/IpduMGeneral</DEFINITION-REF>
+              <PARAMETER-VALUES>
+                <ECUC-NUMERICAL-PARAM-VALUE>
+                  <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/AUTOSAR/IpduM/IpduMGeneral/IpduMDevErrorDetect</DEFINITION-REF>
+                  <VALUE>false</VALUE>
+                </ECUC-NUMERICAL-PARAM-VALUE>
+                <ECUC-TEXTUAL-PARAM-VALUE>
+                  <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/AUTOSAR/IpduM/IpduMGeneral/IpduMHeaderByteOrder</DEFINITION-REF>
+                  <VALUE>IPDUM_BIG_ENDIAN</VALUE>
+                </ECUC-TEXTUAL-PARAM-VALUE>
+                <ECUC-NUMERICAL-PARAM-VALUE>
+                  <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/AUTOSAR/IpduM/IpduMGeneral/IpduMStaticPartExists</DEFINITION-REF>
+                  <VALUE>true</VALUE>
+                </ECUC-NUMERICAL-PARAM-VALUE>
+                <ECUC-NUMERICAL-PARAM-VALUE>
+                  <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/AUTOSAR/IpduM/IpduMGeneral/IpduMVersionInfoApi</DEFINITION-REF>
+                  <VALUE>false</VALUE>
+                </ECUC-NUMERICAL-PARAM-VALUE>
+              </PARAMETER-VALUES>
+            </ECUC-CONTAINER-VALUE>
+            <ECUC-CONTAINER-VALUE UUID="90b8cf0b-e5eb-4085-9454-ce275014700a">
+              <SHORT-NAME>IpduMConfig</SHORT-NAME>
+              <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/AUTOSAR/IpduM/IpduMConfig</DEFINITION-REF>
+              <SUB-CONTAINERS>
+                <ECUC-CONTAINER-VALUE UUID="_B9S0EPZnEfCPJ8nTXVsZdw">
+                  <SHORT-NAME>IpduMContainedTxPdu_0x377_Pdu06</SHORT-NAME>
+                  <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu</DEFINITION-REF>
+                  <PARAMETER-VALUES>
+                    <ECUC-NUMERICAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedPduHeaderId</DEFINITION-REF>
+                      <VALUE>132608</VALUE>
+                    </ECUC-NUMERICAL-PARAM-VALUE>
+                    <ECUC-TEXTUAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedTxPduCollectionSemantics</DEFINITION-REF>
+                      <VALUE>IPDUM_COLLECT_QUEUED</VALUE>
+                    </ECUC-TEXTUAL-PARAM-VALUE>
+                    <ECUC-NUMERICAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedTxPduConfirmation</DEFINITION-REF>
+                      <VALUE>true</VALUE>
+                    </ECUC-NUMERICAL-PARAM-VALUE>
+                    <ECUC-TEXTUAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-STRING-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedTxPduHandleId</DEFINITION-REF>
+                      <VALUE>CONTAINED_TX_PDU_IpduM_Contained_Tx_0x377_Pdu06</VALUE>
+                    </ECUC-TEXTUAL-PARAM-VALUE>
+                    <ECUC-TEXTUAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedTxPduTrigger</DEFINITION-REF>
+                      <VALUE>IPDUM_TRIGGER_ALWAYS</VALUE>
+                    </ECUC-TEXTUAL-PARAM-VALUE>
+                  </PARAMETER-VALUES>
+                  <REFERENCE-VALUES>
+                    <ECUC-REFERENCE-VALUE>
+                      <DEFINITION-REF DEST="ECUC-REFERENCE-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedTxInContainerPduRef</DEFINITION-REF>
+                      <VALUE-REF DEST="ECUC-CONTAINER-VALUE">/R7F7015833/IpduM/IpduMConfig/IpduMContainerTxPdu_0x377</VALUE-REF>
+                    </ECUC-REFERENCE-VALUE>
+                    <ECUC-REFERENCE-VALUE>
+                      <DEFINITION-REF DEST="ECUC-REFERENCE-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedTxPduRef</DEFINITION-REF>
+                      <VALUE-REF DEST="ECUC-CONTAINER-VALUE">/R7F7015833/EcuC/EcucConfigSet/EcucPduCollection/IpduM_Contained_Tx_0x377_Pdu06</VALUE-REF>
+                    </ECUC-REFERENCE-VALUE>
+                  </REFERENCE-VALUES>
+                </ECUC-CONTAINER-VALUE>
+                <ECUC-CONTAINER-VALUE UUID="_Uvf5YPZoEfCPJ8nTXVsZdw">
+                  <SHORT-NAME>IpduMContainerTxPdu_0x377</SHORT-NAME>
+                  <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainerTxPdu</DEFINITION-REF>
+                  <PARAMETER-VALUES>
+                    <ECUC-TEXTUAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainerTxPdu/IpduMContainerHeaderSize</DEFINITION-REF>
+                      <VALUE>IPDUM_HEADERTYPE_SHORT</VALUE>
+                    </ECUC-TEXTUAL-PARAM-VALUE>
+                    <ECUC-NUMERICAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainerTxPdu/IpduMContainerQueueSize</DEFINITION-REF>
+                      <VALUE>10</VALUE>
+                    </ECUC-NUMERICAL-PARAM-VALUE>
+                    <ECUC-NUMERICAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainerTxPdu/IpduMContainerTxFirstContainedPduTrigger</DEFINITION-REF>
+                      <VALUE>true</VALUE>
+                    </ECUC-NUMERICAL-PARAM-VALUE>
+                    <ECUC-TEXTUAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-STRING-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainerTxPdu/IpduMContainerTxHandleId</DEFINITION-REF>
+                      <VALUE>CONTAINER_TX_PDU_IpduM_Contained_Tx_Pdu_0x377</VALUE>
+                    </ECUC-TEXTUAL-PARAM-VALUE>
+                    <ECUC-TEXTUAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainerTxPdu/IpduMContainerTxTriggerMode</DEFINITION-REF>
+                      <VALUE>IPDUM_DIRECT</VALUE>
+                    </ECUC-TEXTUAL-PARAM-VALUE>
+                  </PARAMETER-VALUES>
+                  <REFERENCE-VALUES>
+                    <ECUC-REFERENCE-VALUE>
+                      <DEFINITION-REF DEST="ECUC-REFERENCE-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainerTxPdu/IpduMContainerTxPduRef</DEFINITION-REF>
+                      <VALUE-REF DEST="ECUC-CONTAINER-VALUE">/R7F7015833/EcuC/EcucConfigSet/EcucPduCollection/IpduM_Contained_Tx_Pdu_0x377</VALUE-REF>
+                    </ECUC-REFERENCE-VALUE>
+                  </REFERENCE-VALUES>
+                </ECUC-CONTAINER-VALUE>
+                <ECUC-CONTAINER-VALUE UUID="_r73vAPaMEfCIBb99LiJeqg">
+                  <SHORT-NAME>IpduMContainedTxPdu_0x377_Pdu07</SHORT-NAME>
+                  <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu</DEFINITION-REF>
+                  <PARAMETER-VALUES>
+                    <ECUC-NUMERICAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedPduHeaderId</DEFINITION-REF>
+                      <VALUE>132609</VALUE>
+                    </ECUC-NUMERICAL-PARAM-VALUE>
+                    <ECUC-TEXTUAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedTxPduCollectionSemantics</DEFINITION-REF>
+                      <VALUE>IPDUM_COLLECT_QUEUED</VALUE>
+                    </ECUC-TEXTUAL-PARAM-VALUE>
+                    <ECUC-NUMERICAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedTxPduConfirmation</DEFINITION-REF>
+                      <VALUE>true</VALUE>
+                    </ECUC-NUMERICAL-PARAM-VALUE>
+                    <ECUC-TEXTUAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-STRING-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedTxPduHandleId</DEFINITION-REF>
+                      <VALUE>CONTAINED_TX_PDU_IpduM_Contained_Tx_0x377_Pdu07</VALUE>
+                    </ECUC-TEXTUAL-PARAM-VALUE>
+                    <ECUC-TEXTUAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedTxPduTrigger</DEFINITION-REF>
+                      <VALUE>IPDUM_TRIGGER_ALWAYS</VALUE>
+                    </ECUC-TEXTUAL-PARAM-VALUE>
+                  </PARAMETER-VALUES>
+                  <REFERENCE-VALUES>
+                    <ECUC-REFERENCE-VALUE>
+                      <DEFINITION-REF DEST="ECUC-REFERENCE-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedTxInContainerPduRef</DEFINITION-REF>
+                      <VALUE-REF DEST="ECUC-CONTAINER-VALUE">/R7F7015833/IpduM/IpduMConfig/IpduMContainerTxPdu_0x377</VALUE-REF>
+                    </ECUC-REFERENCE-VALUE>
+                    <ECUC-REFERENCE-VALUE>
+                      <DEFINITION-REF DEST="ECUC-REFERENCE-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedTxPduRef</DEFINITION-REF>
+                      <VALUE-REF DEST="ECUC-CONTAINER-VALUE">/R7F7015833/EcuC/EcucConfigSet/EcucPduCollection/IpduM_Contained_Tx_0x377_Pdu07</VALUE-REF>
+                    </ECUC-REFERENCE-VALUE>
+                  </REFERENCE-VALUES>
+                </ECUC-CONTAINER-VALUE>
+                <ECUC-CONTAINER-VALUE UUID="_sNnmUPaMEfCIBb99LiJeqg">
+                  <SHORT-NAME>IpduMContainedTxPdu_0x377_Pdu08</SHORT-NAME>
+                  <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu</DEFINITION-REF>
+                  <PARAMETER-VALUES>
+                    <ECUC-NUMERICAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedPduHeaderId</DEFINITION-REF>
+                      <VALUE>132642</VALUE>
+                    </ECUC-NUMERICAL-PARAM-VALUE>
+                    <ECUC-TEXTUAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedTxPduCollectionSemantics</DEFINITION-REF>
+                      <VALUE>IPDUM_COLLECT_QUEUED</VALUE>
+                    </ECUC-TEXTUAL-PARAM-VALUE>
+                    <ECUC-NUMERICAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedTxPduConfirmation</DEFINITION-REF>
+                      <VALUE>true</VALUE>
+                    </ECUC-NUMERICAL-PARAM-VALUE>
+                    <ECUC-TEXTUAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-STRING-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedTxPduHandleId</DEFINITION-REF>
+                      <VALUE>CONTAINED_TX_PDU_IpduM_Contained_Tx_0x377_Pdu08</VALUE>
+                    </ECUC-TEXTUAL-PARAM-VALUE>
+                    <ECUC-TEXTUAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedTxPduTrigger</DEFINITION-REF>
+                      <VALUE>IPDUM_TRIGGER_ALWAYS</VALUE>
+                    </ECUC-TEXTUAL-PARAM-VALUE>
+                  </PARAMETER-VALUES>
+                  <REFERENCE-VALUES>
+                    <ECUC-REFERENCE-VALUE>
+                      <DEFINITION-REF DEST="ECUC-REFERENCE-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedTxInContainerPduRef</DEFINITION-REF>
+                      <VALUE-REF DEST="ECUC-CONTAINER-VALUE">/R7F7015833/IpduM/IpduMConfig/IpduMContainerTxPdu_0x377</VALUE-REF>
+                    </ECUC-REFERENCE-VALUE>
+                    <ECUC-REFERENCE-VALUE>
+                      <DEFINITION-REF DEST="ECUC-REFERENCE-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedTxPduRef</DEFINITION-REF>
+                      <VALUE-REF DEST="ECUC-CONTAINER-VALUE">/R7F7015833/EcuC/EcucConfigSet/EcucPduCollection/IpduM_Contained_Tx_0x377_Pdu08</VALUE-REF>
+                    </ECUC-REFERENCE-VALUE>
+                  </REFERENCE-VALUES>
+                </ECUC-CONTAINER-VALUE>
+                <ECUC-CONTAINER-VALUE UUID="_pqz9cPavEfCIBb99LiJeqg">
+                  <SHORT-NAME>IpduMContainerTxPdu_0x36A</SHORT-NAME>
+                  <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainerTxPdu</DEFINITION-REF>
+                  <PARAMETER-VALUES>
+                    <ECUC-TEXTUAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainerTxPdu/IpduMContainerHeaderSize</DEFINITION-REF>
+                      <VALUE>IPDUM_HEADERTYPE_SHORT</VALUE>
+                    </ECUC-TEXTUAL-PARAM-VALUE>
+                    <ECUC-NUMERICAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainerTxPdu/IpduMContainerQueueSize</DEFINITION-REF>
+                      <VALUE>10</VALUE>
+                    </ECUC-NUMERICAL-PARAM-VALUE>
+                    <ECUC-NUMERICAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainerTxPdu/IpduMContainerTxFirstContainedPduTrigger</DEFINITION-REF>
+                      <VALUE>true</VALUE>
+                    </ECUC-NUMERICAL-PARAM-VALUE>
+                    <ECUC-TEXTUAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-STRING-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainerTxPdu/IpduMContainerTxHandleId</DEFINITION-REF>
+                      <VALUE>CONTAINER_TX_PDU_IpduM_Contained_Tx_Pdu_0x36A</VALUE>
+                    </ECUC-TEXTUAL-PARAM-VALUE>
+                    <ECUC-TEXTUAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainerTxPdu/IpduMContainerTxTriggerMode</DEFINITION-REF>
+                      <VALUE>IPDUM_DIRECT</VALUE>
+                    </ECUC-TEXTUAL-PARAM-VALUE>
+                  </PARAMETER-VALUES>
+                  <REFERENCE-VALUES>
+                    <ECUC-REFERENCE-VALUE>
+                      <DEFINITION-REF DEST="ECUC-REFERENCE-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainerTxPdu/IpduMContainerTxPduRef</DEFINITION-REF>
+                      <VALUE-REF DEST="ECUC-CONTAINER-VALUE">/R7F7015833/EcuC/EcucConfigSet/EcucPduCollection/IpduM_Contained_Tx_Pdu_0x36A</VALUE-REF>
+                    </ECUC-REFERENCE-VALUE>
+                  </REFERENCE-VALUES>
+                </ECUC-CONTAINER-VALUE>
+                <ECUC-CONTAINER-VALUE UUID="_1dI8APavEfCIBb99LiJeqg">
+                  <SHORT-NAME>IpduMContainedTxPdu_0x36A_Pdu13</SHORT-NAME>
+                  <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu</DEFINITION-REF>
+                  <PARAMETER-VALUES>
+                    <ECUC-NUMERICAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedPduHeaderId</DEFINITION-REF>
+                      <VALUE>132629</VALUE>
+                    </ECUC-NUMERICAL-PARAM-VALUE>
+                    <ECUC-TEXTUAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedTxPduCollectionSemantics</DEFINITION-REF>
+                      <VALUE>IPDUM_COLLECT_QUEUED</VALUE>
+                    </ECUC-TEXTUAL-PARAM-VALUE>
+                    <ECUC-NUMERICAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedTxPduConfirmation</DEFINITION-REF>
+                      <VALUE>true</VALUE>
+                    </ECUC-NUMERICAL-PARAM-VALUE>
+                    <ECUC-TEXTUAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-STRING-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedTxPduHandleId</DEFINITION-REF>
+                      <VALUE>CONTAINED_TX_PDU_IpduM_Contained_Tx_0x36A_Pdu13</VALUE>
+                    </ECUC-TEXTUAL-PARAM-VALUE>
+                    <ECUC-TEXTUAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedTxPduTrigger</DEFINITION-REF>
+                      <VALUE>IPDUM_TRIGGER_ALWAYS</VALUE>
+                    </ECUC-TEXTUAL-PARAM-VALUE>
+                  </PARAMETER-VALUES>
+                  <REFERENCE-VALUES>
+                    <ECUC-REFERENCE-VALUE>
+                      <DEFINITION-REF DEST="ECUC-REFERENCE-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedTxInContainerPduRef</DEFINITION-REF>
+                      <VALUE-REF DEST="ECUC-CONTAINER-VALUE">/R7F7015833/IpduM/IpduMConfig/IpduMContainerTxPdu_0x36A</VALUE-REF>
+                    </ECUC-REFERENCE-VALUE>
+                    <ECUC-REFERENCE-VALUE>
+                      <DEFINITION-REF DEST="ECUC-REFERENCE-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedTxPduRef</DEFINITION-REF>
+                      <VALUE-REF DEST="ECUC-CONTAINER-VALUE">/R7F7015833/EcuC/EcucConfigSet/EcucPduCollection/IpduM_Contained_Tx_0x36A_Pdu13</VALUE-REF>
+                    </ECUC-REFERENCE-VALUE>
+                  </REFERENCE-VALUES>
+                </ECUC-CONTAINER-VALUE>
+                <ECUC-CONTAINER-VALUE UUID="_1kVwMPavEfCIBb99LiJeqg">
+                  <SHORT-NAME>IpduMContainedTxPdu_0x36A_Pdu34</SHORT-NAME>
+                  <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu</DEFINITION-REF>
+                  <PARAMETER-VALUES>
+                    <ECUC-NUMERICAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedPduHeaderId</DEFINITION-REF>
+                      <VALUE>132616</VALUE>
+                    </ECUC-NUMERICAL-PARAM-VALUE>
+                    <ECUC-TEXTUAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedTxPduCollectionSemantics</DEFINITION-REF>
+                      <VALUE>IPDUM_COLLECT_QUEUED</VALUE>
+                    </ECUC-TEXTUAL-PARAM-VALUE>
+                    <ECUC-NUMERICAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedTxPduConfirmation</DEFINITION-REF>
+                      <VALUE>true</VALUE>
+                    </ECUC-NUMERICAL-PARAM-VALUE>
+                    <ECUC-TEXTUAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-STRING-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedTxPduHandleId</DEFINITION-REF>
+                      <VALUE>CONTAINED_TX_PDU_IpduM_Contained_Tx_0x36A_Pdu34</VALUE>
+                    </ECUC-TEXTUAL-PARAM-VALUE>
+                    <ECUC-TEXTUAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedTxPduTrigger</DEFINITION-REF>
+                      <VALUE>IPDUM_TRIGGER_ALWAYS</VALUE>
+                    </ECUC-TEXTUAL-PARAM-VALUE>
+                  </PARAMETER-VALUES>
+                  <REFERENCE-VALUES>
+                    <ECUC-REFERENCE-VALUE>
+                      <DEFINITION-REF DEST="ECUC-REFERENCE-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedTxInContainerPduRef</DEFINITION-REF>
+                      <VALUE-REF DEST="ECUC-CONTAINER-VALUE">/R7F7015833/IpduM/IpduMConfig/IpduMContainerTxPdu_0x36A</VALUE-REF>
+                    </ECUC-REFERENCE-VALUE>
+                    <ECUC-REFERENCE-VALUE>
+                      <DEFINITION-REF DEST="ECUC-REFERENCE-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedTxPduRef</DEFINITION-REF>
+                      <VALUE-REF DEST="ECUC-CONTAINER-VALUE">/R7F7015833/EcuC/EcucConfigSet/EcucPduCollection/IpduM_Contained_Tx_0x36A_Pdu34</VALUE-REF>
+                    </ECUC-REFERENCE-VALUE>
+                  </REFERENCE-VALUES>
+                </ECUC-CONTAINER-VALUE>
+                <ECUC-CONTAINER-VALUE UUID="_1wBbwPavEfCIBb99LiJeqg">
+                  <SHORT-NAME>IpduMContainedTxPdu_0x36A_Pdu35</SHORT-NAME>
+                  <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu</DEFINITION-REF>
+                  <PARAMETER-VALUES>
+                    <ECUC-NUMERICAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedPduHeaderId</DEFINITION-REF>
+                      <VALUE>132633</VALUE>
+                    </ECUC-NUMERICAL-PARAM-VALUE>
+                    <ECUC-TEXTUAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedTxPduCollectionSemantics</DEFINITION-REF>
+                      <VALUE>IPDUM_COLLECT_QUEUED</VALUE>
+                    </ECUC-TEXTUAL-PARAM-VALUE>
+                    <ECUC-NUMERICAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedTxPduConfirmation</DEFINITION-REF>
+                      <VALUE>true</VALUE>
+                    </ECUC-NUMERICAL-PARAM-VALUE>
+                    <ECUC-TEXTUAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-STRING-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedTxPduHandleId</DEFINITION-REF>
+                      <VALUE>CONTAINED_TX_PDU_IpduM_Contained_Tx_0x36A_Pdu35</VALUE>
+                    </ECUC-TEXTUAL-PARAM-VALUE>
+                    <ECUC-TEXTUAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedTxPduTrigger</DEFINITION-REF>
+                      <VALUE>IPDUM_TRIGGER_ALWAYS</VALUE>
+                    </ECUC-TEXTUAL-PARAM-VALUE>
+                  </PARAMETER-VALUES>
+                  <REFERENCE-VALUES>
+                    <ECUC-REFERENCE-VALUE>
+                      <DEFINITION-REF DEST="ECUC-REFERENCE-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedTxInContainerPduRef</DEFINITION-REF>
+                      <VALUE-REF DEST="ECUC-CONTAINER-VALUE">/R7F7015833/IpduM/IpduMConfig/IpduMContainerTxPdu_0x36A</VALUE-REF>
+                    </ECUC-REFERENCE-VALUE>
+                    <ECUC-REFERENCE-VALUE>
+                      <DEFINITION-REF DEST="ECUC-REFERENCE-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedTxPduRef</DEFINITION-REF>
+                      <VALUE-REF DEST="ECUC-CONTAINER-VALUE">/R7F7015833/EcuC/EcucConfigSet/EcucPduCollection/IpduM_Contained_Tx_0x36A_Pdu35</VALUE-REF>
+                    </ECUC-REFERENCE-VALUE>
+                  </REFERENCE-VALUES>
+                </ECUC-CONTAINER-VALUE>
+                <ECUC-CONTAINER-VALUE UUID="_12poMPavEfCIBb99LiJeqg">
+                  <SHORT-NAME>IpduMContainedTxPdu_0x36A_Pdu39</SHORT-NAME>
+                  <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu</DEFINITION-REF>
+                  <PARAMETER-VALUES>
+                    <ECUC-NUMERICAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedPduHeaderId</DEFINITION-REF>
+                      <VALUE>132630</VALUE>
+                    </ECUC-NUMERICAL-PARAM-VALUE>
+                    <ECUC-TEXTUAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedTxPduCollectionSemantics</DEFINITION-REF>
+                      <VALUE>IPDUM_COLLECT_QUEUED</VALUE>
+                    </ECUC-TEXTUAL-PARAM-VALUE>
+                    <ECUC-NUMERICAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedTxPduConfirmation</DEFINITION-REF>
+                      <VALUE>true</VALUE>
+                    </ECUC-NUMERICAL-PARAM-VALUE>
+                    <ECUC-TEXTUAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-STRING-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedTxPduHandleId</DEFINITION-REF>
+                      <VALUE>CONTAINED_TX_PDU_IpduM_Contained_Tx_0x36A_Pdu39</VALUE>
+                    </ECUC-TEXTUAL-PARAM-VALUE>
+                    <ECUC-TEXTUAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedTxPduTrigger</DEFINITION-REF>
+                      <VALUE>IPDUM_TRIGGER_ALWAYS</VALUE>
+                    </ECUC-TEXTUAL-PARAM-VALUE>
+                  </PARAMETER-VALUES>
+                  <REFERENCE-VALUES>
+                    <ECUC-REFERENCE-VALUE>
+                      <DEFINITION-REF DEST="ECUC-REFERENCE-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedTxInContainerPduRef</DEFINITION-REF>
+                      <VALUE-REF DEST="ECUC-CONTAINER-VALUE">/R7F7015833/IpduM/IpduMConfig/IpduMContainerTxPdu_0x36A</VALUE-REF>
+                    </ECUC-REFERENCE-VALUE>
+                    <ECUC-REFERENCE-VALUE>
+                      <DEFINITION-REF DEST="ECUC-REFERENCE-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedTxPduRef</DEFINITION-REF>
+                      <VALUE-REF DEST="ECUC-CONTAINER-VALUE">/R7F7015833/EcuC/EcucConfigSet/EcucPduCollection/IpduM_Contained_Tx_0x36A_Pdu39</VALUE-REF>
+                    </ECUC-REFERENCE-VALUE>
+                  </REFERENCE-VALUES>
+                </ECUC-CONTAINER-VALUE>
+                <ECUC-CONTAINER-VALUE UUID="_2ATTcPavEfCIBb99LiJeqg">
+                  <SHORT-NAME>IpduMContainedTxPdu_0x36A_Pdu40</SHORT-NAME>
+                  <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu</DEFINITION-REF>
+                  <PARAMETER-VALUES>
+                    <ECUC-NUMERICAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedPduHeaderId</DEFINITION-REF>
+                      <VALUE>132613</VALUE>
+                    </ECUC-NUMERICAL-PARAM-VALUE>
+                    <ECUC-TEXTUAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedTxPduCollectionSemantics</DEFINITION-REF>
+                      <VALUE>IPDUM_COLLECT_QUEUED</VALUE>
+                    </ECUC-TEXTUAL-PARAM-VALUE>
+                    <ECUC-NUMERICAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedTxPduConfirmation</DEFINITION-REF>
+                      <VALUE>true</VALUE>
+                    </ECUC-NUMERICAL-PARAM-VALUE>
+                    <ECUC-TEXTUAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-STRING-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedTxPduHandleId</DEFINITION-REF>
+                      <VALUE>CONTAINED_TX_PDU_IpduM_Contained_Tx_0x36A_Pdu40</VALUE>
+                    </ECUC-TEXTUAL-PARAM-VALUE>
+                    <ECUC-TEXTUAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedTxPduTrigger</DEFINITION-REF>
+                      <VALUE>IPDUM_TRIGGER_ALWAYS</VALUE>
+                    </ECUC-TEXTUAL-PARAM-VALUE>
+                  </PARAMETER-VALUES>
+                  <REFERENCE-VALUES>
+                    <ECUC-REFERENCE-VALUE>
+                      <DEFINITION-REF DEST="ECUC-REFERENCE-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedTxInContainerPduRef</DEFINITION-REF>
+                      <VALUE-REF DEST="ECUC-CONTAINER-VALUE">/R7F7015833/IpduM/IpduMConfig/IpduMContainerTxPdu_0x36A</VALUE-REF>
+                    </ECUC-REFERENCE-VALUE>
+                    <ECUC-REFERENCE-VALUE>
+                      <DEFINITION-REF DEST="ECUC-REFERENCE-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedTxPduRef</DEFINITION-REF>
+                      <VALUE-REF DEST="ECUC-CONTAINER-VALUE">/R7F7015833/EcuC/EcucConfigSet/EcucPduCollection/IpduM_Contained_Tx_0x36A_Pdu40</VALUE-REF>
+                    </ECUC-REFERENCE-VALUE>
+                  </REFERENCE-VALUES>
+                </ECUC-CONTAINER-VALUE>
+                <ECUC-CONTAINER-VALUE UUID="_goO-IPa5EfCIBb99LiJeqg">
+                  <SHORT-NAME>IpduMContainerTxPdu_0x3A2</SHORT-NAME>
+                  <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainerTxPdu</DEFINITION-REF>
+                  <PARAMETER-VALUES>
+                    <ECUC-TEXTUAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainerTxPdu/IpduMContainerHeaderSize</DEFINITION-REF>
+                      <VALUE>IPDUM_HEADERTYPE_SHORT</VALUE>
+                    </ECUC-TEXTUAL-PARAM-VALUE>
+                    <ECUC-NUMERICAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainerTxPdu/IpduMContainerQueueSize</DEFINITION-REF>
+                      <VALUE>10</VALUE>
+                    </ECUC-NUMERICAL-PARAM-VALUE>
+                    <ECUC-NUMERICAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainerTxPdu/IpduMContainerTxFirstContainedPduTrigger</DEFINITION-REF>
+                      <VALUE>true</VALUE>
+                    </ECUC-NUMERICAL-PARAM-VALUE>
+                    <ECUC-TEXTUAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-STRING-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainerTxPdu/IpduMContainerTxHandleId</DEFINITION-REF>
+                      <VALUE>CONTAINER_TX_PDU_IpduM_Contained_Tx_Pdu_0x3A2</VALUE>
+                    </ECUC-TEXTUAL-PARAM-VALUE>
+                    <ECUC-TEXTUAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainerTxPdu/IpduMContainerTxTriggerMode</DEFINITION-REF>
+                      <VALUE>IPDUM_DIRECT</VALUE>
+                    </ECUC-TEXTUAL-PARAM-VALUE>
+                  </PARAMETER-VALUES>
+                  <REFERENCE-VALUES>
+                    <ECUC-REFERENCE-VALUE>
+                      <DEFINITION-REF DEST="ECUC-REFERENCE-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainerTxPdu/IpduMContainerTxPduRef</DEFINITION-REF>
+                      <VALUE-REF DEST="ECUC-CONTAINER-VALUE">/R7F7015833/EcuC/EcucConfigSet/EcucPduCollection/IpduM_Contained_Tx_Pdu_0x3A2</VALUE-REF>
+                    </ECUC-REFERENCE-VALUE>
+                  </REFERENCE-VALUES>
+                </ECUC-CONTAINER-VALUE>
+                <ECUC-CONTAINER-VALUE UUID="_neYWkPa5EfCIBb99LiJeqg">
+                  <SHORT-NAME>IpduMContainedTxPdu_0x3A2_Pdu03</SHORT-NAME>
+                  <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu</DEFINITION-REF>
+                  <PARAMETER-VALUES>
+                    <ECUC-NUMERICAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedPduHeaderId</DEFINITION-REF>
+                      <VALUE>209158</VALUE>
+                    </ECUC-NUMERICAL-PARAM-VALUE>
+                    <ECUC-TEXTUAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedTxPduCollectionSemantics</DEFINITION-REF>
+                      <VALUE>IPDUM_COLLECT_QUEUED</VALUE>
+                    </ECUC-TEXTUAL-PARAM-VALUE>
+                    <ECUC-NUMERICAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedTxPduConfirmation</DEFINITION-REF>
+                      <VALUE>true</VALUE>
+                    </ECUC-NUMERICAL-PARAM-VALUE>
+                    <ECUC-TEXTUAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-STRING-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedTxPduHandleId</DEFINITION-REF>
+                      <VALUE>CONTAINED_TX_PDU_IpduM_Contained_Tx_0x3A2_Pdu03</VALUE>
+                    </ECUC-TEXTUAL-PARAM-VALUE>
+                    <ECUC-TEXTUAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedTxPduTrigger</DEFINITION-REF>
+                      <VALUE>IPDUM_TRIGGER_ALWAYS</VALUE>
+                    </ECUC-TEXTUAL-PARAM-VALUE>
+                  </PARAMETER-VALUES>
+                  <REFERENCE-VALUES>
+                    <ECUC-REFERENCE-VALUE>
+                      <DEFINITION-REF DEST="ECUC-REFERENCE-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedTxInContainerPduRef</DEFINITION-REF>
+                      <VALUE-REF DEST="ECUC-CONTAINER-VALUE">/R7F7015833/IpduM/IpduMConfig/IpduMContainerTxPdu_0x3A2</VALUE-REF>
+                    </ECUC-REFERENCE-VALUE>
+                    <ECUC-REFERENCE-VALUE>
+                      <DEFINITION-REF DEST="ECUC-REFERENCE-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedTxPduRef</DEFINITION-REF>
+                      <VALUE-REF DEST="ECUC-CONTAINER-VALUE">/R7F7015833/EcuC/EcucConfigSet/EcucPduCollection/IpduM_Contained_Tx_0x3A2_Pdu03</VALUE-REF>
+                    </ECUC-REFERENCE-VALUE>
+                  </REFERENCE-VALUES>
+                </ECUC-CONTAINER-VALUE>
+                <ECUC-CONTAINER-VALUE UUID="_nlENYPa5EfCIBb99LiJeqg">
+                  <SHORT-NAME>IpduMContainedTxPdu_0x3A2_Pdu04</SHORT-NAME>
+                  <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu</DEFINITION-REF>
+                  <PARAMETER-VALUES>
+                    <ECUC-NUMERICAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedPduHeaderId</DEFINITION-REF>
+                      <VALUE>209176</VALUE>
+                    </ECUC-NUMERICAL-PARAM-VALUE>
+                    <ECUC-TEXTUAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedTxPduCollectionSemantics</DEFINITION-REF>
+                      <VALUE>IPDUM_COLLECT_QUEUED</VALUE>
+                    </ECUC-TEXTUAL-PARAM-VALUE>
+                    <ECUC-NUMERICAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedTxPduConfirmation</DEFINITION-REF>
+                      <VALUE>true</VALUE>
+                    </ECUC-NUMERICAL-PARAM-VALUE>
+                    <ECUC-TEXTUAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-STRING-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedTxPduHandleId</DEFINITION-REF>
+                      <VALUE>CONTAINED_TX_PDU_IpduM_Contained_Tx_0x3A2_Pdu04</VALUE>
+                    </ECUC-TEXTUAL-PARAM-VALUE>
+                    <ECUC-TEXTUAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedTxPduTrigger</DEFINITION-REF>
+                      <VALUE>IPDUM_TRIGGER_ALWAYS</VALUE>
+                    </ECUC-TEXTUAL-PARAM-VALUE>
+                  </PARAMETER-VALUES>
+                  <REFERENCE-VALUES>
+                    <ECUC-REFERENCE-VALUE>
+                      <DEFINITION-REF DEST="ECUC-REFERENCE-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedTxInContainerPduRef</DEFINITION-REF>
+                      <VALUE-REF DEST="ECUC-CONTAINER-VALUE">/R7F7015833/IpduM/IpduMConfig/IpduMContainerTxPdu_0x3A2</VALUE-REF>
+                    </ECUC-REFERENCE-VALUE>
+                    <ECUC-REFERENCE-VALUE>
+                      <DEFINITION-REF DEST="ECUC-REFERENCE-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedTxPduRef</DEFINITION-REF>
+                      <VALUE-REF DEST="ECUC-CONTAINER-VALUE">/R7F7015833/EcuC/EcucConfigSet/EcucPduCollection/IpduM_Contained_Tx_0x3A2_Pdu04</VALUE-REF>
+                    </ECUC-REFERENCE-VALUE>
+                  </REFERENCE-VALUES>
+                </ECUC-CONTAINER-VALUE>
+                <ECUC-CONTAINER-VALUE UUID="_n1ZvcPa5EfCIBb99LiJeqg">
+                  <SHORT-NAME>IpduMContainedTxPdu_0x3A2_Pdu41</SHORT-NAME>
+                  <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu</DEFINITION-REF>
+                  <PARAMETER-VALUES>
+                    <ECUC-NUMERICAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedPduHeaderId</DEFINITION-REF>
+                      <VALUE>209170</VALUE>
+                    </ECUC-NUMERICAL-PARAM-VALUE>
+                    <ECUC-TEXTUAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedTxPduCollectionSemantics</DEFINITION-REF>
+                      <VALUE>IPDUM_COLLECT_QUEUED</VALUE>
+                    </ECUC-TEXTUAL-PARAM-VALUE>
+                    <ECUC-NUMERICAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedTxPduConfirmation</DEFINITION-REF>
+                      <VALUE>true</VALUE>
+                    </ECUC-NUMERICAL-PARAM-VALUE>
+                    <ECUC-TEXTUAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-STRING-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedTxPduHandleId</DEFINITION-REF>
+                      <VALUE>CONTAINED_TX_PDU_IpduM_Contained_Tx_0x3A2_Pdu41</VALUE>
+                    </ECUC-TEXTUAL-PARAM-VALUE>
+                    <ECUC-TEXTUAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedTxPduTrigger</DEFINITION-REF>
+                      <VALUE>IPDUM_TRIGGER_ALWAYS</VALUE>
+                    </ECUC-TEXTUAL-PARAM-VALUE>
+                  </PARAMETER-VALUES>
+                  <REFERENCE-VALUES>
+                    <ECUC-REFERENCE-VALUE>
+                      <DEFINITION-REF DEST="ECUC-REFERENCE-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedTxInContainerPduRef</DEFINITION-REF>
+                      <VALUE-REF DEST="ECUC-CONTAINER-VALUE">/R7F7015833/IpduM/IpduMConfig/IpduMContainerTxPdu_0x3A2</VALUE-REF>
+                    </ECUC-REFERENCE-VALUE>
+                    <ECUC-REFERENCE-VALUE>
+                      <DEFINITION-REF DEST="ECUC-REFERENCE-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedTxPduRef</DEFINITION-REF>
+                      <VALUE-REF DEST="ECUC-CONTAINER-VALUE">/R7F7015833/EcuC/EcucConfigSet/EcucPduCollection/IpduM_Contained_Tx_0x3A2_Pdu41</VALUE-REF>
+                    </ECUC-REFERENCE-VALUE>
+                  </REFERENCE-VALUES>
+                </ECUC-CONTAINER-VALUE>
+                <ECUC-CONTAINER-VALUE UUID="_oENAcPa5EfCIBb99LiJeqg">
+                  <SHORT-NAME>IpduMContainedTxPdu_0x3A2_Pdu57</SHORT-NAME>
+                  <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu</DEFINITION-REF>
+                  <PARAMETER-VALUES>
+                    <ECUC-NUMERICAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedPduHeaderId</DEFINITION-REF>
+                      <VALUE>209201</VALUE>
+                    </ECUC-NUMERICAL-PARAM-VALUE>
+                    <ECUC-TEXTUAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedTxPduCollectionSemantics</DEFINITION-REF>
+                      <VALUE>IPDUM_COLLECT_QUEUED</VALUE>
+                    </ECUC-TEXTUAL-PARAM-VALUE>
+                    <ECUC-NUMERICAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedTxPduConfirmation</DEFINITION-REF>
+                      <VALUE>true</VALUE>
+                    </ECUC-NUMERICAL-PARAM-VALUE>
+                    <ECUC-TEXTUAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-STRING-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedTxPduHandleId</DEFINITION-REF>
+                      <VALUE>CONTAINED_TX_PDU_IpduM_Contained_Tx_0x3A2_Pdu57</VALUE>
+                    </ECUC-TEXTUAL-PARAM-VALUE>
+                    <ECUC-TEXTUAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedTxPduTrigger</DEFINITION-REF>
+                      <VALUE>IPDUM_TRIGGER_ALWAYS</VALUE>
+                    </ECUC-TEXTUAL-PARAM-VALUE>
+                  </PARAMETER-VALUES>
+                  <REFERENCE-VALUES>
+                    <ECUC-REFERENCE-VALUE>
+                      <DEFINITION-REF DEST="ECUC-REFERENCE-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedTxInContainerPduRef</DEFINITION-REF>
+                      <VALUE-REF DEST="ECUC-CONTAINER-VALUE">/R7F7015833/IpduM/IpduMConfig/IpduMContainerTxPdu_0x3A2</VALUE-REF>
+                    </ECUC-REFERENCE-VALUE>
+                    <ECUC-REFERENCE-VALUE>
+                      <DEFINITION-REF DEST="ECUC-REFERENCE-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMContainedTxPdu/IpduMContainedTxPduRef</DEFINITION-REF>
+                      <VALUE-REF DEST="ECUC-CONTAINER-VALUE">/R7F7015833/EcuC/EcucConfigSet/EcucPduCollection/IpduM_Contained_Tx_0x3A2_Pdu57</VALUE-REF>
+                    </ECUC-REFERENCE-VALUE>
+                  </REFERENCE-VALUES>
+                </ECUC-CONTAINER-VALUE>
+                <ECUC-CONTAINER-VALUE UUID="_KoTssPbFEfCIBb99LiJeqg">
+                  <SHORT-NAME>IpduMMainFunctionTx1</SHORT-NAME>
+                  <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMMainFunctionTx</DEFINITION-REF>
+                  <PARAMETER-VALUES>
+                    <ECUC-NUMERICAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-FLOAT-PARAM-DEF">/AUTOSAR/IpduM/IpduMConfig/IpduMMainFunctionTx/IpduMMainTxTimeBase</DEFINITION-REF>
+                      <VALUE>0.05</VALUE>
+                    </ECUC-NUMERICAL-PARAM-VALUE>
+                  </PARAMETER-VALUES>
+                </ECUC-CONTAINER-VALUE>
+              </SUB-CONTAINERS>
+            </ECUC-CONTAINER-VALUE>
+            <ECUC-CONTAINER-VALUE UUID="2572d293-ec83-4501-b68a-bfe0c04ecdba">
+              <SHORT-NAME>IpduMPublishedInformation</SHORT-NAME>
+              <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/AUTOSAR/IpduM/IpduMPublishedInformation</DEFINITION-REF>
+              <PARAMETER-VALUES>
+                <ECUC-NUMERICAL-PARAM-VALUE>
+                  <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/AUTOSAR/IpduM/IpduMPublishedInformation/IpduMRxDirectComInvocation</DEFINITION-REF>
+                  <VALUE>false</VALUE>
+                </ECUC-NUMERICAL-PARAM-VALUE>
+              </PARAMETER-VALUES>
+            </ECUC-CONTAINER-VALUE>
+          </CONTAINERS>
+        </ECUC-MODULE-CONFIGURATION-VALUES>
+      </ELEMENTS>
+    </AR-PACKAGE>
+  </AR-PACKAGES>
+</AUTOSAR>
