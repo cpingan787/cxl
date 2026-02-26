@@ -1472,14 +1472,14 @@ static void PmStatePreSleepWaitProcess(uint32_t cycleTime)
         WakeDelayProcess(g_pmManage.wakeupSource, g_pmManage.mpuWakeSource ,&g_pmManage.wakeDelayTime);
         g_pmManage.wakeDelayCount = 0;
     }
-    else if(PowerManageSdkGetMpuWakeUpFlag() == 0x01)
-    {
-        g_pmManage.mpuWakeSource = PM_HAL_WAKEUP_SOURCE_MPU;
-        PowerManageSdkSetMpuWakeUpFlag(0x00);
-        MpuPowerSyncSdkSetWake(g_pmManage.mpuWakeSource);
-        g_pmManage.pmState = E_PM_STATE_GET_MPU_WAKE_SOURCE;
-        g_pmManage.wakeDelayCount = 0;
-    }   
+    // else if(PowerManageSdkGetMpuWakeUpFlag() == 0x01)
+    // {
+    //     g_pmManage.mpuWakeSource = PM_HAL_WAKEUP_SOURCE_MPU;
+    //     PowerManageSdkSetMpuWakeUpFlag(0x00);
+    //     MpuPowerSyncSdkSetWake(g_pmManage.mpuWakeSource);
+    //     g_pmManage.pmState = E_PM_STATE_GET_MPU_WAKE_SOURCE;
+    //     g_pmManage.wakeDelayCount = 0;
+    // }   
     else if(g_pmManage.wakeDelayCount >= PM_MCU_SEND_SLEEP_CMD_TIMEOUT)
     {
         g_pmManage.preSleepNoticeCount++;
@@ -1550,7 +1550,7 @@ static void PmStateMcuSleepProcess(uint32_t cycleTime)
     /*获取唤醒源*/
     g_pmManage.wakeupSource = PowerManageHalGetWakeupSource();
     g_pmManage.firstWakeSource = PowerManageHalGetWakeupSource();
-    TBOX_PRINT("Wakeup source is : %d\r\n",g_pmManage.wakeupSource);
+    LogHalUpLoadLog("Wakeup source is : %d\r\n",g_pmManage.wakeupSource);
     TimerHalSetMode(1);
     /*MPU进入正常模式*/
     MpuHalSetMode(1);
@@ -1567,7 +1567,7 @@ static void PmStateMcuSleepProcess(uint32_t cycleTime)
 #if(SECOC_ENABLE == 1)
     SecocSdkWakeUp();
 #endif
-    if((g_pmManage.wakeupSource == PM_HAL_WAKEUP_SOURCE_MPU) || (PowerManageSdkGetMpuWakeUpFlag() == 0x01))
+    if((g_pmManage.wakeupSource == PM_HAL_WAKEUP_SOURCE_MPU) || (PowerManageSdkGetMpuWakeUpFlag() == 0x01) || (g_pmManage.wakeupSource == PM_HAL_WAKEUP_SOURCE_SPI))
     {
         /*MPU唤醒处理*/
         g_pmManage.pmState = E_PM_STATE_GET_MPU_WAKE_SOURCE;

@@ -112,6 +112,7 @@ typedef enum
     REMOTE_CONTROL_TRANS_SEPE_TIME      = 119U,
     REMOTE_CONTROL_PLGM_SEPE_TIME       = 99U,
     REMOTE_CONTROL_PLGM_CLOSE_WAIT_TIME = 199U,
+    REMOTE_CONTROL_IDLE_WAIT_TIME       = 99U, //100ms
     REMOTE_CONTROL_CHECK_EXCUTE_TIME    = 15999U,
     REMOTE_CONTROL_SLEEP_FORBID_TIME    = 30000U,
     REMOTE_CONTROL_PRE_CHECK_TIME       = 999U,
@@ -120,6 +121,9 @@ typedef enum
 {
     REMOTE_CONTROL_GW_BCM_E                 = 0x046,
     REMOTE_CONTROL_GW_PEPS_E                = 0x04D,
+    REMOTE_CONTROL_GW_BCS_1_T               = 0x1EB,
+    REMOTE_CONTROL_GW_EMS_1_T               = 0x1EE,
+    REMOTE_CONTROL_GW_BCM_2_T               = 0x25D,
 }RemoteControlReceiveCanId_t;
 
 typedef RemoteControlProcessResult_t (*RemoteControlPreCheckFunc)(void);
@@ -142,6 +146,7 @@ typedef struct
 typedef enum
 {
     PROCESS_SIGNAL_STATE_IDLE,
+    PROCESS_SIGNAL_STATE_IDLE_WAIT,
     PROCESS_SIGNAL_STATE_NORMAL_PACK,      
     PROCESS_SIGNAL_STATE_NORMAL_TRANS,     
     PROCESS_SIGNAL_STATE_NORMAL_WAIT,      
@@ -442,6 +447,9 @@ static void RemoteControlCmdProcess(void)
     (g_remoteControlReceivePack.mid == REMOTE_CONTROL_MID)&&
     ((g_remoteControlReceivePack.subcommand & 0x7f)== REMOTE_CONTROL_SUBCMD))
     {
+        Can0ClearRxFlagByCanId(REMOTE_CONTROL_GW_BCS_1_T);
+        Can0ClearRxFlagByCanId(REMOTE_CONTROL_GW_EMS_1_T);
+        Can0ClearRxFlagByCanId(REMOTE_CONTROL_GW_BCM_2_T);
         messageType = g_remoteControlReceivePack.pDataBuffer[0];
         LogHalUpLoadLog("RC rcv =%d ", messageType);
         RemoteControlSendAck();
@@ -970,10 +978,28 @@ static void RemoteControlHandleSignalProcess(void)
         {
             s_canId = 0U;
             s_transCount = 0U;
-            s_state = PROCESS_SIGNAL_STATE_NORMAL_PACK;
+            if(g_remoteControlTransTimerHandle >= 0)
+            {
+                TimerHalStartTime(g_remoteControlTransTimerHandle, REMOTE_CONTROL_IDLE_WAIT_TIME);
+            }
+            s_state = PROCESS_SIGNAL_STATE_IDLE_WAIT;
         }
-        break; 
+        break;
 
+        case PROCESS_SIGNAL_STATE_IDLE_WAIT:
+        {
+            if((g_remoteControlTransTimerHandle >= 0) && (TimerHalIsTimeout(g_remoteControlTransTimerHandle) == 0))
+            {
+                TimerHalStopTime(g_remoteControlTransTimerHandle);
+                s_state = PROCESS_SIGNAL_STATE_NORMAL_PACK;
+            }
+            else if(g_remoteControlTransTimerHandle < 0)
+            {
+                s_state = PROCESS_SIGNAL_STATE_NORMAL_PACK;
+                TBOX_PRINT("TIMER HANDLE ERROR\n");
+            }
+        }
+        break;
 
         case PROCESS_SIGNAL_STATE_NORMAL_PACK:
         {
@@ -1031,7 +1057,7 @@ static void RemoteControlHandleSignalProcess(void)
         case PROCESS_SIGNAL_STATE_NORMAL_TRANS:
         {
             ret = CanHalTransmitQueued(g_remoteControlCan1Handle, s_canId, g_remoteControlCanBuf, 
-                        sizeof(g_remoteControlCanBuf), REMOTE_CONTROL_CAN_FD_USE, CAN_TX_PRIO_HIGH);
+                        sizeof(g_remoteControlCanBuf), REMOTE_CONTROL_CAN_FD_USE, CAN_TX_PRIO_NORMAL);
             if(ret != 0U)
             {
                 LogHalUpLoadLog("RC nm trans error,ret = %d", ret);
@@ -1112,7 +1138,7 @@ static void RemoteControlHandleSignalProcess(void)
         case PROCESS_SIGNAL_STATE_SPECIAL_TRANS:
         {
             ret = CanHalTransmitQueued(g_remoteControlCan1Handle, s_canId, g_remoteControlCanBuf, 
-                          sizeof(g_remoteControlCanBuf), REMOTE_CONTROL_CAN_FD_USE, CAN_TX_PRIO_HIGH);
+                          sizeof(g_remoteControlCanBuf), REMOTE_CONTROL_CAN_FD_USE, CAN_TX_PRIO_NORMAL);
             if(ret != 0U)
             {
                 LogHalUpLoadLog("RC spc trans error,ret = %d", ret);
@@ -1420,15 +1446,18 @@ static RemoteControlProcessResult_t RemoteControlPreCheckLv1Fun(void)
 {
     RemoteControlProcessResult_t ret = RemoteControlResult_Fail_e;
     uint32_t batteryVol = 0U;
-    PeripheralHalAdGet(AD_CHANNEL_KL30, &batteryVol);
-    if((batteryVol >= 9000U) && (batteryVol <= 16000U) && 
-       (g_remoteControlSignalInfo.BCS_VehSpd <= 2U) && (g_remoteControlSignalInfo.BCS_VehSpdVD == 1U))
+    if(Can0GetRxFlagByCanId(REMOTE_CONTROL_GW_BCS_1_T) == 1U)
     {
-        ret = RemoteControlResult_Success_e;
-    }
-    else
-    {
-        TBOX_PRINT("RemoteControlPreCheckLv1Fun: batteryVol = %d, g_remoteControlSignalInfo.BCS_VehSpd = %d, g_remoteControlSignalInfo.BCS_VehSpdVD = %d", batteryVol, g_remoteControlSignalInfo.BCS_VehSpd, g_remoteControlSignalInfo.BCS_VehSpdVD);
+        PeripheralHalAdGet(AD_CHANNEL_KL30, &batteryVol);
+        if((batteryVol >= 9000U) && (batteryVol <= 16000U) && 
+        (g_remoteControlSignalInfo.BCS_VehSpd <= 2U) && (g_remoteControlSignalInfo.BCS_VehSpdVD == 1U))
+        {
+            ret = RemoteControlResult_Success_e;
+        }
+        else
+        {
+            TBOX_PRINT("RemoteControlPreCheckLv1Fun: batteryVol = %d, g_remoteControlSignalInfo.BCS_VehSpd = %d, g_remoteControlSignalInfo.BCS_VehSpdVD = %d", batteryVol, g_remoteControlSignalInfo.BCS_VehSpd, g_remoteControlSignalInfo.BCS_VehSpdVD);
+        }
     }
     return ret;
 }
@@ -1446,20 +1475,23 @@ static RemoteControlProcessResult_t RemoteControlPreCheckLv1Fun(void)
 static RemoteControlProcessResult_t RemoteControlPreCheckLv3AcOnFun(void)
 {
     RemoteControlProcessResult_t ret = RemoteControlResult_Fail_e;
-    if(g_remoteControlSignalInfo.BCM_KeySt == 0U)                            //off
+    if((Can0GetRxFlagByCanId(REMOTE_CONTROL_GW_BCM_2_T) == 1U) && (Can0GetRxFlagByCanId(REMOTE_CONTROL_GW_EMS_1_T) == 1U))
     {
-        ret = RemoteControlResult_Success_e;
-    } 
-    else if((g_remoteControlSignalInfo.PEPS_RemoteControlSt == 1U) &&        //remote on
-    (g_remoteControlSignalInfo.BCM_KeySt == 2U) && 
-    (g_remoteControlSignalInfo.EMS_EngSt == 0U)) 
-    {
-        ret = RemoteControlResult_Success_e;
-    }
-    else if((g_remoteControlSignalInfo.EMS_EngSt == 1U) &&                   //engine start
-    (g_remoteControlSignalInfo.BCM_KeySt == 2U))
-    {
-        ret = RemoteControlResult_Success_e;
+        if(g_remoteControlSignalInfo.BCM_KeySt == 0U)                            //off
+        {
+            ret = RemoteControlResult_Success_e;
+        } 
+        else if((g_remoteControlSignalInfo.PEPS_RemoteControlSt == 1U) &&        //remote on
+        (g_remoteControlSignalInfo.BCM_KeySt == 2U) && 
+        (g_remoteControlSignalInfo.EMS_EngSt == 0U)) 
+        {
+            ret = RemoteControlResult_Success_e;
+        }
+        else if((g_remoteControlSignalInfo.EMS_EngSt == 1U) &&                   //engine start
+        (g_remoteControlSignalInfo.BCM_KeySt == 2U))
+        {
+            ret = RemoteControlResult_Success_e;
+        }
     }
     return ret;
 }
@@ -1477,26 +1509,29 @@ static RemoteControlProcessResult_t RemoteControlPreCheckLv3AcOnFun(void)
 static RemoteControlProcessResult_t RemoteControlPreCheckLv3EngineOnFun(void)
 {
     RemoteControlProcessResult_t ret = RemoteControlResult_Fail_e;
-    if((g_remoteControlSignalInfo.BCM_KeySt == 0U) &&                    //off set protect
-    (g_remoteControlSignalInfo.BCM_ATWS_St == 0U))
+    if((Can0GetRxFlagByCanId(REMOTE_CONTROL_GW_BCM_2_T) == 1U) && (Can0GetRxFlagByCanId(REMOTE_CONTROL_GW_EMS_1_T) == 1U))
     {
-        ret = RemoteControlResult_Success_e;
-    }
-    else if((g_remoteControlSignalInfo.PEPS_RemoteControlSt == 1U) &&    //reomte on  set protect
-    (g_remoteControlSignalInfo.BCM_KeySt == 2U) &&
-    (g_remoteControlSignalInfo.BCM_ATWS_St == 0U) &&
-    (g_remoteControlSignalInfo.EMS_EngSt == 0U))
-    {
-        ret = RemoteControlResult_Success_e;
-    }
-    else if(g_remoteControlSignalInfo.EMS_EngSt == 1U)                   //engine start
-    {
-        ret = RemoteControlResult_Success_e;
-    }
-    if((g_remoteControlSignalInfo.EMS_EngSt == 1U)&&(g_remoteControlSignalInfo.PEPS_RemoteControlSt == 0U))
-    {
-        ret = RemoteControlResult_Fail_e;
-        g_remoteControlErrorCode = REMOTE_CONTROL_ERR_CODE_SUCCESS;
+        if((g_remoteControlSignalInfo.BCM_KeySt == 0U) &&                    //off set protect
+        (g_remoteControlSignalInfo.BCM_ATWS_St == 0U))
+        {
+            ret = RemoteControlResult_Success_e;
+        }
+        else if((g_remoteControlSignalInfo.PEPS_RemoteControlSt == 1U) &&    //reomte on  set protect
+        (g_remoteControlSignalInfo.BCM_KeySt == 2U) &&
+        (g_remoteControlSignalInfo.BCM_ATWS_St == 0U) &&
+        (g_remoteControlSignalInfo.EMS_EngSt == 0U))
+        {
+            ret = RemoteControlResult_Success_e;
+        }
+        else if(g_remoteControlSignalInfo.EMS_EngSt == 1U)                   //engine start
+        {
+            ret = RemoteControlResult_Success_e;
+        }
+        if((g_remoteControlSignalInfo.EMS_EngSt == 1U)&&(g_remoteControlSignalInfo.PEPS_RemoteControlSt == 0U))
+        {
+            ret = RemoteControlResult_Fail_e;
+            g_remoteControlErrorCode = REMOTE_CONTROL_ERR_CODE_SUCCESS;
+        }
     }
     return ret;
 }
@@ -1566,19 +1601,22 @@ static RemoteControlProcessResult_t RemoteControlPreCheckLv3EngineMode2OnFun(voi
 static RemoteControlProcessResult_t RemoteControlPreCheckLv3PowerOnFun(void)
 {
     RemoteControlProcessResult_t ret = RemoteControlResult_Fail_e;
-    if((g_remoteControlSignalInfo.BCM_KeySt == 0U) &&                 
-    (g_remoteControlSignalInfo.BCM_ATWS_St == 2U))           //off and set protect
+    if((Can0GetRxFlagByCanId(REMOTE_CONTROL_GW_BCM_2_T) == 1U) && (Can0GetRxFlagByCanId(REMOTE_CONTROL_GW_EMS_1_T) == 1U))
     {
-        ret = RemoteControlResult_Success_e;
-    }
-    else if(g_remoteControlSignalInfo.BCM_KeySt == 2U)       //on
-    {
-        ret = RemoteControlResult_Success_e;
-    }
-    if((g_remoteControlSignalInfo.BCM_KeySt == 2) && (g_remoteControlSignalInfo.PEPS_RemoteControlSt == 0U))
-    {
-        ret = RemoteControlResult_Fail_e;
-        g_remoteControlErrorCode = REMOTE_CONTROL_ERR_CODE_SUCCESS;
+        if((g_remoteControlSignalInfo.BCM_KeySt == 0U) &&                 
+        (g_remoteControlSignalInfo.BCM_ATWS_St == 2U))           //off and set protect
+        {
+            ret = RemoteControlResult_Success_e;
+        }
+        else if(g_remoteControlSignalInfo.BCM_KeySt == 2U)       //on
+        {
+            ret = RemoteControlResult_Success_e;
+        }
+        if((g_remoteControlSignalInfo.BCM_KeySt == 2) && (g_remoteControlSignalInfo.PEPS_RemoteControlSt == 0U))
+        {
+            ret = RemoteControlResult_Fail_e;
+            g_remoteControlErrorCode = REMOTE_CONTROL_ERR_CODE_SUCCESS;
+        }
     }
     return ret;
 }
@@ -1630,22 +1668,25 @@ static RemoteControlProcessResult_t RemoteControlPreCheckLv3PowerOffFun(void)
 static RemoteControlProcessResult_t RemoteControlPreCheckLv3SeatHeatSetFuc(void)
 {
     RemoteControlProcessResult_t ret = RemoteControlResult_Fail_e;
-    if((g_remoteControlSignalInfo.BCM_ATWS_St == 0U) &&              //off and set protect
-    (g_remoteControlSignalInfo.BCM_KeySt == 0U))
+    if((Can0GetRxFlagByCanId(REMOTE_CONTROL_GW_BCM_2_T) == 1U) && (Can0GetRxFlagByCanId(REMOTE_CONTROL_GW_EMS_1_T) == 1U))
     {
-        ret = RemoteControlResult_Success_e;
-    }
-    else if((g_remoteControlSignalInfo.BCM_ATWS_St == 0U) &&         //remote on and set protect
-    (g_remoteControlSignalInfo.PEPS_RemoteControlSt == 1U) &&
-    (g_remoteControlSignalInfo.BCM_KeySt == 2U) &&
-    (g_remoteControlSignalInfo.EMS_EngSt == 0U))
-    {
-        ret = RemoteControlResult_Success_e;
-    }
-    else if((g_remoteControlSignalInfo.EMS_EngSt == 1U) &&           //engine start 
-    (g_remoteControlSignalInfo.BCM_KeySt == 2U))
-    {
-        ret = RemoteControlResult_Success_e;
+        if((g_remoteControlSignalInfo.BCM_ATWS_St == 0U) &&              //off and set protect
+        (g_remoteControlSignalInfo.BCM_KeySt == 0U))
+        {
+            ret = RemoteControlResult_Success_e;
+        }
+        else if((g_remoteControlSignalInfo.BCM_ATWS_St == 0U) &&         //remote on and set protect
+        (g_remoteControlSignalInfo.PEPS_RemoteControlSt == 1U) &&
+        (g_remoteControlSignalInfo.BCM_KeySt == 2U) &&
+        (g_remoteControlSignalInfo.EMS_EngSt == 0U))
+        {
+            ret = RemoteControlResult_Success_e;
+        }
+        else if((g_remoteControlSignalInfo.EMS_EngSt == 1U) &&           //engine start 
+        (g_remoteControlSignalInfo.BCM_KeySt == 2U))
+        {
+            ret = RemoteControlResult_Success_e;
+        }
     }
     return ret;
 }
@@ -1663,22 +1704,25 @@ static RemoteControlProcessResult_t RemoteControlPreCheckLv3SeatHeatSetFuc(void)
 static RemoteControlProcessResult_t RemoteControlPreCheckLv3SeatVentilatFunc(void)
 {
     RemoteControlProcessResult_t ret = RemoteControlResult_Fail_e;
-    if((g_remoteControlSignalInfo.BCM_ATWS_St == 0U) &&              //off and set protect
-    (g_remoteControlSignalInfo.BCM_KeySt == 0U))
+    if((Can0GetRxFlagByCanId(REMOTE_CONTROL_GW_BCM_2_T) == 1U) && (Can0GetRxFlagByCanId(REMOTE_CONTROL_GW_EMS_1_T) == 1U))
     {
-        ret = RemoteControlResult_Success_e;
-    }
-    else if((g_remoteControlSignalInfo.BCM_ATWS_St == 0U) &&         //remote on and set protect
-    (g_remoteControlSignalInfo.PEPS_RemoteControlSt == 1U) &&
-    (g_remoteControlSignalInfo.BCM_KeySt == 2U) &&
-    (g_remoteControlSignalInfo.EMS_EngSt == 0U))
-    {
-        ret = RemoteControlResult_Success_e;
-    }
-    else if((g_remoteControlSignalInfo.EMS_EngSt == 1U) &&           //engine start 
-    (g_remoteControlSignalInfo.BCM_KeySt == 2U))
-    {
-        ret = RemoteControlResult_Success_e;
+        if((g_remoteControlSignalInfo.BCM_ATWS_St == 0U) &&              //off and set protect
+        (g_remoteControlSignalInfo.BCM_KeySt == 0U))
+        {
+            ret = RemoteControlResult_Success_e;
+        }
+        else if((g_remoteControlSignalInfo.BCM_ATWS_St == 0U) &&         //remote on and set protect
+        (g_remoteControlSignalInfo.PEPS_RemoteControlSt == 1U) &&
+        (g_remoteControlSignalInfo.BCM_KeySt == 2U) &&
+        (g_remoteControlSignalInfo.EMS_EngSt == 0U))
+        {
+            ret = RemoteControlResult_Success_e;
+        }
+        else if((g_remoteControlSignalInfo.EMS_EngSt == 1U) &&           //engine start 
+        (g_remoteControlSignalInfo.BCM_KeySt == 2U))
+        {
+            ret = RemoteControlResult_Success_e;
+        }
     }
     return ret;
 }
@@ -1810,14 +1854,17 @@ static RemoteControlProcessResult_t RemoteControlPreCheckLv3WinVentilateOffFunc(
 static RemoteControlProcessResult_t RemoteControlPreCheckLv3MidCtrlFbdLuckFunc(void)
 {
     RemoteControlProcessResult_t ret = RemoteControlResult_Fail_e;
-    if((g_remoteControlSignalInfo.BCM_DriverDoorAjarSt == 0U) &&
-    (g_remoteControlSignalInfo.BCM_PsngrDoorAjarSt == 0U) &&
-    (g_remoteControlSignalInfo.BCM_RLDoorAjarSt == 0U) &&
-    (g_remoteControlSignalInfo.BCM_RRDoorAjarSt == 0U) &&
-    (g_remoteControlSignalInfo.BCM_BonnetAjarSt == 0U) &&
-    (g_remoteControlSignalInfo.BCM_TrunkAjarSt == 0U))
+    if(Can0GetRxFlagByCanId(REMOTE_CONTROL_GW_BCM_2_T) == 1U)
     {
-        ret = RemoteControlResult_Success_e;
+        if((g_remoteControlSignalInfo.BCM_DriverDoorAjarSt == 0U) &&
+        (g_remoteControlSignalInfo.BCM_PsngrDoorAjarSt == 0U) &&
+        (g_remoteControlSignalInfo.BCM_RLDoorAjarSt == 0U) &&
+        (g_remoteControlSignalInfo.BCM_RRDoorAjarSt == 0U) &&
+        (g_remoteControlSignalInfo.BCM_BonnetAjarSt == 0U) &&
+        (g_remoteControlSignalInfo.BCM_TrunkAjarSt == 0U))
+        {
+            ret = RemoteControlResult_Success_e;
+        }
     }
     return ret;
 }
@@ -3027,7 +3074,7 @@ static RemoteControlProcessResult_t RemoteControlBcmCertification(void)
         
         case BCM_AUTU_REQ_E:
             memset(g_remoteControlCanBuf,0U,sizeof(g_remoteControlCanBuf));
-            canRet = CanHalTransmitQueued(g_remoteControlCan1Handle,REMOTE_CONTROL_TEL_IMMOCode2_E,g_remoteControlCanBuf,sizeof(g_remoteControlCanBuf),REMOTE_CONTROL_CAN_FD_USE, CAN_TX_PRIO_HIGH);
+            canRet = CanHalTransmitQueued(g_remoteControlCan1Handle,REMOTE_CONTROL_TEL_IMMOCode2_E,g_remoteControlCanBuf,sizeof(g_remoteControlCanBuf),REMOTE_CONTROL_CAN_FD_USE, CAN_TX_PRIO_NORMAL);
             if(canRet != 0U)
             {
                 LogHalUpLoadLog("BCM autu req error,ret=%d", ret);
@@ -3069,7 +3116,7 @@ static RemoteControlProcessResult_t RemoteControlBcmCertification(void)
             g_randomBcmArray[6] = g_remoteControlSignalInfo.BCM_TEL_IMMOCode6;
             g_randomBcmArray[7] = g_remoteControlSignalInfo.BCM_TEL_IMMOCodeSt;
             BcmAuthCalcKey(g_randomBcmArray,g_remoteControlESK,g_remoteControlCanBuf);
-            canRet = CanHalTransmitQueued(g_remoteControlCan1Handle,REMOTE_CONTROL_TEL_IMMOCode2_E,g_remoteControlCanBuf,sizeof(g_remoteControlCanBuf),REMOTE_CONTROL_CAN_FD_USE, CAN_TX_PRIO_HIGH);
+            canRet = CanHalTransmitQueued(g_remoteControlCan1Handle,REMOTE_CONTROL_TEL_IMMOCode2_E,g_remoteControlCanBuf,sizeof(g_remoteControlCanBuf),REMOTE_CONTROL_CAN_FD_USE, CAN_TX_PRIO_NORMAL);
             if(canRet != 0U)
             {
                 LogHalUpLoadLog("BCM cal key send error,ret=%d", ret);
@@ -3156,7 +3203,7 @@ static RemoteControlProcessResult_t RemoteControlPepsCertification(void)
         
         case PEPS_AUTU_REQ_E:
             memset(g_remoteControlCanBuf,0U,sizeof(g_remoteControlCanBuf));
-            canRet = CanHalTransmitQueued(g_remoteControlCan1Handle,REMOTE_CONTROL_TEL_IMMOCode1_E,g_remoteControlCanBuf,sizeof(g_remoteControlCanBuf),REMOTE_CONTROL_CAN_FD_USE, CAN_TX_PRIO_HIGH);
+            canRet = CanHalTransmitQueued(g_remoteControlCan1Handle,REMOTE_CONTROL_TEL_IMMOCode1_E,g_remoteControlCanBuf,sizeof(g_remoteControlCanBuf),REMOTE_CONTROL_CAN_FD_USE, CAN_TX_PRIO_NORMAL);
             if(canRet != 0U)
             {
                 LogHalUpLoadLog("PEPS autu req error,ret=%d", ret);
@@ -3197,7 +3244,7 @@ static RemoteControlProcessResult_t RemoteControlPepsCertification(void)
             g_randomPepsArray[6] = g_remoteControlSignalInfo.PEPS_TEL_ChallengeCode6;
             g_randomPepsArray[7] = g_remoteControlSignalInfo.PEPS_TEL_ChallengeCode7;
             PepsAuthCalcKey8(g_randomPepsArray, g_remoteControlESK, g_remoteControlCanBuf);
-            canRet = CanHalTransmitQueued(g_remoteControlCan1Handle,REMOTE_CONTROL_TEL_IMMOCode1_E,g_remoteControlCanBuf,sizeof(g_remoteControlCanBuf),REMOTE_CONTROL_CAN_FD_USE, CAN_TX_PRIO_HIGH);
+            canRet = CanHalTransmitQueued(g_remoteControlCan1Handle,REMOTE_CONTROL_TEL_IMMOCode1_E,g_remoteControlCanBuf,sizeof(g_remoteControlCanBuf),REMOTE_CONTROL_CAN_FD_USE, CAN_TX_PRIO_NORMAL);
             if(canRet != 0U)
             {
                 LogHalUpLoadLog("PEPS calc key error,ret=%d", ret);
@@ -3568,6 +3615,10 @@ static void RemoteControlNormalPackReqCanSignal(void)
 
                 /* 2) 控制模式：一次置位 */
                 RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_HVSMCtrlModeSt, 0x1);
+                RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_FLHVSMAutoModeReq, 0x2);
+                RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_FRHVSMAutoModeReq, 0x2);
+                RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_RLHVSMAutoModeReq, 0x2);
+                RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_RRHVSMAutoModeReq, 0x2);
 
                 /* 3) “保持原状态”只对本次未涉及的信号生效
                     关键点：本次涉及的座椅(可能要写0关闭)不再预填 ActLevel，避免关不掉 */
@@ -3575,50 +3626,50 @@ static void RemoteControlNormalPackReqCanSignal(void)
                 {
                     RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf,
                                                 TEL_FLHeatingLevelReq,
-                                                g_remoteControlSignalInfo.HVSM_FLHeatingActLevel);
+                                                0x4);
                 }
                 if (setFRHeat == 0U)
                 {
                     RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf,
                                                 TEL_FRHeatingLevelReq,
-                                                g_remoteControlSignalInfo.HVSM_FRHeatingActLevel);
+                                                0x4);
                 }
                 if (setRLHeat == 0U)
                 {
                     RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf,
                                                 TEL_RLHeatingLevelReq,
-                                                g_remoteControlSignalInfo.HVSMR_RLHeatingActLevel);
+                                                0x4);
                 }
                 if (setRRHeat == 0U)
                 {
                     RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf,
                                                 TEL_RRHeatingLevelReq,
-                                                g_remoteControlSignalInfo.HVSMR_RRHeatingActLevel);
+                                                0x4);
                 }
 
                 if (setFLVent == 0U)
                 {
                     RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf,
                                                 TEL_FLVentilatingLevelReq,
-                                                g_remoteControlSignalInfo.HVSM_FLVentilatingActLevel);
+                                                0x4);
                 }
                 if (setFRVent == 0U)
                 {
                     RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf,
                                                 TEL_FRVentilatingLevelReq,
-                                                g_remoteControlSignalInfo.HVSM_FRVentilatingActLevel);
+                                                0x4);
                 }
                 if (setRLVent == 0U)
                 {
                     RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf,
                                                 TEL_RLVentilatingLevelReq,
-                                                g_remoteControlSignalInfo.HVSMR_RLVentilatingActLevel);
+                                                0x4);
                 }
                 if (setRRVent == 0U)
                 {
                     RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf,
                                                 TEL_RRVentilatingLevelReq,
-                                                g_remoteControlSignalInfo.HVSMR_RRVentilatingActLevel);
+                                                0x4);
                 }
 
                 /* 4) 叠加写本次命令（允许写0表示关闭） */
@@ -3872,15 +3923,19 @@ static void RemoteControlSpecialPackReqCanSignal(void)
             }
             else
             {
-                RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_HVSMCtrlModeSt,            0x0);
+                RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_HVSMCtrlModeSt,            0x7);
                 RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_FLHeatingLevelReq,         0x4);
-                RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_FLVentilatingLevelReq,     0x4);              
+                RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_FLVentilatingLevelReq,     0x4);     
+                RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_FLHVSMAutoModeReq,         0x2);         
                 RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_FRHeatingLevelReq,         0x4);    
                 RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_FRVentilatingLevelReq,     0x4);
+                RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_FRHVSMAutoModeReq,         0x2);         
                 RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_RLHeatingLevelReq,         0x4);
                 RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_RLVentilatingLevelReq,     0x4);
+                RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_RLHVSMAutoModeReq,         0x2);         
                 RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_RRHeatingLevelReq,         0x4);
                 RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_RRVentilatingLevelReq,     0x4);
+                RemoteCtrlSignalValToCanFrame(g_remoteControlCanBuf, TEL_RRHVSMAutoModeReq,         0x2);         
             }
         }
         break;
@@ -4349,7 +4404,7 @@ static RemoteControlProcessResult_t CheckBcmCommandResult(void)
             }
             break;
         case CMD_HAZARD_LAMP_OFF_E:
-            if(g_remoteControlSignalInfo.BCM_TEL_HazLampCtrlSt == 0x1)
+            if(g_remoteControlSignalInfo.BCM_TEL_HazLampCtrlSt == 0x0)
             {
                 result = RemoteControlResult_Success_e;
             }

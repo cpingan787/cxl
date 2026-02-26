@@ -195,7 +195,6 @@ static void SosButtonDetection(void)
                 if (key_time >= SOS_KEY_PRESS_MIN_TIME)
                 {
                     AlarmSdkEcallTriger(E_ECALL_TRIGGER_BTN_MANN);
-                    EcallHalSetVehicleMute(1);
                     SosButtonState = E_SOS_BUTTON_STATE_WAIT_RELEASE;
                 }
             }
@@ -214,7 +213,6 @@ static void SosButtonDetection(void)
                 if (key_time < SOS_KEY_PRESS_MIN_TIME)
                 {
                     AlarmSdkEcallClose(E_ECALL_TRIGGER_BTN_MANN);
-                    EcallHalSetVehicleMute(0);
                 }
             }
 
@@ -523,7 +521,6 @@ static void AirbagSingleProcess(void)
         if(airbagCanFlag == 0)
         {
             AlarmSdkEcallTriger(E_ECALL_TRIGGER_CAN_AUTO);
-            EcallHalSetVehicleMute(1);
             LogHalUpLoadLog("srs can tri EC,signal = %02x", airbagSingal);
             airbagCanFlag = 1;
         }
@@ -541,7 +538,6 @@ static void AirbagSingleProcess(void)
         if(airbagHardwareFlag == 0)
         {
           AlarmSdkEcallTriger(E_ECALL_TRIGGER_SRS_AUTO);
-          EcallHalSetVehicleMute(1);
           LogHalUpLoadLog("srs hd tri EC,signal = %02x", airbagSingal);
           airbagHardwareFlag = 1;
         }
@@ -574,7 +570,6 @@ static void BcallSignalProcess(void)
         if((bcallCanFlag == 0)&&(AlarmSdkGetEcallCallState() == 0)&&(AlarmSdkGetBcallCallState() == 0))
         {
             AlarmSdkBcallTriger(E_ECALL_TRIGGER_CAN_AUTO);
-            EcallHalSetVehicleMute(1);
             bcallCanFlag = 1;
             LogHalUpLoadLog("Bc can tri BC, signal = %02x", bcallSingal);
         }

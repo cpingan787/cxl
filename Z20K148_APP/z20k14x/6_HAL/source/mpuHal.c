@@ -560,7 +560,9 @@ static void MpuHal_SpiDmaTxCallback(void);
 static void MpuHal_SpiDmaRxCallback(void);
 static void MpuHal_SpiDmaRxDataHandleCallback(void);
 static void MpuHal_SpiDmaRxDataProcess(uint8_t *buf, uint16_t length);
+#if(0)
 static void MpuHal_SpiDmaRxReStart(void);
+#endif
 static void MpuHal_SpiDmaTxDataHandleCallback(void);
 static void MpuHalMainSpiSleep(void);
 #endif
@@ -2274,6 +2276,7 @@ void MpuHalUartTxTask(void *pvParameters)
 #endif
 
 #if (SPI_DMA_ENABLE == 1)
+#if(0)
 /*************************************************
  Function: MpuHal_SpiDmaRxReStart
  Description: Restart SPI DMA receive operation
@@ -2291,6 +2294,7 @@ static void MpuHal_SpiDmaRxReStart(void)
     DMA_ChannelRequestEnable(SPI_DMA_RX_CHANNEL);
     DMA_HaltControl(DISABLE);
 }
+#endif
 
 /*************************************************
  Function: MpuHal_SpiIrqCallback
@@ -2313,10 +2317,10 @@ void MpuHal_SpiIrqCallback(void)
     }
     if (GPIO_ReadPinLevel(MPU_HAL_SPI_REQ_PORT, MPU_HAL_SPI_REQ_PORT_PIN) == GPIO_LOW) // 传输完成
     {
-        MpuHal_SpiDmaRxDataHandleCallback();
+        //MpuHal_SpiDmaRxDataHandleCallback();
         return;
     }
-    MpuHal_SpiDmaRxReStart();
+    //MpuHal_SpiDmaRxReStart();
 }
 
 /*************************************************
@@ -2619,7 +2623,7 @@ static void MpuHalMainSpiSleep(void)
     SPI_Disable(MPU_HAL_SPI_ID);
     SYSCTRL_DisableModule(MPU_HAL_SPI_SYSCTRL);
     /* SPI pin deinit */
-    PORT_PinIntConfig(MPU_HAL_SPI_REQ_PORT, MPU_HAL_SPI_REQ_PORT_PIN, PORT_ISF_DISABLED);
+    //PORT_PinIntConfig(MPU_HAL_SPI_REQ_PORT, MPU_HAL_SPI_REQ_PORT_PIN, PORT_ISF_DISABLED);
     PORT_PinmuxConfig(MPU_HAL_SPI_CLK_PORT, MPU_HAL_SPI_CLK_PORT_PIN, MPU_HAL_SPI_CLK_PORT_DEINIT);
     GPIO_SetPinDir(MPU_HAL_SPI_CLK_PORT, MPU_HAL_SPI_CLK_PORT_PIN, GPIO_INPUT);
     PORT_PinmuxConfig(MPU_HAL_SPI_MISO_PORT, MPU_HAL_SPI_MISO_PORT_PIN, MPU_HAL_SPI_MISO_PORT_DEINIT);
@@ -2628,6 +2632,7 @@ static void MpuHalMainSpiSleep(void)
     GPIO_SetPinDir(MPU_HAL_SPI_MOSI_PORT, MPU_HAL_SPI_MOSI_PORT_PIN, GPIO_INPUT);
     PORT_PinmuxConfig(MPU_HAL_SPI_CS_PORT, MPU_HAL_SPI_CS_PORT_PIN, MPU_HAL_SPI_CS_PORT_DEINIT);
     GPIO_SetPinDir(MPU_HAL_SPI_CS_PORT, MPU_HAL_SPI_CS_PORT_PIN, GPIO_INPUT);
+    GPIO_WritePinOutput(MPU_HAL_SPI_IEQ_PORT, MPU_HAL_SPI_IEQ_PORT_PIN, GPIO_LOW);
 }
 
 

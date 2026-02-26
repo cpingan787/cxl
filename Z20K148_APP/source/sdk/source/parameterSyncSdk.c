@@ -631,17 +631,14 @@ static int16_t ParameterSyncResponseOfflineDidPackage(MpuHalDataPack_t *recvData
     // 2. 遍历请求中的每一个 DID
     for (i = 0; i < reqNum; i++)
     {
-        // 检查请求包是否有足够数据读下一个 DID (2 bytes)
         if (readOffset + 2 > recvDataPack->dataLength)
         {
             break; 
         }
 
-        // 提取 DID (Request 格式: DID High + DID Low)
         uint16_t did = (uint16_t)(recvDataPack->pDataBuffer[readOffset] << 8) | recvDataPack->pDataBuffer[readOffset + 1];
         readOffset += 2;
 
-        // 查找映射
         uint8_t paramId = GetParamIdByDid(did);
 
         if (paramId == 0xFF) 
@@ -664,10 +661,8 @@ static int16_t ParameterSyncResponseOfflineDidPackage(MpuHalDataPack_t *recvData
 
         if (stdLen > 0) 
         {
-            // 如果读出来长度(10) < 标准(14)
             if (paramLenth < stdLen)
             {
-                // 补 00 (注意：这意味着你会得到 10字节数据 + 4字节00)
                 memset(pWriteDataPtr + paramLenth, 0x00, stdLen - paramLenth);
                 paramLenth = stdLen;
             }
@@ -676,20 +671,15 @@ static int16_t ParameterSyncResponseOfflineDidPackage(MpuHalDataPack_t *recvData
                  paramLenth = stdLen;
             }
         }
-        // === 数据校验逻辑 ===
-        // 如果数据长度为0，或数据是全00/全01/全FF，则认为是无效数据，不打包
+
         if (IsOfflineDataValid(pWriteDataPtr, paramLenth) == 0)
         {
-            // 数据无效，直接 continue。
-            // total_length 没有增加，下一次循环的数据会覆盖当前位置，相当于丢弃。
             continue; 
         }
 
-        // 检查 Buffer 溢出
-        // 需要空间: DID(2) + Len(2) + Data(paramLenth)
         if (total_length + 4 + paramLenth > sizeof(g_mpuDataBuffer))
         {
-            break; // 空间不足
+            break;
         }
 
         // === 打包响应数据 ===
@@ -762,44 +752,46 @@ void ParameterSyncSdkCycleProcess(MpuHalDataPack_t *recvDataPack)
                 }
                 else
                 {
-                    // 1. 读取本地 Flash 数据
                     g_mcuParameterReadCbFunc(recvDataPack->pDataBuffer[offsetLen], paramData, &length);
 
-                    // --- 新增逻辑开始 ---
-                    uint8_t allowWrite = 1; // 默认允许写入
+                    uint8_t allowWrite = 1;
                     uint8_t currentParamId = recvDataPack->pDataBuffer[offsetLen];
 
-                    // 判断是否为需要保护的 3 个 ID (VIN, ECall, BCall)
                     if (currentParamId == E_ParamId_VIN || 
                         currentParamId == E_ParamId_ECallNumber || 
                         currentParamId == E_ParamId_BCallNumber)
                     {
-                        uint8_t isLocalAllFF = 1; // 假设本地全是 FF
+                        uint8_t isLocalAllFF = 1;
+                        uint8_t isLocalAllZero = 1;
                         uint16_t k;
 
-                        // 检查本地读取到的 paramData 是否全为 0xFF
-                        // length 是 g_mcuParameterReadCbFunc 返回的本地数据长度
                         for (k = 0; k < length; k++)
                         {
                             if (paramData[k] != 0xFF)
                             {
-                                isLocalAllFF = 0; // 发现非 FF 字节，说明本地已有有效数据
+                                isLocalAllFF = 0; 
+                            }
+                            
+                            if (paramData[k] != 0x00)
+                            {
+                                isLocalAllZero = 0;
+                            }
+
+                            if (isLocalAllFF == 0 && isLocalAllZero == 0)
+                            {
                                 break;
                             }
                         }
 
-                        // 如果本地不是全 FF (即已有数据)，则禁止覆盖写入
-                        if (isLocalAllFF == 0)
+                        if (isLocalAllFF == 0 && isLocalAllZero == 0)
                         {
                             allowWrite = 0;
-                            // TBOX_PRINT("Param ID %d exists locally, sync skipped.\r\n", currentParamId);
+                            // TBOX_PRINT("Param ID %d exists locally (valid data), sync skipped.\r\n", currentParamId);
                         }
                     }
-                    // --- 新增逻辑结束 ---
 
                     if (allowWrite == 1)
                     {
-                        // 校验 MPU 发来的新数据是否合法
                         if (IsValidParamData(recvDataPack->pDataBuffer[offsetLen],
                                              &(recvDataPack->pDataBuffer[offsetLen + 2]),
                                              recvDataPack->pDataBuffer[offsetLen + 1]) == 1)

@@ -3276,13 +3276,13 @@ int16_t Service2EWritePIN(uint8_t *pData, uint16_t dataLength)
 // 0x010D_cxl
 int16_t Service2EWriteESKey(uint8_t *pData, uint16_t dataLength)
 {
-  int16_t ret;
+  //int16_t ret;
   // int16_t i;
   // uint8_t dataValid;
   // uint8_t tem[32];
   // uint32_t len;
 
-  ret = WorkFlashVehicleInforStore(E_PARAMETER_INFO_ESK_KEY, pData, dataLength);
+  WorkFlashVehicleInforStore(E_PARAMETER_INFO_ESK_KEY, pData, dataLength);
 
   if (CheckEskValid(pData) == 0)
   {
@@ -3456,15 +3456,12 @@ int16_t Service2EWriteTboxPhoneNum(uint8_t *pData, uint16_t dataLength)
   {
     return 0x13;
   }
-  // int16_t storeResult = WorkFlashVehicleInforStore(E_PARAMETER_INFO_TBOX_PHONE_NUM, pData, dataLength);
-  // if (storeResult < 0)
+  int16_t storeResult = WorkFlashVehicleInforStore(E_PARAMETER_INFO_TBOX_PHONE_NUM, pData, dataLength);
+
+  // if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
   // {
-  //   return 0x72;
+  //   return -1;
   // }
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
-  {
-    return -1;
-  }
   return 0;
 }
 
@@ -5643,15 +5640,16 @@ int16_t Service2EWriteRtcWakeupSet(uint8_t *pData, uint16_t dataLength)
 // 0x0111_cxl
 int16_t Service22ReadICCID(uint8_t *pData, uint16_t *pLength)
 {
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
-  {
-    return -1;
-  }
+  // if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  // {
+  //   return -1;
+  // }
   uint32_t len32 = 0;
   WorkFlashVehicleInforRead(E_PARAMETER_INFO_ICCID, pData, &len32);
   *pLength = (uint16_t)len32;
   return 0;
 }
+
 // 0x0111_cxl
 int16_t Service2EWriteICCID(uint8_t *pData, uint16_t dataLength)
 {
@@ -5659,10 +5657,10 @@ int16_t Service2EWriteICCID(uint8_t *pData, uint16_t dataLength)
   {
     return 0x13;
   }
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
-  {
-    return -1;
-  }
+  // if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  // {
+  //   return -1;
+  // }
   int16_t storeResult = WorkFlashVehicleInforStore(E_PARAMETER_INFO_ICCID, pData, dataLength);
   if (storeResult < 0)
   {
@@ -5774,12 +5772,15 @@ int16_t Service22ReadEmergencyAsNum(uint8_t *pData, uint16_t *pLength)
 // 0x0129_cxl
 int16_t Service22ReadTboxPhoneNum(uint8_t *pData, uint16_t *pLength)
 {
-  uint32_t length;
-  int16_t ret = WorkFlashVehicleInforRead(E_PARAMETER_INFO_TBOX_PHONE_NUM, pData, &length);
-  if (ret != 0 || length == 0)
-  {
-    memset(pData, 0x00, 14);
-  }
+  // uint32_t length;
+  // int16_t ret = WorkFlashVehicleInforRead(E_PARAMETER_INFO_TBOX_PHONE_NUM, pData, &length);
+  // if (ret != 0 || length == 0)
+  // {
+  //   memset(pData, 0x00, 14);
+  // }
+  // *pLength = 14;
+  // return 0;
+   memset(pData, 0x00, 14);
   *pLength = 14;
   return 0;
 }

@@ -263,7 +263,7 @@ void RemoteDiagnosticSdkProcess(CanIdConfig_t *pEcuConfigure, MpuBuffer_t *pMpuB
 
     static uint8_t s_pendingEcuId = 0xFF;
 
-    uint8_t oldIndex = 0;
+    static uint8_t oldIndex = 0;
     // uint32_t canId = 0;
     uint32_t responseId = 0;
     uint8_t ecuId = 0;
@@ -364,14 +364,15 @@ void RemoteDiagnosticSdkProcess(CanIdConfig_t *pEcuConfigure, MpuBuffer_t *pMpuB
                     }
                     else
                     {
-                        if ((rxMsg.pDataBuffer[1] == 0x80) && (rxMsg.pDataBuffer[2] == oldIndex))
+                        if ((rxMsg.pDataBuffer[1] == 0x80) && (1 == oldIndex))
                         {
                             RemoteDiagnosticSdkSendAck(&rxMsg, 0);
+                            LogHalUpLoadLog("rxMsg.pDataBuffer2-5: %2X %2X %2X %2X", rxMsg.pDataBuffer[2], rxMsg.pDataBuffer[3], rxMsg.pDataBuffer[4], rxMsg.pDataBuffer[5]);
                         }
                         else
                         {
                             RemoteDiagnosticSdkSendAck(&rxMsg, 0);
-                            oldIndex = rxMsg.pDataBuffer[2];
+                            oldIndex =1;
                             ecuId = RemoteDiagnosticSdkTpTransmit(pEcuConfigure, &rxMsg, virtualTpHandle);
 
                             if (ecuId != 0xFF)
@@ -405,7 +406,7 @@ void RemoteDiagnosticSdkProcess(CanIdConfig_t *pEcuConfigure, MpuBuffer_t *pMpuB
                         }
                     }
                 }
-                vTaskDelay(1);
+                //vTaskDelay(1);
             }
         }
         if ((g_remoteDiagnosticTimerHandle > 0) && (TimerHalIsTimeout(g_remoteDiagnosticTimerHandle) == 0))
@@ -419,6 +420,7 @@ void RemoteDiagnosticSdkProcess(CanIdConfig_t *pEcuConfigure, MpuBuffer_t *pMpuB
             if (g_selfDiagPending == 1)
             {
                 RemoteDiagnosticSdkSendResponse(&g_selfDiagRxMsg, pEcuConfigure->selfDiagnosticRespId, virtualRxbuf, recvLen);
+                oldIndex = 0;
                 g_selfDiagPending = 0;
             }
         }
@@ -460,7 +462,7 @@ void RemoteDiagnosticSdkProcess(CanIdConfig_t *pEcuConfigure, MpuBuffer_t *pMpuB
                     }
                     else
                     {
-                        ret = UdsTpReceive(g_udsTpHandle[pEcuConfigure->pEcuList[currentTargetEcu].channel], udsRxbuf, &udsRecvLen, 0);
+                        ret = UdsTpReceive(g_udsTpHandle[pEcuConfigure->pEcuList[currentTargetEcu].channel], udsRxbuf, &udsRecvLen, 1);
                         // LogHalUpLoadLog("cxl1");
                     }
 
@@ -471,7 +473,7 @@ void RemoteDiagnosticSdkProcess(CanIdConfig_t *pEcuConfigure, MpuBuffer_t *pMpuB
 
                         responseId = pEcuConfigure->pEcuList[currentTargetEcu].responseId;
                         RemoteDiagnosticSdkSendResponse(&rxMsg, responseId, udsRxbuf, udsRecvLen);
-
+                        oldIndex=0;
                         if ((udsRecvLen == 3) && (udsRxbuf[0] == 0x7F) && (udsRxbuf[2] == 0x78))
                         {
                             g_udsTimeCount = 0;
@@ -481,31 +483,10 @@ void RemoteDiagnosticSdkProcess(CanIdConfig_t *pEcuConfigure, MpuBuffer_t *pMpuB
                             g_udsReceiveFlag = 0;
                         }
                     }
-                    else
+                    else if(CAN_ERROR_TIMEOUT == ret)
                     {
-                        // LogHalUpLoadLog("[MCU] UdsTpReceive Error: %d\r\n", ret);
-                    }
-                    // else
-                    // {
-                    //     static uint8_t simulated_response[] = {
-                    //         0x62, 0xF1, 0x89,
-                    //         0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
-                    //         0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
-                    //         0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
-                    //     uint16_t simulated_len = sizeof(simulated_response);
-
-                    //     if (simulated_len <= sizeof(udsRxbuf))
-                    //     {
-                    //         memcpy(udsRxbuf, simulated_response, simulated_len);
-                    //         udsRecvLen = simulated_len;
-
-                    //         responseId = pEcuConfigure->pEcuList[ecuId].responseId;
-
-                    //         RemoteDiagnosticSdkSendResponse(&rxMsg, responseId, udsRxbuf, udsRecvLen);
-                    //     }
-
-                    //     g_udsReceiveFlag = 0;
-                    // }
+                        LogHalUpLoadLog("RD UDS REV TIMEOUT\r\n");
+                    } else ;
                 }
             }
 

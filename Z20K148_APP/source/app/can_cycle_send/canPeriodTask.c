@@ -22,10 +22,14 @@
 #include "taskEcallProcess.h"
 #include "remoteControl.h"
 #include "taskEcallProcess.h"
+#include "canParseSdk.h"
+#include "vehicleSignalApp.h"
+#include "eolTestSyncWithCpu.h"
 #if (SELFCHECK_RESULT_SEND == 1)
 #include "ecallHal.h"
 #endif
 /****************************** Macro Definitions ******************************/
+#define BCD_TO_DEC(x)  ((((x) >> 4) * 10) + ((x) & 0x0F))
 #define CYCLE_SEND_WITH_SECOC_SDK       (0U)
 #define CYCLE_SEND_WITH_CANFD           (1U)
 #define CYCLE_SEND_WITHOUT_CANFD        (0U)
@@ -231,6 +235,7 @@ static TEL_4 g_tbox4Message;
 static TEL_18 g_tbox18Message;
 static uint8_t g_TEL_MsgCounter = 0U;
 static TEL_TimeVD_e g_timeVdValue = E_TEL_TIME_INVALID;
+static uint8_t g_u8SensitiveDataMode = 0;
 CAN_CYCLE_SEND_CONFIGURE_BEGIN(2)
 /****************************    Time,  Id,       FdFlag    Length  CanllBack******/
 CAN_CYCLE_SEND_CONFIGURE_CAN(480, 0x3C5, 1, 8, CanPeriodMessage3C5)         //GAC need 90%《= time <= 110%
@@ -500,47 +505,56 @@ static int16_t CanPeriodMessage3C5(uint8_t *pCanData)
     uint16_t ret = 0U;
     if (pCanData != NULL)
     {
+        // 1. 清空 Buffer
         memset(pCanData, 0x00, 8);
         
         LocationInfoSync_t locationInfo;
+        
+        uint8_t validFlag = 0U; 
+        int32_t lat_signed = 0;
+        int32_t lon_signed = 0;
+
         if (StateSyncGetLocationInfo(&locationInfo) == 0)
         {
             if ((locationInfo.locationState & 0x1F) > 0)
             {
-                g_tbox11Message.DetailInfo.TEL_NaviPstVD = 1U;
-            }
-            else
-            {
-                g_tbox11Message.DetailInfo.TEL_NaviPstVD = 0U;
+                validFlag = 1U;
             }
 
             uint32_t lat_abs_1e6 = locationInfo.latitude / 10;
             uint32_t lon_abs_1e6 = locationInfo.longitude / 10;
 
-            int32_t lat_signed = ((locationInfo.locationState & 0x80) == 0) ? (int32_t)lat_abs_1e6 : -(int32_t)lat_abs_1e6;
-            
-            int32_t lon_signed = ((locationInfo.locationState & 0x40) == 0) ? (int32_t)lon_abs_1e6 : -(int32_t)lon_abs_1e6;
-
-            uint32_t lat_final = (uint32_t)lat_signed;
-            uint32_t lon_final = (uint32_t)lon_signed;
-
-            g_tbox11Message.DetailInfo.TEL_Latitude_1 = (lat_final >> 20) & 0xFF;
-            g_tbox11Message.DetailInfo.TEL_Latitude_2 = (lat_final >> 12) & 0xFF;
-            g_tbox11Message.DetailInfo.TEL_Latitude_3 = (lat_final >> 4) & 0xFF;
-            g_tbox11Message.DetailInfo.TEL_Latitude_4 = lat_final & 0x0F;
-
-            g_tbox11Message.DetailInfo.TEL_Longitude_1 = (lon_final >> 24) & 0x0F;
-            g_tbox11Message.DetailInfo.TEL_Longitude_2 = (lon_final >> 16) & 0xFF;
-            g_tbox11Message.DetailInfo.TEL_Longitude_3 = (lon_final >> 8) & 0xFF;
-            g_tbox11Message.DetailInfo.TEL_Longitude_4 = lon_final & 0xFF;
-
-            memcpy(pCanData, &g_tbox11Message.data[0], sizeof(g_tbox11Message.data));
+            lat_signed = ((locationInfo.locationState & 0x80) == 0) ? (int32_t)lat_abs_1e6 : -(int32_t)lat_abs_1e6;
+            lon_signed = ((locationInfo.locationState & 0x40) == 0) ? (int32_t)lon_abs_1e6 : -(int32_t)lon_abs_1e6;
         }
-        else
+
+        if (g_u8SensitiveDataMode == 1)
         {
-            g_tbox11Message.DetailInfo.TEL_NaviPstVD = 0U;
-            memcpy(pCanData, &g_tbox11Message.data[0], sizeof(g_tbox11Message.data));
+
+            lat_signed = 95000000;   
+            lon_signed = 185000000;  
+            
+            validFlag = 0U; 
         }
+        // ============================================================
+
+        g_tbox11Message.DetailInfo.TEL_NaviPstVD = validFlag;
+
+        uint32_t lat_final = (uint32_t)lat_signed;
+        uint32_t lon_final = (uint32_t)lon_signed;
+
+        g_tbox11Message.DetailInfo.TEL_Latitude_1 = (lat_final >> 20) & 0xFF;
+        g_tbox11Message.DetailInfo.TEL_Latitude_2 = (lat_final >> 12) & 0xFF;
+        g_tbox11Message.DetailInfo.TEL_Latitude_3 = (lat_final >> 4) & 0xFF;
+        g_tbox11Message.DetailInfo.TEL_Latitude_4 = lat_final & 0x0F;
+
+        g_tbox11Message.DetailInfo.TEL_Longitude_1 = (lon_final >> 24) & 0x0F;
+        g_tbox11Message.DetailInfo.TEL_Longitude_2 = (lon_final >> 16) & 0xFF;
+        g_tbox11Message.DetailInfo.TEL_Longitude_3 = (lon_final >> 8) & 0xFF;
+        g_tbox11Message.DetailInfo.TEL_Longitude_4 = lon_final & 0xFF;
+
+        // 4. 拷贝到输出 Buffer
+        memcpy(pCanData, &g_tbox11Message.data[0], sizeof(g_tbox11Message.data));
     }
     else
     {
@@ -785,24 +799,81 @@ static int16_t CanPeriodMessage39E(uint8_t *pCanData)
 static int16_t CanPeriodMessage273(uint8_t *pCanData)
 {
     uint16_t ret = 0U;
+    
+    uint8_t u8DidBuffer[32]; 
+    uint16_t u16DidLen = 0;
+
+    uint8_t rawStartMon = 0;
+    uint8_t rawStartDay = 0;
+    uint8_t rawStopMon = 0;
+    uint8_t rawStopDay = 0;
+    uint8_t rawStartYear = 0;
+    uint8_t rawStopYear = 0;
+    uint8_t rawMode = 0;
+    uint32_t rawAppType = 0;
+
     if (pCanData != NULL)
     {
-        memset(pCanData, 0x00, 8);
-        // Get for interface
-        g_tbox18Message.DetailInfo.TEL_ACU_GNSSclletAuthorStartMon = 0U;
-        g_tbox18Message.DetailInfo.TEL_ACU_GNSSclletAuthorStartDay = 0U;
-        g_tbox18Message.DetailInfo.TEL_ACU_GNSSclletAuthorStopMon = 0U;
-        g_tbox18Message.DetailInfo.TEL_ACU_GNSSclletAuthorStopDay = 0U;
-        g_tbox18Message.DetailInfo.TEL_ACU_GNSSclletAuthorStartYear = 0U;
-        g_tbox18Message.DetailInfo.TEL_ACU_GNSSclletAuthorStopYear = 0U;
-        g_tbox18Message.DetailInfo.TEL_ACU_GNSSclletAuthorMode = 0U;
-        g_tbox18Message.DetailInfo.TEL_GNSSAPPTypeSt = 0U;
-        memcpy(pCanData, &g_tbox18Message.data[0], sizeof(g_tbox18Message.data));
+        memset(&g_tbox18Message.data[0], 0x00, 8);
+
+        if (ToolRead_SensitiveData_B2C5(u8DidBuffer, &u16DidLen) == 0 && u16DidLen >= 16)
+        {
+
+            rawStartYear = BCD_TO_DEC(u8DidBuffer[1]);
+
+            rawStartMon = BCD_TO_DEC(u8DidBuffer[2]) & 0x0F;
+
+            rawStartDay = BCD_TO_DEC(u8DidBuffer[3]) & 0x1F;
+
+            rawStopYear = BCD_TO_DEC(u8DidBuffer[7]);
+
+            rawStopMon = BCD_TO_DEC(u8DidBuffer[8]) & 0x0F;
+
+            rawStopDay = BCD_TO_DEC(u8DidBuffer[9]) & 0x1F;
+
+            rawMode = u8DidBuffer[12] & 0x03;
+
+            rawAppType = (uint32_t)((u8DidBuffer[13] << 16) | (u8DidBuffer[14] << 8) | u8DidBuffer[15]);
+            rawAppType &= 0xFFFFFF;
+            g_u8SensitiveDataMode = rawMode;
+        }
+        else
+        {
+            g_u8SensitiveDataMode = 0;
+        }
+
+        uint8_t *u8Data = g_tbox18Message.data;
+
+        u8Data[0] = (uint8_t)((rawStartMon << 4) | 
+                              ((rawStartDay >> 1) & 0x0F));
+
+        u8Data[1] = (uint8_t)(((rawStartDay & 0x01) << 7) | 
+                              (rawStopMon << 3)           | 
+                              ((rawStopDay >> 2) & 0x07));
+
+        u8Data[2] = (uint8_t)(((rawStopDay & 0x03) << 6) | 
+                              ((rawStartYear >> 2) & 0x3F));
+
+        u8Data[3] = (uint8_t)(((rawStartYear & 0x03) << 6) | 
+                              ((rawStopYear >> 2) & 0x3F));
+
+        u8Data[4] = (uint8_t)(((rawStopYear & 0x03) << 6) | 
+                              (rawMode << 4));
+
+        u8Data[5] = (uint8_t)((rawAppType >> 16) & 0xFF); // High Byte
+        u8Data[6] = (uint8_t)((rawAppType >> 8) & 0xFF);  // Mid Byte
+        u8Data[7] = (uint8_t)(rawAppType & 0xFF);         // Low Byte
+
+        // ======================================================================
+
+        if (pCanData != NULL)
+        {
+            memcpy(pCanData, g_tbox18Message.data, 8);
+        }
     }
     else
     {
         ret = -1;
-        TBOX_PRINT("can273 period send ptr is null\r\n");
     }
     return ret;
 }

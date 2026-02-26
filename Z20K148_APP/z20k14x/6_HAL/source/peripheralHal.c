@@ -44,6 +44,7 @@
 #define WAKEUP_SOURCE_RTC             (13U)  
 #define WAKEUP_SOURCE_RTC_MCU         (14U)
 #define WAKEUP_SOURCE_GSENSOR         (15U)
+#define WAKEUP_SOURCE_SPI             (20U)
 
 //Define the value of ADC0_FIFO_WATERMARK according to the number of ADC channels used
 #define ADC0_FIFO_WATERMARK           (0U)        			//Define the threshold value of FWM interrupt, use WATERMARK_VALUE + 1 FIFO to trigger FWM interrupt.
@@ -434,6 +435,10 @@ void PORTE_IRQHandler(void)
         PORT_ClearPinInt(MPU_HAL_SPI_REQ_PORT, MPU_HAL_SPI_REQ_PORT_PIN);
 #if (SPI_DMA_ENABLE == 1)
         MpuHal_SpiIrqCallback();
+        if(g_wakeupSourceFun != NULL)
+        {
+            g_wakeupSourceFun(WAKEUP_SOURCE_SPI);
+        }
 #endif
     }
 
@@ -1600,7 +1605,7 @@ static void IrqPinInit(void)
 	PORT_PinmuxConfig(GSM_IRQ_PORT, GSM_IRQ_PIN, GSM_IRQ_PIN_MUX);
 	GPIO_SetPinDir(GSM_IRQ_PORT, GSM_IRQ_PIN, GPIO_INPUT);
 	// PORT_PullConfig(GSM_IRQ_PORT, GSM_IRQ_PIN, PORT_PULL_DOWN);
-	PORT_PinIntConfig(GSM_IRQ_PORT, GSM_IRQ_PIN, PORT_ISF_INT_BOTH_EDGE);
+	PORT_PinIntConfig(GSM_IRQ_PORT, GSM_IRQ_PIN, PORT_ISF_INT_FALLING_EDGE);
 	INT_SetPriority(GSM_IRQ_IRQN, 0x3);
 	INT_EnableIRQ(GSM_IRQ_IRQN);
 	// PORT_InstallCallbackFunc();

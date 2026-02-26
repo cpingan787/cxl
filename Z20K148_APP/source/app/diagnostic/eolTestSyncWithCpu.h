@@ -48,5 +48,6 @@ int16_t CanPassthrough_RequestAndGetResponse(const uint8_t *pUdsRequest, uint16_
                                              
 int16_t CanPassthrough_SendOnly(const uint8_t *pUdsRequest, uint16_t reqLength);
 int16_t CanPassthrough_ReceiveOnly(uint8_t *pUdsResponse, uint16_t *pRespLength, uint32_t timeoutMs);
+int16_t ToolRead_SensitiveData_B2C5(uint8_t *pData, uint16_t *pLength);
                                              
 #endif

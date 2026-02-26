@@ -80,12 +80,12 @@
 #define WORKFLASH_APN_TYPE_LEN (1 + 2)                // 0xB247_cxl 0xB248_cxl
 #define WORKFLASH_TSP_CONNECT_SETTING_LEN (1 + 2)     // 0xB258_cxl
 #define WORKFLASH_PKI_APPLY_REQUEST_LEN (1 + 2)       // 0xB261_cxl
-#define WORKFLASH_TSP_DOMAIN_1_LEN (50 + 2)           // 0x031C_cxl
-#define WORKFLASH_APN3_LEN (32 + 2)                   // 0x1061_cxl
+#define WORKFLASH_TSP_DOMAIN_1_LEN (50 + 1)           // 0x031C_cxl
+#define WORKFLASH_APN3_LEN (32 + 1)                   // 0x1061_cxl
 #define WORKFLASH_OTA_DOMAIN_NAME_LEN (50 + 2)        // 0xB2CB_cxl
 #define WORKFLASH_OTA_PORT_LEN (8 + 2)                // 0xB2CC_cxl
-#define WORKFLASH_PKI_DOMAIN_NAME_LEN (50 + 2)        // 0x1052_cxl
-#define WORKFLASH_PKI_PORT_LEN (8 + 2)                // 0x1053_cxl
+#define WORKFLASH_PKI_DOMAIN_NAME_LEN (50 + 1)        // 0x1052_cxl
+#define WORKFLASH_PKI_PORT_LEN (8 + 1)                // 0x1053_cxl
 #define WORKFLASH_TSP_PORT_3_LEN (8 + 2)              // 0x105E_cxl
 #define WORKFLASH_DTC_SETTING_CONTROL_LEN (12 + 1)    // 0x1020_cxl
 #define WORKFLASH_LOG_DOMAIN_NAME_LEN (100 + 2)       // 0xB275_cxl

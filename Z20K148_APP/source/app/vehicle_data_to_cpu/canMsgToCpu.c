@@ -16,6 +16,7 @@
 
 /****************************** Macro Definitions ******************************/
 #define TX_BUFFER_CAN_MSG_NUM_MAX               (300)
+#define CAN_MSG_DLT_TABLE_SIZE                  (80)
 
 /****************************** Type Definitions ******************************/
 typedef struct
@@ -23,6 +24,12 @@ typedef struct
   uint32_t size;
   uint32_t elementCount;
 }CanIdConfigure_t;
+
+typedef struct
+{
+    uint32_t canId;
+    uint8_t  length;
+}CanMsgDltTable_t;
 
 typedef struct
 {
@@ -48,10 +55,82 @@ typedef struct
 CanMsgRxConfigureBuffer_t g_canRxToCpuConfigureBuffer[RX_CAN_CONFIGURE_CHANNEL_NUMBER][RX_CAN_CONFIGURE_BUFFER_SIZE];
 static CanIdConfigure_t g_canRxToCpuConfigure[RX_CAN_CONFIGURE_CHANNEL_NUMBER];
 static StackBuffer_t g_stack;
-// static uint8_t g_txBuffer[TX_BUFFER_CAN_MSG_NUM_MAX * 14 + 3 + 8];
 static CanMsgTxBuffer_t g_canMsgTxBuffer;
 static uint16_t g_txBufferCount = 0;
 static uint16_t g_txByteOffset = 2;
+
+/* DLC查找表：定义每个CAN ID的预期数据长度 */
+static const CanMsgDltTable_t g_canMsgDltTable[CAN_MSG_DLT_TABLE_SIZE] =
+{
+    {0x02F, 8},
+    {0x032, 8},
+    {0x037, 8},
+    {0x03D, 8},
+    {0x046, 8},
+    {0x04D, 8},
+    {0x055, 8},
+    {0x064, 8},
+    {0x068, 8},
+    {0x075, 8},
+    {0x081, 8},
+    {0x082, 8},
+    {0x094, 8},
+
+    {0x16B, 64},
+    {0x17C, 8},
+    {0x184, 8},
+    {0x186, 8},
+    {0x187, 8},
+    {0x193, 8},
+    {0x19C, 8},
+    {0x1AE, 8},
+    {0x1CF, 8},
+    {0x1E0, 64},
+    {0x1E2, 64},
+    {0x1E3, 64},
+    {0x1E4, 64},
+    {0x1E5, 64},
+    {0x1E6, 64},
+    {0x1E7, 64},
+    {0x1E9, 64},
+    {0x1EB, 64},
+    {0x1EC, 8},
+    {0x1ED, 64},
+    {0x1EE, 64},
+
+    {0x216, 8},
+    {0x217, 8},
+    {0x23F, 8},
+    {0x25D, 8},
+    {0x264, 8},
+
+    {0x305, 8},
+    {0x315, 32},
+    {0x322, 8},
+    {0x324, 64},
+    {0x34E, 8},
+    {0x34F, 8},
+    {0x37A, 8},
+    {0x3A3, 64},
+    {0x3A6, 8},
+    {0x3AB, 8},
+    {0x3B5, 8},
+    {0x3B9, 8},
+    {0x3BE, 8},
+    {0x3C8, 8},
+    {0x3DF, 8},
+    {0x3E0, 8},
+    {0x3E1, 8},
+    {0x3E2, 8},
+    {0x3E5, 8},
+    {0x3E6, 8},
+    {0x3E7, 8},
+    {0x3F7, 8},
+
+    {0x54F, 8},
+    {0x61F, 8},
+};
+
 
 /****************************** Function Declarations *************************/
 static void StackInit(StackBuffer_t *pStack);
@@ -60,6 +139,8 @@ static int16_t StackPop(StackBuffer_t *pStack);
 static int16_t StackTop(StackBuffer_t *pStack);
 static int16_t  StackIsEmpty(StackBuffer_t *pStack);
 static bool IsMultiFrameUploadCanId(uint32_t canId);
+static int8_t GetExpectedDlc(uint32_t canId);
+
 /****************************** Private Function Implementations ***************/
 /*=================================================
    Function:        StackInit
@@ -284,6 +365,14 @@ int16_t SaveCanMsgToBuffer(uint8_t canChannel,const CanHalMsg_t *pCanMsg)
 {
     int32_t bufferIndex;
     int16_t result = 0;
+    uint32_t oldMsgPos = 0u;
+    uint8_t oldDlc = 0u;
+    uint8_t expectedDlc = 0u;
+    
+    if (pCanMsg == NULL)
+    {
+        return -1;
+    }
     
     bufferIndex = GetIndexFromCanMsgConfigureBuffer(canChannel,pCanMsg->canId);
     if(bufferIndex < 0)
@@ -291,23 +380,23 @@ int16_t SaveCanMsgToBuffer(uint8_t canChannel,const CanHalMsg_t *pCanMsg)
       return 0;
     }
     
-    if(bufferIndex >= TX_BUFFER_CAN_MSG_NUM_MAX)
+    if(bufferIndex >= RX_CAN_CONFIGURE_BUFFER_SIZE)
     {
       return 0;
     }
     
     taskENTER_CRITICAL();
     
-    if((g_txByteOffset + 6 + pCanMsg->dlc) > (TX_BUFFER_CAN_MSG_NUM_MAX*14 + 3 + 8))
-    {
-        result = -1; 
-        taskEXIT_CRITICAL();
-        
-        return result;
-    }
-
     if (IsMultiFrameUploadCanId(pCanMsg->canId) != false)
     {
+        /* 多帧上传模式：每帧都追加，用于需要高频率更新的CAN ID（如0x1CF） */
+        if((g_txByteOffset + 6 + pCanMsg->dlc) > (TX_BUFFER_CAN_MSG_NUM_MAX*14 + 3 + 8))
+        {
+            taskEXIT_CRITICAL();
+            LogHalUpLoadLog("CAN Upload BUF OV, canId: 0x%08X, dlc: %d\n", pCanMsg->canId, pCanMsg->dlc);     
+            return -1;
+        }
+
         g_canMsgTxBuffer.txBuffer[g_txByteOffset++] = canChannel;
         g_canMsgTxBuffer.txBuffer[g_txByteOffset++] = (uint8_t)((pCanMsg->canId >> 24) & 0xFFU);
         g_canMsgTxBuffer.txBuffer[g_txByteOffset++] = (uint8_t)((pCanMsg->canId >> 16) & 0xFFU);
@@ -329,20 +418,49 @@ int16_t SaveCanMsgToBuffer(uint8_t canChannel,const CanHalMsg_t *pCanMsg)
 
     if (g_canMsgTxBuffer.index[bufferIndex] != 0)
     {
-        uint32_t idex = g_canMsgTxBuffer.index[bufferIndex];
-        g_canMsgTxBuffer.txBuffer[idex++] = canChannel;
-        g_canMsgTxBuffer.txBuffer[idex++] = (pCanMsg->canId>>24)&0xFF;
-        g_canMsgTxBuffer.txBuffer[idex++] = (pCanMsg->canId>>16)&0xFF;
-        g_canMsgTxBuffer.txBuffer[idex++] = (pCanMsg->canId>>8)&0xFF;
-        g_canMsgTxBuffer.txBuffer[idex++] = pCanMsg->canId&0xFF;
-        g_canMsgTxBuffer.txBuffer[idex++] = pCanMsg->dlc;
-        for(uint32_t i = 0; i < pCanMsg->dlc; i++)
+        /* 更新模式：在原位置更新消息 */
+        oldMsgPos = g_canMsgTxBuffer.index[bufferIndex];
+        oldDlc = g_canMsgTxBuffer.txBuffer[oldMsgPos + 5];
+        
+        if (pCanMsg->dlc == oldDlc)
         {
-            g_canMsgTxBuffer.txBuffer[idex++] = pCanMsg->canData[i];
+            /* DLC相同，直接覆盖更新 */
+            g_canMsgTxBuffer.txBuffer[oldMsgPos++] = canChannel;
+            g_canMsgTxBuffer.txBuffer[oldMsgPos++] = (pCanMsg->canId>>24)&0xFF;
+            g_canMsgTxBuffer.txBuffer[oldMsgPos++] = (pCanMsg->canId>>16)&0xFF;
+            g_canMsgTxBuffer.txBuffer[oldMsgPos++] = (pCanMsg->canId>>8)&0xFF;
+            g_canMsgTxBuffer.txBuffer[oldMsgPos++] = pCanMsg->canId&0xFF;
+            g_canMsgTxBuffer.txBuffer[oldMsgPos++] = pCanMsg->dlc;
+            for(uint32_t i = 0; i < pCanMsg->dlc; i++)
+            {
+                g_canMsgTxBuffer.txBuffer[oldMsgPos++] = pCanMsg->canData[i];
+            }
+        } else {
+            // DLC不同，直接丢弃
         }
     } 
     else 
     {
+        /* 第一次写入：检查空间并追加 */
+        if((g_txByteOffset + 6 + pCanMsg->dlc) > (TX_BUFFER_CAN_MSG_NUM_MAX*14 + 3 + 8))
+        {
+            taskEXIT_CRITICAL();
+            LogHalUpLoadLog("CAN Upload BUF OV, canId: 0x%08X, dlc: %d", pCanMsg->canId, pCanMsg->dlc);     
+            return -1;
+        }
+        /* DLC验证：查表获取预期长度 */
+        expectedDlc = GetExpectedDlc(pCanMsg->canId);
+        if (expectedDlc != 0)
+        {
+            if (pCanMsg->dlc != expectedDlc)
+            {
+                taskEXIT_CRITICAL();
+                LogHalUpLoadLog("DLC mismatch for CAN ID 0x%03X: expected=%u, actual=%u", 
+                        pCanMsg->canId, expectedDlc, pCanMsg->dlc);
+                return 0;
+            }
+        }
+        // 只有DLC匹配或者DLC没有在表注册时才允许写入
         g_canMsgTxBuffer.index[bufferIndex] = g_txByteOffset;
         g_canMsgTxBuffer.txBuffer[g_txByteOffset++] = canChannel;
         g_canMsgTxBuffer.txBuffer[g_txByteOffset++] = (pCanMsg->canId>>24)&0xFF;
@@ -532,6 +650,43 @@ uint8_t CanMsgConfigureBufferDataIsValid(void)
     }
 }
 
+
+/*=================================================
+   Function:        GetExpectedDlc
+   Description:     Get expected DLC for a CAN ID from lookup table
+   Input:           canId - CAN ID value to check
+   Output:          None
+   Return:          Expected DLC length, or 0 if CAN ID not found in table
+   Others:          Uses binary search for efficient lookup
+=================================================*/
+static int8_t GetExpectedDlc(uint32_t canId)
+{
+    int32_t left = 0;
+    int32_t right = CAN_MSG_DLT_TABLE_SIZE - 1;
+    int32_t mid;
+    
+    /* 使用二分查找以提高效率 */
+    while (left <= right)
+    {
+        mid = (left + right) / 2;
+        
+        if (g_canMsgDltTable[mid].canId == canId)
+        {
+            return (int8_t)g_canMsgDltTable[mid].length;
+        }
+        else if (g_canMsgDltTable[mid].canId < canId)
+        {
+            left = mid + 1;
+        }
+        else
+        {
+            right = mid - 1;
+        }
+    }
+    
+    /* 未找到该CAN ID，返回0表示无效 */
+    return 0;
+}
 
 /*=================================================
    Function:        IsMultiFrameUploadCanId

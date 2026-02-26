@@ -59,6 +59,7 @@ CAN_ID_CONFIGURE_DEFINE(GW_EMS_1_T)
 CAN_ID_CONFIGURE_DEFINE(GW_EBS_1_T)
 CAN_ID_CONFIGURE_DEFINE(GW_ACU_1_T)
 CAN_ID_CONFIGURE_DEFINE(GW_ACU_32_B_T)
+CAN_ID_CONFIGURE_DEFINE(GW_ACU_41_B_T)
 CAN_ID_CONFIGURE_DEFINE_END(0)
 
 /****************************** Global Variables ******************************/
@@ -88,6 +89,7 @@ CAN_V_ID_ELEMENT(GW_EMS_1_T, 100, 0x1EE)
 CAN_V_ID_ELEMENT(GW_EBS_1_T, 500, 0x315)
 CAN_V_ID_ELEMENT(GW_ACU_1_T, 500, 0x1E2)
 CAN_V_ID_ELEMENT(GW_ACU_32_B_T, 1000, 0x075) 
+CAN_V_ID_ELEMENT(GW_ACU_41_B_T, 1000, 0x094)
 CAN_ID_CONFIGURE_END(0)
 
 static const can0_signal_configure_t m_can0SignalConfigure =
@@ -8149,6 +8151,109 @@ static const can0_signal_configure_t m_can0SignalConfigure =
             .InvalidData = 0xFFFFFFFF,
         }, // Indicate if the charge current is bigger than the threshold
 
+        .ACU_TEL_GNSSclletAuthorStartMonReq =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_ACU_41_B_T),
+            .dataType = 0,
+            .startBit = 4,
+            .bitLength = 4,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // Indicate if the charge current is bigger than the threshold
+
+        .ACU_TEL_GNSSclletAuthorStartDayReq =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_ACU_41_B_T),
+            .dataType = 0,
+            .startBit = 15,
+            .bitLength = 5,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // Indicate if the charge current is bigger than the threshold
+
+        .ACU_TEL_GNSSclletAuthorStopMonReq =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_ACU_41_B_T),
+            .dataType = 0,
+            .startBit = 11,
+            .bitLength = 4,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // Indicate if the charge current is bigger than the threshold
+
+        .ACU_TEL_GNSSclletAuthorStopDayReq =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_ACU_41_B_T),
+            .dataType = 0,
+            .startBit = 22,
+            .bitLength = 5,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // Indicate if the charge current is bigger than the threshold
+
+        .ACU_TEL_GNSSclletAuthorStartYearReq =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_ACU_41_B_T),
+            .dataType = 0,
+            .startBit = 30,
+            .bitLength = 8,
+            .resulotion = 1,
+            .offset = 2000,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // Indicate if the charge current is bigger than the threshold
+
+        .ACU_TEL_GNSSclletAuthorStopYearReq =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_ACU_41_B_T),
+            .dataType = 0,
+            .startBit = 38,
+            .bitLength = 8,
+            .resulotion = 1,
+            .offset = 2000,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // Indicate if the charge current is bigger than the threshold
+
+        .ACU_TEL_GNSSclletAuthorModeReq =
+        {
+            .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+            .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_ACU_41_B_T),
+            .dataType = 0,
+            .startBit = 36,
+            .bitLength = 2,
+            .resulotion = 1,
+            .offset = 0,
+            .useInvalidFlag = 1,
+            .InvalidData = 0xFFFFFFFF,
+        }, // Indicate if the charge current is bigger than the threshold
+
+        .ACU_TEL_GNSS_APPTypeStSetReq =
+            {
+                .msgBufferPointer = CAN_MSG_BUFFER_ADDRESS(0),
+                .canBufferIdIndex = CAN_ID_TO_BUFFER_INDEX(0, GW_ACU_41_B_T),
+                .dataType = 0,
+                .startBit = 56,
+                .bitLength = 24,
+                .resulotion = 1,
+                .offset = 0,
+                .useInvalidFlag = 1,
+                .InvalidData = 0xFFFFFFFF,
+            }, // Indicate if the charge current is bigger than the threshold
 };
 
 /****************************** Function Declarations *************************/

@@ -32,7 +32,8 @@
 #define PM_HAL_WAKEUP_SOURCE_RTC            13    // CPU定时唤醒
 #define PM_HAL_WAKEUP_SOURCE_MCURTC         14    // MCU timed wake-up
 #define PM_HAL_WAKEUP_SOURCE_GSENSOR        15    // MCU timed wake-up
-#define PM_HAL_WAKEUP_SOURCE_MAX            16    // 唤醒源最大值
+#define PM_HAL_WAKEUP_SOURCE_SPI            20    // SPI 唤醒
+#define PM_HAL_WAKEUP_SOURCE_MAX            21    // 唤醒源最大值
 
 /****************************** Type Definitions ******************************/
 /****************************** Global Variables ******************************/

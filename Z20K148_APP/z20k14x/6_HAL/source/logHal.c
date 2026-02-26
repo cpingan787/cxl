@@ -317,7 +317,7 @@ void LogHalSetMode(uint8_t mode)
     }
     else if(1 == mode)
     {
-        LogHalInit(3);
+        UART2_Init();
     }  
 }
 
@@ -355,7 +355,7 @@ void LogHalUpLoadLog(const char *format, ...)
 {
     static char log_str[LOG_UPLOAD_LOG_BUF_SIZE];
     static MpuHalDataPack_t packet;
-    uint8_t ret = 0U;
+    int16_t ret = 0U;
     va_list args;
     va_start(args, format);
     
@@ -371,7 +371,7 @@ void LogHalUpLoadLog(const char *format, ...)
     ret = MpuHalTransmit(g_logHalhandle, &packet, MPU_HAL_SPI_MODE);
     if(ret != MPU_HAL_STATUS_OK)
     {
-        LogHalPrint("LogHalUpLoadLog failed, log_str: %s", log_str);
+        LogHalPrint("LogHalUpLoadLog failed, ret=%d", ret, g_logHalhandle);
     }
 }
 

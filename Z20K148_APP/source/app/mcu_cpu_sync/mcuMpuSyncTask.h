@@ -42,7 +42,7 @@ typedef enum
     E_ParamId_PkiPort = 29,                 // 0x1053
     E_ParamId_PkiDomainName = 30,           // 0x1052_cxl
     E_ParamId_PublicTspDomain = 31,         // 公网TSP域名 0x1014_cxl
-
+    E_ParamId_TboxPhoneNum = 32,            // TBOX电话号码 0x0129_cxl
     // E_ParamId_TspTimeout = 24,              // TSP超时时间 0xB209_cxl
     // E_ParamId_OfficialServiceNum = 27,      // 官方服务热线 0xB20A_cxl
     // E_ParamId_EmergencyAsNum = 28,          // 紧急售后热线 0xB20B_cxl
@@ -197,7 +197,7 @@ TBOX_PARAMETER_SYNC_WRITE_MAP(E_ParamId_ECallNumber, E_PARAMETER_INFO_ECALL_NUM1
 TBOX_PARAMETER_SYNC_WRITE_MAP(E_ParamId_BCallNumber, E_PARAMETER_INFO_BCALL_NUM1)                            // 0x0124_cxl
 //TBOX_PARAMETER_SYNC_WRITE_MAP(E_ParamId_OfficialServiceNum, E_PARAMETER_INFO_OFFICIAL_SERVICE_NUM)            // 0xB20A_cxl
 //TBOX_PARAMETER_SYNC_WRITE_MAP(E_ParamId_EmergencyAsNum, E_PARAMETER_INFO_EMERGENCY_AS_NUM)                    // 0xB20B_cxl
-//TBOX_PARAMETER_SYNC_WRITE_MAP(E_ParamId_TboxPhoneNum, E_PARAMETER_INFO_TBOX_PHONE_NUM)                        // 0x0129_cxl
+TBOX_PARAMETER_SYNC_WRITE_MAP(E_ParamId_TboxPhoneNum, E_PARAMETER_INFO_TBOX_PHONE_NUM)                        // 0x0129_cxl
 //TBOX_PARAMETER_SYNC_WRITE_MAP(E_ParamId_TspFlowTimeout, E_PARAMETER_INFO_TSP_FLOW_TIMEOUT)                    // 0xB20C_cxl
 //TBOX_PARAMETER_SYNC_WRITE_MAP(E_ParamId_TspAckTime, E_PARAMETER_INFO_TSP_ACK_TIME)                            // 0xB20D_cxl
 TBOX_PARAMETER_SYNC_WRITE_MAP(E_ParamId_Apn2, E_PARAMETER_INFO_APN2)                                          // 0x013C_cxl
@@ -279,7 +279,7 @@ TBOX_PARAMETER_SYNC_READ_MAP(E_ParamId_ECallNumber, E_PARAMETER_INFO_ECALL_NUM1)
 TBOX_PARAMETER_SYNC_READ_MAP(E_ParamId_BCallNumber, E_PARAMETER_INFO_BCALL_NUM1)                            // 0x0124_cxl
 //TBOX_PARAMETER_SYNC_READ_MAP(E_ParamId_OfficialServiceNum, E_PARAMETER_INFO_OFFICIAL_SERVICE_NUM)            // 0xB20A_cxl
 //TBOX_PARAMETER_SYNC_READ_MAP(E_ParamId_EmergencyAsNum, E_PARAMETER_INFO_EMERGENCY_AS_NUM)                    // 0xB20B_cxl
-//TBOX_PARAMETER_SYNC_READ_MAP(E_ParamId_TboxPhoneNum, E_PARAMETER_INFO_TBOX_PHONE_NUM)                        // 0x0129_cxl
+TBOX_PARAMETER_SYNC_READ_MAP(E_ParamId_TboxPhoneNum, E_PARAMETER_INFO_TBOX_PHONE_NUM)                        // 0x0129_cxl
 //TBOX_PARAMETER_SYNC_READ_MAP(E_ParamId_TspFlowTimeout, E_PARAMETER_INFO_TSP_FLOW_TIMEOUT)                    // 0xB20C_cxl
 //TBOX_PARAMETER_SYNC_READ_MAP(E_ParamId_TspAckTime, E_PARAMETER_INFO_TSP_ACK_TIME)                            // 0xB20D_cxl
 TBOX_PARAMETER_SYNC_READ_MAP(E_ParamId_Apn2, E_PARAMETER_INFO_APN2)                                          // 0x013C_cxl

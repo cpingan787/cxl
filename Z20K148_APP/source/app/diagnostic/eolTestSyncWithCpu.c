@@ -149,6 +149,33 @@ int16_t CanPassthrough_RequestAndGetResponse(const uint8_t *pUdsRequest, uint16_
         return -1; // 失败
     }
 }
+int16_t ToolRead_SensitiveData_B2C5(uint8_t *pData, uint16_t *pLength)
+{
+    uint8_t mpuRequest[3] = {0x22, 0xB2, 0xC5};
+    uint8_t mpuResponse[64];
+    uint16_t respLen = 0;
+    int16_t ret;
+
+    ret = CanPassthrough_RequestAndGetResponse(mpuRequest, 3, mpuResponse, &respLen);
+
+    if (ret != 0)
+    {
+        return -1;
+    }
+
+    if (respLen > 3 && mpuResponse[0] == 0x62 && mpuResponse[1] == 0xB2 && mpuResponse[2] == 0xC5)
+    {
+        *pLength = respLen - 3;
+        
+        if (*pLength > 0)
+        {
+            memcpy(pData, &mpuResponse[3], *pLength);
+        }
+        return 0;
+    }
+    
+    return -1;
+}
 void EolTestSyncWithCpuInit(void)
 {
     MpuHalFilter_t filter;
