@@ -992,17 +992,18 @@ void EcallHalInit(void)
 * @return        时间差
 * @attention     无
 *******************************************************************************/
-uint32_t osElapsedTimeGet( uint32_t new_time, uint32_t old_time )
+uint32_t osElapsedTimeGet(uint32_t new_time, uint32_t old_time)
 {
     uint32_t tempDa;
 
-    if ( new_time >= old_time )
+    if (new_time >= old_time)
     {
         tempDa = new_time - old_time;
     }
     else
     {
-        tempDa = 0xFFFFFFFF - new_time + new_time + 1;
+        /* wrap-around: (max - old) + new + 1 */
+        tempDa = (0xFFFFFFFFu - old_time) + new_time + 1u;
     }
 
     return tempDa;
@@ -1092,7 +1093,6 @@ void EcallHalSetMode(uint8_t wakeMode)
     {
         EcallHalSetSosLedRedState(0);   //change power on led off
         EcallHalSetSosLedGreenState(0); //change power on led off
-        EcallHalSetVehicleMute(1);
         GPIO_SetPinOutput(ECALL_PWR_EN_PORT, ECALL_PWR_EN_PIN);
         GPIO_SetPinOutput(CODEC_MIC_PWR_EN_PORT, CODEC_MIC_PWR_EN_PIN);
     }  

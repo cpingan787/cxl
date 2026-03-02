@@ -42,7 +42,7 @@
 #define CAN_TX_BUSY_RETRY_DELAY_MS          (1U)
 #define CAN_OTA_TX_MB_IDX                   (0U)
 #define CAN_TX_MB_IDLE_POLL_DELAY_MS        (1U)
-#define CAN_TX_MB_IDLE_TIMEOUT_MS           (50U) 
+#define CAN_TX_MB_IDLE_TIMEOUT_MS           (10U) 
 /****************************** Type Definitions ******************************/
 typedef enum
 {
@@ -411,6 +411,8 @@ static const EcuMonitorNode_t g_monitorEcuList[] = {
     // TCAN & DCAN
     {0x72D, TBOX_CAN_CHANNEL_2}, // TBOX
     {0x74F, TBOX_CAN_CHANNEL_2}, // GWM
+    {0x67F, TBOX_CAN_CHANNEL_2}, // ECU_BCAN_ICM}
+    {0x73C, TBOX_CAN_CHANNEL_2}, // DCU
     {0x7DF, TBOX_CAN_CHANNEL_2},
 };
 static EventGroupHandle_t g_canTxEvt = NULL;
@@ -498,6 +500,7 @@ void CAN0_Init(uint8_t canIndex, uint8_t canfdFlag, CanBaudType_e idBandrate, Ca
         CAN_Init(CAN_ID_0, &g_Can0Config);                   // 初始化CAN0模块
         CAN_SetRxMaskType(CAN_ID_0, CAN_RX_MASK_INDIVIDUAL); // 使用邮箱的独立屏蔽寄存器
         CAN_BusOffRecoveryScheme(CAN_ID_0, CAN_BUS_OFF_RECOV_AUTO);    //使能BUS_OFF自动恢复功能。
+        //CAN_FdTdcEnable(CAN_ID_0,9);
 
         /* 初始化邮箱说明：MB0用于发送网络管理报文，MB1用于发送网络诊断报文，MB2-4用于发送常规报文。MB5-31用于接收报文，
             共有27个邮箱可以用于接收。建议：网络管理数据使用一个邮箱接收，诊断数据使用一个邮箱接收，对重要的报文，
@@ -636,6 +639,7 @@ void CAN0_Init(uint8_t canIndex, uint8_t canfdFlag, CanBaudType_e idBandrate, Ca
         CAN_Init(CAN_ID_1, &g_Can1Config);                   // 初始化CAN模块
         CAN_SetRxMaskType(CAN_ID_1, CAN_RX_MASK_INDIVIDUAL); // 使用邮箱的独立屏蔽寄存器
         CAN_BusOffRecoveryScheme(CAN_ID_1, CAN_BUS_OFF_RECOV_MANUAL);    //使能BUS_OFF自动恢复功能。
+        //CAN_FdTdcEnable(CAN_ID_1,9);                                     //使能TDC
 
         /* 初始化邮箱说明：MB0用于发送网络管理报文，MB1用于发送网络诊断报文，MB2-4用于发送常规报文。MB5-31用于接收报文，
             共有27个邮箱可以用于接收。建议：网络管理数据使用一个邮箱接收，诊断数据使用一个邮箱接收，对重要的报文，

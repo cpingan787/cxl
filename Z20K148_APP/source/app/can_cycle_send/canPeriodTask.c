@@ -25,6 +25,7 @@
 #include "canParseSdk.h"
 #include "vehicleSignalApp.h"
 #include "eolTestSyncWithCpu.h"
+#include "timerHal.h"
 #if (SELFCHECK_RESULT_SEND == 1)
 #include "ecallHal.h"
 #endif
@@ -67,6 +68,19 @@ typedef struct
 {
     uint32_t timeCount; // Time counter
     uint8_t canData[8]; // CAN data
+
+    /* NOTE:
+     * The legacy implementation used timeCount += g_cycleTime in task context,
+     * which was sensitive to task scheduling jitter.
+     *
+     * To keep the original sending logic but make the timing source stable,
+     * we use TimerHalStartTime/TimerHalIsTimeout per message.
+     * - timerHandle: allocated once and reused
+     * - firstCycle: 1 means the next timeout is the first send after enable/wakeup
+     *              and uses APP_MESSAGE_START_TIME as initial delay.
+     */
+    int16_t timerHandle;
+    uint8_t firstCycle;
 } CanSendMsgBuffer_t;
 
 // CAN channel cycle send configuration structure
@@ -224,10 +238,10 @@ static int16_t CanPeriodMessage273(uint8_t *pCanData);
 static void CanPeriodSetCanConfigureWakeUpStartTime(uint32_t startTime_ms, const CanSendMsgConfigure_t *pMsgConfigure, CanSendMsgBuffer_t *pMsgBuffer, uint32_t elementSize);
 static void CanPeriodSetCanConfigureInitializeStartTime(uint32_t startTime_ms, const CanSendMsgConfigure_t *pMsgConfigure, CanSendMsgBuffer_t *pMsgBuffer, uint32_t elementSize);
 static void CanPeriodSendCycleProcess(int16_t canHandle, const CanSendMsgConfigure_t *pMsgConfigure, CanSendMsgBuffer_t *pMsgBuffer, uint32_t elementSize);
+
 /****************************** Global Variables ******************************/
 static uint8_t g_sleepFlag = 0;
 static uint8_t g_powerManageHandle = -1;
-static uint32_t g_cycleTime = 10;
 static TEL_11_A_T g_tbox11Message;
 static TEL_3 g_tbox3Message;
 static TEL_4 g_tbox4Message;
@@ -236,11 +250,16 @@ static TEL_18 g_tbox18Message;
 static uint8_t g_TEL_MsgCounter = 0U;
 static TEL_TimeVD_e g_timeVdValue = E_TEL_TIME_INVALID;
 static uint8_t g_u8SensitiveDataMode = 0;
+static uint8_t g_authStartYear = 0, g_authStartMon = 0, g_authStartDay = 0;
+static uint8_t g_authStartHour = 0, g_authStartMin = 0;
+
+static uint8_t g_authStopYear = 0, g_authStopMon = 0, g_authStopDay = 0;
+static uint8_t g_authStopHour = 0, g_authStopMin = 0;
 CAN_CYCLE_SEND_CONFIGURE_BEGIN(2)
 /****************************    Time,  Id,       FdFlag    Length  CanllBack******/
 CAN_CYCLE_SEND_CONFIGURE_CAN(480, 0x3C5, 1, 8, CanPeriodMessage3C5)         //GAC need 90%《= time <= 110%
-CAN_CYCLE_SEND_CONFIGURE_CAN(93,  0x35F, 1, 8, CanPeriodMessage35F)
-CAN_CYCLE_SEND_CONFIGURE_CAN(184, 0x35C, 1, 8, CanPeriodMessage35C)
+CAN_CYCLE_SEND_CONFIGURE_CAN(92,  0x35F, 1, 8, CanPeriodMessage35F)
+CAN_CYCLE_SEND_CONFIGURE_CAN(182, 0x35C, 1, 8, CanPeriodMessage35C)
 CAN_CYCLE_SEND_CONFIGURE_CAN(480, 0x39E, 1, 8, CanPeriodMessage39E)
 CAN_CYCLE_SEND_CONFIGURE_CAN(480, 0x273, 1, 8, CanPeriodMessage273)
 CAN_CYCLE_SEND_CONFIGURE_END(2)
@@ -297,8 +316,25 @@ int16_t CanPeriodSendEnable(uint8_t canChannel)
             g_canChannelBufferList[i].enableFlag = 0x01;
             for (j = 0; j < g_canCycleConfigureList[i].cycleConfigureListSize; j++)
             {
-                g_canCycleConfigureList[i].pMsgBuffer[j].timeCount = (g_canCycleConfigureList[i].pCycleConfigureList[j].cycleTime - APP_MESSAGE_START_TIME);
-                //g_canCycleConfigureList[i].pMsgBuffer[j].timeCount = APP_MESSAGE_START_TIME;
+                /* Keep legacy behavior: first send is delayed by APP_MESSAGE_START_TIME.
+                 * Previously achieved by presetting timeCount to (cycleTime - APP_MESSAGE_START_TIME).
+                 * Now achieved by starting the timer with APP_MESSAGE_START_TIME.
+                 */
+                /* Keep timeCount semantics for debug/trace compatibility */
+                if (g_canCycleConfigureList[i].pCycleConfigureList[j].cycleTime > APP_MESSAGE_START_TIME)
+                {
+                    g_canCycleConfigureList[i].pMsgBuffer[j].timeCount =
+                        (g_canCycleConfigureList[i].pCycleConfigureList[j].cycleTime - APP_MESSAGE_START_TIME);
+                }
+                else
+                {
+                    g_canCycleConfigureList[i].pMsgBuffer[j].timeCount = 0U;
+                }
+                g_canCycleConfigureList[i].pMsgBuffer[j].firstCycle = 1U;
+                if (g_canCycleConfigureList[i].pMsgBuffer[j].timerHandle >= 0)
+                {
+                    (void)TimerHalStartTime(g_canCycleConfigureList[i].pMsgBuffer[j].timerHandle, APP_MESSAGE_START_TIME);
+                }
             }
             ret = 0;
             break;
@@ -348,7 +384,12 @@ int16_t CanPeriodSendDisable(uint8_t canChannel)
             for (j = 0; j < g_canCycleConfigureList[i].cycleConfigureListSize; j++)
             {
                 //g_canCycleConfigureList[i].pMsgBuffer[j].timeCount = (g_canCycleConfigureList[i].pCycleConfigureList[j].cycleTime - 3);
-                g_canCycleConfigureList[i].pMsgBuffer[j].timeCount = 0;
+                g_canCycleConfigureList[i].pMsgBuffer[j].timeCount = 0U;
+                g_canCycleConfigureList[i].pMsgBuffer[j].firstCycle = 0U;
+                if (g_canCycleConfigureList[i].pMsgBuffer[j].timerHandle >= 0)
+                {
+                    (void)TimerHalStopTime(g_canCycleConfigureList[i].pMsgBuffer[j].timerHandle);
+                }
             }
             g_canChannelBufferList[i].enableFlag = 0x00;
             ret = 0;
@@ -374,8 +415,21 @@ int16_t CanPeriodSendEnableAll(void)
         g_canChannelBufferList[i].enableFlag = 0x01;
         for (j = 0; j < g_canCycleConfigureList[i].cycleConfigureListSize; j++)
         {
-            g_canCycleConfigureList[i].pMsgBuffer[j].timeCount = (g_canCycleConfigureList[i].pCycleConfigureList[j].cycleTime - APP_MESSAGE_START_TIME);
-            //g_canCycleConfigureList[i].pMsgBuffer[j].timeCount = APP_MESSAGE_START_TIME;
+            /* Keep timeCount semantics for debug/trace compatibility */
+            if (g_canCycleConfigureList[i].pCycleConfigureList[j].cycleTime > APP_MESSAGE_START_TIME)
+            {
+                g_canCycleConfigureList[i].pMsgBuffer[j].timeCount =
+                    (g_canCycleConfigureList[i].pCycleConfigureList[j].cycleTime - APP_MESSAGE_START_TIME);
+            }
+            else
+            {
+                g_canCycleConfigureList[i].pMsgBuffer[j].timeCount = 0U;
+            }
+            g_canCycleConfigureList[i].pMsgBuffer[j].firstCycle = 1U;
+            if (g_canCycleConfigureList[i].pMsgBuffer[j].timerHandle >= 0)
+            {
+                (void)TimerHalStartTime(g_canCycleConfigureList[i].pMsgBuffer[j].timerHandle, APP_MESSAGE_START_TIME);
+            }
         }
     }
     return 0;
@@ -397,7 +451,12 @@ int16_t CanPeriodSendDisableAll(void)
         for (j = 0; j < g_canCycleConfigureList[i].cycleConfigureListSize; j++)
         {
             //g_canCycleConfigureList[i].pMsgBuffer[j].timeCount = (g_canCycleConfigureList[i].pCycleConfigureList[j].cycleTime - 3);
-            g_canCycleConfigureList[i].pMsgBuffer[j].timeCount = 0;
+            g_canCycleConfigureList[i].pMsgBuffer[j].timeCount = 0U;
+            g_canCycleConfigureList[i].pMsgBuffer[j].firstCycle = 0U;
+            if (g_canCycleConfigureList[i].pMsgBuffer[j].timerHandle >= 0)
+            {
+                (void)TimerHalStopTime(g_canCycleConfigureList[i].pMsgBuffer[j].timerHandle);
+            }
         }
         g_canChannelBufferList[i].enableFlag = 0x00;
     }
@@ -528,9 +587,57 @@ static int16_t CanPeriodMessage3C5(uint8_t *pCanData)
             lon_signed = ((locationInfo.locationState & 0x40) == 0) ? (int32_t)lon_abs_1e6 : -(int32_t)lon_abs_1e6;
         }
 
+        uint8_t isDataMasked = 0;
+
         if (g_u8SensitiveDataMode == 1)
         {
+            isDataMasked = 1;//永久不授权
+        }
+        else if (g_u8SensitiveDataMode == 2)
+        {
+            //限时授权
+            const ftyCircleDataToMcu_t *ftyData = StateSyncGetFtyData();
+            
+            if (ftyData != NULL)
+            {
+                const TimeData_t *sourceTime = &ftyData->timeData;
+                
+                uint64_t current_time_val = ((uint64_t)(sourceTime->year % 100) * 100000000ULL) + 
+                                            ((uint64_t)sourceTime->month * 1000000ULL) + 
+                                            ((uint64_t)sourceTime->day * 10000ULL) + 
+                                            ((uint64_t)sourceTime->hour * 100ULL) + 
+                                            (uint64_t)sourceTime->minute;
+                
+                uint64_t start_time_val = ((uint64_t)g_authStartYear * 100000000ULL) + 
+                                          ((uint64_t)g_authStartMon * 1000000ULL) + 
+                                          ((uint64_t)g_authStartDay * 10000ULL) + 
+                                          ((uint64_t)g_authStartHour * 100ULL) + 
+                                          (uint64_t)g_authStartMin;
 
+                uint64_t stop_time_val = ((uint64_t)g_authStopYear * 100000000ULL) + 
+                                         ((uint64_t)g_authStopMon * 1000000ULL) + 
+                                         ((uint64_t)g_authStopDay * 10000ULL) + 
+                                         ((uint64_t)g_authStopHour * 100ULL) + 
+                                         (uint64_t)g_authStopMin;
+                //打印当前时间
+                // LogHalUpLoadLog("Current Time: %04u-%02u-%02u %02u:%02u, Start Time: %04u-%02u-%02u %02u:%02u, Stop Time: %04u-%02u-%02u %02u:%02u\r\n",
+                //             sourceTime->year, sourceTime->month, sourceTime->day, sourceTime->hour, sourceTime->minute,
+                //             g_authStartYear, g_authStartMon, g_authStartDay, g_authStartHour, g_authStartMin,
+                //             g_authStopYear, g_authStopMon, g_authStopDay, g_authStopHour, g_authStopMin);
+                
+                if (current_time_val < start_time_val || current_time_val > stop_time_val)
+                {
+                    isDataMasked = 1;
+                }
+            }
+            else
+            {
+                isDataMasked = 1; 
+            }
+        }
+
+        if (isDataMasked == 1)
+        {
             lat_signed = 95000000;   
             lon_signed = 185000000;  
             
@@ -799,10 +906,6 @@ static int16_t CanPeriodMessage39E(uint8_t *pCanData)
 static int16_t CanPeriodMessage273(uint8_t *pCanData)
 {
     uint16_t ret = 0U;
-    
-    uint8_t u8DidBuffer[32]; 
-    uint16_t u16DidLen = 0;
-
     uint8_t rawStartMon = 0;
     uint8_t rawStartDay = 0;
     uint8_t rawStopMon = 0;
@@ -815,27 +918,36 @@ static int16_t CanPeriodMessage273(uint8_t *pCanData)
     if (pCanData != NULL)
     {
         memset(&g_tbox18Message.data[0], 0x00, 8);
-
-        if (ToolRead_SensitiveData_B2C5(u8DidBuffer, &u16DidLen) == 0 && u16DidLen >= 16)
+        const ftyCircleDataToMcu_t *ftyData = StateSyncGetFtyData();
+        if (ftyData != NULL)
         {
-
-            rawStartYear = BCD_TO_DEC(u8DidBuffer[1]);
-
-            rawStartMon = BCD_TO_DEC(u8DidBuffer[2]) & 0x0F;
-
-            rawStartDay = BCD_TO_DEC(u8DidBuffer[3]) & 0x1F;
-
-            rawStopYear = BCD_TO_DEC(u8DidBuffer[7]);
-
-            rawStopMon = BCD_TO_DEC(u8DidBuffer[8]) & 0x0F;
-
-            rawStopDay = BCD_TO_DEC(u8DidBuffer[9]) & 0x1F;
-
-            rawMode = u8DidBuffer[12] & 0x03;
-
-            rawAppType = (uint32_t)((u8DidBuffer[13] << 16) | (u8DidBuffer[14] << 8) | u8DidBuffer[15]);
+            rawStartYear = BCD_TO_DEC(ftyData->sensitiveData[1]);
+            rawStartMon = BCD_TO_DEC(ftyData->sensitiveData[2]) & 0x0F;
+            rawStartDay = BCD_TO_DEC(ftyData->sensitiveData[3]) & 0x1F;
+			
+			uint8_t rawStartHour = BCD_TO_DEC(ftyData->sensitiveData[4]);
+            uint8_t rawStartMin  = BCD_TO_DEC(ftyData->sensitiveData[5]);
+            rawStopYear = BCD_TO_DEC(ftyData->sensitiveData[7]);
+            rawStopMon = BCD_TO_DEC(ftyData->sensitiveData[8]) & 0x0F;
+            rawStopDay = BCD_TO_DEC(ftyData->sensitiveData[9]) & 0x1F;
+			uint8_t rawStopHour = BCD_TO_DEC(ftyData->sensitiveData[10]);
+            uint8_t rawStopMin  = BCD_TO_DEC(ftyData->sensitiveData[11]);
+            rawMode = ftyData->sensitiveData[12] & 0x03;
+            rawAppType = (uint32_t)((ftyData->sensitiveData[13] << 16) | (ftyData->sensitiveData[14] << 8) | ftyData->sensitiveData[15]);
             rawAppType &= 0xFFFFFF;
             g_u8SensitiveDataMode = rawMode;
+			
+            g_authStartYear = rawStartYear;
+            g_authStartMon  = rawStartMon;
+            g_authStartDay  = rawStartDay;
+            g_authStartHour = rawStartHour;
+            g_authStartMin  = rawStartMin;
+
+            g_authStopYear = rawStopYear;
+            g_authStopMon  = rawStopMon;
+            g_authStopDay  = rawStopDay;
+            g_authStopHour = rawStopHour;
+            g_authStopMin  = rawStopMin;
         }
         else
         {
@@ -899,7 +1011,16 @@ static void CanPeriodSetCanConfigureWakeUpStartTime(uint32_t startTime_ms, const
         {
             continue;
         }
-        //pMsgBuffer[i].timeCount = pMsgConfigure[i].cycleTime - startTime_ms;
+
+        /* After wakeup, align periodic sending with a stable timer again.
+         * Keep behavior consistent with "enable": the first send is delayed by
+         * APP_MESSAGE_START_TIME (plus optional startTime_ms).
+         */
+        if (pMsgBuffer[i].timerHandle >= 0)
+        {
+            pMsgBuffer[i].firstCycle = 1U;
+            (void)TimerHalStartTime(pMsgBuffer[i].timerHandle, (startTime_ms + APP_MESSAGE_START_TIME));
+        }
     }
 }
 
@@ -924,7 +1045,17 @@ static void CanPeriodSetCanConfigureInitializeStartTime(uint32_t startTime_ms, c
         {
             continue;
         }
-        //pMsgBuffer[i].timeCount = pMsgConfigure[i].cycleTime - startTime_ms;
+
+        /* Allocate timers once at init stage. Don't start them here because
+         * enableFlag is 0 by default; timers will be started when enabling.
+         */
+        pMsgBuffer[i].timeCount = 0U;
+        pMsgBuffer[i].firstCycle = 0U;
+        pMsgBuffer[i].timerHandle = TimerHalOpen();
+        if (pMsgBuffer[i].timerHandle >= 0)
+        {
+            (void)TimerHalStopTime(pMsgBuffer[i].timerHandle);
+        }
     }
 }
 
@@ -949,10 +1080,20 @@ static void CanPeriodSendCycleProcess(int16_t canHandle, const CanSendMsgConfigu
         {
             continue;
         }
-        pMsgBuffer[i].timeCount += g_cycleTime;
-        if (pMsgBuffer[i].timeCount >= pMsgConfigure[i].cycleTime)
+
+        /* Timing decision is made by TimerHal, not by task scheduling.
+         * TimerHalIsTimeout() returns 0 when timeout reached.
+         */
+        if ((pMsgBuffer[i].timerHandle >= 0) && (TimerHalIsTimeout(pMsgBuffer[i].timerHandle) == 0))
         {
-            pMsgBuffer[i].timeCount = 0x00;
+            /* Reload timer for next cycle */
+            if (pMsgBuffer[i].firstCycle != 0U)
+            {
+                pMsgBuffer[i].firstCycle = 0U;
+            }
+
+            (void)TimerHalStartTime(pMsgBuffer[i].timerHandle, pMsgConfigure[i].cycleTime);
+
             if (pMsgConfigure[i].msgProcessFun != NULL)
             {
                 ret = pMsgConfigure[i].msgProcessFun(pMsgBuffer[i].canData);
@@ -1006,9 +1147,5 @@ static int16_t CanPeriodCycleInit(uint32_t cycleTime)
     }
     // Power management handle initialization
     g_powerManageHandle = PowerManageSdkOpenHandle(moduleName);
-    if (cycleTime != 0)
-    {
-        g_cycleTime = cycleTime;
-    }
     return 0;
 }

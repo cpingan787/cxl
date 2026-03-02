@@ -70,9 +70,9 @@ int16_t CanPassthrough_RequestAndGetResponse(const uint8_t *pUdsRequest, uint16_
                                              uint8_t *pUdsResponse, uint16_t *pRespLength)
 {
     int16_t ret;
-    uint16_t repeatCount = 0;
+    //uint16_t repeatCount = 0;
     uint8_t rxSuccess = 0;
-    uint16_t maxRepeatCount = 1;
+    //uint16_t maxRepeatCount = 1;
 
     if (pUdsRequest == NULL || pUdsResponse == NULL || pRespLength == NULL)
     {
@@ -103,9 +103,9 @@ int16_t CanPassthrough_RequestAndGetResponse(const uint8_t *pUdsRequest, uint16_
     g_dataPack.pDataBuffer = g_dataBuffer;
     g_dataPack.dataBufferSize = sizeof(g_dataBuffer);
 
-    do
-    {
-        ret = MpuHalReceive(g_mpuHandle, &g_dataPack, 100);
+    // do
+    // {
+        ret = MpuHalReceive(g_mpuHandle, &g_dataPack, 200);
 
         if (ret == 0)
         {
@@ -119,26 +119,26 @@ int16_t CanPassthrough_RequestAndGetResponse(const uint8_t *pUdsRequest, uint16_
                 memcpy(pUdsResponse, g_dataPack.pDataBuffer, g_dataPack.dataLength);
                 *pRespLength = g_dataPack.dataLength;
                 rxSuccess = 1;
-                break;
+                //break;
             }
             else
             {
                 // DO NOT
             }
         }
-        else
-        {
-            repeatCount++;
-            if (repeatCount >= maxRepeatCount)
-            {
-                break;
-            }
+    //     else
+    //     {
+    //         repeatCount++;
+    //         if (repeatCount >= maxRepeatCount)
+    //         {
+    //             break;
+    //         }
 
-            MpuHalTransmit(g_mpuHandle, &g_mpuDataPack, MPU_HAL_UART_MODE);
-            vTaskDelay(10);
-        }
+    //         MpuHalTransmit(g_mpuHandle, &g_mpuDataPack, MPU_HAL_UART_MODE);
+    //         vTaskDelay(10);
+    //     }
 
-    } while (1);
+    // } while (1);
 
     if (rxSuccess)
     {

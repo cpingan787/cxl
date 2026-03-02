@@ -2683,24 +2683,53 @@ static int16_t Service0x22Process(uint8_t *udsData, uint16_t udsLen, uint8_t fun
 
   if (IsDidPassthrough_22(first_did))
   {
+    if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+    {
+      return 0x72;
+    }
     uint8_t mpu_response_buffer[512];
     uint16_t mpu_response_length = 0;
-    int16_t ret;
-    // TBOX_PRINT("22 passthrough DID: %04X\n", first_did);
-    ret = CanPassthrough_RequestAndGetResponse(udsData, udsLen, mpu_response_buffer, &mpu_response_length);
-    if (ret == 0 && mpu_response_length > 0)
+    
+    uint8_t is78Sent = 0;
+    uint16_t elapsedMs = 0;
+
+    CanPassthrough_SendOnly(udsData, udsLen);
+
+    while (elapsedMs < 5000)
     {
-      DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, mpu_response_buffer, mpu_response_length, 0);
-      return 0;
+        if (CanPassthrough_ReceiveOnly(mpu_response_buffer, &mpu_response_length, 10) == 0)
+        {
+            if (mpu_response_length > 0)
+            {
+                DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, mpu_response_buffer, mpu_response_length, 0);
+                return 0; 
+            }
+        }
+
+        elapsedMs += 10;
+
+        if (elapsedMs >= 50 && is78Sent == 0)
+        {
+            uint8_t pendingResponse[3] = {0x7F, 0x22, 0x78};
+            DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, pendingResponse, 3, 0);
+            is78Sent = 1;
+        }
+    }
+
+    if (is78Sent == 1)
+    {
+        uint8_t negativeResponse[3] = {0x7F, 0x22, 0x31};
+        DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, negativeResponse, 3, 0);
+        return 0;
     }
     else
     {
-      negativeNum = 0x31;
+        negativeNum = 0x31; 
     }
   }
+
   else
   {
-
     uint16_t Rdid_len = 0;
     uint16_t Rdid = 0;
     uint16_t didNum = 0;
@@ -2933,6 +2962,7 @@ static int16_t Service0x2EProcess(uint8_t *udsData, uint16_t udsLen, uint8_t fun
   }
   else
   {
+
     uint8_t mpu_response_buffer[64]; 
     uint16_t mpu_response_length = 0;
     
@@ -2941,56 +2971,41 @@ static int16_t Service0x2EProcess(uint8_t *udsData, uint16_t udsLen, uint8_t fun
       return 0x72;
     }
 
-    if (did == 0xB261)
-    {
-        static int16_t s_p2TimerHandle = -1; 
-        
-        uint8_t pendingResponse[3] = {0x7F, 0x2E, 0x78};
-        DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, pendingResponse, 3, 0);
+    uint8_t is78Sent = 0;
+    uint16_t elapsedMs = 0;
+    
+    CanPassthrough_SendOnly(udsData, udsLen);
 
-        if (s_p2TimerHandle < 0) 
+    while (elapsedMs < 5000)
+    {
+        if (CanPassthrough_ReceiveOnly(mpu_response_buffer, &mpu_response_length, 10) == 0)
         {
-            s_p2TimerHandle = TimerHalOpen();
+            if (mpu_response_length > 0)
+            {
+                DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, mpu_response_buffer, mpu_response_length, 0);
+                return 0; 
+            }
         }
 
-        CanPassthrough_SendOnly(udsData, udsLen);
+        elapsedMs += 10;
 
-        TimerHalStartTime(s_p2TimerHandle, 5000);
-
-        while (1)
+        if (elapsedMs >= 50 && is78Sent == 0)
         {
-            if (CanPassthrough_ReceiveOnly(mpu_response_buffer, &mpu_response_length, 2) == 0)
-            {
-                if (mpu_response_length > 0)
-                {
-                    TimerHalStopTime(s_p2TimerHandle);
-                    DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, mpu_response_buffer, mpu_response_length, 0);
-                    return 0; 
-                }
-            }
-
-            if (TimerHalIsTimeout(s_p2TimerHandle) == 0)
-            {
-                TimerHalStopTime(s_p2TimerHandle);
-                negativeNum = 0x72;
-                break;
-            }
+            uint8_t pendingResponse[3] = {0x7F, 0x2E, 0x78};
+            DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, pendingResponse, 3, 0);
+            is78Sent = 1;
         }
     }
 
+    if (is78Sent == 1)
+    {
+        uint8_t negativeResponse[3] = {0x7F, 0x2E, 0x72};
+        DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, negativeResponse, 3, 0);
+        return 0;
+    }
     else
     {
-        int8_t passthroughRet;
-        passthroughRet = CanPassthrough_RequestAndGetResponse(udsData, udsLen, mpu_response_buffer, &mpu_response_length);
-
-        if (passthroughRet == 0 && mpu_response_length > 0)
-        {
-            DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, mpu_response_buffer, mpu_response_length, 0);
-        }
-        else
-        {
-            negativeNum = 0x72;
-        }
+        negativeNum = 0x72;
     }
   }
   

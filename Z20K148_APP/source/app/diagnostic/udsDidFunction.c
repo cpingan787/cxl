@@ -3306,7 +3306,7 @@ int16_t Service2EWriteApn1(uint8_t *pData, uint16_t dataLength)
   // {
   //   return -1;
   // }
-  int16_t storeResult = WorkFlashVehicleInforStore(E_PARAMETER_INFO_APN1, pData, dataLength);
+  int16_t storeResult = WorkFlashVehicleInforStore(E_PARAMETER_INFO_APN, pData, dataLength);
   if (storeResult < 0)
   {
     return 0x72;
@@ -5677,7 +5677,7 @@ int16_t Service2EWriteICCID(uint8_t *pData, uint16_t dataLength)
 int16_t Service22ReadApn1(uint8_t *pData, uint16_t *pLength)
 {
   uint32_t length;
-  WorkFlashVehicleInforRead(E_PARAMETER_INFO_APN1, pData, &length);
+  WorkFlashVehicleInforRead(E_PARAMETER_INFO_APN, pData, &length);
 
   // if (ret != 0 || length == 0)
   // {

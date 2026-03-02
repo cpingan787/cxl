@@ -43,6 +43,7 @@ typedef enum
     E_ParamId_PkiDomainName = 30,           // 0x1052_cxl
     E_ParamId_PublicTspDomain = 31,         // 公网TSP域名 0x1014_cxl
     E_ParamId_TboxPhoneNum = 32,            // TBOX电话号码 0x0129_cxl
+    E_ParamId_APN,                        // APN1接入点 0x011B_cxl
     // E_ParamId_TspTimeout = 24,              // TSP超时时间 0xB209_cxl
     // E_ParamId_OfficialServiceNum = 27,      // 官方服务热线 0xB20A_cxl
     // E_ParamId_EmergencyAsNum = 28,          // 紧急售后热线 0xB20B_cxl
@@ -246,6 +247,7 @@ TBOX_PARAMETER_SYNC_WRITE_MAP(E_ParamId_TspPort3, E_PARAMETER_INFO_TSP_PORT_3)  
 //TBOX_PARAMETER_SYNC_WRITE_MAP(E_ParamId_FunctionConfig, E_PARAMETER_INFO_FUNCTION_CONFIG)                     // 0xB2E6_cxl
 //TBOX_PARAMETER_SYNC_WRITE_MAP(E_ParamId_TransportMode, E_PARAMETER_INFO_TRANSPORT_MODE)                       // 0xB2B4_cxl
 //TBOX_PARAMETER_SYNC_WRITE_MAP(E_ParamId_ManufactoryMode, E_PARAMETER_INFO_MANUFACTORY_MODE)                   // 0x0110_cxl
+TBOX_PARAMETER_SYNC_WRITE_MAP(E_ParamId_APN, E_PARAMETER_INFO_APN)                                          // 0x011B_cxl
 
 TBOX_PARAMTER_SYNC_MAP_WRITE_END()
 
@@ -328,7 +330,7 @@ TBOX_PARAMETER_SYNC_READ_MAP(E_ParamId_TspPort3, E_PARAMETER_INFO_TSP_PORT_3)   
 //TBOX_PARAMETER_SYNC_READ_MAP(E_ParamId_FunctionConfig, E_PARAMETER_INFO_FUNCTION_CONFIG)                     // 0xB2E6_cxl
 //TBOX_PARAMETER_SYNC_READ_MAP(E_ParamId_TransportMode, E_PARAMETER_INFO_TRANSPORT_MODE)                       // 0xB2B4_cxl
 //TBOX_PARAMETER_SYNC_READ_MAP(E_ParamId_ManufactoryMode, E_PARAMETER_INFO_MANUFACTORY_MODE)                   // 0x0110_cxl
-
+TBOX_PARAMETER_SYNC_READ_MAP(E_ParamId_APN, E_PARAMETER_INFO_APN)  
 TBOX_PARAMTER_SYNC_MAP_READ_END()
 
 void McuMpuSyncTaskMain(void *pvParameters);

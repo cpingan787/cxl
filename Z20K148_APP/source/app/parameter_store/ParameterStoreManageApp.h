@@ -145,6 +145,7 @@ typedef enum
     E_PARAMETER_INFO_MANUFACTORY_MODE,           // 0x0110_cxl
     E_PARAMETER_INFO_4G_RESET_COUNT,             // 0xB260_cxl
     E_PARAMETER_INFO_TBOX_RESET_FLAG,            // Tbox Reset Flag
+    E_PARAMETER_INFO_APN,
     
 } FlashParaId_e;
 

@@ -399,6 +399,7 @@ typedef struct
   LteFunctionStatus_t lteFunctionStatus;
   EthLineFaultInfo_t ethLineFaultInfo;
   GpsPosition_t gpsPosition;
+  uint8_t sensitiveData[16];
 } ftyCircleDataToMcu_t;
 
 typedef struct

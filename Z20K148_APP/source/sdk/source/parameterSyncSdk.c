@@ -13,7 +13,7 @@
 #define PARAM_SYNC_SUNBCOMMAND_SET_REQ 0x03     // 参数设置请求sunbcommand
 #define PARAM_SYNC_SUNBCOMMAND_SET_RES 0x04     // 参数设置响应sunbcommand
 #define SYNC_PARAM_TO_MPU_REQUST_COUNT_MAX 0x03 // Mcu请求同步参数到MPU重复请求最大次数
-
+#define MAX_OFFLINE_SYNC_ROUNDS 10
 static int16_t g_mpuHandle = -1;                               // MPU通信句柄
 static pMcuParametReadFun_t g_mcuParameterReadCbFunc = NULL;   // 提供写MCU参数函数
 static pMcuParametWriteFun_t g_mcuParameterWriteCbFunc = NULL; // 读取MCU参数函数
@@ -32,6 +32,11 @@ static MpuHalDataPack_t g_syncParamToMpuPack;   // Mcu请求同步参数至Mpu�
 static uint8_t g_mpuDataBuffer[600] = {0};      // 用来存储MCU请求和响应数据的缓存buffer
 static MpuHalDataPack_t g_mpuDataPack;          // 用来存储要发送的请求和响应数据的缓存结构体
 
+static uint16_t g_syncOfflineDidReqTimeCount = 0; 
+static uint8_t  g_offlineSyncDone = 0;          // 完成标志
+static uint8_t  g_lastReqOfflineDidCount = 0;   // 锁 (1=等待回复)
+static uint8_t  g_syncOfflineSearchIndex = 0;   // 当前索引
+static uint16_t g_syncOfflineReqTimeout = 0;    // 超时计时
 typedef struct
 {
     uint16_t did;
@@ -39,7 +44,7 @@ typedef struct
 } DidMapping_t;
 
 static const DidMapping_t g_OfflineDidMap[] = {
-    {0x011B, E_ParamId_APN1},
+    {0x011B, E_ParamId_APN},
     {0x011C, E_ParamId_IP1_ADDR},
     {0x011D, E_ParamId_TSPPort1},
     {0x031C, E_ParamId_TspDomain1},
@@ -528,19 +533,23 @@ static uint8_t IsValidParamData(uint8_t paramId, uint8_t *data, uint16_t length)
 static uint8_t IsOfflineDataValid(uint8_t *data, uint16_t len)
 {
     if (len == 0) return 0;
+    
     uint8_t isAllFF = 1;
+    uint8_t isAllZero = 1;
     uint16_t k;
 
     for (k = 0; k < len; k++)
     {
         if (data[k] != 0xFF) isAllFF = 0;
+        if (data[k] != 0x00) isAllZero = 0;
         
-        if (isAllFF == 0)
+        if (isAllFF == 0 && isAllZero == 0)
         {
             return 1;
         }
     }
-    if (isAllFF)
+
+    if (isAllFF || isAllZero)
     {
         return 0; 
     }
@@ -610,7 +619,6 @@ static int16_t ParameterSyncResponseOfflineDidPackage(MpuHalDataPack_t *recvData
         return -1;
     }
 
-    // 1. 设置响应包头 AID=01, MID=03, SubCmd=08
     g_mpuDataPack.aid = 0x01;
     g_mpuDataPack.mid = 0x03;       
     g_mpuDataPack.subcommand = 0x08; 
@@ -628,7 +636,6 @@ static int16_t ParameterSyncResponseOfflineDidPackage(MpuHalDataPack_t *recvData
     uint8_t valid_count = 0;
     uint16_t readOffset = 1; // 从请求包的第2个字节开始读 DID
 
-    // 2. 遍历请求中的每一个 DID
     for (i = 0; i < reqNum; i++)
     {
         if (readOffset + 2 > recvDataPack->dataLength)
@@ -643,21 +650,17 @@ static int16_t ParameterSyncResponseOfflineDidPackage(MpuHalDataPack_t *recvData
 
         if (paramId == 0xFF) 
         {
-            continue; // 未知 DID，跳过
+            continue;
         }
 
-        // 预计算写入指针位置
-        // Header占用 4字节: DID(2) + Len(2)
-        // Data 从 g_mpuDataBuffer + total_length + 4 开始写
         uint8_t *pWriteDataPtr = g_mpuDataBuffer + total_length + 4;
         paramLenth = 0;
 
-        // 读取本地参数数据
         if (g_mcuParameterReadCbFunc != NULL)
         {
             g_mcuParameterReadCbFunc(paramId, pWriteDataPtr, &paramLenth);
         }
-        uint16_t stdLen = GetParamStandardLength(did); // 传入 DID
+        uint16_t stdLen = GetParamStandardLength(did);
 
         if (stdLen > 0) 
         {
@@ -705,6 +708,137 @@ static int16_t ParameterSyncResponseOfflineDidPackage(MpuHalDataPack_t *recvData
     g_mpuDataPack.dataLength = total_length;
 
     return 0;
+}
+
+static void ParameterSyncRequstMissingOfflineDidPackage(void)
+{
+    uint16_t paramLen = 0;
+    uint8_t tempBuffer[64];
+    uint8_t mapSize = sizeof(g_OfflineDidMap)/sizeof(DidMapping_t);
+
+    /* 1. 如果已完成，直接退出 */
+    if (g_offlineSyncDone) return;
+
+    /* 2. 锁检查 */
+    if (g_lastReqOfflineDidCount != 0) return;
+
+    if (g_syncOfflineSearchIndex >= mapSize)
+    {
+        // 索引跑到末尾，说明所有 DID 都处理过了（要么有效，要么回复了全0）
+        g_offlineSyncDone = 1; 
+        g_syncOfflineSearchIndex = 0;
+        return;
+    }
+
+    /* 4. 循环扫描 */
+    // g_syncOfflineSearchIndex 会在 continue 时自增
+    for (; g_syncOfflineSearchIndex < mapSize; g_syncOfflineSearchIndex++)
+    {
+        uint16_t did = g_OfflineDidMap[g_syncOfflineSearchIndex].did;
+        uint8_t paramId = g_OfflineDidMap[g_syncOfflineSearchIndex].paramId;
+
+        /* 读取本地 Flash */
+        paramLen = 0;
+        if (g_mcuParameterReadCbFunc != NULL)
+        {
+            g_mcuParameterReadCbFunc(paramId, tempBuffer, &paramLen);
+        }
+
+        /* 情况 A: 本地数据有效 -> 自动跳过 (Index++) */
+        if (IsOfflineDataValid(tempBuffer, paramLen))
+        {
+            continue; 
+        }
+
+        /* 情况 B: 本地数据无效 -> 发送请求 */
+        memset(g_mpuDataBuffer, 0, sizeof(g_mpuDataBuffer));
+
+        g_mpuDataBuffer[0] = 1; 
+        g_mpuDataBuffer[1] = (uint8_t)(did >> 8);
+        g_mpuDataBuffer[2] = (uint8_t)(did & 0xFF);
+
+        g_mpuDataPack.aid = 0x01;
+        g_mpuDataPack.mid = 0x03;
+        g_mpuDataPack.subcommand = 0x09; // 0x09
+        g_mpuDataPack.dataBufferSize = sizeof(g_mpuDataBuffer);
+        g_mpuDataPack.pDataBuffer = g_mpuDataBuffer;
+        g_mpuDataPack.dataLength = 3; 
+
+        if (MpuHalTransmit(g_mpuHandle, &g_mpuDataPack, MPU_HAL_UART_MODE) == 0)
+        {
+            g_lastReqOfflineDidCount = 1; // 上锁
+            g_syncOfflineReqTimeout = 0;  // 清零超时
+
+            return; 
+        }
+    }
+    
+    g_offlineSyncDone = 1;
+}
+
+
+/*************************************************
+  Function:       ParameterSyncProcessOfflineDidResponse
+  Description:    [SubCmd 0x10] 处理MPU回复
+                  逻辑：写前检查，本地若已有效则不写
+*************************************************/
+static void ParameterSyncProcessOfflineDidResponse(MpuHalDataPack_t *recvDataPack)
+{
+    if (recvDataPack == NULL || recvDataPack->dataLength < 1) return;
+
+    uint8_t respCount = recvDataPack->pDataBuffer[0];
+    uint16_t readOffset = 1;
+    
+    uint8_t localBuffer[64]; 
+    uint16_t localLen = 0;
+
+    for (uint8_t i = 0; i < respCount; i++)
+    {
+        if (readOffset + 4 > recvDataPack->dataLength) break;
+
+        uint16_t did = ((uint16_t)recvDataPack->pDataBuffer[readOffset] << 8) |
+                        recvDataPack->pDataBuffer[readOffset + 1];
+        readOffset += 2;
+
+        uint16_t dataLen = ((uint16_t)recvDataPack->pDataBuffer[readOffset] << 8) |
+                            recvDataPack->pDataBuffer[readOffset + 1];
+        readOffset += 2;
+
+        if (readOffset + dataLen > recvDataPack->dataLength) break;
+
+        uint8_t *pMpuData = &recvDataPack->pDataBuffer[readOffset];
+        uint8_t paramId = GetParamIdByDid(did);
+        //先读本地
+        if (paramId != 0xFF && g_mcuParameterWriteCbFunc != NULL)
+        {
+            localLen = 0;
+            if (g_mcuParameterReadCbFunc != NULL)
+            {
+                g_mcuParameterReadCbFunc(paramId, localBuffer, &localLen);
+            }
+
+            if (IsOfflineDataValid(localBuffer, localLen) == 1)
+            {
+                // Local is valid, do nothing.
+                // TBOX_PRINT("DID 0x%04X already valid, skip write.\r\n", did);
+            }
+            else
+            {
+                if (IsOfflineDataValid(pMpuData, dataLen) == 1)
+                {
+                    g_mcuParameterWriteCbFunc(paramId, pMpuData, dataLen);
+                }
+            }
+        }
+        readOffset += dataLen;
+    }
+
+
+    g_syncOfflineSearchIndex++; 
+
+    /* 解锁 */
+    g_lastReqOfflineDidCount = 0;
+    g_syncOfflineReqTimeout = 0;
 }
 /*************************************************
   Function:       ParameterSyncSdkCycleProcess
@@ -812,6 +946,12 @@ void ParameterSyncSdkCycleProcess(MpuHalDataPack_t *recvDataPack)
             }
             g_syncMpuParamResultFlag = 1;
             g_syncMpuParamTimeCount = 0;
+            g_syncOfflineDidReqTimeCount = 0;
+            g_offlineSyncDone = 0;         
+            g_lastReqOfflineDidCount = 0;   
+            g_syncOfflineSearchIndex = 0;  
+            //g_syncOfflineRoundCount = 0;    // 重置轮次
+            g_syncOfflineReqTimeout = 0;
         }
         else if ((recvDataPack->subcommand & 0x7F) == 1)
         {
@@ -858,11 +998,15 @@ void ParameterSyncSdkCycleProcess(MpuHalDataPack_t *recvDataPack)
         }
         else if ((recvDataPack->subcommand & 0x7F) == 7)
         {
-            if (g_syncMpuParamResultFlag == 1)
+            if (g_syncMpuParamResultFlag == 1 && g_offlineSyncDone == 1)
             {
                 ParameterSyncResponseOfflineDidPackage(recvDataPack);
                 MpuHalTransmit(g_mpuHandle, &g_mpuDataPack, MPU_HAL_UART_MODE);
-            }    
+            }   
+        }
+        else if ((recvDataPack->subcommand & 0x7F) == 0x10)
+        {
+            ParameterSyncProcessOfflineDidResponse(recvDataPack);
         }
         else
         {
@@ -877,6 +1021,43 @@ void ParameterSyncSdkCycleProcess(MpuHalDataPack_t *recvDataPack)
             MpuHalTransmit(g_mpuHandle, &g_mpuDataPack, MPU_HAL_UART_MODE);
             g_syncMpuParamRequstFlag = 1;
             g_syncMpuParamTimeCount = 0;
+        }
+    }
+   else 
+    {
+        /* 0x09 离线参数同步 */
+        if (g_offlineSyncDone == 0)
+        {
+            g_syncOfflineDidReqTimeCount++;
+
+            /* --- 超时检测 (重试机制) --- */
+            /* 如果 2秒 没回，认为超时，解锁重试 */
+            if (g_lastReqOfflineDidCount != 0)
+            {
+                g_syncOfflineReqTimeout++;
+                
+                if (g_cycleTime > 0 && g_syncOfflineReqTimeout >= (2000 / g_cycleTime))
+                {
+                    // 超时了！解锁，下次重试同一个
+                    g_lastReqOfflineDidCount = 0;
+                    g_syncOfflineReqTimeout = 0;
+                }
+            }
+            else
+            {
+                g_syncOfflineReqTimeout = 0;
+            }
+
+            /* --- 发送触发 --- */
+            if (g_lastReqOfflineDidCount == 0)
+            {
+                // ⭐ 修改这里：1000ms (1秒) 请求一次
+                if (g_cycleTime > 0 && g_syncOfflineDidReqTimeCount >= (1000 / g_cycleTime))
+                {
+                    g_syncOfflineDidReqTimeCount = 0;
+                    ParameterSyncRequstMissingOfflineDidPackage();
+                }
+            }
         }
     }
     if (g_syncParamToMpuRequstFlag == 1)

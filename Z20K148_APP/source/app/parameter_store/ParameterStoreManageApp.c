@@ -249,7 +249,7 @@ typedef struct
   uint8_t u8NationWorkPort[WORKFLASH_WORK_PORT_LEN];
   uint8_t u8GovernmentWorkAddr[WORKFLASH_WORK_ADDR_LEN];
   uint8_t u8GovernmentWorkPort[WORKFLASH_WORK_PORT_LEN];
-  
+  uint8_t u8Apn[WORKFLASH_APN1_LEN];
 } vehicleInforParamVariable_t;
 
 typedef struct
@@ -437,6 +437,7 @@ TBOX_PARAMETER_MAP(E_PARAMETER_INFO_TRANSPORT_MODE, u8TransportMode, 0)
 TBOX_PARAMETER_MAP(E_PARAMETER_INFO_MANUFACTORY_MODE, u8ManufactoryMode, 0)
 TBOX_PARAMETER_MAP(E_PARAMETER_INFO_4G_RESET_COUNT, u8_4gResetCount, 0)
 TBOX_PARAMETER_MAP(E_PARAMETER_INFO_TBOX_RESET_FLAG, u8TboxResetFlag, 0)            // Tbox Reset Flag
+TBOX_PARAMETER_MAP(E_PARAMETER_INFO_APN, u8Apn, 0)
 TBOX_PARAMTER_MAP_END()
 
 #if 0
