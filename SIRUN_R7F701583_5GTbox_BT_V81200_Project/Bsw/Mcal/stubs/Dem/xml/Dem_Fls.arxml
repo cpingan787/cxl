@@ -1,0 +1,501 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	Description File Generated With Following definition files:
+-->
+<AUTOSAR xmlns:AUTOSAR="http://autosar.org/schema/r4.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://autosar.org/schema/r4.0 AUTOSAR_4-2-2.xsd">
+<AR-PACKAGES>
+	<AR-PACKAGE>
+		<SHORT-NAME>AUTOSAR</SHORT-NAME>
+		<AR-PACKAGES>
+			<AR-PACKAGE>
+				<SHORT-NAME>EcucDefs</SHORT-NAME>
+					<ELEMENTS>
+											<ECUC-VALUE-COLLECTION>
+											<SHORT-NAME>ECUConfiguration</SHORT-NAME>
+											<ECUC-VALUES>
+												<ECUC-MODULE-CONFIGURATION-VALUES-REF-CONDITIONAL>
+													<ECUC-MODULE-CONFIGURATION-VALUES-REF DEST="ECUC-MODULE-CONFIGURATION-VALUES">/AUTOSAR/EcucDefs/Dem0</ECUC-MODULE-CONFIGURATION-VALUES-REF>
+												</ECUC-MODULE-CONFIGURATION-VALUES-REF-CONDITIONAL>
+											</ECUC-VALUES>
+											</ECUC-VALUE-COLLECTION>
+												<ECUC-MODULE-CONFIGURATION-VALUES>
+												<SHORT-NAME>Dem0</SHORT-NAME>
+												<DEFINITION-REF DEST="ECUC-MODULE-DEF">/AUTOSAR/EcucDefs/Dem</DEFINITION-REF>
+												<IMPLEMENTATION-CONFIG-VARIANT>VARIANT-PRE-COMPILE</IMPLEMENTATION-CONFIG-VARIANT>
+													<CONTAINERS>
+														<ECUC-CONTAINER-VALUE UUID="ECUS:34fdb932-1368-4f42-8ab8-29bb036cef86">
+														<SHORT-NAME>DemConfigSet0</SHORT-NAME>
+														<DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/AUTOSAR/EcucDefs/Dem/DemConfigSet</DEFINITION-REF>
+															<SUB-CONTAINERS>
+																<ECUC-CONTAINER-VALUE UUID="ECUS:e05e9b70-1745-4a0c-afb6-991583d5c9ae">
+																<SHORT-NAME>DemEventParameter0</SHORT-NAME>
+																<DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/AUTOSAR/EcucDefs/Dem/DemConfigSet/DemEventParameter</DEFINITION-REF>
+																	<PARAMETER-VALUES>
+																		<ECUC-NUMERICAL-PARAM-VALUE>
+																		<DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/AUTOSAR/EcucDefs/Dem/DemConfigSet/DemEventParameter/DemEventId</DEFINITION-REF>
+																		<VALUE>1</VALUE>
+																		</ECUC-NUMERICAL-PARAM-VALUE>
+																		<ECUC-TEXTUAL-PARAM-VALUE>
+																		<DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/AUTOSAR/EcucDefs/Dem/DemConfigSet/DemEventParameter/DemEventKind</DEFINITION-REF>
+																		<VALUE></VALUE>
+																		</ECUC-TEXTUAL-PARAM-VALUE>
+																		<ECUC-NUMERICAL-PARAM-VALUE>
+																		<DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/AUTOSAR/EcucDefs/Dem/DemConfigSet/DemEventParameter/DemMaxNumberFreezeFrameRecords</DEFINITION-REF>
+																		<VALUE></VALUE>
+																		</ECUC-NUMERICAL-PARAM-VALUE>
+																	</PARAMETER-VALUES>
+																	<REFERENCE-VALUES>
+																		<ECUC-REFERENCE-VALUE>
+																		<DEFINITION-REF DEST="ECUC-REFERENCE-DEF">/AUTOSAR/EcucDefs/Dem/DemConfigSet/DemEventParameter/DemDTCClassRef</DEFINITION-REF>
+																		<VALUE-REF DEST="ECUC-CONTAINER-VALUE"></VALUE-REF>
+																		</ECUC-REFERENCE-VALUE>
+																		<ECUC-REFERENCE-VALUE>
+																		<DEFINITION-REF DEST="ECUC-REFERENCE-DEF">/AUTOSAR/EcucDefs/Dem/DemConfigSet/DemEventParameter/DemExtendedDataClassRef</DEFINITION-REF>
+																		<VALUE-REF DEST="ECUC-CONTAINER-VALUE"></VALUE-REF>
+																		</ECUC-REFERENCE-VALUE>
+																		<ECUC-REFERENCE-VALUE>
+																		<DEFINITION-REF DEST="ECUC-REFERENCE-DEF">/AUTOSAR/EcucDefs/Dem/DemConfigSet/DemEventParameter/DemFreezeFrameClassRef</DEFINITION-REF>
+																		<VALUE-REF DEST="ECUC-CONTAINER-VALUE"></VALUE-REF>
+																		</ECUC-REFERENCE-VALUE>
+																		<ECUC-REFERENCE-VALUE>
+																		<DEFINITION-REF DEST="ECUC-REFERENCE-DEF">/AUTOSAR/EcucDefs/Dem/DemConfigSet/DemEventParameter/DemFreezeFrameRecNumClassRef</DEFINITION-REF>
+																		<VALUE-REF DEST="ECUC-CONTAINER-VALUE"></VALUE-REF>
+																		</ECUC-REFERENCE-VALUE>
+																	</REFERENCE-VALUES>
+																	<SUB-CONTAINERS>
+																	</SUB-CONTAINERS>
+																</ECUC-CONTAINER-VALUE>
+																<ECUC-CONTAINER-VALUE UUID="ECUS:183a270c-e67b-47fc-aaa2-ee1899236159">
+																<SHORT-NAME>DemEventParameter1</SHORT-NAME>
+																<DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/AUTOSAR/EcucDefs/Dem/DemConfigSet/DemEventParameter</DEFINITION-REF>
+																	<PARAMETER-VALUES>
+																		<ECUC-NUMERICAL-PARAM-VALUE>
+																		<DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/AUTOSAR/EcucDefs/Dem/DemConfigSet/DemEventParameter/DemEventId</DEFINITION-REF>
+																		<VALUE>2</VALUE>
+																		</ECUC-NUMERICAL-PARAM-VALUE>
+																		<ECUC-TEXTUAL-PARAM-VALUE>
+																		<DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/AUTOSAR/EcucDefs/Dem/DemConfigSet/DemEventParameter/DemEventKind</DEFINITION-REF>
+																		<VALUE></VALUE>
+																		</ECUC-TEXTUAL-PARAM-VALUE>
+																		<ECUC-NUMERICAL-PARAM-VALUE>
+																		<DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/AUTOSAR/EcucDefs/Dem/DemConfigSet/DemEventParameter/DemMaxNumberFreezeFrameRecords</DEFINITION-REF>
+																		<VALUE></VALUE>
+																		</ECUC-NUMERICAL-PARAM-VALUE>
+																	</PARAMETER-VALUES>
+																	<REFERENCE-VALUES>
+																		<ECUC-REFERENCE-VALUE>
+																		<DEFINITION-REF DEST="ECUC-REFERENCE-DEF">/AUTOSAR/EcucDefs/Dem/DemConfigSet/DemEventParameter/DemDTCClassRef</DEFINITION-REF>
+																		<VALUE-REF DEST="ECUC-CONTAINER-VALUE"></VALUE-REF>
+																		</ECUC-REFERENCE-VALUE>
+																		<ECUC-REFERENCE-VALUE>
+																		<DEFINITION-REF DEST="ECUC-REFERENCE-DEF">/AUTOSAR/EcucDefs/Dem/DemConfigSet/DemEventParameter/DemExtendedDataClassRef</DEFINITION-REF>
+																		<VALUE-REF DEST="ECUC-CONTAINER-VALUE"></VALUE-REF>
+																		</ECUC-REFERENCE-VALUE>
+																		<ECUC-REFERENCE-VALUE>
+																		<DEFINITION-REF DEST="ECUC-REFERENCE-DEF">/AUTOSAR/EcucDefs/Dem/DemConfigSet/DemEventParameter/DemFreezeFrameClassRef</DEFINITION-REF>
+																		<VALUE-REF DEST="ECUC-CONTAINER-VALUE"></VALUE-REF>
+																		</ECUC-REFERENCE-VALUE>
+																		<ECUC-REFERENCE-VALUE>
+																		<DEFINITION-REF DEST="ECUC-REFERENCE-DEF">/AUTOSAR/EcucDefs/Dem/DemConfigSet/DemEventParameter/DemFreezeFrameRecNumClassRef</DEFINITION-REF>
+																		<VALUE-REF DEST="ECUC-CONTAINER-VALUE"></VALUE-REF>
+																		</ECUC-REFERENCE-VALUE>
+																	</REFERENCE-VALUES>
+																	<SUB-CONTAINERS>
+																	</SUB-CONTAINERS>
+																</ECUC-CONTAINER-VALUE>
+																<ECUC-CONTAINER-VALUE UUID="ECUS:71c15787-0c46-450f-85ac-15ac82c14903">
+																<SHORT-NAME>DemEventParameter2</SHORT-NAME>
+																<DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/AUTOSAR/EcucDefs/Dem/DemConfigSet/DemEventParameter</DEFINITION-REF>
+																	<PARAMETER-VALUES>
+																		<ECUC-NUMERICAL-PARAM-VALUE>
+																		<DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/AUTOSAR/EcucDefs/Dem/DemConfigSet/DemEventParameter/DemEventId</DEFINITION-REF>
+																		<VALUE>3</VALUE>
+																		</ECUC-NUMERICAL-PARAM-VALUE>
+																		<ECUC-TEXTUAL-PARAM-VALUE>
+																		<DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/AUTOSAR/EcucDefs/Dem/DemConfigSet/DemEventParameter/DemEventKind</DEFINITION-REF>
+																		<VALUE></VALUE>
+																		</ECUC-TEXTUAL-PARAM-VALUE>
+																		<ECUC-NUMERICAL-PARAM-VALUE>
+																		<DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/AUTOSAR/EcucDefs/Dem/DemConfigSet/DemEventParameter/DemMaxNumberFreezeFrameRecords</DEFINITION-REF>
+																		<VALUE></VALUE>
+																		</ECUC-NUMERICAL-PARAM-VALUE>
+																	</PARAMETER-VALUES>
+																	<REFERENCE-VALUES>
+																		<ECUC-REFERENCE-VALUE>
+																		<DEFINITION-REF DEST="ECUC-REFERENCE-DEF">/AUTOSAR/EcucDefs/Dem/DemConfigSet/DemEventParameter/DemDTCClassRef</DEFINITION-REF>
+																		<VALUE-REF DEST="ECUC-CONTAINER-VALUE"></VALUE-REF>
+																		</ECUC-REFERENCE-VALUE>
+																		<ECUC-REFERENCE-VALUE>
+																		<DEFINITION-REF DEST="ECUC-REFERENCE-DEF">/AUTOSAR/EcucDefs/Dem/DemConfigSet/DemEventParameter/DemExtendedDataClassRef</DEFINITION-REF>
+																		<VALUE-REF DEST="ECUC-CONTAINER-VALUE"></VALUE-REF>
+																		</ECUC-REFERENCE-VALUE>
+																		<ECUC-REFERENCE-VALUE>
+																		<DEFINITION-REF DEST="ECUC-REFERENCE-DEF">/AUTOSAR/EcucDefs/Dem/DemConfigSet/DemEventParameter/DemFreezeFrameClassRef</DEFINITION-REF>
+																		<VALUE-REF DEST="ECUC-CONTAINER-VALUE"></VALUE-REF>
+																		</ECUC-REFERENCE-VALUE>
+																		<ECUC-REFERENCE-VALUE>
+																		<DEFINITION-REF DEST="ECUC-REFERENCE-DEF">/AUTOSAR/EcucDefs/Dem/DemConfigSet/DemEventParameter/DemFreezeFrameRecNumClassRef</DEFINITION-REF>
+																		<VALUE-REF DEST="ECUC-CONTAINER-VALUE"></VALUE-REF>
+																		</ECUC-REFERENCE-VALUE>
+																	</REFERENCE-VALUES>
+																	<SUB-CONTAINERS>
+																	</SUB-CONTAINERS>
+																</ECUC-CONTAINER-VALUE>
+																<ECUC-CONTAINER-VALUE UUID="ECUS:813d0a38-aca1-4cba-9d54-26b166055289">
+																<SHORT-NAME>DemEventParameter4</SHORT-NAME>
+																<DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/AUTOSAR/EcucDefs/Dem/DemConfigSet/DemEventParameter</DEFINITION-REF>
+																	<PARAMETER-VALUES>
+																		<ECUC-NUMERICAL-PARAM-VALUE>
+																		<DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/AUTOSAR/EcucDefs/Dem/DemConfigSet/DemEventParameter/DemEventId</DEFINITION-REF>
+																		<VALUE>5</VALUE>
+																		</ECUC-NUMERICAL-PARAM-VALUE>
+																		<ECUC-TEXTUAL-PARAM-VALUE>
+																		<DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/AUTOSAR/EcucDefs/Dem/DemConfigSet/DemEventParameter/DemEventKind</DEFINITION-REF>
+																		<VALUE></VALUE>
+																		</ECUC-TEXTUAL-PARAM-VALUE>
+																		<ECUC-NUMERICAL-PARAM-VALUE>
+																		<DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/AUTOSAR/EcucDefs/Dem/DemConfigSet/DemEventParameter/DemMaxNumberFreezeFrameRecords</DEFINITION-REF>
+																		<VALUE></VALUE>
+																		</ECUC-NUMERICAL-PARAM-VALUE>
+																	</PARAMETER-VALUES>
+																	<REFERENCE-VALUES>
+																		<ECUC-REFERENCE-VALUE>
+																		<DEFINITION-REF DEST="ECUC-REFERENCE-DEF">/AUTOSAR/EcucDefs/Dem/DemConfigSet/DemEventParameter/DemDTCClassRef</DEFINITION-REF>
+																		<VALUE-REF DEST="ECUC-CONTAINER-VALUE"></VALUE-REF>
+																		</ECUC-REFERENCE-VALUE>
+																		<ECUC-REFERENCE-VALUE>
+																		<DEFINITION-REF DEST="ECUC-REFERENCE-DEF">/AUTOSAR/EcucDefs/Dem/DemConfigSet/DemEventParameter/DemExtendedDataClassRef</DEFINITION-REF>
+																		<VALUE-REF DEST="ECUC-CONTAINER-VALUE"></VALUE-REF>
+																		</ECUC-REFERENCE-VALUE>
+																		<ECUC-REFERENCE-VALUE>
+																		<DEFINITION-REF DEST="ECUC-REFERENCE-DEF">/AUTOSAR/EcucDefs/Dem/DemConfigSet/DemEventParameter/DemFreezeFrameClassRef</DEFINITION-REF>
+																		<VALUE-REF DEST="ECUC-CONTAINER-VALUE"></VALUE-REF>
+																		</ECUC-REFERENCE-VALUE>
+																		<ECUC-REFERENCE-VALUE>
+																		<DEFINITION-REF DEST="ECUC-REFERENCE-DEF">/AUTOSAR/EcucDefs/Dem/DemConfigSet/DemEventParameter/DemFreezeFrameRecNumClassRef</DEFINITION-REF>
+																		<VALUE-REF DEST="ECUC-CONTAINER-VALUE"></VALUE-REF>
+																		</ECUC-REFERENCE-VALUE>
+																	</REFERENCE-VALUES>
+																	<SUB-CONTAINERS>
+																	</SUB-CONTAINERS>
+																</ECUC-CONTAINER-VALUE>
+																<ECUC-CONTAINER-VALUE UUID="ECUS:86afbe2a-84c5-4610-a73a-ffe7700ad3a3">
+																<SHORT-NAME>DemEventParameter3</SHORT-NAME>
+																<DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/AUTOSAR/EcucDefs/Dem/DemConfigSet/DemEventParameter</DEFINITION-REF>
+																	<PARAMETER-VALUES>
+																		<ECUC-NUMERICAL-PARAM-VALUE>
+																		<DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/AUTOSAR/EcucDefs/Dem/DemConfigSet/DemEventParameter/DemEventId</DEFINITION-REF>
+																		<VALUE>4</VALUE>
+																		</ECUC-NUMERICAL-PARAM-VALUE>
+																		<ECUC-TEXTUAL-PARAM-VALUE>
+																		<DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/AUTOSAR/EcucDefs/Dem/DemConfigSet/DemEventParameter/DemEventKind</DEFINITION-REF>
+																		<VALUE></VALUE>
+																		</ECUC-TEXTUAL-PARAM-VALUE>
+																		<ECUC-NUMERICAL-PARAM-VALUE>
+																		<DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/AUTOSAR/EcucDefs/Dem/DemConfigSet/DemEventParameter/DemMaxNumberFreezeFrameRecords</DEFINITION-REF>
+																		<VALUE></VALUE>
+																		</ECUC-NUMERICAL-PARAM-VALUE>
+																	</PARAMETER-VALUES>
+																	<REFERENCE-VALUES>
+																		<ECUC-REFERENCE-VALUE>
+																		<DEFINITION-REF DEST="ECUC-REFERENCE-DEF">/AUTOSAR/EcucDefs/Dem/DemConfigSet/DemEventParameter/DemDTCClassRef</DEFINITION-REF>
+																		<VALUE-REF DEST="ECUC-CONTAINER-VALUE"></VALUE-REF>
+																		</ECUC-REFERENCE-VALUE>
+																		<ECUC-REFERENCE-VALUE>
+																		<DEFINITION-REF DEST="ECUC-REFERENCE-DEF">/AUTOSAR/EcucDefs/Dem/DemConfigSet/DemEventParameter/DemExtendedDataClassRef</DEFINITION-REF>
+																		<VALUE-REF DEST="ECUC-CONTAINER-VALUE"></VALUE-REF>
+																		</ECUC-REFERENCE-VALUE>
+																		<ECUC-REFERENCE-VALUE>
+																		<DEFINITION-REF DEST="ECUC-REFERENCE-DEF">/AUTOSAR/EcucDefs/Dem/DemConfigSet/DemEventParameter/DemFreezeFrameClassRef</DEFINITION-REF>
+																		<VALUE-REF DEST="ECUC-CONTAINER-VALUE"></VALUE-REF>
+																		</ECUC-REFERENCE-VALUE>
+																		<ECUC-REFERENCE-VALUE>
+																		<DEFINITION-REF DEST="ECUC-REFERENCE-DEF">/AUTOSAR/EcucDefs/Dem/DemConfigSet/DemEventParameter/DemFreezeFrameRecNumClassRef</DEFINITION-REF>
+																		<VALUE-REF DEST="ECUC-CONTAINER-VALUE"></VALUE-REF>
+																		</ECUC-REFERENCE-VALUE>
+																	</REFERENCE-VALUES>
+																	<SUB-CONTAINERS>
+																	</SUB-CONTAINERS>
+																</ECUC-CONTAINER-VALUE>
+																<ECUC-CONTAINER-VALUE UUID="ECUS:98123f89-dcbf-4525-8902-1d794ab5b5c7">
+																<SHORT-NAME>DemEventParameter5</SHORT-NAME>
+																<DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/AUTOSAR/EcucDefs/Dem/DemConfigSet/DemEventParameter</DEFINITION-REF>
+																	<PARAMETER-VALUES>
+																		<ECUC-NUMERICAL-PARAM-VALUE>
+																		<DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/AUTOSAR/EcucDefs/Dem/DemConfigSet/DemEventParameter/DemEventId</DEFINITION-REF>
+																		<VALUE>6</VALUE>
+																		</ECUC-NUMERICAL-PARAM-VALUE>
+																		<ECUC-TEXTUAL-PARAM-VALUE>
+																		<DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/AUTOSAR/EcucDefs/Dem/DemConfigSet/DemEventParameter/DemEventKind</DEFINITION-REF>
+																		<VALUE></VALUE>
+																		</ECUC-TEXTUAL-PARAM-VALUE>
+																		<ECUC-NUMERICAL-PARAM-VALUE>
+																		<DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/AUTOSAR/EcucDefs/Dem/DemConfigSet/DemEventParameter/DemMaxNumberFreezeFrameRecords</DEFINITION-REF>
+																		<VALUE></VALUE>
+																		</ECUC-NUMERICAL-PARAM-VALUE>
+																	</PARAMETER-VALUES>
+																	<REFERENCE-VALUES>
+																		<ECUC-REFERENCE-VALUE>
+																		<DEFINITION-REF DEST="ECUC-REFERENCE-DEF">/AUTOSAR/EcucDefs/Dem/DemConfigSet/DemEventParameter/DemDTCClassRef</DEFINITION-REF>
+																		<VALUE-REF DEST="ECUC-CONTAINER-VALUE"></VALUE-REF>
+																		</ECUC-REFERENCE-VALUE>
+																		<ECUC-REFERENCE-VALUE>
+																		<DEFINITION-REF DEST="ECUC-REFERENCE-DEF">/AUTOSAR/EcucDefs/Dem/DemConfigSet/DemEventParameter/DemExtendedDataClassRef</DEFINITION-REF>
+																		<VALUE-REF DEST="ECUC-CONTAINER-VALUE"></VALUE-REF>
+																		</ECUC-REFERENCE-VALUE>
+																		<ECUC-REFERENCE-VALUE>
+																		<DEFINITION-REF DEST="ECUC-REFERENCE-DEF">/AUTOSAR/EcucDefs/Dem/DemConfigSet/DemEventParameter/DemFreezeFrameClassRef</DEFINITION-REF>
+																		<VALUE-REF DEST="ECUC-CONTAINER-VALUE"></VALUE-REF>
+																		</ECUC-REFERENCE-VALUE>
+																		<ECUC-REFERENCE-VALUE>
+																		<DEFINITION-REF DEST="ECUC-REFERENCE-DEF">/AUTOSAR/EcucDefs/Dem/DemConfigSet/DemEventParameter/DemFreezeFrameRecNumClassRef</DEFINITION-REF>
+																		<VALUE-REF DEST="ECUC-CONTAINER-VALUE"></VALUE-REF>
+																		</ECUC-REFERENCE-VALUE>
+																	</REFERENCE-VALUES>
+																	<SUB-CONTAINERS>
+																	</SUB-CONTAINERS>
+																</ECUC-CONTAINER-VALUE>
+																<ECUC-CONTAINER-VALUE UUID="ECUS:8213acf3-530a-4d3b-8e07-a1e13698f97b">
+																<SHORT-NAME>DemEventParameter6</SHORT-NAME>
+																<DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/AUTOSAR/EcucDefs/Dem/DemConfigSet/DemEventParameter</DEFINITION-REF>
+																	<PARAMETER-VALUES>
+																		<ECUC-NUMERICAL-PARAM-VALUE>
+																		<DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/AUTOSAR/EcucDefs/Dem/DemConfigSet/DemEventParameter/DemEventId</DEFINITION-REF>
+																		<VALUE>7</VALUE>
+																		</ECUC-NUMERICAL-PARAM-VALUE>
+																		<ECUC-TEXTUAL-PARAM-VALUE>
+																		<DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/AUTOSAR/EcucDefs/Dem/DemConfigSet/DemEventParameter/DemEventKind</DEFINITION-REF>
+																		<VALUE></VALUE>
+																		</ECUC-TEXTUAL-PARAM-VALUE>
+																		<ECUC-NUMERICAL-PARAM-VALUE>
+																		<DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/AUTOSAR/EcucDefs/Dem/DemConfigSet/DemEventParameter/DemMaxNumberFreezeFrameRecords</DEFINITION-REF>
+																		<VALUE></VALUE>
+																		</ECUC-NUMERICAL-PARAM-VALUE>
+																	</PARAMETER-VALUES>
+																	<REFERENCE-VALUES>
+																		<ECUC-REFERENCE-VALUE>
+																		<DEFINITION-REF DEST="ECUC-REFERENCE-DEF">/AUTOSAR/EcucDefs/Dem/DemConfigSet/DemEventParameter/DemDTCClassRef</DEFINITION-REF>
+																		<VALUE-REF DEST="ECUC-CONTAINER-VALUE"></VALUE-REF>
+																		</ECUC-REFERENCE-VALUE>
+																		<ECUC-REFERENCE-VALUE>
+																		<DEFINITION-REF DEST="ECUC-REFERENCE-DEF">/AUTOSAR/EcucDefs/Dem/DemConfigSet/DemEventParameter/DemExtendedDataClassRef</DEFINITION-REF>
+																		<VALUE-REF DEST="ECUC-CONTAINER-VALUE"></VALUE-REF>
+																		</ECUC-REFERENCE-VALUE>
+																		<ECUC-REFERENCE-VALUE>
+																		<DEFINITION-REF DEST="ECUC-REFERENCE-DEF">/AUTOSAR/EcucDefs/Dem/DemConfigSet/DemEventParameter/DemFreezeFrameClassRef</DEFINITION-REF>
+																		<VALUE-REF DEST="ECUC-CONTAINER-VALUE"></VALUE-REF>
+																		</ECUC-REFERENCE-VALUE>
+																		<ECUC-REFERENCE-VALUE>
+																		<DEFINITION-REF DEST="ECUC-REFERENCE-DEF">/AUTOSAR/EcucDefs/Dem/DemConfigSet/DemEventParameter/DemFreezeFrameRecNumClassRef</DEFINITION-REF>
+																		<VALUE-REF DEST="ECUC-CONTAINER-VALUE"></VALUE-REF>
+																		</ECUC-REFERENCE-VALUE>
+																	</REFERENCE-VALUES>
+																	<SUB-CONTAINERS>
+																	</SUB-CONTAINERS>
+																</ECUC-CONTAINER-VALUE>
+																<ECUC-CONTAINER-VALUE UUID="ECUS:e1b4860c-971c-4b2c-82c9-005b69399a1f">
+																<SHORT-NAME>DemEventParameter7</SHORT-NAME>
+																<DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/AUTOSAR/EcucDefs/Dem/DemConfigSet/DemEventParameter</DEFINITION-REF>
+																	<PARAMETER-VALUES>
+																		<ECUC-NUMERICAL-PARAM-VALUE>
+																		<DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/AUTOSAR/EcucDefs/Dem/DemConfigSet/DemEventParameter/DemEventId</DEFINITION-REF>
+																		<VALUE>8</VALUE>
+																		</ECUC-NUMERICAL-PARAM-VALUE>
+																		<ECUC-TEXTUAL-PARAM-VALUE>
+																		<DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/AUTOSAR/EcucDefs/Dem/DemConfigSet/DemEventParameter/DemEventKind</DEFINITION-REF>
+																		<VALUE></VALUE>
+																		</ECUC-TEXTUAL-PARAM-VALUE>
+																		<ECUC-NUMERICAL-PARAM-VALUE>
+																		<DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/AUTOSAR/EcucDefs/Dem/DemConfigSet/DemEventParameter/DemMaxNumberFreezeFrameRecords</DEFINITION-REF>
+																		<VALUE></VALUE>
+																		</ECUC-NUMERICAL-PARAM-VALUE>
+																	</PARAMETER-VALUES>
+																	<REFERENCE-VALUES>
+																		<ECUC-REFERENCE-VALUE>
+																		<DEFINITION-REF DEST="ECUC-REFERENCE-DEF">/AUTOSAR/EcucDefs/Dem/DemConfigSet/DemEventParameter/DemDTCClassRef</DEFINITION-REF>
+																		<VALUE-REF DEST="ECUC-CONTAINER-VALUE"></VALUE-REF>
+																		</ECUC-REFERENCE-VALUE>
+																		<ECUC-REFERENCE-VALUE>
+																		<DEFINITION-REF DEST="ECUC-REFERENCE-DEF">/AUTOSAR/EcucDefs/Dem/DemConfigSet/DemEventParameter/DemExtendedDataClassRef</DEFINITION-REF>
+																		<VALUE-REF DEST="ECUC-CONTAINER-VALUE"></VALUE-REF>
+																		</ECUC-REFERENCE-VALUE>
+																		<ECUC-REFERENCE-VALUE>
+																		<DEFINITION-REF DEST="ECUC-REFERENCE-DEF">/AUTOSAR/EcucDefs/Dem/DemConfigSet/DemEventParameter/DemFreezeFrameClassRef</DEFINITION-REF>
+																		<VALUE-REF DEST="ECUC-CONTAINER-VALUE"></VALUE-REF>
+																		</ECUC-REFERENCE-VALUE>
+																		<ECUC-REFERENCE-VALUE>
+																		<DEFINITION-REF DEST="ECUC-REFERENCE-DEF">/AUTOSAR/EcucDefs/Dem/DemConfigSet/DemEventParameter/DemFreezeFrameRecNumClassRef</DEFINITION-REF>
+																		<VALUE-REF DEST="ECUC-CONTAINER-VALUE"></VALUE-REF>
+																		</ECUC-REFERENCE-VALUE>
+																	</REFERENCE-VALUES>
+																	<SUB-CONTAINERS>
+																	</SUB-CONTAINERS>
+																</ECUC-CONTAINER-VALUE>
+															</SUB-CONTAINERS>
+														</ECUC-CONTAINER-VALUE>
+														<ECUC-CONTAINER-VALUE UUID="ECUS:d608e738-ab28-4f60-a741-eaac10aac47a">
+														<SHORT-NAME>DemGeneral0</SHORT-NAME>
+														<DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/AUTOSAR/EcucDefs/Dem/DemGeneral</DEFINITION-REF>
+															<PARAMETER-VALUES>
+																<ECUC-TEXTUAL-PARAM-VALUE>
+																<DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/AUTOSAR/EcucDefs/Dem/DemGeneral/DemAgingCycleCounterProcessing</DEFINITION-REF>
+																<VALUE></VALUE>
+																</ECUC-TEXTUAL-PARAM-VALUE>
+																<ECUC-NUMERICAL-PARAM-VALUE>
+																<DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/AUTOSAR/EcucDefs/Dem/DemGeneral/DemBswErrorBufferSize</DEFINITION-REF>
+																<VALUE></VALUE>
+																</ECUC-NUMERICAL-PARAM-VALUE>
+																<ECUC-TEXTUAL-PARAM-VALUE>
+																<DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/AUTOSAR/EcucDefs/Dem/DemGeneral/DemClearDTCBehavior</DEFINITION-REF>
+																<VALUE></VALUE>
+																</ECUC-TEXTUAL-PARAM-VALUE>
+																<ECUC-NUMERICAL-PARAM-VALUE>
+																<DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/AUTOSAR/EcucDefs/Dem/DemGeneral/DemDTCSuppressionSupport</DEFINITION-REF>
+																<VALUE></VALUE>
+																</ECUC-NUMERICAL-PARAM-VALUE>
+																<ECUC-NUMERICAL-PARAM-VALUE>
+																<DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/AUTOSAR/EcucDefs/Dem/DemGeneral/DemDebounceCounterBasedSupport</DEFINITION-REF>
+																<VALUE></VALUE>
+																</ECUC-NUMERICAL-PARAM-VALUE>
+																<ECUC-NUMERICAL-PARAM-VALUE>
+																<DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/AUTOSAR/EcucDefs/Dem/DemGeneral/DemDebounceTimeBasedSupport</DEFINITION-REF>
+																<VALUE></VALUE>
+																</ECUC-NUMERICAL-PARAM-VALUE>
+																<ECUC-NUMERICAL-PARAM-VALUE>
+																<DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/AUTOSAR/EcucDefs/Dem/DemGeneral/DemDevErrorDetect</DEFINITION-REF>
+																<VALUE>0</VALUE>
+																</ECUC-NUMERICAL-PARAM-VALUE>
+																<ECUC-NUMERICAL-PARAM-VALUE>
+																<DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/AUTOSAR/EcucDefs/Dem/DemGeneral/DemDtcStatusAvailabilityMask</DEFINITION-REF>
+																<VALUE></VALUE>
+																</ECUC-NUMERICAL-PARAM-VALUE>
+																<ECUC-NUMERICAL-PARAM-VALUE>
+																<DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/AUTOSAR/EcucDefs/Dem/DemGeneral/DemEnableConditionSupport</DEFINITION-REF>
+																<VALUE></VALUE>
+																</ECUC-NUMERICAL-PARAM-VALUE>
+																<ECUC-TEXTUAL-PARAM-VALUE>
+																<DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/AUTOSAR/EcucDefs/Dem/DemGeneral/DemEventCombinationSupport</DEFINITION-REF>
+																<VALUE></VALUE>
+																</ECUC-TEXTUAL-PARAM-VALUE>
+																<ECUC-NUMERICAL-PARAM-VALUE>
+																<DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/AUTOSAR/EcucDefs/Dem/DemGeneral/DemEventDisplacementSupport</DEFINITION-REF>
+																<VALUE></VALUE>
+																</ECUC-NUMERICAL-PARAM-VALUE>
+																<ECUC-TEXTUAL-PARAM-VALUE>
+																<DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/AUTOSAR/EcucDefs/Dem/DemGeneral/DemExtendedDataCapture</DEFINITION-REF>
+																<VALUE></VALUE>
+																</ECUC-TEXTUAL-PARAM-VALUE>
+																<ECUC-TEXTUAL-PARAM-VALUE>
+																<DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/AUTOSAR/EcucDefs/Dem/DemGeneral/DemFreezeFrameCapture</DEFINITION-REF>
+																<VALUE></VALUE>
+																</ECUC-TEXTUAL-PARAM-VALUE>
+																<ECUC-TEXTUAL-PARAM-VALUE>
+																<DEFINITION-REF DEST="ECUC-STRING-PARAM-DEF">/AUTOSAR/EcucDefs/Dem/DemGeneral/DemHeaderFileInclusion</DEFINITION-REF>
+																<VALUE></VALUE>
+																</ECUC-TEXTUAL-PARAM-VALUE>
+																<ECUC-NUMERICAL-PARAM-VALUE>
+																<DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/AUTOSAR/EcucDefs/Dem/DemGeneral/DemImmediateNvStorageLimit</DEFINITION-REF>
+																<VALUE></VALUE>
+																</ECUC-NUMERICAL-PARAM-VALUE>
+																<ECUC-NUMERICAL-PARAM-VALUE>
+																<DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/AUTOSAR/EcucDefs/Dem/DemGeneral/DemMaxNumberEventEntryMirror</DEFINITION-REF>
+																<VALUE></VALUE>
+																</ECUC-NUMERICAL-PARAM-VALUE>
+																<ECUC-NUMERICAL-PARAM-VALUE>
+																<DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/AUTOSAR/EcucDefs/Dem/DemGeneral/DemMaxNumberEventEntryPermanent</DEFINITION-REF>
+																<VALUE></VALUE>
+																</ECUC-NUMERICAL-PARAM-VALUE>
+																<ECUC-NUMERICAL-PARAM-VALUE>
+																<DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/AUTOSAR/EcucDefs/Dem/DemGeneral/DemMaxNumberEventEntryPrimary</DEFINITION-REF>
+																<VALUE></VALUE>
+																</ECUC-NUMERICAL-PARAM-VALUE>
+																<ECUC-NUMERICAL-PARAM-VALUE>
+																<DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/AUTOSAR/EcucDefs/Dem/DemGeneral/DemMaxNumberEventEntrySecondary</DEFINITION-REF>
+																<VALUE></VALUE>
+																</ECUC-NUMERICAL-PARAM-VALUE>
+																<ECUC-NUMERICAL-PARAM-VALUE>
+																<DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/AUTOSAR/EcucDefs/Dem/DemGeneral/DemMaxNumberPrestoredFF</DEFINITION-REF>
+																<VALUE></VALUE>
+																</ECUC-NUMERICAL-PARAM-VALUE>
+																<ECUC-NUMERICAL-PARAM-VALUE>
+																<DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/AUTOSAR/EcucDefs/Dem/DemGeneral/DemOBDSupport</DEFINITION-REF>
+																<VALUE></VALUE>
+																</ECUC-NUMERICAL-PARAM-VALUE>
+																<ECUC-TEXTUAL-PARAM-VALUE>
+																<DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/AUTOSAR/EcucDefs/Dem/DemGeneral/DemOccurrenceCounterProcessing</DEFINITION-REF>
+																<VALUE></VALUE>
+																</ECUC-TEXTUAL-PARAM-VALUE>
+																<ECUC-TEXTUAL-PARAM-VALUE>
+																<DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/AUTOSAR/EcucDefs/Dem/DemGeneral/DemOperationCycleProcessing</DEFINITION-REF>
+																<VALUE></VALUE>
+																</ECUC-TEXTUAL-PARAM-VALUE>
+																<ECUC-NUMERICAL-PARAM-VALUE>
+																<DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/AUTOSAR/EcucDefs/Dem/DemGeneral/DemOperationCycleStatusStorage</DEFINITION-REF>
+																<VALUE></VALUE>
+																</ECUC-NUMERICAL-PARAM-VALUE>
+																<ECUC-NUMERICAL-PARAM-VALUE>
+																<DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/AUTOSAR/EcucDefs/Dem/DemGeneral/DemPTOSupport</DEFINITION-REF>
+																<VALUE></VALUE>
+																</ECUC-NUMERICAL-PARAM-VALUE>
+																<ECUC-TEXTUAL-PARAM-VALUE>
+																<DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/AUTOSAR/EcucDefs/Dem/DemGeneral/DemStatusBitHandlingTestFailedSinceLastClear</DEFINITION-REF>
+																<VALUE></VALUE>
+																</ECUC-TEXTUAL-PARAM-VALUE>
+																<ECUC-NUMERICAL-PARAM-VALUE>
+																<DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/AUTOSAR/EcucDefs/Dem/DemGeneral/DemStatusBitStorageTestFailed</DEFINITION-REF>
+																<VALUE></VALUE>
+																</ECUC-NUMERICAL-PARAM-VALUE>
+																<ECUC-NUMERICAL-PARAM-VALUE>
+																<DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/AUTOSAR/EcucDefs/Dem/DemGeneral/DemStorageConditionSupport</DEFINITION-REF>
+																<VALUE></VALUE>
+																</ECUC-NUMERICAL-PARAM-VALUE>
+																<ECUC-NUMERICAL-PARAM-VALUE>
+																<DEFINITION-REF DEST="ECUC-FLOAT-PARAM-DEF">/AUTOSAR/EcucDefs/Dem/DemGeneral/DemTaskTime</DEFINITION-REF>
+																<VALUE></VALUE>
+																</ECUC-NUMERICAL-PARAM-VALUE>
+																<ECUC-NUMERICAL-PARAM-VALUE>
+																<DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/AUTOSAR/EcucDefs/Dem/DemGeneral/DemTriggerDcmReports</DEFINITION-REF>
+																<VALUE></VALUE>
+																</ECUC-NUMERICAL-PARAM-VALUE>
+																<ECUC-NUMERICAL-PARAM-VALUE>
+																<DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/AUTOSAR/EcucDefs/Dem/DemGeneral/DemTriggerDltReports</DEFINITION-REF>
+																<VALUE></VALUE>
+																</ECUC-NUMERICAL-PARAM-VALUE>
+																<ECUC-NUMERICAL-PARAM-VALUE>
+																<DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/AUTOSAR/EcucDefs/Dem/DemGeneral/DemTriggerFiMReports</DEFINITION-REF>
+																<VALUE></VALUE>
+																</ECUC-NUMERICAL-PARAM-VALUE>
+																<ECUC-NUMERICAL-PARAM-VALUE>
+																<DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/AUTOSAR/EcucDefs/Dem/DemGeneral/DemTriggerMonitorInitBeforeClearOk</DEFINITION-REF>
+																<VALUE></VALUE>
+																</ECUC-NUMERICAL-PARAM-VALUE>
+																<ECUC-TEXTUAL-PARAM-VALUE>
+																<DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/AUTOSAR/EcucDefs/Dem/DemGeneral/DemTypeOfDTCSupported</DEFINITION-REF>
+																<VALUE></VALUE>
+																</ECUC-TEXTUAL-PARAM-VALUE>
+																<ECUC-TEXTUAL-PARAM-VALUE>
+																<DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/AUTOSAR/EcucDefs/Dem/DemGeneral/DemTypeOfFreezeFrameRecordNumeration</DEFINITION-REF>
+																<VALUE></VALUE>
+																</ECUC-TEXTUAL-PARAM-VALUE>
+																<ECUC-NUMERICAL-PARAM-VALUE>
+																<DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/AUTOSAR/EcucDefs/Dem/DemGeneral/DemVersionInfoApi</DEFINITION-REF>
+																<VALUE></VALUE>
+																</ECUC-NUMERICAL-PARAM-VALUE>
+															</PARAMETER-VALUES>
+															<REFERENCE-VALUES>
+																<ECUC-REFERENCE-VALUE>
+																<DEFINITION-REF DEST="ECUC-REFERENCE-DEF">/AUTOSAR/EcucDefs/Dem/DemGeneral/DemMILIndicatorRef</DEFINITION-REF>
+																<VALUE-REF DEST="ECUC-CONTAINER-VALUE"></VALUE-REF>
+																</ECUC-REFERENCE-VALUE>
+															</REFERENCE-VALUES>
+															<SUB-CONTAINERS>
+															</SUB-CONTAINERS>
+														</ECUC-CONTAINER-VALUE>
+													</CONTAINERS>
+												</ECUC-MODULE-CONFIGURATION-VALUES>
+					</ELEMENTS>
+			</AR-PACKAGE>
+		</AR-PACKAGES>
+		</AR-PACKAGE>
+	</AR-PACKAGES>
+</AUTOSAR>
