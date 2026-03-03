@@ -1,0 +1,1177 @@
+#include "flashHal.h"
+#include "logHal.h"
+#include <string.h>
+// Removed FreeRTOS headers as this is a bare-metal bootloader
+
+#include "sysctrl_drv.h"	// Include system control module header file
+#include "clock_drv.h"		// Include clock module header file
+#include "flash_drv.h"		// Include flash module header file
+#include "crc8_16_32.h"
+
+#define WORKFLASH_BASE_ADDRESS	                FLASH_DATA_BASE_ADDR
+#define WORKFLASH_PARAMETER_ADDRESS_OFFSET      0
+#define ERASE_ADDRESS_INC	0x8000     // 32KB per erase block for 1MB device
+const static FlashHalMetaDataInfo_t g_flashHalMetaDataDefaultInfo = 
+{
+    .m_metaDataHeaderFlag      = FLASH_META_DATA_HEADER_END_FLAG,
+    .m_metaBootFlag            = FLASH_BOOT_JUMP_ACTIVE_FLAG,
+    .m_metaAppFlag             = FLASH_APP_BANKA_ACTIVE_FLAG,
+    .m_metaEndFlag             = FLASH_META_DATA_HEADER_END_FLAG,
+};
+
+FLASH_CmdConfig_t g_stcFlashCmdExeConfig = 
+{
+    FLASH_CMD_ACT_WAIT,
+    NULL
+};
+
+typedef union
+{
+  uint8_t u8Data[8192];
+  uint32_t u32Data[2048];
+}WorkFlashBuffer_u;
+typedef void (*bootloaderFun)(void);
+bootloaderFun JumpToApp;
+unsigned int FLASH_IntFlag;
+static uint8_t g_sector_buf[FLASH_SECTOR_SIZE];
+static FlashHalMetaDataInfo_t g_flashHalMetaDataInfo;
+static WorkFlashBuffer_u g_workFlashBuffer;
+static uint8_t g_enterBootType;
+static const uint8_t secureKey[16]={0x0f,0x15,0x71,0xc9,0x47,0xd9,0xe8,0x59,0x0c,0xb7,0xad,0xd6,0xaf,0x7f,0x67,0x98};
+extern uint32_t __vector_table;
+
+/********************************************************
+Return: Sector number
+0: First sector
+1: Second sector
+*********************************************************/
+//FirstSectorAddress对应某个数据部分的首地址
+static uint8_t GetNewSectorNum(uint32_t FirstSectorAddress,uint8_t *newSectorFlag)
+{
+  
+    uint8_t selectSectorNum;
+    uint8_t sector0Flag;
+    uint8_t sector1Flag;
+    uint8_t newFlag;
+    
+    //uint32_t* p_TestFlsTop = (uint32_t*)(TEST_W_LS_ADDR+FirstSectorAddress);
+    
+    sector0Flag = *((uint8_t *)(FLASH_DATA_BASE_ADDR+(FirstSectorAddress+8190)));
+    sector1Flag = *((uint8_t *)(FLASH_DATA_BASE_ADDR+(FirstSectorAddress+8190+0x2000)));  
+    
+    if(sector0Flag==0xFF)//select sector0
+    {
+        selectSectorNum = 0;
+        newFlag = 0;
+    }
+    else if(sector1Flag==0xFF)//select sector1
+    {
+        selectSectorNum = 1;
+        newFlag = sector0Flag+1;		
+    }
+    else
+    {
+        if(sector0Flag<sector1Flag)
+        {
+            if(sector0Flag!=0)//select sector0
+            {
+                selectSectorNum = 0;
+                newFlag = sector1Flag+1;
+            }
+            else//select sector1
+            {
+              if(sector1Flag!=1)
+              {
+                selectSectorNum = 1;
+                newFlag = sector0Flag+1;                
+              }
+              else
+              {
+                selectSectorNum = 0;
+                newFlag = sector1Flag+1;            
+              }
+            }
+        }
+        else
+        {
+          if(sector1Flag!=0)
+          {
+                selectSectorNum = 1;
+                newFlag = sector0Flag+1;
+          }
+          else
+          {
+            if(sector0Flag!=1)
+            {
+              selectSectorNum = 0;
+              newFlag = sector1Flag+1;
+            }
+            else
+            {
+                selectSectorNum = 1;
+                newFlag = sector0Flag+1;       
+            }
+          }
+        }
+    }
+    if(newFlag==0xFF)
+    {
+        newFlag = 0;
+    } 
+    *newSectorFlag = newFlag;
+    return selectSectorNum;
+}
+
+void FLASHTEST_CCIF_ISR(void)
+{
+    // FLASH_IntFlag = 1;
+    FLASH_IntMask(FLASH_INT_CCIF, MASK);
+}
+
+/*************************************************
+  Function:       FlashHalInit
+  Description:    Flash module initialization API
+  Input:          None
+  Output:         Execution result
+  Return:         Success: FLASH_HAL_STATUS_OK
+                  Failure: FLASH_HAL_STATUS_ERR
+  Others:         
+*************************************************/
+int16_t FlashHalInit()
+{
+    uint8_t tryCnt = 3;
+
+    do
+    {
+        SYSCTRL_DisableModule(SYSCTRL_FLASH);
+        CLK_ModuleSrc(CLK_FLASH, CLK_SRC_FIRC);
+        CLK_SetClkDivider(CLK_FLASH, CLK_DIV_8);
+        SYSCTRL_ResetModule(SYSCTRL_FLASH);
+        SYSCTRL_EnableModule(SYSCTRL_FLASH);
+        
+        FLASH_InstallCallBackFunc(FLASH_INT_CCIF, FLASHTEST_CCIF_ISR);
+        NVIC_SetPriority(FLASH_CmdComplete_IRQn, 0x0);	//设置 FLASH_IRQn 的中断优先级。(高)0-3(低)
+        NVIC_EnableIRQ(FLASH_CmdComplete_IRQn);			//使能 FLASH_IRQn 中断
+        FLASH_IntClear(FLASH_INT_ALL);
+
+        if(FLASH_Init() == SUCC)
+        {
+            break;
+        }
+        tryCnt--;
+        TBOX_PRINT("falsh init error\r\n");
+    } while (tryCnt);
+  
+    // No mutex initialization needed in bare-metal environment
+    FLASH_IntFlag = 0;
+
+    return 0;
+}
+
+/*************************************************
+  Function:       FlashHalDataBlockWrite
+  Description:    Flash block write. Block size: 2048 bytes
+  Input:          blockAddress: Block address
+                  writeOffset: Offset address
+                  pWriteData: The data to be written to flash
+                  writeLength: Data length
+  Output:         Execution result
+  Return:         Success: FLASH_HAL_STATUS_OK
+                  Failure: FLASH_HAL_STATUS_ERR
+  Others:         
+*************************************************/
+int16_t FlashHalDataBlockWrite(uint32_t blockAddress,uint32_t writeOffset,const uint8_t *pWriteData,uint32_t writeLength)
+{
+    uint32_t startAddress;
+    uint32_t endAddress;
+    uint32_t i;
+    uint32_t *pAddress;
+    uint32_t alternativeAddress;
+    uint32_t sectorBaseAddress;
+    uint8_t newSectorFlag;
+    uint8_t sectorNum;
+    uint8_t ret;
+
+    COMMON_DISABLE_INTERRUPTS();  // Disable interrupts for exclusive access
+    
+    sectorBaseAddress = (blockAddress&0xC000)+WORKFLASH_PARAMETER_ADDRESS_OFFSET;//first sector address
+    
+    sectorNum = GetNewSectorNum(sectorBaseAddress,&newSectorFlag);
+    
+    alternativeAddress = sectorBaseAddress+WORKFLASH_BASE_ADDRESS+(uint32_t)sectorNum*0x2000; 
+    startAddress = alternativeAddress+writeOffset;
+    endAddress = startAddress + writeLength;
+    
+    //TBOX_PRINT("WorkFlashWriteBySector alternativeAddress %x\r\n",alternativeAddress);
+    if(endAddress>=(alternativeAddress+0x2000))
+    {
+      COMMON_ENABLE_INTERRUPTS();   // Enable interrupts after exclusive access
+      return -1;
+    }
+    
+    if(sectorNum==0)
+    {
+      pAddress = (uint32_t *)(sectorBaseAddress+WORKFLASH_BASE_ADDRESS+0x2000); 
+    }
+    else
+    {
+      pAddress = (uint32_t *)(sectorBaseAddress+WORKFLASH_BASE_ADDRESS);  
+    }
+
+    for(i=0;i<2048;i++)
+    {
+        g_workFlashBuffer.u32Data[i] = pAddress[i];
+    }
+    for(i=0;i<writeLength;i++)
+    {
+        g_workFlashBuffer.u8Data[i+writeOffset] = pWriteData[i];
+    }
+    g_workFlashBuffer.u8Data[8190] = newSectorFlag;      
+
+    // Erase sector 0
+    COMMON_DISABLE_INTERRUPTS();	//禁止 IRQ 全局中断
+    ret = FLASH_EraseSector(alternativeAddress, &g_stcFlashCmdExeConfig);
+    COMMON_ENABLE_INTERRUPTS();		//使能 IRQ 全局中断
+    if (ret != SUCC)
+    {
+      COMMON_ENABLE_INTERRUPTS();   // Enable interrupts after exclusive access
+      return -1;
+    }
+
+    // Write sector 0 with 32bit access
+
+    for(i=0;i<512;i++)
+    {
+      COMMON_DISABLE_INTERRUPTS();	//禁止 IRQ 全局中断
+      ret = FLASH_ProgramPhrase(alternativeAddress+i*16, (uint8_t *)&g_workFlashBuffer.u32Data[i*4], &g_stcFlashCmdExeConfig);
+      COMMON_ENABLE_INTERRUPTS();		//使能 IRQ 全局中断
+      if (ret != SUCC)
+      {
+        COMMON_ENABLE_INTERRUPTS();   // Enable interrupts after exclusive access
+        return -1;
+      }
+    }	
+    // Disable write access
+    
+    COMMON_ENABLE_INTERRUPTS();   // Enable interrupts after exclusive access
+   
+    return 0;
+}
+
+
+/*************************************************
+  Function:       FlashHalDataBlockRead
+  Description:    Flash block read
+  Input:          blockAddress: Block address
+                  readOffset: Offset address
+                  pReadData: Buffer to store data read from flash
+                  pReadLength: Read length
+  Output:         Execution result
+  Return:         Success: FLASH_HAL_STATUS_OK
+                  Failure: FLASH_HAL_STATUS_ERR
+  Others:         
+*************************************************/
+int16_t FlashHalDataBlockRead(uint32_t blockAddress,uint32_t readOffset,uint8_t *pReadData,uint32_t pReadLength)
+{
+    uint32_t alternativeAddress;
+    uint8_t newSectorFlag;
+    uint8_t sectorNum;
+    uint8_t *pDataAddress;
+    uint32_t i;
+    
+    alternativeAddress = (blockAddress&0xFFFFC000)+(WORKFLASH_PARAMETER_ADDRESS_OFFSET);//first sector address
+    sectorNum = GetNewSectorNum(alternativeAddress,&newSectorFlag);
+    pDataAddress = (uint8_t *)(alternativeAddress + readOffset + WORKFLASH_BASE_ADDRESS);
+    if(sectorNum==0)
+    {
+      pDataAddress += 0x2000;
+    }
+    for(i = 0;i < pReadLength;i++)
+    {
+      pReadData[i] = pDataAddress[i];
+    }
+    
+    return 0;
+}
+
+/*************************************************
+  Function:       FlashHalSmallDataBlockRead
+  Description:    Flash small block read
+  Input:          blockAddress: Block address
+                  readOffset: Offset address
+                  pReadData: Buffer to store data read from flash
+                  pReadLength: Read length
+  Output:         Execution result
+  Return:         Success: FLASH_HAL_STATUS_OK
+                  Failure: FLASH_HAL_STATUS_ERR
+  Others:         
+*************************************************/
+int16_t FlashHalSmallDataBlockRead(uint32_t blockAddress,uint32_t readOffset,uint8_t *pReadData,uint32_t pReadLength)
+{
+    //uint32_t alternativeAddress;
+    //uint8_t newSectorFlag;
+    //uint8_t sectorNum;
+    uint8_t *pDataAddress;
+    uint32_t i;
+    
+    
+    //alternativeAddress = (SectorAddress&0xFFFFE000)+(WORKFLASH_PARAMETER_ADDRESS_OFFSET);//first sector address
+    
+    //sectorNum = GetNewSectorNum(SectorAddress,&newSectorFlag);
+    pDataAddress = (uint8_t *)(blockAddress + readOffset);
+    //if(sectorNum==0)
+    //{
+    //  pDataAddress += 0x1000;
+    //}
+    
+    for(i=0;i<pReadLength;i++)
+    {
+      pReadData[i] = pDataAddress[i];
+    }
+    
+    return 0;
+}
+
+
+/*************************************************
+  Function:       FlashHalFlexWrite
+  Description:    Write data to Flash, supports non-16-byte aligned addresses and arbitrary data lengths
+  Input:          address: Write address
+                  length: Data length to write
+                  pWriteData: Pointer to data to be written
+  Output:         None
+  Return:         Success: SUCC
+                  Failure: ERR
+  Others:         This function can only write data within a single sector, cross-sector writing is not supported
+*************************************************/
+ResultStatus_t FlashHalFlexWrite(uint32_t address, uint32_t length, uint8_t *pWriteData)  //one sector
+{
+    ResultStatus_t ret = SUCC;
+    uint32_t sector_start = address & ~(FLASH_SECTOR_SIZE - 1); // Sector start address (8192-byte aligned)
+    uint32_t sector_end = sector_start + FLASH_SECTOR_SIZE - 1;  // Sector end address
+    uint32_t offset_in_sector = address - sector_start; // Offset of new data within the sector
+
+    if ((address < FLASH_META_DATA_BASE_ADDRESS) || 
+        (address + length > FLASH_APP_BANKB_END_ADDRESS) || 
+        (pWriteData == NULL) || 
+        (length == 0))
+    {
+        ret = ERR;
+        TBOX_PRINT("Line %d: flash write check error (invalid param) %d\r\n", __LINE__, ret);
+    }
+    else if (address + length - 1 > sector_end)
+    {
+        ret = ERR;
+        TBOX_PRINT("Line %d: write cross sector (not supported) %d\r\n", __LINE__, ret);
+    }
+    else
+    {
+        COMMON_DISABLE_INTERRUPTS();
+        FlashHalRead(sector_start, g_sector_buf, FLASH_SECTOR_SIZE);
+        COMMON_ENABLE_INTERRUPTS();
+        
+        // Merge new data into buffer
+        memcpy(&g_sector_buf[offset_in_sector], pWriteData, length);
+        COMMON_DISABLE_INTERRUPTS();
+        ret = FLASH_EraseSector(sector_start, &g_stcFlashCmdExeConfig);
+        COMMON_ENABLE_INTERRUPTS();   
+        if (ret != SUCC)
+        {
+            TBOX_PRINT("Line %d: erase sector error %d\r\n", __LINE__, ret);
+            COMMON_ENABLE_INTERRUPTS();   
+        }
+        else
+        {
+            COMMON_DISABLE_INTERRUPTS();
+            ret = FLASH_Program(sector_start, FLASH_SECTOR_SIZE, g_sector_buf, NULL);
+            COMMON_ENABLE_INTERRUPTS();
+            if (ret != SUCC)
+            {
+                TBOX_PRINT("Line %d: program sector error %d\r\n", __LINE__, ret);
+            }
+        }
+        
+    }
+    return ret; 
+}
+
+/*************************************************
+  Function:       FlashHalRead
+  Description:    Flash read
+  Input:          addr: Read address
+                  data: Buffer to store read data
+                  size: Data size to read
+  Output:         Execution result
+  Return:         Success: FLASH_HAL_STATUS_OK
+                  Failure: FLASH_HAL_STATUS_ERR
+  Others:         
+*************************************************/
+int16_t FlashHalRead(uint32_t addr, uint8_t *data, uint32_t size)
+{
+    uint8_t *pDataAddress = NULL;
+    uint32_t i = 0;   
+    pDataAddress = (uint8_t *)addr;
+    for(i=0;i<size;i++)
+    {
+      data[i] = pDataAddress[i];
+    }
+    return 0;
+}
+
+/*************************************************
+  Function:       FlashHalOtaFlashWrite
+  Description:    Flash code data write, used for firmware update
+  Input:          writeAddress: Write address
+                  pData: Data to write
+                  length: Data length to write
+  Output:         Execution result
+  Return:         Success: FLASH_HAL_STATUS_OK
+                  Failure: FLASH_HAL_STATUS_ERR
+  Others: 
+*************************************************/
+int16_t FlashHalOtaFlashWrite(uint32_t writeAddress,const uint8_t *pData,uint32_t length)
+{
+    uint8_t writeBuffer[512];
+
+    // cy_stc_flash_programrow_config_t programRowConfig =
+    // {
+    //     .blocking = CY_FLASH_PROGRAMROW_BLOCKING,
+    //     .skipBC   = CY_FLASH_PROGRAMROW_SKIP_BLANK_CHECK,
+    //     .dataSize = CY_FLASH_PROGRAMROW_DATA_SIZE_64BIT,
+    //     .dataLoc  = CY_FLASH_PROGRAMROW_DATA_LOCATION_SRAM,
+    //     .intrMask = CY_FLASH_PROGRAMROW_NOT_SET_INTR_MASK,
+    //     .destAddr = NULL,
+    //     .dataAddr = NULL,
+    // };
+    //SemaphoreHandle_t mutex;
+    //mutex = PeripheralDriverHalGetFlashMutexHandle();
+    COMMON_DISABLE_INTERRUPTS();  // Disable interrupts for exclusive access
+    uint32_t addressToBeWriten = writeAddress;
+    uint32_t totalSize         = length;
+    uint32_t addressOfSource   = (uint32_t)pData;
+//     while (totalSize != 0)
+//     {
+//         /***************************/
+//         /*** Parameter checking ****/
+//         /***************************/
+//         if (
+//             (addressToBeWriten < CY_FLASH_LG_DBM1_BASE) ||
+//             ((CY_FLASH_LG_DBM1_BASE + CY_FLASH_LG_DBM1_SIZE) < addressToBeWriten)
+//            )
+//         {
+//             // Error: Out side flash bank B.
+//             //while(1);
+//         }
+
+//         uint16_t dataSizeToBeWriten = 0;
+//         if (totalSize >= 512)
+//         {
+//             programRowConfig.dataSize = CY_FLASH_PROGRAMROW_DATA_SIZE_4096BIT;
+//             dataSizeToBeWriten = 512;
+//         }
+// #if 0 // not supported
+//         else if(totalSize >= 256)
+//         {
+//             programRowConfig.dataSize = CY_FLASH_PROGRAMROW_DATA_SIZE_2048BIT;
+//             dataSizeToBeWriten = 256;
+//         }
+//         else if(totalSize >= 128)
+//         {
+//             programRowConfig.dataSize = CY_FLASH_PROGRAMROW_DATA_SIZE_1024BIT;
+//             dataSizeToBeWriten = 128;
+//         }
+//         else if(totalSize >= 64)
+//         {
+//             programRowConfig.dataSize = CY_FLASH_PROGRAMROW_DATA_SIZE_512BIT;
+//             dataSizeToBeWriten = 64;
+//         }
+// #endif
+//         else if (totalSize >= 32)
+//         {
+//             programRowConfig.dataSize = CY_FLASH_PROGRAMROW_DATA_SIZE_256BIT;
+//             dataSizeToBeWriten = 32;
+//         }
+// #if 0 // not supported
+//         else if(totalSize >= 16)
+//         {
+//             programRowConfig.dataSize = CY_FLASH_PROGRAMROW_DATA_SIZE_128BIT;
+//             dataSizeToBeWriten = 16;
+//         }
+// #endif
+//         else if (totalSize >= 8)
+//         {
+//             programRowConfig.dataSize = CY_FLASH_PROGRAMROW_DATA_SIZE_64BIT;
+//             dataSizeToBeWriten = 8;
+//         }
+//         else // < 8 byte
+//         {
+//             // ToDo: Need special care
+//             programRowConfig.dataSize = CY_FLASH_PROGRAMROW_DATA_SIZE_64BIT;
+//             dataSizeToBeWriten = totalSize;
+//             for (uint32_t i = totalSize; i < 8; i++)
+//             {
+//                 // Padding with 0xFF.
+//                 writeBuffer[i] = 0xFF;
+//             }
+//         }
+
+//         memcpy(writeBuffer, (void *)addressOfSource, dataSizeToBeWriten);
+
+//         programRowConfig.destAddr = (uint32_t *)addressToBeWriten;
+//         programRowConfig.dataAddr = (uint32_t *)writeBuffer;
+        
+//         Cy_Flashc_MainWriteEnable();
+// #if(0)
+//         Cy_Flash_ProgramRow(&sromContext, &programRowConfig, CY_FLASH_DRIVER_BLOCKING);
+// #else
+//         Cy_FlashWriteCode(addressToBeWriten,(uint32_t *)writeBuffer,programRowConfig.dataSize,CY_FLASH_DRIVER_NON_BLOCKING);
+//         WorkFlashWaitUntilRdy(0);
+// #endif
+//         Cy_Flashc_MainWriteDisable();
+//         totalSize         -= dataSizeToBeWriten;
+//         addressToBeWriten += dataSizeToBeWriten;
+//         addressOfSource   += dataSizeToBeWriten;
+        
+//     }
+    COMMON_ENABLE_INTERRUPTS();   // Enable interrupts after exclusive access
+    
+    return 0;
+}
+
+/*************************************************
+  Function:       FlashHalOtaFlashErase
+  Description:    Flash code area erase
+  Input:          BankFlag: Code area flag
+                  0: Bank A  1: Bank B
+  Output:         Execution result
+  Return:         Success: FLASH_HAL_STATUS_OK
+                  Failure: FLASH_HAL_STATUS_ERR
+  Others:
+*************************************************/
+int16_t FlashHalOtaFlashErase(uint8_t BankFlag)
+{
+    uint32_t EraseAddress;
+    uint8_t length;
+    //SemaphoreHandle_t mutex;
+    //无论是在BankA还是B升级的时候另一个Bank的地址永远是这个，芯片底层已经做了映射
+    // Erase Flash: Code Region(Large Sector), See 8.2.5.2 Address Mapping for 1 MB Memory
+    if (BankFlag == 1) //B 分区
+    {
+        EraseAddress = FLASH_APP_BANKA_BASE_ADDRESS; //每个BANK前96K为CM0代码区
+        length = 15 - 3;  //前3个32K留给CM0使用
+    }
+    else //APP2
+    {
+        EraseAddress = FLASH_APP_BANKB_BASE_ADDRESS;
+        length = 15 - 3; //前3个32K留给CM0使用
+    }
+    
+    // No flash operation needed, so no interrupt control required
+
+    return 0;
+}
+
+void FlashHalOtaIntegrityFlagUpdate(uint8_t flag)
+{
+#ifndef INTEGRITY_DISNABLE
+    uint32_t WorkFlashAddress, WorkFlashData;
+    //当前运行BankB，正在升级的为BankA，进行BankA代码完整性标志写入
+    // if (Cy_Flashc_GetMainMap() == CY_FLASH_MAPPING_B)
+    // {
+    //     WorkFlashAddress = CFLASH_BANKA_APP_INTEGRITY_ADDRESS;
+    // }
+    // else
+    // {
+    //     WorkFlashAddress = CFLASH_BANKB_APP_INTEGRITY_ADDRESS;
+    // }
+
+    if (flag)
+    {
+        //WorkFlashData = CFLASH_BANK_APP_INTEGRITY_ENABLE;
+    }
+    else
+    {
+        //WorkFlashData = CFLASH_BANK_APP_INTEGRITY_DISABLE;
+    }
+    
+    // No flash operation needed, so no interrupt control required
+#endif
+}
+
+/*************************************************
+  Function:       FlashHalOtaSetActiveBank
+  Description:    Set active code partition
+  Input:          BankFlag: Code partition flag
+                  0: Bank A  1: Bank B
+  Output:         Execution result
+  Return:         Success: FLASH_HAL_STATUS_OK
+                  Failure: FLASH_HAL_STATUS_ERR
+  Others:
+*************************************************/
+int16_t FlashHalOtaSetActiveBank(uint8_t BankFlag)
+{
+    uint32_t WorkFlashAddress, WorkFlashData;
+
+    //WorkFlashAddress = CFLASH_BANK_ACTIVE_ADDRESS;
+    if (BankFlag) //当前运行BankB，正在升级的为BankA，进行Bank运行标志写入BankA
+    {
+        //WorkFlashData = CFLASH_BANKB_ACTIVE_FLAG;
+    }
+    else
+    {
+        //WorkFlashData = CFLASH_BANKA_ACTIVE_FLAG;
+    }
+    // No flash operation needed, so no interrupt control required
+    
+    return 0;
+}
+
+/*************************************************
+  Function:       FlashHalOtaGetActiveBank
+  Description:    Get current active code partition
+  Input:          None
+  Output:         Current active code partition flag
+  Return:         0: Bank A  1: Bank B
+  Others: 
+*************************************************/
+uint8_t FlashHalOtaGetActiveBank(void)
+{
+    // if(Cy_Flashc_GetMainMap() == CY_FLASH_MAPPING_B)
+    // {
+    //     return 1;
+    // }
+    // else
+    {
+        return 0;
+    }
+}
+
+/*************************************************
+  Function:       FlashHalOtaSetBankSuccessFlag
+  Description:    Set bank success flag
+  Input:          BankFlag: Code partition flag 0: Bank A  1: Bank B
+                  successFlag: Success flag to set
+  Output:         None
+  Return:         Success: FLASH_HAL_STATUS_OK
+                  Failure: FLASH_HAL_STATUS_ERR
+  Others:
+*************************************************/
+int16_t FlashHalOtaSetBankSuccessFlag(uint8_t BankFlag,uint8_t successFlag)
+{
+    uint32_t WorkFlashAddress, WorkFlashData;
+    //当前运行BankB，正在升级的为BankA，进行BankA代码完整性标志写入
+    //if (Cy_Flashc_GetMainMap() == CY_FLASH_MAPPING_B)
+    if(BankFlag == 1)
+    {
+        //WorkFlashAddress = CFLASH_BANKB_APP_INTEGRITY_ADDRESS;
+    }
+    else
+    {
+        //WorkFlashAddress = CFLASH_BANKA_APP_INTEGRITY_ADDRESS;
+    }
+
+    if (successFlag)
+    {
+        //WorkFlashData = CFLASH_BANK_APP_INTEGRITY_ENABLE;
+    }
+    else
+    {
+        //WorkFlashData = CFLASH_BANK_APP_INTEGRITY_DISABLE;
+    }
+    
+    // No flash operation needed, so no interrupt control required
+    
+    return 0;
+}
+
+#define FLASH_SECTOR_SIZE		0x2000	//Define sector size
+// #define FLASH_CODE_BASE_ADDR		((uint32_t)0x00000000)	// Program Code flash base address
+// #define FLASH_CODE_END_ADDR			((uint32_t)0x000FFFFF)	// program/Code flash end address
+// #define FLASH_DATA_BASE_ADDR		((uint32_t)0x01000000)	// Data flash base address
+// #define FLASH_DATA_END_ADDR			((uint32_t)0x0101FFFF)	// Data flash end address
+
+void FlashHalTestMain(void)
+{
+    unsigned char FLASH_WriteData[20];	//Array for writing to FLASH
+    unsigned char FLASH_ReadData[20];	//Array for reading from FLASH
+
+    unsigned int Main_Loop;
+    ResultStatus_t Main_Ret;
+
+    for(Main_Loop=0; Main_Loop<20; Main_Loop++)
+    {
+        FLASH_WriteData[Main_Loop] = 0x55;	//Data for writing to FLASH
+        FLASH_ReadData[Main_Loop] = 0x00;	//Initialize read buffer
+    }
+    
+    //Sector erase test
+    for(Main_Loop = 0; Main_Loop < 1; Main_Loop++)	//Number of sectors to erase, 8192 bytes per sector
+    {
+        COMMON_DISABLE_INTERRUPTS();	//Disable global IRQ interrupt
+        Main_Ret = FLASH_EraseSector((FLASH_DATA_BASE_ADDR + (Main_Loop * FLASH_SECTOR_SIZE)), &g_stcFlashCmdExeConfig);
+        COMMON_ENABLE_INTERRUPTS();		//Enable global IRQ interrupt
+
+        if(Main_Ret != SUCC)
+        {
+            while (1);
+        }
+    }
+    
+    //Read a Phrase test, each Phrase contains 16 bytes
+    for(Main_Loop = 0; Main_Loop<16; Main_Loop ++)
+    {			
+        FLASH_ReadData[Main_Loop] = *(unsigned char *)(FLASH_DATA_BASE_ADDR + Main_Loop);
+    }
+    
+    FLASH_IntFlag = 0;
+    
+    //Write test by Phrase, each Phrase contains 16 bytes
+    for(Main_Loop = 0; Main_Loop<FLASH_SECTOR_SIZE; Main_Loop += 16)
+    {
+        COMMON_DISABLE_INTERRUPTS();	//Disable global IRQ interrupt
+        Main_Ret = FLASH_ProgramPhrase(FLASH_DATA_BASE_ADDR + Main_Loop, FLASH_WriteData, &g_stcFlashCmdExeConfig);
+        COMMON_ENABLE_INTERRUPTS();		//Enable global IRQ interrupt
+        
+        if(Main_Ret != SUCC)
+        {
+            while (1);
+        }
+    }
+    
+    //Read a Phrase test, each Phrase contains 16 bytes
+    for(Main_Loop = 0; Main_Loop<16; Main_Loop ++)
+    {			
+        FLASH_ReadData[Main_Loop] = *(unsigned char *)(FLASH_DATA_BASE_ADDR + Main_Loop);
+    }
+}
+
+void FlashHalJumpToAppCheck(void)
+{
+    uint8_t input[16] = {0x01,0x23,0x45,0x67,0x89,0xab,0xcd,0xef,0xfe,0xdc,0xba,0x98,0x76,0x54,0x32,0x10};
+    const uint8_t key[16]={0x0f,0x15,0x71,0xc9,0x47,0xd9,0xe8,0x59,0x0c,0xb7,0xad,0xd6,0xaf,0x7f,0x67,0x98};
+    uint8_t result[16] = {0xff, 0x0b ,0x84 ,0x4a ,0x08 ,0x53 ,0xbf ,0x7c ,0x69 ,0x34 ,0xab ,0x43 ,0x64 ,0x14 ,0x8f ,0xb9};
+    uint8_t output1[16];
+    
+    uint32_t appStartAddress        = 0x00;
+    uint32_t appAbstractCrcAddress  = 0x00;
+    uint32_t appAbstractAesAddress  = 0x00;
+    uint32_t u32BootFlag            = 0x00;
+    uint32_t u32AppFlag             = 0x00;
+    uint32_t u32App1SuccessFlag     = 0x00;
+    uint32_t u32App2SuccessFlag     = 0x00;
+    uint8_t appStartFlag            = 0x00;
+    uint32_t flashSize              = 0x00;
+    uint32_t checkSum               = 0x00;
+    uint32_t flashCrc32Value        = 0x00;
+    Crc32Objec_t crc32Object;
+    ResultStatus_t rlt = ERR;
+
+    u32App1SuccessFlag = FlashHalReadApp1SuccessFlag();
+    u32App2SuccessFlag = FlashHalReadApp2SuccessFlag();
+    rlt = FlashHalGetMetaDataInfo(&g_flashHalMetaDataInfo);
+    if(rlt == SUCC)
+    {
+        if(g_flashHalMetaDataInfo.m_metaBootFlag == FLASH_BOOT_JUMP_ACTIVE_FLAG)
+        {
+            TBOX_PRINT("%s Line:%d \r\n",__FILE__,__LINE__);
+            appStartFlag = 0x00;//default in boot
+            if(g_flashHalMetaDataInfo.m_metaAppFlag == FLASH_APP_BANKA_ACTIVE_FLAG)//start app1 
+            {
+                if(u32App1SuccessFlag == FLASH_BANK_APP_INTEGRITY_ENABLE)
+                {
+                    appStartFlag = 0x01;
+                }
+                else if(u32App2SuccessFlag == FLASH_BANK_APP_INTEGRITY_ENABLE)
+                {
+                    appStartFlag = 0x02;
+                }
+            }
+            else if(g_flashHalMetaDataInfo.m_metaAppFlag == FLASH_APP_BANKB_ACTIVE_FLAG)
+            {
+                if(u32App2SuccessFlag == FLASH_BANK_APP_INTEGRITY_ENABLE)
+                {
+                    appStartFlag = 0x02;
+                }
+                else if(u32App1SuccessFlag == FLASH_BANK_APP_INTEGRITY_ENABLE)
+                {
+                    appStartFlag = 0x01;
+                }
+            }
+            TBOX_PRINT("appStartFlag is %x \r\n",appStartFlag);
+            do
+            {
+                if(0x01 == appStartFlag)
+                {
+                    appStartAddress = FLASH_APP_BANKA_CM4_BASE_ADDRESS;
+                    appAbstractCrcAddress = FLASH_APP_BANKA_CRC_VALUE_ADDRESS;
+                    appAbstractAesAddress = FLASH_APP_BANKA_AES_VALUE_ADDRESS;
+                }
+                else if(0x02 == appStartFlag)
+                {
+                    appStartAddress = FLASH_APP_BANKB_CM4_BASE_ADDRESS;
+                    appAbstractCrcAddress = FLASH_APP_BANKB_CRC_VALUE_ADDRESS;
+                    appAbstractAesAddress = FLASH_APP_BANKB_AES_VALUE_ADDRESS;
+                }
+                else
+                {
+                    break;
+                }
+                TBOX_PRINT("Jump to appStartAddress is 0x%x \r\n",appStartAddress);
+
+                FlashHalRead(appAbstractCrcAddress,input,16);
+                flashSize = (input[8]<<24)+(input[9]<<16)+(input[10]<<8)+input[11];
+                checkSum = (input[12]<<24)+(input[13]<<16)+(input[14]<<8)+input[15];
+                flashCrc32Value = 0xFFFFFFFF;
+                Crc32Init(&crc32Object,0x04C11DB7);
+                flashCrc32Value = Crc32(&crc32Object, flashCrc32Value, (uint8_t *)appStartAddress, flashSize);
+                flashCrc32Value ^= 0xFFFFFFFF;
+                if (flashCrc32Value != checkSum)
+                {
+                    TBOX_PRINT("app file crc error, flashCrc32Value = %08x\r\n", flashCrc32Value);
+                    TBOX_PRINT("read app abstract data: ");
+                    for(uint16_t i = 0;i <16;i++)
+                    {
+                        TBOX_PRINT("%02x ",input[i]);
+                    }
+                    TBOX_PRINT("\r\n");
+                    TBOX_PRINT("appStartAddress = %08x, flashSize = %08x, checkSum = %08x\r\n", appStartAddress, flashSize, checkSum);
+                    //TimerHalDelayMs(5000);
+                    PeripheralHalMcuHardReset();
+                }
+
+                HsmHalAesEcbEncrypt(secureKey,0,input,16,output1);
+                FlashHalRead(FLASH_APP_BANKB_ABSTRACT_ADDRESS,input,16);
+                for(uint16_t i = 0;i <16;i++)
+                {
+                    if(input[i] != output1[i])
+                    {
+                        TBOX_PRINT("app file aes error\r\n");
+                        TBOX_PRINT("calculate aes result: ");
+                        for(uint16_t i = 0;i <16;i++)
+                        {
+                            TBOX_PRINT("%02x ",output1[i]);
+                        }
+                        TBOX_PRINT("\r\n");
+                        TBOX_PRINT("read aes data: ");
+                        for(uint16_t i = 0;i <16;i++)
+                        {
+                            TBOX_PRINT("%02x ",input[i]);
+                        }
+                        TBOX_PRINT("\r\n");
+                        //TimerHalDelayMs(5000);
+                        PeripheralHalMcuHardReset();
+                    }
+                }
+                if (((*(__IO uint32_t *)appStartAddress) >= FLASH_APP_BANKA_BASE_ADDRESS) && ((*(__IO uint32_t *)appStartAddress) <= FLASH_APP_BANKB_END_ADDRESS))
+                {
+                    SysTick->CTRL  = 0;
+                    SysTick->LOAD  = 0;
+                    SysTick->VAL   = 0UL;                                          
+                    JumpToApp = (bootloaderFun)(*(__IO uint32_t *)(appStartAddress + 4));   
+                    __set_MSP(*(__IO uint32_t*)appStartAddress);
+                    __set_PSP(*(__IO uint32_t*)appStartAddress);
+                    SCB->VTOR = ((uint32_t)&__vector_table) & 0xFFFFFF80U;
+                    CORE_DSB();	
+                    CORE_DISABLE_IRQ();	
+                    JumpToApp();
+                }
+                TBOX_PRINT("Jump to APP Fault\r\n");
+            }while(0);
+        }
+        else if(u32BootFlag == FLASH_BOOT_OTA_ACTIVE_FLAG)
+        {
+            TBOX_PRINT("%s Line:%d \r\n",__FILE__,__LINE__);
+            g_flashHalMetaDataInfo.m_metaBootFlag = FLASH_BOOT_JUMP_ACTIVE_FLAG;
+            FlashHalWriteMetaDataInfo(&g_flashHalMetaDataInfo);
+            g_enterBootType = 1;
+        }
+        else if(u32BootFlag == FLASH_BOOT_UDS_ACTIVE_FLAG)
+        {
+            TBOX_PRINT("%s Line:%d \r\n",__FILE__,__LINE__);
+            g_flashHalMetaDataInfo.m_metaBootFlag = FLASH_BOOT_JUMP_ACTIVE_FLAG;
+            FlashHalWriteMetaDataInfo(&g_flashHalMetaDataInfo);
+            g_enterBootType = 2;
+        }
+        else
+        {
+            TBOX_PRINT("%s Line:%d \r\n",__FILE__,__LINE__);  
+            g_flashHalMetaDataInfo.m_metaBootFlag = FLASH_BOOT_JUMP_ACTIVE_FLAG;
+            FlashHalWriteMetaDataInfo(&g_flashHalMetaDataInfo);
+        }   
+        TBOX_PRINT("enter bootloader type = %d\r\n", g_enterBootType);
+    }
+}
+/*************************************************
+  Function:       FlashHalReadApp1SuccessFlag
+  Description:    Read application 1 success flag from Flash
+  Input:          None
+  Output:         None
+  Return:         The 4-byte flag value read from Flash
+  Others:         This function directly reads 4 bytes from the specified Flash address
+                  No need for additional alignment handling as FlashHalRead supports arbitrary lengths
+*************************************************/
+static uint32_t FlashHalReadApp1SuccessFlag(void)
+{
+    uint32_t flagValue = 0;
+    
+    // Directly read 4-byte flag value into uint32_t variable
+    FlashHalRead(FLASH_APP_BANKA_INTEGRITY_ADDRESS, (uint8_t*)&flagValue, sizeof(flagValue));
+    return flagValue;
+}
+
+/*************************************************
+  Function:       FlashHalReadApp2SuccessFlag
+  Description:    Read application 2 success flag from Flash
+  Input:          None
+  Output:         None
+  Return:         The 4-byte flag value read from Flash
+  Others:         This function directly reads 4 bytes from the specified Flash address
+                  No need for additional alignment handling as FlashHalRead supports arbitrary lengths
+*************************************************/
+static uint32_t FlashHalReadApp2SuccessFlag(void)
+{
+    uint32_t flagValue = 0;
+    
+    // Directly read 4-byte flag value into uint32_t variable
+    FlashHalRead(FLASH_APP_BANKB_INTEGRITY_ADDRESS, (uint8_t*)&flagValue, sizeof(flagValue));
+    return flagValue;
+}
+
+/*************************************************
+  Function:       FlashHalWriteApp1SuccessFlag
+  Description:    Write application 1 success flag to Flash
+  Input:          flagValue: Flag value to be written (4-byte)
+  Output:         None
+  Return:         None
+  Others:         This function directly uses FlashHalFlexWrite which automatically handles non-16-byte alignment
+                  No need for additional buffer as FlashHalFlexWrite supports arbitrary lengths
+*************************************************/
+void FlashHalWriteApp1SuccessFlag(uint32_t flagValue)
+{
+    // FlashHalFlexWrite automatically handles non-aligned addresses and arbitrary lengths
+    FlashHalFlexWrite(FLASH_APP_BANKA_INTEGRITY_ADDRESS, 
+                      sizeof(uint32_t), 
+                      (uint8_t*)&flagValue);
+}
+
+/*************************************************
+  Function:       FlashHalWriteApp2SuccessFlag
+  Description:    Write application 2 success flag to Flash
+  Input:          flagValue: Flag value to be written (4-byte)
+  Output:         None
+  Return:         None
+  Others:         This function directly uses FlashHalFlexWrite which automatically handles non-16-byte alignment
+                  No need for additional buffer as FlashHalFlexWrite supports arbitrary lengths
+*************************************************/
+void FlashHalWriteApp2SuccessFlag(uint32_t flagValue)
+{
+    // FlashHalFlexWrite automatically handles non-aligned addresses and arbitrary lengths
+    FlashHalFlexWrite(FLASH_APP_BANKB_INTEGRITY_ADDRESS, 
+                      sizeof(uint32_t), 
+                      (uint8_t*)&flagValue);
+}
+
+/**
+ * @brief Validates meta data structure using header and end flags
+ * @param pMetaData Pointer to meta data structure to validate
+ * @return 
+ */
+static ResultStatus_t FlashHalIsMetaDataValid(const FlashHalMetaDataInfo_t *pMetaData)
+{
+    ResultStatus_t isValid = ERR;
+    if (pMetaData != NULL)
+    {
+        if(pMetaData->m_metaDataHeaderFlag == FLASH_META_DATA_HEADER_END_FLAG &&
+                   pMetaData->m_metaEndFlag == FLASH_META_DATA_HEADER_END_FLAG)
+        {
+            isValid = SUCC;
+        }
+        else
+        {
+            TBOX_PRINT("Line %d: Invalid meta data header or end flag\r\n", __LINE__);
+        }
+    }
+    else
+    {
+        TBOX_PRINT("Line %d: NULL pointer for meta data validation\r\n", __LINE__);
+    }
+
+    return isValid;
+}
+/**
+ * @brief Writes meta data structure to both Image A and Image B regions
+ * @param pMetaData Pointer to meta data structure to be written
+ * @return ResultStatus_t SUCC on success, ERR on failure
+ */
+ResultStatus_t FlashHalWriteMetaDataInfo(const FlashHalMetaDataInfo_t *pMetaData)
+{
+    ResultStatus_t ret = SUCC;
+    uint32_t sector_start;
+    uint32_t sector_end;
+    uint32_t offset_in_sector;
+    const uint32_t meta_data_size = sizeof(FlashHalMetaDataInfo_t);
+    uint32_t aligned_address;
+    uint32_t padding_before;
+    uint32_t aligned_end_address;
+
+    if (pMetaData == NULL)
+    {
+        TBOX_PRINT("Line %d: NULL pointer for meta data write\r\n", __LINE__);
+        ret = ERR;
+    }
+    else
+    {
+        // First write to Image A region
+        aligned_address = FLASH_META_DATA_IMAGEA_HEADER_FLAG_ADDRESS & ~(FLASH_WRITE_MINIMAM_SIZE - 1);
+        padding_before = FLASH_META_DATA_IMAGEA_HEADER_FLAG_ADDRESS - aligned_address;
+        aligned_end_address = ((FLASH_META_DATA_IMAGEA_HEADER_FLAG_ADDRESS + meta_data_size - 1) + (FLASH_WRITE_MINIMAM_SIZE - 1)) & ~(FLASH_WRITE_MINIMAM_SIZE - 1);
+        
+        sector_start = aligned_address & ~(FLASH_SECTOR_SIZE - 1);
+        sector_end = sector_start + FLASH_SECTOR_SIZE - 1;
+        
+        if (aligned_address >= sector_end || aligned_end_address > sector_end)
+        {
+            TBOX_PRINT("Line %d: Meta data crosses sector boundary\r\n", __LINE__);
+            ret = ERR;
+        }
+        else
+        {
+            // Initialize buffer with all zeros
+            memset(g_sector_buf, 0, FLASH_SECTOR_SIZE);      
+            // Copy metadata to the correct position in the buffer
+            offset_in_sector = aligned_address - sector_start;
+            memcpy(&g_sector_buf[offset_in_sector + padding_before], pMetaData, meta_data_size);
+            // Disable interrupts before erase
+            COMMON_DISABLE_INTERRUPTS();
+            ret = FLASH_EraseSector(sector_start, &g_stcFlashCmdExeConfig);
+            COMMON_ENABLE_INTERRUPTS();
+            if (ret == SUCC)
+            {
+                // Disable interrupts before program
+                COMMON_DISABLE_INTERRUPTS();
+                ret = FLASH_Program(sector_start, FLASH_SECTOR_SIZE, g_sector_buf, NULL);
+                COMMON_ENABLE_INTERRUPTS();      
+                if (ret != SUCC)
+                {
+                    TBOX_PRINT("Line %d: Sector program failed %d\r\n", __LINE__, ret);
+                }
+            }
+            else
+            {
+                TBOX_PRINT("Line %d: Sector erase failed %d\r\n", __LINE__, ret);
+            }
+        }       
+        // If first write succeeded, write to Image B region
+        if (ret == SUCC)
+        {
+            aligned_address = FLASH_META_DATA_IMAGEB_HEADER_FLAG_ADDRESS & ~(FLASH_WRITE_MINIMAM_SIZE - 1);
+            padding_before = FLASH_META_DATA_IMAGEB_HEADER_FLAG_ADDRESS - aligned_address;
+            aligned_end_address = ((FLASH_META_DATA_IMAGEB_HEADER_FLAG_ADDRESS + meta_data_size - 1) + (FLASH_WRITE_MINIMAM_SIZE - 1)) & ~(FLASH_WRITE_MINIMAM_SIZE - 1);
+            
+            sector_start = aligned_address & ~(FLASH_SECTOR_SIZE - 1);
+            sector_end = sector_start + FLASH_SECTOR_SIZE - 1;            
+            if (aligned_address >= sector_end || aligned_end_address > sector_end)
+            {
+                TBOX_PRINT("Line %d: Meta data crosses sector boundary\r\n", __LINE__);
+                ret = ERR;
+            }
+            else
+            {
+                // Initialize buffer with all zeros
+                memset(g_sector_buf, 0, FLASH_SECTOR_SIZE);     
+                // Copy metadata to the correct position in the buffer
+                offset_in_sector = aligned_address - sector_start;
+                memcpy(&g_sector_buf[offset_in_sector + padding_before], pMetaData, meta_data_size);
+                // Disable interrupts before erase
+                COMMON_DISABLE_INTERRUPTS();
+                ret = FLASH_EraseSector(sector_start, &g_stcFlashCmdExeConfig);
+                COMMON_ENABLE_INTERRUPTS();
+                if (ret == SUCC)
+                {
+                    // Disable interrupts before program
+                    COMMON_DISABLE_INTERRUPTS();
+                    ret = FLASH_Program(sector_start, FLASH_SECTOR_SIZE, g_sector_buf, NULL);
+                    COMMON_ENABLE_INTERRUPTS();
+                    if (ret != SUCC)
+                    {
+                        TBOX_PRINT("Line %d: Sector program failed %d\r\n", __LINE__, ret);
+                    }
+                }
+                else
+                {
+                    TBOX_PRINT("Line %d: Sector erase failed %d\r\n", __LINE__, ret);
+                }
+            }
+        }
+    }
+    return ret;
+}
+
+/**
+ * @brief Reads meta data from flash and stores in global cache
+ * Uses A -> B -> default fallback logic with validation
+ */
+ResultStatus_t FlashHalGetMetaDataInfo(FlashHalMetaDataInfo_t *pMetaData)
+{
+    ResultStatus_t result = ERR;
+    FlashHalMetaDataInfo_t tempMeta;
+    uint8_t readStatus = 0;
+
+    if (pMetaData == NULL)
+    {
+        TBOX_PRINT("Line %d: NULL pointer for meta data info\r\n", __LINE__);
+        result = ERR;
+    }
+    else
+    {
+        // Initialize temporary buffer
+        memset(&tempMeta, 0, sizeof(FlashHalMetaDataInfo_t));
+        // Try reading Image A first
+        readStatus = FlashHalRead(FLASH_META_DATA_IMAGEA_HEADER_FLAG_ADDRESS,
+                                  (uint8_t*)&tempMeta,
+                                  sizeof(FlashHalMetaDataInfo_t));
+        if (readStatus == 0)
+        {
+            result = FlashHalIsMetaDataValid(&tempMeta);
+            if (result == SUCC)
+            {
+                memcpy(pMetaData, &tempMeta, sizeof(FlashHalMetaDataInfo_t));
+                TBOX_PRINT("Successfully read valid meta data from Image A\r\n");
+            }
+            else
+            {
+                TBOX_PRINT("Meta data A region error!\r\n");
+                // If Image A failed, try Image B
+                memset(&tempMeta, 0, sizeof(FlashHalMetaDataInfo_t));
+                readStatus = FlashHalRead(FLASH_META_DATA_IMAGEB_HEADER_FLAG_ADDRESS,
+                                          (uint8_t*)&tempMeta,
+                                          sizeof(FlashHalMetaDataInfo_t));
+                if (readStatus == 0)
+                {
+                    result = FlashHalIsMetaDataValid(&tempMeta);
+                    if (result == SUCC)
+                    {
+                        memcpy(pMetaData, &tempMeta, sizeof(FlashHalMetaDataInfo_t));
+                        TBOX_PRINT("Successfully read valid meta data from Image B\r\n");
+                    }
+                    else
+                    {
+                        TBOX_PRINT("Meta data B region error!\r\n");
+                        // If both A and B failed, use default and write it to both regions
+                        TBOX_PRINT("Using default meta data values\r\n");
+                        memcpy(pMetaData, &g_flashHalMetaDataDefaultInfo, sizeof(FlashHalMetaDataInfo_t));
+                        // Write default to both regions for future reads
+                        FlashHalWriteMetaDataInfo(&g_flashHalMetaDataDefaultInfo);
+                        result = SUCC;
+                    }
+                }
+            }
+        } 
+    }
+    return result;
+}
+
+uint8_t FlashHalGetEnterBootType(void)
+{
+    return g_enterBootType;
+}

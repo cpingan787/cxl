@@ -1,0 +1,189 @@
+/* =========================================================================
+ * Z20K148M_flash_Boot_and_App.icf (Scheme A - Expanded Comments)
+ *
+ * Build model:
+ * - One ICF supports Boot + two Release App slots + AppDebug.
+ * - The build system must define __BUILD_TARGET__:
+ *     0 = Boot
+ *     1 = ReleaseApp1 (runs from APP1_RUN_BASE, vectors there)
+ *     2 = ReleaseApp2 (runs from APP2_RUN_BASE, vectors there)
+ *     3 = AppDebug    (runs from 0x00000000, vectors at 0x00000000)
+ *
+ * Flash layout (total 2MB assumed: 0x00000000 .. 0x001FFFFF):
+ * - Boot region (192KB):  [BOOT_BASE .. BOOT_END]
+ *     - Boot code:        [BOOT_BASE .. BOOT_CODE_END]
+ *     - Boot info (128B): [BOOT_INFO_BASE .. BOOT_END]  (reserved tail)
+ * - Meta region (64KB):   [META_BASE .. META_END]
+ * - App slot 1 (768KB):   [APP1_BASE .. APP1_END]
+ *     - Flag  (8KB):      [APP1_FLAG_BASE   .. APP1_FLAG_BASE+0x1FFF]
+ *     - Digest(8KB):      [APP1_DIGEST_BASE .. APP1_DIGEST_BASE+0x1FFF]
+ *     - Run   :           [APP1_RUN_BASE    .. APP1_END] (vectors/code)
+ * - App slot 2 (768KB):   [APP2_BASE .. APP2_END]  (same internal split)
+ * - Reserve (256KB):      [RESV_BASE .. RESV_END]
+ *
+ * RAM layout (Scheme A):
+ * - Original design split SRAM into:
+ *     RAM0: 0x1FFE0000..0x1FFEFFFF (64KB) for .textrw
+ *     RAM1: 0x1FFF0000..0x2001FFFF (192KB) for readwrite + stack/heap
+ * - Scheme A shrinks RAM0 to 8KB and merges the freed part into RAM1:
+ *     RAM0: 0x1FFE0000..0x1FFE1FFF (8KB)  -> section .textrw only
+ *     RAM1: 0x1FFE2000..0x2001FFFF (248KB)-> readwrite + HEAP/CSTACK
+ *
+ * Notes:
+ * - If .textrw grows beyond 8KB, increase RAM0 and move RAM1_BASE accordingly.
+ * - HEAP/CSTACK are placed at the END of RAM1_region.
+ * - readwrite (.data/.bss/.noinit etc.) is placed into RAM1_region.
+ * - .intvec is placed at __INTVEC_ADDR__ which depends on __BUILD_TARGET__.
+ * ========================================================================= */
+
+if (!isdefinedsymbol(__BUILD_TARGET__)) { error "Define __BUILD_TARGET__ as 0(Boot)/1(ReleaseApp1)/2(ReleaseApp2)/3(AppDebug) in Linker Config"; }
+/* The linker requires __BUILD_TARGET__ to choose the active Flash region and vector base. */
+/* __BUILD_TARGET__ selects the active image and vector base. */
+
+/* Flash partition sizes (bytes). Keep these consistent with your device memory map. */
+define symbol FLASH_BOOT_TOTAL_SIZE      = 0x00030000;
+define symbol FLASH_META_DATA_TOTAL_SIZE = 0x00010000;
+define symbol FLASH_APP_SINGLE_SIZE      = 0x000C0000;
+define symbol FLASH_RESERVE_REGION_SIZE  = 0x00040000;
+
+define symbol BOOT_INFO_SIZE             = 0x00000080;
+
+define symbol APP_FLAG_SIZE              = 0x00002000;
+define symbol APP_DIGEST_SIZE            = 0x00002000;
+define symbol APP_RUN_OFFSET             = (APP_FLAG_SIZE + APP_DIGEST_SIZE);
+/* App slot internal layout: [flag][digest][runtime image starting at +0x4000]. */
+
+define symbol FLASH_BASE = 0x00000000;
+
+define symbol BOOT_BASE  = FLASH_BASE;
+define symbol BOOT_END   = BOOT_BASE + FLASH_BOOT_TOTAL_SIZE - 1;
+
+define symbol BOOT_INFO_BASE = (BOOT_BASE + FLASH_BOOT_TOTAL_SIZE - BOOT_INFO_SIZE);
+/* BOOT_INFO is a reserved tail area (e.g., version/build info). Boot code must not overlap it. */
+define symbol BOOT_CODE_END  = (BOOT_INFO_BASE - 1);
+
+define symbol META_BASE  = BOOT_BASE + FLASH_BOOT_TOTAL_SIZE;
+define symbol META_END   = META_BASE + FLASH_META_DATA_TOTAL_SIZE - 1;
+
+define symbol APP1_BASE  = META_BASE + FLASH_META_DATA_TOTAL_SIZE;
+define symbol APP1_END   = APP1_BASE + FLASH_APP_SINGLE_SIZE - 1;
+define symbol APP1_FLAG_BASE   = APP1_BASE;
+define symbol APP1_DIGEST_BASE = APP1_BASE + APP_FLAG_SIZE;
+define symbol APP1_RUN_BASE    = APP1_BASE + APP_RUN_OFFSET;
+
+define symbol APP2_BASE  = APP1_BASE + FLASH_APP_SINGLE_SIZE;
+define symbol APP2_END   = APP2_BASE + FLASH_APP_SINGLE_SIZE - 1;
+define symbol APP2_FLAG_BASE   = APP2_BASE;
+define symbol APP2_DIGEST_BASE = APP2_BASE + APP_FLAG_SIZE;
+define symbol APP2_RUN_BASE    = APP2_BASE + APP_RUN_OFFSET;
+
+define symbol RESV_BASE  = APP2_BASE + FLASH_APP_SINGLE_SIZE;
+define symbol RESV_END   = RESV_BASE + FLASH_RESERVE_REGION_SIZE - 1;
+
+define symbol FLASH_END  = RESV_END;
+
+/* --- RAM partition (Scheme A) --- */
+/* IMPORTANT: RAM0 is intentionally small; it is only for .textrw (code in RAM).
+ * All regular RW objects (global/static) go to RAM1.
+ */
+/* RAM0: .textrw only; RAM1: readwrite + HEAP/CSTACK at the end. */
+define symbol __ICFEDIT_region_RAM_start__ = 0x1FFE0000;
+define symbol __ICFEDIT_region_RAM_end__   = 0x1FFE1FFF;
+
+define symbol RAM1_BASE = 0x1FFE2000;
+define symbol RAM1_SIZE = 0x0003E000;
+define symbol RAM1_END  = RAM1_BASE + RAM1_SIZE - 1;
+
+define symbol __ICFEDIT_size_cstack__ = 0x00001000;
+define symbol __ICFEDIT_size_heap__   = 0x00000200;
+
+/* Exported symbols used by startup/application code. */
+/* These exported symbols are commonly referenced by startup, diagnostics, or memory checks. */
+define exported symbol __RAM_START = __ICFEDIT_region_RAM_start__;
+define exported symbol __RAM_END   = RAM1_END;
+define exported symbol __BOOT_INFO_BASE = BOOT_INFO_BASE;
+
+define memory mem with size = 4G;
+
+/* --- Flash and RAM regions --- */
+/* Regions define legal placement ranges. Placement rules later decide which sections go where. */
+define region BOOT_region        = mem:[from BOOT_BASE to BOOT_CODE_END];
+define region BOOT_INFO_region   = mem:[from BOOT_INFO_BASE to BOOT_END];
+
+define region META_region        = mem:[from META_BASE to META_END];
+
+define region APP1_FLAG_region     = mem:[from APP1_FLAG_BASE   to (APP1_FLAG_BASE   + APP_FLAG_SIZE   - 1)];
+define region APP1_DIGEST_region   = mem:[from APP1_DIGEST_BASE to (APP1_DIGEST_BASE + APP_DIGEST_SIZE - 1)];
+define region APP1_CODE_region     = mem:[from APP1_RUN_BASE    to APP1_END];
+
+define region APP2_FLAG_region     = mem:[from APP2_FLAG_BASE   to (APP2_FLAG_BASE   + APP_FLAG_SIZE   - 1)];
+define region APP2_DIGEST_region   = mem:[from APP2_DIGEST_BASE to (APP2_DIGEST_BASE + APP_DIGEST_SIZE - 1)];
+define region APP2_CODE_region     = mem:[from APP2_RUN_BASE    to APP2_END];
+
+define region DEBUG_ALL_region     = mem:[from FLASH_BASE to FLASH_END];
+
+define region RESV_region          = mem:[from RESV_BASE to RESV_END];
+
+define region RAM0_region = mem:[from __ICFEDIT_region_RAM_start__ to __ICFEDIT_region_RAM_end__];
+define region RAM1_region = mem:[from RAM1_BASE size RAM1_SIZE];
+
+/* --- Runtime blocks --- */
+/* CSTACK: main C stack. HEAP: DLib heap (may be unused if malloc/new are not linked). */
+define block CSTACK with size = __ICFEDIT_size_cstack__, alignment = 8 { };
+define block HEAP   with size = __ICFEDIT_size_heap__,   alignment = 8 { };
+
+/* --- Initialization --- */
+/* initialize by copy: copies initialized RW from Flash to RAM at startup.
+ * do not initialize: keeps .noinit content across reset (if supported by reset sequence).
+ */
+/* Copy initialized RW (.data) from Flash to RAM; zero-init (.bss) as usual. */
+initialize by copy { readwrite };
+do not initialize  { section .noinit };
+
+/* --- Select active code region and vector table location --- */
+/* ACTIVE_CODE_FLASH is the selected Flash region for readonly content (.text/.rodata etc.).
+ * __INTVEC_ADDR__ is where the vector table (.intvec) will be placed.
+ */
+if (__BUILD_TARGET__ == 0) {
+  define symbol __INTVEC_ADDR__    = BOOT_BASE;
+  define region ACTIVE_CODE_FLASH  = BOOT_region;
+}
+else if (__BUILD_TARGET__ == 1) {
+  define symbol __INTVEC_ADDR__    = APP1_RUN_BASE;
+  define region ACTIVE_CODE_FLASH  = APP1_CODE_region;
+}
+else if (__BUILD_TARGET__ == 2) {
+  define symbol __INTVEC_ADDR__    = APP2_RUN_BASE;
+  define region ACTIVE_CODE_FLASH  = APP2_CODE_region;
+}
+else if (__BUILD_TARGET__ == 3) {
+  define symbol __INTVEC_ADDR__    = FLASH_BASE;
+  define region ACTIVE_CODE_FLASH  = DEBUG_ALL_region;
+}
+else {
+  error "Invalid __BUILD_TARGET__. Use 0(Boot)/1(ReleaseApp1)/2(ReleaseApp2)/3(AppDebug).";
+}
+
+/* Optional: place a dedicated .bootinfo section into the reserved Boot info area. */
+/* If no object defines section .bootinfo, this placement has no effect. */
+place in BOOT_INFO_region { section .bootinfo };
+
+/* --- Placement rules --- */
+/* Placement order matters:
+ * 1) Force .intvec at __INTVEC_ADDR__ (must be exact).
+ * 2) Place readonly into ACTIVE_CODE_FLASH.
+ * 3) Place .textrw into RAM0.
+ * 4) Place HEAP/CSTACK at end of RAM1.
+ * 5) Place remaining readwrite into RAM1.
+ */
+/* - .intvec is placed at __INTVEC_ADDR__ (boot/app slot base)
+ * - readonly goes to the selected Flash region
+ * - .textrw goes to RAM0 (used for code executed from RAM)
+ * - HEAP/CSTACK are placed at the end of RAM1
+ * - remaining readwrite goes to RAM1
+ */
+place at address mem:__INTVEC_ADDR__ { readonly section .intvec };
+place in ACTIVE_CODE_FLASH { readonly };
+place in RAM0_region { section .textrw };
+place at end of RAM1_region { block HEAP, block CSTACK };
+place in RAM1_region { readwrite };
