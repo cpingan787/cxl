@@ -1,0 +1,459 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+********************************************************************************
+** Project      = AUTOSAR Renesas R4.2.2 F1x MCAL Components                  **
+** Module       = R422_PORT_F1x_BSWMDT.arxml                                  **
+********************************************************************************
+**                                  COPYRIGHT                                 **
+********************************************************************************
+** Copyright(c) 2016-2021 Renesas Electronics Corporation                     **
+********************************************************************************
+** Purpose:                                                                   **
+** Provides the BSW module description of PORT Driver Component for AUTOSAR   **
+** release 4.2.2                                                              **
+**                                                                            **
+********************************************************************************
+**                                                                            **
+** Unless otherwise agreed upon in writing between your company and           **
+** Renesas Electronics Corporation the following shall apply!                 **
+**                                                                            **
+** Warranty Disclaimer                                                        **
+**                                                                            **
+** There is no warranty of any kind whatsoever granted by Renesas. Any        **
+** warranty is expressly disclaimed and excluded by Renesas, either expressed **
+** or implied, including but not limited to those for non-infringement of     **
+** intellectual property, merchantability and/or fitness for the particular   **
+** purpose.                                                                   **
+**                                                                            **
+** Renesas shall not have any obligation to maintain, service or provide bug  **
+** fixes for the supplied Product(s) and/or the Application.                  **
+**                                                                            **
+** Each User is solely responsible for determining the appropriateness of     **
+** using the Product(s) and assumes all risks associated with its exercise    **
+** of rights under this Agreement, including, but not limited to the risks    **
+** and costs of program errors, compliance with applicable laws, damage to    **
+** or loss of data, programs or equipment, and unavailability or              **
+** interruption of operations.                                                **
+**                                                                            **
+** Limitation of Liability                                                    **
+**                                                                            **
+** In no event shall Renesas be liable to the User for any incidental,        **
+** consequential, indirect, or punitive damage (including but not limited     **
+** to lost profits) regardless of whether such liability is based on breach   **
+** of contract, tort, strict liability, breach of warranties, failure of      **
+** essential purpose or otherwise and even if advised of the possibility of   **
+** such damages. Renesas shall not be liable for any services or products     **
+** provided by third party vendors, developers or consultants identified or   **
+** referred to the User by Renesas in connection with the Product(s) and/or   **
+** the Application.                                                           **
+**                                                                            **
+********************************************************************************
+** Environment:                                                               **
+**              Devices:       RH850/F1K: R7F701542 , R7F701543 , R7F701546   **
+**                                        R7F701547 , R7F701557 , R7F701560   **
+**                                        R7F701561 , R7F701562 , R7F701563   **
+**                                        R7F701566 , R7F701567 , R7F701577   **
+**                                        R7F701580 , R7F701581 , R7F701582   **
+**                                        R7F701583 , R7F701586 , R7F701587   **
+**                                        R7F701597 , R7F701602 , R7F701603   **
+**                                        R7F701610 , R7F701611 , R7F701612   **
+**                                        R7F701613 , R7F701620 , R7F701621   **
+**                                        R7F701622 , R7F701623.              **
+**                         RH850/F1KM-S4: R7F701636 , R7F701644 , R7F701645   **
+**                                        R7F701646 , R7F701647 , R7F701648   **
+**                                        R7F701649 , R7F701650 , R7F701651   **
+**                                        R7F701652 , R7F701653               **
+**                         RH850/F1KM-S1: R7F701684 , R7F701685 , R7F701686   **
+**                                        R7F701687 , R7F701688 , R7F701689   **
+**                                        R7F701690 , R7F701691 , R7F701692   **
+**                                        R7F701693 , R7F701694 , R7F701695.  **
+**                         RH850/F1KH-D8: R7F701708 , R7F701709 , R7F701710   **
+**                                        R7F701711 , R7F701714 , R7F701715.  **
+**                         RH850/F1KM-S2: R7F701760 , R7F701762 , R7F701764.  **
+********************************************************************************
+**                      Revision Control History                              **
+********************************************************************************
+** V1.0.0:  20-Oct-2016  Initial Version                                      **
+** V1.0.1:  24-Nov-2016  As per ARDAABC-794, remove unsupported devices:      **
+**                       701554, 701555, 701575, 701595, 701605, 701606       **
+**                       and 701607                                           **
+** V1.0.2:  06-Dec-2016  As part of ARDAABC-919 Jira ticket, the following    **
+**                       changes are made:                                    **
+**                       1. Added entries for Port_CheckHWConsistency         **
+**                          function.                                         **
+**                       2. Removed devices which are not applicable.         **
+** V1.1.0:  06-Dec-2016  As part of ARDAABC-919 Jira ticket, the following    **
+**                       changes are made:                                    **
+**                       1. Added CAN-ENTER-EXCLUSIVE-AREA-REFS tag for each  **
+**                          called entity.                                    **
+**                       2. Updated all short names to be unique.             **
+**                       3. Added fields for Port_GetVersionInfo.             **
+**                       4. Updated SERVICE-ID and updated fields order.      **
+**                       5. Updated SW-VERSION.                               **
+**                       6. Add IS-REENTRANT tag for all functions.           **
+**                       7. Removed external implementation of exclusive areas**
+** V1.1.1:  11-Jan-2017  As part of ARDAABC-919 Jira ticket, the following    **
+**                       changes are made:                                    **
+**                       1. Under BswCalledEntity_0, added                    **
+**                          Port_INIT_PROTECTION and                          **
+**                          PORT_FILTER_CONFIG_PROTECTION                     **
+**                       2. Changed SERVICE-ID values format from decimal to  **
+**                          hex.                                              **
+**                       3. Moved Port_GetVersionInfo upper in the file to    **
+**                          have all SERVICE-IDs in order.                    **
+** V1.1.2:  29-Jun-2017  Following changes are made,                          **
+**                       1. As per JIRA ARDAABD-1889, following changes are   **
+**                          made:                                             **
+**                          a. Environment section is updated to separate     **
+**                             F1KM devices.                                  **
+**                          b. Software patch version is updated.             **
+**                       2. As per JIRA ARDAABL-1465, following changes are   **
+**                          made:                                             **
+**                          a. Added codeDescriptor, resourceConsumption and  **
+**                             providedEntry attribute.                       **
+**                          b. Corrected the path of                          **
+**                             CAN-ENTER-EXCLUSIVE-AREA-REF.                  **
+** V1.1.3:  25-Jul-2017  Following changes are made,                          **
+**                       1. Software patch version is updated.                **
+**                       2. As per JIRA ARDAABD-1908, resourceConsumption     **
+**                          is updated.                                       **
+**                       3. As per JIRA ARDAABD-1520, Unused exclusive area   **
+**                          tag is removed.                                   **
+** V1.1.4:  29-Aug-2017  As part of jira #ARDAABD-2307 F1KH devices has been  **
+**                       added in environment section.                        **
+** V1.1.5:  09-Oct-2017  Following changes are made,                          **
+**                       1. Software patch version is updated.                **
+**                       2. As part of ARDAABD-2456, VENDOR-API-INFIX tag is  **
+**                          removed.                                          **
+**                       3. As part of ARDAABD-2474, MINIMUM-START-INTERVAL   **
+**                          tag is added in ENTITYS.                          **
+**                       4. As part of ARDAABD-2441,                          **
+**                          <CAN-ENTER-EXCLUSIVE-AREA-REFS> tag is added for  **
+**                          Port_CheckHWConsistency.                          **
+** V1.1.6:  11-May-2018  Following changes are made,                          **
+**                       1. UUID's are updated as unique across modules.      **
+**                          Ref: ARDAABD-3673                                 **
+**                       2. Software patch version is updated.                **
+** V1.1.7:  22-Mar-2019  Following changes are made:                          **
+**                       1. SW-VERSION is updated.                            **
+**                          Ref: ARDAABD-4273                                 **
+** V1.1.8:  15-Oct-2019  Following changes are made:                          **
+**                       1. SW-VERSION is updated.                            **
+**                          Ref: ARDAABD-4140                                 **
+**                       2. #ARDAABD-4553                                     **
+**                          The following chips have been deleted .           **
+**                          R7F701634,R7F701635,R7F701636,R7F701637,R7F701638,**
+**                          R7F701639,R7F701640,R7F701641,R7F701642,R7F701643,**
+**                          R7F701700,R7F701701,R7F701702,R7F701703,R7F701704,**
+**                          R7F701705,R7F701706,R7F701707,R7F701712,R7F701713.**
+**                       3. R7F701636 have been Added. Ref: ARDAABD-4553      **
+** V1.1.9:  06-Aug-2020  1. As part of jira ticket ARDAABD-4611, following    **
+**                          changes are made:                                 **
+**                          a. Update the copyright.                          **
+**                          b. Define the exclusive area                      **
+**                             PORT_REGISTER_PROTECTION                       **
+**                          c. Remove all exclusive areas which not used in   **
+**                             MCAL driver and all API specific exclusive     **
+**                             areas are replaced with common exclusive area  **
+**                             (PORT_REGISTER_PROTECTION).                    **
+**                       2. Following changes are made.                       **
+**                          Updated SW-VERSION to 2.4.17.                     **
+**                       3. As part of #ARDAABD-4541                          **
+**                          a. Changed <SHORT-NAME> of <AR-PACKAGE> from      **
+**                             "EcucDefs_Port" to "ModuleDescription_Port".   **
+**                             Updated the "REF DEST" for all corresponding   **
+**                             objects except <VENDOR-SPECIFIC-MODULE-DEF-REF>**
+** V1.1.10: 31-Mar-2021  As part of ARDAABD-5045, the following changes are   **
+**                       made:                                                **
+**                       a) Removed 'ASIL_B' from  'VAR_INIT_ASIL_B_BOOLEAN', **
+**                          'VAR_ASIL_B_NO_INIT_UNSPECIFIED',                 **
+**                          'CONST_ASIL_B_UNSPECIFIED',                       **
+**                          'CONFIG_DATA_ASIL_B_UNSPECIFIED' and              **
+**                          'CODE_ASIL_B'.                                    **
+**                       b) Updated SW-VERSION.                               **
+**                       c) Copyright information has been updated.           **
+** V1.1.11: 30-Aug-2021  1. As part of ARDAABD-6344, the following changes    **
+**                          are made:                                         **
+**                       a) Added F1KM S2 devices in Environment section.     **
+**                       b) 'UUID' has been made unique.                      **
+**                       2. As part of ARDAABD-6891 and ARDAABD-6581, Updated **
+**                          SW-VERSION tag to 2.4.19.                         **
+********************************************************************************
+-->
+<AUTOSAR xmlns="http://autosar.org/schema/r4.0" xsi:schemaLocation="http://autosar.org/schema/r4.0 AUTOSAR_4-2-2.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <AR-PACKAGES>
+    <AR-PACKAGE UUID="ECUS:7329ec0c-372f-4442-bd82-ec40b8f85fec">
+      <SHORT-NAME>Renesas</SHORT-NAME>
+      <AR-PACKAGES>
+        <AR-PACKAGE UUID="ECUS:3153f040-357a-4638-877d-90a4c8011e40">
+          <SHORT-NAME>ModuleDescription_Port</SHORT-NAME>
+          <ELEMENTS>
+            <BSW-IMPLEMENTATION UUID="ECUS:f56519bf-92e3-483a-8b2b-478688c0bd51">
+              <SHORT-NAME>Port_Impl</SHORT-NAME>
+              <CODE-DESCRIPTORS>
+                <CODE UUID="ECUS:e01ecdfb-878b-4929-bf4f-ecd16547d9d0">
+                  <SHORT-NAME>Port_Code</SHORT-NAME>
+                  <ARTIFACT-DESCRIPTORS>
+                    <AUTOSAR-ENGINEERING-OBJECT>
+                      <SHORT-LABEL>Port.c</SHORT-LABEL>
+                      <CATEGORY>SWSRC</CATEGORY>
+                    </AUTOSAR-ENGINEERING-OBJECT>
+                    <AUTOSAR-ENGINEERING-OBJECT>
+                      <SHORT-LABEL>Port.h</SHORT-LABEL>
+                      <CATEGORY>SWHDR</CATEGORY>
+                    </AUTOSAR-ENGINEERING-OBJECT>
+                  </ARTIFACT-DESCRIPTORS>
+                </CODE>
+              </CODE-DESCRIPTORS>
+              <PROGRAMMING-LANGUAGE>C</PROGRAMMING-LANGUAGE>
+              <RESOURCE-CONSUMPTION UUID="ECUS:d1e52f6a-b654-45c8-a0a1-6e8f7a2a2b31">
+                <SHORT-NAME>ResourceConsumption</SHORT-NAME>
+                <MEMORY-SECTIONS>
+                  <MEMORY-SECTION UUID="ECUS:501043bb-4876-41af-806b-f5c46e7e3287">
+                    <SHORT-NAME>VAR_INIT_BOOLEAN</SHORT-NAME>
+                    <SW-ADDRMETHOD-REF DEST="SW-ADDR-METHOD">/AUTOSAR_MemMap/SwAddrMethods/VAR_INIT</SW-ADDRMETHOD-REF>
+                  </MEMORY-SECTION>
+                  <MEMORY-SECTION UUID="ECUS:9f3af3fb-6bc6-493e-a6cc-c547cea739f4">
+                    <SHORT-NAME>VAR_NO_INIT_UNSPECIFIED</SHORT-NAME>
+                    <SW-ADDRMETHOD-REF DEST="SW-ADDR-METHOD">/AUTOSAR_MemMap/SwAddrMethods/VAR_NO_INIT</SW-ADDRMETHOD-REF>
+                  </MEMORY-SECTION>
+                  <MEMORY-SECTION UUID="ECUS:9e861684-a208-499c-9ee3-04f7727208a1">
+                    <SHORT-NAME>CONST_UNSPECIFIED</SHORT-NAME>
+                    <SW-ADDRMETHOD-REF DEST="SW-ADDR-METHOD">/AUTOSAR_MemMap/SwAddrMethods/CONST</SW-ADDRMETHOD-REF>
+                  </MEMORY-SECTION>
+                  <MEMORY-SECTION UUID="ECUS:f0dd564c-af3c-444c-9dda-467027598d58">
+                    <SHORT-NAME>CONFIG_DATA_UNSPECIFIED</SHORT-NAME>
+                    <SW-ADDRMETHOD-REF DEST="SW-ADDR-METHOD">/AUTOSAR_MemMap/SwAddrMethods/CONFIG_DATA</SW-ADDRMETHOD-REF>
+                  </MEMORY-SECTION>
+                  <MEMORY-SECTION UUID="ECUS:d188c2bc-d1a3-49b9-a24c-a9db7b9077ee">
+                    <SHORT-NAME>CODE</SHORT-NAME>
+                    <SW-ADDRMETHOD-REF DEST="SW-ADDR-METHOD">/AUTOSAR_MemMap/SwAddrMethods/CODE</SW-ADDRMETHOD-REF>
+                  </MEMORY-SECTION>
+                </MEMORY-SECTIONS>
+              </RESOURCE-CONSUMPTION>
+              <SW-VERSION>2.4.19</SW-VERSION>
+              <VENDOR-ID>59</VENDOR-ID>
+              <AR-RELEASE-VERSION>4.2.2</AR-RELEASE-VERSION>
+              <BEHAVIOR-REF DEST="BSW-INTERNAL-BEHAVIOR">/Renesas/ModuleDescription_Port/Port/BswInternalBehavior_0</BEHAVIOR-REF>
+              <VENDOR-SPECIFIC-MODULE-DEF-REFS>
+                <VENDOR-SPECIFIC-MODULE-DEF-REF DEST="ECUC-MODULE-DEF">/Renesas/EcucDefs_Port/Port</VENDOR-SPECIFIC-MODULE-DEF-REF>
+              </VENDOR-SPECIFIC-MODULE-DEF-REFS>
+            </BSW-IMPLEMENTATION>
+            <BSW-MODULE-DESCRIPTION UUID="ECUS:b80571ea-8b33-4a67-b228-de52fbffc67b">
+              <SHORT-NAME>Port</SHORT-NAME>
+              <MODULE-ID>124</MODULE-ID>
+              <PROVIDED-ENTRYS>
+                <BSW-MODULE-ENTRY-REF-CONDITIONAL>
+                  <BSW-MODULE-ENTRY-REF DEST="BSW-MODULE-ENTRY">/Renesas/ModuleDescription_Port/Port_Init</BSW-MODULE-ENTRY-REF>
+                </BSW-MODULE-ENTRY-REF-CONDITIONAL>
+                <BSW-MODULE-ENTRY-REF-CONDITIONAL>
+                  <BSW-MODULE-ENTRY-REF DEST="BSW-MODULE-ENTRY">/Renesas/ModuleDescription_Port/Port_SetPinDirection</BSW-MODULE-ENTRY-REF>
+                </BSW-MODULE-ENTRY-REF-CONDITIONAL>
+                <BSW-MODULE-ENTRY-REF-CONDITIONAL>
+                  <BSW-MODULE-ENTRY-REF DEST="BSW-MODULE-ENTRY">/Renesas/ModuleDescription_Port/Port_RefreshPortDirection</BSW-MODULE-ENTRY-REF>
+                </BSW-MODULE-ENTRY-REF-CONDITIONAL>
+                <BSW-MODULE-ENTRY-REF-CONDITIONAL>
+                  <BSW-MODULE-ENTRY-REF DEST="BSW-MODULE-ENTRY">/Renesas/ModuleDescription_Port/Port_GetVersionInfo</BSW-MODULE-ENTRY-REF>
+                </BSW-MODULE-ENTRY-REF-CONDITIONAL>
+                <BSW-MODULE-ENTRY-REF-CONDITIONAL>
+                  <BSW-MODULE-ENTRY-REF DEST="BSW-MODULE-ENTRY">/Renesas/ModuleDescription_Port/Port_SetPinMode</BSW-MODULE-ENTRY-REF>
+                </BSW-MODULE-ENTRY-REF-CONDITIONAL>
+                <BSW-MODULE-ENTRY-REF-CONDITIONAL>
+                  <BSW-MODULE-ENTRY-REF DEST="BSW-MODULE-ENTRY">/Renesas/ModuleDescription_Port/Port_SetToDioMode</BSW-MODULE-ENTRY-REF>
+                </BSW-MODULE-ENTRY-REF-CONDITIONAL>
+                <BSW-MODULE-ENTRY-REF-CONDITIONAL>
+                  <BSW-MODULE-ENTRY-REF DEST="BSW-MODULE-ENTRY">/Renesas/ModuleDescription_Port/Port_SetToAlternateMode</BSW-MODULE-ENTRY-REF>
+                </BSW-MODULE-ENTRY-REF-CONDITIONAL>
+                <BSW-MODULE-ENTRY-REF-CONDITIONAL>
+                  <BSW-MODULE-ENTRY-REF DEST="BSW-MODULE-ENTRY">/Renesas/ModuleDescription_Port/Port_SetPinDefaultMode</BSW-MODULE-ENTRY-REF>
+                </BSW-MODULE-ENTRY-REF-CONDITIONAL>
+                <BSW-MODULE-ENTRY-REF-CONDITIONAL>
+                  <BSW-MODULE-ENTRY-REF DEST="BSW-MODULE-ENTRY">/Renesas/ModuleDescription_Port/Port_SetPinDefaultDirection</BSW-MODULE-ENTRY-REF>
+                </BSW-MODULE-ENTRY-REF-CONDITIONAL>
+                <BSW-MODULE-ENTRY-REF-CONDITIONAL>
+                  <BSW-MODULE-ENTRY-REF DEST="BSW-MODULE-ENTRY">/Renesas/ModuleDescription_Port/Port_CheckHWConsistency</BSW-MODULE-ENTRY-REF>
+                </BSW-MODULE-ENTRY-REF-CONDITIONAL>
+              </PROVIDED-ENTRYS>
+              <INTERNAL-BEHAVIORS>
+                <BSW-INTERNAL-BEHAVIOR UUID="ECUS:f7b0a479-d9c4-4509-b66c-8acb274e3800">
+                  <SHORT-NAME>BswInternalBehavior_0</SHORT-NAME>
+                  <EXCLUSIVE-AREAS>
+                    <EXCLUSIVE-AREA UUID="ECUS:4d26e92b-24fe-4c97-a9a5-d6681d641823">
+                      <SHORT-NAME>PORT_REGISTER_PROTECTION</SHORT-NAME>
+                    </EXCLUSIVE-AREA>
+                  </EXCLUSIVE-AREAS>
+                  <ENTITYS>
+                    <BSW-CALLED-ENTITY UUID="ECUS:c2b89dc4-001b-4651-bc2e-95038f15e3c3">
+                      <SHORT-NAME>BswCalledEntity_0</SHORT-NAME>
+                      <MINIMUM-START-INTERVAL>0</MINIMUM-START-INTERVAL>
+                      <IMPLEMENTED-ENTRY-REF DEST="BSW-MODULE-ENTRY">/Renesas/ModuleDescription_Port/Port_Init</IMPLEMENTED-ENTRY-REF>
+                    </BSW-CALLED-ENTITY>
+                    <BSW-CALLED-ENTITY UUID="ECUS:6af56134-af31-436e-bafb-0d583d2f8ce6">
+                      <SHORT-NAME>BswCalledEntity_1</SHORT-NAME>
+                      <CAN-ENTER-EXCLUSIVE-AREA-REFS>
+                        <CAN-ENTER-EXCLUSIVE-AREA-REF DEST="EXCLUSIVE-AREA">/Renesas/ModuleDescription_Port/Port/BswInternalBehavior_0/PORT_REGISTER_PROTECTION</CAN-ENTER-EXCLUSIVE-AREA-REF>
+                      </CAN-ENTER-EXCLUSIVE-AREA-REFS>
+                      <MINIMUM-START-INTERVAL>0</MINIMUM-START-INTERVAL>
+                      <IMPLEMENTED-ENTRY-REF DEST="BSW-MODULE-ENTRY">/Renesas/ModuleDescription_Port/Port_SetPinDirection</IMPLEMENTED-ENTRY-REF>
+                    </BSW-CALLED-ENTITY>
+                    <BSW-CALLED-ENTITY UUID="ECUS:a4a098a1-fce7-4483-834c-935d62a78292">
+                      <SHORT-NAME>BswCalledEntity_2</SHORT-NAME>
+                      <CAN-ENTER-EXCLUSIVE-AREA-REFS>
+                        <CAN-ENTER-EXCLUSIVE-AREA-REF DEST="EXCLUSIVE-AREA">/Renesas/ModuleDescription_Port/Port/BswInternalBehavior_0/PORT_REGISTER_PROTECTION</CAN-ENTER-EXCLUSIVE-AREA-REF>
+                      </CAN-ENTER-EXCLUSIVE-AREA-REFS>
+                      <MINIMUM-START-INTERVAL>0</MINIMUM-START-INTERVAL>
+                      <IMPLEMENTED-ENTRY-REF DEST="BSW-MODULE-ENTRY">/Renesas/ModuleDescription_Port/Port_RefreshPortDirection</IMPLEMENTED-ENTRY-REF>
+                    </BSW-CALLED-ENTITY>
+                    <BSW-CALLED-ENTITY UUID="ECUS:bf0b8382-4e55-47c7-9331-1574a9f62cdd">
+                      <SHORT-NAME>BswCalledEntity_3</SHORT-NAME>
+                      <CAN-ENTER-EXCLUSIVE-AREA-REFS>
+                        <CAN-ENTER-EXCLUSIVE-AREA-REF DEST="EXCLUSIVE-AREA">/Renesas/ModuleDescription_Port/Port/BswInternalBehavior_0/PORT_REGISTER_PROTECTION</CAN-ENTER-EXCLUSIVE-AREA-REF>
+                      </CAN-ENTER-EXCLUSIVE-AREA-REFS>
+                      <MINIMUM-START-INTERVAL>0</MINIMUM-START-INTERVAL>
+                      <IMPLEMENTED-ENTRY-REF DEST="BSW-MODULE-ENTRY">/Renesas/ModuleDescription_Port/Port_SetPinMode</IMPLEMENTED-ENTRY-REF>
+                    </BSW-CALLED-ENTITY>
+                    <BSW-CALLED-ENTITY UUID="ECUS:f8d49264-4b07-477b-a82f-0324556433a0">
+                      <SHORT-NAME>BswCalledEntity_4</SHORT-NAME>
+                      <CAN-ENTER-EXCLUSIVE-AREA-REFS>
+                        <CAN-ENTER-EXCLUSIVE-AREA-REF DEST="EXCLUSIVE-AREA">/Renesas/ModuleDescription_Port/Port/BswInternalBehavior_0/PORT_REGISTER_PROTECTION</CAN-ENTER-EXCLUSIVE-AREA-REF>
+                      </CAN-ENTER-EXCLUSIVE-AREA-REFS>
+                      <MINIMUM-START-INTERVAL>0</MINIMUM-START-INTERVAL>
+                      <IMPLEMENTED-ENTRY-REF DEST="BSW-MODULE-ENTRY">/Renesas/ModuleDescription_Port/Port_SetToDioMode</IMPLEMENTED-ENTRY-REF>
+                    </BSW-CALLED-ENTITY>
+                    <BSW-CALLED-ENTITY UUID="ECUS:8bff09cb-6e86-4c62-bad7-969cfbb02f60">
+                      <SHORT-NAME>BswCalledEntity_5</SHORT-NAME>
+                      <CAN-ENTER-EXCLUSIVE-AREA-REFS>
+                        <CAN-ENTER-EXCLUSIVE-AREA-REF DEST="EXCLUSIVE-AREA">/Renesas/ModuleDescription_Port/Port/BswInternalBehavior_0/PORT_REGISTER_PROTECTION</CAN-ENTER-EXCLUSIVE-AREA-REF>
+                      </CAN-ENTER-EXCLUSIVE-AREA-REFS>
+                      <MINIMUM-START-INTERVAL>0</MINIMUM-START-INTERVAL>
+                      <IMPLEMENTED-ENTRY-REF DEST="BSW-MODULE-ENTRY">/Renesas/ModuleDescription_Port/Port_SetToAlternateMode</IMPLEMENTED-ENTRY-REF>
+                    </BSW-CALLED-ENTITY>
+                    <BSW-CALLED-ENTITY UUID="ECUS:b273e639-c8e8-49c1-8353-d30de35a2abd">
+                      <SHORT-NAME>BswCalledEntity_6</SHORT-NAME>
+                      <CAN-ENTER-EXCLUSIVE-AREA-REFS>
+                        <CAN-ENTER-EXCLUSIVE-AREA-REF DEST="EXCLUSIVE-AREA">/Renesas/ModuleDescription_Port/Port/BswInternalBehavior_0/PORT_REGISTER_PROTECTION</CAN-ENTER-EXCLUSIVE-AREA-REF>
+                      </CAN-ENTER-EXCLUSIVE-AREA-REFS>
+                      <MINIMUM-START-INTERVAL>0</MINIMUM-START-INTERVAL>
+                      <IMPLEMENTED-ENTRY-REF DEST="BSW-MODULE-ENTRY">/Renesas/ModuleDescription_Port/Port_SetPinDefaultMode</IMPLEMENTED-ENTRY-REF>
+                    </BSW-CALLED-ENTITY>
+                    <BSW-CALLED-ENTITY UUID="ECUS:f063f62e-8214-4240-987a-d64c0770b95c">
+                      <SHORT-NAME>BswCalledEntity_7</SHORT-NAME>
+                      <CAN-ENTER-EXCLUSIVE-AREA-REFS>
+                        <CAN-ENTER-EXCLUSIVE-AREA-REF DEST="EXCLUSIVE-AREA">/Renesas/ModuleDescription_Port/Port/BswInternalBehavior_0/PORT_REGISTER_PROTECTION</CAN-ENTER-EXCLUSIVE-AREA-REF>
+                      </CAN-ENTER-EXCLUSIVE-AREA-REFS>
+                      <MINIMUM-START-INTERVAL>0</MINIMUM-START-INTERVAL>
+                      <IMPLEMENTED-ENTRY-REF DEST="BSW-MODULE-ENTRY">/Renesas/ModuleDescription_Port/Port_SetPinDefaultDirection</IMPLEMENTED-ENTRY-REF>
+                    </BSW-CALLED-ENTITY>
+                    <BSW-CALLED-ENTITY UUID="ECUS:37d3a855-ee98-4c64-92d5-785bd0262e3a">
+                      <SHORT-NAME>BswCalledEntity_8</SHORT-NAME>
+                      <MINIMUM-START-INTERVAL>0</MINIMUM-START-INTERVAL>
+                      <IMPLEMENTED-ENTRY-REF DEST="BSW-MODULE-ENTRY">/Renesas/ModuleDescription_Port/Port_GetVersionInfo</IMPLEMENTED-ENTRY-REF>
+                    </BSW-CALLED-ENTITY>
+                    <BSW-CALLED-ENTITY UUID="ECUS:8009d3d2-b65f-4ba2-8924-0080c67329e2">
+                      <SHORT-NAME>BswCalledEntity_9</SHORT-NAME>
+                      <CAN-ENTER-EXCLUSIVE-AREA-REFS>
+                        <CAN-ENTER-EXCLUSIVE-AREA-REF DEST="EXCLUSIVE-AREA">/Renesas/ModuleDescription_Port/Port/BswInternalBehavior_0/PORT_REGISTER_PROTECTION</CAN-ENTER-EXCLUSIVE-AREA-REF>
+                      </CAN-ENTER-EXCLUSIVE-AREA-REFS>
+                      <MINIMUM-START-INTERVAL>0</MINIMUM-START-INTERVAL>
+                      <IMPLEMENTED-ENTRY-REF DEST="BSW-MODULE-ENTRY">/Renesas/ModuleDescription_Port/Port_CheckHWConsistency</IMPLEMENTED-ENTRY-REF>
+                    </BSW-CALLED-ENTITY>
+                  </ENTITYS>
+                </BSW-INTERNAL-BEHAVIOR>
+              </INTERNAL-BEHAVIORS>
+            </BSW-MODULE-DESCRIPTION>
+            <BSW-MODULE-ENTRY UUID="ECUS:aa6b6bdd-9cce-4323-aa70-35c0814a2867">
+              <SHORT-NAME>Port_Init</SHORT-NAME>
+              <SERVICE-ID>0x00</SERVICE-ID>
+              <IS-REENTRANT>false</IS-REENTRANT>
+              <IS-SYNCHRONOUS>true</IS-SYNCHRONOUS>
+              <CALL-TYPE>REGULAR</CALL-TYPE>
+              <EXECUTION-CONTEXT>TASK</EXECUTION-CONTEXT>
+              <SW-SERVICE-IMPL-POLICY>STANDARD</SW-SERVICE-IMPL-POLICY>
+            </BSW-MODULE-ENTRY>
+            <BSW-MODULE-ENTRY UUID="ECUS:4a637bb5-00fb-4ded-985a-c888c6cc234d">
+              <SHORT-NAME>Port_SetPinDirection</SHORT-NAME>
+              <SERVICE-ID>0x01</SERVICE-ID>
+              <IS-REENTRANT>true</IS-REENTRANT>
+              <IS-SYNCHRONOUS>true</IS-SYNCHRONOUS>
+              <CALL-TYPE>REGULAR</CALL-TYPE>
+              <EXECUTION-CONTEXT>TASK</EXECUTION-CONTEXT>
+              <SW-SERVICE-IMPL-POLICY>STANDARD</SW-SERVICE-IMPL-POLICY>
+            </BSW-MODULE-ENTRY>
+            <BSW-MODULE-ENTRY UUID="ECUS:a7674508-f7fa-43fc-90cf-49e1d6ec79c5">
+              <SHORT-NAME>Port_RefreshPortDirection</SHORT-NAME>
+              <SERVICE-ID>0x02</SERVICE-ID>
+              <IS-REENTRANT>false</IS-REENTRANT>
+              <IS-SYNCHRONOUS>true</IS-SYNCHRONOUS>
+              <CALL-TYPE>REGULAR</CALL-TYPE>
+              <EXECUTION-CONTEXT>TASK</EXECUTION-CONTEXT>
+              <SW-SERVICE-IMPL-POLICY>STANDARD</SW-SERVICE-IMPL-POLICY>
+            </BSW-MODULE-ENTRY>
+            <BSW-MODULE-ENTRY UUID="ECUS:0058d95d-3426-4cfc-b8ec-7186ea6f7e5f">
+              <SHORT-NAME>Port_GetVersionInfo</SHORT-NAME>
+              <SERVICE-ID>0x03</SERVICE-ID>
+              <IS-REENTRANT>false</IS-REENTRANT>
+              <IS-SYNCHRONOUS>true</IS-SYNCHRONOUS>
+              <CALL-TYPE>REGULAR</CALL-TYPE>
+              <EXECUTION-CONTEXT>TASK</EXECUTION-CONTEXT>
+              <SW-SERVICE-IMPL-POLICY>STANDARD</SW-SERVICE-IMPL-POLICY>
+            </BSW-MODULE-ENTRY>
+            <BSW-MODULE-ENTRY UUID="ECUS:09fbf67d-bebb-4459-b891-061b28606ab0">
+              <SHORT-NAME>Port_SetPinMode</SHORT-NAME>
+              <SERVICE-ID>0x04</SERVICE-ID>
+              <IS-REENTRANT>true</IS-REENTRANT>
+              <IS-SYNCHRONOUS>true</IS-SYNCHRONOUS>
+              <CALL-TYPE>REGULAR</CALL-TYPE>
+              <EXECUTION-CONTEXT>TASK</EXECUTION-CONTEXT>
+              <SW-SERVICE-IMPL-POLICY>STANDARD</SW-SERVICE-IMPL-POLICY>
+            </BSW-MODULE-ENTRY>
+            <BSW-MODULE-ENTRY UUID="ECUS:65c08b3c-6087-4639-90a2-2d360a976c80">
+              <SHORT-NAME>Port_SetToDioMode</SHORT-NAME>
+              <SERVICE-ID>0x05</SERVICE-ID>
+              <IS-REENTRANT>true</IS-REENTRANT>
+              <IS-SYNCHRONOUS>true</IS-SYNCHRONOUS>
+              <CALL-TYPE>REGULAR</CALL-TYPE>
+              <EXECUTION-CONTEXT>TASK</EXECUTION-CONTEXT>
+              <SW-SERVICE-IMPL-POLICY>STANDARD</SW-SERVICE-IMPL-POLICY>
+            </BSW-MODULE-ENTRY>
+            <BSW-MODULE-ENTRY UUID="ECUS:f090959d-ed16-44f4-9916-8417fda080f4">
+              <SHORT-NAME>Port_SetToAlternateMode</SHORT-NAME>
+              <SERVICE-ID>0x06</SERVICE-ID>
+              <IS-REENTRANT>true</IS-REENTRANT>
+              <IS-SYNCHRONOUS>true</IS-SYNCHRONOUS>
+              <CALL-TYPE>REGULAR</CALL-TYPE>
+              <EXECUTION-CONTEXT>TASK</EXECUTION-CONTEXT>
+              <SW-SERVICE-IMPL-POLICY>STANDARD</SW-SERVICE-IMPL-POLICY>
+            </BSW-MODULE-ENTRY>
+            <BSW-MODULE-ENTRY UUID="ECUS:a7bcc311-be7d-4e98-8a2c-5f2b861bd3e0">
+              <SHORT-NAME>Port_SetPinDefaultMode</SHORT-NAME>
+              <SERVICE-ID>0x07</SERVICE-ID>
+              <IS-REENTRANT>true</IS-REENTRANT>
+              <IS-SYNCHRONOUS>true</IS-SYNCHRONOUS>
+              <CALL-TYPE>REGULAR</CALL-TYPE>
+              <EXECUTION-CONTEXT>TASK</EXECUTION-CONTEXT>
+              <SW-SERVICE-IMPL-POLICY>STANDARD</SW-SERVICE-IMPL-POLICY>
+            </BSW-MODULE-ENTRY>
+            <BSW-MODULE-ENTRY UUID="ECUS:723a0fcf-46f4-41c3-979d-919e43c64fcf">
+              <SHORT-NAME>Port_SetPinDefaultDirection</SHORT-NAME>
+              <SERVICE-ID>0x08</SERVICE-ID>
+              <IS-REENTRANT>true</IS-REENTRANT>
+              <IS-SYNCHRONOUS>true</IS-SYNCHRONOUS>
+              <CALL-TYPE>REGULAR</CALL-TYPE>
+              <EXECUTION-CONTEXT>TASK</EXECUTION-CONTEXT>
+              <SW-SERVICE-IMPL-POLICY>STANDARD</SW-SERVICE-IMPL-POLICY>
+            </BSW-MODULE-ENTRY>
+            <BSW-MODULE-ENTRY UUID="ECUS:0ebd37ac-8b09-4935-9993-c441a2a2ad78">
+              <SHORT-NAME>Port_CheckHWConsistency</SHORT-NAME>
+              <SERVICE-ID>0x09</SERVICE-ID>
+              <IS-REENTRANT>true</IS-REENTRANT>
+              <IS-SYNCHRONOUS>true</IS-SYNCHRONOUS>
+              <CALL-TYPE>REGULAR</CALL-TYPE>
+              <EXECUTION-CONTEXT>TASK</EXECUTION-CONTEXT>
+              <SW-SERVICE-IMPL-POLICY>STANDARD</SW-SERVICE-IMPL-POLICY>
+            </BSW-MODULE-ENTRY>
+          </ELEMENTS>
+        </AR-PACKAGE>
+      </AR-PACKAGES>
+    </AR-PACKAGE>
+  </AR-PACKAGES>
+</AUTOSAR>

@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Description File Generated With Following definition files:
+  AUTOSAR_MOD_ECUConfigurationParameters.arxml
+-->
+<AUTOSAR:AUTOSAR xmlns:AUTOSAR="http://autosar.org/schema/r4.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://autosar.org/schema/r4.0 AUTOSAR_4-2-2.xsd">
+<AUTOSAR:AR-PACKAGES>
+  <AUTOSAR:AR-PACKAGE>
+    <AUTOSAR:SHORT-NAME>AUTOSAR</AUTOSAR:SHORT-NAME>
+    <AUTOSAR:AR-PACKAGES>
+      <AUTOSAR:AR-PACKAGE>
+        <AUTOSAR:SHORT-NAME>EcucDefs_EcuM</AUTOSAR:SHORT-NAME>
+          <AUTOSAR:ELEMENTS>
+                      <AUTOSAR:ECUC-VALUE-COLLECTION>
+                      <AUTOSAR:SHORT-NAME>ECUConfiguration</AUTOSAR:SHORT-NAME>
+                      <AUTOSAR:ECUC-VALUES>
+                        <AUTOSAR:ECUC-MODULE-CONFIGURATION-VALUES-REF-CONDITIONAL>
+                          <AUTOSAR:ECUC-MODULE-CONFIGURATION-VALUES-REF DEST="ECUC-MODULE-CONFIGURATION-VALUES">/AUTOSAR/EcucDefs_EcuM/EcuM0</AUTOSAR:ECUC-MODULE-CONFIGURATION-VALUES-REF>
+                        </AUTOSAR:ECUC-MODULE-CONFIGURATION-VALUES-REF-CONDITIONAL>
+                      </AUTOSAR:ECUC-VALUES>
+                      </AUTOSAR:ECUC-VALUE-COLLECTION>
+                        <AUTOSAR:ECUC-MODULE-CONFIGURATION-VALUES>
+                        <AUTOSAR:SHORT-NAME>EcuM0</AUTOSAR:SHORT-NAME>
+                        <AUTOSAR:DEFINITION-REF DEST="ECUC-MODULE-DEF">/AUTOSAR/EcucDefs/EcuM</AUTOSAR:DEFINITION-REF>
+                        <AUTOSAR:IMPLEMENTATION-CONFIG-VARIANT>VARIANT-POST-BUILD</AUTOSAR:IMPLEMENTATION-CONFIG-VARIANT>
+                        <AUTOSAR:MODULE-DESCRIPTION-REF DEST="BSW-IMPLEMENTATION">/Renesas/EcuM</AUTOSAR:MODULE-DESCRIPTION-REF>
+                          <AUTOSAR:CONTAINERS>
+                            <AUTOSAR:ECUC-CONTAINER-VALUE UUID="ECUS:0348bcd9-0c37-4d53-81d3-0f8c02aee805">
+                            <AUTOSAR:SHORT-NAME>EcuMConfiguration0</AUTOSAR:SHORT-NAME>
+                            <AUTOSAR:DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/AUTOSAR/EcucDefs/EcuM/EcuMConfiguration</AUTOSAR:DEFINITION-REF>
+                              <AUTOSAR:SUB-CONTAINERS>
+                                <AUTOSAR:ECUC-CONTAINER-VALUE UUID="ECUS:9958f068-110d-4d24-926d-b476c92ba93f">
+                                <AUTOSAR:SHORT-NAME>EcuMCommonConfiguration0</AUTOSAR:SHORT-NAME>
+                                <AUTOSAR:DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/AUTOSAR/EcucDefs/EcuM/EcuMConfiguration/EcuMCommonConfiguration</AUTOSAR:DEFINITION-REF>
+                                  <AUTOSAR:PARAMETER-VALUES>
+                                    <AUTOSAR:ECUC-NUMERICAL-PARAM-VALUE>
+                                    <AUTOSAR:DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/AUTOSAR/EcucDefs/EcuM/EcuMConfiguration/EcuMCommonConfiguration/EcuMConfigConsistencyHash</AUTOSAR:DEFINITION-REF>
+                                    <AUTOSAR:VALUE>ba4f95fef4247daa</AUTOSAR:VALUE>
+                                    </AUTOSAR:ECUC-NUMERICAL-PARAM-VALUE>
+                                  </AUTOSAR:PARAMETER-VALUES>
+                                  <AUTOSAR:REFERENCE-VALUES>
+                                    <AUTOSAR:ECUC-REFERENCE-VALUE>
+                                    <AUTOSAR:DEFINITION-REF DEST="ECUC-REFERENCE-DEF">/AUTOSAR/EcucDefs/EcuM/EcuMConfiguration/EcuMCommonConfiguration/EcuMDefaultAppMode</AUTOSAR:DEFINITION-REF>
+                                    <AUTOSAR:VALUE-REF DEST="ECUC-CONTAINER-VALUE">/AUTOSAR/EcucDefs/Os/OsAppMode</AUTOSAR:VALUE-REF>
+                                    </AUTOSAR:ECUC-REFERENCE-VALUE>
+                                    <AUTOSAR:ECUC-REFERENCE-VALUE>
+                                    <AUTOSAR:DEFINITION-REF DEST="ECUC-REFERENCE-DEF">/AUTOSAR/EcucDefs/EcuM/EcuMConfiguration/EcuMCommonConfiguration/EcuMOSResource</AUTOSAR:DEFINITION-REF>
+                                    <AUTOSAR:VALUE-REF DEST="ECUC-CONTAINER-VALUE">/AUTOSAR/EcucDefs/Os/OsResource</AUTOSAR:VALUE-REF>
+                                    </AUTOSAR:ECUC-REFERENCE-VALUE>
+                                  </AUTOSAR:REFERENCE-VALUES>
+                                  <AUTOSAR:SUB-CONTAINERS>
+                                    <AUTOSAR:ECUC-CONTAINER-VALUE UUID="ECUS:ec65405c-03c3-41a5-a99b-3bf8a3b95c76">
+                                    <AUTOSAR:SHORT-NAME>EcuMDefaultShutdownTarget0</AUTOSAR:SHORT-NAME>
+                                    <AUTOSAR:DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/AUTOSAR/EcucDefs/EcuM/EcuMConfiguration/EcuMCommonConfiguration/EcuMDefaultShutdownTarget</AUTOSAR:DEFINITION-REF>
+                                      <AUTOSAR:PARAMETER-VALUES>
+                                        <AUTOSAR:ECUC-TEXTUAL-PARAM-VALUE>
+                                        <AUTOSAR:DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/AUTOSAR/EcucDefs/EcuM/EcuMConfiguration/EcuMCommonConfiguration/EcuMDefaultShutdownTarget/EcuMDefaultState</AUTOSAR:DEFINITION-REF>
+                                        <AUTOSAR:VALUE>EcuMStateReset</AUTOSAR:VALUE>
+                                        </AUTOSAR:ECUC-TEXTUAL-PARAM-VALUE>
+                                      </AUTOSAR:PARAMETER-VALUES>
+                                      <AUTOSAR:REFERENCE-VALUES>
+                                        <AUTOSAR:ECUC-REFERENCE-VALUE>
+                                        <AUTOSAR:DEFINITION-REF DEST="ECUC-SYMBOLIC-NAME-REFERENCE-DEF">/AUTOSAR/EcucDefs/EcuM/EcuMConfiguration/EcuMCommonConfiguration/EcuMDefaultShutdownTarget/EcuMDefaultResetModeRef</AUTOSAR:DEFINITION-REF>
+                                        <AUTOSAR:VALUE-REF DEST="ECUC-CONTAINER-VALUE"></AUTOSAR:VALUE-REF>
+                                        </AUTOSAR:ECUC-REFERENCE-VALUE>
+                                        <AUTOSAR:ECUC-REFERENCE-VALUE>
+                                        <AUTOSAR:DEFINITION-REF DEST="ECUC-SYMBOLIC-NAME-REFERENCE-DEF">/AUTOSAR/EcucDefs/EcuM/EcuMConfiguration/EcuMCommonConfiguration/EcuMDefaultShutdownTarget/EcuMDefaultSleepModeRef</AUTOSAR:DEFINITION-REF>
+                                        <AUTOSAR:VALUE-REF DEST="ECUC-CONTAINER-VALUE"></AUTOSAR:VALUE-REF>
+                                        </AUTOSAR:ECUC-REFERENCE-VALUE>
+                                      </AUTOSAR:REFERENCE-VALUES>
+                                    </AUTOSAR:ECUC-CONTAINER-VALUE>
+                                    <AUTOSAR:ECUC-CONTAINER-VALUE UUID="ECUS:1c3f4285-ffb6-4964-b2a7-5d67f0484b55">
+                                    <AUTOSAR:SHORT-NAME>EcuMSleepMode0</AUTOSAR:SHORT-NAME>
+                                    <AUTOSAR:DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/AUTOSAR/EcucDefs/EcuM/EcuMConfiguration/EcuMCommonConfiguration/EcuMSleepMode</AUTOSAR:DEFINITION-REF>
+                                      <AUTOSAR:PARAMETER-VALUES>
+                                        <AUTOSAR:ECUC-NUMERICAL-PARAM-VALUE>
+                                        <AUTOSAR:DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/AUTOSAR/EcucDefs/EcuM/EcuMConfiguration/EcuMCommonConfiguration/EcuMSleepMode/EcuMSleepModeId</AUTOSAR:DEFINITION-REF>
+                                        <AUTOSAR:VALUE>0</AUTOSAR:VALUE>
+                                        </AUTOSAR:ECUC-NUMERICAL-PARAM-VALUE>
+                                        <AUTOSAR:ECUC-NUMERICAL-PARAM-VALUE>
+                                        <AUTOSAR:DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/AUTOSAR/EcucDefs/EcuM/EcuMConfiguration/EcuMCommonConfiguration/EcuMSleepMode/EcuMSleepModeSuspend</AUTOSAR:DEFINITION-REF>
+                                        <AUTOSAR:VALUE>1</AUTOSAR:VALUE>
+                                        </AUTOSAR:ECUC-NUMERICAL-PARAM-VALUE>
+                                      </AUTOSAR:PARAMETER-VALUES>
+                                      <AUTOSAR:REFERENCE-VALUES>
+                                        <AUTOSAR:ECUC-REFERENCE-VALUE>
+                                        <AUTOSAR:DEFINITION-REF DEST="ECUC-SYMBOLIC-NAME-REFERENCE-DEF">/AUTOSAR/EcucDefs/EcuM/EcuMConfiguration/EcuMCommonConfiguration/EcuMSleepMode/EcuMSleepModeMcuModeRef</AUTOSAR:DEFINITION-REF>
+                                        <AUTOSAR:VALUE-REF DEST="ECUC-CONTAINER-VALUE">/AUTOSAR/EcucDefs/Mcu/McuModuleConfiguration/McuModeSettingConf</AUTOSAR:VALUE-REF>
+                                        </AUTOSAR:ECUC-REFERENCE-VALUE>
+                                        <AUTOSAR:ECUC-REFERENCE-VALUE>
+                                        <AUTOSAR:DEFINITION-REF DEST="ECUC-SYMBOLIC-NAME-REFERENCE-DEF">/AUTOSAR/EcucDefs/EcuM/EcuMConfiguration/EcuMCommonConfiguration/EcuMSleepMode/EcuMWakeupSourceMask</AUTOSAR:DEFINITION-REF>
+                                        <AUTOSAR:VALUE-REF DEST="ECUC-CONTAINER-VALUE">/AUTOSAR/EcucDefs_Msn/EcuM0/EcuMConfiguration0/EcuMCommonConfiguration0/EcuMWakeupSource0</AUTOSAR:VALUE-REF>
+                                        </AUTOSAR:ECUC-REFERENCE-VALUE>
+                                      </AUTOSAR:REFERENCE-VALUES>
+                                    </AUTOSAR:ECUC-CONTAINER-VALUE>
+                                    <AUTOSAR:ECUC-CONTAINER-VALUE UUID="ECUS:5b5914ee-72c9-4186-8551-914be710fe47">
+                                    <AUTOSAR:SHORT-NAME>EcuMWakeupSource0</AUTOSAR:SHORT-NAME>
+                                    <AUTOSAR:DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/AUTOSAR/EcucDefs/EcuM/EcuMConfiguration/EcuMCommonConfiguration/EcuMWakeupSource</AUTOSAR:DEFINITION-REF>
+                                      <AUTOSAR:PARAMETER-VALUES>
+                                        <AUTOSAR:ECUC-NUMERICAL-PARAM-VALUE>
+                                        <AUTOSAR:DEFINITION-REF DEST="ECUC-FLOAT-PARAM-DEF">/AUTOSAR/EcucDefs/EcuM/EcuMConfiguration/EcuMCommonConfiguration/EcuMWakeupSource/EcuMValidationTimeout</AUTOSAR:DEFINITION-REF>
+                                        <AUTOSAR:VALUE>0</AUTOSAR:VALUE>
+                                        </AUTOSAR:ECUC-NUMERICAL-PARAM-VALUE>
+                                        <AUTOSAR:ECUC-NUMERICAL-PARAM-VALUE>
+                                        <AUTOSAR:DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/AUTOSAR/EcucDefs/EcuM/EcuMConfiguration/EcuMCommonConfiguration/EcuMWakeupSource/EcuMWakeupSourceId</AUTOSAR:DEFINITION-REF>
+                                        <AUTOSAR:VALUE>0</AUTOSAR:VALUE>
+                                        </AUTOSAR:ECUC-NUMERICAL-PARAM-VALUE>
+                                        <AUTOSAR:ECUC-NUMERICAL-PARAM-VALUE>
+                                        <AUTOSAR:DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/AUTOSAR/EcucDefs/EcuM/EcuMConfiguration/EcuMCommonConfiguration/EcuMWakeupSource/EcuMWakeupSourcePolling</AUTOSAR:DEFINITION-REF>
+                                        <AUTOSAR:VALUE>1</AUTOSAR:VALUE>
+                                        </AUTOSAR:ECUC-NUMERICAL-PARAM-VALUE>
+                                      </AUTOSAR:PARAMETER-VALUES>
+                                      <AUTOSAR:REFERENCE-VALUES>
+                                        <AUTOSAR:ECUC-REFERENCE-VALUE>
+                                        <AUTOSAR:DEFINITION-REF DEST="ECUC-SYMBOLIC-NAME-REFERENCE-DEF">/AUTOSAR/EcucDefs/EcuM/EcuMConfiguration/EcuMCommonConfiguration/EcuMWakeupSource/EcuMComMChannelRef</AUTOSAR:DEFINITION-REF>
+                                        <AUTOSAR:VALUE-REF DEST="ECUC-CONTAINER-VALUE">/AUTOSAR/EcucDefs/ComM/ComMConfigSet/ComMChannel</AUTOSAR:VALUE-REF>
+                                        </AUTOSAR:ECUC-REFERENCE-VALUE>
+                                        <AUTOSAR:ECUC-REFERENCE-VALUE>
+                                        <AUTOSAR:DEFINITION-REF DEST="ECUC-SYMBOLIC-NAME-REFERENCE-DEF">/AUTOSAR/EcucDefs/EcuM/EcuMConfiguration/EcuMCommonConfiguration/EcuMWakeupSource/EcuMResetReasonRef</AUTOSAR:DEFINITION-REF>
+                                        <AUTOSAR:VALUE-REF DEST="ECUC-CONTAINER-VALUE">/AUTOSAR/EcucDefs/Mcu/McuPublishedInformation/McuResetReasonConf</AUTOSAR:VALUE-REF>
+                                        </AUTOSAR:ECUC-REFERENCE-VALUE>
+                                      </AUTOSAR:REFERENCE-VALUES>
+                                    </AUTOSAR:ECUC-CONTAINER-VALUE>
+                                  </AUTOSAR:SUB-CONTAINERS>
+                                </AUTOSAR:ECUC-CONTAINER-VALUE>
+                              </AUTOSAR:SUB-CONTAINERS>
+                            </AUTOSAR:ECUC-CONTAINER-VALUE>
+                            <AUTOSAR:ECUC-CONTAINER-VALUE UUID="ECUS:249e02ec-726b-4e55-a271-4c1be2b613e3">
+                            <AUTOSAR:SHORT-NAME>EcuMGeneral0</AUTOSAR:SHORT-NAME>
+                            <AUTOSAR:DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/AUTOSAR/EcucDefs/EcuM/EcuMGeneral</AUTOSAR:DEFINITION-REF>
+                              <AUTOSAR:PARAMETER-VALUES>
+                                <AUTOSAR:ECUC-NUMERICAL-PARAM-VALUE>
+                                <AUTOSAR:DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/AUTOSAR/EcucDefs/EcuM/EcuMGeneral/EcuMDevErrorDetect</AUTOSAR:DEFINITION-REF>
+                                <AUTOSAR:VALUE>1</AUTOSAR:VALUE>
+                                </AUTOSAR:ECUC-NUMERICAL-PARAM-VALUE>
+                                <AUTOSAR:ECUC-NUMERICAL-PARAM-VALUE>
+                                <AUTOSAR:DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/AUTOSAR/EcucDefs/EcuM/EcuMGeneral/EcuMIncludeDem</AUTOSAR:DEFINITION-REF>
+                                <AUTOSAR:VALUE>1</AUTOSAR:VALUE>
+                                </AUTOSAR:ECUC-NUMERICAL-PARAM-VALUE>
+                                <AUTOSAR:ECUC-NUMERICAL-PARAM-VALUE>
+                                <AUTOSAR:DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/AUTOSAR/EcucDefs/EcuM/EcuMGeneral/EcuMIncludeDet</AUTOSAR:DEFINITION-REF>
+                                <AUTOSAR:VALUE>1</AUTOSAR:VALUE>
+                                </AUTOSAR:ECUC-NUMERICAL-PARAM-VALUE>
+                                <AUTOSAR:ECUC-NUMERICAL-PARAM-VALUE>
+                                <AUTOSAR:DEFINITION-REF DEST="ECUC-FLOAT-PARAM-DEF">/AUTOSAR/EcucDefs/EcuM/EcuMGeneral/EcuMMainFunctionPeriod</AUTOSAR:DEFINITION-REF>
+                                <AUTOSAR:VALUE>0</AUTOSAR:VALUE>
+                                </AUTOSAR:ECUC-NUMERICAL-PARAM-VALUE>
+                                <AUTOSAR:ECUC-NUMERICAL-PARAM-VALUE>
+                                <AUTOSAR:DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/AUTOSAR/EcucDefs/EcuM/EcuMGeneral/EcuMVersionInfoApi</AUTOSAR:DEFINITION-REF>
+                                <AUTOSAR:VALUE>1</AUTOSAR:VALUE>
+                                </AUTOSAR:ECUC-NUMERICAL-PARAM-VALUE>
+                              </AUTOSAR:PARAMETER-VALUES>
+                            </AUTOSAR:ECUC-CONTAINER-VALUE>
+                          </AUTOSAR:CONTAINERS>
+                        </AUTOSAR:ECUC-MODULE-CONFIGURATION-VALUES>
+          </AUTOSAR:ELEMENTS>
+      </AUTOSAR:AR-PACKAGE>
+    </AUTOSAR:AR-PACKAGES>
+    </AUTOSAR:AR-PACKAGE>
+  </AUTOSAR:AR-PACKAGES>
+</AUTOSAR:AUTOSAR>

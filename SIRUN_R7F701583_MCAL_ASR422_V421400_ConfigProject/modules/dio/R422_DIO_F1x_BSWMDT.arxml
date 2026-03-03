@@ -1,0 +1,464 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!--
+********************************************************************************
+** Project      = AUTOSAR Renesas R4.2.2 F1x MCAL Components                  **
+** Module       = R422_DIO_F1x_BSWMDT.arxml                                   **
+********************************************************************************
+**                                  COPYRIGHT                                 **
+********************************************************************************
+** Copyright(c) 2016-2021 Renesas Electronics Corporation                     **
+********************************************************************************
+** Purpose:                                                                   **
+** Provides the BSW module description of DIO Driver Component for AUTOSAR    **
+** release 4.2.2                                                              **
+**                                                                            **
+********************************************************************************
+**                                                                            **
+** Unless otherwise agreed upon in writing between your company and           **
+** Renesas Electronics Corporation the following shall apply!                 **
+**                                                                            **
+** Warranty Disclaimer                                                        **
+**                                                                            **
+** There is no warranty of any kind whatsoever granted by Renesas. Any        **
+** warranty is expressly disclaimed and excluded by Renesas, either expressed **
+** or implied, including but not limited to those for non-infringement of     **
+** intellectual property, merchantability and/or fitness for the particular   **
+** purpose.                                                                   **
+**                                                                            **
+** Renesas shall not have any obligation to maintain, service or provide bug  **
+** fixes for the supplied Product(s) and/or the Application.                  **
+**                                                                            **
+** Each User is solely responsible for determining the appropriateness of     **
+** using the Product(s) and assumes all risks associated with its exercise    **
+** of rights under this Agreement, including, but not limited to the risks    **
+** and costs of program errors, compliance with applicable laws, damage to    **
+** or loss of data, programs or equipment, and unavailability or              **
+** interruption of operations.                                                **
+**                                                                            **
+** Limitation of Liability                                                    **
+**                                                                            **
+** In no event shall Renesas be liable to the User for any incidental,        **
+** consequential, indirect, or punitive damage (including but not limited     **
+** to lost profits) regardless of whether such liability is based on breach   **
+** of contract, tort, strict liability, breach of warranties, failure of      **
+** essential purpose or otherwise and even if advised of the possibility of   **
+** such damages. Renesas shall not be liable for any services or products     **
+** provided by third party vendors, developers or consultants identified or   **
+** referred to the User by Renesas in connection with the Product(s) and/or   **
+** the Application.                                                           **
+**                                                                            **
+********************************************************************************
+** Environment:                                                               **
+**              Devices: RH850/F1K:  R7F701542, R7F701543, R7F701546,         **
+**                                   R7F701547, R7F701557, R7F701560,         **
+**                                   R7F701561, R7F701562, R7F701563,         **
+**                                   R7F701566, R7F701567, R7F701577,         **
+**                                   R7F701580, R7F701581, R7F701582,         **
+**                                   R7F701583, R7F701586, R7F701587,         **
+**                                   R7F701597, R7F701602, R7F701603,         **
+**                                   R7F701610, R7F701611, R7F701612,         **
+**                                   R7F701613, R7F701620, R7F701621,         **
+**                                   R7F701622, R7F701623.                    **
+**                       RH850/F1KM: R7F701636, R7F701644, R7F701645,         **
+**                                   R7F701646, R7F701647, R7F701648,         **
+**                                   R7F701649, R7F701650, R7F701651,         **
+**                                   R7F701652, R7F701653, R7F701684,         **
+**                                   R7F701685, R7F701686, R7F701687,         **
+**                                   R7F701688, R7F701689, R7F701690,         **
+**                                   R7F701691, R7F701692, R7F701693,         **
+**                                   R7F701694, R7F701695, R7F701760,         **
+**                                   R7F701762, R7F701764.                    **
+**                      RH850/F1KH:  R7F701708, R7F701709 , R7F701710,        **
+**                                   R7F701711, R7F701714 , R7F701715         **
+********************************************************************************
+**                      Revision Control History                              **
+********************************************************************************
+** V1.0.0:  17-Oct-2016, Initial Version                                      **
+**                                                                            **
+** V1.0.1:  04-Jan-2017  As part of ARDAABC-919 Jira ticket the following     **
+**                       changes made:                                        **
+**                       1) Removed Dio_MaskedWritePort API                   **
+**                       2) Added Dio_CheckHWConsistency API                  **
+** V1.0.2:  06-Feb-2017  As part of ARDAABC-764 Jira ticket the following     **
+**                       changes made:                                        **
+**                       1) Removed TABS                                      **
+**                       2) Update copyright dates                            **
+** V1.0.3:  25-May-2017  Following changes made:                              **
+**                       1) As part of ARDAABD-1169 Jira ticket,              **
+**                          CODE-DESCRIPTORS,RESOURCE-CONSUMPTION and         **
+**                          PROVIDED-ENTRYS,attributes have been added,path   **
+**                          of the CAN-ENTER-EXCLUSIVE-AREA-REF corrected.    **
+**                       2) Updated Environment                               **
+**                       3) SW-VERSION updated                                **
+** V1.0.4   12-Jul-2017   As part of ARDAABD-1908 Jira ticket following       **
+**                        changes are made:                                   **
+**                        1. Module name from SHORT-NAME has been removed for **
+**                           'RESOURCE-CONSUMPTION' attributes                **
+**                        2. Software version has been updated.               **
+** V1.0.5   18-Aug-2017   As part of ARDAABD-2232 Jira ticket following       **
+**                        changes are made:                                   **
+**                        1. Added support for Dio_InitRamMirror API          **
+** V1.0.6   23-Aug-2017   Following changes made:                             **
+**                        1. As part of ARDAABD-2315 Jira ticket,             **
+**                           Updated Environment by adding F1KH devices.      **
+** V1.0.7   20-Nov-2017   Following changes made:                             **
+**                        1. As part of ARDAABD-2443 Jira ticket,             **
+**                           removed  tag 'VENDOR-API-INFIX'.                 **
+**                        2. As part of ARDAABD-2156 Jira ticket,             **
+**                           added support for  Dio_MaskedWritePort API.      **
+**                        3. As part of ARDAABD-2273 Jira ticket,             **
+**                           added support for Dio_ReadChannelOutputValue API.**
+**                           and Dio_ReadChannelGroupOutput API.              **
+**                        4. As part of ARDAABD-2484 Jira ticket,             **
+**                           updated RESOURCE-CONSUMPTION.                    **
+**                        5. As part of ARDAABD-2304 Jira ticket,             **
+**                           updated RESOURCE-CONSUMPTION with prefix ASIL_B, **
+**                           <MINIMUM-START-INTERVAL> tag is added in ENTITYS,**
+**                           corrected API naming in <PROVIDED-ENTRYS>.       **
+** V1.0.8   24-Jul-2018   Following changes made:                             **
+**                        1. As part of Merging activity,ARDAABD-3484,        **
+**                           a.Updated RESOURCE-CONSUMPTION:Ref:ARDAABD-908   **
+**                           b.SW-VERSION updated.                            **
+**                        2. As part of ARDAABD-2990, removed                 **
+**                           Dio_InitRamMirror API and modified               **
+**                           <PROVIDED-ENTRYS> for Dio_CheckHWConsistency API.**
+**                        3. COPYRIGHT information updated.                   **
+**                        4. As part of ARDAABD-3860, UUID's are made unique. **
+** V1.0.9:  17-Oct-2019 : The following changes are made:                     **
+**                        1. As part of ARDAABD-4547 Jira ticket,             **
+**                          The following chips have been deleted             **
+**                          R7F701700,R7F701701,R7F701702,R7F701703,R7F701704,**
+**                          R7F701705,R7F701706,R7F701707,R7F701712,R7F701713.**
+**                        2.SW-VERSION tag to 2.0.6 Updated Ref:ARDAABD-4456  **
+**                        3. As part of ARDAABD-4196 Jira ticket,             **
+**                          Move </IMPLEMENTED-ENTRY-REF> to the same line    **
+**                          of <IMPLEMENTED-ENTRY-REF> for /Renesas/          **
+**                          EcucDefs_Dio/Dio_CheckHWConsistency.              **
+**                        4.The following chips have been deleted             **
+**                          R7F701634,R7F701635,R7F701636,R7F701637,R7F701638,**
+**                          R7F701639,R7F701640,R7F701641,R7F701642,R7F701643.**
+**                        5.#ARDAABD-4547 Add device of R7F701636.            **
+**                        6.Updated the UUID for duplication check            **
+** V1.0.10  14-Oct-2020 : Following changes made:                             **
+**                        As part of #ARDAABD-4541                            **
+**                        1. Changed <SHORT-NAME> of <AR-PACKAGE> from        **
+**                          "EcucDefs_Dio" to "ModuleDescription_Dio".        **
+**                          Updated the "REF DEST" for all corresponding      **
+**                          objects except <VENDOR-SPECIFIC-MODULE-DEF-REF>.  **
+** V1.0.11  07-Apr-2021 : As part of ARDAABD-5042, the following changes are  **
+**                        made:                                               **
+**                        a) Removed 'ASIL_B' from                            **
+**                           'CODE_ASIL_B', 'CONFIG_DATA_ASIL_B_UNSPECIFIED', **
+**                           'CONST_ASIL_B_32', 'VAR_INIT_ASIL_B_16' and      **
+**                           'VAR_NO_INIT_ASIL_B_UNSPECIFIED'.                **
+**                        b) Updated SW-VERSION.                              **
+**                        c) Copyright information has been updated.          **
+** V1.0.12  25-Aug-2021 : As part of ARDAABD-6343, the following changes are  **
+**                        made:                                               **
+**                        a) Devices R7F701760, R7F701762 and R7F701764 are   **
+**                           added in the Environment field.                  **
+**                        b) UUID's are made unique.                          **
+********************************************************************************
+-->
+<AUTOSAR xmlns="http://autosar.org/schema/r4.0" xsi:schemaLocation="http://autosar.org/schema/r4.0 AUTOSAR_4-2-2.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <AR-PACKAGES>
+    <AR-PACKAGE UUID="ECUS:fb641d04-4eea-4a56-89a7-d333b2069941">
+      <SHORT-NAME>Renesas</SHORT-NAME>
+      <AR-PACKAGES>
+        <AR-PACKAGE UUID="ECUS:837d4614-dbd7-4135-985c-c735401142b8">
+          <SHORT-NAME>ModuleDescription_Dio</SHORT-NAME>
+          <ELEMENTS>
+            <BSW-IMPLEMENTATION UUID="ECUS:fe384f27-3077-4e6c-9ecf-62897fd3ef74" xmlns="http://autosar.org/schema/r4.0">
+              <SHORT-NAME>Dio_Impl</SHORT-NAME>
+              <CODE-DESCRIPTORS>
+                <CODE UUID="ECUS:215d46a2-31ea-45fe-befe-044b7c182c31">
+                  <SHORT-NAME>Dio_Code</SHORT-NAME>
+                  <ARTIFACT-DESCRIPTORS>
+                    <AUTOSAR-ENGINEERING-OBJECT>
+                      <SHORT-LABEL>Dio.c</SHORT-LABEL>
+                      <CATEGORY>SWSRC</CATEGORY>
+                    </AUTOSAR-ENGINEERING-OBJECT>
+                    <AUTOSAR-ENGINEERING-OBJECT>
+                      <SHORT-LABEL>Dio.h</SHORT-LABEL>
+                      <CATEGORY>SWHDR</CATEGORY>
+                    </AUTOSAR-ENGINEERING-OBJECT>
+                  </ARTIFACT-DESCRIPTORS>
+                </CODE>
+              </CODE-DESCRIPTORS>
+              <PROGRAMMING-LANGUAGE>C</PROGRAMMING-LANGUAGE>
+              <RESOURCE-CONSUMPTION UUID="ECUS:6ce418b9-4167-4dc9-8757-ef653297b4dc">
+                <SHORT-NAME>ResourceConsumption</SHORT-NAME>
+                <MEMORY-SECTIONS>
+                  <MEMORY-SECTION UUID="ECUS:b6f6b03c-1314-4d0d-af9c-8e3f4a76f09c">
+                    <SHORT-NAME>CODE</SHORT-NAME>
+                    <SW-ADDRMETHOD-REF DEST="SW-ADDR-METHOD">/AUTOSAR_MemMap/SwAddrMethods/CODE</SW-ADDRMETHOD-REF>
+                  </MEMORY-SECTION>
+                  <MEMORY-SECTION UUID="ECUS:e7ae74e5-d2e2-4773-b32a-9eed3f9bfc47">
+                    <SHORT-NAME>CONFIG_DATA_UNSPECIFIED</SHORT-NAME>
+                    <SW-ADDRMETHOD-REF DEST="SW-ADDR-METHOD">/AUTOSAR_MemMap/SwAddrMethods/CONFIG_DATA</SW-ADDRMETHOD-REF>
+                  </MEMORY-SECTION>
+                  <MEMORY-SECTION UUID="ECUS:c351d145-c2c5-452c-811b-7791c39a7476">
+                    <SHORT-NAME>CONST_32</SHORT-NAME>
+                    <SW-ADDRMETHOD-REF DEST="SW-ADDR-METHOD">/AUTOSAR_MemMap/SwAddrMethods/CONST</SW-ADDRMETHOD-REF>
+                  </MEMORY-SECTION>
+                  <MEMORY-SECTION UUID="ECUS:09802f27-235e-4e05-acde-a517563a09c4">
+                    <SHORT-NAME>VAR_INIT_16</SHORT-NAME>
+                    <SW-ADDRMETHOD-REF DEST="SW-ADDR-METHOD">/AUTOSAR_MemMap/SwAddrMethods/VAR_NO_INIT</SW-ADDRMETHOD-REF>
+                  </MEMORY-SECTION>
+                  <MEMORY-SECTION UUID="ECUS:e7627352-0a88-44cd-87c3-31b30bc20b07">
+                    <SHORT-NAME>VAR_NO_INIT_UNSPECIFIED</SHORT-NAME>
+                    <SW-ADDRMETHOD-REF DEST="SW-ADDR-METHOD">/AUTOSAR_MemMap/SwAddrMethods/VAR_NO_INIT</SW-ADDRMETHOD-REF>
+                  </MEMORY-SECTION>
+                </MEMORY-SECTIONS>
+              </RESOURCE-CONSUMPTION>
+              <SW-VERSION>2.0.7</SW-VERSION>
+              <VENDOR-ID>59</VENDOR-ID>
+              <AR-RELEASE-VERSION>4.2.2</AR-RELEASE-VERSION>
+              <BEHAVIOR-REF DEST="BSW-INTERNAL-BEHAVIOR">/Renesas/ModuleDescription_Dio/Dio/BswInternalBehavior_0</BEHAVIOR-REF>
+              <VENDOR-SPECIFIC-MODULE-DEF-REFS>
+                <VENDOR-SPECIFIC-MODULE-DEF-REF DEST="ECUC-MODULE-DEF">/Renesas/EcucDefs_Dio/Dio</VENDOR-SPECIFIC-MODULE-DEF-REF>
+              </VENDOR-SPECIFIC-MODULE-DEF-REFS>
+            </BSW-IMPLEMENTATION>
+            <BSW-MODULE-DESCRIPTION UUID="ECUS:21b67782-daa0-459d-9813-c37858c9f99e">
+              <SHORT-NAME>Dio</SHORT-NAME>
+              <MODULE-ID>120</MODULE-ID>
+              <PROVIDED-ENTRYS>
+                <BSW-MODULE-ENTRY-REF-CONDITIONAL>
+                  <BSW-MODULE-ENTRY-REF DEST="BSW-MODULE-ENTRY">/Renesas/ModuleDescription_Dio/Dio_ReadPort</BSW-MODULE-ENTRY-REF>
+                </BSW-MODULE-ENTRY-REF-CONDITIONAL>
+                <BSW-MODULE-ENTRY-REF-CONDITIONAL>
+                  <BSW-MODULE-ENTRY-REF DEST="BSW-MODULE-ENTRY">/Renesas/ModuleDescription_Dio/Dio_WritePort</BSW-MODULE-ENTRY-REF>
+                </BSW-MODULE-ENTRY-REF-CONDITIONAL>
+                <BSW-MODULE-ENTRY-REF-CONDITIONAL>
+                  <BSW-MODULE-ENTRY-REF DEST="BSW-MODULE-ENTRY">/Renesas/ModuleDescription_Dio/Dio_ReadChannel</BSW-MODULE-ENTRY-REF>
+                </BSW-MODULE-ENTRY-REF-CONDITIONAL>
+                <BSW-MODULE-ENTRY-REF-CONDITIONAL>
+                  <BSW-MODULE-ENTRY-REF DEST="BSW-MODULE-ENTRY">/Renesas/ModuleDescription_Dio/Dio_ReadChannelOutputValue</BSW-MODULE-ENTRY-REF>
+                </BSW-MODULE-ENTRY-REF-CONDITIONAL>
+                <BSW-MODULE-ENTRY-REF-CONDITIONAL>
+                  <BSW-MODULE-ENTRY-REF DEST="BSW-MODULE-ENTRY">/Renesas/ModuleDescription_Dio/Dio_WriteChannel</BSW-MODULE-ENTRY-REF>
+                </BSW-MODULE-ENTRY-REF-CONDITIONAL>
+                <BSW-MODULE-ENTRY-REF-CONDITIONAL>
+                  <BSW-MODULE-ENTRY-REF DEST="BSW-MODULE-ENTRY">/Renesas/ModuleDescription_Dio/Dio_FlipChannel</BSW-MODULE-ENTRY-REF>
+                </BSW-MODULE-ENTRY-REF-CONDITIONAL>
+                <BSW-MODULE-ENTRY-REF-CONDITIONAL>
+                  <BSW-MODULE-ENTRY-REF DEST="BSW-MODULE-ENTRY">/Renesas/ModuleDescription_Dio/Dio_MaskedWritePort</BSW-MODULE-ENTRY-REF>
+                </BSW-MODULE-ENTRY-REF-CONDITIONAL>
+                <BSW-MODULE-ENTRY-REF-CONDITIONAL>
+                  <BSW-MODULE-ENTRY-REF DEST="BSW-MODULE-ENTRY">/Renesas/ModuleDescription_Dio/Dio_ReadChannelGroup</BSW-MODULE-ENTRY-REF>
+                </BSW-MODULE-ENTRY-REF-CONDITIONAL>
+                <BSW-MODULE-ENTRY-REF-CONDITIONAL>
+                  <BSW-MODULE-ENTRY-REF DEST="BSW-MODULE-ENTRY">/Renesas/ModuleDescription_Dio/Dio_ReadChannelGroupOutputValue</BSW-MODULE-ENTRY-REF>
+                </BSW-MODULE-ENTRY-REF-CONDITIONAL>
+                <BSW-MODULE-ENTRY-REF-CONDITIONAL>
+                  <BSW-MODULE-ENTRY-REF DEST="BSW-MODULE-ENTRY">/Renesas/ModuleDescription_Dio/Dio_WriteChannelGroup</BSW-MODULE-ENTRY-REF>
+                </BSW-MODULE-ENTRY-REF-CONDITIONAL>
+                <BSW-MODULE-ENTRY-REF-CONDITIONAL>
+                  <BSW-MODULE-ENTRY-REF DEST="BSW-MODULE-ENTRY">/Renesas/ModuleDescription_Dio/Dio_CheckHWConsistency</BSW-MODULE-ENTRY-REF>
+                </BSW-MODULE-ENTRY-REF-CONDITIONAL>
+                <BSW-MODULE-ENTRY-REF-CONDITIONAL>
+                  <BSW-MODULE-ENTRY-REF DEST="BSW-MODULE-ENTRY">/Renesas/ModuleDescription_Dio/Dio_GetVersionInfo</BSW-MODULE-ENTRY-REF>
+                </BSW-MODULE-ENTRY-REF-CONDITIONAL>
+              </PROVIDED-ENTRYS>
+              <INTERNAL-BEHAVIORS>
+                <BSW-INTERNAL-BEHAVIOR UUID="ECUS:e525c722-f4ff-4471-b6fe-c9ed1085563a">
+                  <SHORT-NAME>BswInternalBehavior_0</SHORT-NAME>
+                  <EXCLUSIVE-AREAS>
+                    <EXCLUSIVE-AREA UUID="ECUS:c76ad12c-7b3c-47dc-bfee-c0ccde61e10a">
+                      <SHORT-NAME>DIO_REGISTER_PROTECTION</SHORT-NAME>
+                    </EXCLUSIVE-AREA>
+                  </EXCLUSIVE-AREAS>
+                  <ENTITYS>
+                    <BSW-CALLED-ENTITY UUID="ECUS:b4d38a5b-e240-4d27-aaf6-17a6aa756c47">
+                      <SHORT-NAME>BswCalledEntity_0</SHORT-NAME>
+                      <MINIMUM-START-INTERVAL>0</MINIMUM-START-INTERVAL>
+                      <IMPLEMENTED-ENTRY-REF DEST="BSW-MODULE-ENTRY">/Renesas/ModuleDescription_Dio/Dio_ReadChannel</IMPLEMENTED-ENTRY-REF>
+                    </BSW-CALLED-ENTITY>
+                    <BSW-CALLED-ENTITY UUID="ECUS:1ccc95e0-440a-413b-9235-88cec164409f">
+                      <SHORT-NAME>BswCalledEntity_1</SHORT-NAME>
+                      <CAN-ENTER-EXCLUSIVE-AREA-REFS>
+                        <CAN-ENTER-EXCLUSIVE-AREA-REF DEST="EXCLUSIVE-AREA">/Renesas/ModuleDescription_Dio/Dio/BswInternalBehavior_0/DIO_REGISTER_PROTECTION</CAN-ENTER-EXCLUSIVE-AREA-REF>
+                      </CAN-ENTER-EXCLUSIVE-AREA-REFS>
+                      <MINIMUM-START-INTERVAL>0</MINIMUM-START-INTERVAL>
+                      <IMPLEMENTED-ENTRY-REF DEST="BSW-MODULE-ENTRY">/Renesas/ModuleDescription_Dio/Dio_WriteChannel</IMPLEMENTED-ENTRY-REF>
+                    </BSW-CALLED-ENTITY>
+                    <BSW-CALLED-ENTITY UUID="ECUS:59259ea3-3f4c-46fb-a53b-d7fc51707be2">
+                      <SHORT-NAME>BswCalledEntity_2</SHORT-NAME>
+                      <MINIMUM-START-INTERVAL>0</MINIMUM-START-INTERVAL>
+                      <IMPLEMENTED-ENTRY-REF DEST="BSW-MODULE-ENTRY">/Renesas/ModuleDescription_Dio/Dio_ReadPort</IMPLEMENTED-ENTRY-REF>
+                    </BSW-CALLED-ENTITY>
+                    <BSW-CALLED-ENTITY UUID="ECUS:f9924023-9c5a-4b07-9712-d2cef6302349">
+                      <SHORT-NAME>BswCalledEntity_3</SHORT-NAME>
+                      <CAN-ENTER-EXCLUSIVE-AREA-REFS>
+                        <CAN-ENTER-EXCLUSIVE-AREA-REF DEST="EXCLUSIVE-AREA">/Renesas/ModuleDescription_Dio/Dio/BswInternalBehavior_0/DIO_REGISTER_PROTECTION</CAN-ENTER-EXCLUSIVE-AREA-REF>
+                      </CAN-ENTER-EXCLUSIVE-AREA-REFS>
+                      <MINIMUM-START-INTERVAL>0</MINIMUM-START-INTERVAL>
+                      <IMPLEMENTED-ENTRY-REF DEST="BSW-MODULE-ENTRY">/Renesas/ModuleDescription_Dio/Dio_WritePort</IMPLEMENTED-ENTRY-REF>
+                    </BSW-CALLED-ENTITY>
+                    <BSW-CALLED-ENTITY UUID="ECUS:16ded6ac-995a-45b2-bc43-c8b9c0e923c1">
+                      <SHORT-NAME>BswCalledEntity_4</SHORT-NAME>
+                      <MINIMUM-START-INTERVAL>0</MINIMUM-START-INTERVAL>
+                      <IMPLEMENTED-ENTRY-REF DEST="BSW-MODULE-ENTRY">/Renesas/ModuleDescription_Dio/Dio_ReadChannelGroup</IMPLEMENTED-ENTRY-REF>
+                    </BSW-CALLED-ENTITY>
+                    <BSW-CALLED-ENTITY UUID="ECUS:7784e2ea-06aa-450f-936d-2669658c6d60">
+                      <SHORT-NAME>BswCalledEntity_5</SHORT-NAME>
+                      <CAN-ENTER-EXCLUSIVE-AREA-REFS>
+                        <CAN-ENTER-EXCLUSIVE-AREA-REF DEST="EXCLUSIVE-AREA">/Renesas/ModuleDescription_Dio/Dio/BswInternalBehavior_0/DIO_REGISTER_PROTECTION</CAN-ENTER-EXCLUSIVE-AREA-REF>
+                      </CAN-ENTER-EXCLUSIVE-AREA-REFS>
+                      <MINIMUM-START-INTERVAL>0</MINIMUM-START-INTERVAL>
+                      <IMPLEMENTED-ENTRY-REF DEST="BSW-MODULE-ENTRY">/Renesas/ModuleDescription_Dio/Dio_WriteChannelGroup</IMPLEMENTED-ENTRY-REF>
+                    </BSW-CALLED-ENTITY>
+                    <BSW-CALLED-ENTITY UUID="ECUS:ae791688-808f-4b53-9bd3-3981852be985">
+                      <SHORT-NAME>BswCalledEntity_6</SHORT-NAME>
+                      <CAN-ENTER-EXCLUSIVE-AREA-REFS>
+                        <CAN-ENTER-EXCLUSIVE-AREA-REF DEST="EXCLUSIVE-AREA">/Renesas/ModuleDescription_Dio/Dio/BswInternalBehavior_0/DIO_REGISTER_PROTECTION</CAN-ENTER-EXCLUSIVE-AREA-REF>
+                      </CAN-ENTER-EXCLUSIVE-AREA-REFS>
+                      <MINIMUM-START-INTERVAL>0</MINIMUM-START-INTERVAL>
+                      <IMPLEMENTED-ENTRY-REF DEST="BSW-MODULE-ENTRY">/Renesas/ModuleDescription_Dio/Dio_FlipChannel</IMPLEMENTED-ENTRY-REF>
+                    </BSW-CALLED-ENTITY>
+                    <BSW-CALLED-ENTITY UUID="ECUS:a8a2c238-befe-408e-854e-a471a1676ac8">
+                      <SHORT-NAME>BswCalledEntity_7</SHORT-NAME>
+                      <MINIMUM-START-INTERVAL>0</MINIMUM-START-INTERVAL>
+                      <IMPLEMENTED-ENTRY-REF DEST="BSW-MODULE-ENTRY">/Renesas/ModuleDescription_Dio/Dio_GetVersionInfo</IMPLEMENTED-ENTRY-REF>
+                    </BSW-CALLED-ENTITY>
+                    <BSW-CALLED-ENTITY UUID="ECUS:8526a81b-ecd6-4810-ba0e-2e88deee1f9c">
+                      <SHORT-NAME>BswCalledEntity_8</SHORT-NAME>
+                      <MINIMUM-START-INTERVAL>0</MINIMUM-START-INTERVAL>
+                      <IMPLEMENTED-ENTRY-REF DEST="BSW-MODULE-ENTRY">/Renesas/ModuleDescription_Dio/Dio_ReadChannelOutputValue</IMPLEMENTED-ENTRY-REF>
+                    </BSW-CALLED-ENTITY>
+                    <BSW-CALLED-ENTITY UUID="ECUS:6b831da4-b2a5-4f65-bbf6-2e308150d20a">
+                      <SHORT-NAME>BswCalledEntity_9</SHORT-NAME>
+                      <MINIMUM-START-INTERVAL>0</MINIMUM-START-INTERVAL>
+                      <IMPLEMENTED-ENTRY-REF DEST="BSW-MODULE-ENTRY">/Renesas/ModuleDescription_Dio/Dio_ReadChannelGroupOutputValue</IMPLEMENTED-ENTRY-REF>
+                    </BSW-CALLED-ENTITY>
+                    <BSW-CALLED-ENTITY UUID="ECUS:953422cf-1a21-44da-b46b-63ef12aff29b">
+                      <SHORT-NAME>BswCalledEntity_10</SHORT-NAME>
+                      <CAN-ENTER-EXCLUSIVE-AREA-REFS>
+                        <CAN-ENTER-EXCLUSIVE-AREA-REF DEST="EXCLUSIVE-AREA">/Renesas/ModuleDescription_Dio/Dio/BswInternalBehavior_0/DIO_REGISTER_PROTECTION</CAN-ENTER-EXCLUSIVE-AREA-REF>
+                      </CAN-ENTER-EXCLUSIVE-AREA-REFS>
+                      <MINIMUM-START-INTERVAL>0</MINIMUM-START-INTERVAL>
+                      <IMPLEMENTED-ENTRY-REF DEST="BSW-MODULE-ENTRY">/Renesas/ModuleDescription_Dio/Dio_MaskedWritePort</IMPLEMENTED-ENTRY-REF>
+                    </BSW-CALLED-ENTITY>
+                    <BSW-CALLED-ENTITY UUID="ECUS:bb801da4-b2a5-4f65-bbf6-2e308150d20a">
+                      <SHORT-NAME>BswCalledEntity_11</SHORT-NAME>
+                      <MINIMUM-START-INTERVAL>0</MINIMUM-START-INTERVAL>
+                      <IMPLEMENTED-ENTRY-REF DEST="BSW-MODULE-ENTRY">/Renesas/ModuleDescription_Dio/Dio_CheckHWConsistency</IMPLEMENTED-ENTRY-REF>
+                    </BSW-CALLED-ENTITY>
+                  </ENTITYS>
+                </BSW-INTERNAL-BEHAVIOR>
+              </INTERNAL-BEHAVIORS>
+            </BSW-MODULE-DESCRIPTION>
+            <BSW-MODULE-ENTRY UUID="ECUS:5625ab13-aa8e-4572-b63a-bbd0d681a971">
+              <SHORT-NAME>Dio_ReadChannel</SHORT-NAME>
+              <SERVICE-ID>0</SERVICE-ID>
+              <IS-REENTRANT>true</IS-REENTRANT>
+              <IS-SYNCHRONOUS>true</IS-SYNCHRONOUS>
+              <CALL-TYPE>REGULAR</CALL-TYPE>
+              <EXECUTION-CONTEXT>TASK</EXECUTION-CONTEXT>
+              <SW-SERVICE-IMPL-POLICY>STANDARD</SW-SERVICE-IMPL-POLICY>
+            </BSW-MODULE-ENTRY>
+            <BSW-MODULE-ENTRY UUID="ECUS:d26f5ff8-5f3f-45da-b13f-ab235affc37e">
+              <SHORT-NAME>Dio_WriteChannel</SHORT-NAME>
+              <SERVICE-ID>1</SERVICE-ID>
+              <IS-REENTRANT>true</IS-REENTRANT>
+              <IS-SYNCHRONOUS>true</IS-SYNCHRONOUS>
+              <CALL-TYPE>REGULAR</CALL-TYPE>
+              <EXECUTION-CONTEXT>TASK</EXECUTION-CONTEXT>
+              <SW-SERVICE-IMPL-POLICY>STANDARD</SW-SERVICE-IMPL-POLICY>
+            </BSW-MODULE-ENTRY>
+            <BSW-MODULE-ENTRY UUID="ECUS:0d553eb1-b6d2-4e65-960d-5d931734c803">
+              <SHORT-NAME>Dio_ReadPort</SHORT-NAME>
+              <SERVICE-ID>2</SERVICE-ID>
+              <IS-REENTRANT>true</IS-REENTRANT>
+              <IS-SYNCHRONOUS>true</IS-SYNCHRONOUS>
+              <CALL-TYPE>REGULAR</CALL-TYPE>
+              <EXECUTION-CONTEXT>TASK</EXECUTION-CONTEXT>
+              <SW-SERVICE-IMPL-POLICY>STANDARD</SW-SERVICE-IMPL-POLICY>
+            </BSW-MODULE-ENTRY>
+            <BSW-MODULE-ENTRY UUID="ECUS:a28d8861-b9bc-483a-9c70-759df3323bd4">
+              <SHORT-NAME>Dio_WritePort</SHORT-NAME>
+              <SERVICE-ID>3</SERVICE-ID>
+              <IS-REENTRANT>true</IS-REENTRANT>
+              <IS-SYNCHRONOUS>true</IS-SYNCHRONOUS>
+              <CALL-TYPE>REGULAR</CALL-TYPE>
+              <EXECUTION-CONTEXT>TASK</EXECUTION-CONTEXT>
+              <SW-SERVICE-IMPL-POLICY>STANDARD</SW-SERVICE-IMPL-POLICY>
+            </BSW-MODULE-ENTRY>
+            <BSW-MODULE-ENTRY UUID="ECUS:194981e3-9fcf-44f9-a169-58934566eb85">
+              <SHORT-NAME>Dio_ReadChannelGroup</SHORT-NAME>
+              <SERVICE-ID>4</SERVICE-ID>
+              <IS-REENTRANT>true</IS-REENTRANT>
+              <IS-SYNCHRONOUS>true</IS-SYNCHRONOUS>
+              <CALL-TYPE>REGULAR</CALL-TYPE>
+              <EXECUTION-CONTEXT>TASK</EXECUTION-CONTEXT>
+              <SW-SERVICE-IMPL-POLICY>STANDARD</SW-SERVICE-IMPL-POLICY>
+            </BSW-MODULE-ENTRY>
+            <BSW-MODULE-ENTRY UUID="ECUS:ee47da29-2d9d-4dc1-93ea-67e5de31f64a">
+              <SHORT-NAME>Dio_WriteChannelGroup</SHORT-NAME>
+              <SERVICE-ID>5</SERVICE-ID>
+              <IS-REENTRANT>true</IS-REENTRANT>
+              <IS-SYNCHRONOUS>true</IS-SYNCHRONOUS>
+              <CALL-TYPE>REGULAR</CALL-TYPE>
+              <EXECUTION-CONTEXT>TASK</EXECUTION-CONTEXT>
+              <SW-SERVICE-IMPL-POLICY>STANDARD</SW-SERVICE-IMPL-POLICY>
+            </BSW-MODULE-ENTRY>
+            <BSW-MODULE-ENTRY UUID="ECUS:57a15be6-7133-4643-bac2-bb4a47596825">
+              <SHORT-NAME>Dio_FlipChannel</SHORT-NAME>
+              <SERVICE-ID>17</SERVICE-ID>
+              <IS-REENTRANT>true</IS-REENTRANT>
+              <IS-SYNCHRONOUS>true</IS-SYNCHRONOUS>
+              <CALL-TYPE>REGULAR</CALL-TYPE>
+              <EXECUTION-CONTEXT>TASK</EXECUTION-CONTEXT>
+              <SW-SERVICE-IMPL-POLICY>STANDARD</SW-SERVICE-IMPL-POLICY>
+            </BSW-MODULE-ENTRY>
+            <BSW-MODULE-ENTRY UUID="ECUS:68231153-22f8-4ea5-a6cc-327c917db86f">
+              <SHORT-NAME>Dio_MaskedWritePort</SHORT-NAME>
+              <SERVICE-ID>23</SERVICE-ID>
+              <IS-REENTRANT>true</IS-REENTRANT>
+              <IS-SYNCHRONOUS>true</IS-SYNCHRONOUS>
+              <CALL-TYPE>REGULAR</CALL-TYPE>
+              <EXECUTION-CONTEXT>TASK</EXECUTION-CONTEXT>
+              <SW-SERVICE-IMPL-POLICY>STANDARD</SW-SERVICE-IMPL-POLICY>
+            </BSW-MODULE-ENTRY>
+            <BSW-MODULE-ENTRY UUID="ECUS:18faf189-ce57-4969-bd81-338e3f1fed9e">
+              <SHORT-NAME>Dio_ReadChannelOutputValue</SHORT-NAME>
+              <SERVICE-ID>21</SERVICE-ID>
+              <IS-REENTRANT>true</IS-REENTRANT>
+              <IS-SYNCHRONOUS>true</IS-SYNCHRONOUS>
+              <CALL-TYPE>REGULAR</CALL-TYPE>
+              <EXECUTION-CONTEXT>TASK</EXECUTION-CONTEXT>
+              <SW-SERVICE-IMPL-POLICY>STANDARD</SW-SERVICE-IMPL-POLICY>
+            </BSW-MODULE-ENTRY>
+            <BSW-MODULE-ENTRY UUID="ECUS:b0289d39-6781-4bf7-8937-566517dafc4a">
+              <SHORT-NAME>Dio_ReadChannelGroupOutputValue</SHORT-NAME>
+              <SERVICE-ID>22</SERVICE-ID>
+              <IS-REENTRANT>true</IS-REENTRANT>
+              <IS-SYNCHRONOUS>true</IS-SYNCHRONOUS>
+              <CALL-TYPE>REGULAR</CALL-TYPE>
+              <EXECUTION-CONTEXT>TASK</EXECUTION-CONTEXT>
+              <SW-SERVICE-IMPL-POLICY>STANDARD</SW-SERVICE-IMPL-POLICY>
+            </BSW-MODULE-ENTRY>
+            <BSW-MODULE-ENTRY UUID="ECUS:6ebf85cf-047e-46f1-9134-9bd20090ee26">
+              <SHORT-NAME>Dio_GetVersionInfo</SHORT-NAME>
+              <SERVICE-ID>18</SERVICE-ID>
+              <IS-REENTRANT>true</IS-REENTRANT>
+              <IS-SYNCHRONOUS>true</IS-SYNCHRONOUS>
+              <CALL-TYPE>REGULAR</CALL-TYPE>
+              <EXECUTION-CONTEXT>TASK</EXECUTION-CONTEXT>
+              <SW-SERVICE-IMPL-POLICY>STANDARD</SW-SERVICE-IMPL-POLICY>
+            </BSW-MODULE-ENTRY>
+            <BSW-MODULE-ENTRY UUID="ECUS:e0e8e2d7-97f1-467c-8386-de4b5be2f658">
+              <SHORT-NAME>Dio_CheckHWConsistency</SHORT-NAME>
+              <SERVICE-ID>19</SERVICE-ID>
+              <IS-REENTRANT>false</IS-REENTRANT>
+              <IS-SYNCHRONOUS>true</IS-SYNCHRONOUS>
+              <CALL-TYPE>REGULAR</CALL-TYPE>
+              <EXECUTION-CONTEXT>TASK</EXECUTION-CONTEXT>
+              <SW-SERVICE-IMPL-POLICY>STANDARD</SW-SERVICE-IMPL-POLICY>
+            </BSW-MODULE-ENTRY>
+          </ELEMENTS>
+        </AR-PACKAGE>
+      </AR-PACKAGES>
+    </AR-PACKAGE>
+  </AR-PACKAGES>
+</AUTOSAR>

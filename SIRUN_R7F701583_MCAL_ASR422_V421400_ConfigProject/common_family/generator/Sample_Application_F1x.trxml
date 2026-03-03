@@ -1,0 +1,231 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+********************************************************************************
+/* Project      = AUTOSAR Renesas F1x MCAL Components                         */
+********************************************************************************
+**                                  COPYRIGHT                                 **
+********************************************************************************
+** Copyright(c) 2015-2019 Renesas Electronics Corporation                     **
+********************************************************************************
+** Purpose:                                                                   **
+** Provides the path for the Translation Header File and Device Specific C    **
+** Header File.                                                               **
+**                                                                            **
+********************************************************************************
+** Unless otherwise agreed upon in writing between your company and           **
+** Renesas Electronics Corporation the following shall apply!                 **
+**                                                                            **
+** Warranty Disclaimer                                                        **
+**                                                                            **
+** There is no warranty of any kind whatsoever granted by Renesas. Any        **
+** warranty is expressly disclaimed and excluded by Renesas, either expressed **
+** or implied, including but not limited to those for non-infringement of     **
+** intellectual property, merchantability and/or fitness for the particular   **
+** purpose.                                                                   **
+**                                                                            **
+** Renesas shall not have any obligation to maintain, service or provide bug  **
+** fixes for the supplied Product(s) and/or the Application.                  **
+**                                                                            **
+** Each User is solely responsible for determining the appropriateness of     **
+** using the Product(s) and assumes all risks associated with its exercise    **
+** of rights under this Agreement, including, but not limited to the risks    **
+** and costs of program errors, compliance with applicable laws, damage to    **
+** or loss of data, programs or equipment, and unavailability or              **
+** interruption of operations.                                                **
+**                                                                            **
+** Limitation of Liability                                                    **
+**                                                                            **
+** In no event shall Renesas be liable to the User for any incidental,        **
+** consequential, indirect, or punitive damage (including but not limited     **
+** to lost profits) regardless of whether such liability is based on breach   **
+** of contract, tort, strict liability, breach of warranties, failure of      **
+** essential purpose or otherwise and even if advised of the possibility of   **
+** such damages. Renesas shall not be liable for any services or products     **
+** provided by third party vendors, developers or consultants identified or   **
+** referred to the User by Renesas in connection with the Product(s) and/or   **
+** the Application.                                                           **
+**                                                                            **
+********************************************************************************
+** Environment:                                                               **
+**              Devices:        F1x                                           **
+**              Compiler:       GHS V6.1.6                                    **
+********************************************************************************
+**                      Revision Control History                              **
+********************************************************************************
+** V1.0.0:   07-Sep-2015  : Initial version                                   **
+** V2.0.0:   28-Oct-2016: As part of ARDAABD-857:                             **
+**                        1. Adapt list of supported devices                  **
+**                        2. Updated copyright information                    **
+** V2.0.1:   19-Jun-2017: #ARDAABD-1939                                       **
+**                        1. Separated F1K and F1KM entries                   **
+** V2.0.2:   16-May-2018: Following Changes are made:                         **
+**                        1. As part of merging activity, #ARDAABD-3457       **
+**                           a. Added F1KH entries, Ref: ARDAABD-2866.        **
+**                           b. Updated copyright information.                **
+**                        2. As part of JIRA ARDAABD-912, the path of device  **
+**                           files has been updated.                          **
+** V2.0.3:  17-Oct-2019  : ARDAABD-4138 The following changes are made:       **
+**                         1.The following chips have been deleted            **
+**                          R7F701700,R7F701701,R7F701702,R7F701703,R7F701704,**
+**                          R7F701705,R7F701706,R7F701707,R7F701712,R7F701713.**
+**                          R7F701634,R7F701635,R7F701637,R7F701638,R7F701639,**
+**                          R7F701640,R7F701641,R7F701642,R7F701643           **
+********************************************************************************
+-->
+<!--
+The tag PATH-DETAILS should not be renamed since it's top level element.
+-->
+<PATH-DETAILS>
+  <!--
+TRANSLATION-FILE-PATH should contain the path of the translation header file.
+The tag TRANSLATION-FILE-PATH should not be renamed. Only respective value should be updated for the translation header file.
+-->
+  <TRANSLATION-FILE-PATH>
+<!--
+********************************************* F1K *****************************************************
+-->
+    <R7F701542>.\common_family\generator\F1K\F1K_translation_701542.h</R7F701542>
+    <R7F701543>.\common_family\generator\F1K\F1K_translation_701543.h</R7F701543>
+    <R7F701546>.\common_family\generator\F1K\F1K_translation_701546.h</R7F701546>
+    <R7F701547>.common_family\generator\F1K\F1K_translation_701547.h</R7F701547>
+    <R7F701557>.\common_family\generator\F1K\F1K_translation_701557.h</R7F701557>
+    <R7F701560>.\common_family\generator\F1K\F1K_translation_701560.h</R7F701560>
+    <R7F701561>.\common_family\generator\F1K\F1K_translation_701561.h</R7F701561>
+    <R7F701562>.\common_family\generator\F1K\F1K_translation_701562.h</R7F701562>
+    <R7F701563>.\common_family\generator\F1K\F1K_translation_701563.h</R7F701563>
+    <R7F701566>.\common_family\generator\F1K\F1K_translation_701566.h</R7F701566>
+    <R7F701567>.\common_family\generator\F1K\F1K_translation_701567.h</R7F701567>
+    <R7F701577>.\common_family\generator\F1K\F1K_translation_701577.h</R7F701577>
+    <R7F701580>.\common_family\generator\F1K\F1K_translation_701580.h</R7F701580>
+    <R7F701581>.\common_family\generator\F1K\F1K_translation_701581.h</R7F701581>
+    <R7F701582>.\common_family\generator\F1K\F1K_translation_701582.h</R7F701582>
+    <R7F701583>.\common_family\generator\F1K\F1K_translation_701583.h</R7F701583>
+    <R7F701586>.\common_family\generator\F1K\F1K_translation_701586.h</R7F701586>
+    <R7F701587>.\common_family\generator\F1K\F1K_translation_701587.h</R7F701587>
+    <R7F701597>.\common_family\generator\F1K\F1K_translation_701597.h</R7F701597>
+    <R7F701602>.\common_family\generator\F1K\F1K_translation_701602.h</R7F701602>
+    <R7F701603>.\common_family\generator\F1K\F1K_translation_701603.h</R7F701603>
+    <R7F701610>.\common_family\generator\F1K\F1K_translation_701610.h</R7F701610>
+    <R7F701611>.\common_family\generator\F1K\F1K_translation_701611.h</R7F701611>
+    <R7F701612>.\common_family\generator\F1K\F1K_translation_701612.h</R7F701612>
+    <R7F701613>.\common_family\generator\F1K\F1K_translation_701613.h</R7F701613>
+    <R7F701620>.\common_family\generator\F1K\F1K_translation_701620.h</R7F701620>
+    <R7F701621>.\common_family\generator\F1K\F1K_translation_701621.h</R7F701621>
+    <R7F701622>.\common_family\generator\F1K\F1K_translation_701622.h</R7F701622>
+    <R7F701623>.\common_family\generator\F1K\F1K_translation_701623.h</R7F701623>
+
+<!--
+********************************************* F1KM ****************************************************
+-->
+    <R7F701636>..\..\..\..\..\X1X\F1x\common_family\generator\F1KM\F1KM_translation_701636.h</R7F701636>
+    <R7F701644>..\..\..\..\..\X1X\F1x\common_family\generator\F1KM\F1KM_translation_701644.h</R7F701644>
+    <R7F701645>..\..\..\..\..\X1X\F1x\common_family\generator\F1KM\F1KM_translation_701645.h</R7F701645>
+    <R7F701646>..\..\..\..\..\X1X\F1x\common_family\generator\F1KM\F1KM_translation_701646.h</R7F701646>
+    <R7F701647>..\..\..\..\..\X1X\F1x\common_family\generator\F1KM\F1KM_translation_701647.h</R7F701647>
+    <R7F701648>..\..\..\..\..\X1X\F1x\common_family\generator\F1KM\F1KM_translation_701648.h</R7F701648>
+    <R7F701649>..\..\..\..\..\X1X\F1x\common_family\generator\F1KM\F1KM_translation_701649.h</R7F701649>
+    <R7F701650>..\..\..\..\..\X1X\F1x\common_family\generator\F1KM\F1KM_translation_701650.h</R7F701650>
+    <R7F701651>..\..\..\..\..\X1X\F1x\common_family\generator\F1KM\F1KM_translation_701651.h</R7F701651>
+    <R7F701652>..\..\..\..\..\X1X\F1x\common_family\generator\F1KM\F1KM_translation_701652.h</R7F701652>
+    <R7F701653>..\..\..\..\..\X1X\F1x\common_family\generator\F1KM\F1KM_translation_701653.h</R7F701653>
+    <R7F701684>..\..\..\..\..\X1X\F1x\common_family\generator\F1KM\F1KM_translation_701684.h</R7F701684>
+    <R7F701685>..\..\..\..\..\X1X\F1x\common_family\generator\F1KM\F1KM_translation_701685.h</R7F701685>
+    <R7F701686>..\..\..\..\..\X1X\F1x\common_family\generator\F1KM\F1KM_translation_701686.h</R7F701686>
+    <R7F701687>..\..\..\..\..\X1X\F1x\common_family\generator\F1KM\F1KM_translation_701687.h</R7F701687>
+    <R7F701688>..\..\..\..\..\X1X\F1x\common_family\generator\F1KM\F1KM_translation_701688.h</R7F701688>
+    <R7F701689>..\..\..\..\..\X1X\F1x\common_family\generator\F1KM\F1KM_translation_701689.h</R7F701689>
+    <R7F701690>..\..\..\..\..\X1X\F1x\common_family\generator\F1KM\F1KM_translation_701690.h</R7F701690>
+    <R7F701691>..\..\..\..\..\X1X\F1x\common_family\generator\F1KM\F1KM_translation_701691.h</R7F701691>
+    <R7F701692>..\..\..\..\..\X1X\F1x\common_family\generator\F1KM\F1KM_translation_701692.h</R7F701692>
+    <R7F701693>..\..\..\..\..\X1X\F1x\common_family\generator\F1KM\F1KM_translation_701693.h</R7F701693>
+    <R7F701694>..\..\..\..\..\X1X\F1x\common_family\generator\F1KM\F1KM_translation_701694.h</R7F701694>
+    <R7F701695>..\..\..\..\..\X1X\F1x\common_family\generator\F1KM\F1KM_translation_701695.h</R7F701695>
+<!--
+********************************************* F1KH ****************************************************
+-->
+    <R7F701708>..\..\..\..\..\X1X\F1x\common_family\generator\F1KH\F1KH_translation_701708.h</R7F701708>
+    <R7F701709>..\..\..\..\..\X1X\F1x\common_family\generator\F1KH\F1KH_translation_701709.h</R7F701709>
+    <R7F701710>..\..\..\..\..\X1X\F1x\common_family\generator\F1KH\F1KH_translation_701710.h</R7F701710>
+    <R7F701711>..\..\..\..\..\X1X\F1x\common_family\generator\F1KH\F1KH_translation_701711.h</R7F701711>
+    <R7F701714>..\..\..\..\..\X1X\F1x\common_family\generator\F1KH\F1KH_translation_701714.h</R7F701714>
+    <R7F701715>..\..\..\..\..\X1X\F1x\common_family\generator\F1KH\F1KH_translation_701715.h</R7F701715>
+
+  </TRANSLATION-FILE-PATH>
+<!--
+The tags present in DEVICE-FILE-PATH tag should contain the path of the device specific C Header File.
+The tags present in DEVICE-FILE-PATH should be equal to the value for parameter DioDeviceName present in DioGeneral container.
+The tag DEVICE-FILE-PATH should not be renamed.
+If multiple device header files need to provide then each file name should be separated with space.
+Also child tag of DEVICE-FILE-PATH should be unique.
+-->
+  <DEVICE-FILE-PATH>
+<!--
+********************************************* F1K *****************************************************
+-->
+    <R7F701542>.\common_family\include\ghs\dr7f701542_0.h</R7F701542>
+    <R7F701543>.\common_family\include\ghs\dr7f701543_0.h</R7F701543>
+    <R7F701546>.\common_family\include\ghs\dr7f701546_0.h</R7F701546>
+    <R7F701547>.\common_family\include\ghs\dr7f701547_0.h</R7F701547>
+    <R7F701557>.\common_family\include\ghs\dr7f701557_0.h</R7F701557>
+    <R7F701560>.\common_family\include\ghs\dr7f701560_0.h</R7F701560>
+    <R7F701561>.\common_family\include\ghs\dr7f701561_0.h</R7F701561>
+    <R7F701562>.\common_family\include\ghs\dr7f701562_0.h</R7F701562>
+    <R7F701563>.\common_family\include\ghs\dr7f701563_0.h</R7F701563>
+    <R7F701566>.\common_family\include\ghs\dr7f701566_0.h</R7F701566>
+    <R7F701567>.\common_family\include\ghs\dr7f701567_0.h</R7F701567>
+    <R7F701577>.\common_family\include\ghs\dr7f701577_0.h</R7F701577>
+    <R7F701580>.\common_family\include\ghs\dr7f701580_0.h</R7F701580>
+    <R7F701581>.\common_family\include\ghs\dr7f701581_0.h</R7F701581>
+    <R7F701582>.\common_family\include\ghs\dr7f701582_0.h</R7F701582>
+    <R7F701583>.\common_family\include\ghs\dr7f701583_0.h</R7F701583>
+    <R7F701586>.\common_family\include\ghs\dr7f701586_0.h</R7F701586>
+    <R7F701587>.\common_family\include\ghs\dr7f701587_0.h</R7F701587>
+    <R7F701597>.\common_family\include\ghs\dr7f701597_0.h</R7F701597>
+    <R7F701602>.\common_family\include\ghs\dr7f701602_0.h</R7F701602>
+    <R7F701603>.\common_family\include\ghs\dr7f701603_0.h</R7F701603>
+    <R7F701610>.\common_family\include\ghs\dr7f701610_0.h</R7F701610>
+    <R7F701611>.\common_family\include\ghs\dr7f701611_0.h</R7F701611>
+    <R7F701612>.\common_family\include\ghs\dr7f701612_0.h</R7F701612>
+    <R7F701613>.\common_family\include\ghs\dr7f701613_0.h</R7F701613>
+    <R7F701620>.\common_family\include\ghs\dr7f701620_0.h</R7F701620>
+    <R7F701621>.\common_family\include\ghs\dr7f701621_0.h</R7F701621>
+    <R7F701622>.\common_family\include\ghs\dr7f701622_0.h</R7F701622>
+    <R7F701623>.\common_family\include\ghs\dr7f701623_0.h</R7F701623>
+<!--
+********************************************* F1KM ****************************************************
+-->
+    <R7F701636>..\..\..\..\..\X1X\F1x\common_family\include\ghs\dr7f701636_0.h</R7F701636>
+    <R7F701644>..\..\..\..\..\X1X\F1x\common_family\include\ghs\dr7f701644_0.h</R7F701644>
+    <R7F701645>..\..\..\..\..\X1X\F1x\common_family\include\ghs\dr7f701645_0.h</R7F701645>
+    <R7F701646>..\..\..\..\..\X1X\F1x\common_family\include\ghs\dr7f701646_0.h</R7F701646>
+    <R7F701647>..\..\..\..\..\X1X\F1x\common_family\include\ghs\dr7f701647_0.h</R7F701647>
+    <R7F701648>..\..\..\..\..\X1X\F1x\common_family\include\ghs\dr7f701648_0.h</R7F701648>
+    <R7F701649>..\..\..\..\..\X1X\F1x\common_family\include\ghs\dr7f701649_0.h</R7F701649>
+    <R7F701650>..\..\..\..\..\X1X\F1x\common_family\include\ghs\dr7f701650_0.h</R7F701650>
+    <R7F701651>..\..\..\..\..\X1X\F1x\common_family\include\ghs\dr7f701651_0.h</R7F701651>
+    <R7F701652>..\..\..\..\..\X1X\F1x\common_family\include\ghs\dr7f701652_0.h</R7F701652>
+    <R7F701653>..\..\..\..\..\X1X\F1x\common_family\include\ghs\dr7f701653_0.h</R7F701653>
+    <R7F701684>..\..\..\..\..\X1X\F1x\common_family\include\ghs\dr7f701684_0.h</R7F701684>
+    <R7F701685>..\..\..\..\..\X1X\F1x\common_family\include\ghs\dr7f701685_0.h</R7F701685>
+    <R7F701686>..\..\..\..\..\X1X\F1x\common_family\include\ghs\dr7f701686_0.h</R7F701686>
+    <R7F701687>..\..\..\..\..\X1X\F1x\common_family\include\ghs\dr7f701687_0.h</R7F701687>
+    <R7F701688>..\..\..\..\..\X1X\F1x\common_family\include\ghs\dr7f701688_0.h</R7F701688>
+    <R7F701689>..\..\..\..\..\X1X\F1x\common_family\include\ghs\dr7f701689_0.h</R7F701689>
+    <R7F701690>..\..\..\..\..\X1X\F1x\common_family\include\ghs\dr7f701690_0.h</R7F701690>
+    <R7F701691>..\..\..\..\..\X1X\F1x\common_family\include\ghs\dr7f701691_0.h</R7F701691>
+    <R7F701692>..\..\..\..\..\X1X\F1x\common_family\include\ghs\dr7f701692_0.h</R7F701692>
+    <R7F701693>..\..\..\..\..\X1X\F1x\common_family\include\ghs\dr7f701693_0.h</R7F701693>
+    <R7F701694>..\..\..\..\..\X1X\F1x\common_family\include\ghs\dr7f701694_0.h</R7F701694>
+    <R7F701695>..\..\..\..\..\X1X\F1x\common_family\include\ghs\dr7f701695_0.h</R7F701695>
+<!--
+********************************************* F1KH ****************************************************
+-->
+    <R7F701708>..\..\..\..\..\X1X\F1x\common_family\include\ghs\dr7f701708_0.h</R7F701708>
+    <R7F701709>..\..\..\..\..\X1X\F1x\common_family\include\ghs\dr7f701709_0.h</R7F701709>
+    <R7F701710>..\..\..\..\..\X1X\F1x\common_family\include\ghs\dr7f701710_0.h</R7F701710>
+    <R7F701711>..\..\..\..\..\X1X\F1x\common_family\include\ghs\dr7f701711_0.h</R7F701711>
+    <R7F701714>..\..\..\..\..\X1X\F1x\common_family\include\ghs\dr7f701714_0.h</R7F701714>
+    <R7F701715>..\..\..\..\..\X1X\F1x\common_family\include\ghs\dr7f701715_0.h</R7F701715>
+
+  </DEVICE-FILE-PATH>
+</PATH-DETAILS>
