@@ -73,10 +73,10 @@
 **                         Input File                                         **
 *******************************************************************************/
 /*
- * INPUT FILE:    E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\Config\ECUC\test_Mcu_Mcu0_ecuc.arxml
- *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\modules\mcu\R422_MCU_F1x_BSWMDT.arxml
- *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\stubs\4.2.2\Dem\xml\Dem_Mcu.arxml
- * GENERATED ON:  27 Jan 2026 - 17:47:33
+ * INPUT FILE:    E:\PuHua_Tbox\Tools\ASR_RH850F1K_MCAL_Ver42.08.00\Config\Config\ECUC\test_Mcu_Mcu0_ecuc.arxml
+ *                E:\PuHua_Tbox\Tools\ASR_RH850F1K_MCAL_Ver42.08.00\Config\modules\mcu\R422_MCU_F1x_BSWMDT.arxml
+ *                E:\PuHua_Tbox\Tools\ASR_RH850F1K_MCAL_Ver42.08.00\Config\stubs\4.2.2\Dem\xml\Dem_Mcu.arxml
+ * GENERATED ON:  14 Jan 2026 - 18:15:53
  */
 
 /*******************************************************************************
@@ -89,8 +89,8 @@
 *******************************************************************************/
 /* AUTOSAR release version information */
 #define MCU_LCFG_C_AR_RELEASE_MAJOR_VERSION  4U
-#define MCU_LCFG_C_AR_RELEASE_MINOR_VERSION  2U
-#define MCU_LCFG_C_AR_RELEASE_REVISION_VERSION  2U
+#define MCU_LCFG_C_AR_RELEASE_MINOR_VERSION  5U
+#define MCU_LCFG_C_AR_RELEASE_REVISION_VERSION  0U
 
 /* File version information */
 #define MCU_LCFG_C_SW_MAJOR_VERSION  1U

@@ -39,12 +39,7 @@
 #include "CanTp.h"
 #include "Dcm.h"
 #include "Dem.h"
-#include "Mcu.h"
-#include "Fls.h"
-#include "NVM.h"
-#include "Dem.h"
-#include "Wdg_59_DriverA.h"
-#include "Wdg_59_DriverA_PBTypes.h"
+
 /** DO NOT CHANGE THIS COMMENT!
  * <USERBLOCK User Includes>
  */
@@ -284,6 +279,7 @@ EcuM_AL_DriverInitBswM
     {
         Dcm_Init(pbCfg->dcmPbCfg);
         Dem_Init(pbCfg->demPbCfg);
+	//Dem_SetOperationCycleState(0,0);
         /** DO NOT CHANGE THIS COMMENT!
          * <USERBLOCK EcuM_AL_DriverInitBswM EcuMDriverInitListBswM_1>
          */
@@ -358,23 +354,6 @@ FUNC(void, ECUM_ONGOOFFONE_CODE) EcuM_OnGoOffOne
      * <USERBLOCK EcuM_OnGoOffOne>
      */
     /* custom code.... */
-    uint32 init_expired_time = 0;
-    NvM_RequestResultType InitNvMWriteAllStatus = NVM_REQ_PENDING;
-     	Dem_Shutdown();
-	NvM_WriteAll();
-	do
-    	  {
-		  Wdg_59_DriverA_TriggerFunc(WDG_59_DRIVERA_INCLUDE_CRITICAL_SECTION);
-    	  	init_expired_time++;
-              NvM_MainFunction();
-              Fee_MainFunction();
-              Fls_MainFunction();
-              NvM_GetErrorStatus(0,&InitNvMWriteAllStatus);
-    	  	if(init_expired_time >= 500000)
-    	  		break;
-
-    	  }while(InitNvMWriteAllStatus == NVM_REQ_PENDING);    
-    
     /** DO NOT CHANGE THIS COMMENT!
      * </USERBLOCK>
      */
@@ -403,22 +382,6 @@ FUNC(void, ECUM_ONGOOFFTWO_CODE) EcuM_OnGoOffTwo
     /** DO NOT CHANGE THIS COMMENT!
      * </USERBLOCK>
      */
-    uint32 init_expired_time = 0;
-    NvM_RequestResultType InitNvMWriteAllStatus = NVM_REQ_PENDING;
-     	Dem_Shutdown();
-	NvM_WriteAll();
-	do
-    	  {
-    	  	init_expired_time++;
-              NvM_MainFunction();
-              Fee_MainFunction();
-              Fls_MainFunction();
-              NvM_GetErrorStatus(0,&InitNvMWriteAllStatus);
-    	  	if(init_expired_time >= 5000)
-    	  		break;
-
-    	  }while(InitNvMWriteAllStatus == NVM_REQ_PENDING);    
-    
 }
 
 /**
@@ -441,8 +404,6 @@ FUNC(void, ECUM_AL_SWITCHOFF_CODE) EcuM_AL_SwitchOff
      * <USERBLOCK EcuM_AL_SwitchOff>
      */
     /* custom code.... */
-    Mcu_SetMode(McuConf_McuModeSettingConf_McuModeSettingConf0);
-    Mcu_SequencerInit(McuConf_McuLowPowerSequencer_McuLowPowerSequencer0);
     /** DO NOT CHANGE THIS COMMENT!
      * </USERBLOCK>
      */
@@ -944,12 +905,9 @@ FUNC(void, ECUM_CHECKWAKEUP_CODE) EcuM_CheckWakeup
              * <USERBLOCK EcuM_CheckWakeup EcuMWakeupSource_Local>
              */
             /* custom code.... */
-            EcuMWksPending = EcuMWakeupSource_Local;
             /** DO NOT CHANGE THIS COMMENT!
              * </USERBLOCK>
              */
-            EcuMWksPending = EcuMWakeupSource_Local;
-
             break;
         default:
             (void)wakeupSource;

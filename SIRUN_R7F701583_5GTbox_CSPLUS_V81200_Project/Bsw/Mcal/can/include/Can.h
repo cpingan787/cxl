@@ -110,8 +110,8 @@
 #else
 /* AUTOSAR release version information */
 #define CAN_AR_RELEASE_MAJOR_VERSION     4U
-#define CAN_AR_RELEASE_MINOR_VERSION     2U
-#define CAN_AR_RELEASE_REVISION_VERSION  2U
+#define CAN_AR_RELEASE_MINOR_VERSION     5U
+#define CAN_AR_RELEASE_REVISION_VERSION  0U
 #endif
 
 /* Module Software version information */

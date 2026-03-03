@@ -77,8 +77,8 @@
 *******************************************************************************/
 /* AUTOSAR release version information */
 #define DET_AR_RELEASE_MAJOR_VERSION    4
-#define DET_AR_RELEASE_MINOR_VERSION    2
-#define DET_AR_RELEASE_REVISION_VERSION 2
+#define DET_AR_RELEASE_MINOR_VERSION    5
+#define DET_AR_RELEASE_REVISION_VERSION 0
 
 /* Module Software version information */
 #define DET_SW_MAJOR_VERSION    4

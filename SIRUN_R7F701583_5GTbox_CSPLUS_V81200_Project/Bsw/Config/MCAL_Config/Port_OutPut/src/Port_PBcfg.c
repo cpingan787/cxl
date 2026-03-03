@@ -137,11 +137,11 @@
 **                      Input File                                            **
 *******************************************************************************/
 /*
- * INPUT FILE:    E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\Config\ECUC\test_Mcu_Mcu0_ecuc.arxml
- *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\Config\ECUC\test_Port_Port0_ecuc.arxml
- *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\modules\port\R422_PORT_F1x_BSWMDT.arxml
- *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\stubs\4.2.2\Dem\xml\Dem_Port.arxml
- * GENERATED ON:  27 Feb 2026 - 10:55:49
+ * INPUT FILE:    E:\PuHua_Tbox\RH850gitlab\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\Config\ECUC\test_Mcu_Mcu0_ecuc.arxml
+ *                E:\PuHua_Tbox\RH850gitlab\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\Config\ECUC\test_Port_Port0_ecuc.arxml
+ *                E:\PuHua_Tbox\RH850gitlab\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\modules\port\R422_PORT_F1x_BSWMDT.arxml
+ *                E:\PuHua_Tbox\RH850gitlab\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\stubs\4.2.2\Dem\xml\Dem_Port.arxml
+ * GENERATED ON:  21 Jan 2026 - 16:19:24
  */
 
 /*******************************************************************************
@@ -236,7 +236,7 @@ CONST(Port_ConfigType, PORT_CONST)
     0x01U,
 
     /* ucNoOfPinChangeableDetails */
-    0x07U
+    0x05U
   }
 };
 
@@ -323,7 +323,7 @@ CONST(Port_NumRegs, PORT_CONST)
     0xFFFFF314UL,
 
     /* ulInitModePMCSRRegVal */
-    0x00000130UL,
+    0x00000030UL,
 
     /* ulInitModePODCRegVal */
     0x00000000UL,
@@ -500,7 +500,7 @@ CONST(Port_NumRegs, PORT_CONST)
     0x00002BC2UL,
 
     /* ulMaskConfigPMSRRegVal */
-    0xFFF32BC2UL,
+    0xFFF72BC2UL,
 
     /* ulInitModePMCSRRegVal */
     0x00001A0CUL,
@@ -932,25 +932,7 @@ CONST(Port_IPortRegs, PORT_CONST) Port_GstInputRegs[PORT_NUM_OF_INPUT_PORTS] =
 CONST(Port_PinChangeableDetails, PORT_CONST) 
           Port_GstPinChangeableDetailsList[PORT_NUM_OF_PINS_MODIFIABLE] =
 {
-  /* Index: 0 - PortGroup0_PortPin2 */
-  {
-    /* ddPinId */
-    0x0002U,
-
-    /* usPinPositionMask */
-    0x0004U,
-
-    /* usChangeableConfigVal */
-    0x0000U,
-
-    /* ucPortGroupIndex */
-    0x00U,
-
-    /* ucPortType */
-    0x20U
-  },
-
-  /* Index: 1 - PortGroup0_PortPin5 */
+  /* Index: 0 - PortGroup0_PortPin5 */
   {
     /* ddPinId */
     0x0005U,
@@ -968,7 +950,7 @@ CONST(Port_PinChangeableDetails, PORT_CONST)
     0x40U
   },
 
-  /* Index: 2 - PortGroup8_PortPin10 */
+  /* Index: 1 - PortGroup8_PortPin10 */
   {
     /* ddPinId */
     0x0025U,
@@ -986,7 +968,7 @@ CONST(Port_PinChangeableDetails, PORT_CONST)
     0x20U
   },
 
-  /* Index: 3 - PortGroup8_PortPin11 */
+  /* Index: 2 - PortGroup8_PortPin11 */
   {
     /* ddPinId */
     0x0026U,
@@ -1004,25 +986,7 @@ CONST(Port_PinChangeableDetails, PORT_CONST)
     0x20U
   },
 
-  /* Index: 4 - PortGroup10_PortPin2 */
-  {
-    /* ddPinId */
-    0x0031U,
-
-    /* usPinPositionMask */
-    0x0004U,
-
-    /* usChangeableConfigVal */
-    0x0000U,
-
-    /* ucPortGroupIndex */
-    0x04U,
-
-    /* ucPortType */
-    0x40U
-  },
-
-  /* Index: 5 - PortGroup10_PortPin3 */
+  /* Index: 3 - PortGroup10_PortPin3 */
   {
     /* ddPinId */
     0x0032U,
@@ -1040,7 +1004,7 @@ CONST(Port_PinChangeableDetails, PORT_CONST)
     0x60U
   },
 
-  /* Index: 6 - PortGroup10_PortPin15 */
+  /* Index: 4 - PortGroup10_PortPin15 */
   {
     /* ddPinId */
     0x003EU,

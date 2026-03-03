@@ -1327,37 +1327,10 @@ Nm_StateChangeNotification(NetworkHandleType nmNetworkHandle, Nm_StateType nmPre
             }
             if ((boolean)TRUE == findflag)
             {
-                #if 0  /****for SRTL-5G-Prj Start*/
                 index--;
-
                 (void)Com_SendSignal(
                     Nm_ChLConfig[chIndex].NmStateReportSignalRef.sigId,
                     &Nm_StateReportKind[index].signalVal);
-                #else
-                /****for SRTL-5G-Prj Start*/
-
-                /* SWR
-                 bit8 is RMS-state indication ;
-                 bit7 is NOS-state indication
-                 bit0~bit6 is state change indication**/
-
-		            index--;
-                    uint8 CanNmUsrData = 0;
-                    if(nmCurrentState == NM_STATE_NORMAL_OPERATION) /**/
-                    {
-                        CanNmUsrData = 0x40;//set bit7
-                    }
-                    else if(nmCurrentState == NM_STATE_REPEAT_MESSAGE) /**/
-                    {
-                        CanNmUsrData = 0x80;//set bit7//set bit8
-                    }
-                    CanNmUsrData |=Nm_StateReportKind[index].signalVal;
-
-                    (void)Com_SendSignal(
-                    Nm_ChLConfig[chIndex].NmStateReportSignalRef.sigId,
-                    &CanNmUsrData);
-                #endif
-                /****for SRTL-5G-Prj  end*/
             }
 #else
             (void)nmPreviousState;

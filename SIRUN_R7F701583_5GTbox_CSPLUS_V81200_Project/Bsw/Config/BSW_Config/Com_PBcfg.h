@@ -14,7 +14,7 @@
  *  @MCU                : R7F7015833
  *  @file               : Com_PBcfg.h
  *  @author             : iSoft
- *  @date               : 2026-03-01 21:25:51
+ *  @date               : 2026-01-22 11:44:17
  *  @vendor             : iSoft
  *  @description        : 
  *  @specification(S)   : AUTOSAR Classic Platform R19-11
@@ -53,7 +53,7 @@
 **                      Macros                                                **
 *******************************************************************************/
 
-#define COM_RXIPDUBUFF_SIZE                        1365u
+#define COM_RXIPDUBUFF_SIZE                        1368u
 #define COM_TXIPDUBUFF_SIZE                        542u
 
 #define COM_SIGNAL_BOOLBUFF_SIZE                   336u
@@ -61,9 +61,9 @@
 #define COM_SIGNAL_BOOL_INVALID_SIZE               336u
 #define COM_SIGNAL_BOOL_SUBSTITUTE_SIZE            0u
 
-#define COM_SIGNAL_8BITBUFF_SIZE                   817u
+#define COM_SIGNAL_8BITBUFF_SIZE                   816u
 #define COM_RXGROUPSIGNAL_8BITBUFF_SIZE            378u
-#define COM_SIGNAL_8BIT_INVALID_SIZE               814u
+#define COM_SIGNAL_8BIT_INVALID_SIZE               816u
 #define COM_SIGNAL_8BIT_SUBSTITUTE_SIZE            0u
 
 #define COM_SIGNAL_16BITBUFF_SIZE                  102u

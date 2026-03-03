@@ -26,7 +26,6 @@
 **                      Includes                                              **
 *******************************************************************************/
 #include "EcuM.h"
-#include "Dem.h"
 #include "Can.h"
 #include "CanIf.h"
 #include "CanSM.h"
@@ -37,6 +36,7 @@
 #include "CanNm.h"
 #include "CanTp.h"
 #include "Dcm.h"
+#include "Dem.h"
 
 /*******************************************************************************
 **                      Global Constant Definitions                           **
@@ -62,7 +62,7 @@ CONST(EcuM_ConfigType, ECUM_VAR_NO_INIT) EcuM_Config = /* PRQA S 3408,1533 */ /*
 {
     123,    /*EcuMConfigConsistencyHash*/
     OSDEFAULTAPPMODE,    /*EcuMDefaultAppMode*/
-    ECUM_SHUTDOWN_TARGET_OFF,
+    ECUM_SHUTDOWN_TARGET_SLEEP,
     0,
     &EcuM_GenMcalConfig
 };

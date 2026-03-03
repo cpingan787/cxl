@@ -47,8 +47,8 @@
 #define CANIF_MODULE_ID                   60u
 #define CANIF_VENDOR_ID                   62u
 #define CANIF_AR_RELEASE_MAJOR_VERSION    4u
-#define CANIF_AR_RELEASE_MINOR_VERSION    2u
-#define CANIF_AR_RELEASE_REVISION_VERSION 2u
+#define CANIF_AR_RELEASE_MINOR_VERSION    5u
+#define CANIF_AR_RELEASE_REVISION_VERSION 0u
 #define CANIF_SW_MAJOR_VERSION            2u
 #define CANIF_SW_MINOR_VERSION            2u
 #define CANIF_SW_PATCH_VERSION            3u

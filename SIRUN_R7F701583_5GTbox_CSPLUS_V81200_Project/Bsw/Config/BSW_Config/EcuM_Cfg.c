@@ -36,7 +36,7 @@ CONST(ResourceType, ECUM_CONST)EcuM_OSResource = RES_SCHEDULER_CORE0;
 #include "EcuM_MemMap.h"
 #define ECUM_START_SEC_CONFIG_DATA_8
 #include "EcuM_MemMap.h"
-static CONST(uint8, ECUM_CONST) Ecum_WkSources_0[2]={0, 1};
+static CONST(uint8, ECUM_CONST) Ecum_WkSources_0[1]={0};
 #define ECUM_STOP_SEC_CONFIG_DATA_8
 #include "EcuM_MemMap.h"
 
@@ -49,9 +49,9 @@ CONST(EcuM_SleepModeCfgType, ECUM_CONST) EcuM_SleepModeCfgs[ECUM_MAX_SLEEP_MODE_
     {
         FALSE,    /*sleepSuspend*/
         0xff,        /*mcuMode(sleep)*/
-        2,    /*numberOfWakeSource*/
+        1,    /*numberOfWakeSource*/
         &Ecum_WkSources_0[0],/*wkSrcIdx*/
-        EcuMWakeupSource_CAN|EcuMWakeupSource_Local/*wkMask*/
+        EcuMWakeupSource_CAN/*wkMask*/
     }
 };
 #define ECUM_STOP_SEC_CONFIG_DATA_UNSPECIFIED
@@ -113,8 +113,8 @@ CONST(EcuM_UserCfgType, ECUM_CONST) EcuM_UserCfgs[ECUM_MAX_USER_NUM]=
 {
     /*EcuMFlexUserConfig*/
     {
-        TRUE,    /*goDownAllowed*/
-        TRUE,    /*setClkAllowed*/
+        FALSE,    /*goDownAllowed*/
+        FALSE,    /*setClkAllowed*/
         0     /*usrId*/
     }
 };

@@ -100,11 +100,10 @@
 **                         Input File                                         **
 *******************************************************************************/
 /*
- * INPUT FILE:    1
- *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\Config\ECUC\test_Mcu_Mcu0_ecuc.arxml
- *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\modules\mcu\R422_MCU_F1x_BSWMDT.arxml
- *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\stubs\4.2.2\Dem\xml\Dem_Mcu.arxml
- * GENERATED ON:  10 Feb 2026 - 10:23:31
+ * INPUT FILE:    E:\PuHua_Tbox\Tools\ASR_RH850F1K_MCAL_Ver42.08.00\Config\Config\ECUC\test_Mcu_Mcu0_ecuc.arxml
+ *                E:\PuHua_Tbox\Tools\ASR_RH850F1K_MCAL_Ver42.08.00\Config\modules\mcu\R422_MCU_F1x_BSWMDT.arxml
+ *                E:\PuHua_Tbox\Tools\ASR_RH850F1K_MCAL_Ver42.08.00\Config\stubs\4.2.2\Dem\xml\Dem_Mcu.arxml
+ * GENERATED ON:  14 Jan 2026 - 18:15:53
  */
 
 /*******************************************************************************
@@ -189,8 +188,8 @@ volatile LVIReg* const LviReg_BaseAddress =
                                    (volatile LVIReg*)&LVIREG; 
 
 /*Structure of MCU Low Power Sequence registers*/
-volatile LPSReg* const Mcu_LpsRegisters_BaseAddress = 
-                                   (volatile LPSReg*)&LPSREG;
+/* volatile LPSReg* const Mcu_LpsRegisters_BaseAddress =
+                                   (volatile LPSReg*)&LPSREG;  */ 
 
 /*Structure of MCU IOHOLD registers*/
 volatile unsigned long* const Mcu_IoHoldRegister_BaseAddress =
@@ -230,10 +229,10 @@ volatile FEINTReg* const FEIntMsk_BaseAddress =
 
 /* QAC Warning: START Msg(2:4153)-4 */
 /*Structure of TAUJ0 timer registers*/
-volatile TAUJUserReg* const Mcu_Tauj0UserReg_BaseAddress = 
-                                 (volatile TAUJUserReg*)&TAUJ0USERREG;
-volatile TAUJOsReg* const Mcu_Tauj0OsReg_BaseAddress = 
-                                 (volatile TAUJOsReg*)&TAUJ0OSREG;
+/*volatile TAUJUserReg* const Mcu_Tauj0UserReg_BaseAddress = 
+                               (volatile TAUJUserReg*)&TAUJ0USERREG;*/
+/*volatile TAUJOsReg* const Mcu_Tauj0OsReg_BaseAddress = 
+                               (volatile TAUJOsReg*)&TAUJ0OSREG;*/
 
 /* END Msg(2:4153)-4 */
 

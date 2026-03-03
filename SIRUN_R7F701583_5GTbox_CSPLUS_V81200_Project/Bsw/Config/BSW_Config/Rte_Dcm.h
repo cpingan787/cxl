@@ -27,21 +27,6 @@
 
 #include "Dcm_Types.h"
 
-/* add start test  */
-#define GETU32(pt) (((unsigned int)(pt)[0] << 24) ^ ((unsigned int)(pt)[1] << 16) ^ ((unsigned int)(pt)[2] <<  8) ^ ((unsigned int)(pt)[3]))
-
-#define PUTU32(ct, st) { (ct)[0] = (unsigned char)((st) >> 24); (ct)[1] = (unsigned char)((st) >> 16); (ct)[2] = (unsigned char)((st) >>  8); (ct)[3] = (unsigned char)(st); }
-
-struct aes_key_st
-{
-    unsigned int rd_key[4 * (14 + 1)];
-    unsigned int rounds;
-};
-
-typedef struct aes_key_st AES_KEY; 
-
-/* add end test  */
-
 /***************************Security Part****************************************/
 /* PRQA S 0777,0779++ */ /* MISRA Rule 1.3,5.1,5.2 */
 extern  Std_ReturnType  Rte_Call_SecurityAccess_Level_1_CompareKey( const  uint8*  Key,Dcm_OpStatusType  OpStatus,Dcm_NegativeResponseCodeType*  ErrorCode );

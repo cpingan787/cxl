@@ -14,7 +14,7 @@
  *  @MCU                : R7F7015833
  *  @file               : IpduM_Cfg.h
  *  @author             : iSoft
- *  @date               : 2026-02-02 09:24:28
+ *  @date               : 2026-01-21 20:29:55
  *  @vendor             : iSoft
  *  @description        : 
  *  @specification(S)   : AUTOSAR Classic Platform R19-11
@@ -62,7 +62,7 @@ a static part. */
 #define IPDUM_MULTIPLE_PARTITION_USED                       STD_OFF
 
 /* Maximum total size of all TX/RX buffers */
-#define  IPDUM_MAX_BUFFER_SIZE                           19200u
+#define  IPDUM_MAX_BUFFER_SIZE                           1920u
 
 /* Maximum number of transmitted IPdus */
 #define IPDUM_TX_UP_PDU_MAX                         12u
@@ -105,9 +105,9 @@ a static part. */
 
 /* maximum number of IPDUM_RXIND_TYPE_CONTAINER TX */
 #define IPDUM_CONTAINER_TX_NUMBER_MAX                       3u
-#define CONTAINER_TX_PDU_IpduM_Contained_Tx_Pdu_0x377       0u /* IpduMMainFunctionTx */
-#define CONTAINER_TX_PDU_IpduM_Contained_Tx_Pdu_0x36A       1u /* IpduMMainFunctionTx */
-#define CONTAINER_TX_PDU_IpduM_Contained_Tx_Pdu_0x3A2       2u /* IpduMMainFunctionTx */
+#define CONTAINER_TX_PDU_IpduM_Contained_Tx_Pdu_0x377       0u
+#define CONTAINER_TX_PDU_IpduM_Contained_Tx_Pdu_0x36A       1u
+#define CONTAINER_TX_PDU_IpduM_Contained_Tx_Pdu_0x3A2       2u
 
 /*maximum number of TX request */
 #define IPDUM_TX_REQUEST_NUMBER_MAX                         0u
@@ -117,10 +117,10 @@ this size shall be more than Tx static/dynamic part or contained pdu length */
 #define IPDUM_MAX_PDU_BUF_SIZE                             64u
 
 /* maximum number of ipdum tx container queue IpduMContainerQueueSize */
-#define IPDUM_CONTAINER_TX_QUEUE_NUM_MAX                   300u
+#define IPDUM_CONTAINER_TX_QUEUE_NUM_MAX                   30u
 
 /* maximum number of module support tx contained */
-#define IPDUM_SUPPORT_TX_CONTAINED_NUM_MAX                    1500u
+#define IPDUM_SUPPORT_TX_CONTAINED_NUM_MAX                    150u
 
 /* maximum number of ipdum rx container queue IpduMContainerQueueSize */
 #define IPDUM_CONTAINER_RX_QUEUE_NUM_MAX                   0u

@@ -111,11 +111,11 @@
 *******************************************************************************/
 
 /*
- * INPUT FILE:    E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\Config\ECUC\test_Mcu_Mcu0_ecuc.arxml
- *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\Config\ECUC\test_Port_Port0_ecuc.arxml
- *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\modules\port\R422_PORT_F1x_BSWMDT.arxml
- *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\stubs\4.2.2\Dem\xml\Dem_Port.arxml
- * GENERATED ON:  27 Feb 2026 - 10:55:49
+ * INPUT FILE:    E:\PuHua_Tbox\RH850gitlab\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\Config\ECUC\test_Mcu_Mcu0_ecuc.arxml
+ *                E:\PuHua_Tbox\RH850gitlab\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\Config\ECUC\test_Port_Port0_ecuc.arxml
+ *                E:\PuHua_Tbox\RH850gitlab\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\modules\port\R422_PORT_F1x_BSWMDT.arxml
+ *                E:\PuHua_Tbox\RH850gitlab\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\stubs\4.2.2\Dem\xml\Dem_Port.arxml
+ * GENERATED ON:  21 Jan 2026 - 16:19:24
  */
 
 #ifndef PORT_CFG_H
@@ -134,8 +134,8 @@
 
 /* AUTOSAR specification version information */
 #define PORT_CFG_AR_RELEASE_MAJOR_VERSION  4U
-#define PORT_CFG_AR_RELEASE_MINOR_VERSION  2U
-#define PORT_CFG_AR_RELEASE_REVISION_VERSION  2U
+#define PORT_CFG_AR_RELEASE_MINOR_VERSION  5U
+#define PORT_CFG_AR_RELEASE_REVISION_VERSION  0U
 
 /* File version information */
 #define PORT_CFG_SW_MAJOR_VERSION  2U
@@ -145,8 +145,8 @@
 **                      Common Published Information                          **
 *******************************************************************************/
 #define PORT_AR_RELEASE_MAJOR_VERSION_VALUE  4U
-#define PORT_AR_RELEASE_MINOR_VERSION_VALUE  2U
-#define PORT_AR_RELEASE_REVISION_VERSION_VALUE  2U
+#define PORT_AR_RELEASE_MINOR_VERSION_VALUE  5U
+#define PORT_AR_RELEASE_REVISION_VERSION_VALUE  0U
 
 #define PORT_SW_MAJOR_VERSION_VALUE  2U
 #define PORT_SW_MINOR_VERSION_VALUE  4U
@@ -273,7 +273,7 @@
 
 
 /* Number of mode / dir / dioAlt changeable pins */
-#define PORT_NUM_OF_PINS_MODIFIABLE         0x07U
+#define PORT_NUM_OF_PINS_MODIFIABLE         0x05U
 /* Number of config set configured */
 #define PORT_NUM_OF_CONFIGSET               0x01U
 /* Number of numeric ports configured */

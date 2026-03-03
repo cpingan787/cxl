@@ -30,7 +30,6 @@
 #include "CanTp_Cbk.h"
 #include "CanTp_PBcfg.h"
 #include "CanNm_Cbk.h"
-#include "CanTSyn_Cbk.h"
 
 /*******************************************************************************
 **                      Macros                                                **
@@ -157,7 +156,6 @@ static CONST(PduIdType, CANIF_PBCFG_CONST) CanIf_HrhRxPduRef[] =
     CANIF_RXPDU_CANIF_IPD_BKPCANFD_Event_FrS35_CONTROLLER_0_IAM_Rx, /* CanifHrh_0 */
     CANIF_RXPDU_CANIF_CCU_PTCANFD_500ms_FrP13_CONTROLLER_0_IAM_Rx, /* CanifHrh_0 */
     CANIF_RXPDU_CANIF_ESS_PTCANFD_500ms_FrP60_CONTROLLER_0_IAM_Rx, /* CanifHrh_0 */
-    CANIF_RXPDU_RX_PDU_CANTSYNC, /* CanifHrh_0 */
     CANIF_RXPDU_CANIF_ICBVC_CONNCANFD_Event_FrS139_CONTROLLER_0_IAM_Rx, /* CanifHrh_0 */
     CANIF_RXPDU_CANIF_SDM_SFCANFD_Event_FrS13_CONTROLLER_0_IAM_Rx, /* CanifHrh_0 */
     CANIF_RXPDU_CANIF_SDM_SFCANFD_Event_FrS12_CONTROLLER_0_IAM_Rx, /* CanifHrh_0 */
@@ -181,7 +179,7 @@ static CONST(CanIfHrhCfgType,CANIF_PBCFG_CONST) CanIf_HrhCfgData[CANIF_HRH_NUMBE
         CANIF_CANDRV_0_CANIF_CONTROLLER_0_IAM,
 
         0u,
-        122u,
+        121u,
         CANIF_BASIC_CAN,
 
         &CanIf_HrhRxPduRef[0],
@@ -230,7 +228,6 @@ CanIfRxPduUserRxIndicationNameApiType CanIf_UpRxIndicationArray[CANIF_RXINDICATI
         &PduR_CanIfRxIndication,
         &CanTp_RxIndication,
         &CanNm_RxIndication,
-        &CanTSyn_RxIndication,
 };
 #define CANIF_STOP_SEC_PBCONFIG_DATA_UNSPECIFIED
 #include "CanIf_MemMap.h"
@@ -2295,23 +2292,6 @@ static CONST(CanIf_RxPduConfigType,CANIF_PBCFG_CONST) CanIf_RxPduConfigData[CANI
 
         &CanIf_RxCanIdRange[0],   /* CanIfRxCanIdRangeRef */
 },
-    {
-        /*121  CANIF_RXPDU_RX_PDU_CANTSYNC  1536*/
-        FALSE,  /* CanIfRxPduForNM */
-        FALSE,  /* RxMetaDataEnable */
-
-        TRUE, /* CanIfRxPduDataLengthCheck */
-
-        3,     /* CanIfUpRxIndicationApiIndex */
-        CANIF_HOH0_HRH_0, /* CanIfRxPduHrhId */
-        CANTSYN_RX_PDU_CANTSYNC,  /* CanIfUpPduId */
-
-        8u,   /* CanIfRxPduDlc */
-        0x600u, /* CanIfRxPduCanIdMasked */
-        0x7ffu, /* CanIfRxPduCanIdMask */
-        CANIF_RX_STANDARD_FD_CAN,   /* CanIfRxPduCanIdType */
-        NULL_PTR, /* CanIfRxCanIdRangeRef */
-},
 };
 #define CANIF_STOP_SEC_PBCONFIG_DATA_UNSPECIFIED
 #include "CanIf_MemMap.h"
@@ -2823,7 +2803,7 @@ static CONST(CanIf_TxPduConfigType,CANIF_PBCFG_CONST) CanIf_TxPduConfigData[CANI
         /* 27  CANIF_TXPDU_CANIF_synthesized_IAM_ZONE_CONNCANFD_E_CONTROLLER_0_IAM_Tx */
 
         FALSE,
-        20u,
+        16u,
 
         2u,
         CANIF_HOH0_HTH_0,
@@ -2841,7 +2821,7 @@ static CONST(CanIf_TxPduConfigType,CANIF_PBCFG_CONST) CanIf_TxPduConfigData[CANI
         /* 28  CANIF_TXPDU_CANIF_synthesized_IAM_ZONE_CONNCA_0000_CONTROLLER_0_IAM_Tx */
 
         FALSE,
-        52u,
+        48u,
 
         2u,
         CANIF_HOH0_HTH_0,
@@ -2859,7 +2839,7 @@ static CONST(CanIf_TxPduConfigType,CANIF_PBCFG_CONST) CanIf_TxPduConfigData[CANI
         /* 29  CANIF_TXPDU_CANIF_synthesized_IAM_ZONE_CONNCA_0001_CONTROLLER_0_IAM_Tx */
 
         FALSE,
-        52u,
+        48u,
 
         2u,
         CANIF_HOH0_HTH_0,
@@ -2877,7 +2857,7 @@ static CONST(CanIf_TxPduConfigType,CANIF_PBCFG_CONST) CanIf_TxPduConfigData[CANI
         /* 30  CANIF_TXPDU_CANIF_synthesized_IAM_BKPCANFD_20ms_Fr_CONTROLLER_0_IAM_Tx */
 
         FALSE,
-        12u,
+        8u,
 
         2u,
         CANIF_HOH0_HTH_0,

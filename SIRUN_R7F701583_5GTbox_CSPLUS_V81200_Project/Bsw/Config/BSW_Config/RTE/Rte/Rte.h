@@ -260,8 +260,8 @@
 #define RTE_MODULE_ID (2U)
 
 #define RTE_AR_RELEASE_MAJOR_VERSION     (4U)
-#define RTE_AR_RELEASE_MINOR_VERSION     (2U)
-#define RTE_AR_RELEASE_REVISION_VERSION  (2U)
+#define RTE_AR_RELEASE_MINOR_VERSION     (5U)
+#define RTE_AR_RELEASE_REVISION_VERSION  (0U)
 
 /*******************************************************************************
 **                      Include Section                                       **

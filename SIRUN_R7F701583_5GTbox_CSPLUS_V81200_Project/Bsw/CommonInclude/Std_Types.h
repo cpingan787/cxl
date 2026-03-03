@@ -112,8 +112,6 @@
 */
 typedef uint8 Std_ReturnType;
 #define E_NOT_OK    1U
-#define E_BUSY      2U
-
 
 typedef struct
 {

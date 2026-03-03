@@ -33,8 +33,6 @@
 #include "Dcm_Cbk.h"
 #include "IpduM.h"
 #include "IpduM_Cbk.h"
-#include "SecOC.h"
-#include "SecOC_Cbk.h"
 #include "CanNm.h"
 #include "PduR_Internal.h"
 /*******************************************************************************
@@ -158,22 +156,6 @@ PduR_BswModuleConfigData[PDUR_BSW_MODULE_SUM] =
         NULL_PTR,
         NULL_PTR,
         NULL_PTR,
-    },
-    {
-        PDUR_SECOC,
-        NULL_PTR,
-        NULL_PTR,
-        NULL_PTR,
-        SecOC_TriggerTransmit,
-        SecOC_IfTransmit,
-        SecOC_TxConfirmation,
-        SecOC_RxIndication,
-        SecOC_TpTransmit,
-        SecOC_CopyTxData,
-        SecOC_TpTxConfirmation,
-        SecOC_StartOfReception,
-        SecOC_CopyRxData,
-        SecOC_TpRxIndication,
     },
 };
 #define PDUR_STOP_SEC_CONFIG_DATA_UNSPECIFIED

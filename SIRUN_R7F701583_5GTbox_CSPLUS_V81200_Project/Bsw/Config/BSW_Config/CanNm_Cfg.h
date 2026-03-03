@@ -128,7 +128,7 @@ received */
 #define CANNM_REPEAT_MSG_IND_ENABLED                      STD_ON
 
 /* Pre-processor switch for enabling the CAN NM state change notification. */
-#define CANNM_STATE_CHANGE_IND_ENABLED                    STD_ON
+#define CANNM_STATE_CHANGE_IND_ENABLED                    STD_OFF
 
 /* Pre-processor switch for enabling user data support. */
 #define CANNM_USER_DATA_ENABLED                           STD_ON

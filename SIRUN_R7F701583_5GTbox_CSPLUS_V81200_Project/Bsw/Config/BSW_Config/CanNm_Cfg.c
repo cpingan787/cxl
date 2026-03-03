@@ -66,21 +66,21 @@ CanNm_ChannelCfgData[CANNM_NUMBER_OF_CHANNEL]=
 {
     {
         TRUE,                   /* CanNmActiveWakeupBitEnabled */
-        1u,                   /* CanNmImmediateNmCycleTime */
+        2u,                   /* CanNmImmediateNmCycleTime */
         5u,                    /* CanNmImmediateNmTransmissions */
         0u,                   /* CanNmMsgCycleOffset */
-        10u,                  /* CanNmMsgCycleTime */
+        20u,                  /* CanNmMsgCycleTime */
         0u,                   /* CanNmMsgTimeoutTime */
         TRUE,                   /* CanNmNodeDetectionEnabled */
         TRUE,                   /* CanNmNodeIdEnabled */
         131u,                     /* CanNmNodeId */
         CANNM_PDU_BYTE_1,       /* CanNmPduCbvPosition */
         CANNM_PDU_BYTE_0,       /* CanNmPduNidPosition */
-        100u,                  /* CanNmRepeatMessageTime */
+        200u,                  /* CanNmRepeatMessageTime */
         TRUE,                  /* CanNmRepeatMsgIndEnabled */
         FALSE,                  /* CanNmStayInPbsEnabled */
-        500u,                  /* CanNmTimeoutTime */
-        100u,                 /* CanNmWaitBusSleepTime */
+        1000u,                  /* CanNmTimeoutTime */
+        200u,                 /* CanNmWaitBusSleepTime */
         ComMChannel_0,                     /* CanNmComMNetworkHandleRef */
         &CanNm_RxPduData[0],    /* CanNmRxPdu */
         1u,                     /* RxPduNum */
@@ -97,7 +97,7 @@ CanNm_ChannelCfgData[CANNM_NUMBER_OF_CHANNEL]=
 *******************************************************************************/
 const CanNm_ConfigType CanNm_Config =
 {
-    0xau,                         /*MainFunctionPeriod*/
+    0x5u,                         /*MainFunctionPeriod*/
     CanNm_ChannelCfgData,       /* CanNmChannelConfig */
 };
 

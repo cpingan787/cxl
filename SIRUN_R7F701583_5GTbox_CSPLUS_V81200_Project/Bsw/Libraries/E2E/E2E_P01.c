@@ -577,7 +577,7 @@ E2E_P01CalculateCRC8(
     switch (ConfigPtr->DataIDMode)
     {
     case E2E_P01_DATAID_BOTH:
-        CRC = Crc_CalculateCRC8(&DataID_Lbyte, 1, 0xFF, FALSE);
+        CRC = Crc_CalculateCRC8(&DataID_Lbyte, 1, 0, FALSE);
         CRC = Crc_CalculateCRC8(&DataID_Hbyte, 1, CRC, FALSE);
         break;
     case E2E_P01_DATAID_LOW:
@@ -624,7 +624,7 @@ E2E_P01CalculateCRC8(
             CRC,
             FALSE);
     }
-    CRC = CRC ^ 0xFFu;
+    //CRC = CRC ^ 0xFFu;
 
     return CRC;
 }

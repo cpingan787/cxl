@@ -2222,7 +2222,7 @@ static FUNC(void, CAN_RSCAN_PRIVATE_CODE) Can_RxIndicationCommonPart(
 {
   /* References: CAN_DDD_ACT_050 */
   Can_HwType LstMailbox;
-  #if(CAN_AR_VERSION == CAN_AR_422_VERSION)
+  #if(CAN_AR_VERSION == CAN_AR_450_VERSION)
   PduInfoType LstPduInfo;
   #endif
 #if defined(CAN_LPDU_RECEIVE_CALLOUT_FUNCTION)
@@ -2280,7 +2280,7 @@ static FUNC(void, CAN_RSCAN_PRIVATE_CODE) Can_RxIndicationCommonPart(
   else
 #endif
   {
-    #if(CAN_AR_VERSION == CAN_AR_422_VERSION)
+    #if(CAN_AR_VERSION == CAN_AR_450_VERSION)
     LstMailbox.Hoh = (Can_HwHandleType)LpHoh->usHohId;
     LstMailbox.ControllerId =
       (uint8)(LpHoh->ucController + CAN_CONTROLLER_OFFSET);

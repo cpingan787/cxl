@@ -72,8 +72,6 @@
 #include "SchM_Os.h"
 #include "SchM_PduR.h"
 #include "SchM_ComXf.h"
-#include "SchM_WdgM.h"
-
 
 
 /*******************************************************************************
@@ -130,24 +128,8 @@ return RTE_E_OK;
 }
 #define RTE_STOP_SEC_CODE
 #include "Rte_MemMap.h"
-#define RTE_START_SEC_CODE
-#include "Rte_MemMap.h"
-/* ModuleName : WdgM  */
-/* ExclusiveArea : Exclusive */
-void SchM_Enter_WdgM_Exclusive(void)
-{
-    SuspendAllInterrupts();
-}
-#define RTE_STOP_SEC_CODE
-#include "Rte_MemMap.h"
-#define RTE_START_SEC_CODE
-#include "Rte_MemMap.h"
-void SchM_Exit_WdgM_Exclusive(void)
-{
-    ResumeAllInterrupts();
-}
-#define RTE_STOP_SEC_CODE
-#include "Rte_MemMap.h"
+
+
 
 
 #if 0

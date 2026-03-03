@@ -47,7 +47,7 @@
 #define ECUM_VERSION_INFO_API               STD_OFF
 
 /*Switch for whether a driver init list zero configured*/
-#define ECUM_DRIVER_INIT_LIST_ZERO          STD_ON
+#define ECUM_DRIVER_INIT_LIST_ZERO          STD_OFF
 
 /*Switch for whether a driver init list one configured*/
 #define ECUM_DRIVER_INIT_LIST_ONE           STD_ON

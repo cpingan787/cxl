@@ -28,7 +28,6 @@
 #include "Rte_Dcm.h"
 #include "Dcm_PBcfg.h"
 #include "Dcm_Ext.h"
-#include "NvM.h"
 
 /**********************DID*************************/
 #define   DCM_START_SEC_CONST_UNSPECIFIED
@@ -6628,7 +6627,7 @@ static CONST(Dcm_DspSecurityRowType,DCM_CONST)Dcm_DspSecurityRow[1] =
         4u,          /*DcmDspSecurityKeySize*/
         0u,          /*DcmDspSecurityADRSize*/
         TRUE,        /*DcmDspSecurityAttemptCounterEnabled*/
-        2u,    /*DcmDspSecurityNumAttDelay*/
+        3u,    /*DcmDspSecurityNumAttDelay*/
         10000u,  /*DcmDspSecurityDelayTime,10s */
         0u,/*DcmDspSecurityDelayTimeOnBoot*/
         Rte_Call_SecurityAccess_Level_1_GetSeed,    /*Dcm_GetSeedFnc*/
@@ -6809,12 +6808,6 @@ static  CONST(uint8,DCM_CONST)Dcm_SRVTABLE_UDS_CAN_FD_UDS0x31_2_SesRef[1] = {3u}
 
 #define   DCM_START_SEC_CONST_8
 #include  "Dcm_MemMap.h"
-static  CONST(uint8,DCM_CONST)Dcm_SRVTABLE_UDS_CAN_FD_UDS0x31_3_SecRef[1] = {1u};
-#define  DCM_STOP_SEC_CONST_8
-#include "Dcm_MemMap.h"
-
-#define   DCM_START_SEC_CONST_8
-#include  "Dcm_MemMap.h"
 static  CONST(uint8,DCM_CONST)Dcm_SRVTABLE_UDS_CAN_FD_UDS0x31_3_SesRef[1] = {3u};
 #define  DCM_STOP_SEC_CONST_8
 #include "Dcm_MemMap.h"
@@ -6852,8 +6845,8 @@ static  CONST(Dcm_DsdSubServiceCfgType,DCM_CONST)Dcm_SRVTABLE_UDS_CAN_FD_DsdSubS
         0x3u,    /*DcmDsdSubServiceId*/
         TRUE,    /*DcmDsdSubServiceUsed*/
         NULL_PTR,    /*DcmDsdSubServiceModeRuleRef*/
-        &Dcm_SRVTABLE_UDS_CAN_FD_UDS0x31_3_SecRef[0],    /*DcmDsdSubServiceSecurityLevelRef*/
-        1u,    /*DcmDsdSubServiceSecurityLevel_Num*/
+        NULL_PTR,    /*DcmDsdSubServiceSecurityLevelRef*/
+        0u,    /*DcmDsdSubServiceSecurityLevel_Num*/
         &Dcm_SRVTABLE_UDS_CAN_FD_UDS0x31_3_SesRef[0],    /*DcmDsdSubServiceSessionLevelRef*/
         1u,    /*DcmDsdSubServiceSessionLevel_Num*/
         NULL_PTR,    /*DcmDsdServiceRoleRefs*/
@@ -7158,12 +7151,6 @@ static  CONST(uint8,DCM_CONST)Dcm_SRVTABLE_UDS_CAN_FD_UDS0x28_SesRef[1] = {3u};
 
 #define   DCM_START_SEC_CONST_8
 #include  "Dcm_MemMap.h"
-static  CONST(uint8,DCM_CONST)Dcm_SRVTABLE_UDS_CAN_FD_UDS0x2E_SesRef[1] = {3u};
-#define  DCM_STOP_SEC_CONST_8
-#include "Dcm_MemMap.h"
-
-#define   DCM_START_SEC_CONST_8
-#include  "Dcm_MemMap.h"
 static  CONST(uint8,DCM_CONST)Dcm_SRVTABLE_UDS_CAN_FD_UDS0x2F_SesRef[1] = {3u};
 #define  DCM_STOP_SEC_CONST_8
 #include "Dcm_MemMap.h"
@@ -7336,8 +7323,8 @@ static  CONST(Dcm_DsdServiceCfgType,DCM_CONST)SRVTABLE_UDS_CAN_FD_Service[12] =
         NULL_PTR,    /*DcmDsdModeRuleRef*/
         0u, /*DcmDsdSecurityLevel_Num*/
         NULL_PTR,    /*pDcmDsdSecurityLevelRef*/
-        1u,    /*DcmDsdSessionLevel_Num*/
-        &Dcm_SRVTABLE_UDS_CAN_FD_UDS0x2E_SesRef[0],    /*pDcmDsdSessionLevelRef*/
+        0u,    /*DcmDsdSessionLevel_Num*/
+        NULL_PTR,    /*pDcmDsdSessionLevelRef*/
         0u,    /*DcmDsdSubService_Num*/
         NULL_PTR,    /*DcmDsdSubService*/
         NULL_PTR,    /*DcmDsdServiceRoleRefs*/

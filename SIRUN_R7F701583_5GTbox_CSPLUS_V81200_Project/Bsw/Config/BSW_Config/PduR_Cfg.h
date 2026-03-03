@@ -56,14 +56,13 @@
 
 #define PDUR_MULITIPARTITION_SUPPORT    STD_OFF
 
-#define PDUR_BSW_MODULE_SUM             7u
+#define PDUR_BSW_MODULE_SUM             6u
 #define PDUR_COM      0u
 #define PDUR_CANIF      1u
 #define PDUR_CANNM      2u
 #define PDUR_CANTP      3u
 #define PDUR_DCM      4u
 #define PDUR_IPDUM      5u
-#define PDUR_SECOC      6u
 
 #define PDUR_TRANSMIT_SUPPORT                 STD_ON
 #define PDUR_CANCEL_TRANSMIT                  STD_ON
@@ -77,7 +76,7 @@
 #define PDUR_TP_COPYTXDATA                    STD_ON
 #define PDUR_TP_TXCONFIRMATION                STD_ON
 
-#define PDUR_ROUTINGPATH_MAX                  255u
+#define PDUR_ROUTINGPATH_MAX                  168u
 #define PDUR_ROUTING_PATH_GROUP_MAX           0u
 
 #define PDUR_NUMBER_OF_QUEUES                 0u

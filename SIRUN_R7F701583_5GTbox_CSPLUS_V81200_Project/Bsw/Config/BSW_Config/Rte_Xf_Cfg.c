@@ -53,7 +53,7 @@
 CONST(TransformationTechnologyType_PROFILE_01, E2EXF_CONST) E2E_PROFILE_01 =
 {
     {
-        12,            /*HeaderLength*/
+        16,            /*HeaderLength*/
         FALSE            /*InPlace*/
     },
     FALSE,                /*NeedsOriginalData*/

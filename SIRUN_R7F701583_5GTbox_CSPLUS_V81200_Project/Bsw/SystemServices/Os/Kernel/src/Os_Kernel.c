@@ -57,12 +57,6 @@
 #include "Os_Arti.h"
 #include "Os_Monitor.h"
 
-#include "Mcu.h"
-#include "Dio.h"
-#include "Wdg_59_DriverA.h"
-#include "Wdg_59_DriverA_PBTypes.h"
-
-
 /* ===================================================== macros ===================================================== */
 
 /* ================================================ type definitions ================================================ */
@@ -338,27 +332,6 @@ void Os_ShutdownOS(StatusType error, Os_ShutdownAction action)
     /* SWS_Os_00715*/
     for (;;)
     {
-	Wdg_59_DriverA_TriggerFunc(WDG_59_DRIVERA_INCLUDE_CRITICAL_SECTION);
-	
-        if((Dio_ReadChannel(DioConf_DioChannel_DIO_Channel_IG1_INT_Pin1_8) == STD_LOW) || 
-            (Dio_ReadChannel(DioConf_DioChannel_DIO_Channel_CanRx_DET_INT_Pin0_2) == STD_LOW) || 
-            // (Dio_ReadChannel(DioConf_DioChannel_DIO_Channel_KL30_Voltage_DET_INT_Pin0_9) == STD_HIGH) || 
-            (Dio_ReadChannel(DioConf_DioChannel_DIO_Channel_NAD_WAKEUP_MCU_Pin8_2) == STD_HIGH) || 
-            (Dio_ReadChannel(DioConf_DioChannel_DIO_Channel_CDS_STATE_Pin0_11) == STD_HIGH) || 
-            (Dio_ReadChannel(DioConf_DioChannel_DIO_Channel_ECALL_BUTTON_DET_Pin9_5) == STD_HIGH) || 
-            (Dio_ReadChannel(DioConf_DioChannel_DIO_Channel_IMU_INT1_Pin8_1) == STD_LOW) || 
-            (Dio_ReadChannel(DioConf_DioChannel_DIO_Channel_IMU_INT2_Pin8_3) == STD_LOW) || 
-            (Dio_ReadChannel(DioConf_DioChannel_DIO_Channel_RTC_INT_Pin0_6) == STD_LOW))
-        {
-            Mcu_PerformReset();
-        }
-        
-        #if 0
-        if(Dio_ReadChannel(DioConf_DioChannel_DIO_Channel_IG1_INT_Pin1_8) == STD_LOW)
-        {
-            Mcu_PerformReset();
-        }
-        #endif
         /* Nothing to do. */
     }
 }

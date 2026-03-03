@@ -14,7 +14,7 @@
  *  @MCU                : R7F7015833
  *  @file               : BswM_Cfg.h
  *  @author             : iSoft
- *  @date               : 2026-02-25 15:25:45
+ *  @date               : 2026-01-21 17:11:19
  *  @vendor             : iSoft
  *  @description        : 
  *  @specification(S)   : AUTOSAR Classic Platform R19-11
@@ -121,7 +121,7 @@
 #define BSWM_SD_ENABLED                        STD_OFF
 
 /*BswMRteEnabled, calculated according to the SWC RTE request port and action existence*/
-#define BSWM_RTE_ENABLED                       STD_OFF
+#define BSWM_RTE_ENABLED                       STD_ON
 
 #define BSWM_TIMER_ENABLED                    STD_ON
 
@@ -129,7 +129,7 @@
 #define BSWM_VERSION_INFO_API                STD_OFF
 
 /*BswMWdgMEnabled*/
-#define BSWM_WDGM_ENABLED                    STD_ON
+#define BSWM_WDGM_ENABLED                    STD_OFF
 
 #define BSWM_MULTI_PARTITION_ENABLED       STD_OFF
 
@@ -151,7 +151,7 @@
 
 #define BSWM_ACTION_ECUMGODOWNHALTPOLL_ENABLED    STD_ON    /* BswMEcuMGoDownHaltPoll */
 
-#define BSWM_ACTION_ECUMSELECTSHUTDOWNTARGET_ENABLED    STD_OFF    /* BswMEcuMSelectShutdownTarget */
+#define BSWM_ACTION_ECUMSELECTSHUTDOWNTARGET_ENABLED    STD_ON    /* BswMEcuMSelectShutdownTarget */
 
 #define BSWM_ACTION_ECUMSTATESWITCH_ENABLED    STD_ON    /* BswMEcuMStateSwitch */
 
@@ -173,9 +173,9 @@
 
 #define BSWM_ACTION_RTEMODEREQUEST_ENABLED    STD_OFF    /* BswMRteModeRequest */
 
-#define BSWM_ACTION_RTESTART_ENABLED    STD_OFF    /* BswMRteStart */
+#define BSWM_ACTION_RTESTART_ENABLED    STD_ON    /* BswMRteStart */
 
-#define BSWM_ACTION_RTESTOP_ENABLED    STD_OFF    /* BswMRteStop */
+#define BSWM_ACTION_RTESTOP_ENABLED    STD_ON    /* BswMRteStop */
 
 #define BSWM_ACTION_RTESWITCH_ENABLED    STD_OFF    /* BswMRteSwitch */
 
@@ -210,6 +210,8 @@ typedef uint8 BswM_ComIpduGruType;
 
 typedef uint8 BswM_ModeGroupType;
 
+typedef uint16 BswM_ModeType;
+
 /*******************************************************************************
 **                      Global Data Declaration                               **
 *******************************************************************************/
@@ -219,9 +221,17 @@ typedef uint8 BswM_ModeGroupType;
 *******************************************************************************/
 /* PRQA S 1753 EOF */ /* VL_BswM_1753 */
 /* PRQA S 3449, 3451, 0779, 0777 ++ */ /* VL_BswM_3449,VL_BswM_3451,VL_BswM_0779,VL_QAC_DiffIdentifier */
+extern void GenericSwitch_CanSmBusOff_NoCom_CanChannel_0(void);
+extern void GenericSwitch_CanSmBusOff_BusOffSilent_CanChannel_0(void);
 extern void User_EcuM_ClearWakeUpSource_EcuMWakeupSource_CAN(void);
-extern void Act_Bsw_Allow_GoDown_Function(void);
-extern void WakeupSource_Validated(void);
+extern void BswM_EcuM_RequestRun(void);
+extern void BswM_EcuM_ReleaseRun(void);
+extern void BswM_EcuM_ReleasePostRun(void);
+extern void BswM_EcuM_RequestPostRun(void);
+extern void WakeupSource_Enable(void);
+extern void WakeupSource_Disable(void);
+extern void BswM_CanTrcv_ModeShift(void);
+extern void User_EcuM_ClearWakeUpSource_EcuMWakeupSource_Local(void);
 
 /* PRQA S 3449, 3451, 0779, 0777 -- */ /* VL_BswM_3449,VL_BswM_3451,VL_BswM_0779,VL_QAC_DiffIdentifier */
 #endif /* BSWM_CFG_H */

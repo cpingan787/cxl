@@ -90,13 +90,13 @@ NM_COORDINATOR_SUPPORT_ENABLED is enabled. */
 
 /* Pre-processor switch for enabling the Network Management state
 change notification. */
-#define NM_STATE_CHANGE_IND_ENABLED                                  STD_ON
+#define NM_STATE_CHANGE_IND_ENABLED                                  STD_OFF
 
 /* Pre-processor switch for enabling User Data support. */
 #define NM_USER_DATA_ENABLED                                           STD_OFF
 
 /* nm support com api Com_SendSignal */
-#define NM_SUPPORT_COM_SENDSIGNAL                                       STD_ON
+#define NM_SUPPORT_COM_SENDSIGNAL                                       STD_OFF
 
 /*******************************************************************************
 **                      Global Functions                                      **

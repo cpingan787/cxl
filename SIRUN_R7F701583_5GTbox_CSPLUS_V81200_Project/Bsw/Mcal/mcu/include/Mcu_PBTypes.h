@@ -642,7 +642,7 @@
 #define MCU_STPMSK_STOPED                       (uint32)0x00000002UL
 #define MCU_CLK_CNTL_REG_RAM_MIRROR_INVALID     (uint32)0x00000000UL
 #define MCU_TAUJ_STOPED                         (uint8)0x00
-//#define MCU_ICCWEND_ACTIVATION                  (uint8)0x7F
+#define MCU_ICCWEND_ACTIVATION                  (uint8)0x7F
 
 
 /*******************************************************************************

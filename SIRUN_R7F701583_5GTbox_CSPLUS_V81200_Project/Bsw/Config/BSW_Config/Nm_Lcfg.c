@@ -27,7 +27,6 @@
 *******************************************************************************/
 #include "Nm.h"
 #include "ComM_Cfg.h"
-#include "Com_Cfg.h"
 #include "CanNm.h"
 #include "SchM_Nm.h"
 /*******************************************************************************
@@ -77,10 +76,6 @@ const Nm_ChannelLConfigType Nm_ChLConfig[NM_NUMBER_OF_CHANNELS] =
             0,        /* NmComMChannelRef */
         },
         &Nm_CanNmSpecificApi,     /*busNmApi */
-        TRUE, /*NmStateReportEnabled*/
-        {
-            IIAM_NM_CANNM_State_CONNCANFD_IAM_CONNCANFD_NM_CONTROLLER_0_IAM_Tx
-        },
     },
 };
 #define NM_STOP_SEC_CONST_UNSPECIFIED

@@ -61,7 +61,7 @@
 
 #define  DCM_BSWM_ENABLE                            (STD_ON)
 
-#define  NVM_ENABLE                                 (STD_ON)
+#define  NVM_ENABLE                                 (STD_OFF)
 
 #define  DCM_FRAME_LENGTH                           (64u)
 

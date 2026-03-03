@@ -30,8 +30,8 @@
 *******************************************************************************/
 
 #define CANIF_CFG_H_AR_RELEASE_MAJOR_VERSION    4u
-#define CANIF_CFG_H_AR_RELEASE_MINOR_VERSION    2u
-#define CANIF_CFG_H_AR_RELEASE_REVISION_VERSION 2u
+#define CANIF_CFG_H_AR_RELEASE_MINOR_VERSION    5u
+#define CANIF_CFG_H_AR_RELEASE_REVISION_VERSION 0u
 #define CANIF_CFG_H_SW_MAJOR_VERSION            2u
 #define CANIF_CFG_H_SW_MINOR_VERSION            2u
 #define CANIF_CFG_H_SW_PATCH_VERSION            2u
@@ -40,7 +40,7 @@
 **                      Macros                                                **
 *******************************************************************************/
 
-#define CANIF_RXPDU_NUMBER              122u
+#define CANIF_RXPDU_NUMBER              121u
 #define CANIF_RXPDU_CANIF_SDM_SFCANFD_Event_FrS14_CONTROLLER_0_IAM_Rx         0u
 #define CANIF_RXPDU_CANIF_ICBAD_BKPCANFD_Event_FrS04_CONTROLLER_0_IAM_Rx         1u
 #define CANIF_RXPDU_CANIF_ICBAD_BKPCANFD_Event_FrS05_CONTROLLER_0_IAM_Rx         2u
@@ -162,7 +162,6 @@
 #define CANIF_RXPDU_CanIf_phy_rx_0x711         118u
 #define CANIF_RXPDU_CanIf_fun_rx_0x7df         119u
 #define CANIF_RXPDU_CANIF_IAM_NM_RxPdu_IAM_NM_RxPdu         120u
-#define CANIF_RXPDU_RX_PDU_CANTSYNC         121u
 #define CANIF_TXPDU_NUMBER              36u
 #define CANIF_DYNAMIC_TXPDU_NUMBER      36u
 #define CANIF_TXPDU_CANIF_DIAG_DTCInfo_IAM_CONTROLLER_0_IAM_Tx         0u
@@ -215,7 +214,7 @@
 #define CANIF_RXNOTIFYSTATUS_BUFFER    0u
 #define CANIF_TXNOTIFYSTATUS_BUFFER    0u
 
-#define CANIF_RXINDICATION_FUNC_NUMBER     4u
+#define CANIF_RXINDICATION_FUNC_NUMBER     3u
 
 #define CANIF_TXCONFIRMATION_FUNC_NUMBER     3u
 

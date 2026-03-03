@@ -13,7 +13,7 @@
 #include "Dem.h"
 #include "BswM_Ext.h"
 #include "Dio.h"
-#include "BswM_EcuM.h"
+
 void Communication_ON(void)
 {
     BswM_RequestMode(66u, GENERIC_COMCONTROL_ON);
@@ -81,7 +81,6 @@ void GenericSwitch_CanSmBusOff_BusOffSilent_Can3(void)
 void User_EcuM_ClearWakeUpSource_EcuMWakeupSource_CAN(void)
 {
     EcuM_ClearWakeupEvent(EcuMWakeupSource_CAN);
-    EcuM_ClearWakeupEvent(EcuMWakeupSource_Local);
 }
 
 void User_EcuM_ClearWakeUpSource_EcuMWakeupSource_Local(void)
@@ -138,14 +137,4 @@ void ECUNet_Repeat_Req(void)
 //    Rte_IWrite_BswM_NetControl_Mainfunction_Pport_BswM_DataElement_SR_Ecu_Net_Repeat_Control(tmp_uint8_WriteData);
     /* Get Write address */
     /*tmp_uint8_WriteDataRef = Rte_IWriteRef_BswM_NetControl_Mainfunction_Pport_BswM_DataElement_SR_Ecu_Net_Repeat_Control();*/
-}
-
-void Act_Bsw_Allow_GoDown_Function(void)
-{
-    BswM_RequestMode(RPort_AppInd_3,COND_APP_ALLOWED_SLEEP);
-}
-
-void WakeupSource_Validated(void)
-{
-    BswM_EcuM_CurrentWakeup(EcuMWakeupSource_CAN,ECUM_WKSTATUS_EXPIRED);
 }

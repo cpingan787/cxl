@@ -19,7 +19,7 @@
  * @file              : Os_Core_Cfg.c
  * @license           : 
  * @licenseExpiryDate : 
- * @date              : 2026-01-22 11:24:31
+ * @date              : 2026-02-25 15:50:42
  * @customer          : iSoft
  * @description       : Configuration parameter of OS
  * @toolVersion       : 2.2.0.3
@@ -85,21 +85,63 @@ const Os_IntInstallType Os_IntInstall[CFG_ISR_MAX] =
         INVALID_SELECTION_BIT, /*intc2SelectionBit*/
     },
     {
-        4U,  /*IntPrio*/
-        Os_ISR_TAUJ0I0_IRQ_Handler,  /*cat2 ISR*/
-        OS_ID_TAUJ0I0_IRQ,/*IntNumber*/
+        1U,  /*IntPrio*/
+        Os_ISR_RLIN34UR0_IRQ_Handler,  /*cat2 ISR*/
+        OS_ID_RLIN34UR0_IRQ,/*IntNumber*/
+        INVALID_SELECTION_BIT, /*intc2SelectionBit*/
+    },
+    { 
+        1U,  /*IntPrio*/
+        Os_ISR_RLIN34UR1_IRQ_Handler,  /*cat2 ISR*/
+        OS_ID_RLIN34UR1_IRQ,/*IntNumber*/
         INVALID_SELECTION_BIT, /*intc2SelectionBit*/
     },
     {
-        4U,  /*IntPrio*/
-        Os_ISR_TAUD0I9_IRQ_Handler,  /*cat2 ISR*/
-        OS_ID_TAUD0I9_IRQ,/*IntNumber*/
+        1U,  /*IntPrio*/
+        Os_ISR_RLIN34UR2_IRQ_Handler,  /*cat2 ISR*/
+        OS_ID_RLIN34UR2_IRQ,/*IntNumber*/
         INVALID_SELECTION_BIT, /*intc2SelectionBit*/
     },
     {
-        4U,  /*IntPrio*/
-        Os_ISR_TAUB0I12_IRQ_Handler,  /*cat2 ISR*/
-        OS_ID_TAUB0I12_IRQ,/*IntNumber*/
+        2U,  /*IntPrio*/
+        Os_ISR_RLIN35TX_IRQ_Handler,  /*cat2 ISR*/
+        OS_ID_RLIN35UR0_IRQ,/*IntNumber*/
+        INVALID_SELECTION_BIT, /*intc2SelectionBit*/
+    },
+    {
+        5U,  /*IntPrio*/
+        Os_ISR_RLIN35RX_IRQ_Handler,  /*cat2 ISR*/
+        OS_ID_RLIN35UR1_IRQ,/*IntNumber*/
+        INVALID_SELECTION_BIT, /*intc2SelectionBit*/
+    },
+    {
+        2U,  /*IntPrio*/
+        Os_ISR_RLIN35ERR_IRQ_Handler,  /*cat2 ISR*/
+        OS_ID_RLIN35UR2_IRQ,/*IntNumber*/
+        INVALID_SELECTION_BIT, /*intc2SelectionBit*/
+    },
+    {
+        1U,  /*IntPrio*/
+        Os_ISR_RIIC0TI_IRQ_Handler,  /*cat2 ISR*/
+        OS_ID_RIIC0TI_IRQ,/*IntNumber*/
+        INVALID_SELECTION_BIT, /*intc2SelectionBit*/
+    },
+    {
+        1U,  /*IntPrio*/
+        Os_ISR_RIIC0EE_IRQ_Handler,  /*cat2 ISR*/
+        OS_ID_RIIC0EE_IRQ,/*IntNumber*/
+        INVALID_SELECTION_BIT, /*intc2SelectionBit*/
+    },
+    {
+        1U,  /*IntPrio*/
+        Os_ISR_RIIC0RI_IRQ_Handler,  /*cat2 ISR*/
+        OS_ID_RIIC0RI_IRQ,/*IntNumber*/
+        INVALID_SELECTION_BIT, /*intc2SelectionBit*/
+    },
+    {
+        1U,  /*IntPrio*/
+        Os_ISR_RIIC0TEI_IRQ_Handler,  /*cat2 ISR*/
+        OS_ID_RIIC0TEI_IRQ,/*IntNumber*/
         INVALID_SELECTION_BIT, /*intc2SelectionBit*/
     },
 };

@@ -1046,13 +1046,13 @@
 *******************************************************************************/
 /* AUTOSAR release version information */
 #define OS_AR_RELEASE_MAJOR_VERSION    4
-#define OS_AR_RELEASE_MINOR_VERSION    2
-#define OS_AR_RELEASE_REVISION_VERSION 2
+#define OS_AR_RELEASE_MINOR_VERSION    5
+#define OS_AR_RELEASE_REVISION_VERSION 0
 
 /* Module Software version information */
 #define OS_SW_MAJOR_VERSION    4
-#define OS_SW_MINOR_VERSION    2
-#define OS_SW_PATCH_VERSION    2
+#define OS_SW_MINOR_VERSION    5
+#define OS_SW_PATCH_VERSION    0
 
 /*******************************************************************************
 **                      Macro                                                 **

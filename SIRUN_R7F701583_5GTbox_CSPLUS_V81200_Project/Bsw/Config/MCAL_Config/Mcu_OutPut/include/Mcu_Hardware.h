@@ -101,11 +101,10 @@
 **                          Input File                                        **
 *******************************************************************************/
 /*
- * INPUT FILE:    1
- *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\Config\ECUC\test_Mcu_Mcu0_ecuc.arxml
- *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\modules\mcu\R422_MCU_F1x_BSWMDT.arxml
- *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\stubs\4.2.2\Dem\xml\Dem_Mcu.arxml
- * GENERATED ON:  10 Feb 2026 - 10:23:31
+ * INPUT FILE:    E:\PuHua_Tbox\Tools\ASR_RH850F1K_MCAL_Ver42.08.00\Config\Config\ECUC\test_Mcu_Mcu0_ecuc.arxml
+ *                E:\PuHua_Tbox\Tools\ASR_RH850F1K_MCAL_Ver42.08.00\Config\modules\mcu\R422_MCU_F1x_BSWMDT.arxml
+ *                E:\PuHua_Tbox\Tools\ASR_RH850F1K_MCAL_Ver42.08.00\Config\stubs\4.2.2\Dem\xml\Dem_Mcu.arxml
+ * GENERATED ON:  14 Jan 2026 - 18:15:53
  */
 
 #ifndef MCU_HARDWARE_H
@@ -185,7 +184,7 @@ extern volatile WPROTReg* const Mcu_WriteProtReg_BaseAddress;
 extern volatile LVIReg* const LviReg_BaseAddress; 
 
 /*Structure of MCU LPS registers*/
-extern volatile LPSReg* const Mcu_LpsRegisters_BaseAddress;
+/*extern volatile LPSReg * const Mcu_LpsRegisters_BaseAddress;*/
 
 /*Structure of MCU IOHOLD registers*/
 extern volatile unsigned long * const Mcu_IoHoldRegister_BaseAddress;
@@ -206,7 +205,7 @@ extern volatile ClkMntrReg* const Clma2Reg_BaseAddress;
 /*extern volatile ClkMntrReg* const Clma3Reg_BaseAddress;*/
 
 /*Structure of MCU STBC0 registers*/
-extern volatile STBC0Reg* const Mcu_Stbc0Register_BaseAddress;
+extern volatile STBC0Reg * const Mcu_Stbc0Register_BaseAddress;
 
 /*Structure of MCU Wake-up factor registers*/
 extern volatile WUFReg* const WufReg_BaseAddress;
@@ -216,8 +215,8 @@ extern volatile WUFReg* const WufIsoReg_BaseAddress;
 extern volatile FEINTReg* const FEIntMsk_BaseAddress;
 /* QAC Warning: START Msg(2:4153)-1 */
 /*Structure of TAUJ0 timer registers*/
-extern volatile TAUJUserReg* const Mcu_Tauj0UserReg_BaseAddress;
-extern volatile TAUJOsReg* const Mcu_Tauj0OsReg_BaseAddress;
+/*extern volatile TAUJUserReg* const Mcu_Tauj0UserReg_BaseAddress;*/
+/*extern volatile TAUJOsReg* const Mcu_Tauj0OsReg_BaseAddress;*/
 
 /* END Msg(2:4153)-1 */
 /*Structure of MCU Clock registers*/

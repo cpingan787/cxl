@@ -91,10 +91,10 @@
 **                          Input File                                        **
 *******************************************************************************/
 /*
- * INPUT FILE:    E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\Config\ECUC\test_Dio_Dio0_ecuc.arxml
- *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\modules\dio\R422_DIO_F1x_BSWMDT.arxml
- *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\stubs\4.2.2\Dem\xml\Dem_Dio.arxml
- * GENERATED ON:  27 Feb 2026 - 10:55:47
+ * INPUT FILE:    E:\PuHua_Tbox\Tools\ASR_RH850F1K_MCAL_Ver42.08.00\Config\Config\ECUC\test_Dio_Dio0_ecuc.arxml
+ *                E:\PuHua_Tbox\Tools\ASR_RH850F1K_MCAL_Ver42.08.00\Config\modules\dio\R422_DIO_F1x_BSWMDT.arxml
+ *                E:\PuHua_Tbox\Tools\ASR_RH850F1K_MCAL_Ver42.08.00\Config\stubs\4.2.2\Dem\xml\Dem_Dio.arxml
+ * GENERATED ON:  14 Jan 2026 - 18:15:52
  */
 
 #ifndef DIO_HARDWARE_H
@@ -120,7 +120,7 @@
 *******************************************************************************/
 
 /* Number of different port groups configured */
-#define DIO_NUM_OF_PORTREG                  8U
+#define DIO_NUM_OF_PORTREG                  7U
 
 
 /* Precompile option for presence of JTAG port */

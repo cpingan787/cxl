@@ -42,7 +42,7 @@
 /*******************************************************************************
 **                      Macros                                                **
 *******************************************************************************/
-#define PDUR_SRC_PDU_SUM           173u
+#define PDUR_SRC_PDU_SUM           168u
 
 #define PDUR_SRCPDU_COM_DIAG_DTCInfo_IAM_CONTROLLER_0_IAM_Tx          0u
 #define PDUR_SRCPDU_COM_IAM_BKPCANFD_1000ms_FrP60_CONTROLLER_0_IAM_Tx          1u
@@ -212,13 +212,8 @@
 #define PDUR_SRCPDU_Com_Contained_Tx_0x3A2_Pdu04          165u
 #define PDUR_SRCPDU_Com_Contained_Tx_0x3A2_Pdu41          166u
 #define PDUR_SRCPDU_Com_Contained_Tx_0x3A2_Pdu57          167u
-#define PDUR_SRCPDU_CAN0_Rx_SecOC_SyncMsg_0x56F_SecOC_Authentic          168u
-#define PDUR_SRCPDU_SecOC_synthesized_IAM_BKPCANFD_20ms_Fr_CONTROLLER_0_IAM_TxSecured          169u
-#define PDUR_SRCPDU_SecOC_synthesized_IAM_ZONE_CONNCA_0001_CONTROLLER_0_IAM_TxSecured          170u
-#define PDUR_SRCPDU_SecOC_synthesized_IAM_ZONE_CONNCA_0000_CONTROLLER_0_IAM_TxSecured          171u
-#define PDUR_SRCPDU_SecOC_synthesized_IAM_ZONE_CONNCANFD_E_CONTROLLER_0_IAM_TxSecured          172u
 
-#define PDUR_DEST_PDU_SUM              173u
+#define PDUR_DEST_PDU_SUM              168u
 
 #define PDUR_DESTPDU_CANIF_DIAG_DTCInfo_IAM_CONTROLLER_0_IAM_Tx          0u
 #define PDUR_DESTPDU_CANIF_IAM_BKPCANFD_1000ms_FrP60_CONTROLLER_0_IAM_Tx          1u
@@ -388,11 +383,6 @@
 #define PDUR_DESTPDU_IpduM_Contained_Tx_0x3A2_Pdu04          165u
 #define PDUR_DESTPDU_IpduM_Contained_Tx_0x3A2_Pdu41          166u
 #define PDUR_DESTPDU_IpduM_Contained_Tx_0x3A2_Pdu57          167u
-#define PDUR_DESTPDU_CAN0_Rx_SecOC_SyncMsg_0x56F_SecOC_Secured          168u
-#define PDUR_DESTPDU_SecOC_synthesized_IAM_BKPCANFD_20ms_Fr_CONTROLLER_0_IAM_TxAuthentic          169u
-#define PDUR_DESTPDU_SecOC_synthesized_IAM_ZONE_CONNCA_0001_CONTROLLER_0_IAM_TxAuthentic          170u
-#define PDUR_DESTPDU_SecOC_synthesized_IAM_ZONE_CONNCA_0000_CONTROLLER_0_IAM_TxAuthentic          171u
-#define PDUR_DESTPDU_SecOC_synthesized_IAM_ZONE_CONNCANFD_E_CONTROLLER_0_IAM_TxAuthentic          172u
 
 #define PDUR_ROUTING_PATH_GROUP_SUM        0u
 

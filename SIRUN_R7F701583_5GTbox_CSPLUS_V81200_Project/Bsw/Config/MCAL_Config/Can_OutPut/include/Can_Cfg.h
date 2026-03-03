@@ -70,14 +70,14 @@
 **                      Input File                                            **
 *******************************************************************************/
 /*
- * INPUT FILE:    E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\Config\ECUC\test_Can_Can_ecuc.arxml
- *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\Config\ECUC\test_Mcu_Mcu0_ecuc.arxml
- *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\modules\can\R422_CAN_F1x_BSWMDT.arxml
- *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\stubs\4.2.2\Dem\xml\Dem_Can.arxml
- *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\stubs\4.2.2\EcuM\xml\EcuM_can.arxml
- *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\stubs\4.2.2\Os\xml\Os_Can.arxml
- *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\common_family\generator\Sample_Application_F1x.trxml
- * GENERATED ON:  27 Jan 2026 - 05:47:31
+ * INPUT FILE:    E:\PuHua_Tbox\RH850gitlab\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\Config\ECUC\test_Can_Can_ecuc.arxml
+ *                E:\PuHua_Tbox\RH850gitlab\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\Config\ECUC\test_Mcu_Mcu0_ecuc.arxml
+ *                E:\PuHua_Tbox\RH850gitlab\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\modules\can\R422_CAN_F1x_BSWMDT.arxml
+ *                E:\PuHua_Tbox\RH850gitlab\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\stubs\4.2.2\Dem\xml\Dem_Can.arxml
+ *                E:\PuHua_Tbox\RH850gitlab\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\stubs\4.2.2\EcuM\xml\EcuM_can.arxml
+ *                E:\PuHua_Tbox\RH850gitlab\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\stubs\4.2.2\Os\xml\Os_Can.arxml
+ *                E:\PuHua_Tbox\RH850gitlab\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\common_family\generator\Sample_Application_F1x.trxml
+ * GENERATED ON:  20 Jan 2026 - 04:09:31
  */
 
 #ifndef CAN_CFG_H
@@ -110,8 +110,8 @@
 **                      Common Published Information                          **
 *******************************************************************************/
 #define CAN_AR_RELEASE_MAJOR_VERSION_VALUE              4U
-#define CAN_AR_RELEASE_MINOR_VERSION_VALUE              2U
-#define CAN_AR_RELEASE_REVISION_VERSION_VALUE           2U
+#define CAN_AR_RELEASE_MINOR_VERSION_VALUE              5U
+#define CAN_AR_RELEASE_REVISION_VERSION_VALUE           0U
 
 #define CAN_SW_MAJOR_VERSION_VALUE                      1U
 #define CAN_SW_MINOR_VERSION_VALUE                      0U
@@ -125,7 +125,7 @@
 **                      Global Symbols                                        **
 *******************************************************************************/
 /* Pre-compile option for Version information */
-#define CAN_AR_VERSION                                  CAN_AR_422_VERSION
+#define CAN_AR_VERSION                                  CAN_AR_450_VERSION
 
 /* Pre-compile option for Number of configured hardware units */
 #define CAN_NO_OF_UNITS                                 1U

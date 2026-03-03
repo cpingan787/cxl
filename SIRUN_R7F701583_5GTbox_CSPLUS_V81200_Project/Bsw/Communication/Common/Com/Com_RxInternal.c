@@ -3814,7 +3814,6 @@ Com_RxIpduController(boolean initialize)
  * Return              None
  */
 /******************************************************************************/
-uint8 TestactiveEnable = 0;
 FUNC(void, COM_CODE)
 Com_RxIndicationHandle(PduIdType RxPduId, P2CONST(PduInfoType, AUTOMATIC, COM_APPL_DATA) PduInfoPtr)
 {
@@ -3823,7 +3822,7 @@ Com_RxIndicationHandle(PduIdType RxPduId, P2CONST(PduInfoType, AUTOMATIC, COM_AP
     uint16 minPduLength = (uint16)rxIpduPtr->IPduNoDynSignalLength;
     uint16 maxPduLength = minPduLength + (uint16)rxIpduPtr->IPduMaxDynSignalLength;
     uint8 activeEnable = rxIpduStatePtr->RxIpduRTStFlag & Com_RX_ACTIVE_EN;
-    TestactiveEnable = activeEnable;
+
     /*the rx pdu is active,the receive length is suited to pdu configuration length*/
     if ((Com_RX_ACTIVE_EN == activeEnable) && (PduInfoPtr->SduLength >= minPduLength)
         && (PduInfoPtr->SduLength <= maxPduLength))

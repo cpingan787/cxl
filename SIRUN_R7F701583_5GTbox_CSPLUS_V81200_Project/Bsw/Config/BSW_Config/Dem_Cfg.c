@@ -53,16 +53,6 @@ CONST(Dem_MemDestConfigType,AUTOMATIC) DemMemDestCfg[DEM_MEM_DEST_TOTAL_NUM] =
 #define DEM_STOP_SEC_CONST_UNSPECIFIED
 #include "Dem_MemMap.h"
 
-#define DEM_START_SEC_CONST_UNSPECIFIED
-#include "Dem_MemMap.h"
-CONST(uint16,AUTOMATIC) DemNvRamBlockId[DEM_NVRAM_BLOCKID_NUM] =
-{
-    NvMBlock_All_EventEntry, /* DemNvRamBlockIdRef  */
-    NvMBlock_UDS_InternalData, /* DemNvRamBlockIdRef  */
-};
-#define DEM_STOP_SEC_CONST_UNSPECIFIED
-#include "Dem_MemMap.h"
-
 /*******************************************************************************
 *                          OBD Configuration
 *******************************************************************************/

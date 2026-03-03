@@ -267,7 +267,7 @@ define DEM_FF_RECNUM_CONFIGURED 2 */
 /*DemUserDefinedMemoryIdentifier*/
 
 /* DemGeneral/DemNvRamBlockId number */
-#define DEM_NVRAM_BLOCKID_NUM 2
+#define DEM_NVRAM_BLOCKID_NUM 0
 
 /* DemGeneral/DemEventMemorySet/DemGlobalFreezeFrame */
 #define DEM_GLOBAL_FREEZE_FRAME_SUPPORT   STD_OFF
