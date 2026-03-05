@@ -1,9 +1,9 @@
-﻿<CubeSuiteProject>
-  <ProductVersion>9.12.00.00</ProductVersion>
+﻿<CubeSuiteProject PackageVersion="V8.14.00  [02 Jun 2025]">
+  <ProductVersion>9.14.00.00</ProductVersion>
   <Class Guid="68f4a651-b9cd-473b-a595-b00447132ffa">
     <Instance Guid="00000000-0000-0000-0000-000000000000">
       <FormatVersion>2.0</FormatVersion>
-      <FileVersion>9.12</FileVersion>
+      <FileVersion>9.14</FileVersion>
       <ProjectGuid>cdb34bc3-0942-4315-9a65-3c19c36c4cb7</ProjectGuid>
       <ProjectItemGuid>79b7754e-9db6-46eb-9555-f0a69cb54d8c</ProjectItemGuid>
       <FileCategoryGuid>574c1161-1526-4ec0-9453-2c518cde7ade</FileCategoryGuid>
@@ -8488,7 +8488,7 @@
       <GeneralOptionResetVectorAddressPE14-DefaultValue />
       <GeneralOptionResetVectorAddressPE15-DefaultValue />
       <IsLockedByUser>False</IsLockedByUser>
-      <TimeTagModified--0>-8584333073677210071</TimeTagModified--0>
+      <TimeTagModified--0>-8584290160472497218</TimeTagModified--0>
       <BuildMode-0>DefaultBuild</BuildMode-0>
       <Memo-0 />
       <SetAllBuildModeValue-0>False</SetAllBuildModeValue-0>
@@ -8529,7 +8529,7 @@
       <GeneralOptionOtherAdditionalOptions-0 />
       <GeneralOptionResetVectorAddressPE6-0 />
       <GeneralOptionResetVectorAddressPE7-0 />
-      <LastCompilerVersion-0>V2.06.00</LastCompilerVersion-0>
+      <LastCompilerVersion-0>V2.07.00</LastCompilerVersion-0>
       <GeneralOptionResetVectorAddressD-0>0</GeneralOptionResetVectorAddressD-0>
     </Instance>
     <Instance Guid="24e7db6c-6f3c-483e-b3af-c4be92050d3b">
@@ -15134,6 +15134,7 @@ ROM=00000000-001FFFFF
       <Debugger-DebugTarget-ProcessorElementNumber>1</Debugger-DebugTarget-ProcessorElementNumber>
       <Debugger-DebugTarget-SubID>0</Debugger-DebugTarget-SubID>
       <DebuggerProperty-EssentialProperty-EmulatorConnect-SerialNumber />
+      <DebuggerProperty-DownloadProperty-DebugInformation-SearchGlobalVariablesOutsideCurrentScope>False</DebuggerProperty-DownloadProperty-DebugInformation-SearchGlobalVariablesOutsideCurrentScope>
     </Instance>
     <Instance Guid="41cb1db7-6af7-45a4-a3e9-0d955d2eea5f">
       <DeviceChangedCounter>0</DeviceChangedCounter>
@@ -15315,10 +15316,6 @@ ROM=00000000-001FFFFF
     &lt;/DataElement&gt;
     &lt;DataElement key="intp1condition_MacroName" value=""&gt;
     &lt;/DataElement&gt;
-    &lt;DataElement key="taud0i14condition" value="0"&gt;
-    &lt;/DataElement&gt;
-    &lt;DataElement key="taud0i14condition_MacroName" value=""&gt;
-    &lt;/DataElement&gt;
     &lt;DataElement key="rlin30rxcondition" value="0"&gt;
     &lt;/DataElement&gt;
     &lt;DataElement key="rlin30rxcondition_MacroName" value=""&gt;
@@ -15434,6 +15431,10 @@ ROM=00000000-001FFFFF
     &lt;DataElement key="tauj0o3condition" value="0"&gt;
     &lt;/DataElement&gt;
     &lt;DataElement key="tauj0o3condition_MacroName" value=""&gt;
+    &lt;/DataElement&gt;
+    &lt;DataElement key="taub1i1condition" value="0"&gt;
+    &lt;/DataElement&gt;
+    &lt;DataElement key="taub1i1condition_MacroName" value=""&gt;
     &lt;/DataElement&gt;
     &lt;DataElement key="taub0i12condition" value="0"&gt;
     &lt;/DataElement&gt;
@@ -15971,9 +15972,9 @@ ROM=00000000-001FFFFF
     &lt;/DataElement&gt;
     &lt;DataElement key="adca1trg1condition_MacroName" value=""&gt;
     &lt;/DataElement&gt;
-    &lt;DataElement key="taub1i1condition" value="0"&gt;
+    &lt;DataElement key="csih0socondition" value="0"&gt;
     &lt;/DataElement&gt;
-    &lt;DataElement key="taub1i1condition_MacroName" value=""&gt;
+    &lt;DataElement key="csih0socondition_MacroName" value=""&gt;
     &lt;/DataElement&gt;
     &lt;DataElement key="rlin31rxcondition" value="0"&gt;
     &lt;/DataElement&gt;
@@ -16103,9 +16104,9 @@ ROM=00000000-001FFFFF
     &lt;/DataElement&gt;
     &lt;DataElement key="csih1css4condition_MacroName" value=""&gt;
     &lt;/DataElement&gt;
-    &lt;DataElement key="csih0socondition" value="0"&gt;
+    &lt;DataElement key="taud0i14condition" value="0"&gt;
     &lt;/DataElement&gt;
-    &lt;DataElement key="csih0socondition_MacroName" value=""&gt;
+    &lt;DataElement key="taud0i14condition_MacroName" value=""&gt;
     &lt;/DataElement&gt;
     &lt;DataElement key="taub0o11condition" value="0"&gt;
     &lt;/DataElement&gt;

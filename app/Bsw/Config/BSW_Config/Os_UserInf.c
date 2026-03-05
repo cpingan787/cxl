@@ -154,7 +154,7 @@ TASK(OsTask_Init)
     MpuHalInit();
     TimerHalInit();
 
-    // C3基线任务的初始化部分，拆分为xxxInit函数，在此处调用
+    // C3锟斤拷锟斤拷锟斤拷锟斤拷某锟绞硷拷锟斤拷锟斤拷郑锟斤拷锟斤拷为xxxInit锟斤拷锟斤拷锟斤拷锟节此达拷锟斤拷锟斤拷
     MpuHalTxTaskInit();
     McuMpuSyncTaskInit();
     TaskPowerManageInit();

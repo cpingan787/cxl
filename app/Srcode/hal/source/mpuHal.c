@@ -12,7 +12,7 @@
 #include "stdio.h"
 #include "Dio.h"
 
-#define MPU_COMMUNICATION_USE_SPI               0
+#define MPU_COMMUNICATION_USE_SPI 0
 
 // #define MPU_HAL_PDMA_DW_TX                      DW1
 // #define MPU_HAL_PDMA_DW_CHANNEL_TX              14
@@ -20,40 +20,36 @@
 // #define MPU_HAL_PDMA_DW_CHANNEL_RX              15
 // #define MPU_HAL_SPI_CHANNEL                    SCB3
 // #define SCB_SPI_OVERSAMPLING                  8
-#define MPU_HAL_HANDLE_INSTANSE_MAX           15
-#define MPU_PROTOCAL_HEADER_LEN                8
-#define MPU_HAL_TX_BUFFER                     1072//4096
-#define MPU_HAL_RX_BUFFER                     1096
-#define MPU_HAL_UART_INT_RX_BUF_LEN           200
+#define MPU_HAL_HANDLE_INSTANSE_MAX 15
+#define MPU_PROTOCAL_HEADER_LEN 8
+#define MPU_HAL_TX_BUFFER 1072 // 4096
+#define MPU_HAL_RX_BUFFER 1096
+#define MPU_HAL_UART_INT_RX_BUF_LEN 200
 
-#if(0)
-#define MPU_HAL_UART_CHANNEL                    SCB3
+#if (0)
+#define MPU_HAL_UART_CHANNEL SCB3
 
-
-#define E_UART_RX_INTR_FACTER     (                              \
-                                 CY_SCB_UART_RX_TRIGGER      |   \
-                               /*CY_SCB_UART_RX_NOT_EMPTY    | */\
-                               /*CY_SCB_UART_RX_FULL         | */\
-                                 CY_SCB_UART_RX_OVERFLOW     |   \
-                                 CY_SCB_UART_RX_UNDERFLOW    |   \
-                                 CY_SCB_UART_RX_ERR_FRAME    |   \
-                                 CY_SCB_UART_RX_ERR_PARITY   |   \
-                                 CY_SCB_UART_RX_BREAK_DETECT |   \
-                                 0                               \
-                                )
+#define E_UART_RX_INTR_FACTER (                                                                    \
+    CY_SCB_UART_RX_TRIGGER | /*CY_SCB_UART_RX_NOT_EMPTY    | */ /*CY_SCB_UART_RX_FULL         | */ \
+    CY_SCB_UART_RX_OVERFLOW |                                                                      \
+    CY_SCB_UART_RX_UNDERFLOW |                                                                     \
+    CY_SCB_UART_RX_ERR_FRAME |                                                                     \
+    CY_SCB_UART_RX_ERR_PARITY |                                                                    \
+    CY_SCB_UART_RX_BREAK_DETECT |                                                                  \
+    0)
 #endif
-typedef struct 
+typedef struct
 {
     uint8_t data[1200];
     uint16_t dataCount;
     uint16_t dataLength;
-}MpuUartProtocalBuffer_t;
+} MpuUartProtocalBuffer_t;
 typedef struct
 {
     QueueHandle_t txQueueHandle;
     uint8_t buffer[MPU_HAL_TX_BUFFER];
     uint16_t index;
-}MpuUartTxBuffer_t;
+} MpuUartTxBuffer_t;
 
 volatile uint8_t g_mpuUartReciveOneByteBuffer[2];
 volatile uint16_t g_mpuUartReciveCount = 0;
@@ -66,42 +62,41 @@ volatile uint8_t g_uartReceiveData1[MPU_HAL_UART_INT_RX_BUF_LEN];
 volatile uint8_t g_mpuUartRxBufId;
 volatile uint16_t g_mpuUartRxBufCount0;
 volatile uint16_t g_mpuUartRxBufCount1;
-volatile uint8_t  g_mpuUartRxBufDealFlag = 0;
+volatile uint8_t g_mpuUartRxBufDealFlag = 0;
 
-static MpuUartProtocalBuffer_t     g_mpuUartProtocalBuffer;
+static MpuUartProtocalBuffer_t g_mpuUartProtocalBuffer;
 
 static MpuUartTxBuffer_t g_mpuUartTxBuffer;
-static int16_t MpuUartTransmit(const uint8_t* pTxData,uint16_t txLength);
-
+static int16_t MpuUartTransmit(const uint8_t *pTxData, uint16_t txLength);
 
 typedef struct
 {
     uint8_t buffer[MPU_HAL_TX_BUFFER];
     uint16_t txLength;
-}MpuTxBuffer_t;
+} MpuTxBuffer_t;
 
 typedef struct
 {
     uint8_t buffer[MPU_HAL_RX_BUFFER];
     uint16_t txLength;
-}MpuRxBuffer_t;
+} MpuRxBuffer_t;
 
 typedef struct
 {
     uint8_t buffer[MPU_HAL_RX_BUFFER];
     uint16_t dataCount;
-}MpuProtocolBuffer_t;
+} MpuProtocolBuffer_t;
 
 typedef struct
 {
     uint8_t useFlag;
     uint8_t useRxFilter;
-    uint8_t* pDataBufferRx;
+    uint8_t *pDataBufferRx;
     uint16_t dataBufferSize;
     uint16_t rxIndexIn;
     QueueHandle_t rxQueueHandle;
     MpuHalFilter_t rxFilterConfig;
-}MpuHalHandle_t;
+} MpuHalHandle_t;
 
 typedef enum
 {
@@ -114,162 +109,187 @@ typedef enum
     E_MPU_HAL_START_STATE_KEY_ON_DELAY,
     E_MPU_HAL_START_STATE_KEY_OFF,
     E_MPU_HAL_START_STATE_FINISH,
-}MpuHalStartState_e;
+} MpuHalStartState_e;
 
-typedef struct 
+typedef struct
 {
-    uint8_t wakeMode;/*0:MPU power off,1:Mpu sleep,2:Mpu wake*/
+    uint8_t wakeMode; /*0:MPU power off,1:Mpu sleep,2:Mpu wake*/
     uint8_t wakeoutTimeCount;
     MpuHalStartState_e startState;
     MpuHalHandle_t rxHandle[MPU_HAL_HANDLE_INSTANSE_MAX];
     uint8_t mcuRequest; /*0:no request,1:requested */
     MpuTxBuffer_t txBuffer[2];
-    uint8_t txBufferFlag;/*0:tx buffer0 available,1:tx buffer available */
+    uint8_t txBufferFlag; /*0:tx buffer0 available,1:tx buffer available */
     MpuRxBuffer_t rxBuffer;
-}MpuHalManage_t;
+} MpuHalManage_t;
 
 static MpuHalManage_t g_mpuManage;
-#if(0)
+#if (0)
 static cy_stc_pdma_descr_t g_spiRxDmaDescr;
 static cy_stc_pdma_descr_t g_spiTxDmaDescr;
 static cy_stc_scb_spi_context_t g_mpuSpiDevContext;
 
-
-static const cy_stc_scb_spi_config_t g_mpuSpiConfig=
-{
-    .spiMode = CY_SCB_SPI_SLAVE,
-    .subMode = CY_SCB_SPI_MOTOROLA,
-    .sclkMode = CY_SCB_SPI_CPHA0_CPOL0,
-    .oversample = SCB_SPI_OVERSAMPLING,
-    .rxDataWidth = 8,
-    .txDataWidth = 8,
-    .enableMsbFirst = true,
-    .enableFreeRunSclk = false,
-    .enableInputFilter = false,
-    .enableMisoLateSample = true,
-    .enableTransferSeperation = true,
-    .ssPolarity0 = 0,
-    .ssPolarity1 = 0,
-    .ssPolarity2 = 0,
-    .ssPolarity3 = 0,
-    .enableWakeFromSleep = 0,
-    .txFifoTriggerLevel = 0,
-    .rxFifoTriggerLevel = 255,
-    .rxFifoIntEnableMask = 0,
-    .txFifoIntEnableMask = 0,
-    .masterSlaveIntEnableMask = 0,
-    .enableSpiDoneInterrupt = 0,
-    .enableSpiBusErrorInterrupt = 0,
+static const cy_stc_scb_spi_config_t g_mpuSpiConfig =
+    {
+        .spiMode = CY_SCB_SPI_SLAVE,
+        .subMode = CY_SCB_SPI_MOTOROLA,
+        .sclkMode = CY_SCB_SPI_CPHA0_CPOL0,
+        .oversample = SCB_SPI_OVERSAMPLING,
+        .rxDataWidth = 8,
+        .txDataWidth = 8,
+        .enableMsbFirst = true,
+        .enableFreeRunSclk = false,
+        .enableInputFilter = false,
+        .enableMisoLateSample = true,
+        .enableTransferSeperation = true,
+        .ssPolarity0 = 0,
+        .ssPolarity1 = 0,
+        .ssPolarity2 = 0,
+        .ssPolarity3 = 0,
+        .enableWakeFromSleep = 0,
+        .txFifoTriggerLevel = 0,
+        .rxFifoTriggerLevel = 255,
+        .rxFifoIntEnableMask = 0,
+        .txFifoIntEnableMask = 0,
+        .masterSlaveIntEnableMask = 0,
+        .enableSpiDoneInterrupt = 0,
+        .enableSpiBusErrorInterrupt = 0,
 };
 
-static const cy_stc_sysint_irq_t g_mpuSpiIrqConfig = 
-{
-    .sysIntSrc = scb_3_interrupt_IRQn,
-    .intIdx = CPUIntIdx5_IRQn,
-    .isEnabled = true,
+static const cy_stc_sysint_irq_t g_mpuSpiIrqConfig =
+    {
+        .sysIntSrc = scb_3_interrupt_IRQn,
+        .intIdx = CPUIntIdx5_IRQn,
+        .isEnabled = true,
 };
 
 static const cy_stc_pdma_chnl_config_t g_mpuRxDmaChanConfig =
-{
-    .PDMA_Descriptor = &g_spiRxDmaDescr,
-    .preemptable = 0,
-    .priority = 0,
-    .enable = 1,
+    {
+        .PDMA_Descriptor = &g_spiRxDmaDescr,
+        .preemptable = 0,
+        .priority = 0,
+        .enable = 1,
 };
 
-static const cy_stc_pdma_chnl_config_t g_mpuTxDmaChanConfig = 
-{
-    .PDMA_Descriptor = &g_spiRxDmaDescr,
-    .preemptable = 0,
-    .priority = 0,
-    .enable = 1,    
+static const cy_stc_pdma_chnl_config_t g_mpuTxDmaChanConfig =
+    {
+        .PDMA_Descriptor = &g_spiRxDmaDescr,
+        .preemptable = 0,
+        .priority = 0,
+        .enable = 1,
 };
 
 static cy_stc_pdma_descr_config_t g_mpuRxDmaDesConfig =
-{
-    .deact = 0,
-    .intrType = CY_PDMA_INTR_X_LOOP_CMPLT,
-    .trigoutType = CY_PDMA_INTR_1ELEMENT_CMPLT,
-    .chStateAtCmplt = CY_PDMA_CH_ENABLED,
-    .triginType = CY_PDMA_TRIGIN_XLOOP,
-    .dataSize = CY_PDMA_BYTE,
-    .srcTxfrSize = 1,
-    .destTxfrSize = 0,
-    .descrType = CY_PDMA_2D_TRANSFER,
-    .srcAddr = (uint32_t *)&MPU_HAL_SPI_CHANNEL->unRX_FIFO_RD.u32Register,
-    .destAddr = g_mpuManage.rxBuffer.buffer,
-    .srcXincr = 0,
-    .destXincr = 1,
-    .xCount = 1,
-    .srcYincr = 0,
-    .destYincr = 1,
-    .yCount = 4096,
-    .descrNext = &g_spiRxDmaDescr, 
+    {
+        .deact = 0,
+        .intrType = CY_PDMA_INTR_X_LOOP_CMPLT,
+        .trigoutType = CY_PDMA_INTR_1ELEMENT_CMPLT,
+        .chStateAtCmplt = CY_PDMA_CH_ENABLED,
+        .triginType = CY_PDMA_TRIGIN_XLOOP,
+        .dataSize = CY_PDMA_BYTE,
+        .srcTxfrSize = 1,
+        .destTxfrSize = 0,
+        .descrType = CY_PDMA_2D_TRANSFER,
+        .srcAddr = (uint32_t *)&MPU_HAL_SPI_CHANNEL->unRX_FIFO_RD.u32Register,
+        .destAddr = g_mpuManage.rxBuffer.buffer,
+        .srcXincr = 0,
+        .destXincr = 1,
+        .xCount = 1,
+        .srcYincr = 0,
+        .destYincr = 1,
+        .yCount = 4096,
+        .descrNext = &g_spiRxDmaDescr,
 };
 
 static cy_stc_pdma_descr_config_t g_mpuTxDmaDesConfig =
-{
-    .deact = 0,
-    .intrType = CY_PDMA_INTR_1ELEMENT_CMPLT,
-    .trigoutType = CY_PDMA_TRIGOUT_1ELEMENT_CMPLT,
-    .chStateAtCmplt = CY_PDMA_CH_DISABLED,
-    .triginType = CY_PDMA_TRIGIN_DESCR,
-    .dataSize = CY_PDMA_BYTE,
-    .srcTxfrSize = 0,
-    .destTxfrSize = 1,
-    .descrType = CY_PDMA_1D_TRANSFER,
-    .srcAddr = (uint32_t *)&(SCB3->unTX_FIFO_WR.u32Register),
-    .destAddr = g_mpuManage.txBuffer[0].buffer,
-    .srcXincr = 1,
-    .destXincr = 0,
-    .xCount = 4096,
-    .srcYincr = 0,
-    .destYincr = 0u,
-    .yCount = 0u,
-    .descrNext = 0u, 
+    {
+        .deact = 0,
+        .intrType = CY_PDMA_INTR_1ELEMENT_CMPLT,
+        .trigoutType = CY_PDMA_TRIGOUT_1ELEMENT_CMPLT,
+        .chStateAtCmplt = CY_PDMA_CH_DISABLED,
+        .triginType = CY_PDMA_TRIGIN_DESCR,
+        .dataSize = CY_PDMA_BYTE,
+        .srcTxfrSize = 0,
+        .destTxfrSize = 1,
+        .descrType = CY_PDMA_1D_TRANSFER,
+        .srcAddr = (uint32_t *)&(SCB3->unTX_FIFO_WR.u32Register),
+        .destAddr = g_mpuManage.txBuffer[0].buffer,
+        .srcXincr = 1,
+        .destXincr = 0,
+        .xCount = 4096,
+        .srcYincr = 0,
+        .destYincr = 0u,
+        .yCount = 0u,
+        .descrNext = 0u,
 };
 #endif
 static void MpuHalGpioInit(void)
 {
     /********power en **************************/
     PORT.PPCMD1 = _WRITE_PROTECT_COMMAND;
-    PORT.PDSC1 &= (uint32_t) ~_PORT_PMn7_MODE_UNUSED;
+    PORT.PDSC1 &= (uint32_t)~_PORT_PMn7_MODE_UNUSED;
     PORT.PDSC1 |= _PORT_PDSCn7_SLOW_MODE_SELECT;
     PORT.PPCMD1 = _WRITE_PROTECT_COMMAND;
-    PORT.PODC1 &= (uint32_t) ~_PORT_PMn7_MODE_UNUSED;
+    PORT.PODC1 &= (uint32_t)~_PORT_PMn7_MODE_UNUSED;
     PORT.PODC1 |= _PORT_PODCn7_PUSH_PULL;
     PORT.PBDC1 &= (uint16_t)_PORT_PMn7_MODE_UNUSED;
     PORT.PBDC1 |= _PORT_PBDCn7_PBDC_MODE_DISABLED;
-    PORT.P1 &= (uint16_t) ~_PORT_PMn7_MODE_UNUSED;
+    PORT.P1 &= (uint16_t)~_PORT_PMn7_MODE_UNUSED;
     PORT.P1 |= _PORT_Pn7_OUTPUT_HIGH;
-    PORT.PM1 &= (uint16_t) ~_PORT_PMn7_MODE_UNUSED;
+    PORT.PM1 &= (uint16_t)~_PORT_PMn7_MODE_UNUSED;
     PORT.PM1 |= _PORT_PMn7_MODE_OUTPUT;
 
     PORT.PPCMD18 = _WRITE_PROTECT_COMMAND;
-    PORT.PDSC18 &= (uint32_t) ~_PORT_PMn3_MODE_UNUSED;
+    PORT.PDSC18 &= (uint32_t)~_PORT_PMn3_MODE_UNUSED;
     PORT.PDSC18 |= _PORT_PDSCn3_SLOW_MODE_SELECT;
     PORT.PPCMD18 = _WRITE_PROTECT_COMMAND;
-    PORT.PODC18 &= (uint32_t) ~_PORT_PMn3_MODE_UNUSED;
+    PORT.PODC18 &= (uint32_t)~_PORT_PMn3_MODE_UNUSED;
     PORT.PODC18 |= _PORT_PODCn3_PUSH_PULL;
-    PORT.PBDC18 &= (uint16_t) ~_PORT_PMn3_MODE_UNUSED;
+    PORT.PBDC18 &= (uint16_t)~_PORT_PMn3_MODE_UNUSED;
     PORT.PBDC18 |= _PORT_PBDCn3_PBDC_MODE_DISABLED;
-    PORT.P18 &= (uint16_t) ~_PORT_PMn3_MODE_UNUSED;
+    PORT.P18 &= (uint16_t)~_PORT_PMn3_MODE_UNUSED;
     PORT.P18 |= _PORT_Pn3_OUTPUT_HIGH;
-    PORT.PM18 &= (uint16_t) ~_PORT_PMn3_MODE_UNUSED;
+    PORT.PM18 &= (uint16_t)~_PORT_PMn3_MODE_UNUSED;
     PORT.PM18 |= _PORT_PMn3_MODE_OUTPUT;
     /********power key***************************/
     PORT.PPCMD18 = _WRITE_PROTECT_COMMAND;
-    PORT.PDSC18 &= (uint32_t) ~_PORT_PMn1_MODE_UNUSED;
+    PORT.PDSC18 &= (uint32_t)~_PORT_PMn1_MODE_UNUSED;
     PORT.PDSC18 |= _PORT_PDSCn1_SLOW_MODE_SELECT;
     PORT.PPCMD18 = _WRITE_PROTECT_COMMAND;
-    PORT.PODC18 &= (uint32_t) ~_PORT_PMn1_MODE_UNUSED;
+    PORT.PODC18 &= (uint32_t)~_PORT_PMn1_MODE_UNUSED;
     PORT.PODC18 |= _PORT_PODCn1_PUSH_PULL;
-    PORT.PBDC18 &= (uint16_t) ~_PORT_PMn1_MODE_UNUSED;
+    PORT.PBDC18 &= (uint16_t)~_PORT_PMn1_MODE_UNUSED;
     PORT.PBDC18 |= _PORT_PBDCn1_PBDC_MODE_DISABLED;
-    PORT.P18 &= (uint16_t) ~_PORT_PMn1_MODE_UNUSED;
+    PORT.P18 &= (uint16_t)~_PORT_PMn1_MODE_UNUSED;
     PORT.P18 |= _PORT_Pn1_OUTPUT_LOW;
-    PORT.PM18 &= (uint16_t) ~_PORT_PMn1_MODE_UNUSED;
+    PORT.PM18 &= (uint16_t)~_PORT_PMn1_MODE_UNUSED;
     PORT.PM18 |= _PORT_PMn1_MODE_OUTPUT;
+    /********mcu wake mpu***************************/
+    PORT.PPCMD12 = _WRITE_PROTECT_COMMAND;
+    PORT.PDSC12 &= (uint32_t)~_PORT_PMn0_MODE_UNUSED;
+    PORT.PDSC12 |= _PORT_PDSCn0_SLOW_MODE_SELECT;
+    PORT.PPCMD12 = _WRITE_PROTECT_COMMAND;
+    PORT.PODC12 &= (uint32_t)~_PORT_PMn0_MODE_UNUSED;
+    PORT.PODC12 |= _PORT_PODCn0_PUSH_PULL;
+    PORT.PBDC12 &= (uint32_t)~_PORT_PMn0_MODE_UNUSED;
+    PORT.PBDC12 |= _PORT_PBDCn0_PBDC_MODE_DISABLED;
+    PORT.P12 &= (uint32_t)~_PORT_PMn0_MODE_UNUSED;
+    PORT.P12 |= _PORT_Pn0_OUTPUT_LOW;
+    PORT.PM12 &= (uint32_t)~_PORT_PMn0_MODE_UNUSED;
+    PORT.PM12 |= _PORT_PMn0_MODE_OUTPUT;
+    /********reset***************************/
+    PORT.PPCMD18 = _WRITE_PROTECT_COMMAND;
+    PORT.PDSC18 &= (uint32_t)~_PORT_PMn0_MODE_UNUSED;
+    PORT.PDSC18 |= _PORT_PDSCn0_SLOW_MODE_SELECT;
+    PORT.PPCMD18 = _WRITE_PROTECT_COMMAND;
+    PORT.PODC18 &= (uint32_t)~_PORT_PMn0_MODE_UNUSED;
+    PORT.PODC18 |= _PORT_PODCn0_PUSH_PULL;
+    PORT.PBDC18 &= (uint16_t)~_PORT_PMn0_MODE_UNUSED;
+    PORT.PBDC18 |= _PORT_PBDCn0_PBDC_MODE_DISABLED;
+    PORT.P18 &= (uint16_t)~_PORT_PMn0_MODE_UNUSED;
+    PORT.P18 |= _PORT_Pn0_OUTPUT_LOW;
+    PORT.PM18 &= (uint16_t)~_PORT_PMn0_MODE_UNUSED;
+    PORT.PM18 |= _PORT_PMn0_MODE_OUTPUT;
     // /********vbus***************************/
     // portPinCfg.hsiom  = P0_0_GPIO;
     // portPinCfg.outVal = 1u;
@@ -278,22 +298,22 @@ static void MpuHalGpioInit(void)
     // portPinCfg.hsiom  = P19_3_GPIO;  // TODO guanyuan
     // portPinCfg.outVal = 0u;
     // Cy_GPIO_Pin_Init(GPIO_PRT19,3,&portPinCfg);
-#if(MPU_COMMUNICATION_USE_SPI)    
+#if (MPU_COMMUNICATION_USE_SPI)
     /********request  out************************/
-    portPinCfg.hsiom  = P13_3_GPIO;
-    Cy_GPIO_Pin_Init(GPIO_PRT13,3,&portPinCfg);
+    portPinCfg.hsiom = P13_3_GPIO;
+    Cy_GPIO_Pin_Init(GPIO_PRT13, 3, &portPinCfg);
     /********spi miso***********************/
-    portPinCfg.hsiom  = P13_0_SCB3_SPI_MISO;
-    Cy_GPIO_Pin_Init(GPIO_PRT13,0,&portPinCfg);
+    portPinCfg.hsiom = P13_0_SCB3_SPI_MISO;
+    Cy_GPIO_Pin_Init(GPIO_PRT13, 0, &portPinCfg);
     /********spi mosi***********************/
-    portPinCfg.hsiom  = P13_1_SCB3_SPI_MOSI;
-    Cy_GPIO_Pin_Init(GPIO_PRT13,1,&portPinCfg);
+    portPinCfg.hsiom = P13_1_SCB3_SPI_MOSI;
+    Cy_GPIO_Pin_Init(GPIO_PRT13, 1, &portPinCfg);
     /********spi clk***********************/
     portPinCfg.driveMode = CY_GPIO_DM_HIGHZ;
-    portPinCfg.hsiom  = P13_2_SCB3_SPI_CLK;
-    Cy_GPIO_Pin_Init(GPIO_PRT13,2,&portPinCfg);    
+    portPinCfg.hsiom = P13_2_SCB3_SPI_CLK;
+    Cy_GPIO_Pin_Init(GPIO_PRT13, 2, &portPinCfg);
 #else /**** *use uart commnication**************/
-    
+
     // /********spi miso***********************/    // TODO guanyuan
     // portPinCfg.driveMode = CY_GPIO_DM_HIGHZ;
     // portPinCfg.hsiom  = P13_0_SCB3_UART_RX;
@@ -301,40 +321,40 @@ static void MpuHalGpioInit(void)
     // /********spi mosi***********************/
     // portPinCfg.driveMode = CY_GPIO_DM_STRONG_IN_OFF;
     // portPinCfg.hsiom  = P13_1_SCB3_UART_TX;
-    // Cy_GPIO_Pin_Init(GPIO_PRT13,1,&portPinCfg);    
+    // Cy_GPIO_Pin_Init(GPIO_PRT13,1,&portPinCfg);
 #endif
     /********reset***********************/
     PORT.PPCMD18 = _WRITE_PROTECT_COMMAND;
-    PORT.PDSC18 &= (uint32_t) ~_PORT_PMn0_MODE_UNUSED;
+    PORT.PDSC18 &= (uint32_t)~_PORT_PMn0_MODE_UNUSED;
     PORT.PDSC18 |= _PORT_PDSCn0_SLOW_MODE_SELECT;
     PORT.PPCMD18 = _WRITE_PROTECT_COMMAND;
-    PORT.PODC18 &= (uint32_t) ~_PORT_PMn0_MODE_UNUSED;
+    PORT.PODC18 &= (uint32_t)~_PORT_PMn0_MODE_UNUSED;
     PORT.PODC18 |= _PORT_PODCn0_PUSH_PULL;
-    PORT.PBDC18 &= (uint16_t) ~_PORT_PMn0_MODE_UNUSED;
+    PORT.PBDC18 &= (uint16_t)~_PORT_PMn0_MODE_UNUSED;
     PORT.PBDC18 |= _PORT_PBDCn0_PBDC_MODE_DISABLED;
-    PORT.P18 &= (uint16_t) ~_PORT_PMn0_MODE_UNUSED;
+    PORT.P18 &= (uint16_t)~_PORT_PMn0_MODE_UNUSED;
     PORT.P18 |= _PORT_Pn0_OUTPUT_LOW;
-    PORT.PM18 &= (uint16_t) ~_PORT_PMn0_MODE_UNUSED;
+    PORT.PM18 &= (uint16_t)~_PORT_PMn0_MODE_UNUSED;
     PORT.PM18 |= _PORT_PMn0_MODE_OUTPUT;
 
     /********level shift***********************/
     PORT.PPCMD11 = _WRITE_PROTECT_COMMAND;
-    PORT.PDSC11 &= (uint32_t) ~_PORT_PMn15_MODE_UNUSED;
+    PORT.PDSC11 &= (uint32_t)~_PORT_PMn15_MODE_UNUSED;
     PORT.PDSC11 |= _PORT_PDSCn15_SLOW_MODE_SELECT;
     PORT.PPCMD11 = _WRITE_PROTECT_COMMAND;
-    PORT.PODC11 &= (uint32_t) ~_PORT_PMn15_MODE_UNUSED;
+    PORT.PODC11 &= (uint32_t)~_PORT_PMn15_MODE_UNUSED;
     PORT.PODC11 |= _PORT_PODCn15_PUSH_PULL;
-    PORT.PBDC11 &= (uint16_t) ~_PORT_PMn15_MODE_UNUSED;
+    PORT.PBDC11 &= (uint16_t)~_PORT_PMn15_MODE_UNUSED;
     PORT.PBDC11 |= _PORT_PBDCn15_PBDC_MODE_DISABLED;
-    PORT.P11 &= (uint16_t) ~_PORT_PMn15_MODE_UNUSED;
+    PORT.P11 &= (uint16_t)~_PORT_PMn15_MODE_UNUSED;
     PORT.P11 |= _PORT_Pn15_OUTPUT_HIGH;
-    PORT.PM11 &= (uint16_t) ~_PORT_PMn15_MODE_UNUSED;
+    PORT.PM11 &= (uint16_t)~_PORT_PMn15_MODE_UNUSED;
     PORT.PM11 |= _PORT_PMn15_MODE_OUTPUT;
 }
 
 static void MpuHalSetPower(uint8_t flag)
 {
-    if(0==flag)
+    if (0 == flag)
     {
         R_PORT_SetGpioOutput(Port1, 7, 0);
         R_PORT_SetGpioOutput(Port18, 3, 0);
@@ -348,7 +368,7 @@ static void MpuHalSetPower(uint8_t flag)
 
 static void MpuHalSetPowerkey(uint8_t flag)
 {
-    if(0==flag)
+    if (0 == flag)
     {
         R_PORT_SetGpioOutput(Port18, 1, 0);
     }
@@ -360,7 +380,7 @@ static void MpuHalSetPowerkey(uint8_t flag)
 
 static void MpuHalSetWakeOut(uint8_t flag)
 {
-    if(0==flag)
+    if (0 == flag)
     {
         R_PORT_SetGpioOutput(Port12, 0, 0);
     }
@@ -369,31 +389,31 @@ static void MpuHalSetWakeOut(uint8_t flag)
         R_PORT_SetGpioOutput(Port12, 0, 1);
     }
 }
-#if(0)
+#if (0)
 static void MpuHalSetVbus(uint8_t flag)
 {
-    if(0==flag)
+    if (0 == flag)
     {
-        Cy_GPIO_Clr(GPIO_PRT0,0);
+        Cy_GPIO_Clr(GPIO_PRT0, 0);
     }
     else
     {
-        Cy_GPIO_Set(GPIO_PRT0,0);
+        Cy_GPIO_Set(GPIO_PRT0, 0);
     }
 }
 
-#if(MPU_COMMUNICATION_USE_SPI)
+#if (MPU_COMMUNICATION_USE_SPI)
 static void MpuSpiDeviceClockInit(void)
 {
     uint32_t divSetting;
-    uint64_t temp,sourceFreq,targetFreq;
-    
+    uint64_t temp, sourceFreq, targetFreq;
+
     sourceFreq = 80000000ul;
-    targetFreq = 8000000*SCB_SPI_OVERSAMPLING;
+    targetFreq = 8000000 * SCB_SPI_OVERSAMPLING;
     temp = ((uint64_t)sourceFreq << 5ull);
     divSetting = (uint32_t)(temp / targetFreq);
-    Cy_SysClk_PeriphSetFracDivider(CY_SYSCLK_DIV_24_5_BIT, 3, 
-                                   (((divSetting >> 5u) & 0x00000FFF) - 1u), 
+    Cy_SysClk_PeriphSetFracDivider(CY_SYSCLK_DIV_24_5_BIT, 3,
+                                   (((divSetting >> 5u) & 0x00000FFF) - 1u),
                                    (divSetting & 0x0000001F));
     Cy_SysClk_PeriphEnableDivider(CY_SYSCLK_DIV_24_5_BIT, 3u);
 }
@@ -411,141 +431,140 @@ static void MpuSpiDeviceInit(void)
     Cy_SysInt_SetSystemIrqVector(g_mpuSpiIrqConfig.sysIntSrc, MpuSpiIrqFun);
     NVIC_EnableIRQ(g_mpuSpiIrqConfig.intIdx);
     Cy_SCB_SPI_Init(MPU_HAL_SPI_CHANNEL, &g_mpuSpiConfig, &g_mpuSpiDevContext);
-    
+
     Cy_SCB_SPI_SetActiveSlaveSelect(MPU_HAL_SPI_CHANNEL, 0);
     Cy_SCB_SPI_Enable(MPU_HAL_SPI_CHANNEL);
 }
 
 static void SetRequestMpuTxRx(uint8_t reqFlag)
 {
-    if(reqFlag!=0)
+    if (reqFlag != 0)
     {
-        Cy_GPIO_Set(GPIO_PRT7,5);
+        Cy_GPIO_Set(GPIO_PRT7, 5);
     }
     else
     {
-        Cy_GPIO_Clr(GPIO_PRT7,5);
+        Cy_GPIO_Clr(GPIO_PRT7, 5);
     }
 }
 #endif
-static void MpuDataDispatch(const uint8_t* pData,uint16_t length,uint8_t irq)
+static void MpuDataDispatch(const uint8_t *pData, uint16_t length, uint8_t irq)
 {
-    uint16_t i,j,instanceMax;
+    uint16_t i, j, instanceMax;
     uint32_t data;
     uint32_t xHigherPriorityTaskWoken = pdFALSE;
-    MpuHalHandle_t* pHandleInstance;
-    
+    MpuHalHandle_t *pHandleInstance;
+
     instanceMax = MPU_HAL_HANDLE_INSTANSE_MAX;
-    for(i=0;i<instanceMax;i++)
+    for (i = 0; i < instanceMax; i++)
     {
-        pHandleInstance = g_mpuManage.rxHandle+ i;
-        if((pHandleInstance->useFlag==1)&&(pHandleInstance->pDataBufferRx!=NULL))
+        pHandleInstance = g_mpuManage.rxHandle + i;
+        if ((pHandleInstance->useFlag == 1) && (pHandleInstance->pDataBufferRx != NULL))
         {
-            if((pHandleInstance->useRxFilter==1)&&(pData[2]==pHandleInstance->rxFilterConfig.aid))
+            if ((pHandleInstance->useRxFilter == 1) && (pData[2] == pHandleInstance->rxFilterConfig.aid))
             {
-                if((pData[3]>=pHandleInstance->rxFilterConfig.midMin)&&(pData[3]<=pHandleInstance->rxFilterConfig.midMax))
+                if ((pData[3] >= pHandleInstance->rxFilterConfig.midMin) && (pData[3] <= pHandleInstance->rxFilterConfig.midMax))
                 {
                     /***** copy data to receive buffer*****************/
-                    data = (pHandleInstance->rxIndexIn<<16);
-                    for(j=0;j<length;j++)
+                    data = (pHandleInstance->rxIndexIn << 16);
+                    for (j = 0; j < length; j++)
                     {
                         pHandleInstance->pDataBufferRx[pHandleInstance->rxIndexIn] = pData[j];
                         pHandleInstance->rxIndexIn++;
-                        if(pHandleInstance->rxIndexIn>=pHandleInstance->dataBufferSize)
+                        if (pHandleInstance->rxIndexIn >= pHandleInstance->dataBufferSize)
                         {
                             pHandleInstance->rxIndexIn = 0;
                         }
                     }
                     /******** dispatch data*******************************************/
                     data += length;
-                    if(irq)
+                    if (irq)
                     {
-                        xQueueSendFromISR(pHandleInstance->rxQueueHandle, &data, &xHigherPriorityTaskWoken );
+                        xQueueSendFromISR(pHandleInstance->rxQueueHandle, &data, &xHigherPriorityTaskWoken);
                     }
                     else
                     {
-                        xQueueSend(pHandleInstance->rxQueueHandle, &data,0 );
+                        xQueueSend(pHandleInstance->rxQueueHandle, &data, 0);
                     }
-                }                                   
-            }            
+                }
+            }
         }
     }
 }
-#if(0)
+#if (0)
 static void MpuDmaTxIrqFun(void)
 {
-    Cy_PDMA_Chnl_ClearInterrupt( MPU_HAL_PDMA_DW_TX, MPU_HAL_PDMA_DW_CHANNEL_TX);
+    Cy_PDMA_Chnl_ClearInterrupt(MPU_HAL_PDMA_DW_TX, MPU_HAL_PDMA_DW_CHANNEL_TX);
 }
 
 static void MpuDmaRxIrqFun(void)
 {
-    uint16_t length,i,dataCount,packLength,packStart;
+    uint16_t length, i, dataCount, packLength, packStart;
     uint8_t *pBuffer;
-    
-    Cy_PDMA_Chnl_ClearInterrupt( MPU_HAL_PDMA_DW_RX,MPU_HAL_PDMA_DW_CHANNEL_RX);
+
+    Cy_PDMA_Chnl_ClearInterrupt(MPU_HAL_PDMA_DW_RX, MPU_HAL_PDMA_DW_CHANNEL_RX);
     dataCount = 0;
     pBuffer = g_mpuManage.rxBuffer.buffer;
     length = 4096;
-    for(i = 0;i<length;i++)
+    for (i = 0; i < length; i++)
     {
-        if(0==dataCount)
+        if (0 == dataCount)
         {
-            if(0x55==pBuffer[i])
+            if (0x55 == pBuffer[i])
             {
                 dataCount++;
                 packStart = i;
             }
         }
-        else if(1==dataCount)
+        else if (1 == dataCount)
         {
-            if(0xAA==pBuffer[i])
+            if (0xAA == pBuffer[i])
             {
                 dataCount++;
             }
         }
-        else if(dataCount<MPU_PROTOCAL_HEADER_LEN)
+        else if (dataCount < MPU_PROTOCAL_HEADER_LEN)
         {
             dataCount++;
-            if(MPU_PROTOCAL_HEADER_LEN==dataCount)
+            if (MPU_PROTOCAL_HEADER_LEN == dataCount)
             {
-                packLength = (pBuffer [packStart +5]<<8)+pBuffer [packStart +6];
-                if(packLength>4000)
+                packLength = (pBuffer[packStart + 5] << 8) + pBuffer[packStart + 6];
+                if (packLength > 4000)
                 {
                     dataCount = 0;
-                }                
+                }
             }
-           
         }
-        else if(dataCount>=(packLength+MPU_PROTOCAL_HEADER_LEN))
+        else if (dataCount >= (packLength + MPU_PROTOCAL_HEADER_LEN))
         {
-            MpuDataDispatch(pBuffer+packStart,packLength+MPU_PROTOCAL_HEADER_LEN+2,1);
+            MpuDataDispatch(pBuffer + packStart, packLength + MPU_PROTOCAL_HEADER_LEN + 2, 1);
             dataCount = 0;
-            i +=(packLength+MPU_PROTOCAL_HEADER_LEN+2);
+            i += (packLength + MPU_PROTOCAL_HEADER_LEN + 2);
         }
     }
 }
 
 static void MpuDmaDeviceInit(void)
 {
-    cy_stc_sysint_irq_t        sysIntIrqCfgDma;
+    cy_stc_sysint_irq_t sysIntIrqCfgDma;
     /**************dma rx*******************************/
     Cy_PDMA_Disable(MPU_HAL_PDMA_DW_RX);
     Cy_PDMA_Chnl_DeInit(MPU_HAL_PDMA_DW_RX, MPU_HAL_PDMA_DW_CHANNEL_RX);
-    Cy_PDMA_Descr_Init(&g_spiRxDmaDescr,&g_mpuRxDmaDesConfig);
-    Cy_PDMA_Chnl_Init(MPU_HAL_PDMA_DW_RX,MPU_HAL_PDMA_DW_CHANNEL_RX,(const cy_stc_pdma_chnl_config_t*) &g_mpuRxDmaChanConfig);
-    Cy_PDMA_Chnl_Enable(MPU_HAL_PDMA_DW_RX,MPU_HAL_PDMA_DW_CHANNEL_RX);
+    Cy_PDMA_Descr_Init(&g_spiRxDmaDescr, &g_mpuRxDmaDesConfig);
+    Cy_PDMA_Chnl_Init(MPU_HAL_PDMA_DW_RX, MPU_HAL_PDMA_DW_CHANNEL_RX, (const cy_stc_pdma_chnl_config_t *)&g_mpuRxDmaChanConfig);
+    Cy_PDMA_Chnl_Enable(MPU_HAL_PDMA_DW_RX, MPU_HAL_PDMA_DW_CHANNEL_RX);
     Cy_PDMA_Chnl_SetInterruptMask(MPU_HAL_PDMA_DW_RX, MPU_HAL_PDMA_DW_CHANNEL_RX);
     Cy_PDMA_Enable(MPU_HAL_PDMA_DW_RX);
-    Cy_TrigMux_Connect1To1(TRIG_OUT_1TO1_8_SCB_RX_TO_PDMA13,0u,TRIGGER_TYPE_CPUSS_DW1_TR_IN__EDGE,0u);
+    Cy_TrigMux_Connect1To1(TRIG_OUT_1TO1_8_SCB_RX_TO_PDMA13, 0u, TRIGGER_TYPE_CPUSS_DW1_TR_IN__EDGE, 0u);
     /**************dma tx ***********************************/
     Cy_PDMA_Disable(MPU_HAL_PDMA_DW_TX);
     Cy_PDMA_Chnl_DeInit(MPU_HAL_PDMA_DW_TX, MPU_HAL_PDMA_DW_CHANNEL_TX);
-    Cy_PDMA_Descr_Init(&g_spiTxDmaDescr,&g_mpuTxDmaDesConfig);
-    Cy_PDMA_Chnl_Init(MPU_HAL_PDMA_DW_TX,MPU_HAL_PDMA_DW_CHANNEL_TX,(const cy_stc_pdma_chnl_config_t*) &g_mpuTxDmaChanConfig);
+    Cy_PDMA_Descr_Init(&g_spiTxDmaDescr, &g_mpuTxDmaDesConfig);
+    Cy_PDMA_Chnl_Init(MPU_HAL_PDMA_DW_TX, MPU_HAL_PDMA_DW_CHANNEL_TX, (const cy_stc_pdma_chnl_config_t *)&g_mpuTxDmaChanConfig);
     Cy_PDMA_Chnl_Enable(MPU_HAL_PDMA_DW_TX, MPU_HAL_PDMA_DW_CHANNEL_TX);
     Cy_PDMA_Chnl_SetInterruptMask(MPU_HAL_PDMA_DW_TX, MPU_HAL_PDMA_DW_CHANNEL_TX);
     Cy_PDMA_Enable(MPU_HAL_PDMA_DW_TX);
-    sysIntIrqCfgDma.intIdx    = CPUIntIdx1_IRQn;
+    sysIntIrqCfgDma.intIdx = CPUIntIdx1_IRQn;
     sysIntIrqCfgDma.isEnabled = true;
     sysIntIrqCfgDma.sysIntSrc = cpuss_interrupts_dw1_15_IRQn;
     Cy_SysInt_InitIRQ(&sysIntIrqCfgDma);
@@ -555,27 +574,27 @@ static void MpuDmaDeviceInit(void)
     Cy_SysInt_SetSystemIrqVector(sysIntIrqCfgDma.sysIntSrc, MpuDmaTxIrqFun);
 }
 #endif
-static uint8_t MpuPackHeader(uint8_t headerBuffer[],const MpuHalDataPack_t* pMsg)
+static uint8_t MpuPackHeader(uint8_t headerBuffer[], const MpuHalDataPack_t *pMsg)
 {
     headerBuffer[0] = 0x55;
-    headerBuffer[1] = 0xAA;    
+    headerBuffer[1] = 0xAA;
     headerBuffer[2] = pMsg->aid;
-    headerBuffer[3] = pMsg->mid; 
+    headerBuffer[3] = pMsg->mid;
     headerBuffer[4] = pMsg->subcommand;
-    headerBuffer[5] = (pMsg->dataLength>>8)&0xFF; 
-    headerBuffer[6] = pMsg->dataLength&0xFF;
-    headerBuffer[7] = 0x00;    /*reserved*/ 
-    headerBuffer[8] = 0x00;    /*reserved*/ 
+    headerBuffer[5] = (pMsg->dataLength >> 8) & 0xFF;
+    headerBuffer[6] = pMsg->dataLength & 0xFF;
+    headerBuffer[7] = 0x00; /*reserved*/
+    headerBuffer[8] = 0x00; /*reserved*/
     return MPU_PROTOCAL_HEADER_LEN;
 }
 
-static uint16_t MpuPackGetCrc(uint8_t header[],const MpuHalDataPack_t* pMsg)
+static uint16_t MpuPackGetCrc(uint8_t header[], const MpuHalDataPack_t *pMsg)
 {
     uint16_t crc;
-    
+
     crc = 0x0000;
-    crc = CcittCrc16(crc,header,MPU_PROTOCAL_HEADER_LEN);
-    crc = CcittCrc16(crc,pMsg->pDataBuffer,pMsg->dataLength);    
+    crc = CcittCrc16(crc, header, MPU_PROTOCAL_HEADER_LEN);
+    crc = CcittCrc16(crc, pMsg->pDataBuffer, pMsg->dataLength);
     return crc;
 }
 
@@ -583,77 +602,76 @@ void MpuHalCycleProcess(uint32_t cycleTime)
 {
     static uint32_t timeCount = 0;
 
-    if(E_MPU_HAL_START_STATE_IDLE==g_mpuManage.startState)
+    if (E_MPU_HAL_START_STATE_IDLE == g_mpuManage.startState)
     {
-        
     }
-    else if(E_MPU_HAL_START_STATE_POWER_OFF==g_mpuManage.startState)
+    else if (E_MPU_HAL_START_STATE_POWER_OFF == g_mpuManage.startState)
     {
         timeCount = 0;
         g_mpuManage.startState = E_MPU_HAL_START_STATE_OFF_DELAY;
     }
-    else if(E_MPU_HAL_START_STATE_OFF_DELAY==g_mpuManage.startState)
+    else if (E_MPU_HAL_START_STATE_OFF_DELAY == g_mpuManage.startState)
     {
         timeCount += cycleTime;
-        if(timeCount>=500)
+        if (timeCount >= 500)
         {
             g_mpuManage.startState = E_MPU_HAL_START_STATE_POWER_ON;
             MpuHalSetPower(1);
         }
     }
-    else if(E_MPU_HAL_START_STATE_POWER_ON==g_mpuManage.startState)
+    else if (E_MPU_HAL_START_STATE_POWER_ON == g_mpuManage.startState)
     {
-        timeCount= 0;
+        timeCount = 0;
         g_mpuManage.startState = E_MPU_HAL_START_STATE_POWER_DELAY;
     }
-    else if(E_MPU_HAL_START_STATE_POWER_DELAY==g_mpuManage.startState)
+    else if (E_MPU_HAL_START_STATE_POWER_DELAY == g_mpuManage.startState)
     {
         timeCount += cycleTime;
-        if(timeCount>=(400-cycleTime))
+        if (timeCount >= (400 - cycleTime))
         {
             g_mpuManage.startState = E_MPU_HAL_START_STATE_KEY_ON;
         }
     }
-    else if(E_MPU_HAL_START_STATE_KEY_ON==g_mpuManage.startState)
+    else if (E_MPU_HAL_START_STATE_KEY_ON == g_mpuManage.startState)
     {
         g_mpuManage.startState = E_MPU_HAL_START_STATE_KEY_ON_DELAY;
         MpuHalSetPowerkey(1);
         timeCount = 0;
     }
-    else if(E_MPU_HAL_START_STATE_KEY_ON_DELAY==g_mpuManage.startState)
+    else if (E_MPU_HAL_START_STATE_KEY_ON_DELAY == g_mpuManage.startState)
     {
         timeCount += cycleTime;
-        if(timeCount>(500-cycleTime))
+        if (timeCount > (500 - cycleTime))
         {
             g_mpuManage.startState = E_MPU_HAL_START_STATE_KEY_OFF;
             MpuHalSetPowerkey(0);
         }
     }
-    else if(E_MPU_HAL_START_STATE_KEY_OFF==g_mpuManage.startState)
+    else if (E_MPU_HAL_START_STATE_KEY_OFF == g_mpuManage.startState)
     {
         g_mpuManage.startState = E_MPU_HAL_START_STATE_FINISH;
     }
-    if(g_mpuManage.wakeoutTimeCount<2)
+    if (g_mpuManage.wakeoutTimeCount < 2)
     {
         g_mpuManage.wakeoutTimeCount++;
-        if(2==g_mpuManage.wakeoutTimeCount)
+        if (2 == g_mpuManage.wakeoutTimeCount)
         {
             MpuHalSetWakeOut(0);
         }
-    }       
+    }
 }
 
 int16_t MpuHalOpen(void)
 {
-    int16_t handle,index;
-    
+    int16_t handle, index;
+
     handle = -1;
     index = 0;
-    
+
     __disable_irq();
-    for(index=0;index<MPU_HAL_HANDLE_INSTANSE_MAX;index++)
+    for (index = 0; index < MPU_HAL_HANDLE_INSTANSE_MAX; index++)
     {
-        if(g_mpuManage.rxHandle[index].useFlag==0)
+        if (g_mpuManage.rxHandle[index].useFlag == 0)
         {
             g_mpuManage.rxHandle[index].useFlag = 1;
             handle = index;
@@ -664,14 +682,14 @@ int16_t MpuHalOpen(void)
     return handle;
 }
 
-int16_t MpuHalSetRxFilter(int16_t handle,const MpuHalFilter_t* pFilter)
+int16_t MpuHalSetRxFilter(int16_t handle, const MpuHalFilter_t *pFilter)
 {
-    if((handle>=0)&&(handle<MPU_HAL_HANDLE_INSTANSE_MAX))
+    if ((handle >= 0) && (handle < MPU_HAL_HANDLE_INSTANSE_MAX))
     {
-        if(pFilter!=NULL)
+        if (pFilter != NULL)
         {
             g_mpuManage.rxHandle[handle].useRxFilter = 1;
-            memcpy(&(g_mpuManage.rxHandle[handle].rxFilterConfig),pFilter,sizeof(MpuHalFilter_t));
+            memcpy(&(g_mpuManage.rxHandle[handle].rxFilterConfig), pFilter, sizeof(MpuHalFilter_t));
         }
         else
         {
@@ -685,13 +703,13 @@ int16_t MpuHalSetRxFilter(int16_t handle,const MpuHalFilter_t* pFilter)
     }
 }
 
-int16_t MpuHalSetRxBuffer(int16_t handle,uint8_t* pBuffer,uint32_t bufferSize)
+int16_t MpuHalSetRxBuffer(int16_t handle, uint8_t *pBuffer, uint32_t bufferSize)
 {
-    if((handle>=0)&&(handle<MPU_HAL_HANDLE_INSTANSE_MAX))
+    if ((handle >= 0) && (handle < MPU_HAL_HANDLE_INSTANSE_MAX))
     {
-        if(pBuffer!=NULL)
+        if (pBuffer != NULL)
         {
-            g_mpuManage.rxHandle[handle].rxQueueHandle = xQueueCreate(10,sizeof(uint32_t));
+            g_mpuManage.rxHandle[handle].rxQueueHandle = xQueueCreate(10, sizeof(uint32_t));
             g_mpuManage.rxHandle[handle].rxIndexIn = 0;
             g_mpuManage.rxHandle[handle].pDataBufferRx = pBuffer;
             g_mpuManage.rxHandle[handle].dataBufferSize = bufferSize;
@@ -700,7 +718,7 @@ int16_t MpuHalSetRxBuffer(int16_t handle,uint8_t* pBuffer,uint32_t bufferSize)
         else
         {
             return MPU_HAL_STATUS_ERR;
-        }        
+        }
     }
     else
     {
@@ -708,35 +726,35 @@ int16_t MpuHalSetRxBuffer(int16_t handle,uint8_t* pBuffer,uint32_t bufferSize)
     }
 }
 
-#if(MPU_COMMUNICATION_USE_SPI)
-int16_t MpuHalTransmit(int16_t handle,const MpuHalDataPack_t* pTxMsg)
+#if (MPU_COMMUNICATION_USE_SPI)
+int16_t MpuHalTransmit(int16_t handle, const MpuHalDataPack_t *pTxMsg)
 {
-    uint16_t crc,index;
+    uint16_t crc, index;
     uint8_t packHeader[20];
     int16_t ret = MPU_HAL_STATUS_OK;
-    
-    if((handle>=0)&&(handle<MPU_HAL_HANDLE_INSTANSE_MAX))
+
+    if ((handle >= 0) && (handle < MPU_HAL_HANDLE_INSTANSE_MAX))
     {
-        if(pTxMsg!=NULL)
+        if (pTxMsg != NULL)
         {
-            if(pTxMsg->dataLength<4000)
+            if (pTxMsg->dataLength < 4000)
             {
-                MpuPackHeader(packHeader,pTxMsg);
-                crc = MpuPackGetCrc(packHeader,pTxMsg);
+                MpuPackHeader(packHeader, pTxMsg);
+                crc = MpuPackGetCrc(packHeader, pTxMsg);
                 __disable_irq();
-                if((g_mpuManage.txBuffer[g_mpuManage.txBufferFlag].txLength+pTxMsg->dataLength)<(MPU_HAL_TX_BUFFER-MPU_PROTOCAL_HEADER_LEN-2))
+                if ((g_mpuManage.txBuffer[g_mpuManage.txBufferFlag].txLength + pTxMsg->dataLength) < (MPU_HAL_TX_BUFFER - MPU_PROTOCAL_HEADER_LEN - 2))
                 {
                     index = g_mpuManage.txBuffer[g_mpuManage.txBufferFlag].txLength;
-                    memcpy(g_mpuManage.txBuffer[g_mpuManage.txBufferFlag].buffer+index,packHeader,MPU_PROTOCAL_HEADER_LEN);
+                    memcpy(g_mpuManage.txBuffer[g_mpuManage.txBufferFlag].buffer + index, packHeader, MPU_PROTOCAL_HEADER_LEN);
                     index += MPU_PROTOCAL_HEADER_LEN;
-                    memcpy(g_mpuManage.txBuffer[g_mpuManage.txBufferFlag].buffer+index,pTxMsg->pDataBuffer,pTxMsg->dataLength);
+                    memcpy(g_mpuManage.txBuffer[g_mpuManage.txBufferFlag].buffer + index, pTxMsg->pDataBuffer, pTxMsg->dataLength);
                     index += pTxMsg->dataLength;
-                    g_mpuManage.txBuffer[g_mpuManage.txBufferFlag].buffer[index] = (crc>>8)&0xFF;
+                    g_mpuManage.txBuffer[g_mpuManage.txBufferFlag].buffer[index] = (crc >> 8) & 0xFF;
                     index++;
-                    g_mpuManage.txBuffer[g_mpuManage.txBufferFlag].buffer[index] = crc&0xFF;
+                    g_mpuManage.txBuffer[g_mpuManage.txBufferFlag].buffer[index] = crc & 0xFF;
                     g_mpuManage.txBuffer[g_mpuManage.txBufferFlag].txLength = index;
                     MpuHalRequestIrqFun();
-                } 
+                }
                 else
                 {
                     ret = MPU_HAL_STATUS_ERR;
@@ -751,7 +769,7 @@ int16_t MpuHalTransmit(int16_t handle,const MpuHalDataPack_t* pTxMsg)
         else
         {
             ret = MPU_HAL_STATUS_ERR;
-        }        
+        }
     }
     else
     {
@@ -760,35 +778,35 @@ int16_t MpuHalTransmit(int16_t handle,const MpuHalDataPack_t* pTxMsg)
     return ret;
 }
 #else
-int16_t MpuHalTransmit(int16_t handle,const MpuHalDataPack_t* pTxMsg)
+int16_t MpuHalTransmit(int16_t handle, const MpuHalDataPack_t *pTxMsg)
 {
     static uint8_t sTxBuffer[MPU_HAL_TX_BUFFER];
-    uint16_t crc,index;
+    uint16_t crc, index;
     uint8_t packHeader[20];
     int16_t ret = MPU_HAL_STATUS_OK;
 
-    if((handle>=0)&&(handle<MPU_HAL_HANDLE_INSTANSE_MAX))
+    if ((handle >= 0) && (handle < MPU_HAL_HANDLE_INSTANSE_MAX))
     {
-        if(pTxMsg!=NULL)
+        if (pTxMsg != NULL)
         {
-            if(pTxMsg->dataLength<4000)
+            if (pTxMsg->dataLength < 4000)
             {
-                //taskENTER_CRITICAL(); 
+                // taskENTER_CRITICAL();
                 __disable_irq();
-                MpuPackHeader(packHeader,pTxMsg);
-                crc = MpuPackGetCrc(packHeader,pTxMsg);
+                MpuPackHeader(packHeader, pTxMsg);
+                crc = MpuPackGetCrc(packHeader, pTxMsg);
 
                 index = 0;
-                memcpy(sTxBuffer+index,packHeader,MPU_PROTOCAL_HEADER_LEN);
+                memcpy(sTxBuffer + index, packHeader, MPU_PROTOCAL_HEADER_LEN);
                 index += MPU_PROTOCAL_HEADER_LEN;
-                memcpy(sTxBuffer+index,pTxMsg->pDataBuffer,pTxMsg->dataLength);
+                memcpy(sTxBuffer + index, pTxMsg->pDataBuffer, pTxMsg->dataLength);
                 index += pTxMsg->dataLength;
-                sTxBuffer[index] = (crc>>8)&0xFF;
+                sTxBuffer[index] = (crc >> 8) & 0xFF;
                 index++;
-                sTxBuffer[index] = crc&0xFF;
+                sTxBuffer[index] = crc & 0xFF;
                 index++;
-                MpuUartTransmit(sTxBuffer,index);
-                //taskEXIT_CRITICAL(); 
+                MpuUartTransmit(sTxBuffer, index);
+                // taskEXIT_CRITICAL();
                 __enable_irq();
             }
             else
@@ -799,7 +817,7 @@ int16_t MpuHalTransmit(int16_t handle,const MpuHalDataPack_t* pTxMsg)
         else
         {
             ret = MPU_HAL_STATUS_ERR;
-        }        
+        }
     }
     else
     {
@@ -809,61 +827,61 @@ int16_t MpuHalTransmit(int16_t handle,const MpuHalDataPack_t* pTxMsg)
 }
 #endif
 
-int16_t MpuHalReceive(int16_t handle,MpuHalDataPack_t* pRxMsg,uint32_t waitTime )
+int16_t MpuHalReceive(int16_t handle, MpuHalDataPack_t *pRxMsg, uint32_t waitTime)
 {
-    uint16_t len,crc,crcRx,index,i;
+    uint16_t len, crc, crcRx, index, i;
     uint32_t data;
     uint8_t packHeader[10];
     QueueHandle_t queHandle;
     int16_t ret = MPU_HAL_STATUS_OK;
-    
-    if((handle>=0)&&(handle<MPU_HAL_HANDLE_INSTANSE_MAX))
+
+    if ((handle >= 0) && (handle < MPU_HAL_HANDLE_INSTANSE_MAX))
     {
-        index = handle&0xFF;
-        if(pRxMsg!=NULL)
+        index = handle & 0xFF;
+        if (pRxMsg != NULL)
         {
             queHandle = g_mpuManage.rxHandle[index].rxQueueHandle;
-            if(xQueueReceive( queHandle, &data, waitTime)== pdPASS)
+            if (xQueueReceive(queHandle, &data, waitTime) == pdPASS)
             {
-                index = (data>>16)&0xFFFF;
-                len = data&0xFFFF;
-                if((pRxMsg->dataBufferSize+MPU_PROTOCAL_HEADER_LEN+2)>=len)
+                index = (data >> 16) & 0xFFFF;
+                len = data & 0xFFFF;
+                if ((pRxMsg->dataBufferSize + MPU_PROTOCAL_HEADER_LEN + 2) >= len)
                 {
                     /****receive header****************************/
-                    for(i=0;i<MPU_PROTOCAL_HEADER_LEN;i++)
+                    for (i = 0; i < MPU_PROTOCAL_HEADER_LEN; i++)
                     {
-                         packHeader[i] = g_mpuManage.rxHandle[handle].pDataBufferRx[index];
-                         index++;
-                          if(index>=g_mpuManage.rxHandle[handle].dataBufferSize)
-                          {
-                              index = 0;
-                          }
+                        packHeader[i] = g_mpuManage.rxHandle[handle].pDataBufferRx[index];
+                        index++;
+                        if (index >= g_mpuManage.rxHandle[handle].dataBufferSize)
+                        {
+                            index = 0;
+                        }
                     }
                     /*******receive service data**************************************/
-                    for(i=0;i<(len-MPU_PROTOCAL_HEADER_LEN-2);i++)
+                    for (i = 0; i < (len - MPU_PROTOCAL_HEADER_LEN - 2); i++)
                     {
-                         pRxMsg->pDataBuffer[i] = g_mpuManage.rxHandle[handle].pDataBufferRx[index];
-                         index++;
-                          if(index>=g_mpuManage.rxHandle[handle].dataBufferSize)
-                          {
-                              index = 0;
-                          }
+                        pRxMsg->pDataBuffer[i] = g_mpuManage.rxHandle[handle].pDataBufferRx[index];
+                        index++;
+                        if (index >= g_mpuManage.rxHandle[handle].dataBufferSize)
+                        {
+                            index = 0;
+                        }
                     }
-                    pRxMsg->dataLength = len-MPU_PROTOCAL_HEADER_LEN-2;
-                    crcRx = (g_mpuManage.rxHandle[handle].pDataBufferRx[index]<<8);
+                    pRxMsg->dataLength = len - MPU_PROTOCAL_HEADER_LEN - 2;
+                    crcRx = (g_mpuManage.rxHandle[handle].pDataBufferRx[index] << 8);
                     index++;
-                    if(index>=g_mpuManage.rxHandle[handle].dataBufferSize)
+                    if (index >= g_mpuManage.rxHandle[handle].dataBufferSize)
                     {
                         index = 0;
                     }
                     crcRx |= g_mpuManage.rxHandle[handle].pDataBufferRx[index];
-                    crc =MpuPackGetCrc(packHeader,pRxMsg);
-                    if(crcRx==crc)
+                    crc = MpuPackGetCrc(packHeader, pRxMsg);
+                    if (crcRx == crc)
                     {
                         pRxMsg->aid = packHeader[2];
                         pRxMsg->mid = packHeader[3];
                         pRxMsg->subcommand = packHeader[4];
-                        pRxMsg->dataLength = len - (MPU_PROTOCAL_HEADER_LEN+2);
+                        pRxMsg->dataLength = len - (MPU_PROTOCAL_HEADER_LEN + 2);
                     }
                     else
                     {
@@ -889,7 +907,7 @@ int16_t MpuHalReceive(int16_t handle,MpuHalDataPack_t* pRxMsg,uint32_t waitTime 
     {
         ret = MPU_HAL_STATUS_ERR;
     }
-    
+
     return ret;
 }
 
@@ -898,13 +916,14 @@ void MpuHalStart(void)
     g_mpuManage.wakeoutTimeCount = 10;
     MpuHalSetWakeOut(0);
     MpuHalSetPower(1);
+    R_PORT_SetGpioOutput(Port18, 0, 0);
     g_mpuManage.startState = E_MPU_HAL_START_STATE_POWER_ON;
 }
 
 int16_t MpuHalStartIsFinished(void)
 {
     int16_t ret;
-    if(E_MPU_HAL_START_STATE_FINISH==g_mpuManage.startState)
+    if (E_MPU_HAL_START_STATE_FINISH == g_mpuManage.startState)
     {
         ret = MPU_HAL_STATUS_OK;
     }
@@ -924,7 +943,7 @@ void MpuHalReset(void)
 int16_t MpuHalResetIsFinished(void)
 {
     int16_t ret;
-    if(E_MPU_HAL_START_STATE_FINISH==g_mpuManage.startState)
+    if (E_MPU_HAL_START_STATE_FINISH == g_mpuManage.startState)
     {
         ret = MPU_HAL_STATUS_OK;
     }
@@ -942,20 +961,20 @@ void MpuHalPowerOff(void)
 }
 
 void MpuHalSetMode(uint8_t wakeMode)
-{   
-    if(0==wakeMode)
+{
+    if (0 == wakeMode)
     {
         g_mpuManage.wakeMode = wakeMode;
     }
-    else if(1==wakeMode)
+    else if (1 == wakeMode)
     {
         /*wake up mpu*/
         g_mpuManage.wakeoutTimeCount = 0;
-        MpuHalSetWakeOut(1); 
+        MpuHalSetWakeOut(1);
         g_mpuManage.wakeMode = wakeMode;
-    }  
+    }
 }
-#if(0)
+#if (0)
 int16_t MpuHalGetWakeMode(void)
 {
     return g_mpuManage.wakeMode;
@@ -965,53 +984,53 @@ void MpuHalRequestIrqFun(void)
 {
     uint16_t length;
     uint8_t *pBuffer;
-    
-    if(g_mpuManage.mcuRequest==0)
+
+    if (g_mpuManage.mcuRequest == 0)
     {
-        if(g_mpuManage.txBuffer[g_mpuManage.txBufferFlag].txLength>0)
+        if (g_mpuManage.txBuffer[g_mpuManage.txBufferFlag].txLength > 0)
         {
             /***switch dma tx buffer*******************/
             g_mpuTxDmaDesConfig.destAddr = g_mpuManage.txBuffer[g_mpuManage.txBufferFlag].buffer;
             /****DMA buffer not used is filled with 0*/
             pBuffer = g_mpuManage.txBuffer[g_mpuManage.txBufferFlag].buffer;
-            length= g_mpuManage.txBuffer[g_mpuManage.txBufferFlag].txLength;
+            length = g_mpuManage.txBuffer[g_mpuManage.txBufferFlag].txLength;
             pBuffer[length] = 0x00;
-            pBuffer[length+1] = 0x00;
+            pBuffer[length + 1] = 0x00;
             /******swtich tx buffe not used by dma to ready to write r*********************/
             g_mpuManage.txBufferFlag++;
-            if(g_mpuManage.txBufferFlag>=2)
+            if (g_mpuManage.txBufferFlag >= 2)
             {
-               g_mpuManage.txBufferFlag = 0;
+                g_mpuManage.txBufferFlag = 0;
             }
             g_mpuManage.txBuffer[g_mpuManage.txBufferFlag].txLength = 0;
             MpuSpiDeviceInit();
             MpuDmaDeviceInit();
             SetRequestMpuTxRx(1);
-            g_mpuManage.mcuRequest=1;
+            g_mpuManage.mcuRequest = 1;
         }
     }
 }
 #endif
-void UartProtocalProcess(uint8_t *pData,uint16_t dataLength,uint8_t IsrFlag)
+void UartProtocalProcess(uint8_t *pData, uint16_t dataLength, uint8_t IsrFlag)
 {
-    //int pos;
+    // int pos;
     uint16_t i;
-    MpuUartProtocalBuffer_t* pProtocalData;
+    MpuUartProtocalBuffer_t *pProtocalData;
 
     pProtocalData = &g_mpuUartProtocalBuffer;
-    for(i=0;i<dataLength;i++)
+    for (i = 0; i < dataLength; i++)
     {
-        if(0==pProtocalData->dataCount)
+        if (0 == pProtocalData->dataCount)
         {
-            if(0x55==pData[i])
+            if (0x55 == pData[i])
             {
-            pProtocalData->data[pProtocalData->dataCount] = pData[i];
-            pProtocalData->dataCount++;
-            }      
+                pProtocalData->data[pProtocalData->dataCount] = pData[i];
+                pProtocalData->dataCount++;
+            }
         }
-        else if(1==pProtocalData->dataCount)
+        else if (1 == pProtocalData->dataCount)
         {
-            if(0xAA==pData[i])
+            if (0xAA == pData[i])
             {
                 pProtocalData->data[pProtocalData->dataCount] = pData[i];
                 pProtocalData->dataCount++;
@@ -1021,14 +1040,14 @@ void UartProtocalProcess(uint8_t *pData,uint16_t dataLength,uint8_t IsrFlag)
                 pProtocalData->dataCount = 0;
             }
         }
-        else if(pProtocalData->dataCount<MPU_PROTOCAL_HEADER_LEN)
+        else if (pProtocalData->dataCount < MPU_PROTOCAL_HEADER_LEN)
         {
             pProtocalData->data[pProtocalData->dataCount] = pData[i];
             pProtocalData->dataCount++;
-            if(MPU_PROTOCAL_HEADER_LEN==pProtocalData->dataCount)
+            if (MPU_PROTOCAL_HEADER_LEN == pProtocalData->dataCount)
             {
-                pProtocalData->dataLength = ((uint16_t)(pProtocalData->data[5])<<8)+pProtocalData->data[6];
-                if(pProtocalData->dataLength>(sizeof(pProtocalData->data)-(MPU_PROTOCAL_HEADER_LEN+2)))
+                pProtocalData->dataLength = ((uint16_t)(pProtocalData->data[5]) << 8) + pProtocalData->data[6];
+                if (pProtocalData->dataLength > (sizeof(pProtocalData->data) - (MPU_PROTOCAL_HEADER_LEN + 2)))
                 {
                     pProtocalData->dataCount = 0;
                     pProtocalData->dataLength = 0;
@@ -1039,10 +1058,10 @@ void UartProtocalProcess(uint8_t *pData,uint16_t dataLength,uint8_t IsrFlag)
         {
             pProtocalData->data[pProtocalData->dataCount] = pData[i];
             pProtocalData->dataCount++;
-            if(pProtocalData->dataCount>=(pProtocalData->dataLength+(MPU_PROTOCAL_HEADER_LEN+2)))
+            if (pProtocalData->dataCount >= (pProtocalData->dataLength + (MPU_PROTOCAL_HEADER_LEN + 2)))
             {
-                //check sum and dispatch
-                MpuDataDispatch(pProtocalData->data,pProtocalData->dataCount,IsrFlag);
+                // check sum and dispatch
+                MpuDataDispatch(pProtocalData->data, pProtocalData->dataCount, IsrFlag);
                 pProtocalData->dataLength = 0;
                 pProtocalData->dataCount = 0;
             }
@@ -1084,67 +1103,66 @@ void MpuHalUartInterruptCallback(uint8_t data)
 
 void MpuHalUartTimerCallback(void)
 {
-    if((g_mpuUartRxBufId == 1) && (g_mpuUartRxBufCount0))
+    if ((g_mpuUartRxBufId == 1) && (g_mpuUartRxBufCount0))
     {
-        UartProtocalProcess(g_uartReceiveData0 , g_mpuUartRxBufCount0, 1);
+        UartProtocalProcess(g_uartReceiveData0, g_mpuUartRxBufCount0, 1);
         memset(g_uartReceiveData0, 0, sizeof(g_uartReceiveData0));
         g_mpuUartRxBufCount0 = 0;
     }
-    else if((g_mpuUartRxBufId == 0) && (g_mpuUartRxBufCount1))
+    else if ((g_mpuUartRxBufId == 0) && (g_mpuUartRxBufCount1))
     {
-        UartProtocalProcess(g_uartReceiveData1 , g_mpuUartRxBufCount1, 1);
+        UartProtocalProcess(g_uartReceiveData1, g_mpuUartRxBufCount1, 1);
         memset(g_uartReceiveData1, 0, sizeof(g_uartReceiveData1));
         g_mpuUartRxBufCount1 = 0;
     }
     g_mpuUartRxBufDealFlag = 0;
 }
 
-#if(0)
+#if (0)
 static void MpuUartIntrISR(void)
 {
     static uint8_t temData[128];
-    uint32_t num ;
-    
+    uint32_t num;
+
     num = Cy_SCB_UART_GetArray(MPU_HAL_UART_CHANNEL, temData, 64);
     /* UART interrupt handler */
     Cy_SCB_UART_Interrupt(MPU_HAL_UART_CHANNEL, &g_mpuUartDevContext);
-    UartProtocalProcess(temData,num,1);
+    UartProtocalProcess(temData, num, 1);
     NVIC_ClearPendingIRQ(CPUIntIdx4_IRQn);
 }
 
 static void MpuUartDeviceClockInit(uint32_t bandrate)
 {
     uint32_t divSetting;
-    uint64_t temp,sourceFreq,targetFreq;
-    
+    uint64_t temp, sourceFreq, targetFreq;
+
     sourceFreq = 80000000ul;
     /*targetFreq = (115200*4);*/
-    targetFreq = bandrate*8;//bandrate*sampletime
+    targetFreq = bandrate * 8; // bandrate*sampletime
     temp = ((uint64_t)sourceFreq << 5ull);
-    //temp = sourceFreq;
+    // temp = sourceFreq;
     divSetting = (uint32_t)(temp / targetFreq);
     Cy_SysClk_PeriphAssignDivider(PCLK_SCB3_CLOCK, CY_SYSCLK_DIV_24_5_BIT, 3u);
-    Cy_SysClk_PeriphSetFracDivider(CY_SYSCLK_DIV_24_5_BIT, 3, 
-                                   (((divSetting >> 5u) & 0x00000FFF) - 1u), 
+    Cy_SysClk_PeriphSetFracDivider(CY_SYSCLK_DIV_24_5_BIT, 3,
+                                   (((divSetting >> 5u) & 0x00000FFF) - 1u),
                                    (divSetting & 0x0000001F));
     Cy_SysClk_PeriphEnableDivider(CY_SYSCLK_DIV_24_5_BIT, 3u);
 }
 static void MpuScbUartEvent(uint32_t locEvents)
 {
-    
 }
 #endif
 void MpuHalMainUartInit(uint32_t bandrate)
 {
-#if(0)
-    cy_stc_sysint_irq_t         irqCfgUart;
-    
-    MpuUartDeviceClockInit(bandrate);    
+#if (0)
+    cy_stc_sysint_irq_t irqCfgUart;
+
+    MpuUartDeviceClockInit(bandrate);
     irqCfgUart.sysIntSrc = scb_3_interrupt_IRQn;
-    irqCfgUart.intIdx    = CPUIntIdx4_IRQn;
+    irqCfgUart.intIdx = CPUIntIdx4_IRQn;
     irqCfgUart.isEnabled = true;
-    Cy_SysInt_InitIRQ(&irqCfgUart);//开启UART接收中断
-    Cy_SysInt_SetSystemIrqVector(irqCfgUart.sysIntSrc, MpuUartIntrISR);//Scb_UART_IntrISR:uart中断处理函数
+    Cy_SysInt_InitIRQ(&irqCfgUart);                                     // 开启UART接收中断
+    Cy_SysInt_SetSystemIrqVector(irqCfgUart.sysIntSrc, MpuUartIntrISR); // Scb_UART_IntrISR:uart中断处理函数
     //
     Cy_SCB_UART_DeInit(MPU_HAL_UART_CHANNEL);
     Cy_SCB_UART_Init(MPU_HAL_UART_CHANNEL, &g_mpuUarConfig, &g_mpuUartDevContext);
@@ -1165,11 +1183,11 @@ void MpuHalInit(void)
     g_mpuManage.wakeoutTimeCount = 10;
     g_mpuManage.wakeMode = 1;
     MpuHalGpioInit();
-#if(MPU_COMMUNICATION_USE_SPI)    
+#if (MPU_COMMUNICATION_USE_SPI)
     // MpuSpiDeviceClockInit();
     R_CSIG1_Start();
 #else
-    MpuHalMainUartInit(115200*4);
+    MpuHalMainUartInit(115200 * 4);
 #endif
     // R_INTP6_Start(); // TODO guanyuan
     // R_INTP10_Start();
@@ -1179,20 +1197,20 @@ void MpuHalInit(void)
 void MpuHalTxTaskInit(void)
 {
     // g_mpuUartTxBuffer.txFrameLength = 0;
-    g_mpuUartTxBuffer.txQueueHandle = xQueueCreate( 20, // The number of items the queue can hold.
-                              sizeof(uint32_t));
+    g_mpuUartTxBuffer.txQueueHandle = xQueueCreate(20, // The number of items the queue can hold.
+                                                   sizeof(uint32_t));
 }
 
 void MpuHalTxTask(void)
 {
-    uint32_t queueData,remain,i;
+    uint32_t queueData, remain, i;
     uint16_t startAddress;
     uint16_t length;
-    //长度2
-    //ucountSemaphore = xSemaphoreCreateCounting(3000,0);
-    uint8_t temp[50],j;
+    // 长度2
+    // ucountSemaphore = xSemaphoreCreateCounting(3000,0);
+    uint8_t temp[50], j;
     uint8_t ret;
-    
+
     // while(1)
     {
         if (R_UART5_SendStatus() != 0)
@@ -1200,69 +1218,68 @@ void MpuHalTxTask(void)
             // TODO:
             return;
         }
-        
-        if(xQueueReceive(g_mpuUartTxBuffer.txQueueHandle, &queueData, 0)!= pdPASS)
+
+        if (xQueueReceive(g_mpuUartTxBuffer.txQueueHandle, &queueData, 0) != pdPASS)
         {
-          return;
+            return;
         }
-        //发送FIFO中的数据;
-        i=0;
-        startAddress = (queueData>>16)&0xFFFF;
-        remain = length = queueData&0xFFFF;         
+        // 发送FIFO中的数据;
+        i = 0;
+        startAddress = (queueData >> 16) & 0xFFFF;
+        remain = length = queueData & 0xFFFF;
         R_UART5_Send(&g_mpuUartTxBuffer.buffer[startAddress], length);
-#if(0)
-        while(i<length)
+#if (0)
+        while (i < length)
         {
-            if(remain>40)
+            if (remain > 40)
             {
-                for(j=0; j<40; j++)
-                {                    
+                for (j = 0; j < 40; j++)
+                {
                     temp[j] = g_mpuUartTxBuffer.buffer[startAddress++];
-                    if(startAddress>=MPU_HAL_TX_BUFFER)
+                    if (startAddress >= MPU_HAL_TX_BUFFER)
                     {
                         startAddress = 0;
                     }
-                    
                 }
                 R_UART5_Send(temp, 40);
                 // vTaskDelay(1);
-                i = i+40;
+                i = i + 40;
                 remain = remain - 40;
             }
             else
-            {              
-                for(j=0; j<remain; j++)
-                {                    
+            {
+                for (j = 0; j < remain; j++)
+                {
                     temp[j] = g_mpuUartTxBuffer.buffer[startAddress++];
-                    if(startAddress>=MPU_HAL_TX_BUFFER)
+                    if (startAddress >= MPU_HAL_TX_BUFFER)
                     {
                         startAddress = 0;
-                    }                    
+                    }
                 }
                 R_UART5_Send(temp, remain);
-                i = i+ remain;
+                i = i + remain;
                 // vTaskDelay(1);
             }
         }
 #endif
-    }    
+    }
 }
 
-static int16_t MpuUartTransmit(const uint8_t* pTxData,uint16_t txLength)
+static int16_t MpuUartTransmit(const uint8_t *pTxData, uint16_t txLength)
 {
     uint16_t i;
     uint32_t data;
-    data =  g_mpuUartTxBuffer.index<<16;
-    for(i=0; i<txLength; i++)
+    data = g_mpuUartTxBuffer.index << 16;
+    for (i = 0; i < txLength; i++)
     {
         g_mpuUartTxBuffer.buffer[g_mpuUartTxBuffer.index++] = pTxData[i];
-        if(g_mpuUartTxBuffer.index>=MPU_HAL_TX_BUFFER)
+        if (g_mpuUartTxBuffer.index >= MPU_HAL_TX_BUFFER)
         {
             g_mpuUartTxBuffer.index = 0;
         }
     }
     data |= txLength;
-    xQueueSend(g_mpuUartTxBuffer.txQueueHandle,&data,0);
+    xQueueSend(g_mpuUartTxBuffer.txQueueHandle, &data, 0);
     return 0;
 }
 
@@ -1272,7 +1289,7 @@ void MpuHalUartPrintErrState(uint16_t cycleTime)
     static uint32_t timeCount = 0;
 
     timeCount++;
-    if(timeCount < (1000 / cycleTime))
+    if (timeCount < (1000 / cycleTime))
     {
         return;
     }
