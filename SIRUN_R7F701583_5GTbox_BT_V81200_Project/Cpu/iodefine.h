@@ -5616,7 +5616,7 @@ struct __tag525
     unsigned char  dummy14[4];                             /* Reserved         */
     unsigned short FCPSR;                                  /* FCPSR            */
     unsigned char  dummy15[2];                             /* Reserved         */
-    unsigned short FPCKAR;                                 /* FPCKAR           */
+    unsigned short FPCKARtemp;                                 /* FPCKAR           */
     unsigned char  dummy16[26];                            /* Reserved         */
     unsigned short FECCEMON;                               /* FECCEMON         */
     unsigned char  dummy17[2];                             /* Reserved         */

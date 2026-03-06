@@ -19,7 +19,7 @@
  * @file              : Os_Core_Cfg.c
  * @license           : 
  * @licenseExpiryDate : 
- * @date              : 2026-01-17 21:52:00
+ * @date              : 2026-03-03 20:34:17
  * @customer          : iSoft
  * @description       : Configuration parameter of OS
  * @toolVersion       : 2.2.0.3
@@ -82,6 +82,42 @@ const Os_IntInstallType Os_IntInstall[CFG_ISR_MAX] =
         3U,  /*IntPrio*/
         Os_ISR_ADCA0I1_IRQ_Handler,  /*cat2 ISR*/
         OS_ID_ADCA0I1_IRQ,/*IntNumber*/
+        INVALID_SELECTION_BIT, /*intc2SelectionBit*/
+    },
+    {
+        1U,  /*IntPrio*/
+        Os_ISR_RLIN34TX0_IRQ_Handler,  /*cat2 ISR*/
+        OS_ID_RLIN34UR0_IRQ,/*IntNumber*/
+        INVALID_SELECTION_BIT, /*intc2SelectionBit*/
+    },
+    {
+        1U,  /*IntPrio*/
+        Os_ISR_RLIN34RX1_IRQ_Handler,  /*cat2 ISR*/
+        OS_ID_RLIN34UR1_IRQ,/*IntNumber*/
+        INVALID_SELECTION_BIT, /*intc2SelectionBit*/
+    },
+    {
+        1U,  /*IntPrio*/
+        Os_ISR_RLIN34ERR2_IRQ_Handler,  /*cat2 ISR*/
+        OS_ID_RLIN34UR2_IRQ,/*IntNumber*/
+        INVALID_SELECTION_BIT, /*intc2SelectionBit*/
+    },
+    {
+        2U,  /*IntPrio*/
+        Os_ISR_RLIN35TX0_IRQ_Handler,  /*cat2 ISR*/
+        OS_ID_RLIN35UR0_IRQ,/*IntNumber*/
+        INVALID_SELECTION_BIT, /*intc2SelectionBit*/
+    },
+    {
+        6U,  /*IntPrio*/
+        Os_ISR_RLIN35RX1_IRQ_Handler,  /*cat2 ISR*/
+        OS_ID_RLIN35UR1_IRQ,/*IntNumber*/
+        INVALID_SELECTION_BIT, /*intc2SelectionBit*/
+    },
+    {
+        1U,  /*IntPrio*/
+        Os_ISR_RLIN35ERR2_IRQ_Handler,  /*cat2 ISR*/
+        OS_ID_RLIN35UR2_IRQ,/*IntNumber*/
         INVALID_SELECTION_BIT, /*intc2SelectionBit*/
     },
 };

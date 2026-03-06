@@ -19,7 +19,7 @@
  * @file              : Os_UserInf.c
  * @license           : 
  * @licenseExpiryDate : 
- * @date              : 2026-01-17 21:51:58
+ * @date              : 2026-01-20 14:26:30
  * @customer          : iSoft
  * @description       : Configuration parameter of OS
  * @toolVersion       : 2.2.0.3
@@ -28,8 +28,8 @@
 /* =================================================== inclusions =================================================== */
 #include "Os.h"
 #include "Os_Arch_Processor.h"
-
 #include "Can.h"
+#include "CanIf.h"
 
 /** DO NOT CHANGE THIS COMMENT!
 * <USERBLOCK User Includes>
@@ -68,10 +68,18 @@ TASK(OsTask_0)
     Dcm_MainFunction_Post();
     Dcm_MainFunction();
 	index++;
-	if(index == 100)
+	if(index == 1000)
 	{
+        uint8 aab[8] = {1,2,3,4,5,6,7,8};
 		index = 0;
     	//TstCanSendMessage();
+        PduInfoType pduInfo;
+        PduIdType canIfTxSduId = 0x666;
+        pduInfo.SduDataPtr = aab;
+        pduInfo.SduLength = 8;
+
+        /* @req SWS_CanNm_00032 */
+        CanIf_Transmit(canIfTxSduId, &pduInfo);
 		
 		//Can_MainFunction_Read();
   		//Can_MainFunction_Write();
@@ -211,6 +219,121 @@ ISR(ISR_ADCA0I1_IRQ_Handler)
     * <USERBLOCK ADCA0I1_IRQ>
     */
 
+    /** DO NOT CHANGE THIS COMMENT!
+    * </USERBLOCK>
+    */
+}
+
+#define OS_STOP_SEC_CODE
+#include "Os_MemMap.h"
+/*
+ *ISR(ISR_RLIN34TX0_IRQ_Handler: Core0(CPU))
+ */
+#define OS_START_SEC_CODE
+#include "Os_MemMap.h"
+ISR(ISR_RLIN34TX0_IRQ_Handler)
+{
+    /* please insert your code here ... */
+    /** DO NOT CHANGE THIS COMMENT!
+    * <USERBLOCK RLIN34TX0_IRQ>
+    */
+    /* custom code.... */
+    r_uart4_interrupt_send();
+    /** DO NOT CHANGE THIS COMMENT!
+    * </USERBLOCK>
+    */
+}
+#define OS_STOP_SEC_CODE
+#include "Os_MemMap.h"
+/*
+ *ISR(ISR_RLIN34RX1_IRQ_Handler: Core0(CPU))
+ */
+#define OS_START_SEC_CODE
+#include "Os_MemMap.h"
+ISR(ISR_RLIN34RX1_IRQ_Handler)
+{
+    /* please insert your code here ... */
+    /** DO NOT CHANGE THIS COMMENT!
+    * <USERBLOCK RLIN34RX1_IRQ>
+    */
+    /* custom code.... */
+    r_uart4_interrupt_receive();
+    /** DO NOT CHANGE THIS COMMENT!
+    * </USERBLOCK>
+    */
+}
+#define OS_STOP_SEC_CODE
+#include "Os_MemMap.h"
+/*
+ *ISR(ISR_RLIN34ERR2_IRQ_Handler: Core0(CPU))
+ */
+#define OS_START_SEC_CODE
+#include "Os_MemMap.h"
+ISR(ISR_RLIN34ERR2_IRQ_Handler)
+{
+    /* please insert your code here ... */
+    /** DO NOT CHANGE THIS COMMENT!
+    * <USERBLOCK RLIN34ERR2_IRQ>
+    */
+    /* custom code.... */
+    r_uart4_interrupt_error();
+    /** DO NOT CHANGE THIS COMMENT!
+    * </USERBLOCK>
+    */
+}
+#define OS_STOP_SEC_CODE
+#include "Os_MemMap.h"
+/*
+ *ISR(ISR_RLIN35TX0_IRQ_Handler: Core0(CPU))
+ */
+#define OS_START_SEC_CODE
+#include "Os_MemMap.h"
+ISR(ISR_RLIN35TX0_IRQ_Handler)
+{
+    /* please insert your code here ... */
+    /** DO NOT CHANGE THIS COMMENT!
+    * <USERBLOCK RLIN35TX0_IRQ>
+    */
+    /* custom code.... */
+    r_uart5_interrupt_send();
+    /** DO NOT CHANGE THIS COMMENT!
+    * </USERBLOCK>
+    */
+}
+#define OS_STOP_SEC_CODE
+#include "Os_MemMap.h"
+/*
+ *ISR(ISR_RLIN35RX1_IRQ_Handler: Core0(CPU))
+ */
+#define OS_START_SEC_CODE
+#include "Os_MemMap.h"
+ISR(ISR_RLIN35RX1_IRQ_Handler)
+{
+    /* please insert your code here ... */
+    /** DO NOT CHANGE THIS COMMENT!
+    * <USERBLOCK RLIN35RX1_IRQ>
+    */
+    /* custom code.... */
+    r_uart5_interrupt_receive();
+    /** DO NOT CHANGE THIS COMMENT!
+    * </USERBLOCK>
+    */
+}
+#define OS_STOP_SEC_CODE
+#include "Os_MemMap.h"
+/*
+ *ISR(ISR_RLIN35ERR2_IRQ_Handler: Core0(CPU))
+ */
+#define OS_START_SEC_CODE
+#include "Os_MemMap.h"
+ISR(ISR_RLIN35ERR2_IRQ_Handler)
+{
+    /* please insert your code here ... */
+    /** DO NOT CHANGE THIS COMMENT!
+    * <USERBLOCK RLIN35ERR2_IRQ>
+    */
+    /* custom code.... */
+    r_uart5_interrupt_error();
     /** DO NOT CHANGE THIS COMMENT!
     * </USERBLOCK>
     */

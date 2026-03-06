@@ -19,7 +19,7 @@
  * @file              : Os_Resource_Cfg.c
  * @license           : 
  * @licenseExpiryDate : 
- * @date              : 2026-01-17 21:51:59
+ * @date              : 2026-03-03 20:34:16
  * @customer          : iSoft
  * @description       : Configuration parameter of OS
  * @toolVersion       : 2.2.0.3
@@ -141,6 +141,72 @@ static const uint16 Os_ResourceAccessMask_ADCA0I1_IRQ[1] =
 #define OS_STOP_SEC_CONFIG_DATA_UNSPECIFIED
 #include "Os_MemMap.h"
 
+#define OS_START_SEC_CONFIG_DATA_UNSPECIFIED
+#include "Os_MemMap.h"
+/* PRQA S 4152, 3132 ++ */ /* VL_Os_4152, VL_Os_3132 */
+static const uint16 Os_ResourceAccessMask_RLIN34TX0_IRQ[1] =
+/* PRQA S 4152, 3132 -- */
+{
+    0U,
+};
+#define OS_STOP_SEC_CONFIG_DATA_UNSPECIFIED
+#include "Os_MemMap.h"
+
+#define OS_START_SEC_CONFIG_DATA_UNSPECIFIED
+#include "Os_MemMap.h"
+/* PRQA S 4152, 3132 ++ */ /* VL_Os_4152, VL_Os_3132 */
+static const uint16 Os_ResourceAccessMask_RLIN34RX1_IRQ[1] =
+/* PRQA S 4152, 3132 -- */
+{
+    0U,
+};
+#define OS_STOP_SEC_CONFIG_DATA_UNSPECIFIED
+#include "Os_MemMap.h"
+
+#define OS_START_SEC_CONFIG_DATA_UNSPECIFIED
+#include "Os_MemMap.h"
+/* PRQA S 4152, 3132 ++ */ /* VL_Os_4152, VL_Os_3132 */
+static const uint16 Os_ResourceAccessMask_RLIN34ERR2_IRQ[1] =
+/* PRQA S 4152, 3132 -- */
+{
+    0U,
+};
+#define OS_STOP_SEC_CONFIG_DATA_UNSPECIFIED
+#include "Os_MemMap.h"
+
+#define OS_START_SEC_CONFIG_DATA_UNSPECIFIED
+#include "Os_MemMap.h"
+/* PRQA S 4152, 3132 ++ */ /* VL_Os_4152, VL_Os_3132 */
+static const uint16 Os_ResourceAccessMask_RLIN35TX0_IRQ[1] =
+/* PRQA S 4152, 3132 -- */
+{
+    0U,
+};
+#define OS_STOP_SEC_CONFIG_DATA_UNSPECIFIED
+#include "Os_MemMap.h"
+
+#define OS_START_SEC_CONFIG_DATA_UNSPECIFIED
+#include "Os_MemMap.h"
+/* PRQA S 4152, 3132 ++ */ /* VL_Os_4152, VL_Os_3132 */
+static const uint16 Os_ResourceAccessMask_RLIN35RX1_IRQ[1] =
+/* PRQA S 4152, 3132 -- */
+{
+    0U,
+};
+#define OS_STOP_SEC_CONFIG_DATA_UNSPECIFIED
+#include "Os_MemMap.h"
+
+#define OS_START_SEC_CONFIG_DATA_UNSPECIFIED
+#include "Os_MemMap.h"
+/* PRQA S 4152, 3132 ++ */ /* VL_Os_4152, VL_Os_3132 */
+static const uint16 Os_ResourceAccessMask_RLIN35ERR2_IRQ[1] =
+/* PRQA S 4152, 3132 -- */
+{
+    0U,
+};
+#define OS_STOP_SEC_CONFIG_DATA_UNSPECIFIED
+#include "Os_MemMap.h"
+
 
 #define OS_START_SEC_CONFIG_DATA_UNSPECIFIED
 #include "Os_MemMap.h"
@@ -154,6 +220,12 @@ const uint16* const Os_IsrResourceAccessMask[CFG_ISR_MAX] =
     Os_ResourceAccessMask_RCANGRECC0_IRQ,
     Os_ResourceAccessMask_ADCA0I0_IRQ,
     Os_ResourceAccessMask_ADCA0I1_IRQ,
+    Os_ResourceAccessMask_RLIN34TX0_IRQ,
+    Os_ResourceAccessMask_RLIN34RX1_IRQ,
+    Os_ResourceAccessMask_RLIN34ERR2_IRQ,
+    Os_ResourceAccessMask_RLIN35TX0_IRQ,
+    Os_ResourceAccessMask_RLIN35RX1_IRQ,
+    Os_ResourceAccessMask_RLIN35ERR2_IRQ,
 };
 #define OS_STOP_SEC_CONFIG_DATA_UNSPECIFIED
 #include "Os_MemMap.h"

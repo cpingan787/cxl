@@ -19,7 +19,7 @@
  * @file              : Os_Interrupt_CfgData.h
  * @license           : 
  * @licenseExpiryDate : 
- * @date              : 2026-01-17 21:51:59
+ * @date              : 2026-03-03 20:34:16
  * @customer          : iSoft
  * @description       : Configuration parameter of OS
  * @toolVersion       : 2.2.0.3
@@ -62,6 +62,12 @@ DeclareISR(ISR_RCAN1ERR_IRQ_Handler);
 DeclareISR(ISR_RCANGRECC0_IRQ_Handler);
 DeclareISR(ISR_ADCA0I0_IRQ_Handler);
 DeclareISR(ISR_ADCA0I1_IRQ_Handler);
+DeclareISR(ISR_RLIN34TX0_IRQ_Handler);
+DeclareISR(ISR_RLIN34RX1_IRQ_Handler);
+DeclareISR(ISR_RLIN34ERR2_IRQ_Handler);
+DeclareISR(ISR_RLIN35TX0_IRQ_Handler);
+DeclareISR(ISR_RLIN35RX1_IRQ_Handler);
+DeclareISR(ISR_RLIN35ERR2_IRQ_Handler);
 /* PRQA S 1753 -- */
 
 #endif /* OS_INTERRUPT_CFGDATA_H */

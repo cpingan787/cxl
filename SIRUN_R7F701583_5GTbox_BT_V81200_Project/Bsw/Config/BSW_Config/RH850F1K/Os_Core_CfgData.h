@@ -19,7 +19,7 @@
  * @file              : Os_Core_CfgData.h
  * @license           : 
  * @licenseExpiryDate : 
- * @date              : 2026-01-17 21:52:00
+ * @date              : 2026-03-03 20:34:17
  * @customer          : iSoft
  * @description       : Configuration parameter of OS
  * @toolVersion       : 2.2.0.3
@@ -51,6 +51,12 @@ extern void Os_ISR_RCAN1ERR_IRQ_Handler(void);
 extern void Os_ISR_RCANGRECC0_IRQ_Handler(void);
 extern void Os_ISR_ADCA0I0_IRQ_Handler(void);
 extern void Os_ISR_ADCA0I1_IRQ_Handler(void);
+extern void Os_ISR_RLIN34TX0_IRQ_Handler(void);
+extern void Os_ISR_RLIN34RX1_IRQ_Handler(void);
+extern void Os_ISR_RLIN34ERR2_IRQ_Handler(void);
+extern void Os_ISR_RLIN35TX0_IRQ_Handler(void);
+extern void Os_ISR_RLIN35RX1_IRQ_Handler(void);
+extern void Os_ISR_RLIN35ERR2_IRQ_Handler(void);
 extern const Os_IntInstallType Os_IntInstall[CFG_ISR_MAX];
 
 #endif /* OS_CORECFG_H */

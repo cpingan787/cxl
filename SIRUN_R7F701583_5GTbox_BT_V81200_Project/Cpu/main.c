@@ -37,6 +37,7 @@
 #include "MemIf_Types.h"
 #include "CanIf.h"
 #include "Std_Types.h"
+#include "logHal.h"
 
 
 uint8 ReadAppBuffer[32] = {0};
@@ -195,6 +196,7 @@ void main(void)
     Dio_WriteChannel(DioConf_DioChannel_DIO_Channel_KL30_DOWEN_DET_EN_Pin1_6, STD_HIGH);
 
     /* Initialize CAN Driver */
+    LogHalInit(1);
     Can_Init(CanConfigSet0);
 
     Can_SetControllerMode(CanConf_CanController_CanController, CAN_T_START);
@@ -202,8 +204,9 @@ void main(void)
      /* Initialize Fls Driver */
    // Fls_Init(FlsConfigSet);
    // Fls_test();
-    
+    TBOX_PRINT("BOOTTEST\n");
     EcuMService_Init();
+    
 
    
 
