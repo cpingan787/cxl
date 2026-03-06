@@ -43,8 +43,8 @@
 /* ========================================== external function definitions ========================================= */
 
 /* ========================================== internal function definitions ========================================= */
-#define     CFG_ISR_MAX								(19U)
-#define     CFG_ISR2_MAX							(19U)
+#define     CFG_ISR_MAX								(12U)
+#define     CFG_ISR2_MAX							(12U)
 /* wether support interrupt nest */
 #define     CFG_INT_NEST_ENABLE             		TRUE
 /* highest ISR2 interrupt priority */
@@ -52,8 +52,8 @@
 
 
 /* Core0*/
-#define     CFG_ISR_MAX_CORE0						(19U)
-#define     CFG_ISR2_MAX_CORE0						(19U)
+#define     CFG_ISR_MAX_CORE0						(12U)
+#define     CFG_ISR2_MAX_CORE0						(12U)
 
 /* PRQA S 0722, 0724, 1271, 1434, 0723, 0784 ++ *//* VL_Os_0722, VL_Os_0724, VL_Os_1271, VL_Os_1434, VL_Os_0723, VL_Os_0784 */
 typedef enum
@@ -61,24 +61,17 @@ typedef enum
     /* Core0 ISR2 */
     CFG_ISR2_ID_CORE0_BEGIN = 0,
     CFG_SYS_TIMER_CORE0_ID = CFG_ISR2_ID_CORE0_BEGIN, /*system timer core0*/
-    CFG_ISR_RCAN1ERR_IRQ_ID,
     CFG_ISR_RCAN1TRX_IRQ_ID,
+    CFG_ISR_RCAN1ERR_IRQ_ID,
     CFG_ISR_RCANGRECC0_IRQ_ID,
+    CFG_ISR_ADCA0I0_IRQ_ID,
     CFG_ISR_ADCA0I1_IRQ_ID,
-    CFG_ISR_ADCA1I1_IRQ_ID,
-    CFG_ISR_TAUJ0I0_IRQ_ID,
-    CFG_ISR_TAUD0I9_IRQ_ID,
-    CFG_ISR_TAUB0I12_IRQ_ID,
     CFG_ISR_RLIN34TX0_IRQ_ID,
     CFG_ISR_RLIN34RX1_IRQ_ID,
     CFG_ISR_RLIN34ERR2_IRQ_ID,
     CFG_ISR_RLIN35TX0_IRQ_ID,
     CFG_ISR_RLIN35RX1_IRQ_ID,
     CFG_ISR_RLIN35ERR2_IRQ_ID,
-    CFG_ISR_RIIC0TI_IRQ_ID,
-    CFG_ISR_RIIC0EE_IRQ_ID,
-    CFG_ISR_RIIC0RI_IRQ_ID,
-    CFG_ISR_RIIC0TEI_IRQ_ID,
     CFG_ISR2_ID_CORE0_END,
 
     INVALID_ISR = 0xFFFFU,

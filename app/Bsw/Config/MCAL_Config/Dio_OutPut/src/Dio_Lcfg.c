@@ -79,10 +79,10 @@
 **                         Input File                                         **
 *******************************************************************************/
 /*
- * INPUT FILE:    E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\Config\ECUC\test_Dio_Dio0_ecuc.arxml
- *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\modules\dio\R422_DIO_F1x_BSWMDT.arxml
- *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\stubs\4.2.2\Dem\xml\Dem_Dio.arxml
- * GENERATED ON:  27 Feb 2026 - 16:27:07
+ * INPUT FILE:    E:\PuHua_Tbox\Tools\ASR_RH850F1K_MCAL_Ver42.08.00\Config\Config\ECUC\test_Dio_Dio0_ecuc.arxml
+ *                E:\PuHua_Tbox\Tools\ASR_RH850F1K_MCAL_Ver42.08.00\Config\modules\dio\R422_DIO_F1x_BSWMDT.arxml
+ *                E:\PuHua_Tbox\Tools\ASR_RH850F1K_MCAL_Ver42.08.00\Config\stubs\4.2.2\Dem\xml\Dem_Dio.arxml
+ * GENERATED ON:  14 Jan 2026 - 18:15:52
  */
 
 /*******************************************************************************
@@ -173,7 +173,7 @@ CONST (Dio_PortGroup, DIO_CONST)
   /* Index: 0 - PortGroup9_Bits0_6 */
   {
     /* ucPortGroupIndex */
-    0x05U,
+    0x02U,
 
     /* ulModeMask */
     0xFFFFFF80UL,
@@ -185,7 +185,7 @@ CONST (Dio_PortGroup, DIO_CONST)
   /* Index: 1 - PortGroup11_Bits0_15 */
   {
     /* ucPortGroupIndex */
-    0x03U,
+    0x05U,
 
     /* ulModeMask */
     0xFFFF0000UL,
@@ -197,7 +197,7 @@ CONST (Dio_PortGroup, DIO_CONST)
   /* Index: 2 - PortGroup8_Bits0_12 */
   {
     /* ucPortGroupIndex */
-    0x01U,
+    0x03U,
 
     /* ulModeMask */
     0xFFFFE000UL,
@@ -209,7 +209,7 @@ CONST (Dio_PortGroup, DIO_CONST)
   /* Index: 3 - PortGroup0_Bits0_14 */
   {
     /* ucPortGroupIndex */
-    0x06U,
+    0x01U,
 
     /* ulModeMask */
     0xFFFF8000UL,
@@ -221,7 +221,7 @@ CONST (Dio_PortGroup, DIO_CONST)
   /* Index: 4 - PortGroup_1_Bits0_11 */
   {
     /* ucPortGroupIndex */
-    0x07U,
+    0x06U,
 
     /* ulModeMask */
     0xFFFFF000UL,
@@ -245,22 +245,10 @@ CONST (Dio_PortGroup, DIO_CONST)
   /* Index: 6 - PortGroup10_Bits0_15 */
   {
     /* ucPortGroupIndex */
-    0x02U,
-
-    /* ulModeMask */
-    0xFFFF0000UL,
-
-    /* ucPortType */
-    0x02U
-  },
-
-  /* Index: 7 - PortGroup12_Bits0_2 */
-  {
-    /* ucPortGroupIndex */
     0x04U,
 
     /* ulModeMask */
-    0xFFFFFFF8UL,
+    0xFFFF0000UL,
 
     /* ucPortType */
     0x02U
@@ -290,16 +278,7 @@ CONST(Dio_PortChannel, DIO_CONST)
     0x00U
   },
 
-  /* Index: 2 - DIO_Channel_ECALL_BUTTON_DET_Pin9_5 */
-  {
-    /* usMask */
-    0x0020U,
-
-    /* ucPortIndex */
-    0x00U
-  },
-
-  /* Index: 3 - UserConfigCh3 */
+  /* Index: 2 - UserConfigCh3 */
   {
     /* usMask */
     0x0001U,
@@ -308,7 +287,7 @@ CONST(Dio_PortChannel, DIO_CONST)
     0x01U
   },
 
-  /* Index: 4 - UserConfigCh4 */
+  /* Index: 3 - UserConfigCh4 */
   {
     /* usMask */
     0x0010U,
@@ -317,7 +296,7 @@ CONST(Dio_PortChannel, DIO_CONST)
     0x01U
   },
 
-  /* Index: 5 - DIO_Channel_LEVEL_SHIFT_EN_Pin11_15 */
+  /* Index: 4 - DIO_Channel_LEVEL_SHIFT_EN_Pin11_15 */
   {
     /* usMask */
     0x8000U,
@@ -326,7 +305,7 @@ CONST(Dio_PortChannel, DIO_CONST)
     0x01U
   },
 
-  /* Index: 6 - DIO_Channel_CAN_STB_Pin8_6 */
+  /* Index: 5 - DIO_Channel_CAN_STB_Pin8_6 */
   {
     /* usMask */
     0x0040U,
@@ -335,7 +314,7 @@ CONST(Dio_PortChannel, DIO_CONST)
     0x02U
   },
 
-  /* Index: 7 - DIO_Channel_ACC_INT_Pin8_5 */
+  /* Index: 6 - DIO_Channel_ACC_INT_Pin8_5 */
   {
     /* usMask */
     0x0020U,
@@ -344,34 +323,7 @@ CONST(Dio_PortChannel, DIO_CONST)
     0x02U
   },
 
-  /* Index: 8 - DIO_Channel_IMU_INT1_Pin8_1 */
-  {
-    /* usMask */
-    0x0002U,
-
-    /* ucPortIndex */
-    0x02U
-  },
-
-  /* Index: 9 - DIO_Channel_IMU_INT2_Pin8_3 */
-  {
-    /* usMask */
-    0x0008U,
-
-    /* ucPortIndex */
-    0x02U
-  },
-
-  /* Index: 10 - DIO_Channel_NAD_WAKEUP_MCU_Pin8_2 */
-  {
-    /* usMask */
-    0x0004U,
-
-    /* ucPortIndex */
-    0x02U
-  },
-
-  /* Index: 11 - DIO_Channel_KL30_Voltage_DET_EN_Pin0_12 */
+  /* Index: 7 - DIO_Channel_KL30_Voltage_DET_EN_Pin0_12 */
   {
     /* usMask */
     0x1000U,
@@ -380,7 +332,7 @@ CONST(Dio_PortChannel, DIO_CONST)
     0x03U
   },
 
-  /* Index: 12 - DIO_Channel_KL30_Voltage_DET_INT_Pin0_9 */
+  /* Index: 8 - DIO_Channel_KL30_Voltage_DET_INT_Pin0_9 */
   {
     /* usMask */
     0x0200U,
@@ -389,43 +341,7 @@ CONST(Dio_PortChannel, DIO_CONST)
     0x03U
   },
 
-  /* Index: 13 - DIO_Channel_CanRx_DET_INT_Pin0_2 */
-  {
-    /* usMask */
-    0x0004U,
-
-    /* ucPortIndex */
-    0x03U
-  },
-
-  /* Index: 14 - DIO_Channel_NAD_SLEEP_IND_Pin0_4 */
-  {
-    /* usMask */
-    0x0010U,
-
-    /* ucPortIndex */
-    0x03U
-  },
-
-  /* Index: 15 - DIO_Channel_CDS_STATE_Pin0_11 */
-  {
-    /* usMask */
-    0x0800U,
-
-    /* ucPortIndex */
-    0x03U
-  },
-
-  /* Index: 16 - DIO_Channel_RTC_INT_Pin0_6 */
-  {
-    /* usMask */
-    0x0040U,
-
-    /* ucPortIndex */
-    0x03U
-  },
-
-  /* Index: 17 - DIO_Channel_KL30_DOWEN_DET_EN_Pin1_6 */
+  /* Index: 9 - DIO_Channel_KL30_DOWEN_DET_EN_Pin1_6 */
   {
     /* usMask */
     0x0040U,
@@ -434,7 +350,7 @@ CONST(Dio_PortChannel, DIO_CONST)
     0x04U
   },
 
-  /* Index: 18 - DIO_Channel_IG1_INT_Pin1_8 */
+  /* Index: 10 - DIO_Channel_IG1_INT_Pin1_8 */
   {
     /* usMask */
     0x0100U,
@@ -443,7 +359,7 @@ CONST(Dio_PortChannel, DIO_CONST)
     0x04U
   },
 
-  /* Index: 19 - DIO_Channel_NAD_V2X_5V0__EN_Pin1_7 */
+  /* Index: 11 - DIO_Channel_NAD_V2X_5V0__EN_Pin1_7 */
   {
     /* usMask */
     0x0080U,
@@ -452,16 +368,7 @@ CONST(Dio_PortChannel, DIO_CONST)
     0x04U
   },
 
-  /* Index: 20 - DIO_Channel_CALL_BUTTON_PWR_EN_Pin1_0 */
-  {
-    /* usMask */
-    0x0001U,
-
-    /* ucPortIndex */
-    0x04U
-  },
-
-  /* Index: 21 - DIO_Channel_NAD_V2X_3V8_EN_Pin18_3 */
+  /* Index: 12 - DIO_Channel_NAD_V2X_3V8_EN_Pin18_3 */
   {
     /* usMask */
     0x0008U,
@@ -470,7 +377,7 @@ CONST(Dio_PortChannel, DIO_CONST)
     0x05U
   },
 
-  /* Index: 22 - DIO_Channel_AG591_POWERKEY_EN_Pin18_1 */
+  /* Index: 13 - DIO_Channel_AG591_POWERKEY_EN_Pin18_1 */
   {
     /* usMask */
     0x0002U,
@@ -479,7 +386,7 @@ CONST(Dio_PortChannel, DIO_CONST)
     0x05U
   },
 
-  /* Index: 23 - DIO_Channel_AG591_RST_EN_Pin18_0 */
+  /* Index: 14 - DIO_Channel_AG591_RST_EN_Pin18_0 */
   {
     /* usMask */
     0x0001U,
@@ -488,7 +395,7 @@ CONST(Dio_PortChannel, DIO_CONST)
     0x05U
   },
 
-  /* Index: 24 - DIO_Channel_NAD_TO_MCU_Pin10_13 */
+  /* Index: 15 - DIO_Channel_NAD_TO_MCU_Pin10_13 */
   {
     /* usMask */
     0x2000U,
@@ -497,22 +404,13 @@ CONST(Dio_PortChannel, DIO_CONST)
     0x06U
   },
 
-  /* Index: 25 - DIO_Channel_MCU_TO_NAD_EN_Pin10_14 */
+  /* Index: 16 - DIO_Channel_MCU_TO_NAD_EN_Pin10_14 */
   {
     /* usMask */
     0x4000U,
 
     /* ucPortIndex */
     0x06U
-  },
-
-  /* Index: 26 - DIO_Channel_MCU_WAKEUP_NAD_Pin12_0 */
-  {
-    /* usMask */
-    0x0001U,
-
-    /* ucPortIndex */
-    0x07U
   }
 };
 

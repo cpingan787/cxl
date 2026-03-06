@@ -92,7 +92,7 @@
 /*******************************************************************************
 **                      Version Check                                         **
 *******************************************************************************/
-/*
+
 #if (PORT_VERSION_AR_RELEASE_MAJOR_VERSION != \
                                         PORT_VERSION_C_AR_RELEASE_MAJOR_VERSION)
   #error "Port_Version.c : Mismatch in Release Major Version"
@@ -111,7 +111,7 @@
 #endif
 #if (PORT_VERSION_SW_MINOR_VERSION != PORT_VERSION_C_SW_MINOR_VERSION)
   #error "Port_Version.c : Mismatch in Software Minor Version"
-#endif*/
+#endif
 /* Implements PORT_ESDD_UD_053 */
 #if (PORT_VERSION_CHECK_EXT_MODULES == STD_ON)
 
@@ -121,21 +121,21 @@
 #if (PORT_CRITICAL_SECTION_PROTECTION == STD_ON)
 #if ((RTE_AR_RELEASE_MAJOR_VERSION != PORT_AR_RELEASE_MAJOR_VERSION) \
  || (RTE_AR_RELEASE_MINOR_VERSION != PORT_AR_RELEASE_MINOR_VERSION))
-//  #error "The AR version of Rte.h does not match the expected version"
+  #error "The AR version of Rte.h does not match the expected version"
 #endif
 #endif /* (PORT_CRITICAL_SECTION_PROTECTION == STD_ON) */
 
 /* Dem Module Version Check */
 #if ((DEM_AR_RELEASE_MAJOR_VERSION != PORT_AR_RELEASE_MAJOR_VERSION) \
  || (DEM_AR_RELEASE_MINOR_VERSION != PORT_AR_RELEASE_MINOR_VERSION))
-//  #error "The AR version of Dem.h does not match the expected version"
+  #error "The AR version of Dem.h does not match the expected version"
 #endif
 
 /* Det Module Version Check */
 #if (PORT_DEV_ERROR_DETECT == STD_ON)
 #if ((DET_AR_RELEASE_MAJOR_VERSION != PORT_AR_RELEASE_MAJOR_VERSION) \
  || (DET_AR_RELEASE_MINOR_VERSION != PORT_AR_RELEASE_MINOR_VERSION))
-//  #error "The AR version of Det.h does not match the expected version"
+  #error "The AR version of Det.h does not match the expected version"
 #endif
 #endif /* (PORT_DEV_ERROR_DETECT == STD_ON) */
 #endif /* #if (PORT_VERSION_CHECK_EXT_MODULES == STD_ON) */

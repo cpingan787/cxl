@@ -36,7 +36,7 @@
 #define     CFG_PRETASKHOOK                 		FALSE
 #define     CFG_POSTTASKHOOK                		FALSE
 #define     CFG_STARTUPHOOK                 		FALSE
-#define     CFG_SHUTDOWNHOOK                		TRUE
+#define     CFG_SHUTDOWNHOOK                		FALSE
 #define     CFG_USEGETSERVICEID             		FALSE
 #define     CFG_USEPARAMETERACCESS          		FALSE
 

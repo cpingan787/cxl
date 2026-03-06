@@ -46,24 +46,17 @@
 
 /* ========================================== internal function definitions ========================================= */
 extern void Os_ISR_SystemTimer_Core_0_Handler0(void);
-extern void Os_ISR_RCAN1ERR_IRQ_Handler(void);
 extern void Os_ISR_RCAN1TRX_IRQ_Handler(void);
+extern void Os_ISR_RCAN1ERR_IRQ_Handler(void);
 extern void Os_ISR_RCANGRECC0_IRQ_Handler(void);
+extern void Os_ISR_ADCA0I0_IRQ_Handler(void);
 extern void Os_ISR_ADCA0I1_IRQ_Handler(void);
-extern void Os_ISR_ADCA1I1_IRQ_Handler(void);
-extern void Os_ISR_TAUJ0I0_IRQ_Handler(void);
-extern void Os_ISR_TAUD0I9_IRQ_Handler(void);
-extern void Os_ISR_TAUB0I12_IRQ_Handler(void);
 extern void Os_ISR_RLIN34TX0_IRQ_Handler(void);
 extern void Os_ISR_RLIN34RX1_IRQ_Handler(void);
 extern void Os_ISR_RLIN34ERR2_IRQ_Handler(void);
 extern void Os_ISR_RLIN35TX0_IRQ_Handler(void);
 extern void Os_ISR_RLIN35RX1_IRQ_Handler(void);
 extern void Os_ISR_RLIN35ERR2_IRQ_Handler(void);
-extern void Os_ISR_RIIC0TI_IRQ_Handler(void);
-extern void Os_ISR_RIIC0EE_IRQ_Handler(void);
-extern void Os_ISR_RIIC0RI_IRQ_Handler(void);
-extern void Os_ISR_RIIC0TEI_IRQ_Handler(void);
 extern const Os_IntInstallType Os_IntInstall[CFG_ISR_MAX];
 
 #endif /* OS_CORECFG_H */

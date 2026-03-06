@@ -99,10 +99,10 @@
 **                          Input File                                        **
 *******************************************************************************/
 /*
- * INPUT FILE:    E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\Config\ECUC\test_Adc_Adc0_ecuc.arxml
- *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\modules\adc\R422_ADC_F1x_BSWMDT.arxml
- *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\stubs\4.2.2\Dem\xml\Dem_Adc.arxml
- * GENERATED ON:  27 Jan 2026 - 17:47:30
+ * INPUT FILE:    E:\PuHua_Tbox\Tools\ASR_RH850F1K_MCAL_Ver42.08.00\Config\Config\ECUC\test_Adc_Adc0_ecuc.arxml
+ *                E:\PuHua_Tbox\Tools\ASR_RH850F1K_MCAL_Ver42.08.00\Config\modules\adc\R422_ADC_F1x_BSWMDT.arxml
+ *                E:\PuHua_Tbox\Tools\ASR_RH850F1K_MCAL_Ver42.08.00\Config\stubs\4.2.2\Dem\xml\Dem_Adc.arxml
+ * GENERATED ON:  14 Jan 2026 - 18:15:50
  */
 
 #ifndef ADC_CFG_H
@@ -211,19 +211,19 @@
 
 /* Enables/Disables ISR for SG1 unit of HW 0*/
 /* Implements ADC_ESDD_UD_026 */
-#define ADC0_SG1_ISR_API                    STD_OFF
+#define ADC0_SG1_ISR_API                    STD_ON
 
 /* Enables/Disables ISR for SG2 unit of HW 0 */
-#define ADC0_SG2_ISR_API                    STD_ON
+#define ADC0_SG2_ISR_API                    STD_OFF
 
 /* Enables/Disables ISR for SG3 unit of HW 0 */
 #define ADC0_SG3_ISR_API                    STD_OFF
 
 /* Enables/Disables ISR for SG1 unit of HW 1 */
-#define ADC1_SG1_ISR_API                    STD_OFF
+#define ADC1_SG1_ISR_API                    STD_ON
 
 /* Enables/Disables ISR for SG2 unit of HW 1 */
-#define ADC1_SG2_ISR_API                    STD_ON
+#define ADC1_SG2_ISR_API                    STD_OFF
 
 /* Enables/Disables ISR for SG3 unit of HW 1 */
 #define ADC1_SG3_ISR_API                    STD_OFF

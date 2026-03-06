@@ -77,8 +77,8 @@ extern volatile uint16_t g_mpuUartReciveCount;
 extern volatile uint8_t g_mpuUartErrorType;
 extern volatile uint8_t g_mpuUartErrorFlag;
 extern volatile uint8_t g_mpuSetRecvErrorFlag;
-// extern uint8_t g_bleUartReciveData[];
-// extern uint16_t g_bleUartReciveCount;
+extern uint8_t g_bleUartReciveData[];
+extern uint16_t g_bleUartReciveCount;
 /* End user code. Do not edit comment generated here */
 
 /***********************************************************************************************************************

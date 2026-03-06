@@ -318,7 +318,7 @@
 
 /* Timeout value for updating the status registers
    of count enable status register for timer stop */
-#define GPT_TIMEOUT_COUNT                   240U
+#define GPT_TIMEOUT_COUNT                   160U
 
 /* Enable/disable the register read back for OSTM
    GPT_WV_DISABLE           0

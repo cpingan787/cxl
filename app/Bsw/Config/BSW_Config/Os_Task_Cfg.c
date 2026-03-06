@@ -19,10 +19,10 @@
  * @file              : Os_Task_Cfg.c
  * @license           : 
  * @licenseExpiryDate : 
- * @date              : 2026-01-20 14:26:30
+ * @date              : 2026-01-05 10:51:07
  * @customer          : iSoft
  * @description       : Configuration parameter of OS
- * @toolVersion       : 2.2.0.3
+ * @toolVersion       : 
  **********************************************************************************************************************/
 
 /* =================================================== inclusions =================================================== */
@@ -73,42 +73,7 @@ static Os_StackDataType Os_TaskStack_Idle_Core0[128];
 #define OS_START_SEC_VAR_CLEARED_CORE0_32
 #include "Os_MemMap.h"
 /* PRQA S 3132 ++ */ /* VL_QAC_MagicNum */
-static Os_StackDataType Os_OsTask_Init_Stack[256];
-/* PRQA S 3132 -- */
-#define OS_STOP_SEC_VAR_CLEARED_CORE0_32
-#include "Os_MemMap.h"
-#define OS_START_SEC_VAR_CLEARED_CORE0_32
-#include "Os_MemMap.h"
-/* PRQA S 3132 ++ */ /* VL_QAC_MagicNum */
-static Os_StackDataType Os_OsTask_1ms_Stack[256];
-/* PRQA S 3132 -- */
-#define OS_STOP_SEC_VAR_CLEARED_CORE0_32
-#include "Os_MemMap.h"
-#define OS_START_SEC_VAR_CLEARED_CORE0_32
-#include "Os_MemMap.h"
-/* PRQA S 3132 ++ */ /* VL_QAC_MagicNum */
-static Os_StackDataType Os_OsTask_5ms_Stack[1024];
-/* PRQA S 3132 -- */
-#define OS_STOP_SEC_VAR_CLEARED_CORE0_32
-#include "Os_MemMap.h"
-#define OS_START_SEC_VAR_CLEARED_CORE0_32
-#include "Os_MemMap.h"
-/* PRQA S 3132 ++ */ /* VL_QAC_MagicNum */
-static Os_StackDataType Os_OsTask_10ms_Stack[1024];
-/* PRQA S 3132 -- */
-#define OS_STOP_SEC_VAR_CLEARED_CORE0_32
-#include "Os_MemMap.h"
-#define OS_START_SEC_VAR_CLEARED_CORE0_32
-#include "Os_MemMap.h"
-/* PRQA S 3132 ++ */ /* VL_QAC_MagicNum */
-static Os_StackDataType Os_OsTask_50ms_Stack[256];
-/* PRQA S 3132 -- */
-#define OS_STOP_SEC_VAR_CLEARED_CORE0_32
-#include "Os_MemMap.h"
-#define OS_START_SEC_VAR_CLEARED_CORE0_32
-#include "Os_MemMap.h"
-/* PRQA S 3132 ++ */ /* VL_QAC_MagicNum */
-static Os_StackDataType Os_OsTask_100ms_Stack[256];
+static Os_StackDataType Os_OsTask_0_Stack[256];
 /* PRQA S 3132 -- */
 #define OS_STOP_SEC_VAR_CLEARED_CORE0_32
 #include "Os_MemMap.h"
@@ -122,12 +87,7 @@ const Os_StackType Os_TaskStack[CFG_TASK_MAX] =
 /* PRQA S 1533, 1502 -- */
 {
     /* PRQA S 0488 ++ */ /* VL_Os_0488 */
-    {OS_STACK_TOP(Os_OsTask_Init_Stack), OS_STACK_BOTTOM(Os_OsTask_Init_Stack)},
-    {OS_STACK_TOP(Os_OsTask_1ms_Stack), OS_STACK_BOTTOM(Os_OsTask_1ms_Stack)},
-    {OS_STACK_TOP(Os_OsTask_5ms_Stack), OS_STACK_BOTTOM(Os_OsTask_5ms_Stack)},
-    {OS_STACK_TOP(Os_OsTask_10ms_Stack), OS_STACK_BOTTOM(Os_OsTask_10ms_Stack)},
-    {OS_STACK_TOP(Os_OsTask_50ms_Stack), OS_STACK_BOTTOM(Os_OsTask_50ms_Stack)},
-    {OS_STACK_TOP(Os_OsTask_100ms_Stack), OS_STACK_BOTTOM(Os_OsTask_100ms_Stack)},
+    {OS_STACK_TOP(Os_OsTask_0_Stack), OS_STACK_BOTTOM(Os_OsTask_0_Stack)},
     {OS_STACK_TOP(Os_TaskStack_Idle_Core0), OS_STACK_BOTTOM(Os_TaskStack_Idle_Core0)},
     /* PRQA S 0488 -- */
 };
@@ -146,77 +106,12 @@ const Os_TaskCfgType Os_TaskCfg[CFG_TASK_MAX] =
 
 	{
         (Os_EventMaskType)0x0ULL,                     /*EventAccessMask*/
-        &Os_TaskEntry_OsTask_Init,	/*osTaskEntry*/
+        &Os_TaskEntry_OsTask_0,	/*osTaskEntry*/
         /* PRQA S 0488 ++ */ /* VL_Os_0488 */
-        {OS_STACK_TOP(Os_OsTask_Init_Stack), OS_STACK_BOTTOM(Os_OsTask_Init_Stack)},
+        {OS_STACK_TOP(Os_OsTask_0_Stack), OS_STACK_BOTTOM(Os_OsTask_0_Stack)},
         /* PRQA S 0488 -- */
         1U,  /*osTaskActivation*/
         1U,  /*osTaskPriority*/
-        OSDEFAULTAPPMODE,	/*osTaskAutoStartMode*/
-        OS_PREEMPTIVE_NON,	/*osTaskSchedule*/
-        0U,                    /*Rsv*/
-        OS_CORE_ID_0,
-    },
-	{
-        (Os_EventMaskType)0x0ULL,                     /*EventAccessMask*/
-        &Os_TaskEntry_OsTask_1ms,	/*osTaskEntry*/
-        /* PRQA S 0488 ++ */ /* VL_Os_0488 */
-        {OS_STACK_TOP(Os_OsTask_1ms_Stack), OS_STACK_BOTTOM(Os_OsTask_1ms_Stack)},
-        /* PRQA S 0488 -- */
-        1U,  /*osTaskActivation*/
-        6U,  /*osTaskPriority*/
-        OS_NULL_APPMODE,	/*osTaskAutoStartMode*/
-        OS_PREEMPTIVE_FULL,	/*osTaskSchedule*/
-        0U,                    /*Rsv*/
-        OS_CORE_ID_0,
-    },
-	{
-        (Os_EventMaskType)0x0ULL,                     /*EventAccessMask*/
-        &Os_TaskEntry_OsTask_5ms,	/*osTaskEntry*/
-        /* PRQA S 0488 ++ */ /* VL_Os_0488 */
-        {OS_STACK_TOP(Os_OsTask_5ms_Stack), OS_STACK_BOTTOM(Os_OsTask_5ms_Stack)},
-        /* PRQA S 0488 -- */
-        1U,  /*osTaskActivation*/
-        5U,  /*osTaskPriority*/
-        OS_NULL_APPMODE,	/*osTaskAutoStartMode*/
-        OS_PREEMPTIVE_FULL,	/*osTaskSchedule*/
-        0U,                    /*Rsv*/
-        OS_CORE_ID_0,
-    },
-	{
-        (Os_EventMaskType)0x0ULL,                     /*EventAccessMask*/
-        &Os_TaskEntry_OsTask_10ms,	/*osTaskEntry*/
-        /* PRQA S 0488 ++ */ /* VL_Os_0488 */
-        {OS_STACK_TOP(Os_OsTask_10ms_Stack), OS_STACK_BOTTOM(Os_OsTask_10ms_Stack)},
-        /* PRQA S 0488 -- */
-        1U,  /*osTaskActivation*/
-        4U,  /*osTaskPriority*/
-        OS_NULL_APPMODE,	/*osTaskAutoStartMode*/
-        OS_PREEMPTIVE_FULL,	/*osTaskSchedule*/
-        0U,                    /*Rsv*/
-        OS_CORE_ID_0,
-    },
-	{
-        (Os_EventMaskType)0x0ULL,                     /*EventAccessMask*/
-        &Os_TaskEntry_OsTask_50ms,	/*osTaskEntry*/
-        /* PRQA S 0488 ++ */ /* VL_Os_0488 */
-        {OS_STACK_TOP(Os_OsTask_50ms_Stack), OS_STACK_BOTTOM(Os_OsTask_50ms_Stack)},
-        /* PRQA S 0488 -- */
-        1U,  /*osTaskActivation*/
-        3U,  /*osTaskPriority*/
-        OS_NULL_APPMODE,	/*osTaskAutoStartMode*/
-        OS_PREEMPTIVE_FULL,	/*osTaskSchedule*/
-        0U,                    /*Rsv*/
-        OS_CORE_ID_0,
-    },
-	{
-        (Os_EventMaskType)0x0ULL,                     /*EventAccessMask*/
-        &Os_TaskEntry_OsTask_100ms,	/*osTaskEntry*/
-        /* PRQA S 0488 ++ */ /* VL_Os_0488 */
-        {OS_STACK_TOP(Os_OsTask_100ms_Stack), OS_STACK_BOTTOM(Os_OsTask_100ms_Stack)},
-        /* PRQA S 0488 -- */
-        1U,  /*osTaskActivation*/
-        2U,  /*osTaskPriority*/
         OS_NULL_APPMODE,	/*osTaskAutoStartMode*/
         OS_PREEMPTIVE_FULL,	/*osTaskSchedule*/
         0U,                    /*Rsv*/
@@ -278,37 +173,7 @@ const uint16 Os_CfgPriorityMax_Inf[OS_AUTOSAR_CORES] =
 /* PRQA S 4152 ++ */ /* VL_Os_4152 */
 #define OS_START_SEC_VAR_CLEARED_CORE0_UNSPECIFIED
 #include "Os_MemMap.h"
-static Os_TCBType Os_TCB_OsTask_Init;
-#define OS_STOP_SEC_VAR_CLEARED_CORE0_UNSPECIFIED
-#include "Os_MemMap.h"
-
-#define OS_START_SEC_VAR_CLEARED_CORE0_UNSPECIFIED
-#include "Os_MemMap.h"
-static Os_TCBType Os_TCB_OsTask_1ms;
-#define OS_STOP_SEC_VAR_CLEARED_CORE0_UNSPECIFIED
-#include "Os_MemMap.h"
-
-#define OS_START_SEC_VAR_CLEARED_CORE0_UNSPECIFIED
-#include "Os_MemMap.h"
-static Os_TCBType Os_TCB_OsTask_5ms;
-#define OS_STOP_SEC_VAR_CLEARED_CORE0_UNSPECIFIED
-#include "Os_MemMap.h"
-
-#define OS_START_SEC_VAR_CLEARED_CORE0_UNSPECIFIED
-#include "Os_MemMap.h"
-static Os_TCBType Os_TCB_OsTask_10ms;
-#define OS_STOP_SEC_VAR_CLEARED_CORE0_UNSPECIFIED
-#include "Os_MemMap.h"
-
-#define OS_START_SEC_VAR_CLEARED_CORE0_UNSPECIFIED
-#include "Os_MemMap.h"
-static Os_TCBType Os_TCB_OsTask_50ms;
-#define OS_STOP_SEC_VAR_CLEARED_CORE0_UNSPECIFIED
-#include "Os_MemMap.h"
-
-#define OS_START_SEC_VAR_CLEARED_CORE0_UNSPECIFIED
-#include "Os_MemMap.h"
-static Os_TCBType Os_TCB_OsTask_100ms;
+static Os_TCBType Os_TCB_OsTask_0;
 #define OS_STOP_SEC_VAR_CLEARED_CORE0_UNSPECIFIED
 #include "Os_MemMap.h"
 
@@ -323,12 +188,7 @@ static Os_TCBType Os_TCB_OS_TASK_IDLE_CORE0;
 #include "Os_MemMap.h"
 Os_TCBType* const Os_TCB[CFG_TASK_MAX] =
 {
-    &Os_TCB_OsTask_Init,
-    &Os_TCB_OsTask_1ms,
-    &Os_TCB_OsTask_5ms,
-    &Os_TCB_OsTask_10ms,
-    &Os_TCB_OsTask_50ms,
-    &Os_TCB_OsTask_100ms,
+    &Os_TCB_OsTask_0,
     &Os_TCB_OS_TASK_IDLE_CORE0,
 };
 #define OS_STOP_SEC_CONFIG_DATA_UNSPECIFIED
@@ -377,4 +237,4 @@ static void Os_TaskEntry_IdleCore0(void)
 #include "Os_MemMap.h"
 
 /* PRQA S 6070 -- */
-/* PRQA S 6520, 6540, 6620 EOF */ /* VL_MTR_Os_CONF, VL_MTR_Os_STTPP, VL_MTR_Os_STSCT */
+/* PRQA S 6520, 6540 EOF */ /* VL_MTR_Os_CONF, VL_MTR_Os_STTPP */

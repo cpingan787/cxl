@@ -73,8 +73,8 @@
  * AUTOSAR specification version information
  */
 #define STD_TYPES_AR_RELEASE_MAJOR_VERSION     4
-#define STD_TYPES_AR_RELEASE_MINOR_VERSION     5
-#define STD_TYPES_AR_RELEASE_REVISION_VERSION  0
+#define STD_TYPES_AR_RELEASE_MINOR_VERSION     2
+#define STD_TYPES_AR_RELEASE_REVISION_VERSION  2
 
 /*
  * File version information
@@ -112,8 +112,6 @@
 */
 typedef uint8 Std_ReturnType;
 #define E_NOT_OK    1U
-#define E_BUSY      2U
-
 
 typedef struct
 {

@@ -405,19 +405,24 @@ and Fls_UseFlashControllerEndHook function. */
 #define FLS_BLANKCHECK_TIMEOUT_COUNT      213U
 
 /* Flash Programming HW frequency in MHz */
-#define FLS_CPU_FREQUENCY_MHZ             120U
+#define FLS_CPU_FREQUENCY_MHZ             80U
 
 /* fPCLK clock devider */
 #define FLS_CPUCLK_UL_DIV                 4U
 
 /* Data flash pool size */
 #define FLS_DF_POOL_SIZE                  1024U
+// #define FLS_DF_POOL_SIZE                  32768U
+// #define FLS_DF_POOL_SIZE                  62U     /* 62 blocks */
 
 /*  Physical memory address of the specified virtual sector start address */
 #define FLS_DF_SECTOR_START_ADDRESS       4280287232UL
+// #define FLS_DF_SECTOR_START_ADDRESS       65536UL /* 64KB */
 
 /* Total amount of data flash memory in bytes */
 #define FLS_DF_TOTAL_SIZE                 65536U
+// #define FLS_DF_TOTAL_SIZE                 2097152U
+// #define FLS_DF_TOTAL_SIZE                 2031616U     /* 62*32K */
 
 /* TimeOut Count for a single block Erase */
 #define FLS_ERASE_TIMEOUT_COUNT           10000U
@@ -425,6 +430,7 @@ and Fls_UseFlashControllerEndHook function. */
 /* TRACE [R4, FLS281_Conf] */
 /* Smallest amount of flash memory written that can be programmed */
 #define FLS_PAGE_SIZE                     (uint8)4
+// #define FLS_PAGE_SIZE                     (uint8)256
 
 /* TimeOut Count for a single page write */
 #define FLS_WRITE_TIMEOUT_COUNT           1700U
@@ -433,11 +439,13 @@ and Fls_UseFlashControllerEndHook function. */
 
 /* Data flash memory start address */
 #define FLS_DF_BASE_ADDRESS               4280287232UL
+// #define FLS_DF_BASE_ADDRESS               65536UL
 
 /* FLS_DF_BLOCK_SIZE related macros */
 
 /* Block size of data flash memory in bytes */
 #define FLS_DF_BLOCK_SIZE                 64U
+// #define FLS_DF_BLOCK_SIZE                 32768U  /* 32KB */
 
 
 /* Macro to make  FHVE3 and FHVE15  Registers setting available only for

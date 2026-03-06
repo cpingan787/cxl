@@ -111,11 +111,11 @@
 *******************************************************************************/
 
 /*
- * INPUT FILE:    E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\Config\ECUC\test_Mcu_Mcu0_ecuc.arxml
- *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\Config\ECUC\test_Port_Port0_ecuc.arxml
- *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\modules\port\R422_PORT_F1x_BSWMDT.arxml
- *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\stubs\4.2.2\Dem\xml\Dem_Port.arxml
- * GENERATED ON:  27 Feb 2026 - 10:55:49
+ * INPUT FILE:    E:\PuHua_Tbox\Tools\ASR_RH850F1K_MCAL_Ver42.08.00\Config\Config\ECUC\test_Mcu_Mcu0_ecuc.arxml
+ *                E:\PuHua_Tbox\Tools\ASR_RH850F1K_MCAL_Ver42.08.00\Config\Config\ECUC\test_Port_Port0_ecuc.arxml
+ *                E:\PuHua_Tbox\Tools\ASR_RH850F1K_MCAL_Ver42.08.00\Config\modules\port\R422_PORT_F1x_BSWMDT.arxml
+ *                E:\PuHua_Tbox\Tools\ASR_RH850F1K_MCAL_Ver42.08.00\Config\stubs\4.2.2\Dem\xml\Dem_Port.arxml
+ * GENERATED ON:  14 Jan 2026 - 18:15:52
  */
 
 #ifndef PORT_CFG_H
@@ -198,7 +198,7 @@
 #define PORT_CRITICAL_SECTION_PROTECTION    STD_ON
 
 /* Enables/Disables the checking of port pin backup status */
-#define PORT_PIN_STATUS_BACKUP              STD_ON
+#define PORT_PIN_STATUS_BACKUP              STD_OFF
 
 /* Indicates the number of Alternative Modes  */
 #define PORT_MAX_MODE                       (uint8)0x0f
@@ -220,7 +220,7 @@
 #define PORT_VERSION_CHECK_EXT_MODULES      STD_ON
 
 /* Enables/Disables Port_SetToDioMode and Port_SetToAlternateMode API */
-#define PORT_SET_TO_DIO_ALT_MODE_API        STD_OFF
+#define PORT_SET_TO_DIO_ALT_MODE_API        STD_ON
 
 /* User define value for Endless Loop. */
 #define PORT_UNLOCK_SEQUENCE_COUNT          (uint8)0x14
@@ -265,7 +265,7 @@
 #define PORT_INPUT_PORT_GROUPS_AVAILABLE    STD_ON
 
 /* The following constant contains total number of pins configured */
-#define PORT_TOTAL_NUMBER_OF_PINS           (uint16)120
+#define PORT_TOTAL_NUMBER_OF_PINS           (uint16)111
 
 /* DEM for Port Driver component */
 #define PORT_E_WRITE_TIMEOUT_FAILURE        \
@@ -273,7 +273,7 @@
 
 
 /* Number of mode / dir / dioAlt changeable pins */
-#define PORT_NUM_OF_PINS_MODIFIABLE         0x07U
+#define PORT_NUM_OF_PINS_MODIFIABLE         0x05U
 /* Number of config set configured */
 #define PORT_NUM_OF_CONFIGSET               0x01U
 /* Number of numeric ports configured */
@@ -330,111 +330,102 @@
 #define Port_PortGroup00_PortPin120    (Port_PinType)12
 #define Port_PortGroup00_PortPin130    (Port_PinType)13
 #define Port_PortGroup00_PortPin140    (Port_PinType)14
-#define Port_PortGroup1_PortPin0    (Port_PinType)15
-#define Port_PortGroup1_PortPin1    (Port_PinType)16
-#define Port_PortGroup1_PortPin2    (Port_PinType)17
-#define Port_PortGroup1_PortPin3    (Port_PinType)18
-#define Port_PortGroup1_PortPin4    (Port_PinType)19
-#define Port_PortGroup1_PortPin5    (Port_PinType)20
-#define Port_PortGroup1_PortPin6    (Port_PinType)21
-#define Port_PortGroup1_PortPin7    (Port_PinType)22
-#define Port_PortGroup1_PortPin8    (Port_PinType)23
-#define Port_PortGroup1_PortPin9    (Port_PinType)24
-#define Port_PortGroup1_PortPin10    (Port_PinType)25
-#define Port_PortGroup1_PortPin11    (Port_PinType)26
-#define Port_PortGroup80_PortPin00    (Port_PinType)27
-#define Port_PortGroup80_PortPin10    (Port_PinType)28
-#define Port_PortGroup80_PortPin20    (Port_PinType)29
-#define Port_PortGroup80_PortPin30    (Port_PinType)30
-#define Port_PortGroup80_PortPin40    (Port_PinType)31
-#define Port_PortGroup80_PortPin50    (Port_PinType)32
-#define Port_PortGroup80_PortPin60    (Port_PinType)33
-#define Port_PortGroup80_PortPin70    (Port_PinType)34
-#define Port_PortGroup80_PortPin80    (Port_PinType)35
-#define Port_PortGroup80_PortPin90    (Port_PinType)36
-#define Port_PortGroup80_PortPin100    (Port_PinType)37
-#define Port_PortGroup80_PortPin110    (Port_PinType)38
-#define Port_PortGroup80_PortPin120    (Port_PinType)39
-#define Port_PortGroup90_PortPin00    (Port_PinType)40
-#define Port_PortGroup90_PortPin10    (Port_PinType)41
-#define Port_PortGroup90_PortPin20    (Port_PinType)42
-#define Port_PortGroup90_PortPin30    (Port_PinType)43
-#define Port_PortGroup90_PortPin40    (Port_PinType)44
-#define Port_PortGroup90_PortPin50    (Port_PinType)45
-#define Port_PortGroup90_PortPin60    (Port_PinType)46
-#define Port_PortGroup100_PortPin00    (Port_PinType)47
-#define Port_PortGroup100_PortPin10    (Port_PinType)48
-#define Port_PortGroup100_PortPin20    (Port_PinType)49
-#define Port_PortGroup100_PortPin30    (Port_PinType)50
-#define Port_PortGroup100_PortPin40    (Port_PinType)51
-#define Port_PortGroup100_PortPin50    (Port_PinType)52
-#define Port_PortGroup100_PortPin60    (Port_PinType)53
-#define Port_PortGroup100_PortPin70    (Port_PinType)54
-#define Port_PortGroup100_PortPin80    (Port_PinType)55
-#define Port_PortGroup100_PortPin90    (Port_PinType)56
-#define Port_PortGroup100_PortPin100    (Port_PinType)57
-#define Port_PortGroup100_PortPin110    (Port_PinType)58
-#define Port_PortGroup100_PortPin120    (Port_PinType)59
-#define Port_PortGroup100_PortPin130    (Port_PinType)60
-#define Port_PortGroup100_PortPin140    (Port_PinType)61
-#define Port_PortGroup100_PortPin150    (Port_PinType)62
-#define Port_PortGroup110_PortPin00    (Port_PinType)63
-#define Port_PortGroup110_PortPin10    (Port_PinType)64
-#define Port_PortGroup110_PortPin20    (Port_PinType)65
-#define Port_PortGroup110_PortPin30    (Port_PinType)66
-#define Port_PortGroup110_PortPin40    (Port_PinType)67
-#define Port_PortGroup110_PortPin50    (Port_PinType)68
-#define Port_PortGroup110_PortPin60    (Port_PinType)69
-#define Port_PortGroup110_PortPin70    (Port_PinType)70
-#define Port_PortGroup110_PortPin80    (Port_PinType)71
-#define Port_PortGroup110_PortPin90    (Port_PinType)72
-#define Port_PortGroup110_PortPin100    (Port_PinType)73
-#define Port_PortGroup110_PortPin110    (Port_PinType)74
-#define Port_PortGroup110_PortPin120    (Port_PinType)75
-#define Port_PortGroup110_PortPin130    (Port_PinType)76
-#define Port_PortGroup110_PortPin140    (Port_PinType)77
-#define Port_PortGroup110_PortPin150    (Port_PinType)78
-#define Port_PortGroup120_PortPin00    (Port_PinType)79
-#define Port_PortGroup120_PortPin10    (Port_PinType)80
-#define Port_PortGroup120_PortPin20    (Port_PinType)81
-#define Port_PortGroup180_PortPin00    (Port_PinType)82
-#define Port_PortGroup180_PortPin10    (Port_PinType)83
-#define Port_PortGroup180_PortPin20    (Port_PinType)84
-#define Port_PortGroup180_PortPin30    (Port_PinType)85
-#define Port_PortGroup200_PortPin40    (Port_PinType)86
-#define Port_PortGroup200_PortPin50    (Port_PinType)87
-#define Port_PortGroupJtag00_PortPin00    (Port_PinType)88
-#define Port_PortGroupJtag00_PortPin10    (Port_PinType)89
-#define Port_PortGroupJtag00_PortPin20    (Port_PinType)90
-#define Port_PortGroupJtag00_PortPin30    (Port_PinType)91
-#define Port_PortGroupJtag00_PortPin40    (Port_PinType)92
-#define Port_PortGroupJtag00_PortPin50    (Port_PinType)93
-#define Port_PortGroupJtag00_PortPin60    (Port_PinType)94
-#define Port_PortGroupAnalog00_PortPin00    (Port_PinType)95
-#define Port_PortGroupAnalog00_PortPin10    (Port_PinType)96
-#define Port_PortGroupAnalog00_PortPin20    (Port_PinType)97
-#define Port_PortGroupAnalog00_PortPin30    (Port_PinType)98
-#define Port_PortGroupAnalog00_PortPin40    (Port_PinType)99
-#define Port_PortGroupAnalog00_PortPin50    (Port_PinType)100
-#define Port_PortGroupAnalog00_PortPin60    (Port_PinType)101
-#define Port_PortGroupAnalog00_PortPin70    (Port_PinType)102
-#define Port_PortGroupAnalog00_PortPin80    (Port_PinType)103
-#define Port_PortGroupAnalog00_PortPin90    (Port_PinType)104
-#define Port_PortGroupAnalog00_PortPin100    (Port_PinType)105
-#define Port_PortGroupAnalog00_PortPin110    (Port_PinType)106
-#define Port_PortGroupAnalog00_PortPin120    (Port_PinType)107
-#define Port_PortGroupAnalog00_PortPin130    (Port_PinType)108
-#define Port_PortGroupAnalog00_PortPin140    (Port_PinType)109
-#define Port_PortGroupAnalog00_PortPin150    (Port_PinType)110
-#define Port_PortGroupAnalog10_PortPin00    (Port_PinType)111
-#define Port_PortGroupAnalog10_PortPin10    (Port_PinType)112
-#define Port_PortGroupAnalog10_PortPin20    (Port_PinType)113
-#define Port_PortGroupAnalog10_PortPin30    (Port_PinType)114
-#define Port_PortGroupAnalog10_PortPin40    (Port_PinType)115
-#define Port_PortGroupAnalog10_PortPin50    (Port_PinType)116
-#define Port_PortGroupAnalog10_PortPin60    (Port_PinType)117
-#define Port_PortGroupAnalog10_PortPin70    (Port_PinType)118
-#define Port_PortGroupInput00_PortPin00    (Port_PinType)119
+#define Port_PortGroup1_PortPin6    (Port_PinType)15
+#define Port_PortGroup1_PortPin7    (Port_PinType)16
+#define Port_PortGroup1_PortPin8    (Port_PinType)17
+#define Port_PortGroup80_PortPin00    (Port_PinType)18
+#define Port_PortGroup80_PortPin10    (Port_PinType)19
+#define Port_PortGroup80_PortPin20    (Port_PinType)20
+#define Port_PortGroup80_PortPin30    (Port_PinType)21
+#define Port_PortGroup80_PortPin40    (Port_PinType)22
+#define Port_PortGroup80_PortPin50    (Port_PinType)23
+#define Port_PortGroup80_PortPin60    (Port_PinType)24
+#define Port_PortGroup80_PortPin70    (Port_PinType)25
+#define Port_PortGroup80_PortPin80    (Port_PinType)26
+#define Port_PortGroup80_PortPin90    (Port_PinType)27
+#define Port_PortGroup80_PortPin100    (Port_PinType)28
+#define Port_PortGroup80_PortPin110    (Port_PinType)29
+#define Port_PortGroup80_PortPin120    (Port_PinType)30
+#define Port_PortGroup90_PortPin00    (Port_PinType)31
+#define Port_PortGroup90_PortPin10    (Port_PinType)32
+#define Port_PortGroup90_PortPin20    (Port_PinType)33
+#define Port_PortGroup90_PortPin30    (Port_PinType)34
+#define Port_PortGroup90_PortPin40    (Port_PinType)35
+#define Port_PortGroup90_PortPin50    (Port_PinType)36
+#define Port_PortGroup90_PortPin60    (Port_PinType)37
+#define Port_PortGroup100_PortPin00    (Port_PinType)38
+#define Port_PortGroup100_PortPin10    (Port_PinType)39
+#define Port_PortGroup100_PortPin20    (Port_PinType)40
+#define Port_PortGroup100_PortPin30    (Port_PinType)41
+#define Port_PortGroup100_PortPin40    (Port_PinType)42
+#define Port_PortGroup100_PortPin50    (Port_PinType)43
+#define Port_PortGroup100_PortPin60    (Port_PinType)44
+#define Port_PortGroup100_PortPin70    (Port_PinType)45
+#define Port_PortGroup100_PortPin80    (Port_PinType)46
+#define Port_PortGroup100_PortPin90    (Port_PinType)47
+#define Port_PortGroup100_PortPin100    (Port_PinType)48
+#define Port_PortGroup100_PortPin110    (Port_PinType)49
+#define Port_PortGroup100_PortPin120    (Port_PinType)50
+#define Port_PortGroup100_PortPin130    (Port_PinType)51
+#define Port_PortGroup100_PortPin140    (Port_PinType)52
+#define Port_PortGroup100_PortPin150    (Port_PinType)53
+#define Port_PortGroup110_PortPin00    (Port_PinType)54
+#define Port_PortGroup110_PortPin10    (Port_PinType)55
+#define Port_PortGroup110_PortPin20    (Port_PinType)56
+#define Port_PortGroup110_PortPin30    (Port_PinType)57
+#define Port_PortGroup110_PortPin40    (Port_PinType)58
+#define Port_PortGroup110_PortPin50    (Port_PinType)59
+#define Port_PortGroup110_PortPin60    (Port_PinType)60
+#define Port_PortGroup110_PortPin70    (Port_PinType)61
+#define Port_PortGroup110_PortPin80    (Port_PinType)62
+#define Port_PortGroup110_PortPin90    (Port_PinType)63
+#define Port_PortGroup110_PortPin100    (Port_PinType)64
+#define Port_PortGroup110_PortPin110    (Port_PinType)65
+#define Port_PortGroup110_PortPin120    (Port_PinType)66
+#define Port_PortGroup110_PortPin130    (Port_PinType)67
+#define Port_PortGroup110_PortPin140    (Port_PinType)68
+#define Port_PortGroup110_PortPin150    (Port_PinType)69
+#define Port_PortGroup120_PortPin00    (Port_PinType)70
+#define Port_PortGroup120_PortPin10    (Port_PinType)71
+#define Port_PortGroup120_PortPin20    (Port_PinType)72
+#define Port_PortGroup180_PortPin00    (Port_PinType)73
+#define Port_PortGroup180_PortPin10    (Port_PinType)74
+#define Port_PortGroup180_PortPin20    (Port_PinType)75
+#define Port_PortGroup180_PortPin30    (Port_PinType)76
+#define Port_PortGroup200_PortPin40    (Port_PinType)77
+#define Port_PortGroup200_PortPin50    (Port_PinType)78
+#define Port_PortGroupJtag00_PortPin00    (Port_PinType)79
+#define Port_PortGroupJtag00_PortPin10    (Port_PinType)80
+#define Port_PortGroupJtag00_PortPin20    (Port_PinType)81
+#define Port_PortGroupJtag00_PortPin30    (Port_PinType)82
+#define Port_PortGroupJtag00_PortPin40    (Port_PinType)83
+#define Port_PortGroupJtag00_PortPin50    (Port_PinType)84
+#define Port_PortGroupJtag00_PortPin60    (Port_PinType)85
+#define Port_PortGroupAnalog00_PortPin00    (Port_PinType)86
+#define Port_PortGroupAnalog00_PortPin10    (Port_PinType)87
+#define Port_PortGroupAnalog00_PortPin20    (Port_PinType)88
+#define Port_PortGroupAnalog00_PortPin30    (Port_PinType)89
+#define Port_PortGroupAnalog00_PortPin40    (Port_PinType)90
+#define Port_PortGroupAnalog00_PortPin50    (Port_PinType)91
+#define Port_PortGroupAnalog00_PortPin60    (Port_PinType)92
+#define Port_PortGroupAnalog00_PortPin70    (Port_PinType)93
+#define Port_PortGroupAnalog00_PortPin80    (Port_PinType)94
+#define Port_PortGroupAnalog00_PortPin90    (Port_PinType)95
+#define Port_PortGroupAnalog00_PortPin100    (Port_PinType)96
+#define Port_PortGroupAnalog00_PortPin110    (Port_PinType)97
+#define Port_PortGroupAnalog00_PortPin120    (Port_PinType)98
+#define Port_PortGroupAnalog00_PortPin130    (Port_PinType)99
+#define Port_PortGroupAnalog00_PortPin140    (Port_PinType)100
+#define Port_PortGroupAnalog00_PortPin150    (Port_PinType)101
+#define Port_PortGroupAnalog10_PortPin00    (Port_PinType)102
+#define Port_PortGroupAnalog10_PortPin10    (Port_PinType)103
+#define Port_PortGroupAnalog10_PortPin20    (Port_PinType)104
+#define Port_PortGroupAnalog10_PortPin30    (Port_PinType)105
+#define Port_PortGroupAnalog10_PortPin40    (Port_PinType)106
+#define Port_PortGroupAnalog10_PortPin50    (Port_PinType)107
+#define Port_PortGroupAnalog10_PortPin60    (Port_PinType)108
+#define Port_PortGroupAnalog10_PortPin70    (Port_PinType)109
+#define Port_PortGroupInput00_PortPin00    (Port_PinType)110
 
 /* Configuration Set Handles */
 #define PortConfigSet0  (&Port_GstConfiguration[0])

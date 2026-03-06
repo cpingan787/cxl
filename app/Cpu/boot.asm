@@ -22,7 +22,7 @@
 	; if using eiint as table reference method,
 	; enable next line's macro.
 
-	;USE_TABLE_REFERENCE_METHOD .set 1
+	USE_TABLE_REFERENCE_METHOD .set 1
 
 ;-----------------------------------------------------------------------------
 ;	exception vector table

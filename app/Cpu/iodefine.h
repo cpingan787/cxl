@@ -13343,6 +13343,10 @@ struct __tag605
 #define DMAC     (*(volatile struct __tag604 *)0xFFFF8000) /* DMAC */
 #define INTC2    (*(volatile struct __tag605 *)0xFFFFB040) /* INTC2 */
 
+/* add by brave according sample */
+#define FLMDPCMD FLMD.PCMD
+#define FLMDCNT FLMD.CNT
+
 /* IOR List *
 FLMD.CNT
 FLMD.PCMD

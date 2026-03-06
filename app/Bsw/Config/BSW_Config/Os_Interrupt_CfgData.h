@@ -57,24 +57,17 @@ extern Os_IsrType* const Os_SysIsrNestQueue_Inf[OS_AUTOSAR_CORES];
 /*
  * DeclareISR
  */
-DeclareISR(ISR_RCAN1ERR_IRQ_Handler);
 DeclareISR(ISR_RCAN1TRX_IRQ_Handler);
+DeclareISR(ISR_RCAN1ERR_IRQ_Handler);
 DeclareISR(ISR_RCANGRECC0_IRQ_Handler);
+DeclareISR(ISR_ADCA0I0_IRQ_Handler);
 DeclareISR(ISR_ADCA0I1_IRQ_Handler);
-DeclareISR(ISR_ADCA1I1_IRQ_Handler);
-DeclareISR(ISR_TAUJ0I0_IRQ_Handler);
-DeclareISR(ISR_TAUD0I9_IRQ_Handler);
-DeclareISR(ISR_TAUB0I12_IRQ_Handler);
 DeclareISR(ISR_RLIN34TX0_IRQ_Handler);
 DeclareISR(ISR_RLIN34RX1_IRQ_Handler);
 DeclareISR(ISR_RLIN34ERR2_IRQ_Handler);
 DeclareISR(ISR_RLIN35TX0_IRQ_Handler);
 DeclareISR(ISR_RLIN35RX1_IRQ_Handler);
 DeclareISR(ISR_RLIN35ERR2_IRQ_Handler);
-DeclareISR(ISR_RIIC0TI_IRQ_Handler);
-DeclareISR(ISR_RIIC0EE_IRQ_Handler);
-DeclareISR(ISR_RIIC0RI_IRQ_Handler);
-DeclareISR(ISR_RIIC0TEI_IRQ_Handler);
 /* PRQA S 1753 -- */
 
 #endif /* OS_INTERRUPT_CFGDATA_H */

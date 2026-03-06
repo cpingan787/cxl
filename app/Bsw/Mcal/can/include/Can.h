@@ -78,10 +78,10 @@
 /*******************************************************************************
 **      To support different AUTOSAR releases in a single package             **
 *******************************************************************************/
-#define CAN_AR_FOUR_ZERO_THREE    450
+#define CAN_AR_FOUR_ZERO_THREE    403
 #define CAN_AR_FOUR_TWO_TWO       422
 
-#define CAN_AR_450_VERSION     CAN_AR_FOUR_ZERO_THREE
+#define CAN_AR_403_VERSION     CAN_AR_FOUR_ZERO_THREE
 #define CAN_AR_422_VERSION     CAN_AR_FOUR_TWO_TWO
 
 /*******************************************************************************
@@ -110,8 +110,8 @@
 #else
 /* AUTOSAR release version information */
 #define CAN_AR_RELEASE_MAJOR_VERSION     4U
-#define CAN_AR_RELEASE_MINOR_VERSION     2U
-#define CAN_AR_RELEASE_REVISION_VERSION  2U
+#define CAN_AR_RELEASE_MINOR_VERSION     0U
+#define CAN_AR_RELEASE_REVISION_VERSION  3U
 #endif
 
 /* Module Software version information */

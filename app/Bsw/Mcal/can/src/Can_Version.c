@@ -140,7 +140,7 @@
 
 #if ((DEM_AR_RELEASE_MAJOR_VERSION != CAN_AR_RELEASE_MAJOR_VERSION) || \
               (DEM_AR_RELEASE_MINOR_VERSION != CAN_AR_RELEASE_MINOR_VERSION))
- // #error "The AR version of Dem.h does not match the expected version"
+  #error "The AR version of Dem.h does not match the expected version"
 #endif
 
 #if(CAN_CRITICAL_SECTION_PROTECTION == STD_ON)

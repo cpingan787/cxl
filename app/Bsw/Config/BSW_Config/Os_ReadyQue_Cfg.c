@@ -19,10 +19,10 @@
  * @file              : Os_ReadyQue_Cfg.c
  * @license           : 
  * @licenseExpiryDate : 
- * @date              : 2026-01-20 14:26:30
+ * @date              : 2026-01-05 10:51:06
  * @customer          : iSoft
  * @description       : Configuration parameter of OS
- * @toolVersion       : 2.2.0.3
+ * @toolVersion       : 
  **********************************************************************************************************************/
 
 /* =================================================== inclusions =================================================== */
@@ -55,41 +55,6 @@ static Os_TaskType Os_ActivateQueue_Core0_1[2];
 /* PRQA S 3132 -- */
 #define OS_STOP_SEC_VAR_CLEARED_CORE0_UNSPECIFIED
 #include "Os_MemMap.h"
-#define OS_START_SEC_VAR_CLEARED_CORE0_UNSPECIFIED
-#include "Os_MemMap.h"
-/* PRQA S 3132 ++ */ /* VL_QAC_MagicNum */
-static Os_TaskType Os_ActivateQueue_Core0_2[2];
-/* PRQA S 3132 -- */
-#define OS_STOP_SEC_VAR_CLEARED_CORE0_UNSPECIFIED
-#include "Os_MemMap.h"
-#define OS_START_SEC_VAR_CLEARED_CORE0_UNSPECIFIED
-#include "Os_MemMap.h"
-/* PRQA S 3132 ++ */ /* VL_QAC_MagicNum */
-static Os_TaskType Os_ActivateQueue_Core0_3[2];
-/* PRQA S 3132 -- */
-#define OS_STOP_SEC_VAR_CLEARED_CORE0_UNSPECIFIED
-#include "Os_MemMap.h"
-#define OS_START_SEC_VAR_CLEARED_CORE0_UNSPECIFIED
-#include "Os_MemMap.h"
-/* PRQA S 3132 ++ */ /* VL_QAC_MagicNum */
-static Os_TaskType Os_ActivateQueue_Core0_4[2];
-/* PRQA S 3132 -- */
-#define OS_STOP_SEC_VAR_CLEARED_CORE0_UNSPECIFIED
-#include "Os_MemMap.h"
-#define OS_START_SEC_VAR_CLEARED_CORE0_UNSPECIFIED
-#include "Os_MemMap.h"
-/* PRQA S 3132 ++ */ /* VL_QAC_MagicNum */
-static Os_TaskType Os_ActivateQueue_Core0_5[2];
-/* PRQA S 3132 -- */
-#define OS_STOP_SEC_VAR_CLEARED_CORE0_UNSPECIFIED
-#include "Os_MemMap.h"
-#define OS_START_SEC_VAR_CLEARED_CORE0_UNSPECIFIED
-#include "Os_MemMap.h"
-/* PRQA S 3132 ++ */ /* VL_QAC_MagicNum */
-static Os_TaskType Os_ActivateQueue_Core0_6[2];
-/* PRQA S 3132 -- */
-#define OS_STOP_SEC_VAR_CLEARED_CORE0_UNSPECIFIED
-#include "Os_MemMap.h"
 
 #define OS_START_SEC_VAR_CLEARED_CORE0_UNSPECIFIED
 #include "Os_MemMap.h"
@@ -103,11 +68,6 @@ static Os_TaskType* const Os_ReadyQueue_Core0[CFG_PRIORITY_MAX_CORE0] =
 {
     Os_ActivateQueue_Core0_0,
     Os_ActivateQueue_Core0_1,
-    Os_ActivateQueue_Core0_2,
-    Os_ActivateQueue_Core0_3,
-    Os_ActivateQueue_Core0_4,
-    Os_ActivateQueue_Core0_5,
-    Os_ActivateQueue_Core0_6,
 };
 #define OS_STOP_SEC_CONFIG_DATA_UNSPECIFIED
 #include "Os_MemMap.h"
@@ -117,11 +77,6 @@ static Os_TaskType* const Os_ReadyQueue_Core0[CFG_PRIORITY_MAX_CORE0] =
 static const uint32 Os_ActivateQueueSize_Core0[CFG_PRIORITY_MAX_CORE0] =
 {
     1U,
-    2U,
-    2U,
-    2U,
-    2U,
-    2U,
     2U,
 };
 #define OS_STOP_SEC_CONFIG_DATA_UNSPECIFIED
@@ -158,4 +113,3 @@ const Os_ReadyQueueManageType * const Os_ReadyQueMg_Inf[OS_AUTOSAR_CORES] =
 #define OS_STOP_SEC_CONFIG_DATA_UNSPECIFIED
 #include "Os_MemMap.h"
 /*=======[E N D   O F   F I L E]==============================================*/
-/* PRQA S 6620 EOF */ /* VL_MTR_Os_STSCT */

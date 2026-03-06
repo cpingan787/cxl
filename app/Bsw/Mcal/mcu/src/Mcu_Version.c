@@ -129,7 +129,7 @@
 /* Dem Module Version Check */
 #if ((DEM_AR_RELEASE_MAJOR_VERSION != MCU_AR_RELEASE_MAJOR_VERSION) \
  || (DEM_AR_RELEASE_MINOR_VERSION != MCU_AR_RELEASE_MINOR_VERSION))
- // #error "The AR version of Dem.h does not match the expected version"
+  #error "The AR version of Dem.h does not match the expected version"
 #endif /* ((DEM_AR_RELEASE_MAJOR_VERSION != MCU_AR_RELEASE_MAJOR_VERSION)
           || (DEM_AR_RELEASE_MINOR_VERSION != MCU_AR_RELEASE_MINOR_VERSION)) */
 

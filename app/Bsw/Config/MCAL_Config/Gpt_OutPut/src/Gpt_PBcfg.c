@@ -358,7 +358,7 @@ CONST(Gpt_TAUUnitConfigType,GPT_CONST) Gpt_GstTAUUnitConfig[] =
     0x0001U,
 
     /* usPrescaler */
-    0xFFF0U,
+    0xFFFFU,
 
     /* ucBaudRate */
     0xFFU,

@@ -1,4 +1,4 @@
-# mcu_app
+# mcu_boot
 
 
 
@@ -15,14 +15,14 @@ Already a pro? Just edit this README.md and make it your own. Want to make it ea
 
 ```
 cd existing_repo
-git remote add origin https://code.sirun.net/TBox/svw/vehicle_f/mcu_app.git
+git remote add origin https://code.sirun.net/TBox/svw/vehicle_f/mcu_boot.git
 git branch -M main
 git push -uf origin main
 ```
 
 ## Integrate with your tools
 
-- [ ] [Set up project integrations](https://code.sirun.net/TBox/svw/vehicle_f/mcu_app/-/settings/integrations)
+- [ ] [Set up project integrations](https://code.sirun.net/TBox/svw/vehicle_f/mcu_boot/-/settings/integrations)
 
 ## Collaborate with your team
 

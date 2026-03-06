@@ -81,8 +81,8 @@
 *******************************************************************************/
 /* AUTOSAR specification release version information for R4.0.3 */
 #define COMPILER_AR_RELEASE_MAJOR_VERSION  4
-#define COMPILER_AR_RELEASE_MINOR_VERSION  5
-#define COMPILER_AR_RELEASE_REVISION_VERSION  0
+#define COMPILER_AR_RELEASE_MINOR_VERSION  4
+#define COMPILER_AR_RELEASE_REVISION_VERSION  2
 
 /* AUTOSAR specification version information as per R3.2.2 */
 #define COMPILER_AR_MAJOR_VERSION  2
@@ -133,12 +133,6 @@
    fctname     function name respectively name of the defined type
  */
 #define CONSTP2FUNC(rettype, ptrclass, fctname)  rettype (* const fctname)
-
-/* memclass and ptrclass is not used */
-/* [cover parentID={3D1E4249-7935-442a-BA40-B52F61DAD64C}] [/cover] */
-/* MISRA2012_RULE_4_9_JUSTIFICATION: Function like macro is defined to comply
-   with the AUTOSAR standard. This macro is not used in MCAL.*/
-#define FUNC_P2CONST(rettype, ptrclass, memclass) const rettype *
 
 /* The compiler abstraction shall define the FUNC macro for the declaration and
    definition of functions, that ensures correct syntax of function
@@ -200,6 +194,8 @@
 //#define DISABLE_INTERRUPT()       __asm("di")
 #define ENABLE_INTERRUPT()		__EI()
 #define DISABLE_INTERRUPT()		__DI()
+
+#define LOCAL_INLINE          static inline 
 
 /* Inline assembler support for syncp instruction */
 //#define EXECUTE_SYNCP()           __asm("syncp")

@@ -68,8 +68,8 @@
 *******************************************************************************/
 /* AUTOSAR specification release version information for R4.0.3 */
 #define PLATFORM_TYPES_AR_RELEASE_MAJOR_VERSION     4
-#define PLATFORM_TYPES_AR_RELEASE_MINOR_VERSION     5
-#define PLATFORM_TYPES_AR_RELEASE_REVISION_VERSION  0
+#define PLATFORM_TYPES_AR_RELEASE_MINOR_VERSION     0
+#define PLATFORM_TYPES_AR_RELEASE_REVISION_VERSION  3
 
 /* AUTOSAR specification version information as per R3.2.2 */
 #define PLATFORM_TYPES_AR_MAJOR_VERSION  2

@@ -6018,11 +6018,8 @@ McuSeqMode)
     if ( Mcu_GpConfigPtr->ucINTCWEND == MCU_TRUE )
     {
       /* QAC Warning: START Msg(2:2814)-26 */
-      // RH850_SV_CLEAR_ICR_SYNCP(8 , Mcu_ICCWEND_ICRAddress,
-                                    // MCU_ICCWEND_ACTIVATION);
-      RH850_SV_CLEAR_ICR_SYNCP(8 , Mcu_ICCWEND_IMRAddress,
+      RH850_SV_CLEAR_ICR_SYNCP(8 , Mcu_ICCWEND_ICRAddress,
                                     MCU_ICCWEND_ACTIVATION);
-                                    
       /* END Msg(2:2814)-26 */
     }
     else
@@ -6220,9 +6217,7 @@ FUNC(void, MCU_PUBLIC_CODE)Mcu_SequencerStop(void)
     if ( Mcu_GpConfigPtr->ucINTCWEND == MCU_TRUE )
     {
       /* QAC Warning: START Msg(2:2814)-26 */
-      // RH850_SV_MODE_ICR_OR(8, Mcu_ICCWEND_ICRAddress,
-      //                               ((uint8)~MCU_ICCWEND_ACTIVATION));
-      RH850_SV_MODE_ICR_OR(8 , Mcu_ICCWEND_IMRAddress,
+      RH850_SV_MODE_ICR_OR(8, Mcu_ICCWEND_ICRAddress,
                                     ((uint8)~MCU_ICCWEND_ACTIVATION));
       /* END Msg(2:2814)-26 */
     }

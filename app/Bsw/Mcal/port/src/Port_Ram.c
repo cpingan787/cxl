@@ -121,7 +121,7 @@
 /*******************************************************************************
 **                      Version Check                                         **
 *******************************************************************************/
-/*
+
 #if (PORT_RAM_AR_RELEASE_MAJOR_VERSION != \
                                             PORT_RAM_C_AR_RELEASE_MAJOR_VERSION)
   #error "Port_Ram.c : Mismatch in Release Major Version"
@@ -141,7 +141,7 @@
 #if (PORT_RAM_SW_MINOR_VERSION != PORT_RAM_C_SW_MINOR_VERSION)
    #error "Port_Ram.c : Mismatch in Software Minor Version"
 #endif
-*/
+
 /*******************************************************************************
 **                      MISRA C Rule Violations                               **
 *******************************************************************************/

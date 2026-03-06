@@ -70,14 +70,14 @@
 **                      Input File                                            **
 *******************************************************************************/
 /*
- * INPUT FILE:    E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\Config\ECUC\test_Can_Can_ecuc.arxml
- *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\Config\ECUC\test_Mcu_Mcu0_ecuc.arxml
- *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\modules\can\R422_CAN_F1x_BSWMDT.arxml
- *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\stubs\4.2.2\Dem\xml\Dem_Can.arxml
- *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\stubs\4.2.2\EcuM\xml\EcuM_can.arxml
- *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\stubs\4.2.2\Os\xml\Os_Can.arxml
- *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\common_family\generator\Sample_Application_F1x.trxml
- * GENERATED ON:  27 Jan 2026 - 05:47:31
+ * INPUT FILE:    E:\PuHua_Tbox\RH850gitlab\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\Config\ECUC\test_Can_Can_ecuc.arxml
+ *                E:\PuHua_Tbox\RH850gitlab\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\Config\ECUC\test_Mcu_Mcu0_ecuc.arxml
+ *                E:\PuHua_Tbox\RH850gitlab\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\modules\can\R422_CAN_F1x_BSWMDT.arxml
+ *                E:\PuHua_Tbox\RH850gitlab\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\stubs\4.2.2\Dem\xml\Dem_Can.arxml
+ *                E:\PuHua_Tbox\RH850gitlab\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\stubs\4.2.2\EcuM\xml\EcuM_can.arxml
+ *                E:\PuHua_Tbox\RH850gitlab\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\stubs\4.2.2\Os\xml\Os_Can.arxml
+ *                E:\PuHua_Tbox\RH850gitlab\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\common_family\generator\Sample_Application_F1x.trxml
+ * GENERATED ON:  17 Jan 2026 - 08:35:33
  */
 
 /*******************************************************************************
@@ -284,7 +284,7 @@ static CONST(Can_HohConfigType, CAN_RSCAN_CONFIG_DATA) Can_GaaHohConfig0[] =
     /* ucPaddingValue */
     0x00U,
     /* ulXXCCRegValue */
-    CAN_RSCAN_RFIM | CAN_RSCAN_RFIE | CAN_RSCAN_RFDC_48 | CAN_RSCAN_RFPLS_64
+    CAN_RSCAN_RFIM | CAN_RSCAN_RFIE | CAN_RSCAN_RFDC_64 | CAN_RSCAN_RFPLS_64
   },
   /* Index: 1 - CanHardwareObject_Rx1 -> RxFIFO[1] */
   {
@@ -305,9 +305,9 @@ static CONST(Can_HohConfigType, CAN_RSCAN_CONFIG_DATA) Can_GaaHohConfig0[] =
     /* ucPaddingValue */
     0x00U,
     /* ulXXCCRegValue */
-    CAN_RSCAN_RFIM | CAN_RSCAN_RFIE | CAN_RSCAN_RFDC_48 | CAN_RSCAN_RFPLS_64
+    CAN_RSCAN_RFIM | CAN_RSCAN_RFIE | CAN_RSCAN_RFDC_64 | CAN_RSCAN_RFPLS_64
   },
-  /* Index: 2 - CanHardwareObject_Tx0 -> TxRxFIFO(Tx)[3] linked to TxBuffer[16] */
+  /* Index: 2 - CanHardwareObject_Tx0 -> TxBuffer[16] */
   {
     /* enHoh */
     CAN_HOH_HTH,
@@ -316,19 +316,19 @@ static CONST(Can_HohConfigType, CAN_RSCAN_CONFIG_DATA) Can_GaaHohConfig0[] =
     /* ucController */
     0x00U,
     /* ucTMDLC */
-    0x40U,
+    0x14U,
     /* usHohId */
     0x0002U,
     /* enBufferType */
-    CAN_BUFFERTYPE_TXRXFIFO,
+    CAN_BUFFERTYPE_BUFFER,
     /* ucBufferIndex */
-    0x03U,
+    0x10U,
     /* ucPaddingValue */
     0x00U,
     /* ulXXCCRegValue */
-    CAN_RSCAN_CFITT(0) | CAN_RSCAN_CFTML(0) | CAN_RSCAN_CFM_TX | CAN_RSCAN_CFIM | CAN_RSCAN_CFTXIE | CAN_RSCAN_CFDC_16 | CAN_RSCAN_CFPLS_64
+    0UL
   },
-  /* Index: 3 - CanHardwareObject_Tx1 -> TxRxFIFO(Tx)[4] linked to TxBuffer[17] */
+  /* Index: 3 - CanHardwareObject_Tx1 -> TxBuffer[17] */
   {
     /* enHoh */
     CAN_HOH_HTH,
@@ -337,17 +337,17 @@ static CONST(Can_HohConfigType, CAN_RSCAN_CONFIG_DATA) Can_GaaHohConfig0[] =
     /* ucController */
     0x00U,
     /* ucTMDLC */
-    0x40U,
+    0x14U,
     /* usHohId */
     0x0003U,
     /* enBufferType */
-    CAN_BUFFERTYPE_TXRXFIFO,
+    CAN_BUFFERTYPE_BUFFER,
     /* ucBufferIndex */
-    0x04U,
+    0x11U,
     /* ucPaddingValue */
     0x00U,
     /* ulXXCCRegValue */
-    CAN_RSCAN_CFITT(0) | CAN_RSCAN_CFTML(1) | CAN_RSCAN_CFM_TX | CAN_RSCAN_CFIM | CAN_RSCAN_CFTXIE | CAN_RSCAN_CFDC_16 | CAN_RSCAN_CFPLS_64
+    0UL
   }
 };
 
@@ -384,7 +384,7 @@ static CONST(Can_FilterType, CAN_RSCAN_CONFIG_DATA) Can_GaaFilterConfig00[] =
 static CONST(uint32, CAN_RSCAN_CONFIG_DATA) Can_GaaTMIEConfig00[] =
 {
   /* Index: 0 - 0 */
-  0x00000000UL,
+  0x00030000UL,
   /* Index: 1 - 1 */
   0x00000000UL,
   /* Index: 2 - 2 */

@@ -19,7 +19,7 @@
  * @file              : Os_Application.ld
  * @license           : 
  * @licenseExpiryDate : 
- * @date              : 2026-02-02 11:06:48
+ * @date              : 2026-01-17 21:52:00
  * @customer          : iSoft
  * @description       : Configuration parameter of OS
  * @toolVersion       : 2.2.0.3

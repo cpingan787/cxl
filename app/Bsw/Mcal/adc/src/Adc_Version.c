@@ -138,7 +138,7 @@
 
 #if ((DEM_AR_RELEASE_MAJOR_VERSION != ADC_AR_RELEASE_MAJOR_VERSION) || \
      (DEM_AR_RELEASE_MINOR_VERSION != ADC_AR_RELEASE_MINOR_VERSION))
- // #error "The AR version of Dem.h does not match the expected version"
+  #error "The AR version of Dem.h does not match the expected version"
 #endif /* End of DET */
 
 #if ((OS_AR_RELEASE_MAJOR_VERSION != ADC_AR_RELEASE_MAJOR_VERSION) || \

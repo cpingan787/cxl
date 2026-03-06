@@ -19,10 +19,10 @@
  * @file              : Ioc.h
  * @license           : 
  * @licenseExpiryDate : 
- * @date              : 2026-01-16 11:47:36
+ * @date              : 2026-01-05 10:51:04
  * @customer          : iSoft
  * @description       : Configuration parameter of OS
- * @toolVersion       : 2.2.0.3
+ * @toolVersion       : 
  **********************************************************************************************************************/
 #ifndef IOC_H
 #define IOC_H

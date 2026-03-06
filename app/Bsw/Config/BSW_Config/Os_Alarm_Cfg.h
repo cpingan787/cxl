@@ -19,10 +19,10 @@
  * @file              : Os_Alarm_Cfg.h
  * @license           : 
  * @licenseExpiryDate : 
- * @date              : 2026-01-20 14:26:30
+ * @date              : 2026-01-05 10:51:05
  * @customer          : iSoft
  * @description       : Configuration parameter of OS
- * @toolVersion       : 2.2.0.3
+ * @toolVersion       : 
  **********************************************************************************************************************/
 
 #ifndef OS_ALARM_CFG_H
@@ -31,11 +31,11 @@
 /* =================================================== inclusions =================================================== */
 
 /* ===================================================== macros ===================================================== */
-#define     CFG_ALARM_MAX                   		(5U)
-#define     CFG_AUTO_ALARM_MAX              		(0U)
+#define     CFG_ALARM_MAX                   		(1U)
+#define     CFG_AUTO_ALARM_MAX              		(1U)
 /* Core0*/
-#define     CFG_ALARM_MAX_CORE0                   	(5U)
-#define     CFG_AUTO_ALARM_MAX_CORE0              	(0U)
+#define     CFG_ALARM_MAX_CORE0                   	(1U)
+#define     CFG_AUTO_ALARM_MAX_CORE0              	(1U)
 
 /* PRQA S 0722, 0724, 1271, 1434, 0723 ++ *//* VL_Os_0722, VL_Os_0724, VL_Os_1271, VL_Os_1434, VL_Os_0723 */
  /*! Alarm identifiers. */
@@ -43,11 +43,7 @@ typedef enum
 {
     /* Core0 */
     CFG_ALARM_ID_CORE0_BEGIN = 0,
-    OsAlarm_1ms = CFG_ALARM_ID_CORE0_BEGIN,
-    OsAlarm_5ms,
-    OsAlarm_10ms,
-    OsAlarm_50ms,
-    OsAlarm_100ms,
+    OsAlarm_0 = CFG_ALARM_ID_CORE0_BEGIN,
     CFG_ALARM_ID_CORE0_END,
 
     INVALID_ALARM = 0xFFFFU,

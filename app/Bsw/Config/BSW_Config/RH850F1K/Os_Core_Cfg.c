@@ -56,14 +56,14 @@ const Os_IntInstallType Os_IntInstall[CFG_ISR_MAX] =
     },
     {
         3U,  /*IntPrio*/
-        Os_ISR_RCAN1ERR_IRQ_Handler,  /*cat2 ISR*/
-        OS_ID_RCAN1ERR_IRQ,/*IntNumber*/
+        Os_ISR_RCAN1TRX_IRQ_Handler,  /*cat2 ISR*/
+        OS_ID_RCAN1TRX_IRQ,/*IntNumber*/
         INVALID_SELECTION_BIT, /*intc2SelectionBit*/
     },
     {
         3U,  /*IntPrio*/
-        Os_ISR_RCAN1TRX_IRQ_Handler,  /*cat2 ISR*/
-        OS_ID_RCAN1TRX_IRQ,/*IntNumber*/
+        Os_ISR_RCAN1ERR_IRQ_Handler,  /*cat2 ISR*/
+        OS_ID_RCAN1ERR_IRQ,/*IntNumber*/
         INVALID_SELECTION_BIT, /*intc2SelectionBit*/
     },
     {
@@ -74,32 +74,14 @@ const Os_IntInstallType Os_IntInstall[CFG_ISR_MAX] =
     },
     {
         3U,  /*IntPrio*/
-        Os_ISR_ADCA0I1_IRQ_Handler,  /*cat2 ISR*/
-        OS_ID_ADCA0I1_IRQ,/*IntNumber*/
+        Os_ISR_ADCA0I0_IRQ_Handler,  /*cat2 ISR*/
+        OS_ID_ADCA0I0_IRQ,/*IntNumber*/
         INVALID_SELECTION_BIT, /*intc2SelectionBit*/
     },
     {
         3U,  /*IntPrio*/
-        Os_ISR_ADCA1I1_IRQ_Handler,  /*cat2 ISR*/
-        OS_ID_ADCA1I1_IRQ,/*IntNumber*/
-        INVALID_SELECTION_BIT, /*intc2SelectionBit*/
-    },
-    {
-        4U,  /*IntPrio*/
-        Os_ISR_TAUJ0I0_IRQ_Handler,  /*cat2 ISR*/
-        OS_ID_TAUJ0I0_IRQ,/*IntNumber*/
-        INVALID_SELECTION_BIT, /*intc2SelectionBit*/
-    },
-    {
-        4U,  /*IntPrio*/
-        Os_ISR_TAUD0I9_IRQ_Handler,  /*cat2 ISR*/
-        OS_ID_TAUD0I9_IRQ,/*IntNumber*/
-        INVALID_SELECTION_BIT, /*intc2SelectionBit*/
-    },
-    {
-        4U,  /*IntPrio*/
-        Os_ISR_TAUB0I12_IRQ_Handler,  /*cat2 ISR*/
-        OS_ID_TAUB0I12_IRQ,/*IntNumber*/
+        Os_ISR_ADCA0I1_IRQ_Handler,  /*cat2 ISR*/
+        OS_ID_ADCA0I1_IRQ,/*IntNumber*/
         INVALID_SELECTION_BIT, /*intc2SelectionBit*/
     },
     {
@@ -136,30 +118,6 @@ const Os_IntInstallType Os_IntInstall[CFG_ISR_MAX] =
         1U,  /*IntPrio*/
         Os_ISR_RLIN35ERR2_IRQ_Handler,  /*cat2 ISR*/
         OS_ID_RLIN35UR2_IRQ,/*IntNumber*/
-        INVALID_SELECTION_BIT, /*intc2SelectionBit*/
-    },
-    {
-        1U,  /*IntPrio*/
-        Os_ISR_RIIC0TI_IRQ_Handler,  /*cat2 ISR*/
-        OS_ID_RIIC0TI_IRQ,/*IntNumber*/
-        INVALID_SELECTION_BIT, /*intc2SelectionBit*/
-    },
-    {
-        1U,  /*IntPrio*/
-        Os_ISR_RIIC0EE_IRQ_Handler,  /*cat2 ISR*/
-        OS_ID_RIIC0EE_IRQ,/*IntNumber*/
-        INVALID_SELECTION_BIT, /*intc2SelectionBit*/
-    },
-    {
-        1U,  /*IntPrio*/
-        Os_ISR_RIIC0RI_IRQ_Handler,  /*cat2 ISR*/
-        OS_ID_RIIC0RI_IRQ,/*IntNumber*/
-        INVALID_SELECTION_BIT, /*intc2SelectionBit*/
-    },
-    {
-        1U,  /*IntPrio*/
-        Os_ISR_RIIC0TEI_IRQ_Handler,  /*cat2 ISR*/
-        OS_ID_RIIC0TEI_IRQ,/*IntNumber*/
         INVALID_SELECTION_BIT, /*intc2SelectionBit*/
     },
 };

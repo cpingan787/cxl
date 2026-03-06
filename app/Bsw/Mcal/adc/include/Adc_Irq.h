@@ -111,8 +111,8 @@
 #define ADC_IRQ_SW_MINOR_VERSION    ADC_TYPES_SW_MINOR_VERSION
 
 
-// #define ADC0_SG1_CAT2_ISR STD_ON
-// #define ADC1_SG1_CAT2_ISR STD_ON
+#define ADC0_SG1_CAT2_ISR STD_ON
+#define ADC1_SG1_CAT2_ISR STD_ON
 
 #define ISR(X) void OS_ISR_##X(void)
 
@@ -146,7 +146,7 @@
 /* Use ISR() macro from Os.h */
 /* Defines the CAT1 interrupt mapping */
 #else
-//extern _INTERRUPT_ FUNC(void, ADC_FAST_CODE) ADC0_SG1_ISR(void);
+// extern _INTERRUPT_ FUNC(void, ADC_FAST_CODE) ADC0_SG1_ISR(void);
 #endif
 
 /* Defines the CAT2 interrupt mapping */
@@ -154,7 +154,7 @@
 /* Use ISR() macro from Os.h */
 /* Defines the CAT1 interrupt mapping */
 #else
-//extern _INTERRUPT_ FUNC(void, ADC_FAST_CODE) ADC0_SG2_ISR(void);
+extern _INTERRUPT_ FUNC(void, ADC_FAST_CODE) ADC0_SG2_ISR(void);
 #endif
 
 /* Defines the CAT2 interrupt mapping */
@@ -162,7 +162,7 @@
 /* Use ISR() macro from Os.h */
 /* Defines the CAT1 interrupt mapping */
 #else
-//extern _INTERRUPT_ FUNC(void, ADC_FAST_CODE) ADC0_SG3_ISR(void);
+// extern _INTERRUPT_ FUNC(void, ADC_FAST_CODE) ADC0_SG3_ISR(void);
 #endif
 
 /* Defines the CAT2 interrupt mapping */

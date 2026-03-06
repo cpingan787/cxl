@@ -448,7 +448,7 @@
 *******************************************************************************/
 
 /* Implements PORT114,EAAR_PN0034_FR_0055,SWS_Port_0014 */
-/*
+
 #if (PORT_AR_RELEASE_MAJOR_VERSION != PORT_C_AR_RELEASE_MAJOR_VERSION)
   #error "Port.c : Mismatch in Release Major Version"
 #endif
@@ -464,7 +464,7 @@
 #endif
 #if (PORT_SW_MINOR_VERSION != PORT_C_SW_MINOR_VERSION)
   #error "Port.c : Mismatch in Software Minor Version"
-#endif*/
+#endif
 /*******************************************************************************
 **                      Global Data                                           **
 *******************************************************************************/

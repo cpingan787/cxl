@@ -98,7 +98,7 @@
 #endif
 /* CAN Interface call-back Header File */
 /* MISRA Violation: START Msg(2:0857)-6 */
-#include "CanIf_Cbk.h"
+#include "CanIf.h"
 /* END Msg(2:0857)-6 */
 /*
  * OS Header File to have the prototype of GetCounterValue()

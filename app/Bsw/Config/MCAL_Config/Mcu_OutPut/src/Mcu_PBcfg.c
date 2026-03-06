@@ -120,11 +120,10 @@
 **                         Input File                                         **
 *******************************************************************************/
 /*
- * INPUT FILE:    1
- *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\Config\ECUC\test_Mcu_Mcu0_ecuc.arxml
- *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\modules\mcu\R422_MCU_F1x_BSWMDT.arxml
- *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\stubs\4.2.2\Dem\xml\Dem_Mcu.arxml
- * GENERATED ON:  10 Feb 2026 - 10:23:31
+ * INPUT FILE:    E:\PuHua_Tbox\Tools\ASR_RH850F1K_MCAL_Ver42.08.00\Config\Config\ECUC\test_Mcu_Mcu0_ecuc.arxml
+ *                E:\PuHua_Tbox\Tools\ASR_RH850F1K_MCAL_Ver42.08.00\Config\modules\mcu\R422_MCU_F1x_BSWMDT.arxml
+ *                E:\PuHua_Tbox\Tools\ASR_RH850F1K_MCAL_Ver42.08.00\Config\stubs\4.2.2\Dem\xml\Dem_Mcu.arxml
+ * GENERATED ON:  14 Jan 2026 - 18:15:53
  */
 
 /*******************************************************************************
@@ -308,9 +307,6 @@ CONST(Mcu_ConfigType, MCU_VAR) Mcu_GstConfiguration[1] =
     /* ucModeSettingOffset */
     0x00U,
 
-    /* ucSequencerSettingOffset */
-    0x00U,
-
     /* pPortGroupSetting */
     &Mcu_GaaPortGroup[0],
 
@@ -324,9 +320,6 @@ CONST(Mcu_ConfigType, MCU_VAR) Mcu_GstConfiguration[1] =
     0x00U,
 
     /* ucNumOfPortGroup */
-    0x01U,
-
-    /* ucINTCWEND */
     0x01U
   }
 };
@@ -372,19 +365,19 @@ CONST(Mcu_ClockSetting, MCU_VAR) Mcu_GstClockSetting[1] =
     0x01U,
 
     /* ucNoOfIsoCkscReg */
-    0x03U,
+    0x04U,
 
     /* ucNoOfAwoCkscReg */
     0x04U,
 
     /* ucNoOfPllIsoCkscReg */
-    0x07U,
+    0x06U,
 
     /* ucNoOfPllAwoCkscReg */
     0x00U,
 
     /* ucCkscPllIndexOffset */
-    0x07U,
+    0x08U,
 
     /* ucPllSelectedSrcClock */
     0x01U,
@@ -423,7 +416,7 @@ CONST(Mcu_ModeSetting, MCU_VAR) Mcu_GstModeSetting[1] =
   /* Index: 0 - McuModeSettingConf0 */
   {
     /* ulPowerDownWakeupType0 */
-    0xFBFF7F9FUL,
+    0xFFFF7FFFUL,
 
     /* ulPowerDownWakeupTypeIso0 */
     0xFFFFFFFFUL,
@@ -432,7 +425,7 @@ CONST(Mcu_ModeSetting, MCU_VAR) Mcu_GstModeSetting[1] =
     MCU_HALT_MODE,
 
     /* blModeTransitionReq */
-    MCU_FALSE,
+    MCU_TRUE,
 
     /* blMainOscOperation */
     MCU_TRUE
@@ -489,7 +482,28 @@ CONST(Mcu_CkscSetting, MCU_VAR)Mcu_GstCkscSetting[14] =
     0x01U
   },
 
-  /* Index: 2 - McuIsoLrosc0 */
+  /* Index: 2 - McuIsoLin0 */
+  {
+    /* ucCkscSourceSelRegNum */
+    MCU_REG_CKSC_ILINS_CTL,
+
+    /* usCkscDividerSelRegOffset */
+    MCU_REG_CKSC_ILIND_CTL,
+
+    /* usCkscStpmskSelRegOffset */
+    MCU_REG_CKSC_ILIND_STPM,
+
+    /* ucCkscSourceSelRegValue */
+    0x02U,
+
+    /* ucCkscDividerSelRegValue */
+    0x01U,
+
+    /* ucCkscControlval */
+    0x07U
+  },
+
+  /* Index: 3 - McuIsoLrosc0 */
   {
     /* ucCkscSourceSelRegNum */
     MCU_NOT_USED,
@@ -510,7 +524,7 @@ CONST(Mcu_CkscSetting, MCU_VAR)Mcu_GstCkscSetting[14] =
     0x00U
   },
 
-  /* Index: 3 - McuAwoAdca00 */
+  /* Index: 4 - McuAwoAdca00 */
   {
     /* ucCkscSourceSelRegNum */
     MCU_REG_CKSC_AADCAS_CTL,
@@ -531,7 +545,7 @@ CONST(Mcu_CkscSetting, MCU_VAR)Mcu_GstCkscSetting[14] =
     0x07U
   },
 
-  /* Index: 4 - McuAwoFout0 */
+  /* Index: 5 - McuAwoFout0 */
   {
     /* ucCkscSourceSelRegNum */
     MCU_REG_CKSC_AFOUTS_CTL,
@@ -552,7 +566,7 @@ CONST(Mcu_CkscSetting, MCU_VAR)Mcu_GstCkscSetting[14] =
     0x05U
   },
 
-  /* Index: 5 - McuAwoTauj0 */
+  /* Index: 6 - McuAwoTauj0 */
   {
     /* ucCkscSourceSelRegNum */
     MCU_REG_CKSC_ATAUJS_CTL,
@@ -573,7 +587,7 @@ CONST(Mcu_CkscSetting, MCU_VAR)Mcu_GstCkscSetting[14] =
     0x07U
   },
 
-  /* Index: 6 - McuAwoWdta0 */
+  /* Index: 7 - McuAwoWdta0 */
   {
     /* ucCkscSourceSelRegNum */
     MCU_NOT_USED,
@@ -594,7 +608,7 @@ CONST(Mcu_CkscSetting, MCU_VAR)Mcu_GstCkscSetting[14] =
     0x06U
   },
 
-  /* Index: 7 - CPUCLK */
+  /* Index: 8 - CPUCLK */
   {
     /* ucCkscSourceSelRegNum */
     MCU_REG_CKSC_CPUCLKS_CTL,
@@ -609,13 +623,13 @@ CONST(Mcu_CkscSetting, MCU_VAR)Mcu_GstCkscSetting[14] =
     0x03U,
 
     /* ucCkscDividerSelRegValue */
-    0x11U,
+    0x01U,
 
     /* ucCkscControlval */
     0x03U
   },
 
-  /* Index: 8 - McuIsoAdca10 */
+  /* Index: 9 - McuIsoAdca10 */
   {
     /* ucCkscSourceSelRegNum */
     MCU_REG_CKSC_IADCAS_CTL,
@@ -636,7 +650,7 @@ CONST(Mcu_CkscSetting, MCU_VAR)Mcu_GstCkscSetting[14] =
     0x03U
   },
 
-  /* Index: 9 - McuIsoCan0 */
+  /* Index: 10 - McuIsoCan0 */
   {
     /* ucCkscSourceSelRegNum */
     MCU_REG_CKSC_ICANS_CTL,
@@ -655,27 +669,6 @@ CONST(Mcu_CkscSetting, MCU_VAR)Mcu_GstCkscSetting[14] =
 
     /* ucCkscControlval */
     0x05U
-  },
-
-  /* Index: 10 - McuIsoLin0 */
-  {
-    /* ucCkscSourceSelRegNum */
-    MCU_REG_CKSC_ILINS_CTL,
-
-    /* usCkscDividerSelRegOffset */
-    MCU_REG_CKSC_ILIND_CTL,
-
-    /* usCkscStpmskSelRegOffset */
-    MCU_REG_CKSC_ILIND_STPM,
-
-    /* ucCkscSourceSelRegValue */
-    0x01U,
-
-    /* ucCkscDividerSelRegValue */
-    0x01U,
-
-    /* ucCkscControlval */
-    0x07U
   },
 
   /* Index: 11 - McuIsoPeri10 */
@@ -762,55 +755,11 @@ CONST(Mcu_PortGroupAddress, MCU_VAR) Mcu_GaaPortGroup[1] =
 /* QAC Warning: START Msg(2:3211)-4 */
 /* QAC Warning: START Msg(2:0315)-5 */
 /* Array of Sequencer Setting */
-CONST(Mcu_SequencerSetting, MCU_VAR) Mcu_GstSequencerSetting[1] =
-{
-  /* Index: 0 - McuLowPowerSequencer0 */
-  {
-    /* pDigitalInputModeSetting */
-    &Mcu_GstDigitalInputModeSetting[0],
-
-    /* pTAUJ0ChRegs */
-    /* MISRA Violation: START Msg(4:0303)-3 */
-    (P2VAR(volatile TAUJChReg, TYPEDEF, MCU_CONFIG_DATA)) &TAUJ0CH0REG,
-    /* END Msg(4:0303)-3 */
-
-    /* ulSequencerCtlReg */
-    0x00000001UL,
-
-    /* ulTauj0TimerCntVal */
-    0x00000000UL,
-
-    /* usExternalSensorStabTime */
-    0x0000U,
-
-    /* usPrescaler */
-    0xFFFFU,
-
-    /* ucBaudrate */
-    0xFFU,
-
-    /* ucChannelMask */
-    0x01U
-  }
-};
-
-
+/* CONST(Mcu_SequencerSetting, MCU_VAR) Mcu_GstSequencerSetting[]; */
 /* END Msg(2:0315)-5 */
 /* END Msg(2:3211)-4 */
 /* Array of Digital Input Mode setting */
-CONST(Mcu_DigitalInputSetting, MCU_VAR) Mcu_GstDigitalInputModeSetting[1] =
-{
-  /* Index: 0 - 1 */
-  {
-    /* ulDigitalPinSelreg0 */
-    0x00000001UL,
-
-    /* ulDigitalPinDataSetReg0 */
-    0x00000000UL
-  }
-};
-
-
+/* CONST(Mcu_DigitalInputSetting, MCU_VAR) Mcu_GstDigitalInputModeSetting[]; */
 
 
 #define MCU_STOP_SEC_CONFIG_DATA_UNSPECIFIED

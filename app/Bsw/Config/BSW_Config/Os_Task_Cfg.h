@@ -19,10 +19,10 @@
  * @file              : Os_Task_Cfg.h
  * @license           : 
  * @licenseExpiryDate : 
- * @date              : 2026-01-20 14:26:30
+ * @date              : 2026-01-05 10:51:07
  * @customer          : iSoft
  * @description       : Configuration parameter of OS
- * @toolVersion       : 2.2.0.3
+ * @toolVersion       : 
  **********************************************************************************************************************/
 
 #ifndef OS_TASK_CFG_H
@@ -32,15 +32,15 @@
 
 /* ===================================================== macros ===================================================== */
 /* Scheduling policy: full preemptive, no preemptive, mixed preemptive */
-#define     CFG_SCHED_POLICY                		OS_PREEMPTIVE_MIXED
+#define     CFG_SCHED_POLICY                		OS_PREEMPTIVE_FULL
 /* number of task and resource priority in system */
-#define     CFG_PRIORITY_MAX_CORE0					(7U)
+#define     CFG_PRIORITY_MAX_CORE0					(2U)
 
 /* All of the tasks */
-#define		CFG_TASK_MAX							(7U)
+#define		CFG_TASK_MAX							(2U)
 #define		CFG_EXTENDED_TASK_MAX					(0U)
 /* Core0 */
-#define     CFG_TASK_MAX_CORE0              		(7U)
+#define     CFG_TASK_MAX_CORE0              		(2U)
 #define     CFG_EXTENDED_TASK_MAX_CORE0     		(0U)
 
 /* ================================================ type definitions ================================================ */
@@ -50,12 +50,7 @@ typedef enum
 {
     /* Basic Task */
     CFG_BASIC_TASK_ID_CORE0_BEGIN = 0,
-    OsTask_Init = CFG_BASIC_TASK_ID_CORE0_BEGIN,
-    OsTask_1ms,
-    OsTask_5ms,
-    OsTask_10ms,
-    OsTask_50ms,
-    OsTask_100ms,
+    OsTask_0 = CFG_BASIC_TASK_ID_CORE0_BEGIN,
     CFG_BASIC_TASK_ID_CORE0_END,
     /* Core0 Idle Task */
     OS_TASK_IDLE_CORE0 = CFG_BASIC_TASK_ID_CORE0_END,

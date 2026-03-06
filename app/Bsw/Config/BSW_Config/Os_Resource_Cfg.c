@@ -64,62 +64,7 @@ Os_ResourceType Os_TCBTaskResourceStack[CFG_TASK_MAX][CFG_STD_RESOURCE_MAX];
 #define OS_START_SEC_CONFIG_DATA_UNSPECIFIED
 #include "Os_MemMap.h"
 /* PRQA S 4152, 3132 ++ */ /* VL_Os_4152, VL_Os_3132 */
-static const uint16 Os_ResourceAccessMask_OsTask_Init[1] =
-/* PRQA S 4152, 3132 -- */
-{
-    0x1U,
-};
-#define OS_STOP_SEC_CONFIG_DATA_UNSPECIFIED
-#include "Os_MemMap.h"
-
-#define OS_START_SEC_CONFIG_DATA_UNSPECIFIED
-#include "Os_MemMap.h"
-/* PRQA S 4152, 3132 ++ */ /* VL_Os_4152, VL_Os_3132 */
-static const uint16 Os_ResourceAccessMask_OsTask_1ms[1] =
-/* PRQA S 4152, 3132 -- */
-{
-    0x1U,
-};
-#define OS_STOP_SEC_CONFIG_DATA_UNSPECIFIED
-#include "Os_MemMap.h"
-
-#define OS_START_SEC_CONFIG_DATA_UNSPECIFIED
-#include "Os_MemMap.h"
-/* PRQA S 4152, 3132 ++ */ /* VL_Os_4152, VL_Os_3132 */
-static const uint16 Os_ResourceAccessMask_OsTask_5ms[1] =
-/* PRQA S 4152, 3132 -- */
-{
-    0x1U,
-};
-#define OS_STOP_SEC_CONFIG_DATA_UNSPECIFIED
-#include "Os_MemMap.h"
-
-#define OS_START_SEC_CONFIG_DATA_UNSPECIFIED
-#include "Os_MemMap.h"
-/* PRQA S 4152, 3132 ++ */ /* VL_Os_4152, VL_Os_3132 */
-static const uint16 Os_ResourceAccessMask_OsTask_10ms[1] =
-/* PRQA S 4152, 3132 -- */
-{
-    0x1U,
-};
-#define OS_STOP_SEC_CONFIG_DATA_UNSPECIFIED
-#include "Os_MemMap.h"
-
-#define OS_START_SEC_CONFIG_DATA_UNSPECIFIED
-#include "Os_MemMap.h"
-/* PRQA S 4152, 3132 ++ */ /* VL_Os_4152, VL_Os_3132 */
-static const uint16 Os_ResourceAccessMask_OsTask_50ms[1] =
-/* PRQA S 4152, 3132 -- */
-{
-    0x1U,
-};
-#define OS_STOP_SEC_CONFIG_DATA_UNSPECIFIED
-#include "Os_MemMap.h"
-
-#define OS_START_SEC_CONFIG_DATA_UNSPECIFIED
-#include "Os_MemMap.h"
-/* PRQA S 4152, 3132 ++ */ /* VL_Os_4152, VL_Os_3132 */
-static const uint16 Os_ResourceAccessMask_OsTask_100ms[1] =
+static const uint16 Os_ResourceAccessMask_OsTask_0[1] =
 /* PRQA S 4152, 3132 -- */
 {
     0x1U,
@@ -135,12 +80,7 @@ static const uint16 Os_ResourceAccessMask_OsTask_100ms[1] =
 const uint16* const Os_TaskResourceAccessMask[CFG_TASK_MAX] =
 /* PRQA S 1533 -- */
 {
-    Os_ResourceAccessMask_OsTask_Init,
-    Os_ResourceAccessMask_OsTask_1ms,
-    Os_ResourceAccessMask_OsTask_5ms,
-    Os_ResourceAccessMask_OsTask_10ms,
-    Os_ResourceAccessMask_OsTask_50ms,
-    Os_ResourceAccessMask_OsTask_100ms,
+    Os_ResourceAccessMask_OsTask_0,
 	NULL_PTR, /* IdleTask_Core0 */
 };
 #define OS_STOP_SEC_CONFIG_DATA_UNSPECIFIED
@@ -149,7 +89,7 @@ const uint16* const Os_TaskResourceAccessMask[CFG_TASK_MAX] =
 #define OS_START_SEC_CONFIG_DATA_UNSPECIFIED
 #include "Os_MemMap.h"
 /* PRQA S 4152, 3132 ++ */ /* VL_Os_4152, VL_Os_3132 */
-static const uint16 Os_ResourceAccessMask_RCAN1ERR_IRQ[1] =
+static const uint16 Os_ResourceAccessMask_RCAN1TRX_IRQ[1] =
 /* PRQA S 4152, 3132 -- */
 {
     0U,
@@ -160,7 +100,7 @@ static const uint16 Os_ResourceAccessMask_RCAN1ERR_IRQ[1] =
 #define OS_START_SEC_CONFIG_DATA_UNSPECIFIED
 #include "Os_MemMap.h"
 /* PRQA S 4152, 3132 ++ */ /* VL_Os_4152, VL_Os_3132 */
-static const uint16 Os_ResourceAccessMask_RCAN1TRX_IRQ[1] =
+static const uint16 Os_ResourceAccessMask_RCAN1ERR_IRQ[1] =
 /* PRQA S 4152, 3132 -- */
 {
     0U,
@@ -182,51 +122,18 @@ static const uint16 Os_ResourceAccessMask_RCANGRECC0_IRQ[1] =
 #define OS_START_SEC_CONFIG_DATA_UNSPECIFIED
 #include "Os_MemMap.h"
 /* PRQA S 4152, 3132 ++ */ /* VL_Os_4152, VL_Os_3132 */
+static const uint16 Os_ResourceAccessMask_ADCA0I0_IRQ[1] =
+/* PRQA S 4152, 3132 -- */
+{
+    0U,
+};
+#define OS_STOP_SEC_CONFIG_DATA_UNSPECIFIED
+#include "Os_MemMap.h"
+
+#define OS_START_SEC_CONFIG_DATA_UNSPECIFIED
+#include "Os_MemMap.h"
+/* PRQA S 4152, 3132 ++ */ /* VL_Os_4152, VL_Os_3132 */
 static const uint16 Os_ResourceAccessMask_ADCA0I1_IRQ[1] =
-/* PRQA S 4152, 3132 -- */
-{
-    0U,
-};
-#define OS_STOP_SEC_CONFIG_DATA_UNSPECIFIED
-#include "Os_MemMap.h"
-
-#define OS_START_SEC_CONFIG_DATA_UNSPECIFIED
-#include "Os_MemMap.h"
-/* PRQA S 4152, 3132 ++ */ /* VL_Os_4152, VL_Os_3132 */
-static const uint16 Os_ResourceAccessMask_ADCA1I1_IRQ[1] =
-/* PRQA S 4152, 3132 -- */
-{
-    0U,
-};
-#define OS_STOP_SEC_CONFIG_DATA_UNSPECIFIED
-#include "Os_MemMap.h"
-
-#define OS_START_SEC_CONFIG_DATA_UNSPECIFIED
-#include "Os_MemMap.h"
-/* PRQA S 4152, 3132 ++ */ /* VL_Os_4152, VL_Os_3132 */
-static const uint16 Os_ResourceAccessMask_TAUJ0I0_IRQ[1] =
-/* PRQA S 4152, 3132 -- */
-{
-    0U,
-};
-#define OS_STOP_SEC_CONFIG_DATA_UNSPECIFIED
-#include "Os_MemMap.h"
-
-#define OS_START_SEC_CONFIG_DATA_UNSPECIFIED
-#include "Os_MemMap.h"
-/* PRQA S 4152, 3132 ++ */ /* VL_Os_4152, VL_Os_3132 */
-static const uint16 Os_ResourceAccessMask_TAUD0I9_IRQ[1] =
-/* PRQA S 4152, 3132 -- */
-{
-    0U,
-};
-#define OS_STOP_SEC_CONFIG_DATA_UNSPECIFIED
-#include "Os_MemMap.h"
-
-#define OS_START_SEC_CONFIG_DATA_UNSPECIFIED
-#include "Os_MemMap.h"
-/* PRQA S 4152, 3132 ++ */ /* VL_Os_4152, VL_Os_3132 */
-static const uint16 Os_ResourceAccessMask_TAUB0I12_IRQ[1] =
 /* PRQA S 4152, 3132 -- */
 {
     0U,
@@ -300,50 +207,6 @@ static const uint16 Os_ResourceAccessMask_RLIN35ERR2_IRQ[1] =
 #define OS_STOP_SEC_CONFIG_DATA_UNSPECIFIED
 #include "Os_MemMap.h"
 
-#define OS_START_SEC_CONFIG_DATA_UNSPECIFIED
-#include "Os_MemMap.h"
-/* PRQA S 4152, 3132 ++ */ /* VL_Os_4152, VL_Os_3132 */
-static const uint16 Os_ResourceAccessMask_RIIC0TI_IRQ[1] =
-/* PRQA S 4152, 3132 -- */
-{
-    0U,
-};
-#define OS_STOP_SEC_CONFIG_DATA_UNSPECIFIED
-#include "Os_MemMap.h"
-
-#define OS_START_SEC_CONFIG_DATA_UNSPECIFIED
-#include "Os_MemMap.h"
-/* PRQA S 4152, 3132 ++ */ /* VL_Os_4152, VL_Os_3132 */
-static const uint16 Os_ResourceAccessMask_RIIC0EE_IRQ[1] =
-/* PRQA S 4152, 3132 -- */
-{
-    0U,
-};
-#define OS_STOP_SEC_CONFIG_DATA_UNSPECIFIED
-#include "Os_MemMap.h"
-
-#define OS_START_SEC_CONFIG_DATA_UNSPECIFIED
-#include "Os_MemMap.h"
-/* PRQA S 4152, 3132 ++ */ /* VL_Os_4152, VL_Os_3132 */
-static const uint16 Os_ResourceAccessMask_RIIC0RI_IRQ[1] =
-/* PRQA S 4152, 3132 -- */
-{
-    0U,
-};
-#define OS_STOP_SEC_CONFIG_DATA_UNSPECIFIED
-#include "Os_MemMap.h"
-
-#define OS_START_SEC_CONFIG_DATA_UNSPECIFIED
-#include "Os_MemMap.h"
-/* PRQA S 4152, 3132 ++ */ /* VL_Os_4152, VL_Os_3132 */
-static const uint16 Os_ResourceAccessMask_RIIC0TEI_IRQ[1] =
-/* PRQA S 4152, 3132 -- */
-{
-    0U,
-};
-#define OS_STOP_SEC_CONFIG_DATA_UNSPECIFIED
-#include "Os_MemMap.h"
-
 
 #define OS_START_SEC_CONFIG_DATA_UNSPECIFIED
 #include "Os_MemMap.h"
@@ -352,24 +215,17 @@ const uint16* const Os_IsrResourceAccessMask[CFG_ISR_MAX] =
 /* PRQA S 1533 -- */
 {
     NULL_PTR,   /* SystemTimerCore0 */
-    Os_ResourceAccessMask_RCAN1ERR_IRQ,
     Os_ResourceAccessMask_RCAN1TRX_IRQ,
+    Os_ResourceAccessMask_RCAN1ERR_IRQ,
     Os_ResourceAccessMask_RCANGRECC0_IRQ,
+    Os_ResourceAccessMask_ADCA0I0_IRQ,
     Os_ResourceAccessMask_ADCA0I1_IRQ,
-    Os_ResourceAccessMask_ADCA1I1_IRQ,
-    Os_ResourceAccessMask_TAUJ0I0_IRQ,
-    Os_ResourceAccessMask_TAUD0I9_IRQ,
-    Os_ResourceAccessMask_TAUB0I12_IRQ,
     Os_ResourceAccessMask_RLIN34TX0_IRQ,
     Os_ResourceAccessMask_RLIN34RX1_IRQ,
     Os_ResourceAccessMask_RLIN34ERR2_IRQ,
     Os_ResourceAccessMask_RLIN35TX0_IRQ,
     Os_ResourceAccessMask_RLIN35RX1_IRQ,
     Os_ResourceAccessMask_RLIN35ERR2_IRQ,
-    Os_ResourceAccessMask_RIIC0TI_IRQ,
-    Os_ResourceAccessMask_RIIC0EE_IRQ,
-    Os_ResourceAccessMask_RIIC0RI_IRQ,
-    Os_ResourceAccessMask_RIIC0TEI_IRQ,
 };
 #define OS_STOP_SEC_CONFIG_DATA_UNSPECIFIED
 #include "Os_MemMap.h"
@@ -382,7 +238,7 @@ const Os_ResourceCfgType Os_ResourceCfg[CFG_STD_RESOURCE_MAX] =
 {
     {
         OS_CORE_ID_0,
-        6U,	/*ceiling*/
+        1U,	/*ceiling*/
         OS_RES_OCCUPIED_BY_TASK,	/*resourceOccupyType*/
     },
 };

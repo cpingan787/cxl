@@ -35,6 +35,132 @@
 #include "Std_Types.h"
 #include "ComStack_Cfg.h"
 
+
+/*==================================================================================================
+*                              SOURCE FILE VERSION INFORMATION
+==================================================================================================*/
+/** 
+* @brief Parameters that shall be published within the standard types header file and also in the 
+*        module's description file
+*/
+/** @violates @ref ComStackTypes_h_REF_1 MISRA 2012 Advisory Rule 2.5, unused macro.*/
+#define COMTYPE_VENDOR_ID                    43
+#define COMTYPE_AR_RELEASE_MAJOR_VERSION     4
+#define COMTYPE_AR_RELEASE_MINOR_VERSION     2
+/** @violates @ref ComStackTypes_h_REF_1 MISRA 2012 Advisory Rule 2.5, unused macro.*/
+#define COMTYPE_AR_RELEASE_REVISION_VERSION  0
+/** @violates @ref ComStackTypes_h_REF_1 MISRA 2012 Advisory Rule 2.5, unused macro.*/
+#define COMTYPE_SW_MAJOR_VERSION             1
+/** @violates @ref ComStackTypes_h_REF_1 MISRA 2012 Advisory Rule 2.5, unused macro.*/
+#define COMTYPE_SW_MINOR_VERSION             0
+/** @violates @ref ComStackTypes_h_REF_1 MISRA 2012 Advisory Rule 2.5, unused macro.*/
+#define COMTYPE_SW_PATCH_VERSION             0
+
+/**
+* @brief  Action has been successfully finished 
+* @details   General return codes for NotifResultType
+*/
+#define NTFRSLT_OK           0x00
+
+/**
+* @brief  Message not successfully received or sent out 
+* @details   General return codes for NotifResultType
+*/
+#define NTFRSLT_E_NOT_OK     0x01
+
+/**
+* @brief  Timer N_Ar/N_As has passed its time-out value N_Asmax/N_Armax 
+* @details   General return codes for NotifResultType
+*/
+#define NTFRSLT_E_TIMEOUT_A  0x02
+
+/**
+* @brief  Timer N_Bs has passed its time-out value N_Bsmax 
+* @details   General return codes for NotifResultType
+*/
+#define NTFRSLT_E_TIMEOUT_BS 0x03
+
+/**
+* @brief  Timer N_Cr has passed its time-out value N_Crmax 
+* @details   General return codes for NotifResultType
+*/
+#define NTFRSLT_E_TIMEOUT_CR 0x04
+
+/**
+* @brief  Unexpected sequence number (PCI.SN) value received 
+* @details   General return codes for NotifResultType
+*/
+#define NTFRSLT_E_WRONG_SN   0x05
+
+/**
+* @brief  Invalid or unknown FlowStatus value has been received 
+* @details   General return codes for NotifResultType
+*/
+#define NTFRSLT_E_INVALID_FS 0x06
+
+/**
+* @brief  Unexpected protocol data unit received 
+* @details   General return codes for NotifResultType
+*/
+#define NTFRSLT_E_UNEXP_PDU  0x07
+
+/**
+* @brief  Flow control WAIT frame that exceeds the maximum counter N_WFTmax received 
+* @details   General return codes for NotifResultType
+*/
+#define NTFRSLT_E_WFT_OVRN   0x08
+
+/**
+* @brief  Flow control (FC) N_PDU with FlowStatus = OVFLW received 
+* @details   General return codes for NotifResultType
+*/
+#define NTFRSLT_E_ABORT  0x09
+
+/**
+* @brief  Indicates an abort of a transmission. 
+* @details   General return codes for NotifResultType
+*/
+#define NTFRSLT_E_NO_BUFFER  0x0A
+
+/**
+* @brief  Requested cancellation has been executed 
+* @details   General return codes for NotifResultType
+*/
+#define NTFRSLT_E_CANCELATION_OK 0x0B
+
+/**
+* @brief  Request cancellation has not been executed
+*         Due to an internal error the requested cancelation has not been executed.
+*         This will happen e.g. if the to be canceled transmission has been executed already. 
+* @details   General return codes for NotifResultType
+*/
+#define NTFRSLT_E_CANCELATION_NOT_OK 0x0C
+
+/**
+* @brief  The parameter change request has been successfully executed
+* @details   General return codes for NotifResultType
+*/
+#define NTFRSLT_PARAMETER_OK  0x0D
+
+/**
+* @brief  The request for the change of the parameter did not complete successfully
+* @details   General return codes for NotifResultType
+*/
+#define NTFRSLT_E_PARAMETER_NOT_OK  0x0E
+
+/**
+* @brief  The parameter change request not executed successfully due to an ongoing reception 
+* @details   General return codes for NotifResultType
+*/
+#define NTFRSLT_E_RX_ON 0x0F
+
+/**
+* @brief  The parameter change request not executed successfully due to a wrong value
+* @details   General return codes for NotifResultType
+*/
+#define NTFRSLT_E_VALUE_NOT_OK 0x10
+
+
 /* Variables of this type shall be used to store the basic information
  * about a PDU of any type, namely a pointer variable pointing to its SDU (payload),
  * and the corresponding length of the SDU in bytes.*/

@@ -19,10 +19,10 @@
  * @file              : Os_Alarm_Cfg.c
  * @license           : 
  * @licenseExpiryDate : 
- * @date              : 2026-01-20 14:26:30
+ * @date              : 2026-01-05 10:51:05
  * @customer          : iSoft
  * @description       : Configuration parameter of OS
- * @toolVersion       : 2.2.0.3
+ * @toolVersion       : 
  **********************************************************************************************************************/
 
 /* =================================================== inclusions =================================================== */
@@ -37,27 +37,7 @@
 /* ========================================== internal function declarations ======================================== */
 #define OS_START_SEC_CODE
 #include "Os_MemMap.h"
-static void AlarmCallback_OsAlarm_1ms(void);
-#define OS_STOP_SEC_CODE
-#include "Os_MemMap.h"
-#define OS_START_SEC_CODE
-#include "Os_MemMap.h"
-static void AlarmCallback_OsAlarm_5ms(void);
-#define OS_STOP_SEC_CODE
-#include "Os_MemMap.h"
-#define OS_START_SEC_CODE
-#include "Os_MemMap.h"
-static void AlarmCallback_OsAlarm_10ms(void);
-#define OS_STOP_SEC_CODE
-#include "Os_MemMap.h"
-#define OS_START_SEC_CODE
-#include "Os_MemMap.h"
-static void AlarmCallback_OsAlarm_50ms(void);
-#define OS_STOP_SEC_CODE
-#include "Os_MemMap.h"
-#define OS_START_SEC_CODE
-#include "Os_MemMap.h"
-static void AlarmCallback_OsAlarm_100ms(void);
+static void AlarmCallback_OsAlarm_0(void);
 #define OS_STOP_SEC_CODE
 #include "Os_MemMap.h"
 
@@ -71,45 +51,24 @@ static void AlarmCallback_OsAlarm_100ms(void);
 
 #define OS_START_SEC_CODE
 #include "Os_MemMap.h"
-static void AlarmCallback_OsAlarm_1ms(void)
+static void AlarmCallback_OsAlarm_0(void)
 {
-    (void)ActivateTaskAsyn(OsTask_1ms);
-}
-#define OS_STOP_SEC_CODE
-#include "Os_MemMap.h"
-#define OS_START_SEC_CODE
-#include "Os_MemMap.h"
-static void AlarmCallback_OsAlarm_5ms(void)
-{
-    (void)ActivateTaskAsyn(OsTask_5ms);
-}
-#define OS_STOP_SEC_CODE
-#include "Os_MemMap.h"
-#define OS_START_SEC_CODE
-#include "Os_MemMap.h"
-static void AlarmCallback_OsAlarm_10ms(void)
-{
-    (void)ActivateTaskAsyn(OsTask_10ms);
-}
-#define OS_STOP_SEC_CODE
-#include "Os_MemMap.h"
-#define OS_START_SEC_CODE
-#include "Os_MemMap.h"
-static void AlarmCallback_OsAlarm_50ms(void)
-{
-    (void)ActivateTaskAsyn(OsTask_50ms);
-}
-#define OS_STOP_SEC_CODE
-#include "Os_MemMap.h"
-#define OS_START_SEC_CODE
-#include "Os_MemMap.h"
-static void AlarmCallback_OsAlarm_100ms(void)
-{
-    (void)ActivateTaskAsyn(OsTask_100ms);
+    (void)ActivateTaskAsyn(OsTask_0);
 }
 #define OS_STOP_SEC_CODE
 #include "Os_MemMap.h"
 
+#define OS_START_SEC_CONFIG_DATA_UNSPECIFIED
+#include "Os_MemMap.h"
+static const Os_AlarmAutostartCfgType Os_AlarmAutostartCfg_OsAlarm_0 =
+{
+    0U,                      /*osAlarmStartTime*/
+    5U,                      /*osAlarmCycleTime*/
+    OSDEFAULTAPPMODE,               /*osAlarmAppMode*/
+    OS_ALARM_AUTOSTART_ABSOLUTE,   /*osAlarmAutostartType*/
+};
+#define OS_STOP_SEC_CONFIG_DATA_UNSPECIFIED
+#include "Os_MemMap.h"
 
 #define OS_START_SEC_CONFIG_DATA_UNSPECIFIED
 #include "Os_MemMap.h"
@@ -118,32 +77,8 @@ const Os_AlarmCfgType Os_AlarmCfg[CFG_ALARM_MAX] =
 /* PRQA S 1531 -- */
 {
     {
-        NULL_PTR,                           /*osAlarmAutostartRef*/
-        &AlarmCallback_OsAlarm_1ms,            /*osAlarmCallback*/
-        OS_CORE_ID_0,
-        SystemTimer_Core_0,         /*osAlarmCounter*/
-    },
-    {
-        NULL_PTR,                           /*osAlarmAutostartRef*/
-        &AlarmCallback_OsAlarm_5ms,            /*osAlarmCallback*/
-        OS_CORE_ID_0,
-        SystemTimer_Core_0,         /*osAlarmCounter*/
-    },
-    {
-        NULL_PTR,                           /*osAlarmAutostartRef*/
-        &AlarmCallback_OsAlarm_10ms,            /*osAlarmCallback*/
-        OS_CORE_ID_0,
-        SystemTimer_Core_0,         /*osAlarmCounter*/
-    },
-    {
-        NULL_PTR,                           /*osAlarmAutostartRef*/
-        &AlarmCallback_OsAlarm_50ms,            /*osAlarmCallback*/
-        OS_CORE_ID_0,
-        SystemTimer_Core_0,         /*osAlarmCounter*/
-    },
-    {
-        NULL_PTR,                           /*osAlarmAutostartRef*/
-        &AlarmCallback_OsAlarm_100ms,            /*osAlarmCallback*/
+        &Os_AlarmAutostartCfg_OsAlarm_0,  /*osAlarmAutostartRef*/
+        &AlarmCallback_OsAlarm_0,            /*osAlarmCallback*/
         OS_CORE_ID_0,
         SystemTimer_Core_0,         /*osAlarmCounter*/
     },
@@ -153,27 +88,7 @@ const Os_AlarmCfgType Os_AlarmCfg[CFG_ALARM_MAX] =
 
 #define OS_START_SEC_VAR_CLEARED_CORE0_UNSPECIFIED
 #include "Os_MemMap.h"
-static Os_ACBType Os_ACB_OsAlarm_1ms;
-#define OS_STOP_SEC_VAR_CLEARED_CORE0_UNSPECIFIED
-#include "Os_MemMap.h"
-#define OS_START_SEC_VAR_CLEARED_CORE0_UNSPECIFIED
-#include "Os_MemMap.h"
-static Os_ACBType Os_ACB_OsAlarm_5ms;
-#define OS_STOP_SEC_VAR_CLEARED_CORE0_UNSPECIFIED
-#include "Os_MemMap.h"
-#define OS_START_SEC_VAR_CLEARED_CORE0_UNSPECIFIED
-#include "Os_MemMap.h"
-static Os_ACBType Os_ACB_OsAlarm_10ms;
-#define OS_STOP_SEC_VAR_CLEARED_CORE0_UNSPECIFIED
-#include "Os_MemMap.h"
-#define OS_START_SEC_VAR_CLEARED_CORE0_UNSPECIFIED
-#include "Os_MemMap.h"
-static Os_ACBType Os_ACB_OsAlarm_50ms;
-#define OS_STOP_SEC_VAR_CLEARED_CORE0_UNSPECIFIED
-#include "Os_MemMap.h"
-#define OS_START_SEC_VAR_CLEARED_CORE0_UNSPECIFIED
-#include "Os_MemMap.h"
-static Os_ACBType Os_ACB_OsAlarm_100ms;
+static Os_ACBType Os_ACB_OsAlarm_0;
 #define OS_STOP_SEC_VAR_CLEARED_CORE0_UNSPECIFIED
 #include "Os_MemMap.h"
 
@@ -184,11 +99,7 @@ Os_ACBType* const Os_ACB[CFG_ALARM_MAX] =
 /* PRQA S 1531 -- */
 {
     /* Core0 */
-    &Os_ACB_OsAlarm_1ms,
-    &Os_ACB_OsAlarm_5ms,
-    &Os_ACB_OsAlarm_10ms,
-    &Os_ACB_OsAlarm_50ms,
-    &Os_ACB_OsAlarm_100ms,
+    &Os_ACB_OsAlarm_0,
 };
 #define OS_STOP_SEC_CONFIG_DATA_UNSPECIFIED
 #include "Os_MemMap.h"
@@ -205,4 +116,4 @@ const Os_AlarmIndexType Os_AlarmIdRange[OS_AUTOSAR_CORES] =
 #define OS_STOP_SEC_CONFIG_DATA_UNSPECIFIED
 #include "Os_MemMap.h"
 
-/* PRQA S 6520, 6610, 6620 EOF */ /* VL_MTR_Os_STVAR, VL_MTR_Os_STCDN, VL_MTR_Os_STSCT */
+/* PRQA S 6520 EOF */ /* VL_MTR_Os_STVAR */

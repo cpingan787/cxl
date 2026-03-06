@@ -188,10 +188,10 @@
 **                         Input File                                         **
 *******************************************************************************/
 /*
- * INPUT FILE:    E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\Config\ECUC\test_Adc_Adc0_ecuc.arxml
- *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\modules\adc\R422_ADC_F1x_BSWMDT.arxml
- *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\stubs\4.2.2\Dem\xml\Dem_Adc.arxml
- * GENERATED ON:  27 Jan 2026 - 17:47:30
+ * INPUT FILE:    E:\PuHua_Tbox\Tools\ASR_RH850F1K_MCAL_Ver42.08.00\Config\Config\ECUC\test_Adc_Adc0_ecuc.arxml
+ *                E:\PuHua_Tbox\Tools\ASR_RH850F1K_MCAL_Ver42.08.00\Config\modules\adc\R422_ADC_F1x_BSWMDT.arxml
+ *                E:\PuHua_Tbox\Tools\ASR_RH850F1K_MCAL_Ver42.08.00\Config\stubs\4.2.2\Dem\xml\Dem_Adc.arxml
+ * GENERATED ON:  14 Jan 2026 - 18:15:50
  */
 
 /*******************************************************************************
@@ -381,7 +381,7 @@
 /* VAR(Adc_PwmGroupRamData, ADC_NOINIT_DATA) Adc_GstPwmDiagGroupRamData[]; */
 /* END Msg(4:3408)-2 */
 /* SG Unit Queue Size */
-VAR(Adc_GroupType, ADC_NOINIT_DATA) Adc_GaaSgUnitPriorityQueue[1];
+/* VAR(Adc_GroupType, ADC_NOINIT_DATA) Adc_GaaSgUnitPriorityQueue[]; */
 
   #define ADC_STOP_SEC_VAR_NO_INIT_UNSPECIFIED
 /* MISRA Violation: START Msg(4:5087)-5 */
@@ -437,7 +437,7 @@ VAR(Adc_RunTimeData, ADC_NOINIT_DATA) Adc_GstRunTimeData[2];
 /* END Msg(4:3408)-2 */
 
 /* RAM Allocation to store channel enable or disable status */
-VAR(boolean, ADC_NOINIT_DATA) Adc_GaaChannelToDisableEnable[29];
+VAR(boolean, ADC_NOINIT_DATA) Adc_GaaChannelToDisableEnable[10];
 
 /* QAC Warning: START Msg(2:2022)-2 */
 /* Global array to store the flag for restart of ADC groups */
@@ -499,7 +499,7 @@ CONST(Adc_ConfigType, ADC_CONST) Adc_GstConfiguration[] =
     &Adc_GstGroupConfig[0],
 
     /* pGroupHWTrigg */
-    NULL_PTR,
+    &Adc_GaaHWGroupTrigg[0],
 
     /* pChannelToGroup */
     &Adc_GaaChannelToGroup[0],
@@ -523,13 +523,13 @@ CONST(Adc_ConfigType, ADC_CONST) Adc_GstConfiguration[] =
     &Adc_GaaChannelToDisableEnable[0],
 
     /* ucMaxSwTriggGroups */
-    0x03U,
+    0x02U,
 
     /* ucNoOfGroups */
     0x03U,
 
     /* ucNoOfChannels */
-    0x1DU
+    0x0AU
   }
 };
 
@@ -562,7 +562,7 @@ CONST(Adc_HwUnitConfigType, ADC_CONST) Adc_GstHWUnitConfig[] =
     0x01U,
 
     /* ucVirChannelCount */
-    0x10U
+    0x05U
   },
 
   /* Index: 1 - AdcHwUnit1 */
@@ -579,7 +579,7 @@ CONST(Adc_HwUnitConfigType, ADC_CONST) Adc_GstHWUnitConfig[] =
     /* END Msg(4:0303)-3 */
 
     /* ulHwUnitSettings */
-    0x00000000UL,
+    0x00000010UL,
 
     /* ulHwSamplingTime */
     0x00000012UL,
@@ -588,7 +588,7 @@ CONST(Adc_HwUnitConfigType, ADC_CONST) Adc_GstHWUnitConfig[] =
     0x01U,
 
     /* ucVirChannelCount */
-    0x08U
+    0x01U
   }
 };
 
@@ -597,43 +597,17 @@ CONST(Adc_HwUnitConfigType, ADC_CONST) Adc_GstHWUnitConfig[] =
 /* Structure for SG unit configuration */
 CONST(Adc_HwSgUnitType, ADC_CONST) Adc_GstSgUnitConfig[] =
 {
-  /* Index: 0 - AdcHwScanGroup2 */
+  /* Index: 0 - AdcHwScanGroup1 */
   {
     /* ucSgRegIndex */
-    0x01U,
-
-    /* pQueue */
-    &Adc_GaaSgUnitPriorityQueue[0],
-
-    /* pIcrIntpAddress */
-    /* MISRA Violation: START Msg(4:0303)-3 */
-    (P2VAR(volatile uint16, TYPEDEF, ADC_CONFIG_DATA))&ICADCA0I1,
-    /* END Msg(4:0303)-3 */
-
-    /* enFunctionalityModeType */
-    ADC_INTERRUPT_MODE,
-
-    /* ucDataRegisterIndex */
     0x00U,
-
-    /* ucAdcSgQueueSize */
-    0x01U,
-
-    /* ucSgUnitId */
-    ADC_SG2
-  },
-
-  /* Index: 1 - AdcHwScanGroup2 */
-  {
-    /* ucSgRegIndex */
-    0x04U,
 
     /* pQueue */
     NULL_PTR,
 
     /* pIcrIntpAddress */
     /* MISRA Violation: START Msg(4:0303)-3 */
-    (P2VAR(volatile uint16, TYPEDEF, ADC_CONFIG_DATA))&ICADCA1I1,
+    (P2VAR(volatile uint16, TYPEDEF, ADC_CONFIG_DATA))&ICADCA0I0,
     /* END Msg(4:0303)-3 */
 
     /* enFunctionalityModeType */
@@ -646,7 +620,33 @@ CONST(Adc_HwSgUnitType, ADC_CONST) Adc_GstSgUnitConfig[] =
     0x00U,
 
     /* ucSgUnitId */
-    ADC_SG2
+    ADC_SG1
+  },
+
+  /* Index: 1 - AdcHwScanGroup1 */
+  {
+    /* ucSgRegIndex */
+    0x03U,
+
+    /* pQueue */
+    NULL_PTR,
+
+    /* pIcrIntpAddress */
+    /* MISRA Violation: START Msg(4:0303)-3 */
+    (P2VAR(volatile uint16, TYPEDEF, ADC_CONFIG_DATA))&ICADCA1I0,
+    /* END Msg(4:0303)-3 */
+
+    /* enFunctionalityModeType */
+    ADC_INTERRUPT_MODE,
+
+    /* ucDataRegisterIndex */
+    0x00U,
+
+    /* ucAdcSgQueueSize */
+    0x00U,
+
+    /* ucSgUnitId */
+    ADC_SG1
   }
 };
 
@@ -678,10 +678,10 @@ CONST(Adc_GroupConfigType, ADC_CONST) Adc_GstGroupConfig[] =
     0x00U,
 
     /* ucGroupSettings */
-    0x04U,
+    0x05U,
 
     /* ucChannelCount */
-    0x10U
+    0x04U
   },
 
   /* Index: 1 - AdcGroup1 */
@@ -704,13 +704,13 @@ CONST(Adc_GroupConfigType, ADC_CONST) Adc_GstGroupConfig[] =
     0x01U,
 
     /* ucChannelToGroupIndex */
-    0x10U,
-
-    /* ucGroupSettings */
     0x04U,
 
+    /* ucGroupSettings */
+    0x05U,
+
     /* ucChannelCount */
-    0x08U
+    0x01U
   },
 
   /* Index: 2 - AdcGroup2 */
@@ -733,10 +733,10 @@ CONST(Adc_GroupConfigType, ADC_CONST) Adc_GstGroupConfig[] =
     0x00U,
 
     /* ucChannelToGroupIndex */
-    0x18U,
+    0x05U,
 
     /* ucGroupSettings */
-    0x04U,
+    0x05U,
 
     /* ucChannelCount */
     0x05U
@@ -789,19 +789,19 @@ CONST(uint8, ADC_CONST) Adc_GaaHwUnitIndex[] =
 CONST(uint8, ADC_CONST) Adc_GaaSgUnitIndex[] =
 {
   /* Index: 0 - SG Unit Id: 1 */
-  0xFFU,
+  0x00U,
 
   /* Index: 1 - SG Unit Id: 2 */
-  0x00U,
+  0xFFU,
 
   /* Index: 2 - SG Unit Id: 3 */
   0xFFU,
 
   /* Index: 3 - SG Unit Id: 1 */
-  0xFFU,
+  0x01U,
 
   /* Index: 4 - SG Unit Id: 2 */
-  0x01U,
+  0xFFU,
 
   /* Index: 5 - SG Unit Id: 3 */
   0xFFU
@@ -833,13 +833,13 @@ CONST(uint8, ADC_CONST) Adc_GaaSgUnitIndex[] =
 CONST(uint16, ADC_CONFIG_CONST) Adc_GaaChannelToGroup[] =
 {
   /* Index: 0 - Group Id 0 */
-   0x0000U, 0x0001U, 0x0002U, 0x0003U, 0x0004U, 0x0005U, 0x0006U, 0x0007U, 0x0008U, 0x0009U, 0x000AU, 0x000BU, 0x000CU, 0x000DU, 0x000EU, 0x000FU,
+   0x0001U, 0x0002U, 0x0003U, 0x0004U,
 
   /* Index: 1 - Group Id 1 */
-   0x0000U, 0x0001U, 0x0002U, 0x0003U, 0x0004U, 0x0005U, 0x0006U, 0x0007U,
+   0x0013U,
 
   /* Index: 2 - Group Id 2 */
-   0x0000U, 0x0001U, 0x0002U, 0x0003U, 0x0004U
+   0x0001U, 0x0002U, 0x0003U, 0x0004U, 0x0005U
 };
 
 
@@ -863,7 +863,13 @@ CONST(uint16, ADC_CONFIG_CONST) Adc_GaaChannelToGroup[] =
 /* END Msg(4:5087)-5 */
 
 /* Structure for HW trigger group configuration */
-/* CONST(uint32, ADC_CONST) Adc_GaaHWGroupTrigg[]; */
+CONST(uint32, ADC_CONST) Adc_GaaHWGroupTrigg[] =
+{
+  /* Index: 0 - AdcGroup2 */
+  0x00000001UL
+};
+
+
 
 /* Structure for limit check range configuration */
 /* CONST(uint32, ADC_CONST) Adc_GaaLimitCheckRange[]; */

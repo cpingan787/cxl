@@ -19,10 +19,10 @@
  * @file              : Os_Task_CfgData.h
  * @license           : 
  * @licenseExpiryDate : 
- * @date              : 2026-01-20 14:26:30
+ * @date              : 2026-01-05 10:51:07
  * @customer          : iSoft
  * @description       : Configuration parameter of OS
- * @toolVersion       : 2.2.0.3
+ * @toolVersion       : 
  **********************************************************************************************************************/
 
 #ifndef OS_TASK_CFGDATA_H
@@ -53,12 +53,7 @@ extern const Os_StackType Os_TaskStack[CFG_TASK_MAX];
 /*
  * DeclareTask
  */
-DeclareTask(OsTask_Init);
-DeclareTask(OsTask_1ms);
-DeclareTask(OsTask_5ms);
-DeclareTask(OsTask_10ms);
-DeclareTask(OsTask_50ms);
-DeclareTask(OsTask_100ms);
+DeclareTask(OsTask_0);
 /* PRQA S 4152, 1753, 1712 -- */
 /* PRQA S 1753 ++ */ /* VL_Os_1753 */
 extern void IdleHook_Core0(void);
