@@ -13,17 +13,17 @@ Copyright ? 2024 SiRun (Beijing) . All rights reserved.
 
 #define WORKFLASH_ADDRESS_VEHICLE_INFO_IMPORTANT 0x00000000 // 重要的设备信息Flash存储偏移地址（不会经常更改）
 #define WORKFLASH_ADDRESS_VEHICLE_INFO_VARIABLE 0x00004000  // 可变的设备Flash信息存储偏移地址
-#define WORKFLASH_ADDRESS_VEHICLE_DTC1 0x00008000           // 故障码信息Flash存储偏移地址1
-#define WORKFLASH_ADDRESS_VEHICLE_DTC2 0x0000C000           // 故障码信息Flash存储偏移地址2
-#define WORKFLASH_ADDRESS_REMOTE_CONTROL_VALUE 0x00010000   // 远控参数FLASH信息存储偏移地址
-#define WORKFLASH_ADDRESS_FINGER_PRINT 0x00014000           // 诊断指纹信息FLASH信息存储偏移地址
-#define WORKFLASH_ADDRESS_BLUETOOTH_KEY 0x00018000          // 蓝牙钥匙信息FLASH信息存储偏移地址
-#define WORKFLASH_ADDRESS_RESERVED4 0x0001C000              // 预留FLASH信息存储地址
+#define WORKFLASH_ADDRESS_VEHICLE_DTC1 0x00010000           // 故障码信息Flash存储偏移地址1
+#define WORKFLASH_ADDRESS_VEHICLE_DTC2 0x00020000           // 故障码信息Flash存储偏移地址2
+// #define WORKFLASH_ADDRESS_REMOTE_CONTROL_VALUE 0x00010000   // 远控参数FLASH信息存储偏移地址
+// #define WORKFLASH_ADDRESS_FINGER_PRINT 0x00014000           // 诊断指纹信息FLASH信息存储偏移地址
+// #define WORKFLASH_ADDRESS_BLUETOOTH_KEY 0x00018000          // 蓝牙钥匙信息FLASH信息存储偏移地址
+// #define WORKFLASH_ADDRESS_RESERVED4 0x0001C000              // 预留FLASH信息存储地址
 
-// #define WORKFLASH_ADDRESS_SECURITY	                0x14017500	//安全访问失败次数存储地址
+// // #define WORKFLASH_ADDRESS_SECURITY	                0x14017500	//安全访问失败次数存储地址
 
-#define WORKFLASH_ADDRESS_SMALL_BLOCK_1 0x14017500 // 小块存储地址，一小块=128字节
-#define WORKFLASH_ADDRESS_SMALL_BLOCK_2 0x14017580 // 小块存储地址，一小块=128字节
+// #define WORKFLASH_ADDRESS_SMALL_BLOCK_1 0x14017500 // 小块存储地址，一小块=128字节
+// #define WORKFLASH_ADDRESS_SMALL_BLOCK_2 0x14017580 // 小块存储地址，一小块=128字节
 
 typedef enum
 {   

@@ -220,7 +220,7 @@ int16_t FlashHalDataBlockWrite(uint32_t blockAddress,uint32_t writeOffset,const 
 
     xSemaphoreTake( g_workFlashMutexHandle, portMAX_DELAY );
     
-    sectorBaseAddress = (blockAddress & 0xC000) + WORKFLASH_PARAMETER_ADDRESS_OFFSET;   //first sector address
+    sectorBaseAddress = (blockAddress & 0xFFFFC000) + WORKFLASH_PARAMETER_ADDRESS_OFFSET;   //first sector address
     
     sectorNum = GetNewSectorNum(sectorBaseAddress,&newSectorFlag);
     

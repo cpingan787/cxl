@@ -5059,15 +5059,15 @@ int16_t Service22ReadSecOCVersionNumberF1C8(uint8_t *pData, uint16_t *pLength) /
 
 int16_t Service22ReadCsrF1C9(uint8_t *pData, uint16_t *pLength)
 {
-  uint32_t length = 840;
-  int16_t ret;
-  // ret = WorkFlashVehicleInforRead(WORKFLASH_ADDRESS_RESERVED4,pData,&length);
-  ret = FlashHalDataBlockRead(WORKFLASH_ADDRESS_RESERVED4, 0, pData, length);
-  if (ret != 0)
-  {
-    return -1;
-  }
-  *pLength = length;
+  // uint32_t length = 840;
+  // int16_t ret;
+  // // ret = WorkFlashVehicleInforRead(WORKFLASH_ADDRESS_RESERVED4,pData,&length);
+  // ret = FlashHalDataBlockRead(WORKFLASH_ADDRESS_RESERVED4, 0, pData, length);
+  // if (ret != 0)
+  // {
+  //   return -1;
+  // }
+  // *pLength = length;
   return 0;
 }
 
