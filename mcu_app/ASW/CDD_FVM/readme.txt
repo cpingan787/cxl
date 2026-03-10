@@ -1,4 +1,0 @@
-1、SecOC发送安全报文时，调用Fvm_GetFreshnessValue，获取完整新鲜度值
-2、SecOC接收安全报文时，调用Fvm_VerifyFreshnessValue，验证并构建完整新鲜度值返回
-3、接收到同步报文时，调用Fvm_UpdateSynCounters，更新行程计数器和复位计数器，重置消息计数器
-4、使用前需要配置g_fvmConfig
