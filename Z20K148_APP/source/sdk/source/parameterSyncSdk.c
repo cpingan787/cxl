@@ -61,6 +61,28 @@ static const DidMapping_t g_OfflineDidMap[] = {
 
 };
 
+static uint8_t GetExpectedLengthByParamId(uint8_t paramId)
+{
+    switch (paramId)
+    {
+        case E_ParamId_APN:             return 32; // 0x011B
+        case E_ParamId_IP1_ADDR:        return 16; // 0x011C
+        case E_ParamId_TSPPort1:        return 8;  // 0x011D
+        case E_ParamId_TspDomain1:      return 50; // 0x031C
+        case E_ParamId_Apn2:            return 32; // 0x013C
+        case E_ParamId_Ip3Addr:         return 16; // 0x105F
+        case E_ParamId_TspPort3:        return 8;  // 0x105E
+        case E_ParamId_Apn3:            return 32; // 0x1061
+        case E_ParamId_PkiPort:         return 8;  // 0x1053
+        case E_ParamId_PkiDomainName:   return 50; // 0x1052
+        case E_ParamId_VIN:             return 17; // 0xF190
+        case E_ParamId_ECallNumber:     return 14; // 0x011F
+        case E_ParamId_BCallNumber:     return 14; // 0x0124
+        case E_ParamId_PublicTspDomain: return 50; // 0x1014
+        default:                        return 0;  //
+    }
+}
+
 static uint8_t GetParamIdByDid(uint16_t did)
 {
     uint8_t i;
@@ -481,7 +503,13 @@ static uint8_t IsValidParamData(uint8_t paramId, uint8_t *data, uint16_t length)
     uint8_t i;
     uint8_t found = 0;
     uint16_t expectedLen = 0;
-
+    // if (paramId == E_ParamId_ECallNumber || paramId == E_ParamId_BCallNumber)
+    // {
+    //     if (length != 14)
+    //     {
+    //         return 0;
+    //     }
+    // }
     for (i = 0; i < sizeof(g_paramLengthTable) / sizeof(g_paramLengthTable[0]); i++)
     {
         if (g_paramLengthTable[i].paramId == paramId)
@@ -743,13 +771,12 @@ static void ParameterSyncRequstMissingOfflineDidPackage(void)
         {
             g_mcuParameterReadCbFunc(paramId, tempBuffer, &paramLen);
         }
-
+        
         /* 情况 A: 本地数据有效 -> 自动跳过 (Index++) */
         if (IsOfflineDataValid(tempBuffer, paramLen))
         {
             continue; 
         }
-
         /* 情况 B: 本地数据无效 -> 发送请求 */
         memset(g_mpuDataBuffer, 0, sizeof(g_mpuDataBuffer));
 
@@ -819,6 +846,7 @@ static void ParameterSyncProcessOfflineDidResponse(MpuHalDataPack_t *recvDataPac
 
             if (IsOfflineDataValid(localBuffer, localLen) == 1)
             {
+    
                 // Local is valid, do nothing.
                 // TBOX_PRINT("DID 0x%04X already valid, skip write.\r\n", did);
             }
@@ -864,93 +892,64 @@ void ParameterSyncSdkCycleProcess(MpuHalDataPack_t *recvDataPack)
             offsetLen = 1;
             for (i = 0; i < recvDataPack->pDataBuffer[0]; i++)
             {
-                // if (recvDataPack->pDataBuffer[offsetLen] == E_ParamId_VIN || 
-                //     recvDataPack->pDataBuffer[offsetLen] == E_ParamId_ECallNumber || 
-                //     recvDataPack->pDataBuffer[offsetLen] == E_ParamId_BCallNumber)
-                // {
-                //     offsetLen = offsetLen + 2 + recvDataPack->pDataBuffer[offsetLen + 1];
-                //     continue;
-                // }
+                uint8_t currentParamId = recvDataPack->pDataBuffer[offsetLen];
+                uint8_t mpuDataLen = recvDataPack->pDataBuffer[offsetLen + 1];
+                uint8_t *pMpuData = &(recvDataPack->pDataBuffer[offsetLen + 2]);
 
-                if (recvDataPack->pDataBuffer[offsetLen] == g_syncMpuParamIdList[14])
+                if (currentParamId == g_syncMpuParamIdList[14])
                 {
                     ProjectConfigGetMcuMpuTotalVersion(paramData, &length);
-                    if (memcmp(paramData, &(recvDataPack->pDataBuffer[offsetLen + 2]), recvDataPack->pDataBuffer[offsetLen + 1]) != 0)
+                    if (memcmp(paramData, pMpuData, mpuDataLen) != 0)
                     {
-                        if (ProjectConfigSetMpuVersion(recvDataPack->pDataBuffer + offsetLen + 2, recvDataPack->pDataBuffer[offsetLen + 1]) == 0)
+                        if (ProjectConfigSetMpuVersion(pMpuData, mpuDataLen) == 0)
                         {
                             ProjectConfigGetMcuMpuTotalVersion(paramData, &length);
-                            g_mcuParameterWriteCbFunc(recvDataPack->pDataBuffer[offsetLen], paramData, length);
+                            g_mcuParameterWriteCbFunc(currentParamId, paramData, length);
                         }
                     }
                 }
                 else
                 {
-                    g_mcuParameterReadCbFunc(recvDataPack->pDataBuffer[offsetLen], paramData, &length);
+                    uint8_t expectedLen = GetExpectedLengthByParamId(currentParamId);
+                    uint8_t allowWrite = 0;
 
-                    uint8_t allowWrite = 1;
-                    uint8_t currentParamId = recvDataPack->pDataBuffer[offsetLen];
-
-                    if (currentParamId == E_ParamId_VIN || 
-                        currentParamId == E_ParamId_ECallNumber || 
-                        currentParamId == E_ParamId_BCallNumber)
+                    if (expectedLen != 0 && mpuDataLen != expectedLen)
                     {
-                        uint8_t isLocalAllFF = 1;
-                        uint8_t isLocalAllZero = 1;
-                        uint16_t k;
-
-                        for (k = 0; k < length; k++)
+                        // 长度不对，跳过该参数，继续解析后续报文
+                    }
+                    else
+                    {
+                        length = 0;
+                        if (g_mcuParameterReadCbFunc(currentParamId, paramData, &length) == 0)
                         {
-                            if (paramData[k] != 0xFF)
+                            if (IsOfflineDataValid(paramData, length) == 0)
                             {
-                                isLocalAllFF = 0; 
+                                if (IsValidParamData(currentParamId, pMpuData, mpuDataLen) == 1)
+                                {
+                                    if (memcmp(paramData, pMpuData, mpuDataLen) != 0)
+                                    {
+                                        allowWrite = 1;
+                                    }
+                                }
                             }
-                            
-                            if (paramData[k] != 0x00)
-                            {
-                                isLocalAllZero = 0;
-                            }
-
-                            if (isLocalAllFF == 0 && isLocalAllZero == 0)
-                            {
-                                break;
-                            }
-                        }
-
-                        if (isLocalAllFF == 0 && isLocalAllZero == 0)
-                        {
-                            allowWrite = 0;
-                            // TBOX_PRINT("Param ID %d exists locally (valid data), sync skipped.\r\n", currentParamId);
                         }
                     }
 
                     if (allowWrite == 1)
                     {
-                        if (IsValidParamData(recvDataPack->pDataBuffer[offsetLen],
-                                             &(recvDataPack->pDataBuffer[offsetLen + 2]),
-                                             recvDataPack->pDataBuffer[offsetLen + 1]) == 1)
-                        {
-                            // 对比数据是否发生变化 (本地 vs MPU)
-                            if (memcmp(paramData, &(recvDataPack->pDataBuffer[offsetLen + 2]), recvDataPack->pDataBuffer[offsetLen + 1]) != 0)
-                            {
-                                // 执行写入
-                                g_mcuParameterWriteCbFunc(recvDataPack->pDataBuffer[offsetLen],
-                                                          recvDataPack->pDataBuffer + offsetLen + 2,
-                                                          recvDataPack->pDataBuffer[offsetLen + 1]);
-                            }
-                        }
+                        g_mcuParameterWriteCbFunc(currentParamId, pMpuData, mpuDataLen);
                     }
-                    // else { TBOX_PRINT("Skipped write for protected param.\r\n"); }
                 }
-                offsetLen = offsetLen + 2 + recvDataPack->pDataBuffer[offsetLen + 1];
+                offsetLen = offsetLen + 2 + mpuDataLen;
             }
+
+            // 处理完成后重置相关标记
             g_syncMpuParamResultFlag = 1;
             g_syncMpuParamTimeCount = 0;
             g_syncOfflineDidReqTimeCount = 0;
-            g_offlineSyncDone = 0;         
-            g_lastReqOfflineDidCount = 0;   
-            g_syncOfflineSearchIndex = 0;  
-            //g_syncOfflineRoundCount = 0;    // 重置轮次
+            g_offlineSyncDone = 0;
+            g_lastReqOfflineDidCount = 0;
+            g_syncOfflineSearchIndex = 0;
             g_syncOfflineReqTimeout = 0;
         }
         else if ((recvDataPack->subcommand & 0x7F) == 1)
@@ -975,27 +974,56 @@ void ParameterSyncSdkCycleProcess(MpuHalDataPack_t *recvDataPack)
             }
         }
         else if ((recvDataPack->subcommand & 0x7F) == 3)
+{
+    uint8_t paramId  = recvDataPack->pDataBuffer[0];
+    uint8_t paramLen = recvDataPack->pDataBuffer[1];
+    uint8_t *pData   = &recvDataPack->pDataBuffer[2];
+    
+    uint8_t expectedLen = GetExpectedLengthByParamId(paramId);
+    uint8_t localBuf[64];
+    uint16_t localLen = 0;
+    uint8_t allowWrite = 0;
+
+    if (expectedLen != 0 && paramLen == expectedLen)
+    {
+        if (IsValidParamData(paramId, pData, paramLen))
         {
-            if (recvDataPack->pDataBuffer[0] < 26)
+
+            if (g_mcuParameterReadCbFunc != NULL)
             {
-                if (IsValidParamData(recvDataPack->pDataBuffer[0], &recvDataPack->pDataBuffer[2], recvDataPack->pDataBuffer[1]))
+                int16_t readRet = g_mcuParameterReadCbFunc(paramId, localBuf, &localLen);
+                
+                if (readRet == 0)
                 {
-                    g_mcuParameterWriteCbFunc(recvDataPack->pDataBuffer[0], &recvDataPack->pDataBuffer[2], recvDataPack->pDataBuffer[1]);
-                    ParameterSyncResponseSyncParamPackage(1, recvDataPack->pDataBuffer[0]);
-                        
+                    if (IsOfflineDataValid(localBuf, localLen) == 0)
+                    {
+                        allowWrite = 1;
+                    }
+                    else
+                    {
+                        allowWrite = 0;
+                    }
                 }
                 else
                 {
-                    ParameterSyncResponseSyncParamPackage(0, recvDataPack->pDataBuffer[0]);
+                    allowWrite = 0;
                 }
-                MpuHalTransmit(g_mpuHandle, &g_mpuDataPack, MPU_HAL_UART_MODE);
-            }
-            else
-            {
-                ParameterSyncResponseSyncParamPackage(0, recvDataPack->pDataBuffer[0]);
-                MpuHalTransmit(g_mpuHandle, &g_mpuDataPack, MPU_HAL_UART_MODE);
             }
         }
+    }
+
+    if (allowWrite == 1)
+    {
+        g_mcuParameterWriteCbFunc(paramId, pData, paramLen);
+        ParameterSyncResponseSyncParamPackage(1, paramId); // 回复成功
+    }
+    else
+    {
+        ParameterSyncResponseSyncParamPackage(0, paramId); 
+    }
+    
+    MpuHalTransmit(g_mpuHandle, &g_mpuDataPack, MPU_HAL_UART_MODE);
+}
         else if ((recvDataPack->subcommand & 0x7F) == 7)
         {
             if (g_syncMpuParamResultFlag == 1 && g_offlineSyncDone == 1)

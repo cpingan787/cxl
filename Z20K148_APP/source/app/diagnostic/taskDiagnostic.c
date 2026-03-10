@@ -402,7 +402,7 @@ static const RdidInfor_t g_Service22FunMapList[] =
         {0x0111, 20, Service22ReadICCID},                                                         // 0x0111_cxl
         {0x011B, 32, Service22ReadApn1},                                                          // 0x011B_cxl
         {0x011C, 16, Service22ReadIp1Addr},                                                       // 0x011C_cxl
-        {0x011D, 2, Service22ReadTspPort},                                                        // 0x011D_cxl
+        {0x011D, 8, Service22ReadTspPort},                                                        // 0x011D_cxl
         {0xB209, 1, Service22ReadTspTimeout},                                                     // 0xB209_cxl
         {0x011F, 14, Service22ReadECallNum1},                                                     // 0x011F_cxl
         {0x0124, 1, Service22ReadBCallNum1},                                                      // 0x0124_cxl
