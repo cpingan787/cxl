@@ -1,0 +1,8 @@
+Debug/*
+settings/*
+Release/*
+
+*.ewd
+*.ewp
+*.ewt
+*.xcl
