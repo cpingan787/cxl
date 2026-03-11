@@ -5,7 +5,7 @@
 #include "logHal.h"
 // #include "firmwareUpdateSdk.h"
 // #include "parameterSyncSdk.h"
-#include "stateSyncSdk.h"
+//#include "stateSyncSdk.h"
 #include "mcuMpuSyncTask.h"
 
 // static uint8_t g_syncParamList[]={
@@ -45,13 +45,13 @@ void McuMpuSyncTaskInit(void)
     // //参数同步初始化
     // ParameterSyncSdkInit(g_mpuHandle,McuParameterRead,McuParameterWrite,g_cycleTime,g_syncParamList,sizeof(g_syncParamList));
     //状态同步初始化
-    StateSyncSdkInit(g_mpuHandle,g_cycleTime);
+    //StateSyncSdkInit(g_mpuHandle,g_cycleTime);
     // //升级初始化
     // FirmwareUpdateSdkInit(g_cycleTime);
     //时间同步初始化
-    TimeSyncSdkInit(g_mpuHandle,g_cycleTime);
+    //TimeSyncSdkInit(g_mpuHandle,g_cycleTime);
     //电源状态同步初始化
-    MpuPowerSyncSdkInit(g_mpuHandle,g_cycleTime);
+    //MpuPowerSyncSdkInit(g_mpuHandle,g_cycleTime);
     
     g_dataPack.pDataBuffer = g_dataBuffer;
     g_dataPack.dataBufferSize = sizeof(g_dataBuffer);
@@ -121,13 +121,13 @@ void McuMpuSyncTaskMain(void)
         // //参数同步周期调用
         // ParameterSyncSdkCycleProcess(paramSyncPack);
         //状态同步周期调用
-        StateSyncSdkCycleProcess(stateSyncPack);
+        //StateSyncSdkCycleProcess(stateSyncPack);
         // //升级周期调用
         // FirmwareUpdateSdkCycleProcess();
         //时间同步周期调用
-        TimeSyncSdkCycleProcess(timeSyncPack);
+        //TimeSyncSdkCycleProcess(timeSyncPack);
         //电源状态同步周期调用
-        MpuPowerSyncSdkCycleProcess(powerSyncPack);
+        //MpuPowerSyncSdkCycleProcess(powerSyncPack);
     
         MpuHalUartPrintErrState(5);
         // //延时100ms

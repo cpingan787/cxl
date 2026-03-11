@@ -7,7 +7,8 @@
 //#include "powerManageSdk.h"
 #include "firmwareUpdateSdk.h"
 #include "string.h"
-
+#include "mpuHal.h"
+#include "osHal.h"
 static FlashState_e g_flashState = E_FlashState_Idle;  
 static uint8_t g_versionNumber[20] = {'v','0','0','1','.','0','0','2',};                              //软件版本号长度
 static Crc32Objec_t g_crc32Object;
@@ -216,163 +217,182 @@ static uint8_t FirmwareUpdateSdkCodeCheck(volatile uint8_t *dataPack)
 *************************************************/
 void FirmwareUpdateSdkCycleProcess(void)
 {
-    uint8_t i = 0U;
-    uint8_t cmdClass = 0U;
-    uint8_t dataTxLen = 0U;
-    uint8_t dataTxAraay[20] = {0};
-    uint16_t rxNum = 0U;
-    UartReceivePackType_t newPack = UART_RECEIVE_PACK_OLD;
-    FirmwareUpdateSdkCmd_e s_UpdateCmd = E_FirmwareUpdateSdkCmd_Default;
-    newPack = MpuHalGetNewPack();
-    if(newPack == UART_RECEIVE_PACK_NEW)
-    {
-        // TBOX_PRINT("NewPack:");
-        // for(i = 0; i < 8U; i++)
-        // {
-        //     TBOX_PRINT("%02x ", g_rxBuffer[i]);
-        // }
-        // TBOX_PRINT("\r\n");
+    // uint8_t i = 0U;
+    // uint8_t cmdClass = 0U;
+    // uint8_t dataTxLen = 0U;
+    // uint8_t dataTxAraay[20] = {0};
+    // uint16_t rxNum = 0U;
+    // UartReceivePackType_t newPack = UART_RECEIVE_PACK_OLD;
+    // FirmwareUpdateSdkCmd_e s_UpdateCmd = E_FirmwareUpdateSdkCmd_Default;
+    // newPack = MpuHalGetNewPack();
+    // if(newPack == UART_RECEIVE_PACK_NEW)
+    // {
+    //     // TBOX_PRINT("NewPack:");
+    //     // for(i = 0; i < 8U; i++)
+    //     // {
+    //     //     TBOX_PRINT("%02x ", g_rxBuffer[i]);
+    //     // }
+    //     // TBOX_PRINT("\r\n");
 
-        rxNum =  MpuHalGetUartRxDataNum();
-        if(rxNum >= MPU_PROTOCAL_HEADER_LEN)
-        {
-            rxNum = 0U;
-            newPack = UART_RECEIVE_PACK_OLD;
-            MpuHalSetNewPack(newPack);
-            cmdClass = g_rxBuffer[2];   
-            if(cmdClass == PROTOCOL_AID_FWUPD)
-            {
-                s_UpdateCmd = (FirmwareUpdateSdkCmd_e)g_rxBuffer[3];
-                memset(dataTxAraay,0,sizeof(dataTxAraay));
-                dataTxAraay[0] = g_rxBuffer[8];
-                dataTxAraay[1] = g_rxBuffer[9];
-                switch(s_UpdateCmd)
-                {
-                    case E_FirmwareUpdateSdkCmd_GetMcuVersion:  // Read version number
-                        TBOX_PRINT("--------------------01 Read Version Number------------------\r\n");
-                        dataTxAraay[2] = 0x00; 
-                        for(i = 0; i < 11U; i++)
-                        {
-                            dataTxAraay[3 + i] = g_versionNumber[i];
-                        }
-                        dataTxLen = 14U;
-                        break;
+    //     rxNum =  MpuHalGetUartRxDataNum();
+    //     if(rxNum >= MPU_PROTOCAL_HEADER_LEN)
+    //     {
+    //         rxNum = 0U;
+    //         newPack = UART_RECEIVE_PACK_OLD;
+    //         MpuHalSetNewPack(newPack);
+    //         cmdClass = g_rxBuffer[2];   
+    //         if(cmdClass == PROTOCOL_AID_FWUPD)
+    //         {
+    //             s_UpdateCmd = (FirmwareUpdateSdkCmd_e)g_rxBuffer[3];
+    //             memset(dataTxAraay,0,sizeof(dataTxAraay));
+    //             dataTxAraay[0] = g_rxBuffer[8];
+    //             dataTxAraay[1] = g_rxBuffer[9];
+    //             switch(s_UpdateCmd)
+    //             {
+    //                 case E_FirmwareUpdateSdkCmd_GetMcuVersion:  // Read version number
+    //                     TBOX_PRINT("--------------------01 Read Version Number------------------\r\n");
+    //                     dataTxAraay[2] = 0x00; 
+    //                     for(i = 0; i < 11U; i++)
+    //                     {
+    //                         dataTxAraay[3 + i] = g_versionNumber[i];
+    //                     }
+    //                     dataTxLen = 14U;
+    //                     break;
                         
-                    case E_FirmwareUpdateSdkCmd_GetMcuSeed:  // Get seed command
-                        TBOX_PRINT("--------------------02 Get Seed Command------------------\r\n");
-                        dataTxAraay[2] = 0x00; 
-                        dataTxAraay[3] = 0x01;
-                        dataTxAraay[4] = 0x02;
-                        dataTxAraay[5] = 0x03;
-                        dataTxAraay[6] = 0x04;
-                        dataTxLen = 7U;
-                        FirmwareUpdateSdkResetTimer();
-                        break;
+    //                 case E_FirmwareUpdateSdkCmd_GetMcuSeed:  // Get seed command
+    //                     TBOX_PRINT("--------------------02 Get Seed Command------------------\r\n");
+    //                     dataTxAraay[2] = 0x00; 
+    //                     dataTxAraay[3] = 0x01;
+    //                     dataTxAraay[4] = 0x02;
+    //                     dataTxAraay[5] = 0x03;
+    //                     dataTxAraay[6] = 0x04;
+    //                     dataTxLen = 7U;
+    //                     FirmwareUpdateSdkResetTimer();
+    //                     break;
                         
-                    case E_FirmwareUpdateSdkCmd_UnlockMcuFlash:  // Unlock flash download function
-                        TBOX_PRINT("--------------------03 Unlock Flash Download Function %d,%d,%d,%d------------------\r\n",
-                                  g_rxBuffer[10], g_rxBuffer[11], g_rxBuffer[12], g_rxBuffer[13]);
-                        if((g_rxBuffer[10] == 0x01) && (g_rxBuffer[11] == 0x02) && 
-                           (g_rxBuffer[12] == 0x03) && (g_rxBuffer[13] == 0x04))
-                        {
-                            dataTxAraay[2] = 0x00; 
-                        }
-                        else
-                        {
-                            dataTxAraay[2] = 0x01; 
-                        }
-                        dataTxLen = 3U;
-                        FirmwareUpdateSdkResetTimer();
-                        break;
+    //                 case E_FirmwareUpdateSdkCmd_UnlockMcuFlash:  // Unlock flash download function
+    //                     TBOX_PRINT("--------------------03 Unlock Flash Download Function %d,%d,%d,%d------------------\r\n",
+    //                               g_rxBuffer[10], g_rxBuffer[11], g_rxBuffer[12], g_rxBuffer[13]);
+    //                     if((g_rxBuffer[10] == 0x01) && (g_rxBuffer[11] == 0x02) && 
+    //                        (g_rxBuffer[12] == 0x03) && (g_rxBuffer[13] == 0x04))
+    //                     {
+    //                         dataTxAraay[2] = 0x00; 
+    //                     }
+    //                     else
+    //                     {
+    //                         dataTxAraay[2] = 0x01; 
+    //                     }
+    //                     dataTxLen = 3U;
+    //                     FirmwareUpdateSdkResetTimer();
+    //                     break;
                         
-                    case E_FirmwareUpdateSdkCmd_EnterDownloadMode:  // Enter download state
-                        TBOX_PRINT("--------------------04 Enter Download State %d,%d,%d,%d------------------\r\n",
-                                  g_rxBuffer[10], g_rxBuffer[11], g_rxBuffer[12], g_rxBuffer[13]);
-                        if((g_rxBuffer[10] == 0x01) && (g_rxBuffer[11] == 0x02) && 
-                           (g_rxBuffer[12] == 0x03) && (g_rxBuffer[13] == 0x04))
-                        {
-                            FlashHalGetMetaDataInfo(&s_MetaDataInfo);
-                            s_MetaDataInfo.m_metaBootFlag = FLASH_BOOT_JUMP_ACTIVE_FLAG;
-                            FlashHalWriteMetaDataInfo(&s_MetaDataInfo);
-                            dataTxAraay[2] = 0x00; 
-                            FirmwareUpdateSdkResetTimer();
-                        }
-                        else
-                        {
-                            dataTxAraay[2] = 0x01; 
-                        }
-                        dataTxLen = 3U;
-                        g_flashState = E_FlashState_FlashIn;
-                        break;
+    //                 case E_FirmwareUpdateSdkCmd_EnterDownloadMode:  // Enter download state
+    //                     TBOX_PRINT("--------------------04 Enter Download State %d,%d,%d,%d------------------\r\n",
+    //                               g_rxBuffer[10], g_rxBuffer[11], g_rxBuffer[12], g_rxBuffer[13]);
+    //                     if((g_rxBuffer[10] == 0x01) && (g_rxBuffer[11] == 0x02) && 
+    //                        (g_rxBuffer[12] == 0x03) && (g_rxBuffer[13] == 0x04))
+    //                     {
+    //                         FlashHalGetMetaDataInfo(&s_MetaDataInfo);
+    //                         s_MetaDataInfo.m_metaBootFlag = FLASH_BOOT_JUMP_ACTIVE_FLAG;
+    //                         FlashHalWriteMetaDataInfo(&s_MetaDataInfo);
+    //                         dataTxAraay[2] = 0x00; 
+    //                         FirmwareUpdateSdkResetTimer();
+    //                     }
+    //                     else
+    //                     {
+    //                         dataTxAraay[2] = 0x01; 
+    //                     }
+    //                     dataTxLen = 3U;
+    //                     g_flashState = E_FlashState_FlashIn;
+    //                     break;
                         
-                    case E_FirmwareUpdateSdkCmd_EraseMcuMemory:  // Erase flash code
-                        dataTxAraay[2] = FirmwareUpdateSdkEraseFlash(g_rxBuffer);
-                        dataTxLen = 3U;
-                        FirmwareUpdateSdkResetTimer();
-                        break;
+    //                 case E_FirmwareUpdateSdkCmd_EraseMcuMemory:  // Erase flash code
+    //                     dataTxAraay[2] = FirmwareUpdateSdkEraseFlash(g_rxBuffer);
+    //                     dataTxLen = 3U;
+    //                     FirmwareUpdateSdkResetTimer();
+    //                     break;
                         
-                    case E_FirmwareUpdateSdkCmd_DownloadMcuMemory:  // Download update data
-                        dataTxAraay[2] = FirmwareUpdateSdkLoadCode(g_rxBuffer);
-                        dataTxLen = 3U;
-                        FirmwareUpdateSdkResetTimer();
-                        break;
+    //                 case E_FirmwareUpdateSdkCmd_DownloadMcuMemory:  // Download update data
+    //                     dataTxAraay[2] = FirmwareUpdateSdkLoadCode(g_rxBuffer);
+    //                     dataTxLen = 3U;
+    //                     FirmwareUpdateSdkResetTimer();
+    //                     break;
                         
-                    case E_FirmwareUpdateSdkCmd_VirifyMcuMemory:  // Download complete
-                        dataTxAraay[2] = FirmwareUpdateSdkCodeCheck(g_rxBuffer);
-                        dataTxLen = 3U;
-                        FirmwareUpdateSdkResetTimer();
-                        break;
+    //                 case E_FirmwareUpdateSdkCmd_VirifyMcuMemory:  // Download complete
+    //                     dataTxAraay[2] = FirmwareUpdateSdkCodeCheck(g_rxBuffer);
+    //                     dataTxLen = 3U;
+    //                     FirmwareUpdateSdkResetTimer();
+    //                     break;
                         
-                    case E_FirmwareUpdateSdkCmd_SoftwareResetMcu:  // Reset command
-                        TBOX_PRINT("--------------------08 Reset Command------------------\r\n");
-                        dataTxAraay[2] = 0x00; 
-                        dataTxLen = 3U;
-                        MpuHalTransmit(cmdClass, (uint8_t)s_UpdateCmd, dataTxAraay, dataTxLen);
-                        TimerHalDelayMs(500);
-                        PeripheralHalMcuHardReset();
-                        break;
+    //                 case E_FirmwareUpdateSdkCmd_SoftwareResetMcu:  // Reset command
+    //                     TBOX_PRINT("--------------------08 Reset Command------------------\r\n");
+    //                     dataTxAraay[2] = 0x00; 
+    //                     dataTxLen = 3U;
+    //                     MpuHalDataPack_t resetTxPack;
+    //                     resetTxPack.aid = cmdClass;
+    //                     resetTxPack.mid = (uint8_t)s_UpdateCmd;
+    //                     resetTxPack.subcommand = 0x00;//需要定义
+    //                     resetTxPack.pDataBuffer = dataTxAraay;
+    //                     resetTxPack.dataLength = dataTxLen;
+    //                     resetTxPack.dataBufferSize = sizeof(dataTxAraay);
+    //                     int16_t g_mpuHandle = 0;
+    //                     MpuHalTransmit(g_mpuHandle, &resetTxPack);
+    //                     //TimerHalDelayMs(500);
+    //                     PeripheralHalMcuHardReset();
+    //                     break;
                         
-                    case E_FirmwareUpdateSdkCmd_GetMcuBankId:  // Get app running status
-                        TBOX_PRINT("--------------------09 Get App Running Status %d------------------\r\n", 2);
-                        dataTxAraay[2] = 0x00; 
-                        dataTxAraay[3] = 0x00;
-                        dataTxLen = 4U;
-                        break;
+    //                 case E_FirmwareUpdateSdkCmd_GetMcuBankId:  // Get app running status
+    //                     TBOX_PRINT("--------------------09 Get App Running Status %d------------------\r\n", 2);
+    //                     dataTxAraay[2] = 0x00; 
+    //                     dataTxAraay[3] = 0x00;
+    //                     dataTxLen = 4U;
+    //                     break;
                         
-                    default:  // Unsupported command
-                        TBOX_PRINT("--------------------Unsupported Command %02x------------------\r\n", s_UpdateCmd);
-                        dataTxAraay[2] = 0xFF; 
-                        dataTxLen = 3U;
-                        break;
-                }
+    //                 default:  // Unsupported command
+    //                     TBOX_PRINT("--------------------Unsupported Command %02x------------------\r\n", s_UpdateCmd);
+    //                     dataTxAraay[2] = 0xFF; 
+    //                     dataTxLen = 3U;
+    //                     break;
+    //             }
       
-                if(s_UpdateCmd != E_FirmwareUpdateSdkCmd_SoftwareResetMcu)
-                {
-                    if(MpuHalTransmit(cmdClass, (uint8_t)s_UpdateCmd, dataTxAraay, dataTxLen) != MPU_HAL_STATUS_OK)
-                    {
-                        TBOX_PRINT("Mcu uart transmit error\r\n");
-                    }
-                }
-            }
-            else if(cmdClass == 0x05)
-            {
-                // Handle command class 0x05 if needed in the future
-            }
-            else
-            {
-                // Handle unsupported command class
-                TBOX_PRINT("--------------------Unsupported Command Class %02x------------------\r\n", cmdClass);
-            }
-        }
-        else
-        {
-            TBOX_PRINT("FirmwareUpdateSdkCycleProcess: Insufficient data bytes\r\n");
-        }
-    }
-    else
-    {
-        //TBOX_PRINT("FirmwareUpdateSdkCycleProcess: No new package\r\n");
-    }
+    //             // 在 switch-case 结束之后，替换原来的发送代码：
+    //             if(s_UpdateCmd != E_FirmwareUpdateSdkCmd_SoftwareResetMcu)
+    //             {
+    //                 // 1. 定义并填充发送结构体
+    //                 MpuHalDataPack_t txPack;
+    //                 txPack.aid = cmdClass;
+    //                 txPack.mid = (uint8_t)s_UpdateCmd;
+    //                 txPack.subcommand = 0x00;//需要定义
+    //                 txPack.pDataBuffer = dataTxAraay;
+    //                 txPack.dataLength = dataTxLen;
+    //                 txPack.dataBufferSize = sizeof(dataTxAraay);
+                    
+    //                 int16_t g_mpuHandle = 0;//需要初始化
+    //                 if(MpuHalTransmit(g_mpuHandle, &txPack) != MPU_HAL_STATUS_OK)
+    //                 {
+    //                     TBOX_PRINT("Mcu uart transmit error\r\n");
+    //                 }
+    //             }
+    //         }
+    //         else if(cmdClass == 0x05)
+    //         {
+    //             // Handle command class 0x05 if needed in the future
+    //         }
+    //         else
+    //         {
+    //             // Handle unsupported command class
+    //             TBOX_PRINT("--------------------Unsupported Command Class %02x------------------\r\n", cmdClass);
+    //         }
+    //     }
+    //     else
+    //     {
+    //         TBOX_PRINT("FirmwareUpdateSdkCycleProcess: Insufficient data bytes\r\n");
+    //     }
+    // }
+    // else
+    // {
+    //     //TBOX_PRINT("FirmwareUpdateSdkCycleProcess: No new package\r\n");
+    // }
     return;
 }
 
@@ -409,7 +429,7 @@ void FirmwareUpdateSdkTimerCallback(void)
         if(g_fotaModeTimeCount >= 10000)         //10s
         {
             g_fotaModeTimeCount = 0;
-            PeripheralHalMcuHardReset();
+            //PeripheralHalMcuHardReset();
         }
     }
 }

@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 #include "r_cg_macrodriver.h"
-
+extern uint8_t g_rxBuffer[1024];
 #define MPU_HAL_STATUS_OK       0
 #define MPU_HAL_STATUS_ERR       -1
 #define MPU_PROTOCAL_HEADER_LEN  (8U)

@@ -1030,5 +1030,5 @@ void MpuHalUartPrintErrState(uint16_t cycleTime)
 *************************************************/
 UartReceivePackType_t MpuHalGetNewPack(void)
 {
-    return s_mpuUartNewPack;
+//    return s_mpuUartNewPack;
 }

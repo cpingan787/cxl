@@ -8,7 +8,12 @@ Copyright ? 2024 SiRun (Beijing) . All rights reserved.
 *************************************************/
 #ifndef _FLASH_HAL_H_
 #define _FLASH_HAL_H_
-
+typedef enum
+{
+    SUCC = 0U,
+    ERR = 1U,
+    BUSY = 2U
+}ResultStatus_t;
 #include "stdint.h"
 //#include "common_drv.h"	
 /************************************Simon Boot Debug*****************************************************/
@@ -105,13 +110,6 @@ typedef struct
     uint32_t m_metaAppFlag;
     uint32_t m_metaEndFlag;
 }FlashHalMetaDataInfo_t;
-
-typedef enum
-{
-    SUCC = 0U,
-    ERR = 1U,
-    BUSY = 2U
-}ResultStatus_t;
 
 /*************************************************
   Function:       FlashHalInit
