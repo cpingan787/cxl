@@ -33,6 +33,7 @@
 #include "Diag_Callout.h"
 #include "RequestDownload.h"
 #include "MemM_cfg.h"
+#include "logHal.h"
 /***************************************************************************************************
 *                                       PROGRAM BODY
 ***************************************************************************************************/
@@ -60,9 +61,11 @@ Std_ReturnType RequestDownload(uint32 addr, uint32 size)
     Std_ReturnType retValue = E_NOT_OK;
     /* Which logical block does the download address belong to  */
     uint8 LBId;
-
+    TBOX_PRINT("[34]1 Addr = 0x%08X, Total Size = 0x%X\r\n", addr, size);
     /* Use this address to get logical block number. */
     LBId = MemM_LBIdGet(addr,size);
+    TBOX_PRINT("[34] Mapp to LBId: %d\r\n", LBId);
+
     /*if LBId is valid then keep LBId */
     if ((LBId != COMMF_INVALID_U8) && (size != 0))
     {
@@ -85,6 +88,7 @@ Std_ReturnType RequestDownload(uint32 addr, uint32 size)
                 g_DownSeg[g_DownSegIdx].size = size;
                 g_CrcAddrEnd[g_DownBlockIdx - 1U] = addr;
                 g_DownBlockEnd[g_DownBlockIdx - 1U] = g_DownSegIdx;
+                TBOX_PRINT("[34] Target is Application/Data.\n");
             }
             retValue = E_OK;
             SecM_Crc16Preprocess();

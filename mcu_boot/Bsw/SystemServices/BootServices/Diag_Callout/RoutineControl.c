@@ -39,6 +39,7 @@
 //#include "mcal_test_main.h"
 #include "SecM.h"
 #include "BootM.h"
+#include "logHal.h"
 /***************************************************************************************************
 *                                      DEFINES AND MACROS
 ***************************************************************************************************/
@@ -398,6 +399,7 @@ uint8 RC_EraseMem_Preprocess(uint8* buf, uint16 len)
         (SizeFormat != RC_ERASE_SIZE_FORMAT))
     {
         Ret = RC_ERASE_LEN_ERROR;
+        TBOX_PRINT("[31] Erase Preprocess: Format Error! Len=%d\r\n", len);
     }
     else
     {
@@ -405,6 +407,8 @@ uint8 RC_EraseMem_Preprocess(uint8* buf, uint16 len)
         MemoryAddress = CommF_GetUint32DataValue(&buf[1],RC_ERASE_ADDR_FORMAT);
         /*Calculate the erase length*/
         MemorySize = CommF_GetUint32DataValue(&buf[RC_ERASE_ADDR_FORMAT+1U],RC_ERASE_SIZE_FORMAT);
+
+        TBOX_PRINT("[31] erase Addr=0x%08X, Size=0x%X\r\n", MemoryAddress, MemorySize);
         /*Use this address to get logical block number.*/
         LBId = MemM_LBIdGet(MemoryAddress,MemorySize);
         /*Erase address is valid and flash driver has been verified*/
@@ -453,6 +457,7 @@ uint8 RC_EraseMemory(void)
     sAddr = MemM_LBStartAddrGet(g_CurLogicalBlockId) - MEMM_ADDR_OFFSET;
     size = MemM_LBSizeGet(g_CurLogicalBlockId);
 
+    TBOX_PRINT("[31] RC_EraseMemory Start Addr=0x%08X, Size=0x%X\r\n", sAddr, size);
     /*erase memory*/
     retValue = FlsIf_Erase(sAddr, size);
 

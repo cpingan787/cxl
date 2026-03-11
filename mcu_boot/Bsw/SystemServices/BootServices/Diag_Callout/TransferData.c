@@ -35,6 +35,7 @@
 #include "MemM_cfg.h"
 //#include "mcal_test_main.h"
 #include "Diag_Callout.h"
+#include "logHal.h"
 /***************************************************************************************************
 *                                       DATA PROTOTYPES
 ***************************************************************************************************/
@@ -64,7 +65,7 @@ END_FUNCTION_HDR */
 uint8 TransData_WriteMemory(uint32 addr, uint32 size, uint8 * buf)
 {
     uint8 retValue = E_NOT_OK;
-
+    TBOX_PRINT("[36] WriteMemory: Addr = 0x%08X, Size = %d bytes, BlockId = %d\n", addr, size, g_CurLogicalBlockId);
     Diag_NRC78Send();
     //delay_ms(2);
 
@@ -73,6 +74,7 @@ uint8 TransData_WriteMemory(uint32 addr, uint32 size, uint8 * buf)
     {
        // CommF_DataCopy((void *)addr,(void *)buf,size);
         retValue = E_OK;
+        TBOX_PRINT("[36] Write to Flash Driver (RAM) skipped/mocked.\n");
     }
     else
     {
