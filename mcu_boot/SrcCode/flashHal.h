@@ -106,6 +106,13 @@ typedef struct
     uint32_t m_metaEndFlag;
 }FlashHalMetaDataInfo_t;
 
+typedef enum
+{
+    SUCC = 0U,
+    ERR = 1U,
+    BUSY = 2U
+}ResultStatus_t;
+
 /*************************************************
   Function:       FlashHalInit
   Description:    Flash module initialization API

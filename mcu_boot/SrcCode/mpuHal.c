@@ -2,7 +2,7 @@
 #include "logHal.h"
 #include "osHal.h"
 //#include "crc8_16_32.h"
-
+#include "Dio_Cfg.h"
 #include "r_cg_macrodriver.h"
 
 #include "stdio.h"
@@ -1018,4 +1018,17 @@ void MpuHalUartPrintErrState(uint16_t cycleTime)
         return;
     }
     timeCount = 0;
+}
+
+/*************************************************
+  Function:       MpuHalGetNewPack
+  Description:    Get the new packet flag status
+  Input:          None
+  Output:         None
+  Return:         New packet flag value (0 = no new packet, non-zero = new packet available)
+  Others:         Used to check if a new MPU communication packet has been received
+*************************************************/
+UartReceivePackType_t MpuHalGetNewPack(void)
+{
+    return s_mpuUartNewPack;
 }

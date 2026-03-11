@@ -6,7 +6,8 @@
 
 #define MPU_HAL_STATUS_OK       0
 #define MPU_HAL_STATUS_ERR       -1
-
+#define MPU_PROTOCAL_HEADER_LEN  (8U)
+#define PROTOCOL_AID_FWUPD       (0x03U)
 typedef struct
 {
   uint8_t aid;
@@ -25,8 +26,11 @@ typedef struct
 }MpuHalFilter_t;
 
 
-
-
+typedef enum
+{
+    UART_RECEIVE_PACK_NEW,
+    UART_RECEIVE_PACK_OLD,
+}UartReceivePackType_t;
 
 
 
