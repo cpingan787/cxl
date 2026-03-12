@@ -55,7 +55,7 @@ int16_t FirmwareUpdateSdkInit(uint16_t cycleTime);
   Return:         无
   Others:         
 *************************************************/
-void FirmwareUpdateSdkCycleProcess(void);
-static void FirmwareUpdateSdkResetTimer(void);
+void FirmwareUpdateSdkCycleProcess(uint8_t *pData, uint16_t dataLen);
+void FirmwareUpdateSdkResetTimer(void);
 void FirmwareUpdateSdkTimerCallback(void);
 #endif

@@ -5,7 +5,7 @@
 #include "firmwareUpdateSdk.h" // 引入固件升级头文件
 
 static uint16_t g_cycleTime = 5;                     
-static int16_t g_mpuHandle = -1;                      
+int16_t g_mpuHandle = -1;                      
 static uint8_t g_dataBuffer[1024] = {0};
 static MpuHalDataPack_t  g_dataPack;
 static uint8_t g_recvDataBuffer[1024] = {0};
@@ -78,16 +78,14 @@ void McuMpuSyncTaskMain(void)
         
         if(g_dataPack.aid == 0x05) 
         {
-//            FirmwareUpdateSdkCycleProcess(&g_dataPack);
+            FirmwareUpdateSdkCycleProcess(g_dataPack.pDataBuffer, g_dataPack.dataBufferSize);
         }
         else if(g_dataPack.aid == 0x01 && g_dataPack.mid == 0x02)
         {
 
         }
-        // ... 保持你原有的其他状态同步判断
     }
     
-    // 升级周期性超时监控（如重启等）
     FirmwareUpdateSdkTimerCallback(); 
     
     MpuHalUartPrintErrState(5);

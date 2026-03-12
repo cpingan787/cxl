@@ -4,11 +4,44 @@
 #include "logHal.h"
 #include "firmwareUpdateSdk.h"
 #include "string.h"
+#include "MemIf_Types.h"
+#include "Std_Types.h"
+#include "Fls.h"
+#include "crc8_16_32.h"
+
+/* ==================== 升级地址及大小宏定义 ==================== */
+// MPU下发擦除/升级指令时，协议里带的 App1 抽象逻辑地址
+#define FLASH_APP_BANKA_ABSTRACT_ADDRESS   0x00000000 
+// MPU下发擦除/升级指令时，协议里带的 App2 抽象逻辑地址
+#define FLASH_APP_BANKB_ABSTRACT_ADDRESS   0x00000000 
+
+// 实际物理 Flash 中，App1 分区的起始物理地址
+#define FLASH_APP_BANKA_BASE_ADDRESS       0x00000000 
+// 实际物理 Flash 中，App2 分区的结束物理地址 (用于防止刷写越界)
+#define FLASH_APP_BANKB_END_ADDRESS        0x00000000 
+
+// 单个 APP 分区(Bank)的总大小 (例如 512KB 就是 512 * 1024)
+#define APP_BANK_SIZE                      (512 * 1024) 
+
+/* ==================== 状态与分区ID宏定义 ==================== */
+#define FLASH_APP_DEFALT_BANK_ID           0x00
+#define FLASH_APP_BANKA_ID                 0x01
+#define FLASH_APP_BANKB_ID                 0x02
+
+// 固件完整性标志位 (用于验签/校验完成后的标记)
+#define FLASH_BANK_APP_INTEGRITY_DISABLE   0x00 
+#define FLASH_BANK_APP_INTEGRITY_ENABLE    0x01 
+
+// A/B面激活标志位
+#define FLASH_APP_BANKA_ACTIVE_FLAG        0x01
+#define FLASH_APP_BANKB_ACTIVE_FLAG        0x02
+
+extern int16_t g_mpuHandle;
 
 static FlashState_e g_flashState = E_FlashState_Idle;  
 static uint8_t g_versionNumber[20] = {'v','0','0','1','.','0','0','2',};                              //软件版本号长度
-//static Crc32Objec_t g_crc32Object;
-//static uint8_t flashAppFlag = FLASH_APP_DEFALT_BANK_ID;
+static Crc32Objec_t g_crc32Object;
+static uint8_t flashAppFlag = FLASH_APP_DEFALT_BANK_ID;
 static uint8_t g_fotaModeFlag = 0U;   
 static uint16_t g_fotaModeTimeCount = 0U;  
 static uint32_t g_crcData = 0xFFFFFFFF;
@@ -27,49 +60,71 @@ static uint32_t g_crcData = 0xFFFFFFFF;
 *************************************************/
 static uint8_t FirmwareUpdateSdkEraseFlash(volatile uint8_t *dataPack)
 {
-    // uint32_t address = 0;
-     uint8_t ret = 0;
+    uint32_t address = 0;
+    uint8_t ret = 0;
     
-    // TBOX_PRINT("--------------------05 Erase flash code %d,%d,%d,%d------------------\r\n",dataPack[10],dataPack[11],dataPack[12],dataPack[13]);
-    // // Verify data
-    // if(dataPack[10] == 0x01 && dataPack[11] == 0x02 && 
-    //             dataPack[12] == 0x03 && dataPack[13] == 0x04)
-    // {
-    //     address = ((dataPack[14] << 24) + (dataPack[15] << 16)+ (dataPack[16] << 8) + dataPack[17]);
-	//     TBOX_PRINT("boot erase start address is 0x%x\r\n",address);
-    //     if(address == FLASH_APP_BANKA_ABSTRACT_ADDRESS)
-    //     {
-    //         flashAppFlag = FLASH_APP_BANKA_ID;
-    //         FlashHalWriteApp1SuccessFlag(FLASH_BANK_APP_INTEGRITY_DISABLE);
-    //     }
-    //     else if(address == FLASH_APP_BANKB_ABSTRACT_ADDRESS)
-    //     {
-    //         flashAppFlag = FLASH_APP_BANKB_ID;
-    //         FlashHalWriteApp2SuccessFlag(FLASH_BANK_APP_INTEGRITY_DISABLE);
-    //     }
-    //     else
-    //     {
-    //         flashAppFlag = FLASH_APP_DEFALT_BANK_ID;
-    //         TBOX_PRINT("05 address error\r\n");
-    //     }
+    TBOX_PRINT("--------------------05 Erase flash code %d,%d,%d,%d------------------\r\n",dataPack[10],dataPack[11],dataPack[12],dataPack[13]);
+    // Verify data
+    if(dataPack[10] == 0x01 && dataPack[11] == 0x02 && 
+                dataPack[12] == 0x03 && dataPack[13] == 0x04)
+    {
+        address = ((dataPack[14] << 24) + (dataPack[15] << 16)+ (dataPack[16] << 8) + dataPack[17]);
+	    TBOX_PRINT("boot erase start address is 0x%x\r\n",address);
+        if(address == FLASH_APP_BANKA_ABSTRACT_ADDRESS)
+        {
+            flashAppFlag = FLASH_APP_BANKA_ID;
+            // 先注释掉，等后期补齐 Boot 状态机驱动
+            // FlashHalWriteApp1SuccessFlag(FLASH_BANK_APP_INTEGRITY_DISABLE);
+        }
+        else if(address == FLASH_APP_BANKB_ABSTRACT_ADDRESS)
+        {
+            flashAppFlag = FLASH_APP_BANKB_ID;
+            FlashHalWriteApp2SuccessFlag(FLASH_BANK_APP_INTEGRITY_DISABLE);
+        }
+        else
+        {
+            flashAppFlag = FLASH_APP_DEFALT_BANK_ID;
+            TBOX_PRINT("05 address error\r\n");
+        }
     
-    //     if(FLASH_HAL_STATUS_OK == FlashHalOtaFlashErase(flashAppFlag))
-    //     {
-    //         TBOX_PRINT("Erase Bank %d success！\r\n", flashAppFlag);
-    //         g_flashState = E_FlashState_FlashErase;
-    //         g_crcData = Crc32Init(&g_crc32Object,0x04C11DB7);
-    //     }
-    //     else
-    //     {
-    //         g_flashState = E_FlashState_Idle;
-    //         ret = 1;
-    //     }
-    // }
-    // else
-    // {
-    //     g_flashState = E_FlashState_Idle;
-    //     ret = 2;
-    // }
+        Std_ReturnType flsRet;
+        uint32_t eraseLength = 0;
+        
+        // 根据 address 计算你需要擦除的长度（假设你已经在宏里定义了 APP 分区的大小）
+        // 例如：#define APP_BANK_SIZE  (1024 * 512) // 512KB
+        // 你需要根据实际情况赋值 eraseLength
+        eraseLength = APP_BANK_SIZE; 
+        
+        // 1. 发起擦除请求
+        flsRet = Fls_Erase((Fls_AddressType)address, (Fls_LengthType)eraseLength);
+        
+        if(flsRet == E_OK)
+        {
+            // 2. 轮询等待擦除完成 (擦除非常慢，死循环等待必须喂狗)
+            while (Fls_GetStatus() != MEMIF_IDLE)
+            {
+                Fls_MainFunction();
+                
+                // 【致命警告】擦除整块 Bank 可能需要几秒钟，必定触发看门狗！
+                // 必须在这里疯狂喂狗！
+                // Wdg_SetTriggerCondition(xxx); 
+            }
+            
+            TBOX_PRINT("Erase Bank %d success\r\n", flashAppFlag);
+            g_flashState = E_FlashState_FlashErase;
+            g_crcData = Crc32Init(&g_crc32Object, 0x04C11DB7); // 如果你没有这个函数，注意规避报错
+        }
+        else
+        {
+            g_flashState = E_FlashState_Idle;
+            ret = 1; // Erase Fail
+        }
+    }
+    else
+    {
+        g_flashState = E_FlashState_Idle;
+        ret = 2;
+    }
     return ret;
 }
 
@@ -93,67 +148,83 @@ static uint8_t FirmwareUpdateSdkEraseFlash(volatile uint8_t *dataPack)
 static uint8_t FirmwareUpdateSdkLoadCode(volatile uint8_t *dataPack)
 {
     uint8_t ret = 0U;
-    // uint32_t len = 0U;
-    // uint32_t addr = 0U;
+    uint32_t len = 0U;
+    uint32_t addr = 0U;
 
-    // if(dataPack != NULL) 
-    // {
-    //     if(g_flashState == E_FlashState_FlashErase)
-    //     {
-    //         addr = ((uint32_t)dataPack[10] << 24) |
-    //                ((uint32_t)dataPack[11] << 16) |
-    //                ((uint32_t)dataPack[12] << 8)  |
-    //                (uint32_t)dataPack[13];
+    if(dataPack != NULL) 
+    {
+        if(g_flashState == E_FlashState_FlashErase)
+        {
+            addr = ((uint32_t)dataPack[10] << 24) |
+                   ((uint32_t)dataPack[11] << 16) |
+                   ((uint32_t)dataPack[12] << 8)  |
+                   (uint32_t)dataPack[13];
             
-    //         len = ((uint32_t)dataPack[5] << 8) | (uint32_t)dataPack[6];
-    //         len -= 10; // Subtract header length
+            len = ((uint32_t)dataPack[5] << 8) | (uint32_t)dataPack[6];
+            len -= 10; // Subtract header length
             
-    //         TBOX_PRINT("--------------------06 addr=%08x len=%d cnt=%02x %02x------------------\r\n",
-    //                   addr, len, dataPack[8], dataPack[9]);
-    //         if((len <= 0 || len > (1024*1024)) || // Limit max length to 1MB
-    //            (addr < FLASH_APP_BANKA_BASE_ADDRESS) || 
-    //            (addr > FLASH_APP_BANKB_END_ADDRESS) || 
-    //            ((addr + len) > FLASH_APP_BANKB_END_ADDRESS))
-    //         {
-    //             if(len <= 0 || len > (1024*1024))
-    //             {
-    //                 TBOX_PRINT("06 invalid data length: %d\r\n", len);
-    //             }
-    //             else if((addr < FLASH_APP_BANKA_BASE_ADDRESS) || (addr > FLASH_APP_BANKB_END_ADDRESS))
-    //             {
-    //                 TBOX_PRINT("06 address out of range: %08x\r\n", addr);
-    //             }
-    //             else if((addr + len) > FLASH_APP_BANKB_END_ADDRESS)
-    //             {
-    //                 TBOX_PRINT("06 address+length exceeds flash boundary: %08x\r\n", addr + len);
-    //             }
-    //             ret = 0x0A; 
-    //         }
-    //         else
-    //         {
-    //             if(FLASH_HAL_STATUS_OK != FlashHalOtaFlashWrite(addr, &dataPack[18], len))
-    //             {
-    //                 TBOX_PRINT("06 FlashHalOtaFlashWrite operation failed\r\n");
-    //                 ret = 0x03; 
-    //             }
-    //             else
-    //             {
-    //                 g_crcData = Crc32(&g_crc32Object, g_crcData, (uint8_t *)addr, len);
-    //             }
-    //         }
-    //     }
-    //     else
-    //     {
-    //         // System is not in correct state for writing firmware
-    //         TBOX_PRINT("--------------------06 Invalid flash state: %d (expected: %d)------------------\r\n", 
-    //                   g_flashState, E_FlashState_FlashErase);
-    //         ret = 0x06; 
-    //     }
-    // }
-    // else
-    // {
-    //     TBOX_PRINT("FirmwareUpdateSdkLoadCode: dataPack is NULL\r\n");
-    // }
+            TBOX_PRINT("--------------------06 addr=%08x len=%d cnt=%02x %02x------------------\r\n",
+                      addr, len, dataPack[8], dataPack[9]);
+            if((len <= 0 || len > (1024*1024)) || // Limit max length to 1MB
+               (addr < FLASH_APP_BANKA_BASE_ADDRESS) || 
+               (addr > FLASH_APP_BANKB_END_ADDRESS) || 
+               ((addr + len) > FLASH_APP_BANKB_END_ADDRESS))
+            {
+                if(len <= 0 || len > (1024*1024))
+                {
+                    TBOX_PRINT("06 invalid data length: %d\r\n", len);
+                }
+                else if((addr < FLASH_APP_BANKA_BASE_ADDRESS) || (addr > FLASH_APP_BANKB_END_ADDRESS))
+                {
+                    TBOX_PRINT("06 address out of range: %08x\r\n", addr);
+                }
+                else if((addr + len) > FLASH_APP_BANKB_END_ADDRESS)
+                {
+                    TBOX_PRINT("06 address+length exceeds flash boundary: %08x\r\n", addr + len);
+                }
+                ret = 0x0A; 
+            }
+            else
+            {
+               Std_ReturnType flsRet;
+                
+                // 1. 发起写请求
+                flsRet = Fls_Write((Fls_AddressType)addr, (const uint8_t *)&dataPack[18], (Fls_LengthType)len);
+                
+                if(flsRet == E_OK)
+                {
+                    // 2. 轮询等待写操作真正完成
+                    while (Fls_GetStatus() != MEMIF_IDLE)
+                    {
+                        Fls_MainFunction(); // 推动底层 Flash 状态机
+                        
+                        // 【非常重要】如果写 Flash 耗时较长，你的看门狗可能会复位
+                        // 请在这里添加“喂狗”函数，例如：
+                        // Wdg_SetTriggerCondition(xxx); 
+                    }
+                    
+                    // 3. 校验并累加 CRC
+                    g_crcData = Crc32(&g_crc32Object, g_crcData, (uint8_t *)addr, len);
+                }
+                else
+                {
+                    TBOX_PRINT("06 Fls_Write request rejected\r\n");
+                    ret = 0x03; 
+                }
+            }
+        }
+        else
+        {
+            // System is not in correct state for writing firmware
+            TBOX_PRINT("--------------------06 Invalid flash state: %d (expected: %d)------------------\r\n", 
+                      g_flashState, E_FlashState_FlashErase);
+            ret = 0x06; 
+        }
+    }
+    else
+    {
+        TBOX_PRINT("FirmwareUpdateSdkLoadCode: dataPack is NULL\r\n");
+    }
     return ret;
 }
 
@@ -171,35 +242,37 @@ static uint8_t FirmwareUpdateSdkLoadCode(volatile uint8_t *dataPack)
 static uint8_t FirmwareUpdateSdkCodeCheck(volatile uint8_t *dataPack)
 {
     uint8_t ret = 0U;
-    // uint32_t checksum = 0U;
+    uint32_t checksum = 0U;
 
-    // TBOX_PRINT("--------------------07 Download Complete------------------\r\n");
+    TBOX_PRINT("--------------------07 Download Complete------------------\r\n");
 
-    // g_crcData ^= 0xFFFFFFFF; 
-    // checksum = (dataPack[10]<<24)+(dataPack[11]<<16)+(dataPack[12]<<8)+dataPack[13];
-    // if(checksum == g_crcData)
-    // {
-    //     FlashHalGetMetaDataInfo(&s_MetaDataInfo);
-    //     if(FLASH_APP_BANKA_ID == flashAppFlag)  
-    //     {
-    //         TBOX_PRINT("Update and virify app1 success!\r\n");
-    //         FlashHalWriteApp1SuccessFlag(FLASH_BANK_APP_INTEGRITY_ENABLE); //APP1 application update completed
-    //         s_MetaDataInfo.m_metaAppFlag = FLASH_APP_BANKA_ACTIVE_FLAG;
-    //         FlashHalWriteMetaDataInfo(&s_MetaDataInfo);
-    //     }
-    //     else if(FLASH_APP_BANKB_ID == flashAppFlag) 
-    //     {
-    //         TBOX_PRINT("Update and virify app2 success!\r\n");
-    //         FlashHalWriteApp2SuccessFlag(FLASH_BANK_APP_INTEGRITY_ENABLE); //APP2 application update completed
-    //         s_MetaDataInfo.m_metaAppFlag = FLASH_APP_BANKB_ACTIVE_FLAG;
-    //         FlashHalWriteMetaDataInfo(&s_MetaDataInfo);
-    //     }
-    // }
-    // else
-    // {
-    //     TBOX_PRINT("checksum = %x, g_crcData = %x\r\n", checksum, g_crcData);
-    //     ret = 0x01; 
-    // }
+    g_crcData ^= 0xFFFFFFFF; 
+    checksum = (dataPack[10]<<24)+(dataPack[11]<<16)+(dataPack[12]<<8)+dataPack[13];
+    if(checksum == g_crcData)
+    {
+        // FlashHalGetMetaDataInfo(&s_MetaDataInfo); // 之前已经注释
+        if(FLASH_APP_BANKA_ID == flashAppFlag)  
+        {
+            TBOX_PRINT("Update and virify app1 success!\r\n");
+            // 先注释掉
+            // FlashHalWriteApp1SuccessFlag(FLASH_BANK_APP_INTEGRITY_ENABLE); 
+            // s_MetaDataInfo.m_metaAppFlag = FLASH_APP_BANKA_ACTIVE_FLAG;
+            // FlashHalWriteMetaDataInfo(&s_MetaDataInfo);
+        }
+        else if(FLASH_APP_BANKB_ID == flashAppFlag) 
+        {
+            TBOX_PRINT("Update and virify app2 success!\r\n");
+            // 先注释掉
+            // FlashHalWriteApp2SuccessFlag(FLASH_BANK_APP_INTEGRITY_ENABLE); 
+            // s_MetaDataInfo.m_metaAppFlag = FLASH_APP_BANKB_ACTIVE_FLAG;
+            // FlashHalWriteMetaDataInfo(&s_MetaDataInfo);
+        }
+    }
+    else
+    {
+        TBOX_PRINT("checksum = %x, g_crcData = %x\r\n", checksum, g_crcData);
+        ret = 0x01; 
+    }
     return ret;
 }
 
@@ -211,166 +284,127 @@ static uint8_t FirmwareUpdateSdkCodeCheck(volatile uint8_t *dataPack)
   Return:         None
   Others:         
 *************************************************/
-void FirmwareUpdateSdkCycleProcess(void)
+void FirmwareUpdateSdkCycleProcess(uint8_t *pData, uint16_t dataLen)
 {
-    // uint8_t i = 0U;
-    // uint8_t cmdClass = 0U;
-    // uint8_t dataTxLen = 0U;
-    // uint8_t dataTxAraay[20] = {0};
-    // uint16_t rxNum = 0U;
-    // UartReceivePackType_t newPack = UART_RECEIVE_PACK_OLD;
-    // FirmwareUpdateSdkCmd_e s_UpdateCmd = E_FirmwareUpdateSdkCmd_Default;
-    // newPack = MpuHalGetNewPack();
-    // if(newPack == UART_RECEIVE_PACK_NEW)
-    // {
-    //     // TBOX_PRINT("NewPack:");
-    //     // for(i = 0; i < 8U; i++)
-    //     // {
-    //     //     TBOX_PRINT("%02x ", g_rxBuffer[i]);
-    //     // }
-    //     // TBOX_PRINT("\r\n");
+    uint8_t i = 0U;
+    uint8_t cmdClass = 0U;
+    uint8_t dataTxLen = 0U;
+    uint8_t dataTxAraay[20] = {0};
+    FirmwareUpdateSdkCmd_e s_UpdateCmd = E_FirmwareUpdateSdkCmd_Default;
 
-    //     rxNum =  MpuHalGetUartRxDataNum();
-    //     if(rxNum >= MPU_PROTOCAL_HEADER_LEN)
-    //     {
-    //         rxNum = 0U;
-    //         newPack = UART_RECEIVE_PACK_OLD;
-    //         MpuHalSetNewPack(newPack);
-    //         cmdClass = g_rxBuffer[2];   
-    //         if(cmdClass == PROTOCOL_AID_FWUPD)
-    //         {
-    //             s_UpdateCmd = (FirmwareUpdateSdkCmd_e)g_rxBuffer[3];
-    //             memset(dataTxAraay,0,sizeof(dataTxAraay));
-    //             dataTxAraay[0] = g_rxBuffer[8];
-    //             dataTxAraay[1] = g_rxBuffer[9];
-    //             switch(s_UpdateCmd)
-    //             {
-    //                 case E_FirmwareUpdateSdkCmd_GetMcuVersion:  // Read version number
-    //                     TBOX_PRINT("--------------------01 Read Version Number------------------\r\n");
-    //                     dataTxAraay[2] = 0x00; 
-    //                     for(i = 0; i < 11U; i++)
-    //                     {
-    //                         dataTxAraay[3 + i] = g_versionNumber[i];
-    //                     }
-    //                     dataTxLen = 14U;
-    //                     break;
-                        
-    //                 case E_FirmwareUpdateSdkCmd_GetMcuSeed:  // Get seed command
-    //                     TBOX_PRINT("--------------------02 Get Seed Command------------------\r\n");
-    //                     dataTxAraay[2] = 0x00; 
-    //                     dataTxAraay[3] = 0x01;
-    //                     dataTxAraay[4] = 0x02;
-    //                     dataTxAraay[5] = 0x03;
-    //                     dataTxAraay[6] = 0x04;
-    //                     dataTxLen = 7U;
-    //                     FirmwareUpdateSdkResetTimer();
-    //                     break;
-                        
-    //                 case E_FirmwareUpdateSdkCmd_UnlockMcuFlash:  // Unlock flash download function
-    //                     TBOX_PRINT("--------------------03 Unlock Flash Download Function %d,%d,%d,%d------------------\r\n",
-    //                               g_rxBuffer[10], g_rxBuffer[11], g_rxBuffer[12], g_rxBuffer[13]);
-    //                     if((g_rxBuffer[10] == 0x01) && (g_rxBuffer[11] == 0x02) && 
-    //                        (g_rxBuffer[12] == 0x03) && (g_rxBuffer[13] == 0x04))
-    //                     {
-    //                         dataTxAraay[2] = 0x00; 
-    //                     }
-    //                     else
-    //                     {
-    //                         dataTxAraay[2] = 0x01; 
-    //                     }
-    //                     dataTxLen = 3U;
-    //                     FirmwareUpdateSdkResetTimer();
-    //                     break;
-                        
-    //                 case E_FirmwareUpdateSdkCmd_EnterDownloadMode:  // Enter download state
-    //                     TBOX_PRINT("--------------------04 Enter Download State %d,%d,%d,%d------------------\r\n",
-    //                               g_rxBuffer[10], g_rxBuffer[11], g_rxBuffer[12], g_rxBuffer[13]);
-    //                     if((g_rxBuffer[10] == 0x01) && (g_rxBuffer[11] == 0x02) && 
-    //                        (g_rxBuffer[12] == 0x03) && (g_rxBuffer[13] == 0x04))
-    //                     {
-    //                         FlashHalGetMetaDataInfo(&s_MetaDataInfo);
-    //                         s_MetaDataInfo.m_metaBootFlag = FLASH_BOOT_JUMP_ACTIVE_FLAG;
-    //                         FlashHalWriteMetaDataInfo(&s_MetaDataInfo);
-    //                         dataTxAraay[2] = 0x00; 
-    //                         FirmwareUpdateSdkResetTimer();
-    //                     }
-    //                     else
-    //                     {
-    //                         dataTxAraay[2] = 0x01; 
-    //                     }
-    //                     dataTxLen = 3U;
-    //                     g_flashState = E_FlashState_FlashIn;
-    //                     break;
-                        
-    //                 case E_FirmwareUpdateSdkCmd_EraseMcuMemory:  // Erase flash code
-    //                     dataTxAraay[2] = FirmwareUpdateSdkEraseFlash(g_rxBuffer);
-    //                     dataTxLen = 3U;
-    //                     FirmwareUpdateSdkResetTimer();
-    //                     break;
-                        
-    //                 case E_FirmwareUpdateSdkCmd_DownloadMcuMemory:  // Download update data
-    //                     dataTxAraay[2] = FirmwareUpdateSdkLoadCode(g_rxBuffer);
-    //                     dataTxLen = 3U;
-    //                     FirmwareUpdateSdkResetTimer();
-    //                     break;
-                        
-    //                 case E_FirmwareUpdateSdkCmd_VirifyMcuMemory:  // Download complete
-    //                     dataTxAraay[2] = FirmwareUpdateSdkCodeCheck(g_rxBuffer);
-    //                     dataTxLen = 3U;
-    //                     FirmwareUpdateSdkResetTimer();
-    //                     break;
-                        
-    //                 case E_FirmwareUpdateSdkCmd_SoftwareResetMcu:  // Reset command
-    //                     TBOX_PRINT("--------------------08 Reset Command------------------\r\n");
-    //                     dataTxAraay[2] = 0x00; 
-    //                     dataTxLen = 3U;
-    //                     MpuHalTransmit(cmdClass, (uint8_t)s_UpdateCmd, dataTxAraay, dataTxLen);
-    //                     TimerHalDelayMs(500);
-    //                     PeripheralHalMcuHardReset();
-    //                     break;
-                        
-    //                 case E_FirmwareUpdateSdkCmd_GetMcuBankId:  // Get app running status
-    //                     TBOX_PRINT("--------------------09 Get App Running Status %d------------------\r\n", 2);
-    //                     dataTxAraay[2] = 0x00; 
-    //                     dataTxAraay[3] = 0x00;
-    //                     dataTxLen = 4U;
-    //                     break;
-                        
-    //                 default:  // Unsupported command
-    //                     TBOX_PRINT("--------------------Unsupported Command %02x------------------\r\n", s_UpdateCmd);
-    //                     dataTxAraay[2] = 0xFF; 
-    //                     dataTxLen = 3U;
-    //                     break;
-    //             }
-      
-    //             if(s_UpdateCmd != E_FirmwareUpdateSdkCmd_SoftwareResetMcu)
-    //             {
-    //                 if(MpuHalTransmit(cmdClass, (uint8_t)s_UpdateCmd, dataTxAraay, dataTxLen) != MPU_HAL_STATUS_OK)
-    //                 {
-    //                     TBOX_PRINT("Mcu uart transmit error\r\n");
-    //                 }
-    //             }
-    //         }
-    //         else if(cmdClass == 0x05)
-    //         {
-    //             // Handle command class 0x05 if needed in the future
-    //         }
-    //         else
-    //         {
-    //             // Handle unsupported command class
-    //             TBOX_PRINT("--------------------Unsupported Command Class %02x------------------\r\n", cmdClass);
-    //         }
-    //     }
-    //     else
-    //     {
-    //         TBOX_PRINT("FirmwareUpdateSdkCycleProcess: Insufficient data bytes\r\n");
-    //     }
-    // }
-    // else
-    // {
-    //     //TBOX_PRINT("FirmwareUpdateSdkCycleProcess: No new package\r\n");
-    // }
-    return;
+    // 协议最短长度保护
+    if(pData == NULL || dataLen < MPU_PROTOCAL_HEADER_LEN) 
+    {
+        return;
+    }
+
+    cmdClass = pData[2];   
+    if(cmdClass == PROTOCOL_AID_FWUPD)
+    {
+        s_UpdateCmd = (FirmwareUpdateSdkCmd_e)pData[3];
+        memset(dataTxAraay, 0, sizeof(dataTxAraay));
+        dataTxAraay[0] = pData[8];
+        dataTxAraay[1] = pData[9];
+
+        switch(s_UpdateCmd)
+        {
+            case E_FirmwareUpdateSdkCmd_GetMcuVersion:
+                TBOX_PRINT("---01 Read Version---\r\n");
+                dataTxAraay[2] = 0x00; 
+                for(i = 0; i < 11U; i++) { dataTxAraay[3 + i] = g_versionNumber[i]; }
+                dataTxLen = 14U;
+                break;
+                
+            case E_FirmwareUpdateSdkCmd_GetMcuSeed:
+                TBOX_PRINT("---02 Get Seed---\r\n");
+                dataTxAraay[2] = 0x00; dataTxAraay[3] = 0x01; dataTxAraay[4] = 0x02;
+                dataTxAraay[5] = 0x03; dataTxAraay[6] = 0x04;
+                dataTxLen = 7U;
+                FirmwareUpdateSdkResetTimer();
+                break;
+                
+            case E_FirmwareUpdateSdkCmd_UnlockMcuFlash:
+                TBOX_PRINT("---03 Unlock Flash---\r\n");
+                if((pData[10] == 0x01) && (pData[11] == 0x02) && (pData[12] == 0x03) && (pData[13] == 0x04))
+                    { dataTxAraay[2] = 0x00; } else { dataTxAraay[2] = 0x01; }
+                dataTxLen = 3U;
+                FirmwareUpdateSdkResetTimer();
+                break;
+                
+            case E_FirmwareUpdateSdkCmd_EnterDownloadMode:
+                TBOX_PRINT("---04 Enter Download Mode---\r\n");
+                if((pData[10] == 0x01) && (pData[11] == 0x02) && (pData[12] == 0x03) && (pData[13] == 0x04))
+                {
+                    // 先把这三行注释掉，等后期做A/B面切换时再补齐元数据驱动
+                    // FlashHalGetMetaDataInfo(&s_MetaDataInfo);
+                    // s_MetaDataInfo.m_metaBootFlag = FLASH_BOOT_JUMP_ACTIVE_FLAG;
+                    // FlashHalWriteMetaDataInfo(&s_MetaDataInfo);
+                    
+                    dataTxAraay[2] = 0x00; 
+                    FirmwareUpdateSdkResetTimer();
+                } 
+                else 
+                { 
+                    dataTxAraay[2] = 0x01; 
+                }
+                dataTxLen = 3U;
+                g_flashState = E_FlashState_FlashIn;
+                break;
+                
+            case E_FirmwareUpdateSdkCmd_EraseMcuMemory:
+                dataTxAraay[2] = FirmwareUpdateSdkEraseFlash(pData);
+                dataTxLen = 3U;
+                FirmwareUpdateSdkResetTimer();
+                break;
+                
+            case E_FirmwareUpdateSdkCmd_DownloadMcuMemory:
+                dataTxAraay[2] = FirmwareUpdateSdkLoadCode(pData);
+                dataTxLen = 3U;
+                FirmwareUpdateSdkResetTimer();
+                break;
+                
+            case E_FirmwareUpdateSdkCmd_VirifyMcuMemory:
+                dataTxAraay[2] = FirmwareUpdateSdkCodeCheck(pData);
+                dataTxLen = 3U;
+                FirmwareUpdateSdkResetTimer();
+                break;
+                
+            case E_FirmwareUpdateSdkCmd_SoftwareResetMcu:
+                TBOX_PRINT("---08 Reset---\r\n");
+                dataTxAraay[2] = 0x00; dataTxLen = 3U;
+                
+                MpuHalDataPack_t resetTxPack;
+                resetTxPack.aid = cmdClass;
+                resetTxPack.mid = 0x01;  //
+                resetTxPack.subcommand = (uint8_t)s_UpdateCmd;
+                resetTxPack.pDataBuffer = dataTxAraay;
+                resetTxPack.dataBufferSize = dataTxLen;
+                
+                MpuHalTransmit(g_mpuHandle, &resetTxPack);
+                // ==============================
+                
+                // TimerHalDelayMs(500);
+                // PeripheralHalMcuHardReset(); 
+                break;
+                
+            default:
+                dataTxAraay[2] = 0xFF; dataTxLen = 3U;
+                break;
+        }
+
+        if(s_UpdateCmd != E_FirmwareUpdateSdkCmd_SoftwareResetMcu)
+        {
+            MpuHalDataPack_t normalTxPack;
+            normalTxPack.aid = cmdClass;
+            normalTxPack.mid = 0x01;
+            normalTxPack.subcommand = (uint8_t)s_UpdateCmd;
+            normalTxPack.pDataBuffer = dataTxAraay;
+            normalTxPack.dataBufferSize = dataTxLen;
+            
+            MpuHalTransmit(g_mpuHandle, &normalTxPack);
+            // ==============================
+        }
+    }
 }
 
 /*************************************************
@@ -382,11 +416,11 @@ void FirmwareUpdateSdkCycleProcess(void)
   Others:         Modifies global variables g_fotaModeTimeCount and g_fotaModeFlag
                   Resets the timer counter to 0 and sets the FOTA mode flag to 1
 *************************************************/
-//static void FirmwareUpdateSdkResetTimer(void)
-//{
-//    g_fotaModeTimeCount = 0;
-//    g_fotaModeFlag = 1;
-//}
+void FirmwareUpdateSdkResetTimer(void)
+{
+   g_fotaModeTimeCount = 0;
+   g_fotaModeFlag = 1;
+}
 
 /*************************************************
   Function:       FirmwareUpdateSdkTimerCallback
@@ -400,13 +434,14 @@ void FirmwareUpdateSdkCycleProcess(void)
 *************************************************/
 void FirmwareUpdateSdkTimerCallback(void)
 {
-    // if((FlashHalGetEnterBootType() == 1) || (g_fotaModeFlag == 1))
-    // {
-    //     g_fotaModeTimeCount++;
-    //     if(g_fotaModeTimeCount >= 10000)         //10s
-    //     {
-    //         g_fotaModeTimeCount = 0;
-    //         PeripheralHalMcuHardReset();
-    //     }
-    // }
+    // 如果系统自带的 FlashHalGetEnterBootType 不兼容，可以只留 g_fotaModeFlag 判断
+    if(g_fotaModeFlag == 1) 
+    {
+        g_fotaModeTimeCount++;
+        if(g_fotaModeTimeCount >= 10000) // 10s超时复位
+        {
+            g_fotaModeTimeCount = 0;
+            // PeripheralHalMcuHardReset(); // 确保你有这个硬件复位接口
+        }
+    }
 }
