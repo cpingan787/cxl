@@ -55,7 +55,7 @@ int16_t FirmwareUpdateSdkInit(uint16_t cycleTime);
   Return:         无
   Others:         
 *************************************************/
-void FirmwareUpdateSdkCycleProcess(MpuHalDataPack_t *pack);
+void FirmwareUpdateSdkCycleProcess(void);
 static void FirmwareUpdateSdkResetTimer(void);
 void FirmwareUpdateSdkTimerCallback(void);
 #endif
