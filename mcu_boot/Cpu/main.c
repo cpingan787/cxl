@@ -37,7 +37,7 @@
 #include "MemIf_Types.h"
 #include "CanIf.h"
 #include "Std_Types.h"
-
+#include "McuMpuSyncTask.h"
 
 uint8 ReadAppBuffer[32] = {0};
 uint8 WriteAppBuffer[32] = {0};
@@ -209,7 +209,7 @@ void main(void)
     
     EcuMService_Init();
 
-   
+    McuMpuSyncTaskInit();
 
     //FLc_Test();
 

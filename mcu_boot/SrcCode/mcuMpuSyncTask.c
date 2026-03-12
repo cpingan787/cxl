@@ -76,7 +76,7 @@ void McuMpuSyncTaskMain(void)
         TBOX_PRINT("sync: aid %d, mid 0x%02X, subcommond %d\r\n", g_dataPack.aid, g_dataPack.mid, (g_dataPack.subcommand & 0x7F));
         
         
-        if(g_dataPack.aid == 0x05) 
+        if(g_dataPack.aid == 0x05) //aid是否05
         {
             FirmwareUpdateSdkCycleProcess(g_dataPack.pDataBuffer, g_dataPack.dataBufferSize);
         }
