@@ -40,6 +40,7 @@ int16_t FirmwareUpdateSdkInit(void)
     g_mpuHandle = MpuHalOpen();
     if (g_mpuHandle < 0)
     {
+        TBOX_PRINT("MpuHalOpen failed\r\n");
         return -1;
     }
 

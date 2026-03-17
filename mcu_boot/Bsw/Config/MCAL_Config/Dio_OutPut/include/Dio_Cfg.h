@@ -80,10 +80,10 @@
 **                          Input File                                        **
 *******************************************************************************/
 /*
- * INPUT FILE:    E:\PuHua_Tbox\Tools\ASR_RH850F1K_MCAL_Ver42.08.00\Config\Config\ECUC\test_Dio_Dio0_ecuc.arxml
- *                E:\PuHua_Tbox\Tools\ASR_RH850F1K_MCAL_Ver42.08.00\Config\modules\dio\R422_DIO_F1x_BSWMDT.arxml
- *                E:\PuHua_Tbox\Tools\ASR_RH850F1K_MCAL_Ver42.08.00\Config\stubs\4.2.2\Dem\xml\Dem_Dio.arxml
- * GENERATED ON:  14 Jan 2026 - 18:15:52
+ * INPUT FILE:    E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\Config\ECUC\test_Dio_Dio0_ecuc.arxml
+ *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\modules\dio\R422_DIO_F1x_BSWMDT.arxml
+ *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\stubs\4.2.2\Dem\xml\Dem_Dio.arxml
+ * GENERATED ON:  27 Feb 2026 - 16:27:07
  */
 
 
@@ -189,10 +189,10 @@
 *******************************************************************************/
 
 /* Total number of configured ports */
-#define DIO_MAXNOOFPORT                     (Dio_PortType)7
+#define DIO_MAXNOOFPORT                     (Dio_PortType)8
 
 /* Total number of configured channels */
-#define DIO_MAXNOOFCHANNEL                  (Dio_ChannelType)17
+#define DIO_MAXNOOFCHANNEL                  (Dio_ChannelType)27
 
 /* Total number of channel groups configured per configset */
 #define DIO_NO_OF_CHGRP_PER_CFGSET          (uint8)4
@@ -201,10 +201,10 @@
 #define DIO_CONFIG_ARRAY_SIZE               0U
 
 /* Array size for the port group structure */
-#define DIO_PORT_GROUP_ARRAY_SIZE           7U
+#define DIO_PORT_GROUP_ARRAY_SIZE           8U
 
 /* Array size for the channel structure */
-#define DIO_CHANNEL_ARRAY_SIZE              17U
+#define DIO_CHANNEL_ARRAY_SIZE              27U
 
 /* Array size for the channel group structure */
 #define DIO_CHANNEL_GROUP_ARRAY_SIZE        4U
@@ -220,46 +220,67 @@
 #define DioConf_DioPort_PortGroup_1_Bits0_11 (Dio_PortType)4
 #define DioConf_DioPort_PortGroup18_Bits0_3 (Dio_PortType)5
 #define DioConf_DioPort_PortGroup10_Bits0_15 (Dio_PortType)6
+#define DioConf_DioPort_PortGroup12_Bits0_2 (Dio_PortType)7
 
 /* The Pointer to Port Group name */
 
 /* DIO Channel Configuration Handles */
 #define DioConf_DioChannel_UserConfigCh1    (Dio_ChannelType)0
 #define DioConf_DioChannel_UserConfigCh2    (Dio_ChannelType)1
-#define DioConf_DioChannel_UserConfigCh3    (Dio_ChannelType)2
-#define DioConf_DioChannel_UserConfigCh4    (Dio_ChannelType)3
-#define DioConf_DioChannel_DIO_Channel_LEVEL_SHIFT_EN_Pin11_15 (Dio_ChannelType)4
-#define DioConf_DioChannel_DIO_Channel_CAN_STB_Pin8_6 (Dio_ChannelType)5
-#define DioConf_DioChannel_DIO_Channel_ACC_INT_Pin8_5 (Dio_ChannelType)6
-#define DioConf_DioChannel_DIO_Channel_KL30_Voltage_DET_EN_Pin0_12 (Dio_ChannelType)7
-#define DioConf_DioChannel_DIO_Channel_KL30_Voltage_DET_INT_Pin0_9 (Dio_ChannelType)8
-#define DioConf_DioChannel_DIO_Channel_KL30_DOWEN_DET_EN_Pin1_6 (Dio_ChannelType)9
-#define DioConf_DioChannel_DIO_Channel_IG1_INT_Pin1_8 (Dio_ChannelType)10
-#define DioConf_DioChannel_DIO_Channel_NAD_V2X_5V0__EN_Pin1_7 (Dio_ChannelType)11
-#define DioConf_DioChannel_DIO_Channel_NAD_V2X_3V8_EN_Pin18_3 (Dio_ChannelType)12
-#define DioConf_DioChannel_DIO_Channel_AG591_POWERKEY_EN_Pin18_1 (Dio_ChannelType)13
-#define DioConf_DioChannel_DIO_Channel_AG591_RST_EN_Pin18_0 (Dio_ChannelType)14
-#define DioConf_DioChannel_DIO_Channel_NAD_TO_MCU_Pin10_13 (Dio_ChannelType)15
-#define DioConf_DioChannel_DIO_Channel_MCU_TO_NAD_EN_Pin10_14 (Dio_ChannelType)16
+#define DioConf_DioChannel_DIO_Channel_ECALL_BUTTON_DET_Pin9_5 (Dio_ChannelType)2
+#define DioConf_DioChannel_UserConfigCh3    (Dio_ChannelType)3
+#define DioConf_DioChannel_UserConfigCh4    (Dio_ChannelType)4
+#define DioConf_DioChannel_DIO_Channel_LEVEL_SHIFT_EN_Pin11_15 (Dio_ChannelType)5
+#define DioConf_DioChannel_DIO_Channel_CAN_STB_Pin8_6 (Dio_ChannelType)6
+#define DioConf_DioChannel_DIO_Channel_ACC_INT_Pin8_5 (Dio_ChannelType)7
+#define DioConf_DioChannel_DIO_Channel_IMU_INT1_Pin8_1 (Dio_ChannelType)8
+#define DioConf_DioChannel_DIO_Channel_IMU_INT2_Pin8_3 (Dio_ChannelType)9
+#define DioConf_DioChannel_DIO_Channel_NAD_WAKEUP_MCU_Pin8_2 (Dio_ChannelType)10
+#define DioConf_DioChannel_DIO_Channel_KL30_Voltage_DET_EN_Pin0_12 (Dio_ChannelType)11
+#define DioConf_DioChannel_DIO_Channel_KL30_Voltage_DET_INT_Pin0_9 (Dio_ChannelType)12
+#define DioConf_DioChannel_DIO_Channel_CanRx_DET_INT_Pin0_2 (Dio_ChannelType)13
+#define DioConf_DioChannel_DIO_Channel_NAD_SLEEP_IND_Pin0_4 (Dio_ChannelType)14
+#define DioConf_DioChannel_DIO_Channel_CDS_STATE_Pin0_11 (Dio_ChannelType)15
+#define DioConf_DioChannel_DIO_Channel_RTC_INT_Pin0_6 (Dio_ChannelType)16
+#define DioConf_DioChannel_DIO_Channel_KL30_DOWEN_DET_EN_Pin1_6 (Dio_ChannelType)17
+#define DioConf_DioChannel_DIO_Channel_IG1_INT_Pin1_8 (Dio_ChannelType)18
+#define DioConf_DioChannel_DIO_Channel_NAD_V2X_5V0__EN_Pin1_7 (Dio_ChannelType)19
+#define DioConf_DioChannel_DIO_Channel_CALL_BUTTON_PWR_EN_Pin1_0 (Dio_ChannelType)20
+#define DioConf_DioChannel_DIO_Channel_NAD_V2X_3V8_EN_Pin18_3 (Dio_ChannelType)21
+#define DioConf_DioChannel_DIO_Channel_AG591_POWERKEY_EN_Pin18_1 (Dio_ChannelType)22
+#define DioConf_DioChannel_DIO_Channel_AG591_RST_EN_Pin18_0 (Dio_ChannelType)23
+#define DioConf_DioChannel_DIO_Channel_NAD_TO_MCU_Pin10_13 (Dio_ChannelType)24
+#define DioConf_DioChannel_DIO_Channel_MCU_TO_NAD_EN_Pin10_14 (Dio_ChannelType)25
+#define DioConf_DioChannel_DIO_Channel_MCU_WAKEUP_NAD_Pin12_0 (Dio_ChannelType)26
 
 /* Channel Mapping for DioChannelBitPosition */
 #define DioConfig0_UserConfigCh1_bit        (uint8)0x00
 #define DioConfig0_UserConfigCh2_bit        (uint8)0x04
+#define DioConfig0_DIO_Channel_ECALL_BUTTON_DET_Pin9_5_bit (uint8)0x05
 #define DioConfig0_UserConfigCh3_bit        (uint8)0x00
 #define DioConfig0_UserConfigCh4_bit        (uint8)0x04
 #define DioConfig0_DIO_Channel_LEVEL_SHIFT_EN_Pin11_15_bit (uint8)0x0F
 #define DioConfig0_DIO_Channel_CAN_STB_Pin8_6_bit (uint8)0x06
 #define DioConfig0_DIO_Channel_ACC_INT_Pin8_5_bit (uint8)0x05
+#define DioConfig0_DIO_Channel_IMU_INT1_Pin8_1_bit (uint8)0x01
+#define DioConfig0_DIO_Channel_IMU_INT2_Pin8_3_bit (uint8)0x03
+#define DioConfig0_DIO_Channel_NAD_WAKEUP_MCU_Pin8_2_bit (uint8)0x02
 #define DioConfig0_DIO_Channel_KL30_Voltage_DET_EN_Pin0_12_bit (uint8)0x0C
 #define DioConfig0_DIO_Channel_KL30_Voltage_DET_INT_Pin0_9_bit (uint8)0x09
+#define DioConfig0_DIO_Channel_CanRx_DET_INT_Pin0_2_bit (uint8)0x02
+#define DioConfig0_DIO_Channel_NAD_SLEEP_IND_Pin0_4_bit (uint8)0x04
+#define DioConfig0_DIO_Channel_CDS_STATE_Pin0_11_bit (uint8)0x0B
+#define DioConfig0_DIO_Channel_RTC_INT_Pin0_6_bit (uint8)0x06
 #define DioConfig0_DIO_Channel_KL30_DOWEN_DET_EN_Pin1_6_bit (uint8)0x06
 #define DioConfig0_DIO_Channel_IG1_INT_Pin1_8_bit (uint8)0x08
 #define DioConfig0_DIO_Channel_NAD_V2X_5V0__EN_Pin1_7_bit (uint8)0x07
+#define DioConfig0_DIO_Channel_CALL_BUTTON_PWR_EN_Pin1_0_bit (uint8)0x00
 #define DioConfig0_DIO_Channel_NAD_V2X_3V8_EN_Pin18_3_bit (uint8)0x03
 #define DioConfig0_DIO_Channel_AG591_POWERKEY_EN_Pin18_1_bit (uint8)0x01
 #define DioConfig0_DIO_Channel_AG591_RST_EN_Pin18_0_bit (uint8)0x00
 #define DioConfig0_DIO_Channel_NAD_TO_MCU_Pin10_13_bit (uint8)0x0D
 #define DioConfig0_DIO_Channel_MCU_TO_NAD_EN_Pin10_14_bit (uint8)0x0E
+#define DioConfig0_DIO_Channel_MCU_WAKEUP_NAD_Pin12_0_bit (uint8)0x00
 
 /* The Pointer to Port Channel name */
 

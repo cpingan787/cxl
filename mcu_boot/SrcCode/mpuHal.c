@@ -1,8 +1,8 @@
 #include "mpuHal.h"
 #include "logHal.h"
 #include "osHal.h"
-//#include "crc8_16_32.h"
-#include "Dio_Cfg.h"
+#include "crc8_16_32.h"
+
 #include "r_cg_macrodriver.h"
 
 #include "stdio.h"
@@ -112,7 +112,7 @@ static void MpuHalGpioInit(void)
 {
     Dio_WriteChannel(DioConf_DioChannel_DIO_Channel_NAD_V2X_5V0__EN_Pin1_7, STD_HIGH);
     Dio_WriteChannel(DioConf_DioChannel_DIO_Channel_NAD_V2X_3V8_EN_Pin18_3, STD_HIGH);
-    Dio_WriteChannel(DioConf_DioChannel_DIO_Channel_AG591_POWERKEY_EN_Pin18_1, STD_LOW);
+    // Dio_WriteChannel(DioConf_DioChannel_DIO_Channel_AG591_POWERKEY_EN_Pin18_1, STD_LOW);
     Dio_WriteChannel(DioConf_DioChannel_DIO_Channel_MCU_WAKEUP_NAD_Pin12_0, STD_LOW);
 
 #if(MPU_COMMUNICATION_USE_SPI)    
@@ -144,7 +144,7 @@ static void MpuHalGpioInit(void)
     Dio_WriteChannel(DioConf_DioChannel_DIO_Channel_LEVEL_SHIFT_EN_Pin11_15, STD_HIGH);
 }
 
-static void MpuHalSetPower(uint8_t flag)
+void MpuHalSetPower(uint8_t flag)
 {
     if(0==flag)
     {
@@ -910,7 +910,7 @@ void MpuHalInit(void)
     memset(&g_mpuManage, 0, sizeof(g_mpuManage));
     g_mpuManage.wakeoutTimeCount = 10;
     g_mpuManage.wakeMode = 1;
-    MpuHalGpioInit();
+    //MpuHalGpioInit();
 #if (MPU_COMMUNICATION_USE_SPI)
     // MpuSpiDeviceClockInit();
     R_CSIG1_Start();
@@ -1018,17 +1018,4 @@ void MpuHalUartPrintErrState(uint16_t cycleTime)
         return;
     }
     timeCount = 0;
-}
-
-/*************************************************
-  Function:       MpuHalGetNewPack
-  Description:    Get the new packet flag status
-  Input:          None
-  Output:         None
-  Return:         New packet flag value (0 = no new packet, non-zero = new packet available)
-  Others:         Used to check if a new MPU communication packet has been received
-*************************************************/
-UartReceivePackType_t MpuHalGetNewPack(void)
-{
-//    return s_mpuUartNewPack;
 }

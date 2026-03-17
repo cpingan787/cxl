@@ -72,6 +72,8 @@ TASK(OsTask_0)
    {
         LogHalInit(1);
         MpuHalInit();
+        MpuHalSetPower(1);
+        
         McuMpuSyncTaskInit();
         uint8 flag = BootM_GetFlag();
         FirmwareUpdate_UnlockMcuFlashAck();
@@ -92,6 +94,7 @@ TASK(OsTask_0)
     Dcm_TimerFunction();
     Dcm_MainFunction_Post();
     Dcm_MainFunction();
+    MpuHalUartTimerCallback();
     McuMpuSyncTaskMain();
 	index++;
 	if(index == 100)
@@ -383,7 +386,7 @@ ISR(ISR_RLIN35TX0_IRQ_Handler)
     * <USERBLOCK RLIN35TX0_IRQ>
     */
     /* custom code.... */
-    // r_uart5_interrupt_send();
+    r_uart5_interrupt_send();
     /** DO NOT CHANGE THIS COMMENT!
     * </USERBLOCK>
     */
@@ -402,7 +405,7 @@ ISR(ISR_RLIN35RX1_IRQ_Handler)
     * <USERBLOCK RLIN35RX1_IRQ>
     */
     /* custom code.... */
-    // r_uart5_interrupt_receive();
+    r_uart5_interrupt_receive();
     /** DO NOT CHANGE THIS COMMENT!
     * </USERBLOCK>
     */
@@ -421,7 +424,7 @@ ISR(ISR_RLIN35ERR2_IRQ_Handler)
     * <USERBLOCK RLIN35ERR2_IRQ>
     */
     /* custom code.... */
-    // r_uart5_interrupt_error();
+    r_uart5_interrupt_error();
     /** DO NOT CHANGE THIS COMMENT!
     * </USERBLOCK>
     */

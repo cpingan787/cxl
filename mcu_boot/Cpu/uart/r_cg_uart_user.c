@@ -43,6 +43,7 @@ Includes
 #include "r_cg_macrodriver.h"
 #include "r_cg_uart.h"
 /* Start user code for include. Do not edit comment generated here */
+#include "mpuHal.h"
 #include "r_port.h"
 /* End user code. Do not edit comment generated here */
 #include "r_cg_userdefine.h"
@@ -50,11 +51,11 @@ Includes
 /***********************************************************************************************************************
 Global variables and functions
 ***********************************************************************************************************************/
-extern volatile uint8_t  * gp_uart1_tx_address;    /* uart1 transmit data address */
-extern volatile uint16_t   g_uart1_tx_count;       /* uart1 transmit data number */
-extern volatile uint8_t  * gp_uart1_rx_address;    /* uart1 receive data address */
-extern volatile uint16_t   g_uart1_rx_count;       /* uart1 receive data number */
-extern volatile uint16_t   g_uart1_rx_length;      /* uart1 receive data length */
+// extern volatile uint8_t  * gp_uart1_tx_address;    /* uart1 transmit data address */
+// extern volatile uint16_t   g_uart1_tx_count;       /* uart1 transmit data number */
+// extern volatile uint8_t  * gp_uart1_rx_address;    /* uart1 receive data address */
+// extern volatile uint16_t   g_uart1_rx_count;       /* uart1 receive data number */
+// extern volatile uint16_t   g_uart1_rx_length;      /* uart1 receive data length */
 extern volatile uint8_t  * gp_uart4_tx_address;    /* uart4 transmit data address */
 extern volatile uint16_t   g_uart4_tx_count;       /* uart4 transmit data number */
 extern volatile uint8_t  * gp_uart4_rx_address;    /* uart4 receive data address */
@@ -71,6 +72,10 @@ extern volatile uint8_t g_debugUartReciveData[];
 extern volatile uint16_t g_debugUartReciveCount;
 extern volatile uint8_t g_debugUartErrorType;
 extern volatile uint8_t g_debugUartErrorFlag;
+extern volatile uint16_t g_mpuUartReciveCount;
+extern volatile uint8_t g_mpuUartErrorType;
+extern volatile uint8_t g_mpuUartErrorFlag;
+extern volatile uint8_t g_mpuSetRecvErrorFlag;
 // extern uint8_t g_bleUartReciveData[];
 // extern uint16_t g_bleUartReciveCount;
 /* End user code. Do not edit comment generated here */
@@ -81,6 +86,7 @@ extern volatile uint8_t g_debugUartErrorFlag;
 * Arguments    : None
 * Return Value : None
 ***********************************************************************************************************************/
+#if(0)
 #pragma interrupt r_uart1_interrupt_receive(enable=false, channel=122, fpu=true, callt=false)
 void r_uart1_interrupt_receive(void)
 {
@@ -177,6 +183,7 @@ static void r_uart1_callback_error(uint8_t err_type)
     /* Start user code. Do not edit comment generated here */
     /* End user code. Do not edit comment generated here */
 }
+#endif
 /***********************************************************************************************************************
 * Function Name: r_uart4_interrupt_receive
 * Description  : None
@@ -190,27 +197,10 @@ void r_uart4_interrupt_receive(void)
     uint16_t temp; 
 
     rx_data_8 = RLN34.LURDR.UINT16; 
-
-#if(1)
     if(g_debugUartReciveCount < 100)
     {
         g_debugUartReciveData[g_debugUartReciveCount++] = rx_data_8;
     }
-#else
-    temp = g_uart4_rx_count;
-    if (g_uart4_rx_length > temp)
-    {
-        *gp_uart4_rx_address = rx_data_8;
-        gp_uart4_rx_address++;
-        g_uart4_rx_count++;
-
-        temp = g_uart4_rx_count;
-        if (g_uart4_rx_length == temp)
-        {
-            r_uart4_callback_receiveend();
-        }
-    }
-#endif
 }
 /***********************************************************************************************************************
 * Function Name: r_uart4_interrupt_error
@@ -250,22 +240,6 @@ void r_uart4_interrupt_send(void)
     }
 }
 /***********************************************************************************************************************
-* Function Name: r_uart4_callback_receiveend
-* Description  : This function is a callback function called when UART4 completed data reception.
-* Arguments    : None
-* Return Value : None
-***********************************************************************************************************************/
-static void r_uart4_callback_receiveend(void)
-{
-    /* Start user code. Do not edit comment generated here */
-    if(g_debugUartReciveCount < 10)
-    {
-        g_debugUartReciveCount += g_uart4_rx_count;
-        R_UART4_Receive(&g_debugUartReciveData[g_debugUartReciveCount], 1);
-    }
-    /* End user code. Do not edit comment generated here */
-}
-/***********************************************************************************************************************
 * Function Name: r_uart4_callback_sendend
 * Description  : This function is a callback function called when UART4 completed data transmission.
 * Arguments    : None
@@ -294,5 +268,85 @@ static void r_uart4_callback_error(uint8_t err_type)
     }
     /* End user code. Do not edit comment generated here */
 }
+/***********************************************************************************************************************
+* Function Name: r_uart5_interrupt_receive
+* Description  : None
+* Arguments    : None
+* Return Value : None
+***********************************************************************************************************************/
+// #pragma interrupt r_uart5_interrupt_receive(enable=false, channel=238, fpu=true, callt=false)
+void r_uart5_interrupt_receive(void)
+{
+    uint8_t rx_data_8;
 
+    rx_data_8 = RLN35.LURDR.UINT16;
+    MpuHalUartInterruptCallback(rx_data_8);
+}
+/***********************************************************************************************************************
+* Function Name: r_uart5_interrupt_error
+* Description  : None
+* Arguments    : None
+* Return Value : None
+***********************************************************************************************************************/
+// #pragma interrupt r_uart5_interrupt_error(enable=false, channel=239, fpu=true, callt=false)
+void r_uart5_interrupt_error(void)
+{
+    uint8_t  err_type;
+    uint8_t rx_data_8;
 
+    rx_data_8 = RLN35.LURDR.UINT16;
+    err_type = (uint8_t)(RLN35.LEST);  
+    RLN35.LEST &= (uint8_t) ~_UART_CLEAR_ERROR_FLAG;
+    r_uart5_callback_error(err_type);
+}
+/***********************************************************************************************************************
+* Function Name: r_uart5_interrupt_send
+* Description  : None
+* Arguments    : None
+* Return Value : None
+***********************************************************************************************************************/
+// #pragma interrupt r_uart5_interrupt_send(enable=false, channel=237, fpu=true, callt=false)
+void r_uart5_interrupt_send(void)
+{
+    if (g_uart5_tx_count > 0U)
+    {
+        RLN35.LUTDR.UINT16 = *gp_uart5_tx_address;
+        gp_uart5_tx_address++;
+        g_uart5_tx_count--;
+    }
+    else
+    {
+        r_uart5_callback_sendend();
+    }
+}
+/***********************************************************************************************************************
+* Function Name: r_uart5_callback_sendend
+* Description  : This function is a callback function called when UART5 completed data transmission.
+* Arguments    : None
+* Return Value : None
+***********************************************************************************************************************/
+static void r_uart5_callback_sendend(void)
+{
+    /* Start user code. Do not edit comment generated here */
+    /* End user code. Do not edit comment generated here */
+}
+/***********************************************************************************************************************
+* Function Name: r_uart5_callback_error
+* Description  : This function is a callback function called when UART5 receive error or event generation occures.
+* Arguments    : err_type -
+*                    error type
+* Return Value : None
+***********************************************************************************************************************/
+static void r_uart5_callback_error(uint8_t err_type)
+{
+    /* Start user code. Do not edit comment generated here */
+    if(g_mpuUartErrorFlag == 0)
+    {
+        g_mpuUartErrorType = err_type;
+        g_mpuUartErrorFlag = 1;
+    }
+    /* End user code. Do not edit comment generated here */
+}
+
+/* Start user code for adding. Do not edit comment generated here */
+/* End user code. Do not edit comment generated here */

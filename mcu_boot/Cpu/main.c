@@ -193,7 +193,7 @@ void main(void)
 
     /* Initialize the Port pins */
     Port_Init(PortConfigSet0);
-
+    //MpuHalSetPower(1);
     Dio_WriteChannel(DioConf_DioChannel_DIO_Channel_CAN_STB_Pin8_6, STD_LOW);
     Dio_WriteChannel(DioConf_DioChannel_DIO_Channel_KL30_Voltage_DET_EN_Pin0_12, STD_HIGH);
     Dio_WriteChannel(DioConf_DioChannel_DIO_Channel_KL30_DOWEN_DET_EN_Pin1_6, STD_HIGH);
