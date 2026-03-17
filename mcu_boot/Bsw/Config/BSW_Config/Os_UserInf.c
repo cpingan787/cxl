@@ -73,7 +73,7 @@ TASK(OsTask_0)
         LogHalInit(1);
         MpuHalInit();
         MpuHalSetPower(1);
-        
+
         McuMpuSyncTaskInit();
         uint8 flag = BootM_GetFlag();
         FirmwareUpdate_UnlockMcuFlashAck();
@@ -96,6 +96,7 @@ TASK(OsTask_0)
     Dcm_MainFunction();
     MpuHalUartTimerCallback();
     McuMpuSyncTaskMain();
+    MpuHalTxTask();
 	index++;
 	if(index == 100)
 	{

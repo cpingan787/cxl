@@ -254,7 +254,7 @@ CONST(Port_NumRegs, PORT_CONST)
     0x001FCBF3UL,
 
     /* ulInitModePSRRegVal */
-    0x00000020UL,
+    0x00001020UL,   // <--- 注意这里：把你原本的 0x00000020UL 修改为 0x00001020UL
 
     /* ulInitModePMSRRegVal */
     0x0000EFD7UL,
@@ -314,7 +314,7 @@ CONST(Port_NumRegs, PORT_CONST)
     0x001FCBD3UL,
 
     /* ulInitModePSRRegVal */
-    0x00000000UL,
+    0x000000C0UL,   // <--- 注意这里：把你上面改的 0x00000080UL 进一步修改为 0x000000C1UL
 
     /* ulInitModePMSRRegVal */
     0x0000FF3FUL,
@@ -494,7 +494,7 @@ CONST(Port_NumRegs, PORT_CONST)
     0x001FCBF3UL,
 
     /* ulInitModePSRRegVal */
-    0x00000000UL,
+    0x00004000UL,   // <--- 原来是 0x00000000UL，修改为 0x00004000UL
 
     /* ulInitModePMSRRegVal */
     0x0000BFFFUL,
@@ -554,7 +554,7 @@ CONST(Port_NumRegs, PORT_CONST)
     0x001FCBF3UL,
 
     /* ulInitModePSRRegVal */
-    0x00000000UL,
+    0x00008000UL,   // <--- 注意这里：把原本的 0x00000000UL 修改为 0x00008000UL
 
     /* ulInitModePMSRRegVal */
     0x00007FFFUL,
@@ -674,7 +674,7 @@ CONST(Port_NumRegs, PORT_CONST)
     0x001E8BD3UL,
 
     /* ulInitModePSRRegVal */
-    0x00000000UL,
+    0x00000008UL,   // <--- 原来是 0x00000000UL
 
     /* ulInitModePMSRRegVal */
     0x0000FFF4UL,
