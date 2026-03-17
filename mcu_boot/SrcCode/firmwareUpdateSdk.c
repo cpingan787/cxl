@@ -1,3 +1,12 @@
+﻿/*************************************************
+ Copyright © 2026 SiRun (Beijing) . All rights reserved.
+ File Name: firmwareUpdateSdk.h
+ Author:
+ Created Time:
+ Description:
+ Others:
+*************************************************/
+/****************************** include ***************************************/
 #include "stdlib.h"
 #include "string.h"
 #include "mpuHal.h"
@@ -5,116 +14,96 @@
 #include "firmwareUpdateSdk.h"
 #include "MemIf_Types.h"
 #include "Std_Types.h"
-#include "Fls.h"
+#include "FlsIf.h"
+#include "crc8_16_32.h"
+#include "Mcu.h"
 
 // CRC 校验暂时不做
 // #include "crc8_16_32.h"
 
-/* ==================== A区 (Bank A) ==================== */
-// MPU下发擦除/升级指令时，协议里带的 App1 逻辑地址
-#define FLASH_APP_BANKA_ABSTRACT_ADDRESS   0x00050200 
+/****************************** Macro Definitions ******************************/
+#define FLASH_APP_BANKA_ACTIVE_ADDRESS           0x00050000 
+#define FLASH_APP_BANKA_ABSTRACT_ADDRESS         0x00050200 
+#define FLASH_APP_BANKA_BASE_ADDRESS             0x00050200  // A区代码起始
+#define FLASH_APP_BANKA_END_ADDRESS              0x0011FFFF  // A区代码结束
+#define FLASH_APP_BANKA_VALID_FLAG_ADDR          0x00050000  // 大小 0x200
+#define APP_BANK_SIZE                            0x000CFE00
+#define FLASH_APP_DEFALT_BANK_ID                 0x00
+#define FLASH_APP_BANKA_ID                       0x01
+#define FLASH_BANK_APP_INTEGRITY_DISABLE         0x00 
+#define FLASH_BANK_APP_INTEGRITY_ENABLE          0x01 
+#define FLASH_APP_BANKA_ACTIVE_FLAG              0x01
 
-// A区应用程序的物理写入范围
-#define FLASH_APP_BANKA_BASE_ADDRESS       0x00050200  // A区代码起始
-#define FLASH_APP_BANKA_END_ADDRESS        0x0011FFFF  // A区代码结束
-// A区有效标志位(Valid Flag)存放地址
-#define FLASH_APP_BANKA_VALID_FLAG_ADDR    0x00050000  // 大小 0x200
-
-/* ==================== B区 (Bank B) ==================== */
-// #define FLASH_APP_BANKB_ABSTRACT_ADDRESS   0x00120200
-// #define FLASH_APP_BANKB_BASE_ADDRESS       0x00120200  // B区代码起始
-// #define FLASH_APP_BANKB_END_ADDRESS        0x001EFFFF  // B区代码结束
-// #define FLASH_APP_BANKB_VALID_FLAG_ADDR    0x00120000  // 大小 0x200
-
-/* ==================== 擦除参数 ==================== */
-// APP 代码区的总大小：0x11FFFF - 0x50200 + 1 = 0xCFE00
-#define APP_BANK_SIZE                      0x000CFE00
-
-/* ==================== 状态与分区ID宏定义 ==================== */
-#define FLASH_APP_DEFALT_BANK_ID           0x00
-#define FLASH_APP_BANKA_ID                 0x01
-// #define FLASH_APP_BANKB_ID                 0x02
-
-// 固件完整性标志位
-#define FLASH_BANK_APP_INTEGRITY_DISABLE   0x00 
-#define FLASH_BANK_APP_INTEGRITY_ENABLE    0x01 
-
-// A/B面激活标志位
-#define FLASH_APP_BANKA_ACTIVE_FLAG        0x01
-// #define FLASH_APP_BANKB_ACTIVE_FLAG        0x02
-
-extern int16_t g_mpuHandle;
-
+/****************************** Type Definitions ******************************/
+/****************************** Global Variables ******************************/
 static FlashState_e g_flashState = E_FlashState_Idle;  
 static uint8_t g_versionNumber[20] = {'v','0','0','1','.','0','0','2',};                              //软件版本号长度
 static uint8_t flashAppFlag = FLASH_APP_DEFALT_BANK_ID;
 static uint8_t g_fotaModeFlag = 0U;   
 static uint16_t g_fotaModeTimeCount = 0U;  
+static uint8_t g_mpuOtaFlag = 0U;
 
 // CRC相关
-// static Crc32Objec_t g_crc32Object;
-// static uint32_t g_crcData = 0xFFFFFFFF;
+static Crc32Objec_t g_crc32Object;
+static uint32_t g_crcData = 0xFFFFFFFF;
 // static FlashHalMetaDataInfo_t s_MetaDataInfo;
 
+/****************************** Function Declarations *************************/
+static uint8_t FirmwareUpdateSdkLoadCode(volatile uint8_t *dataPack, uint16_t dataBufferSize);
+static uint8_t FirmwareUpdateSdkEraseFlash(volatile uint8_t *dataPack);
+static uint8_t FirmwareUpdateSdkCodeCheck(volatile uint8_t *dataPack);
+
+/****************************** Public Function Implementations ******************************/
 /*************************************************
-* Function:       FirmwareUpdateSdkEraseFlash
+ Function: FirmwareUpdateSdkEraseFlash
+ Description: 擦除指定地址的Flash代码
+ Input: dataPack 数据打包结构体指针
+ Output: None
+ Return: E_OK-成功, E_NOT_OK-失败
+ Others:
 *************************************************/
 static uint8_t FirmwareUpdateSdkEraseFlash(volatile uint8_t *dataPack)
 {
     uint32_t address = 0;
     uint8_t ret = 0;
     
-    TBOX_PRINT("--------------------05 Erase flash code %d,%d,%d,%d------------------\r\n",dataPack[10],dataPack[11],dataPack[12],dataPack[13]);
+    TBOX_PRINT("--------------------05 Erase flash code %d,%d,%d,%d------------------\r\n",dataPack[2],dataPack[3],dataPack[4],dataPack[5]);
     
     // Verify data
-    if(dataPack[10] == 0x01 && dataPack[11] == 0x02 && 
-       dataPack[12] == 0x03 && dataPack[13] == 0x04)
+    if (dataPack[2] == 0x01 && dataPack[3] == 0x02 && dataPack[4] == 0x03 && dataPack[5] == 0x04)
     {
-        address = ((dataPack[14] << 24) + (dataPack[15] << 16)+ (dataPack[16] << 8) + dataPack[17]);
+        address = ((dataPack[6] << 24) + (dataPack[7] << 16)+ (dataPack[8] << 8) + dataPack[9]);
         TBOX_PRINT("boot erase start address is 0x%x\r\n",address);
         
-        if(address == FLASH_APP_BANKA_ABSTRACT_ADDRESS)
+        if (address == FLASH_APP_BANKA_ABSTRACT_ADDRESS)
         {
             flashAppFlag = FLASH_APP_BANKA_ID;
             // 先注释掉，等后期补齐 Boot 状态机驱动
             // FlashHalWriteApp1SuccessFlag(FLASH_BANK_APP_INTEGRITY_DISABLE);
         }
-        /* 
-        else if(address == FLASH_APP_BANKB_ABSTRACT_ADDRESS)
-        {
-            flashAppFlag = FLASH_APP_BANKB_ID;
-            // FlashHalWriteApp2SuccessFlag(FLASH_BANK_APP_INTEGRITY_DISABLE);
-        }
-        */
         else
         {
             flashAppFlag = FLASH_APP_DEFALT_BANK_ID;
             TBOX_PRINT("05 address error\r\n");
+            return 1; // error
         }
     
-        Std_ReturnType flsRet;
-        uint32_t eraseLength = APP_BANK_SIZE; 
+        uint32_t eraseLength = APP_BANK_SIZE;  // 长度待确认, 使用传入值还是常量
         
         // 1. 发起擦除请求
-        flsRet = Fls_Erase((Fls_AddressType)address, (Fls_LengthType)eraseLength);
+        uint8_t retValue = FlsIf_Erase(address, eraseLength);
         
-        if(flsRet == E_OK)
+        if (retValue == E_OK)
         {
-            // 2. 轮询等待擦除完成 (擦除非常慢，死循环等待必须喂狗)
-            while (Fls_GetStatus() != MEMIF_IDLE)
-            {
-                Fls_MainFunction();
-                
-                // 【致命警告】擦除整块 Bank 可能需要几秒钟，必定触发看门狗！
-                // 必须在这里疯狂喂狗！
-                // Wdg_SetTriggerCondition(xxx); 
-            }
-            
             TBOX_PRINT("Erase Bank %d success\r\n", flashAppFlag);
             g_flashState = E_FlashState_FlashErase;
-            
-            // CRC 暂时不校验，注释掉初始化
-            // g_crcData = Crc32Init(&g_crc32Object, 0x04C11DB7); 
+            g_crcData = Crc32Init(&g_crc32Object, 0x04C11DB7); 
+            retValue = FlsIf_Write(FLASH_APP_BANKA_ACTIVE_ADDRESS, 4, 0xFF);
+            if (retValue != E_OK)
+            {
+                TBOX_PRINT("Write Bank %d active flag failed %02x\r\n", flashAppFlag, retValue);
+                ret = 0x02; 
+            }
         }
         else
         {
@@ -131,9 +120,15 @@ static uint8_t FirmwareUpdateSdkEraseFlash(volatile uint8_t *dataPack)
 }
 
 /*************************************************
-  Function:       FirmwareUpdateSdkLoadCode
+ Function: FirmwareUpdateSdkLoadCode
+ Description: 加载代码到指定地址
+ Input: dataPack 数据打包结构体指针
+        dataBufferSize 数据缓冲区大小
+ Output: None
+ Return: E_OK-成功, E_NOT_OK-失败
+ Others:
 *************************************************/
-static uint8_t FirmwareUpdateSdkLoadCode(volatile uint8_t *dataPack)
+static uint8_t FirmwareUpdateSdkLoadCode(volatile uint8_t *dataPack, uint16_t dataBufferSize)
 {
     uint8_t ret = 0U;
     uint32_t len = 0U;
@@ -143,16 +138,11 @@ static uint8_t FirmwareUpdateSdkLoadCode(volatile uint8_t *dataPack)
     {
         if(g_flashState == E_FlashState_FlashErase)
         {
-            addr = ((uint32_t)dataPack[10] << 24) |
-                   ((uint32_t)dataPack[11] << 16) |
-                   ((uint32_t)dataPack[12] << 8)  |
-                   (uint32_t)dataPack[13];
+            addr = ((uint32_t)dataPack[2] << 24) | ((uint32_t)dataPack[3] << 16) | ((uint32_t)dataPack[4] << 8)  | (uint32_t)dataPack[5];
             
-            len = ((uint32_t)dataPack[5] << 8) | (uint32_t)dataPack[6];
-            len -= 10; // Subtract header length
+            len = dataBufferSize - 10;
             
-            TBOX_PRINT("--------------------06 addr=%08x len=%d cnt=%02x %02x------------------\r\n",
-                      addr, len, dataPack[8], dataPack[9]);
+            TBOX_PRINT("--------------------06 addr=%08x len=%d cnt=%02x %02x------------------\r\n", addr, len, dataPack[0], dataPack[1]);
                       
             // 边界检查
             if((len <= 0 || len > (1024*1024)) || 
@@ -176,21 +166,12 @@ static uint8_t FirmwareUpdateSdkLoadCode(volatile uint8_t *dataPack)
             }
             else
             {
-               Std_ReturnType flsRet;
-               
-                flsRet = Fls_Write((Fls_AddressType)addr, (const uint8_t *)&dataPack[18], (Fls_LengthType)len);
+                uint8_t flsRet = FlsIf_Write(addr, len, (const uint8_t *)&dataPack[10]);
                 
-                if(flsRet == E_OK)
-                {
-                    // 2. 轮询等待写操作真正完成
-                    while (Fls_GetStatus() != MEMIF_IDLE)
-                    {
-                        Fls_MainFunction();
-                        // 喂狗
-                        // Wdg_SetTriggerCondition(xxx); 
-                    }
-                    
-                    // 3. 校验并累加 CRC
+                if (flsRet == E_OK)
+                {  
+                    /* 校验并累加 CRC */
+                    g_crcData = Crc32(&g_crc32Object, g_crcData, (uint8_t *)addr, len);
                 }
                 else
                 {
@@ -214,139 +195,154 @@ static uint8_t FirmwareUpdateSdkLoadCode(volatile uint8_t *dataPack)
 }
 
 /*************************************************
-  Function:       FirmwareUpdateSdkCodeCheck
+ Function: FirmwareUpdateSdkCodeCheck
+ Description: 校验代码是否正确
+ Input: dataPack 数据打包结构体指针
+ Output: None
+ Return: E_OK-成功, E_NOT_OK-失败
+ Others:
 *************************************************/
 static uint8_t FirmwareUpdateSdkCodeCheck(volatile uint8_t *dataPack)
 {
     uint8_t ret = 0U;
-    
-    // 忽略未使用的参数警告
-    (void)dataPack;
 
     TBOX_PRINT("--------------------07 Download Complete------------------\r\n");
 
     // CRC 校验相关，直接判断成功
-    // g_crcData ^= 0xFFFFFFFF; 
-    // uint32_t checksum = (dataPack[10]<<24)+(dataPack[11]<<16)+(dataPack[12]<<8)+dataPack[13];
-    // if(checksum == g_crcData)
-    
-    if(1) //跳过 CRC 验证
+    g_crcData ^= 0xFFFFFFFF;
+    uint32_t checksum = (dataPack[2] << 24) + (dataPack[3] << 16) + (dataPack[4] << 8) + dataPack[5];
+
+    if (checksum == g_crcData)
     {
-        if(FLASH_APP_BANKA_ID == flashAppFlag)  
+        if (FLASH_APP_BANKA_ID == flashAppFlag)  
         {
-            TBOX_PRINT("Update and virify app1 success (CRC bypassed)!\r\n");
-            // FlashHalWriteApp1SuccessFlag(FLASH_BANK_APP_INTEGRITY_ENABLE); 
+            uint8_t retValue = FlsIf_Write(FLASH_APP_BANKA_ACTIVE_ADDRESS, 4, 0xFE);
+            if (retValue == E_OK)
+            {
+                TBOX_PRINT("Update and virify app1 success (CRC bypassed)!\r\n");
+            }
+            else
+            {
+                TBOX_PRINT("APP ACTIVE failed %02x\r\n", retValue);
+                ret = 0x02; 
+            }
         }
-        /* B区
-        else if(FLASH_APP_BANKB_ID == flashAppFlag) 
-        {
-            TBOX_PRINT("Update and virify app2 success (CRC bypassed)!\r\n");
-            // FlashHalWriteApp2SuccessFlag(FLASH_BANK_APP_INTEGRITY_ENABLE); 
-        }
-        */
     }
     else
     {
-        TBOX_PRINT("CRC check failed (should not print this currently)\r\n");
+        TBOX_PRINT("CRC check failed %08x != %08x\r\n", checksum, g_crcData);
         ret = 0x01; 
     }
     return ret;
 }
 
 /*************************************************
-  Function:       FirmwareUpdateSdkCycleProcess
+ Function: FirmwareUpdateSdkCycleProcess
+ Description: 串口升级周期任务处理函数
+ Input: handle 串口句柄
+        pRxMsg 接收数据结构体指针
+ Output: None
+ Return: void
+ Others:
 *************************************************/
-void FirmwareUpdateSdkCycleProcess(uint8_t *pData, uint16_t dataLen)
+void FirmwareUpdateSdkCycleProcess(int16_t handle, MpuHalDataPack_t *pRxMsg)
 {
     uint8_t i = 0U;
-    uint8_t cmdClass = 0U;
+    uint8_t curAid = 0U;
     uint8_t dataTxLen = 0U;
     uint8_t dataTxAraay[20] = {0};
-    FirmwareUpdateSdkCmd_e s_UpdateCmd = E_FirmwareUpdateSdkCmd_Default;
+    FirmwareUpdateSdkCmd_e s_UpdateMid = E_FirmwareUpdateSdkCmd_Default;
 
-    if(pData == NULL || dataLen < MPU_PROTOCAL_HEADER_LEN) 
+    if ((pRxMsg == NULL) || (pRxMsg->pDataBuffer == NULL) || (pRxMsg->dataBufferSize < MPU_PROTOCAL_HEADER_LEN)) 
     {
         return;
     }
 
-    cmdClass = pData[2];   
-    if(cmdClass == PROTOCOL_AID_FWUPD)
+    curAid = pRxMsg->aid;   
+    if(curAid == PROTOCOL_AID_FWUPD)
     {
-        s_UpdateCmd = (FirmwareUpdateSdkCmd_e)pData[3];
+        s_UpdateMid = (FirmwareUpdateSdkCmd_e)pRxMsg->mid;
         memset(dataTxAraay, 0, sizeof(dataTxAraay));
-        dataTxAraay[0] = pData[8];
-        dataTxAraay[1] = pData[9];
+        /* 2字节counter */
+        dataTxAraay[0] = pRxMsg->pDataBuffer[0];
+        dataTxAraay[1] = pRxMsg->pDataBuffer[1];
 
-        switch(s_UpdateCmd)
+        switch(s_UpdateMid)
         {
             case E_FirmwareUpdateSdkCmd_GetMcuVersion:
                 TBOX_PRINT("---01 Read Version---\r\n");
                 dataTxAraay[2] = 0x00; 
-                for(i = 0; i < 11U; i++) { dataTxAraay[3 + i] = g_versionNumber[i]; }
+                /* 11字节版本号 */
+                for(i = 0; i < 11U; i++) {
+                    dataTxAraay[3 + i] = g_versionNumber[i]; 
+                }
                 dataTxLen = 14U;
                 break;
                 
             case E_FirmwareUpdateSdkCmd_GetMcuSeed:
                 TBOX_PRINT("---02 Get Seed---\r\n");
-                dataTxAraay[2] = 0x00; dataTxAraay[3] = 0x01; dataTxAraay[4] = 0x02;
-                dataTxAraay[5] = 0x03; dataTxAraay[6] = 0x04;
+                dataTxAraay[2] = 0x00; // status
+                /* 4字节种子 */
+                dataTxAraay[3] = 0x01; 
+                dataTxAraay[4] = 0x02;
+                dataTxAraay[5] = 0x03; 
+                dataTxAraay[6] = 0x04;
                 dataTxLen = 7U;
-                FirmwareUpdateSdkResetTimer();
                 break;
                 
             case E_FirmwareUpdateSdkCmd_UnlockMcuFlash:
                 TBOX_PRINT("---03 Unlock Flash---\r\n");
-                if((pData[10] == 0x01) && (pData[11] == 0x02) && (pData[12] == 0x03) && (pData[13] == 0x04))
-                    { dataTxAraay[2] = 0x00; } else { dataTxAraay[2] = 0x01; }
-                dataTxLen = 3U;
-                FirmwareUpdateSdkResetTimer();
-                break;
-                
-            case E_FirmwareUpdateSdkCmd_EnterDownloadMode:
-                TBOX_PRINT("---04 Enter Download Mode---\r\n");
-                if((pData[10] == 0x01) && (pData[11] == 0x02) && (pData[12] == 0x03) && (pData[13] == 0x04))
-                {
+                if((pRxMsg->pDataBuffer[2] == 0x01) && (pRxMsg->pDataBuffer[3] == 0x02) && (pRxMsg->pDataBuffer[4] == 0x03) && (pRxMsg->pDataBuffer[5] == 0x04))
+                { 
                     dataTxAraay[2] = 0x00; 
-                    FirmwareUpdateSdkResetTimer();
                 } 
                 else 
                 { 
                     dataTxAraay[2] = 0x01; 
                 }
                 dataTxLen = 3U;
-                g_flashState = E_FlashState_FlashIn;
+                break;
+                
+            case E_FirmwareUpdateSdkCmd_EnterDownloadMode:
+                TBOX_PRINT("---04 Enter Download Mode---\r\n");
+                if((pRxMsg->pDataBuffer[2] == 0x01) && (pRxMsg->pDataBuffer[3] == 0x02) && (pRxMsg->pDataBuffer[4] == 0x03) && (pRxMsg->pDataBuffer[5] == 0x04))
+                {
+                    dataTxAraay[2] = 0x00; 
+                } 
+                else 
+                { 
+                    dataTxAraay[2] = 0x01; 
+                }
+                dataTxLen = 3U;
+                g_flashState = E_FlashState_FlashIn; // 进入下载状态
                 break;
                 
             case E_FirmwareUpdateSdkCmd_EraseMcuMemory:
-                dataTxAraay[2] = FirmwareUpdateSdkEraseFlash(pData);
+                /* 传入数据 1 2 3 4 地址 长度 */
+                dataTxAraay[2] = FirmwareUpdateSdkEraseFlash(pRxMsg->pDataBuffer); // 擦除flash的功能待适配
                 dataTxLen = 3U;
-                FirmwareUpdateSdkResetTimer();
                 break;
                 
             case E_FirmwareUpdateSdkCmd_DownloadMcuMemory:
-                dataTxAraay[2] = FirmwareUpdateSdkLoadCode(pData);
+                dataTxAraay[2] = FirmwareUpdateSdkLoadCode(pRxMsg->pDataBuffer, pRxMsg->dataBufferSize); // 下载固件功能待适配
                 dataTxLen = 3U;
-                FirmwareUpdateSdkResetTimer();
                 break;
                 
             case E_FirmwareUpdateSdkCmd_VirifyMcuMemory:
-                dataTxAraay[2] = FirmwareUpdateSdkCodeCheck(pData);
+                dataTxAraay[2] = FirmwareUpdateSdkCodeCheck(pRxMsg->pDataBuffer);
                 dataTxLen = 3U;
-                FirmwareUpdateSdkResetTimer();
                 break;
                 
             case E_FirmwareUpdateSdkCmd_SoftwareResetMcu:
                 TBOX_PRINT("---08 Reset---\r\n");
-                dataTxAraay[2] = 0x00; dataTxLen = 3U;
-                
-                MpuHalDataPack_t resetTxPack;
-                resetTxPack.aid = cmdClass;
-                resetTxPack.mid = 0x01; //mid是否0x01  
-                resetTxPack.subcommand = (uint8_t)s_UpdateCmd;
-                resetTxPack.pDataBuffer = dataTxAraay;
-                resetTxPack.dataBufferSize = dataTxLen;
-                
-                MpuHalTransmit(g_mpuHandle, &resetTxPack);
+                dataTxAraay[2] = 0x00; 
+                dataTxLen = 3U;
+                break;
+            case E_FirmwareUpdateSdkCmd_GetMcuBankId:
+                TBOX_PRINT("---09 Get Bank Id---\r\n");
+                dataTxAraay[2] = 0x00; 
+                dataTxAraay[3] = flashAppFlag;
+                dataTxLen = 4U;
                 break;
                 
             default:
@@ -354,41 +350,66 @@ void FirmwareUpdateSdkCycleProcess(uint8_t *pData, uint16_t dataLen)
                 break;
         }
 
-        if(s_UpdateCmd != E_FirmwareUpdateSdkCmd_SoftwareResetMcu)
+
+        MpuHalDataPack_t TxPack;
+        TxPack.aid = curAid;
+        TxPack.mid =(uint8_t)s_UpdateMid;
+        TxPack.subcommand = pRxMsg->subcommand;
+        TxPack.pDataBuffer = dataTxAraay;
+        TxPack.dataBufferSize = sizeof(dataTxAraay);
+        TxPack.dataLength = dataTxLen;
+        MpuHalTransmit(handle, &TxPack);
+
+        if (s_UpdateMid == E_FirmwareUpdateSdkCmd_SoftwareResetMcu)
         {
-            MpuHalDataPack_t normalTxPack;
-            normalTxPack.aid = cmdClass;
-            normalTxPack.mid = 0x01;
-            normalTxPack.subcommand = (uint8_t)s_UpdateCmd;
-            normalTxPack.pDataBuffer = dataTxAraay;
-            normalTxPack.dataBufferSize = dataTxLen;
-            
-            MpuHalTransmit(g_mpuHandle, &normalTxPack);
+            // delay 100ms
+            delay_us(1000);
+            // reset
+            Mcu_PerformReset();
         }
+
     }
 }
 
 /*************************************************
-  Function:       FirmwareUpdateSdkResetTimer
+ Function: FirmwareUpdate_SetMpuOtaFlag
+ Description: 设置MPU OTA标志位
+ Input: flag OTA标志位
+ Output: None
+ Return: void
+ Others:
 *************************************************/
-void FirmwareUpdateSdkResetTimer(void)
+void FirmwareUpdate_SetMpuOtaFlag(uint8_t flag)
 {
-   g_fotaModeTimeCount = 0;
-   g_fotaModeFlag = 1;
+    g_mpuOtaFlag = flag;
 }
 
 /*************************************************
-  Function:       FirmwareUpdateSdkTimerCallback
+ Function: FirmwareUpdate_GetMpuOtaFlag
+ Description: 获取MPU OTA标志位
+ Input: None
+ Output: None
+ Return: uint8_t OTA标志位
+ Others:
 *************************************************/
-void FirmwareUpdateSdkTimerCallback(void)
+uint8_t FirmwareUpdate_GetMpuOtaFlag(void)
 {
-    if(g_fotaModeFlag == 1) 
+    return g_mpuOtaFlag;
+}
+
+/*************************************************
+ Function: FirmwareUpdate_UnlockMcuFlashAck
+ Description: 解锁MPU Flash响应
+ Input: None
+ Output: None
+ Return: void
+ Others:
+*************************************************/
+void FirmwareUpdate_UnlockMcuFlashAck(void)
+{
+    uint8_t otaFlag = FirmwareUpdate_GetMpuOtaFlag();
+    if (otaFlag == 1U)
     {
-        g_fotaModeTimeCount++;
-        if(g_fotaModeTimeCount >= 10000) // 10s超时复位
-        {
-            g_fotaModeTimeCount = 0;
-            // PeripheralHalMcuHardReset(); 
-        }
+        TBOX_PRINT("Mpu OTA To Bootloader\r\n");
     }
 }

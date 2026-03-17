@@ -204,12 +204,10 @@ void main(void)
     Can_SetControllerMode(CanConf_CanController_CanController, CAN_T_START);
 
      /* Initialize Fls Driver */
-    Fls_Init(FlsConfigSet);
+    // Fls_Init(FlsConfigSet);
    // Fls_test();
     
     EcuMService_Init();
-
-    McuMpuSyncTaskInit();
 
     //FLc_Test();
 

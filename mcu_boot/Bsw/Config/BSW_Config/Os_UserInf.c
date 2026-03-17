@@ -31,6 +31,10 @@
 
 #include "Can.h"
 #include "logHal.h"
+#include "mpuHal.h"
+#include "mcuMpuSyncTask.h"
+#include "firmwareUpdateSdk.h"
+
 /** DO NOT CHANGE THIS COMMENT!
 * <USERBLOCK User Includes>
 */
@@ -67,8 +71,11 @@ TASK(OsTask_0)
    if (aa == 201) 
    {
         LogHalInit(1);
-        TBOX_PRINT("boot start1\n");
-        // TstCanSendMessage(0x333, 0x66778999);
+        MpuHalInit();
+        McuMpuSyncTaskInit();
+        uint8 flag = BootM_GetFlag();
+        FirmwareUpdate_UnlockMcuFlashAck();
+        TBOX_PRINT("boot start: %d\n", flag);
         aa = 0;
     }
 #if 1
@@ -76,7 +83,6 @@ TASK(OsTask_0)
     if (aa == 200) // 1s
     {
         TBOX_PRINT("boot1 cycle %ds\n",time);
-        // TstCanSendMessage(0x666, 0x66778999);
         aa = 0;
         time++;
     }
@@ -86,6 +92,7 @@ TASK(OsTask_0)
     Dcm_TimerFunction();
     Dcm_MainFunction_Post();
     Dcm_MainFunction();
+    McuMpuSyncTaskMain();
 	index++;
 	if(index == 100)
 	{

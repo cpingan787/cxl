@@ -1,24 +1,43 @@
+/*************************************************
+ Copyright © 2026 SiRun (Beijing) . All rights reserved.
+ File Name: log.c
+ Author:
+ Created Time:
+ Description:
+ Others:
+*************************************************/
+/****************************** include ***************************************/
 #include "logHal.h"
-
 #include "r_cg_macrodriver.h"
 #include "r_cg_uart.h"
-// #include "delay.h"
-
 #include "stdio.h"
 #include "string.h"
 #include "stdarg.h"
 
+
+/****************************** Macro Definitions ******************************/
+/****************************** Type Definitions ******************************/
+/****************************** Global Variables ******************************/
 static char g_debugBuffer[PRINT_MAX_LEN];
 volatile uint8_t g_debugPrintEndFlag = 0;
 volatile uint8_t g_debugUartReciveData[100] = {0};
 volatile uint16_t g_debugUartReciveCount = 0;
 volatile uint8_t g_debugUartErrorType = 0;
 volatile uint8_t g_debugUartErrorFlag = 0;
-
-//static uint8_t     g_AG568uart_in_data[128];
-
 static uint8_t g_debugMode;
 
+/****************************** Function Declarations *************************/
+static void delay_us(unsigned int xus);
+
+/****************************** Public Function Implementations ******************************/
+/*************************************************
+  Function:     delay_us
+  Description:  delay us
+  Input:        xus: delay us time
+  Output:       None
+  Return:       None
+  Others:       None
+*************************************************/
 static void delay_us(unsigned int xus)
 {
     unsigned int i,j;

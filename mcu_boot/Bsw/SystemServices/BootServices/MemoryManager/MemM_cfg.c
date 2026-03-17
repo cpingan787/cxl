@@ -116,4 +116,10 @@ MemM_FlagInfo_t g_FlagsInfo[MEMM_FLAG_NUM] =
         MEMM_FLAG_FAC_SIZE,
         COMMF_INVALID_U8 /*true value is not constant*/
     },
+    {
+        MEMM_DRV_EE,
+        REPROGRAM_ADDR_IDX,
+        MEMM_FLAG_MPU_REPROGRAM_SIZE,
+        MEMM_FLAG_MPU_REPROGRAM_DATA
+    },
 };

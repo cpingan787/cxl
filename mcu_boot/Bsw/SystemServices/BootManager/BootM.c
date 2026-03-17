@@ -38,6 +38,8 @@
 #include "Diag_Callout.h"
 #include "CanIf.h"
 #include "CanTp_Cfg.h"
+#include "firmwareUpdateSdk.h"
+
 /***************************************************************************************************
 *                                  DATA TYPES AND STRUCTURES
 ***************************************************************************************************/
@@ -53,6 +55,7 @@ typedef void (* theApp)(void);
 #define BOOTM_VALID_11RESET                           (0x02u)
 #define BOOTM_VALID_SIB                               (0x03u)
 #define BOOTM_INVALID_APP                             (0x04u)
+#define BOOTM_VALID_MPU_REPROGRAM                     (0x05u)
 /***************************************************************************************************
 *                                       DATA PROTOTYPES
 ***************************************************************************************************/
@@ -176,6 +179,10 @@ uint8 BootM_GetFlag(void)
     {
          flag = BOOTM_VALID_REPROGRAM;
     }
+    else if (Diag_FlagCompare(MEMM_FLAG_MPU_REPROGRAM_ID) == E_OK)
+    {
+         flag = BOOTM_VALID_MPU_REPROGRAM;
+    }
     else if(BootM_IsAllLBA_Valid() == E_OK)
     {
          BootM_AppGo();
@@ -246,6 +253,11 @@ uint8 BootM_FlagHandle(uint8 Flag)
             BootM_ReprogramRespond();
 #endif/*#if(DCM_RESET_RESPONSE_TYPE == DCM_RESET_BEFORE_RESPONSE)*/
             BootM_ReprogramStateSet();
+            break;
+        case BOOTM_VALID_MPU_REPROGRAM:
+            /*Clear reprogram flag*/
+            retValue = Diag_FlagClear(MEMM_FLAG_MPU_REPROGRAM_ID);
+            FirmwareUpdate_SetMpuOtaFlag(1U);
             break;
 #if(DCM_RESET_RESPONSE_TYPE == DCM_RESET_BEFORE_RESPONSE)
         case BOOTM_VALID_10RESET:

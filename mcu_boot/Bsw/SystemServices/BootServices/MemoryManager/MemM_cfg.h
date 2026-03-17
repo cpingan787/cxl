@@ -57,7 +57,7 @@ enum USERDATA_BLOCK0
 #define MEMM_APPB_FLAG_ADDR                      0x00120000U
 #define MEMM_CAL_FLAG_ADDR                       0x001F0000U
 
-#define MEMM_FLAG_NUM                            0x08U
+#define MEMM_FLAG_NUM                            0x09U
 
 #define MEMM_FLAG_REPROGRAM_ID                   0x00u
 #define MEMM_FLAG_REPROGRAM_SIZE                 0x04u
@@ -90,9 +90,15 @@ enum USERDATA_BLOCK0
 #define MEMM_FLAG_FAC_ID                         0x07u
 #define MEMM_FLAG_FAC_SIZE                       0x04u
 
+#define MEMM_FLAG_MPU_REPROGRAM_ID               0x08u
+#define MEMM_FLAG_MPU_REPROGRAM_SIZE             0x04u
+#define MEMM_FLAG_MPU_REPROGRAM_DATA             0xC5u
+
 
 #define MEMM_FLAG_APPAddr_ID                   	 0x08u
 #define MEMM_FLAG_APPAddr_SIZE                   0x04u
+
+
 
 /*g_logicalBlocks info*/
 #define MEMM_LOGICALBLOCK_NUM          0x04u
