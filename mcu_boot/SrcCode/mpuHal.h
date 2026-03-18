@@ -1,62 +1,137 @@
+/*************************************************
+ Copyright © 2026 SiRun (Beijing) . All rights reserved.
+ File Name: mpuHal.h
+ Author:
+ Created Time:
+ Description:
+ Others:
+*************************************************/
 #ifndef _MPU_HAL_IF_H
 #define _MPU_HAL_IF_H
-
+/****************************** include ***************************************/
 #include <stdint.h>
 #include "r_cg_macrodriver.h"
-extern uint8_t g_rxBuffer[1024];
-#define MPU_HAL_STATUS_OK       0
-#define MPU_HAL_STATUS_ERR       -1
-#define MPU_PROTOCAL_HEADER_LEN  (8U)
-#define PROTOCOL_AID_FWUPD       (0x03U)
+
+/****************************** Macro Definitions ******************************/
+#define MPU_HAL_STATUS_OK                 0
+#define MPU_HAL_STATUS_ERR                -1
+#define MPU_PROTOCAL_HEADER_LEN           (8U)
+#define PROTOCOL_AID_FWUPD                (0x03U)
+
+/****************************** Type Definitions ******************************/
 typedef struct
 {
-  uint8_t aid;
-  uint8_t mid;
-  uint8_t subcommand;
-  uint16_t dataBufferSize;
-  uint16_t dataLength;
-  uint8_t* pDataBuffer;
-}MpuHalDataPack_t;
+    uint8_t aid;
+    uint8_t mid;
+    uint8_t subcommand;
+    uint16_t dataBufferSize;
+    uint16_t dataLength;
+    uint8_t* pDataBuffer;
+} MpuHalDataPack_t;
 
 typedef struct
 {
-  uint8_t aid;
-  uint8_t midMin;
-  uint8_t midMax;
-}MpuHalFilter_t;
+    uint8_t aid;
+    uint8_t midMin;
+    uint8_t midMax;
+} MpuHalFilter_t;
 
-
-typedef enum
-{
-    UART_RECEIVE_PACK_NEW,
-    UART_RECEIVE_PACK_OLD,
-}UartReceivePackType_t;
-
-
-
-
+/****************************** Function Declarations *************************/
+/*************************************************
+ Function: MpuHalInit
+ Description: 初始化 MPU 模块
+ Input: None
+ Output: None
+ Return: None
+ Others:
+*************************************************/
 void MpuHalInit(void);
-void MpuHalCycleProcess(uint32_t cycleTime);
+
+/*************************************************
+ Function: MpuHalOpen
+ Description: 打开 MPU 模块
+ Input: None
+ Output: None
+ Return: None
+ Others:
+*************************************************/
 int16_t MpuHalOpen(void);
+
+/*************************************************
+ Function: MpuHalSetRxFilter
+ Description: 设置 MPU 模块的接收过滤器
+ Input: handle - MPU 模块句柄
+        pFilter - 接收过滤器指针
+ Output: None
+ Return: None
+ Others:
+*************************************************/
 int16_t MpuHalSetRxFilter(int16_t handle,const MpuHalFilter_t* pFilter);
+
+/*************************************************
+ Function: MpuHalSetRxBuffer
+ Description: 设置 MPU 模块的接收缓冲区
+ Input: handle - MPU 模块句柄
+        pBuffer - 接收缓冲区指针
+        bufferSize - 接收缓冲区大小
+ Output: None
+ Return: None
+ Others:
+*************************************************/
 int16_t MpuHalSetRxBuffer(int16_t handle,uint8_t* pBuffer,uint32_t bufferSize);
+
+/*************************************************
+ Function: MpuHalTransmit
+ Description: 发送 MPU 模块的数据
+ Input: handle - MPU 模块句柄
+        pTxMsg - 发送数据指针
+ Output: None
+ Return: None
+ Others:
+*************************************************/
 int16_t MpuHalTransmit(int16_t handle,const MpuHalDataPack_t* pTxMsg);
+
+/*************************************************
+ Function: MpuHalReceive
+ Description: 接收 MPU 模块的数据
+ Input: handle - MPU 模块句柄
+        pRxMsg - 接收数据指针
+        waitTime - 等待时间
+ Output: None
+ Return: None
+ Others:
+*************************************************/
 int16_t MpuHalReceive(int16_t handle,MpuHalDataPack_t* pRxMsg,uint32_t waitTime );
-void MpuHalStart(void);
-int16_t MpuHalStartIsFinished(void);
-void MpuHalReset(void);
-int16_t MpuHalResetIsFinished(void);
-void MpuHalPowerOff(void);
-void MpuHalSetMode(uint8_t wakeMode);
-int16_t MpuHalGetWakeMode(void);
 
-void MpuHalRequestIrqFun(void);
-
-void MpuHalTxTaskInit(void);
+/*************************************************
+ Function: MpuHalTxTask
+ Description: MPU 模块的 UART 发送任务
+ Input: None
+ Output: None
+ Return: None
+ Others:
+*************************************************/
 void MpuHalTxTask(void);
-void UartProtocalProcess(uint8_t *pData,uint16_t dataLength,uint8_t IsrFlag);
-void MpuHalUartPrintErrState(uint16_t cycleTime);
+
+/*************************************************
+ Function: MpuHalUartInterruptCallback
+ Description: MPU 模块的 UART 中断回调函数
+ Input: data - 接收数据
+ Output: None
+ Return: None
+ Others:
+*************************************************/
 void MpuHalUartInterruptCallback(uint8_t data);
+
+/*************************************************
+ Function: MpuHalUartTimerCallback
+ Description: MPU 模块的 UART 定时器回调函数
+ Input: None
+ Output: None
+ Return: None
+ Others:
+*************************************************/
 void MpuHalUartTimerCallback(void);
+
 
 #endif

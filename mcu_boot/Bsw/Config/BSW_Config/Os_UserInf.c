@@ -72,7 +72,6 @@ TASK(OsTask_0)
    {
         LogHalInit(1);
         MpuHalInit();
-        MpuHalSetPower(1);
 
         McuMpuSyncTaskInit();
         uint8 flag = BootM_GetFlag();

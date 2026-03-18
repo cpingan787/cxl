@@ -87,9 +87,8 @@ static uint8_t FirmwareUpdateSdkEraseFlash(volatile uint8_t *dataPack)
             TBOX_PRINT("05 address error\r\n");
             return 1; // error
         }
-    
-        uint32_t eraseLength = APP_BANK_SIZE;  // 长度待确认, 使用传入值还是常量
         address = 0x50000;
+        uint32_t eraseLength = APP_BANK_SIZE;  // 长度待确认, 使用传入值还是常量
         
         // 1. 发起擦除请求
         uint8_t retValue = FlsIf_Erase(address, eraseLength);
@@ -108,7 +107,6 @@ static uint8_t FirmwareUpdateSdkEraseFlash(volatile uint8_t *dataPack)
         }
         else
         {
-            TBOX_PRINT("Erasefailed %02x\r\n", retValue);
             g_flashState = E_FlashState_Idle;
             ret = 1; // Erase Fail
         }
@@ -254,6 +252,9 @@ void FirmwareUpdateSdkCycleProcess(int16_t handle, MpuHalDataPack_t *pRxMsg)
     uint8_t dataTxLen = 0U;
     uint8_t dataTxAraay[20] = {0};
     FirmwareUpdateSdkCmd_e s_UpdateMid = E_FirmwareUpdateSdkCmd_Default;
+    uint16_t newCmdCounter = 0;
+    static uint16_t lastCmdCounter = 0xff11U;
+
 
     if ((pRxMsg == NULL) || (pRxMsg->pDataBuffer == NULL) || (pRxMsg->dataBufferSize < MPU_PROTOCAL_HEADER_LEN)) 
     {
@@ -268,6 +269,7 @@ void FirmwareUpdateSdkCycleProcess(int16_t handle, MpuHalDataPack_t *pRxMsg)
         /* 2字节counter */
         dataTxAraay[0] = pRxMsg->pDataBuffer[0];
         dataTxAraay[1] = pRxMsg->pDataBuffer[1];
+        newCmdCounter = (uint16_t)(dataTxAraay[0] << 8) | dataTxAraay[1];
 
         switch(s_UpdateMid)
         {
@@ -307,9 +309,17 @@ void FirmwareUpdateSdkCycleProcess(int16_t handle, MpuHalDataPack_t *pRxMsg)
                 
             case E_FirmwareUpdateSdkCmd_EnterDownloadMode:
                 TBOX_PRINT("---04 Enter Download Mode---\r\n");
-                if((pRxMsg->pDataBuffer[2] == 0x01) && (pRxMsg->pDataBuffer[3] == 0x02) && (pRxMsg->pDataBuffer[4] == 0x03) && (pRxMsg->pDataBuffer[5] == 0x04))
+                if ((pRxMsg->pDataBuffer[2] == 0x01) && (pRxMsg->pDataBuffer[3] == 0x02) && (pRxMsg->pDataBuffer[4] == 0x03) && (pRxMsg->pDataBuffer[5] == 0x04))
                 {
-                    dataTxAraay[2] = 0x00; 
+                    if (newCmdCounter != lastCmdCounter)
+                    {
+                        dataTxAraay[2] = FlsIf_Init();
+                    }
+                    else
+                    {
+                        TBOX_PRINT("Same cmd counter\r\n");
+                        dataTxAraay[2] = 0x00; 
+                    }
                 } 
                 else 
                 { 
@@ -321,12 +331,29 @@ void FirmwareUpdateSdkCycleProcess(int16_t handle, MpuHalDataPack_t *pRxMsg)
                 
             case E_FirmwareUpdateSdkCmd_EraseMcuMemory:
                 /* 传入数据 1 2 3 4 地址 长度 */
-                dataTxAraay[2] = FirmwareUpdateSdkEraseFlash(pRxMsg->pDataBuffer); // 擦除flash的功能待适配
+                if (newCmdCounter != lastCmdCounter)
+                {
+                    dataTxAraay[2] = FirmwareUpdateSdkEraseFlash(pRxMsg->pDataBuffer);
+                }
+                else
+                {
+                    TBOX_PRINT("Same cmd counter\r\n");
+                    dataTxAraay[2] = 0x00; 
+                }
+                
                 dataTxLen = 3U;
                 break;
                 
             case E_FirmwareUpdateSdkCmd_DownloadMcuMemory:
-                dataTxAraay[2] = FirmwareUpdateSdkLoadCode(pRxMsg->pDataBuffer, pRxMsg->dataBufferSize); // 下载固件功能待适配
+                if (newCmdCounter != lastCmdCounter)
+                {
+                    dataTxAraay[2] = FirmwareUpdateSdkLoadCode(pRxMsg->pDataBuffer, pRxMsg->dataBufferSize);
+                }
+                else
+                {
+                    TBOX_PRINT("Same cmd counter\r\n");
+                    dataTxAraay[2] = 0x00; 
+                }         
                 dataTxLen = 3U;
                 break;
                 
@@ -361,6 +388,7 @@ void FirmwareUpdateSdkCycleProcess(int16_t handle, MpuHalDataPack_t *pRxMsg)
         TxPack.dataBufferSize = sizeof(dataTxAraay);
         TxPack.dataLength = dataTxLen;
         MpuHalTransmit(handle, &TxPack);
+        lastCmdCounter = newCmdCounter;
 
         if (s_UpdateMid == E_FirmwareUpdateSdkCmd_SoftwareResetMcu)
         {
