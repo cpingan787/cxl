@@ -342,7 +342,7 @@ uint8 FlsIf_Erase(uint32 sAddr, uint32 size)
         }
         else
         {
-            tem = E_NOT_OK ;
+            tem = 2 ;
         }
    
         /* erase cycle ,erase all valid sectors start from tarAddr ,in length*/
@@ -391,7 +391,7 @@ uint8 FlsIf_Erase(uint32 sAddr, uint32 size)
                      if(blocknum >= FLSIF_BLOCK_NUM)
                      {
                       /* all blocks has been erased */
-                       tem = E_NOT_OK;
+                       tem = 3;
                      }
                      else
                      {
@@ -402,13 +402,13 @@ uint8 FlsIf_Erase(uint32 sAddr, uint32 size)
             }
             else
             {
-                tem = E_NOT_OK;
+                tem = 4;
             }
         }
     }
     else
     {
-        tem = E_NOT_OK;
+        tem = 5;
     }
     return tem;
 }

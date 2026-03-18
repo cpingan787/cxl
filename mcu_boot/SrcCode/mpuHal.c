@@ -113,7 +113,7 @@ static void MpuHalGpioInit(void)
     Dio_WriteChannel(DioConf_DioChannel_DIO_Channel_NAD_V2X_5V0__EN_Pin1_7, STD_HIGH);
     Dio_WriteChannel(DioConf_DioChannel_DIO_Channel_NAD_V2X_3V8_EN_Pin18_3, STD_HIGH);
     // Dio_WriteChannel(DioConf_DioChannel_DIO_Channel_AG591_POWERKEY_EN_Pin18_1, STD_LOW);
-    Dio_WriteChannel(DioConf_DioChannel_DIO_Channel_MCU_WAKEUP_NAD_Pin12_0, STD_LOW);
+    //Dio_WriteChannel(DioConf_DioChannel_DIO_Channel_MCU_WAKEUP_NAD_Pin12_0, STD_LOW);
 
 #if(MPU_COMMUNICATION_USE_SPI)    
     /********request  out************************/
@@ -174,11 +174,11 @@ static void MpuHalSetWakeOut(uint8_t flag)
 {
     if(0==flag)
     {
-        Dio_WriteChannel(DioConf_DioChannel_DIO_Channel_MCU_WAKEUP_NAD_Pin12_0, STD_LOW);
+        //Dio_WriteChannel(DioConf_DioChannel_DIO_Channel_MCU_WAKEUP_NAD_Pin12_0, STD_LOW);
     }
     else
     {
-        Dio_WriteChannel(DioConf_DioChannel_DIO_Channel_MCU_WAKEUP_NAD_Pin12_0, STD_HIGH);
+        //Dio_WriteChannel(DioConf_DioChannel_DIO_Channel_MCU_WAKEUP_NAD_Pin12_0, STD_HIGH);
     }
 }
 #if(0)

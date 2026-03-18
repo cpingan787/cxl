@@ -89,6 +89,7 @@ static uint8_t FirmwareUpdateSdkEraseFlash(volatile uint8_t *dataPack)
         }
     
         uint32_t eraseLength = APP_BANK_SIZE;  // 长度待确认, 使用传入值还是常量
+        address = 0x50000;
         
         // 1. 发起擦除请求
         uint8_t retValue = FlsIf_Erase(address, eraseLength);
@@ -107,6 +108,7 @@ static uint8_t FirmwareUpdateSdkEraseFlash(volatile uint8_t *dataPack)
         }
         else
         {
+            TBOX_PRINT("Erasefailed %02x\r\n", retValue);
             g_flashState = E_FlashState_Idle;
             ret = 1; // Erase Fail
         }
