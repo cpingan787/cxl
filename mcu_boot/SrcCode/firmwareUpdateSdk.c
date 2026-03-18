@@ -97,7 +97,7 @@ static uint8_t FirmwareUpdateSdkEraseFlash(volatile uint8_t *dataPack)
         {
             TBOX_PRINT("Erase Bank %d success\r\n", flashAppFlag);
             g_flashState = E_FlashState_FlashErase;
-            g_crcData = Crc32Init(&g_crc32Object, 0x04C11DB7); 
+            g_crcData = Crc32Init(&g_crc32Object, 0xEDB88320); 
             retValue = FlsIf_Write(FLASH_APP_BANKA_ACTIVE_ADDRESS, 4, 0xFF);
             if (retValue != E_OK)
             {

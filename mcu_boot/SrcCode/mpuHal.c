@@ -18,10 +18,17 @@
 /****************************** Macro Definitions ******************************/
 #define MPU_HAL_HANDLE_INSTANSE_MAX     15
 #define MPU_PROTOCAL_HEADER_LEN         8
-#define MPU_HAL_TX_BUFFER               1072
 #define MPU_HAL_RX_BUFFER               4096
+
+/* RX 环形缓冲区配置 */
 #define MPU_RX_RING_BUF_SIZE            4096
-#define MPU_RX_RING_BUF_MASK            (MPU_RX_RING_BUF_SIZE - 1) /* 用于替代取模运算的高效掩码 */
+#define MPU_RX_RING_BUF_MASK            (MPU_RX_RING_BUF_SIZE - 1) 
+
+/* TX 环形缓冲区配置 */
+#define MPU_TX_RING_BUF_SIZE            4096
+#define MPU_TX_RING_BUF_MASK            (MPU_TX_RING_BUF_SIZE - 1)
+
+#define MPU_TX_FRAME_QUEUE_SIZE 16 /* 最多允许排队 16 帧 */
 
 /****************************** Type Definitions ******************************/
 typedef enum
@@ -43,31 +50,6 @@ typedef struct
     uint16_t dataCount;
     uint16_t dataLength;
 } MpuUartProtocalBuffer_t;
-
-typedef struct
-{
-    QueueHandle_t txQueueHandle;
-    uint8_t buffer[MPU_HAL_TX_BUFFER];
-    uint16_t index;
-} MpuUartTxBuffer_t;
-
-typedef struct
-{
-    uint8_t buffer[MPU_HAL_TX_BUFFER];
-    uint16_t txLength;
-} MpuTxBuffer_t;
-
-typedef struct
-{
-    uint8_t buffer[MPU_HAL_RX_BUFFER];
-    uint16_t txLength;
-} MpuRxBuffer_t;
-
-typedef struct
-{
-    uint8_t buffer[MPU_HAL_RX_BUFFER];
-    uint16_t dataCount;
-} MpuProtocolBuffer_t;
 
 typedef struct
 {
@@ -93,23 +75,39 @@ volatile uint16_t g_mpuUartReciveCount = 0;
 volatile uint8_t g_mpuUartErrorType = 0;
 volatile uint8_t g_mpuUartErrorFlag = 0;
 volatile uint8_t g_mpuSetRecvErrorFlag = 0;
+
+/* RX 资源 */
 volatile uint8_t g_uartRxRingBuf[MPU_RX_RING_BUF_SIZE];
 volatile uint16_t g_uartRxHead = 0;  /* 中断写入位置 */
 volatile uint16_t g_uartRxTail = 0;  /* 定时器读取位置 */
 
+/* TX 资源 */
+static uint8_t g_uartTxRingBuf[MPU_TX_RING_BUF_SIZE];
+static volatile uint16_t g_uartTxHead = 0;    /* 应用层写入位置 */
+static volatile uint16_t g_uartTxTail = 0;    /* 底层发送读取位置 */
+static volatile uint16_t g_uartTxLastLen = 0; /* 正在发送的数据长度 */
+
+/* 记录每一帧长度的环形队列 */
+static volatile uint16_t g_txFrameLens[MPU_TX_FRAME_QUEUE_SIZE];
+static volatile uint8_t  g_txLenHead = 0;
+static volatile uint8_t  g_txLenTail = 0;
+
+/* 专用的底层发送平铺缓冲。
+   它解决了环形数组回环造成的物理内存撕裂问题，完美适配中断发送！*/
+static uint8_t s_flatTxBuffer[MPU_TX_RING_BUF_SIZE];
+
 static MpuUartProtocalBuffer_t g_mpuUartProtocalBuffer;
-static MpuUartTxBuffer_t g_mpuUartTxBuffer;
 static MpuHalManage_t g_mpuManage;
 
 /****************************** Function Declarations *************************/
 static void MpuHalGpioInit(void);
-static int16_t MpuUartTransmit(const uint8_t *pTxData, uint16_t txLength);
 static void MpuDataDispatch(const uint8_t *pData, uint16_t length, uint8_t irq);
-static inline void UartProtocalProcess_Byte(uint8_t rx_data, uint8_t IsrFlag); /* 优化为 inline */
-static void MpuHalTxTaskInit(void);
+static inline void UartProtocalProcess_Byte(uint8_t rx_data, uint8_t IsrFlag);
 static void ReadFromRingBuffer(uint8_t *dest, const uint8_t *srcBuf, uint16_t srcSize, uint16_t *srcIndex, uint16_t readLen);
+static void WriteToTxRingBuffer(const uint8_t *src, uint16_t len);
 
 /****************************** Public Function Implementations ******************************/
+
 /*************************************************
  Function: MpuHalGpioInit
  Description: 初始化 MPU 相关 GPIO 引脚
@@ -123,8 +121,6 @@ static void MpuHalGpioInit(void)
     /* 拉高 MPU POWER */
     Dio_WriteChannel(DioConf_DioChannel_DIO_Channel_NAD_V2X_5V0__EN_Pin1_7, STD_HIGH);
     Dio_WriteChannel(DioConf_DioChannel_DIO_Channel_NAD_V2X_3V8_EN_Pin18_3, STD_HIGH);
-    // Dio_WriteChannel(DioConf_DioChannel_DIO_Channel_AG591_RST_EN_Pin18_0, STD_LOW);
-    // Dio_WriteChannel(DioConf_DioChannel_DIO_Channel_LEVEL_SHIFT_EN_Pin11_15, STD_HIGH);
 }
 
 /*************************************************
@@ -154,7 +150,6 @@ static void MpuDataDispatch(const uint8_t *pData, uint16_t length, uint8_t irq)
             {
                 if ((pData[3] >= pHandleInstance->rxFilterConfig.midMin) && (pData[3] <= pHandleInstance->rxFilterConfig.midMax))
                 {
-                    /***** copy data to receive buffer (Optimized with memcpy) *****/
                     data = (pHandleInstance->rxIndexIn << 16);
                     uint16_t space_to_end = pHandleInstance->dataBufferSize - pHandleInstance->rxIndexIn;
                     
@@ -174,7 +169,6 @@ static void MpuDataDispatch(const uint8_t *pData, uint16_t length, uint8_t irq)
                         pHandleInstance->rxIndexIn = length - space_to_end;
                     }
                     
-                    /******** dispatch data*******************************************/
                     data += length;
                     if (irq)
                     {
@@ -209,7 +203,6 @@ static uint8_t MpuPackHeader(uint8_t headerBuffer[], const MpuHalDataPack_t *pMs
     headerBuffer[5] = (pMsg->dataLength >> 8) & 0xFF;
     headerBuffer[6] = pMsg->dataLength & 0xFF;
     headerBuffer[7] = 0x00; /*reserved*/
-    headerBuffer[8] = 0x00; /*reserved*/
     return MPU_PROTOCAL_HEADER_LEN;
 }
 
@@ -224,9 +217,7 @@ static uint8_t MpuPackHeader(uint8_t headerBuffer[], const MpuHalDataPack_t *pMs
 *************************************************/
 static uint16_t MpuPackGetCrc(uint8_t header[], const MpuHalDataPack_t *pMsg)
 {
-    uint16_t crc;
-
-    crc = 0x0000;
+    uint16_t crc = 0x0000;
     crc = CcittCrc16(crc, header, MPU_PROTOCAL_HEADER_LEN);
     crc = CcittCrc16(crc, pMsg->pDataBuffer, pMsg->dataLength);
     return crc;
@@ -242,10 +233,7 @@ static uint16_t MpuPackGetCrc(uint8_t header[], const MpuHalDataPack_t *pMsg)
 *************************************************/
 int16_t MpuHalOpen(void)
 {
-    int16_t handle, index;
-
-    handle = -1;
-    index = 0;
+    int16_t handle = -1, index = 0;
 
     __disable_irq();
     for (index = 0; index < MPU_HAL_HANDLE_INSTANSE_MAX; index++)
@@ -285,10 +273,7 @@ int16_t MpuHalSetRxFilter(int16_t handle, const MpuHalFilter_t *pFilter)
         }
         return MPU_HAL_STATUS_OK;
     }
-    else
-    {
-        return MPU_HAL_STATUS_ERR;
-    }
+    return MPU_HAL_STATUS_ERR;
 }
 
 /*************************************************
@@ -313,14 +298,32 @@ int16_t MpuHalSetRxBuffer(int16_t handle, uint8_t *pBuffer, uint32_t bufferSize)
             g_mpuManage.rxHandle[handle].dataBufferSize = bufferSize;
             return MPU_HAL_STATUS_OK;
         }
-        else
-        {
-            return MPU_HAL_STATUS_ERR;
-        }
+    }
+    return MPU_HAL_STATUS_ERR;
+}
+
+/*************************************************
+ Function: WriteToTxRingBuffer
+ Description: 辅助函数 - 安全且极速地将数据写入 TX 环形缓冲区
+ Input: src - 指向要写入的数据缓冲区的指针
+        len - 要写入的数据长度（字节）
+ Output: None
+ Return: None
+ Others:
+*************************************************/
+static void WriteToTxRingBuffer(const uint8_t *src, uint16_t len)
+{
+    uint16_t space_to_end = MPU_TX_RING_BUF_SIZE - g_uartTxHead;
+    if (len <= space_to_end)
+    {
+        memcpy(&g_uartTxRingBuf[g_uartTxHead], src, len);
+        g_uartTxHead = (g_uartTxHead + len) & MPU_TX_RING_BUF_MASK;
     }
     else
     {
-        return MPU_HAL_STATUS_ERR;
+        memcpy(&g_uartTxRingBuf[g_uartTxHead], src, space_to_end);
+        memcpy(&g_uartTxRingBuf[0], src + space_to_end, len - space_to_end);
+        g_uartTxHead = len - space_to_end;
     }
 }
 
@@ -335,47 +338,51 @@ int16_t MpuHalSetRxBuffer(int16_t handle, uint8_t *pBuffer, uint32_t bufferSize)
 *************************************************/
 int16_t MpuHalTransmit(int16_t handle, const MpuHalDataPack_t *pTxMsg)
 {
-    static uint8_t sTxBuffer[MPU_HAL_TX_BUFFER];
-    uint16_t crc, index;
-    uint8_t packHeader[20];
+    uint16_t crc, totalLen, freeSpace;
+    uint8_t packHeader[MPU_PROTOCAL_HEADER_LEN];
+    uint8_t crcBuf[2];
+    uint8_t nextLenHead;
     int16_t ret = MPU_HAL_STATUS_OK;
 
-    if ((handle >= 0) && (handle < MPU_HAL_HANDLE_INSTANSE_MAX))
+    if ((handle >= 0) && (handle < MPU_HAL_HANDLE_INSTANSE_MAX) && (pTxMsg != NULL))
     {
-        if (pTxMsg != NULL)
+        totalLen = MPU_PROTOCAL_HEADER_LEN + pTxMsg->dataLength + 2;
+        
+        /* 1. 检查环形缓冲是否装得下这帧 */
+        if (totalLen < (MPU_TX_RING_BUF_SIZE - 10))
         {
-            if (pTxMsg->dataLength < 4000)
-            {
-                __disable_irq();
-                MpuPackHeader(packHeader, pTxMsg);
-                crc = MpuPackGetCrc(packHeader, pTxMsg);
+            MpuPackHeader(packHeader, pTxMsg);
+            crc = MpuPackGetCrc(packHeader, pTxMsg);
+            crcBuf[0] = (crc >> 8) & 0xFF;
+            crcBuf[1] = crc & 0xFF;
 
-                index = 0;
-                memcpy(sTxBuffer + index, packHeader, MPU_PROTOCAL_HEADER_LEN);
-                index += MPU_PROTOCAL_HEADER_LEN;
-                memcpy(sTxBuffer + index, pTxMsg->pDataBuffer, pTxMsg->dataLength);
-                index += pTxMsg->dataLength;
-                sTxBuffer[index] = (crc >> 8) & 0xFF;
-                index++;
-                sTxBuffer[index] = crc & 0xFF;
-                index++;
-                MpuUartTransmit(sTxBuffer, index);
-                __enable_irq();
+            __disable_irq();
+            
+            freeSpace = (g_uartTxTail - g_uartTxHead - 1) & MPU_TX_RING_BUF_MASK;
+            nextLenHead = (g_txLenHead + 1) & (MPU_TX_FRAME_QUEUE_SIZE - 1);
+
+            /* 2. 只有当数据空间足够，且“长度记录队列”也没有满时，才允许入队 */
+            if ((totalLen <= freeSpace) && (nextLenHead != g_txLenTail))
+            {
+                /* 写入数据 */
+                WriteToTxRingBuffer(packHeader, MPU_PROTOCAL_HEADER_LEN);
+                WriteToTxRingBuffer(pTxMsg->pDataBuffer, pTxMsg->dataLength);
+                WriteToTxRingBuffer(crcBuf, 2);
+                
+                /* 记录这帧的确切长度 */
+                g_txFrameLens[g_txLenHead] = totalLen;
+                g_txLenHead = nextLenHead;
             }
             else
             {
-                ret = MPU_HAL_STATUS_ERR;
+                ret = MPU_HAL_STATUS_ERR; /* 发送过快，上层需重试 */
             }
+            __enable_irq();
         }
-        else
-        {
-            ret = MPU_HAL_STATUS_ERR;
-        }
+        else ret = MPU_HAL_STATUS_ERR;
     }
-    else
-    {
-        ret = MPU_HAL_STATUS_ERR;
-    }
+    else ret = MPU_HAL_STATUS_ERR;
+    
     return ret;
 }
 
@@ -394,17 +401,20 @@ int16_t MpuHalTransmit(int16_t handle, const MpuHalDataPack_t *pTxMsg)
 static void ReadFromRingBuffer(uint8_t *dest, const uint8_t *srcBuf, uint16_t srcSize, uint16_t *srcIndex, uint16_t readLen)
 {
     uint16_t space = srcSize - *srcIndex;
+    uint16_t newIndex;
+
     if (readLen <= space)
     {
         memcpy(dest, &srcBuf[*srcIndex], readLen);
-        *srcIndex += readLen;
-        if (*srcIndex == srcSize) *srcIndex = 0;
+        newIndex = *srcIndex + readLen;
+        if (newIndex == srcSize) newIndex = 0;
+        *srcIndex = newIndex; // 一次性原子赋值
     }
     else
     {
         memcpy(dest, &srcBuf[*srcIndex], space);
         memcpy(dest + space, srcBuf, readLen - space);
-        *srcIndex = readLen - space;
+        *srcIndex = readLen - space; // 这里本来就是一次性赋值，安全
     }
 }
 
@@ -427,60 +437,36 @@ int16_t MpuHalReceive(int16_t handle, MpuHalDataPack_t *pRxMsg, uint32_t waitTim
     QueueHandle_t queHandle;
     int16_t ret = MPU_HAL_STATUS_OK;
 
-    if ((handle >= 0) && (handle < MPU_HAL_HANDLE_INSTANSE_MAX))
+    if ((handle >= 0) && (handle < MPU_HAL_HANDLE_INSTANSE_MAX) && (pRxMsg != NULL))
     {
-        index = handle & 0xFF;
-        if (pRxMsg != NULL)
+        queHandle = g_mpuManage.rxHandle[handle].rxQueueHandle;
+        if (xQueueReceive(queHandle, &data, waitTime) == pdPASS)
         {
-            queHandle = g_mpuManage.rxHandle[index].rxQueueHandle;
-            if (xQueueReceive(queHandle, &data, waitTime) == pdPASS)
+            index = (data >> 16) & 0xFFFF;
+            len = data & 0xFFFF;
+            if ((pRxMsg->dataBufferSize + MPU_PROTOCAL_HEADER_LEN + 2) >= len)
             {
-                index = (data >> 16) & 0xFFFF;
-                len = data & 0xFFFF;
-                if ((pRxMsg->dataBufferSize + MPU_PROTOCAL_HEADER_LEN + 2) >= len)
-                {
-                    /****receive header (Optimized) ****************************/
-                    ReadFromRingBuffer(packHeader, g_mpuManage.rxHandle[handle].pDataBufferRx, g_mpuManage.rxHandle[handle].dataBufferSize, &index, MPU_PROTOCAL_HEADER_LEN);
-                    
-                    /*******receive service data (Optimized) **************************************/
-                    ReadFromRingBuffer(pRxMsg->pDataBuffer, g_mpuManage.rxHandle[handle].pDataBufferRx, g_mpuManage.rxHandle[handle].dataBufferSize, &index, len - MPU_PROTOCAL_HEADER_LEN - 2);
-                    pRxMsg->dataLength = len - MPU_PROTOCAL_HEADER_LEN - 2;
-                    
-                    /* receive crc */
-                    ReadFromRingBuffer(crcBuf, g_mpuManage.rxHandle[handle].pDataBufferRx, g_mpuManage.rxHandle[handle].dataBufferSize, &index, 2);
-                    crcRx = (crcBuf[0] << 8) | crcBuf[1];
+                ReadFromRingBuffer(packHeader, g_mpuManage.rxHandle[handle].pDataBufferRx, g_mpuManage.rxHandle[handle].dataBufferSize, &index, MPU_PROTOCAL_HEADER_LEN);
+                ReadFromRingBuffer(pRxMsg->pDataBuffer, g_mpuManage.rxHandle[handle].pDataBufferRx, g_mpuManage.rxHandle[handle].dataBufferSize, &index, len - MPU_PROTOCAL_HEADER_LEN - 2);
+                pRxMsg->dataLength = len - MPU_PROTOCAL_HEADER_LEN - 2;
+                
+                ReadFromRingBuffer(crcBuf, g_mpuManage.rxHandle[handle].pDataBufferRx, g_mpuManage.rxHandle[handle].dataBufferSize, &index, 2);
+                crcRx = (crcBuf[0] << 8) | crcBuf[1];
 
-                    crc = MpuPackGetCrc(packHeader, pRxMsg);
-                    if (crcRx == crc)
-                    {
-                        pRxMsg->aid = packHeader[2];
-                        pRxMsg->mid = packHeader[3];
-                        pRxMsg->subcommand = packHeader[4];
-                    }
-                    else
-                    {
-                        ret = MPU_HAL_STATUS_ERR;
-                    }
-                }
-                else
+                crc = MpuPackGetCrc(packHeader, pRxMsg);
+                if (crcRx == crc)
                 {
-                    ret = MPU_HAL_STATUS_ERR;
+                    pRxMsg->aid = packHeader[2];
+                    pRxMsg->mid = packHeader[3];
+                    pRxMsg->subcommand = packHeader[4];
                 }
+                else ret = MPU_HAL_STATUS_ERR;
             }
-            else
-            {
-                ret = MPU_HAL_STATUS_ERR;
-            }
+            else ret = MPU_HAL_STATUS_ERR;
         }
-        else
-        {
-            ret = MPU_HAL_STATUS_ERR;
-        }
+        else ret = MPU_HAL_STATUS_ERR;
     }
-    else
-    {
-        ret = MPU_HAL_STATUS_ERR;
-    }
+    else ret = MPU_HAL_STATUS_ERR;
 
     return ret;
 }
@@ -495,16 +481,12 @@ int16_t MpuHalReceive(int16_t handle, MpuHalDataPack_t *pRxMsg, uint32_t waitTim
 *************************************************/
 void MpuHalUartInterruptCallback(uint8_t data)
 {
-    /* 计算下一个写入位置 (已使用掩码替代 % 优化性能) */
     uint16_t next_head = (g_uartRxHead + 1) & MPU_RX_RING_BUF_MASK;
-    
-    /* 如果环形缓冲区没满，就写入数据 */
     if (next_head != g_uartRxTail) 
     {
         g_uartRxRingBuf[g_uartRxHead] = data;
         g_uartRxHead = next_head;
     }
-    /* 如果满了，只能丢弃当前字节, 4K 缓冲区下，1K 的包绝不会满 */
 }
 
 /*************************************************
@@ -517,14 +499,10 @@ void MpuHalUartInterruptCallback(uint8_t data)
 *************************************************/
 void MpuHalUartTimerCallback(void)
 {
-    /* 只要头和尾不相遇，说明缓冲区里有新数据 */
     while (g_uartRxTail != g_uartRxHead)
     {
-        /* 取出一个字节 (已使用掩码替代 % 优化性能) */
         uint8_t rx_data = g_uartRxRingBuf[g_uartRxTail];
         g_uartRxTail = (g_uartRxTail + 1) & MPU_RX_RING_BUF_MASK;
-
-        /* 直接将单字节喂给协议解析状态机 */
         UartProtocalProcess_Byte(rx_data, 1);
     }
 }
@@ -557,20 +535,15 @@ static inline void UartProtocalProcess_Byte(uint8_t rx_data, uint8_t IsrFlag)
         }
         else
         {
-            /* 状态机容错处理：如果收到了 55 55 AA，不至于把第二个 55 丢掉 */
             pProtocalData->dataCount = (0x55 == rx_data) ? 1 : 0;
         }
     }
     else if (pProtocalData->dataCount < MPU_PROTOCAL_HEADER_LEN)
     {
         pProtocalData->data[pProtocalData->dataCount++] = rx_data;
-        
         if (MPU_PROTOCAL_HEADER_LEN == pProtocalData->dataCount)
         {
-            /* 解析长度位 (假设 第5、6字节是长度) */
             pProtocalData->dataLength = ((uint16_t)(pProtocalData->data[5]) << 8) | pProtocalData->data[6];
-            
-            /* 安全校验：防止长度字段异常导致数组越界写入崩溃 */
             if (pProtocalData->dataLength > (sizeof(pProtocalData->data) - (MPU_PROTOCAL_HEADER_LEN + 2)))
             {
                 pProtocalData->dataCount = 0; 
@@ -581,17 +554,11 @@ static inline void UartProtocalProcess_Byte(uint8_t rx_data, uint8_t IsrFlag)
     else
     {
         pProtocalData->data[pProtocalData->dataCount++] = rx_data;
-        
-        /* 检查是否接收到了完整的包 (头 + 数据长度 + 校验/尾部) */
         if (pProtocalData->dataCount >= (pProtocalData->dataLength + MPU_PROTOCAL_HEADER_LEN + 2))
         {
-            // check sum and dispatch (处理完整的一帧)
             MpuDataDispatch(pProtocalData->data, pProtocalData->dataCount, IsrFlag);
-            
-            /* 处理完毕，复位状态机，等待下一个包 */
             pProtocalData->dataLength = 0;
             pProtocalData->dataCount = 0;
-            /* 绝对不要在这里用 memset，毫无必要且浪费时间！ */
         }
     }
 }
@@ -624,26 +591,12 @@ void MpuHalInit(void)
     g_mpuManage.wakeoutTimeCount = 10;
     g_mpuManage.wakeMode = 1;
     MpuHalGpioInit();
-    MpuHalTxTaskInit();
     MpuHalMainUartInit(); // 115200 * 4
 }
 
 /*************************************************
- Function: MpuHalTxTaskInit
- Description: 初始化 MPU 模块的 UART 发送任务
- Input: None
- Output: None
- Return: None
- Others:
-*************************************************/
-static void MpuHalTxTaskInit(void)
-{
-    g_mpuUartTxBuffer.txQueueHandle = xQueueCreate(20, sizeof(uint32_t));
-}
-
-/*************************************************
  Function: MpuHalTxTask
- Description: MPU 模块的 UART 发送任务
+ Description: MPU 模块的 UART 发送任务 (无队列防撕裂机制)
  Input: None
  Output: None
  Return: None
@@ -651,53 +604,19 @@ static void MpuHalTxTaskInit(void)
 *************************************************/
 void MpuHalTxTask(void)
 {
-    uint32_t queueData, remain, i;
-    uint16_t startAddress;
-    uint16_t length;
-
-    uint8_t temp[50], j;
-    uint8_t ret;
+    uint16_t frameLen;
 
     if (R_UART5_SendStatus() != 0)
     {
         return;
     }
 
-    if (xQueueReceive(g_mpuUartTxBuffer.txQueueHandle, &queueData, 0) != pdPASS)
+    if (g_txLenHead != g_txLenTail)
     {
-        return;
+        frameLen = g_txFrameLens[g_txLenTail];
+        g_txLenTail = (g_txLenTail + 1) & (MPU_TX_FRAME_QUEUE_SIZE - 1);
+        ReadFromRingBuffer(s_flatTxBuffer, g_uartTxRingBuf, MPU_TX_RING_BUF_SIZE, (uint16_t*)&g_uartTxTail, frameLen);
+        R_UART5_Send(s_flatTxBuffer, frameLen);
     }
-    // 发送FIFO中的数据;
-    i = 0;
-    startAddress = (queueData >> 16) & 0xFFFF;
-    remain = length = queueData & 0xFFFF;
-    R_UART5_Send(&g_mpuUartTxBuffer.buffer[startAddress], length);
 }
 
-/*************************************************
- Function: MpuUartTransmit
- Description: 发送数据到 MPU 模块的 UART 接口
- Input: pTxData - 指向要发送数据的指针
-        txLength - 要发送的数据长度
- Output: None
- Return: 0 - 成功
-         -1 - 失败
- Others:
-*************************************************/
-static int16_t MpuUartTransmit(const uint8_t *pTxData, uint16_t txLength)
-{
-    uint16_t i;
-    uint32_t data;
-    data = g_mpuUartTxBuffer.index << 16;
-    for (i = 0; i < txLength; i++)
-    {
-        g_mpuUartTxBuffer.buffer[g_mpuUartTxBuffer.index++] = pTxData[i];
-        if (g_mpuUartTxBuffer.index >= MPU_HAL_TX_BUFFER)
-        {
-            g_mpuUartTxBuffer.index = 0;
-        }
-    }
-    data |= txLength;
-    xQueueSend(g_mpuUartTxBuffer.txQueueHandle, &data, 0);
-    return 0;
-}
