@@ -425,7 +425,7 @@ MD_STATUS R_UART5_Send(uint8_t * const tx_buf, uint16_t tx_num)
             gp_uart5_tx_address++;
             g_uart5_tx_count--;
             /* Clear ICRLIN35UR0 requestt and enable operation */
-            INTC2.ICRLIN35UR0.BIT.RFRLIN35UR0 = _INT_REQUEST_NOT_OCCUR;
+            // INTC2.ICRLIN35UR0.BIT.RFRLIN35UR0 = _INT_REQUEST_NOT_OCCUR;
             INTC2.ICRLIN35UR0.BIT.MKRLIN35UR0 = _INT_PROCESSING_ENABLED;	
         }
         else

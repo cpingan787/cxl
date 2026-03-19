@@ -209,6 +209,7 @@ static uint8_t FirmwareUpdateSdkLoadCode(volatile uint8_t *dataPack, uint16_t da
 static uint8_t FirmwareUpdateSdkCodeCheck(volatile uint8_t *dataPack)
 {
     uint8_t ret = 0U;
+    uint32 dataRead = 0;
 
     TBOX_PRINT("--------------------07 Download Complete size=%d------------------\r\n", g_otaCurSize);
 
@@ -221,7 +222,12 @@ static uint8_t FirmwareUpdateSdkCodeCheck(volatile uint8_t *dataPack)
         {
             uint32_t WriteData = 0xFE;
             uint32_t retValue = FlsIf_Write(FLASH_APP_BANKA_ACTIVE_ADDRESS, 4, (uint8*)&WriteData);
-
+            retValue = FlsIf_Read(FLASH_APP_BANKA_ACTIVE_ADDRESS, 4, (uint8*)&dataRead);
+            if(dataRead != WriteData)
+            {
+                TBOX_PRINT("FlsIf_Read failed %08x\r\n", dataRead);
+                ret = 0x01; 
+            }
             if (retValue != E_OK)
             {
                 TBOX_PRINT("APP ACTIVE failed %02x\r\n", retValue);
@@ -231,13 +237,12 @@ static uint8_t FirmwareUpdateSdkCodeCheck(volatile uint8_t *dataPack)
             {
                 TBOX_PRINT("virify success\r\n");
                 uint32 WriteData = 0xD5u;
-                uint32 dataRead = 0;
                 retValue = EEIf_Write(2, 4, (uint8*)&WriteData);
                 
                 EEIf_Read(2, 4, (uint8*)&dataRead);
                 if((retValue != E_OK) || (dataRead != WriteData))
                 {
-                    TBOX_PRINT("VALID ADDR ERROR\r\n");
+                    TBOX_PRINT("EEIf_Write failed %08x\r\n", dataRead);
                     ret = 0x01; 
                 }
                 ret = 0x00;

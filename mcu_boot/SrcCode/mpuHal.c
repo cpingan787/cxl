@@ -622,7 +622,12 @@ void MpuHalTxTask(void)
         frameLen = g_txFrameLens[g_txLenTail];
         g_txLenTail = (g_txLenTail + 1) & (MPU_TX_FRAME_QUEUE_SIZE - 1);
         ReadFromRingBuffer(s_flatTxBuffer, g_uartTxRingBuf, MPU_TX_RING_BUF_SIZE, (uint16_t*)&g_uartTxTail, frameLen);
-        R_UART5_Send(s_flatTxBuffer, frameLen);
+        MD_STATUS status = R_UART5_Send(s_flatTxBuffer, frameLen);
+        if(status != MD_OK)
+        {
+            TBOX_PRINT("MPU Send failed\r\n");
+            return;
+        }
         g_MpuEndFlag = 1;
     }
 }
