@@ -16,9 +16,9 @@
 /****************************** Global Variables ******************************/
 static uint16_t g_cycleTime = 5;                     
 int16_t g_mpuHandle = -1;                      
-static uint8_t g_dataBuffer[1024] = {0};
+static uint8_t g_dataBuffer[4096] = {0};
 static MpuHalDataPack_t  g_dataPack;
-static uint8_t g_recvDataBuffer[1024] = {0};
+static uint8_t g_recvDataBuffer[4096] = {0};
 
 
 /*************************************************

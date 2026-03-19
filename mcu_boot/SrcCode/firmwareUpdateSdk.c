@@ -42,6 +42,7 @@ static uint8_t flashAppFlag = FLASH_APP_DEFALT_BANK_ID;
 static uint8_t g_fotaModeFlag = 0U;   
 static uint16_t g_fotaModeTimeCount = 0U;  
 static uint8_t g_mpuOtaFlag = 0U;
+static uint32_t g_otaCurSize = 0;
 
 // CRC相关
 static Crc32Objec_t g_crc32Object;
@@ -99,6 +100,7 @@ static uint8_t FirmwareUpdateSdkEraseFlash(volatile uint8_t *dataPack)
             g_flashState = E_FlashState_FlashErase;
             g_crcData = Crc32Init(&g_crc32Object, 0xEDB88320); 
             retValue = FlsIf_Write(FLASH_APP_BANKA_ACTIVE_ADDRESS, 4, 0xFF);
+            g_otaCurSize = 0;
             if (retValue != E_OK)
             {
                 TBOX_PRINT("Write Bank %d active flag failed %02x\r\n", flashAppFlag, retValue);
@@ -171,6 +173,7 @@ static uint8_t FirmwareUpdateSdkLoadCode(volatile uint8_t *dataPack, uint16_t da
                 if (flsRet == E_OK)
                 {  
                     /* 校验并累加 CRC */
+                    g_otaCurSize += len;
                     g_crcData = Crc32(&g_crc32Object, g_crcData, (uint8_t *)addr, len);
                 }
                 else
@@ -206,7 +209,7 @@ static uint8_t FirmwareUpdateSdkCodeCheck(volatile uint8_t *dataPack)
 {
     uint8_t ret = 0U;
 
-    TBOX_PRINT("--------------------07 Download Complete------------------\r\n");
+    TBOX_PRINT("--------------------07 Download Complete ------------------\r\n");
 
     // CRC 校验相关，直接判断成功
     g_crcData ^= 0xFFFFFFFF;
@@ -216,15 +219,18 @@ static uint8_t FirmwareUpdateSdkCodeCheck(volatile uint8_t *dataPack)
     {
         if (FLASH_APP_BANKA_ID == flashAppFlag)  
         {
-            uint8_t retValue = FlsIf_Write(FLASH_APP_BANKA_ACTIVE_ADDRESS, 4, 0xFE);
-            if (retValue == E_OK)
-            {
-                TBOX_PRINT("Update and virify app1 success (CRC bypassed)!\r\n");
-            }
-            else
+            uint32_t WriteData = 0xFE;
+            uint32_t retValue = FlsIf_Write(FLASH_APP_BANKA_ACTIVE_ADDRESS, 4, (uint8*)&WriteData);
+
+            if (retValue != E_OK)
             {
                 TBOX_PRINT("APP ACTIVE failed %02x\r\n", retValue);
-                ret = 0x02; 
+                ret = 0x02;
+            }
+            else 
+            {
+                TBOX_PRINT("virify success\r\n");
+                ret = 0x00;
             }
         }
     }
@@ -347,7 +353,7 @@ void FirmwareUpdateSdkCycleProcess(int16_t handle, MpuHalDataPack_t *pRxMsg)
             case E_FirmwareUpdateSdkCmd_DownloadMcuMemory:
                 if (newCmdCounter != lastCmdCounter)
                 {
-                    dataTxAraay[2] = FirmwareUpdateSdkLoadCode(pRxMsg->pDataBuffer, pRxMsg->dataBufferSize);
+                    dataTxAraay[2] = FirmwareUpdateSdkLoadCode(pRxMsg->pDataBuffer, pRxMsg->dataLength);
                 }
                 else
                 {
