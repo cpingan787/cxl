@@ -256,7 +256,6 @@ uint8 BootM_FlagHandle(uint8 Flag)
             break;
         case BOOTM_VALID_MPU_REPROGRAM:
             /*Clear reprogram flag*/
-            // retValue = Diag_FlagClear(MEMM_FLAG_MPU_REPROGRAM_ID);
             FirmwareUpdate_SetMpuOtaFlag(1U);
             break;
 #if(DCM_RESET_RESPONSE_TYPE == DCM_RESET_BEFORE_RESPONSE)

@@ -81,9 +81,8 @@ TASK(OsTask_0)
     }
 #if 1
     aa++;
-    if (aa == 20) // 1s
+    if (aa == 200) // 1s
     {
-        MpuHalTxTask();
         // TBOX_PRINT("boot1 cycle %ds\n",time);
         aa = 0;
         time++;
@@ -94,10 +93,9 @@ TASK(OsTask_0)
     Dcm_TimerFunction();
     Dcm_MainFunction_Post();
     Dcm_MainFunction();
-    
     MpuHalUartTimerCallback();
     McuMpuSyncTaskMain();
-
+    MpuHalTxTask();
 	index++;
 	if(index == 100)
 	{

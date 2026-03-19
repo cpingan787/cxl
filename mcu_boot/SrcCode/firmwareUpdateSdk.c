@@ -17,6 +17,7 @@
 #include "FlsIf.h"
 #include "crc8_16_32.h"
 #include "Mcu.h"
+#include "MemM_cfg.h"
 
 // CRC 校验暂时不做
 // #include "crc8_16_32.h"
@@ -98,8 +99,9 @@ static uint8_t FirmwareUpdateSdkEraseFlash(volatile uint8_t *dataPack)
         {
             TBOX_PRINT("Erase Bank %d success\r\n", flashAppFlag);
             g_flashState = E_FlashState_FlashErase;
-            g_crcData = Crc32Init(&g_crc32Object, 0xEDB88320); 
-            retValue = FlsIf_Write(FLASH_APP_BANKA_ACTIVE_ADDRESS, 4, 0xFF);
+            g_crcData = Crc32Init(&g_crc32Object, 0x04C11DB7); 
+            uint32_t WriteData = 0xFF;
+            retValue = FlsIf_Write(FLASH_APP_BANKA_ACTIVE_ADDRESS, 4, (uint8*)&WriteData);
             g_otaCurSize = 0;
             if (retValue != E_OK)
             {
@@ -209,19 +211,18 @@ static uint8_t FirmwareUpdateSdkCodeCheck(volatile uint8_t *dataPack)
 {
     uint8_t ret = 0U;
 
-    TBOX_PRINT("--------------------07 Download Complete ------------------\r\n");
+    TBOX_PRINT("--------------------07 Download Complete size=%d------------------\r\n", g_otaCurSize);
 
-    // CRC 校验相关，直接判断成功
-    g_crcData ^= 0xFFFFFFFF;
+    uint32_t  finalCrc = g_crcData ^ 0xFFFFFFFF;
     uint32_t checksum = (dataPack[2] << 24) + (dataPack[3] << 16) + (dataPack[4] << 8) + dataPack[5];
 
-    if (checksum == g_crcData)
+    if (checksum == finalCrc)
     {
         if (FLASH_APP_BANKA_ID == flashAppFlag)  
         {
             uint32_t WriteData = 0xFE;
             uint32_t retValue = FlsIf_Write(FLASH_APP_BANKA_ACTIVE_ADDRESS, 4, (uint8*)&WriteData);
-
+            retValue = Diag_FlagClear(MEMM_FLAG_MPU_REPROGRAM_ID);
             if (retValue != E_OK)
             {
                 TBOX_PRINT("APP ACTIVE failed %02x\r\n", retValue);
@@ -256,7 +257,7 @@ void FirmwareUpdateSdkCycleProcess(int16_t handle, MpuHalDataPack_t *pRxMsg)
     uint8_t i = 0U;
     uint8_t curAid = 0U;
     uint8_t dataTxLen = 0U;
-    uint8_t dataTxAraay[20] = {0};
+    static uint8_t dataTxAraay[20] = {0};
     FirmwareUpdateSdkCmd_e s_UpdateMid = E_FirmwareUpdateSdkCmd_Default;
     uint16_t newCmdCounter = 0;
     static uint16_t lastCmdCounter = 0xff11U;
@@ -398,8 +399,8 @@ void FirmwareUpdateSdkCycleProcess(int16_t handle, MpuHalDataPack_t *pRxMsg)
 
         if (s_UpdateMid == E_FirmwareUpdateSdkCmd_SoftwareResetMcu)
         {
-            // delay 100ms
-            delay_us(1000);
+            // delay 50ms
+            delay_us(50000);
             // reset
             Mcu_PerformReset();
         }

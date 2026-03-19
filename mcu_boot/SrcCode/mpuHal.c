@@ -510,7 +510,7 @@ void MpuHalUartTimerCallback(void)
     if (processCount == 0 && g_mpuUartProtocalBuffer.dataCount > 0)
     {
         s_rxIdleTimer++;
-        if (s_rxIdleTimer >= 30) 
+        if (s_rxIdleTimer >= 2) 
         {
             g_mpuUartProtocalBuffer.dataCount = 0;
             g_mpuUartProtocalBuffer.dataLength = 0;
