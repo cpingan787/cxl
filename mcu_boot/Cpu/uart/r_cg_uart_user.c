@@ -76,6 +76,7 @@ extern volatile uint16_t g_mpuUartReciveCount;
 extern volatile uint8_t g_mpuUartErrorType;
 extern volatile uint8_t g_mpuUartErrorFlag;
 extern volatile uint8_t g_mpuSetRecvErrorFlag;
+extern volatile uint8_t g_MpuEndFlag;
 // extern uint8_t g_bleUartReciveData[];
 // extern uint16_t g_bleUartReciveCount;
 /* End user code. Do not edit comment generated here */
@@ -328,6 +329,7 @@ void r_uart5_interrupt_send(void)
 static void r_uart5_callback_sendend(void)
 {
     /* Start user code. Do not edit comment generated here */
+    g_MpuEndFlag = 0;
     /* End user code. Do not edit comment generated here */
 }
 /***********************************************************************************************************************

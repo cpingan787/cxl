@@ -18,7 +18,6 @@
 #include "crc8_16_32.h"
 #include "Mcu.h"
 #include "MemM_cfg.h"
-
 // CRC 校验暂时不做
 // #include "crc8_16_32.h"
 
@@ -222,7 +221,7 @@ static uint8_t FirmwareUpdateSdkCodeCheck(volatile uint8_t *dataPack)
         {
             uint32_t WriteData = 0xFE;
             uint32_t retValue = FlsIf_Write(FLASH_APP_BANKA_ACTIVE_ADDRESS, 4, (uint8*)&WriteData);
-            retValue = Diag_FlagClear(MEMM_FLAG_MPU_REPROGRAM_ID);
+
             if (retValue != E_OK)
             {
                 TBOX_PRINT("APP ACTIVE failed %02x\r\n", retValue);
@@ -231,6 +230,16 @@ static uint8_t FirmwareUpdateSdkCodeCheck(volatile uint8_t *dataPack)
             else 
             {
                 TBOX_PRINT("virify success\r\n");
+                uint32 WriteData = 0xD5u;
+                uint32 dataRead = 0;
+                retValue = EEIf_Write(2, 4, (uint8*)&WriteData);
+                
+                EEIf_Read(2, 4, (uint8*)&dataRead);
+                if((retValue != E_OK) || (dataRead != WriteData))
+                {
+                    TBOX_PRINT("VALID ADDR ERROR\r\n");
+                    ret = 0x01; 
+                }
                 ret = 0x00;
             }
         }

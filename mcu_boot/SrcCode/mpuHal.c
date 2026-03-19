@@ -108,6 +108,7 @@ static uint8_t s_flatTxBuffer[MPU_TX_RING_BUF_SIZE];
 
 static MpuUartProtocalBuffer_t g_mpuUartProtocalBuffer;
 static MpuHalManage_t g_mpuManage;
+volatile uint8_t g_MpuEndFlag = 0;
 
 /****************************** Function Declarations *************************/
 static void MpuHalGpioInit(void);
@@ -611,11 +612,17 @@ void MpuHalTxTask(void)
         return;
     }
 
+    if (g_MpuEndFlag == 1)
+    {
+        return;
+    }
+
     if (g_txLenHead != g_txLenTail)
     {
         frameLen = g_txFrameLens[g_txLenTail];
         g_txLenTail = (g_txLenTail + 1) & (MPU_TX_FRAME_QUEUE_SIZE - 1);
         ReadFromRingBuffer(s_flatTxBuffer, g_uartTxRingBuf, MPU_TX_RING_BUF_SIZE, (uint16_t*)&g_uartTxTail, frameLen);
         R_UART5_Send(s_flatTxBuffer, frameLen);
+        g_MpuEndFlag = 1;
     }
 }
