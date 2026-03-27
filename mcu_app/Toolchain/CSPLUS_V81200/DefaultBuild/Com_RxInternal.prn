@@ -1,0 +1,1704 @@
+RH850 Family Assembler V2.07.00.03 Assemble Source List
+
+OFFSET   CODE                  NO  SOURCE STATEMENT
+
+00000000                        1  #CC-RH Compiler RH850 Assembler Source
+00000000                        2  #@	CC-RH Version : V2.07.00  [06 Dec 2024]
+00000000                        3  #@	Command : ..\..\Bsw\Communication\Common\Com\Com_RxInternal.c -oDefaultBuild\Com_RxInternal.obj -Xcpu=g3kh -Xno_warning=20188,20111 -g -g_line -I..\..\Srcode\app\diagnostic -I..\..\Srcode\app\parameter_store -I..\..\Cpu\port -I..\..\Cpu\uart -I..\..\Cpu\iic -I..\..\Srcode\app\vehicle_data_to_mpu -I..\..\Srcode\app\power_manage -I..\..\Srcode\app\mcu_cpu_sync -I..\..\Srcode\app\remote_control -I..\..\Srcode\app\can_cycle_send -I..\..\Srcode\app\project_configure -I..\..\Srcode\sdk\include -I..\..\Srcode\commonLib\include -I..\..\Srcode\hal\include -I..\..\Bsw\Mcal\icu\include -I..\..\Bsw\Config\MCAL_Config\Icu_OutPut\include -I..\..\Bsw\Crypto\CRYPTO\vss -I..\..\ASW\CDD_FVM -I..\..\Bsw\Memory\EEIf -I..\..\Bsw\Communication\CAN\CanTSyn -I..\..\Bsw\SystemServices\StbM -I..\..\Bsw\Crypto\CSM -I..\..\Bsw\Crypto\CRYPTO\RSA -I..\..\Bsw\Crypto\CRYPTO\RandomGen\CTR_DRBG -I..\..\Bsw\Crypto\CRYPTO\MAC\CMAC -I..\..\Bsw\Crypto\CRYPTO\Hash\sha256 -I..\..\Bsw\Crypto\CRYPTO\dh -I..\..\Bsw\Crypto\CRYPTO\AES -I..\..\Bsw\Crypto\CRYPTO -I..\..\Bsw\Crypto\CryInterface -I..\..\Bsw\Communication\Common\SecOC -I..\..\Bsw\Memory\NvM -I..\..\Bsw\Memory\MemIf -I..\..\Bsw\Memory\Fee -I..\..\Bsw\SystemServices\WdgM -I..\..\Bsw\SystemServices\WdgIf -I..\..\Bsw\Config\MCAL_Config\Wdg_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Gpt_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Fls_OutPut\include -I..\..\Bsw\Mcal\wdg\include -I..\..\Bsw\Mcal\gpt\include -I..\..\Bsw\Mcal\fls\include -I..\..\Bsw\Communication\Common\IpduM -I..\..\ASW\APP -I..\..\Bsw\SystemServices\BswM -I..\..\ASW\BSW_Ext -I..\..\Bsw\Communication\Common\Dcm -I..\..\Bsw\Communication\CAN\CanTp -I..\..\Bsw\SystemServices\Dem -I..\..\Bsw\Libraries\E2E -I..\..\Bsw\Libraries\Crc -I..\..\Bsw\Communication\Common\NmIf -I..\..\Bsw\Communication\CAN\CanNm -I..\..\Bsw\Config\BSW_Config\RTE\Rte -I..\..\Bsw\Config\BSW_Config\RTE\SchM -I..\..\Bsw\Libraries\IStd -I..\..\Bsw\SystemServices\EcuM -I..\..\Bsw\SystemServices\ComM -I..\..\Bsw\Communication\CAN\CanSM -I..\..\Bsw\Communication\CAN\CanIf -I..\..\Bsw\Communication\Common\Com -I..\..\Bsw\Communication\Common\PDUR -I..\..\Cpu -I..\..\Bsw\CommonInclude -I..\..\Bsw\Config\BSW_Config -I..\..\Bsw\Config\BSW_Config\RH850F1K -I..\..\Bsw\SystemServices\Os\Extend\inc -I..\..\Bsw\SystemServices\Os\Kernel\inc -I..\..\Bsw\SystemServices\Os\Portable\Mcu -I..\..\Bsw\SystemServices\Os\Portable\Processor -I..\..\Bsw\Config\MCAL_Config\Adc_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Can_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Dio_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Mcu_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Port_OutPut\include -I..\..\Bsw\Mcal\adc\include -I..\..\Bsw\Mcal\can\include -I..\..\Bsw\Mcal\dio\include -I..\..\Bsw\Mcal\general -I..\..\Bsw\Mcal\mcu\include -I..\..\Bsw\Mcal\port\include -I..\..\Bsw\Mcal\stubs\CanGeneral\include -I..\..\Bsw\Mcal\stubs\Det\include -I..\..\Bsw\Mcal\stubs\MemIf\include -I..\..\Bsw\Mcal\stubs\SchM\include -DRH850_F1KM_S1_2MB -lang=c99 -Xfloat=fpu -Xround=zero -Xdiv -Xasm_path=DefaultBuild -Xasm_option=-Xprn_path=DefaultBuild -c -MAKEUD=DefaultBuild -Xexec_time=C:\Users\xlchen\AppData\Local\Temp\CSPlusBuildTool_a90908fdd7b44cda84a81a8dc9dc289305ud2dzg.ab2
+00000000                        4  #@	compiled at Fri Mar 27 09:50:28 2026
+00000000                        5  
+00000000                        6  	.file "..\..\Bsw\Communication\Common\Com\Com_RxInternal.c"
+00000000                        7  
+00000000                        8  	$reg_mode 32
+00000000                        9  	.dbl_size 8
+00000000                       10  
+00000000                       11  	.extern _Com_ConfigStd
+00000000                       12  	.extern _Com_IpduGroupDMEnable
+00000000                       13  	.extern _Com_IpduGroupEnable
+00000000                       14  	.extern _Com_RxIPduRunTimeState
+00000000                       15  	.extern _Com_RxIPduInitState
+00000000                       16  	.extern _Com_RxIPduGroupsRef
+00000000                       17  	.extern _Com_RxSignalTimeoutVal
+00000000                       18  	.extern _Com_TimeoutRxSignalRef
+00000000                       19  	.extern _Com_RxSignalTimeoutNotificationCfg
+00000000                       20  	.extern _Com_RxSigGrpTimeoutVal
+00000000                       21  	.extern _Com_TimeoutRxSigGrpRef
+00000000                       22  	.extern _Com_RxSigGrpTimeoutNotificationCfg
+00000000                       23  	.extern _Com_RxIPduRuntimeBuff
+00000000                       24  	.extern _Com_RxIPduInitValue
+00000000                       25  	.extern _Com_SignalBoolRuntimeBuff
+00000000                       26  	.extern _Com_Signal8BitRuntimeBuff
+00000000                       27  	.extern _Com_Signal16BitRuntimeBuff
+00000000                       28  	.extern _Com_Signal32BitRuntimeBuff
+00000000                       29  	.extern _Com_Signal64BitRuntimeBuff
+00000000                       30  	.extern _Com_RxGroupSignalBoolShadowBuff
+00000000                       31  	.extern _Com_RxGroupSignal8BitShadowBuff
+00000000                       32  	.extern _Com_RxGroupSignal16BitShadowBuff
+00000000                       33  	.extern _Com_RxGroupSignal32BitShadowBuff
+00000000                       34  	.extern _Com_RxSignalTimeOutCnt
+00000000                       35  	.extern _Com_RxSignalGroupTimeOutCnt
+00000000                       36  	.public _TestactiveEnable, 1
+00000000                       37  	.public _Com_ReceiveSignalGroupHandle
+00000000                       38  	.extern _SchM_Enter_Com_Context
+00000000                       39  	.extern _SchM_Exit_Com_Context
+00000000                       40  	.public _Com_ReceiveGroupSignalHandle
+00000000                       41  	.public _Com_ReceiveSignalHandle
+00000000                       42  	.extern _ILib_memcpy
+00000000                       43  	.extern _Com_InitSignalBuffer
+00000000                       44  	.extern _Com_SignalUnPackHandle
+00000000                       45  	.public _Com_RxIpduController
+00000000                       46  	.extern _SchM_Enter_Com_MultiCore_Lock
+00000000                       47  	.extern _SchM_Exit_Com_MultiCore_Lock
+00000000                       48  	.public _Com_RxIndicationHandle
+00000000                       49  	.public _Com_MainFunctionRxHandle
+00000000                       50  	.public _Com_RxPduDMCtrHandle
+00000000                       51  
+00000000                       52  	.section .text, text
+00000000                       53  _Com_ReceiveSignalGroupHandle:
+00000000                       54  	.stack _Com_ReceiveSignalGroupHandle = 12
+00000000                       55  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 438
+00000000 8007210C              56  	prepare 0x00000061, 0x00000000
+00000004                       57  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 440
+00000004 40160000              58  	movhi HIGHW1(#_Com_ConfigStd), r0, r2
+00000008 22170100              59  	ld.w LOWW(#_Com_ConfigStd)[r2], r2
+0000000C 22171100              60  	ld.w 0x00000010[r2], r2
+00000010                       61  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 442
+00000010 EC3F4002              62  	mul 0x0000000C, r7, r0
+00000014 C711                  63  	add r7, r2
+00000016                       64  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 450
+00000016 E2A70500              65  	ld.hu 0x00000004[r2], r20
+0000001A E2AF0700              66  	ld.hu 0x00000006[r2], r21
+0000001E 80FF0000              67  	jarl _SchM_Enter_Com_Context, r31
+00000022 8505                  68  	br9 .BB.LABEL.1_9
+00000024                       69  .BB.LABEL.1_1:	; bb
+00000024                       70  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 453
+00000024 40160000              71  	movhi HIGHW1(#_Com_ConfigStd), r0, r2
+00000028 22170100              72  	ld.w LOWW(#_Com_ConfigStd)[r2], r2
+0000002C 22171900              73  	ld.w 0x00000018[r2], r2
+00000030 D42EFFFF              74  	andi 0x0000FFFF, r20, r5
+00000034                       75  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 454
+00000034 F82F4002              76  	mul 0x00000018, r5, r0
+00000038 C511                  77  	add r5, r2
+0000003A                       78  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 455
+0000003A 222F1500              79  	ld.w 0x00000014[r2], r5
+0000003E                       80  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 456
+0000003E 6A2A                  81  	cmp 0x0000000A, r5
+00000040                       82  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 454
+00000040 E2170100              83  	ld.hu 0x00000000[r2], r2
+00000044                       84  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 456
+00000044 8B05                  85  	bh9 .BB.LABEL.1_8
+00000046                       86  .BB.LABEL.1_2:	; bb
+00000046                       87  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 0
+00000046 C12A                  88  	shl 0x00000001, r5
+00000048 E50600000000          89  	jmp #.SWITCH.LABEL.1_11[r5]
+0000004E                       90  .SWITCH.LABEL.1_11:
+0000004E 8505                  91  	br9 .BB.LABEL.1_3
+00000050 8505                  92  	br9 .BB.LABEL.1_7
+00000052 8505                  93  	br9 .BB.LABEL.1_8
+00000054 8505                  94  	br9 .BB.LABEL.1_6
+00000056 8505                  95  	br9 .BB.LABEL.1_7
+00000058 8505                  96  	br9 .BB.LABEL.1_8
+0000005A 8505                  97  	br9 .BB.LABEL.1_5
+0000005C 8505                  98  	br9 .BB.LABEL.1_6
+0000005E 8505                  99  	br9 .BB.LABEL.1_7
+00000060 8505                 100  	br9 .BB.LABEL.1_8
+00000062 8505                 101  	br9 .BB.LABEL.1_5
+00000064                      102  .SWITCH.LABEL.1_11.END:
+00000064                      103  .BB.LABEL.1_3:	; switch_clause_bb
+00000064                      104  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 460
+00000064                      105  	mov #_Com_RxGroupSignalBoolShadowBuff, r5
+00000064 250600000000            -- mov         0x0,tp
+0000006A                      106  	mov #_Com_SignalBoolRuntimeBuff, r6
+0000006A 260600000000            -- mov         0x0,r6
+00000070                      107  .BB.LABEL.1_4:	; switch_clause_bb
+00000070                      108  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 0
+00000070 C229                 109  	add r2, r5
+00000072 C611                 110  	add r6, r2
+00000074 02170000             111  	ld.b 0x00000000[r2], r2
+00000078 45170000             112  	st.b r2, 0x00000000[r5]
+0000007C 8505                 113  	br9 .BB.LABEL.1_8
+0000007E                      114  .BB.LABEL.1_5:	; switch_clause_bb40
+0000007E                      115  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 466
+0000007E                      116  	mov #_Com_RxGroupSignal8BitShadowBuff, r5
+0000007E 250600000000            -- mov         0x0,tp
+00000084                      117  	mov #_Com_Signal8BitRuntimeBuff, r6
+00000084 260600000000            -- mov         0x0,r6
+0000008A 8505                 118  	br9 .BB.LABEL.1_4
+0000008C                      119  .BB.LABEL.1_6:	; switch_clause_bb48
+0000008C                      120  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 472
+0000008C C211                 121  	add r2, r2
+0000008E                      122  	mov #_Com_RxGroupSignal16BitShadowBuff, r5
+0000008E 250600000000            -- mov         0x0,tp
+00000094 C229                 123  	add r2, r5
+00000096                      124  	mov #_Com_Signal16BitRuntimeBuff, r6
+00000096 260600000000            -- mov         0x0,r6
+0000009C C611                 125  	add r6, r2
+0000009E 22170000             126  	ld.h 0x00000000[r2], r2
+000000A2 65170000             127  	st.h r2, 0x00000000[r5]
+000000A6 8505                 128  	br9 .BB.LABEL.1_8
+000000A8                      129  .BB.LABEL.1_7:	; switch_clause_bb56
+000000A8                      130  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 479
+000000A8 C212                 131  	shl 0x00000002, r2
+000000AA                      132  	mov #_Com_RxGroupSignal32BitShadowBuff, r5
+000000AA 250600000000            -- mov         0x0,tp
+000000B0 C229                 133  	add r2, r5
+000000B2                      134  	mov #_Com_Signal32BitRuntimeBuff, r6
+000000B2 260600000000            -- mov         0x0,r6
+000000B8 C611                 135  	add r6, r2
+000000BA 22170100             136  	ld.w 0x00000000[r2], r2
+000000BE 65170100             137  	st.w r2, 0x00000000[r5]
+000000C2                      138  .BB.LABEL.1_8:	; switch_break_bb
+000000C2                      139  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 0
+000000C2 41A2                 140  	add 0x00000001, r20
+000000C4                      141  .BB.LABEL.1_9:	; bb67
+000000C4                      142  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 451
+000000C4 D416FFFF             143  	andi 0x0000FFFF, r20, r2
+000000C8 F511                 144  	cmp r21, r2
+000000CA 8105                 145  	bl9 .BB.LABEL.1_1
+000000CC                      146  .BB.LABEL.1_10:	; bb74
+000000CC                      147  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 513
+000000CC 80FF0000             148  	jarl _SchM_Exit_Com_Context, r31
+000000D0                      149  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 515
+000000D0 40063F0C             150  	dispose 0x00000000, 0x00000061, [r31]
+000000D4                      151  _Com_ReceiveGroupSignalHandle:
+000000D4                      152  	.stack _Com_ReceiveGroupSignalHandle = 0
+000000D4                      153  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 533
+000000D4 40160000             154  	movhi HIGHW1(#_Com_ConfigStd), r0, r2
+000000D8                      155  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 535
+000000D8 22170100             156  	ld.w LOWW(#_Com_ConfigStd)[r2], r2
+000000DC 222F1900             157  	ld.w 0x00000018[r2], r5
+000000E0 263645FE             158  	movea 0xFFFFFE45, r6, r6
+000000E4                      159  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 536
+000000E4 0640                 160  	mov r6, r8
+000000E6 F8474002             161  	mul 0x00000018, r8, r0
+000000EA C541                 162  	add r5, r8
+000000EC                      163  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 537
+000000EC 88470B00             164  	ld.bu 0x0000000A[r8], r8
+000000F0 EC42                 165  	mulh 0x0000000C, r8
+000000F2 22171100             166  	ld.w 0x00000010[r2], r2
+000000F6 C811                 167  	add r8, r2
+000000F8                      168  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 538
+000000F8 E2170900             169  	ld.hu 0x00000008[r2], r2
+000000FC                      170  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 543
+000000FC C312                 171  	shl 0x00000003, r2
+000000FE                      172  	mov #_Com_RxIPduRunTimeState, r8
+000000FE 280600000000            -- mov         0x0,r8
+00000104 C241                 173  	add r2, r8
+00000106 08160600             174  	addi 0x00000006, r8, r2
+0000010A                      175  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 544
+0000010A C8D70600             176  	tst1 0x00000002, 0x00000006[r8]
+0000010E 8205                 177  	bz9 .BB.LABEL.2_2
+00000110                      178  .BB.LABEL.2_1:	; entry.if_break_bb93_crit_edge
+00000110                      179  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 0
+00000110 20568100             180  	movea 0x00000081, r0, r10
+00000114 8505                 181  	br9 .BB.LABEL.2_12
+00000116                      182  .BB.LABEL.2_2:	; if_then_bb
+00000116                      183  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 546
+00000116 F8374002             184  	mul 0x00000018, r6, r0
+0000011A C629                 185  	add r6, r5
+0000011C                      186  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 548
+0000011C 25371500             187  	ld.w 0x00000014[r5], r6
+00000120 6A32                 188  	cmp 0x0000000A, r6
+00000122                      189  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 546
+00000122 E52F0100             190  	ld.hu 0x00000000[r5], r5
+00000126                      191  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 548
+00000126 8B05                 192  	bh9 .BB.LABEL.2_9
+00000128                      193  .BB.LABEL.2_3:	; if_then_bb
+00000128                      194  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 0
+00000128 C132                 195  	shl 0x00000001, r6
+0000012A E60600000000         196  	jmp #.SWITCH.LABEL.2_13[r6]
+00000130                      197  .SWITCH.LABEL.2_13:
+00000130 8505                 198  	br9 .BB.LABEL.2_4
+00000132 8505                 199  	br9 .BB.LABEL.2_8
+00000134 8505                 200  	br9 .BB.LABEL.2_9
+00000136 8505                 201  	br9 .BB.LABEL.2_7
+00000138 8505                 202  	br9 .BB.LABEL.2_8
+0000013A 8505                 203  	br9 .BB.LABEL.2_9
+0000013C 8505                 204  	br9 .BB.LABEL.2_6
+0000013E 8505                 205  	br9 .BB.LABEL.2_7
+00000140 8505                 206  	br9 .BB.LABEL.2_8
+00000142 8505                 207  	br9 .BB.LABEL.2_9
+00000144 8505                 208  	br9 .BB.LABEL.2_6
+00000146                      209  .SWITCH.LABEL.2_13.END:
+00000146                      210  .BB.LABEL.2_4:	; switch_clause_bb
+00000146                      211  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 552
+00000146                      212  	mov #_Com_RxGroupSignalBoolShadowBuff, r6
+00000146 260600000000            -- mov         0x0,r6
+0000014C                      213  .BB.LABEL.2_5:	; switch_clause_bb
+0000014C                      214  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 0
+0000014C C629                 215  	add r6, r5
+0000014E 052F0000             216  	ld.b 0x00000000[r5], r5
+00000152 472F0000             217  	st.b r5, 0x00000000[r7]
+00000156 8505                 218  	br9 .BB.LABEL.2_9
+00000158                      219  .BB.LABEL.2_6:	; switch_clause_bb52
+00000158                      220  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 558
+00000158                      221  	mov #_Com_RxGroupSignal8BitShadowBuff, r6
+00000158 260600000000            -- mov         0x0,r6
+0000015E 8505                 222  	br9 .BB.LABEL.2_5
+00000160                      223  .BB.LABEL.2_7:	; switch_clause_bb58
+00000160                      224  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 573
+00000160 C529                 225  	add r5, r5
+00000162                      226  	mov #_Com_RxGroupSignal16BitShadowBuff, r6
+00000162 260600000000            -- mov         0x0,r6
+00000168 C531                 227  	add r5, r6
+0000016A 262F0000             228  	ld.h 0x00000000[r6], r5
+0000016E 672F0000             229  	st.h r5, 0x00000000[r7]
+00000172 8505                 230  	br9 .BB.LABEL.2_9
+00000174                      231  .BB.LABEL.2_8:	; switch_clause_bb72
+00000174                      232  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 0
+00000174 C22A                 233  	shl 0x00000002, r5
+00000176                      234  	mov #_Com_RxGroupSignal32BitShadowBuff, r6
+00000176 260600000000            -- mov         0x0,r6
+0000017C C629                 235  	add r6, r5
+0000017E 252F0100             236  	ld.w 0x00000000[r5], r5
+00000182 672F0100             237  	st.w r5, 0x00000000[r7]
+00000186                      238  .BB.LABEL.2_9:	; switch_break_bb
+00000186                      239  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 600
+00000186 C2C70000             240  	tst1 0x00000000, 0x00000000[r2]
+0000018A 8A05                 241  	bnz9 .BB.LABEL.2_11
+0000018C                      242  .BB.LABEL.2_10:	; switch_break_bb.if_break_bb93_crit_edge
+0000018C                      243  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 0
+0000018C 20568000             244  	movea 0x00000080, r0, r10
+00000190 8505                 245  	br9 .BB.LABEL.2_12
+00000192                      246  .BB.LABEL.2_11:	; if_then_bb92
+00000192 0052                 247  	mov 0x00000000, r10
+00000194                      248  .BB.LABEL.2_12:	; if_break_bb93
+00000194                      249  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 611
+00000194 7F00                 250  	jmp [r31]
+00000196                      251  _Com_ReceiveSignalHandle:
+00000196                      252  	.stack _Com_ReceiveSignalHandle = 20
+00000196                      253  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 628
+00000196 8007210F             254  	prepare 0x00000079, 0x00000000
+0000019A                      255  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 630
+0000019A 40160000             256  	movhi HIGHW1(#_Com_ConfigStd), r0, r2
+0000019E 22170100             257  	ld.w LOWW(#_Com_ConfigStd)[r2], r2
+000001A2 22A70900             258  	ld.w 0x00000008[r2], r20
+000001A6                      259  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 632
+000001A6 0610                 260  	mov r6, r2
+000001A8 FC174002             261  	mul 0x0000001C, r2, r0
+000001AC D411                 262  	add r20, r2
+000001AE                      263  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 633
+000001AE E2170F00             264  	ld.hu 0x0000000E[r2], r2
+000001B2                      265  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 637
+000001B2 C312                 266  	shl 0x00000003, r2
+000001B4                      267  	mov #_Com_RxIPduRunTimeState, r5
+000001B4 250600000000            -- mov         0x0,tp
+000001BA C229                 268  	add r2, r5
+000001BC 05AE0600             269  	addi 0x00000006, r5, r21
+000001C0                      270  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 638
+000001C0 C5D70600             271  	tst1 0x00000002, 0x00000006[r5]
+000001C4 07B0                 272  	mov r7, r22
+000001C6 8205                 273  	bz9 .BB.LABEL.3_2
+000001C8                      274  .BB.LABEL.3_1:	; entry.if_break_bb96_crit_edge
+000001C8                      275  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 0
+000001C8 20568100             276  	movea 0x00000081, r0, r10
+000001CC 8505                 277  	br9 .BB.LABEL.3_16
+000001CE                      278  .BB.LABEL.3_2:	; if_then_bb
+000001CE                      279  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 640
+000001CE FC374002             280  	mul 0x0000001C, r6, r0
+000001D2 C6A1                 281  	add r6, r20
+000001D4 F4BF0500             282  	ld.hu 0x00000004[r20], r23
+000001D8                      283  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 642
+000001D8 80FF0000             284  	jarl _SchM_Enter_Com_Context, r31
+000001DC                      285  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 643
+000001DC 34171500             286  	ld.w 0x00000014[r20], r2
+000001E0 6A12                 287  	cmp 0x0000000A, r2
+000001E2 8B05                 288  	bh9 .BB.LABEL.3_13
+000001E4                      289  .BB.LABEL.3_3:	; if_then_bb
+000001E4                      290  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 0
+000001E4 C112                 291  	shl 0x00000001, r2
+000001E6 E20600000000         292  	jmp #.SWITCH.LABEL.3_17[r2]
+000001EC                      293  .SWITCH.LABEL.3_17:
+000001EC 8505                 294  	br9 .BB.LABEL.3_4
+000001EE 8505                 295  	br9 .BB.LABEL.3_9
+000001F0 8505                 296  	br9 .BB.LABEL.3_11
+000001F2 8505                 297  	br9 .BB.LABEL.3_7
+000001F4 8505                 298  	br9 .BB.LABEL.3_8
+000001F6 8505                 299  	br9 .BB.LABEL.3_10
+000001F8 8505                 300  	br9 .BB.LABEL.3_6
+000001FA 8505                 301  	br9 .BB.LABEL.3_7
+000001FC 8505                 302  	br9 .BB.LABEL.3_8
+000001FE 8505                 303  	br9 .BB.LABEL.3_10
+00000200 8505                 304  	br9 .BB.LABEL.3_6
+00000202                      305  .SWITCH.LABEL.3_17.END:
+00000202                      306  .BB.LABEL.3_4:	; switch_clause_bb
+00000202                      307  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 647
+00000202                      308  	mov #_Com_SignalBoolRuntimeBuff, r2
+00000202 220600000000            -- mov         0x0,hp
+00000208                      309  .BB.LABEL.3_5:	; switch_clause_bb
+00000208                      310  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 0
+00000208 C2B9                 311  	add r2, r23
+0000020A 17BF0000             312  	ld.b 0x00000000[r23], r23
+0000020E 56BF0000             313  	st.b r23, 0x00000000[r22]
+00000212 8505                 314  	br9 .BB.LABEL.3_13
+00000214                      315  .BB.LABEL.3_6:	; switch_clause_bb42
+00000214                      316  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 653
+00000214                      317  	mov #_Com_Signal8BitRuntimeBuff, r2
+00000214 220600000000            -- mov         0x0,hp
+0000021A 8505                 318  	br9 .BB.LABEL.3_5
+0000021C                      319  .BB.LABEL.3_7:	; switch_clause_bb48
+0000021C                      320  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 668
+0000021C D7B9                 321  	add r23, r23
+0000021E                      322  	mov #_Com_Signal16BitRuntimeBuff, r2
+0000021E 220600000000            -- mov         0x0,hp
+00000224 D711                 323  	add r23, r2
+00000226 22BF0000             324  	ld.h 0x00000000[r2], r23
+0000022A 76BF0000             325  	st.h r23, 0x00000000[r22]
+0000022E 8505                 326  	br9 .BB.LABEL.3_13
+00000230                      327  .BB.LABEL.3_8:	; switch_clause_bb55
+00000230                      328  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 674
+00000230 C2BA                 329  	shl 0x00000002, r23
+00000232                      330  	mov #_Com_Signal32BitRuntimeBuff, r2
+00000232 220600000000            -- mov         0x0,hp
+00000238 C2B9                 331  	add r2, r23
+0000023A 37BF0100             332  	ld.w 0x00000000[r23], r23
+0000023E 76BF0100             333  	st.w r23, 0x00000000[r22]
+00000242 8505                 334  	br9 .BB.LABEL.3_13
+00000244                      335  .BB.LABEL.3_9:	; switch_clause_bb62
+00000244                      336  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 677
+00000244 C2BA                 337  	shl 0x00000002, r23
+00000246                      338  	mov #_Com_Signal32BitRuntimeBuff, r2
+00000246 220600000000            -- mov         0x0,hp
+0000024C 0442                 339  	mov 0x00000004, r8
+0000024E 8505                 340  	br9 .BB.LABEL.3_12
+00000250                      341  .BB.LABEL.3_10:	; switch_clause_bb69
+00000250                      342  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 683
+00000250 C3BA                 343  	shl 0x00000003, r23
+00000252                      344  	mov #_Com_Signal64BitRuntimeBuff, r2
+00000252 220600000000            -- mov         0x0,hp
+00000258 C2B9                 345  	add r2, r23
+0000025A 37170500             346  	ld.w 0x00000004[r23], r2
+0000025E 37BF0100             347  	ld.w 0x00000000[r23], r23
+00000262 76170500             348  	st.w r2, 0x00000004[r22]
+00000266 76BF0100             349  	st.w r23, 0x00000000[r22]
+0000026A 8505                 350  	br9 .BB.LABEL.3_13
+0000026C                      351  .BB.LABEL.3_11:	; switch_clause_bb76
+0000026C                      352  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 686
+0000026C C3BA                 353  	shl 0x00000003, r23
+0000026E                      354  	mov #_Com_Signal64BitRuntimeBuff, r2
+0000026E 220600000000            -- mov         0x0,hp
+00000274 0842                 355  	mov 0x00000008, r8
+00000276                      356  .BB.LABEL.3_12:	; switch_clause_bb76
+00000276                      357  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 0
+00000276 1738                 358  	mov r23, r7
+00000278 C239                 359  	add r2, r7
+0000027A 1630                 360  	mov r22, r6
+0000027C 80FF0000             361  	jarl _ILib_memcpy, r31
+00000280                      362  .BB.LABEL.3_13:	; switch_break_bb
+00000280                      363  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 693
+00000280 80FF0000             364  	jarl _SchM_Exit_Com_Context, r31
+00000284                      365  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 696
+00000284 D5C70000             366  	tst1 0x00000000, 0x00000000[r21]
+00000288 8A05                 367  	bnz9 .BB.LABEL.3_15
+0000028A                      368  .BB.LABEL.3_14:	; switch_break_bb.if_break_bb96_crit_edge
+0000028A                      369  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 0
+0000028A 20568000             370  	movea 0x00000080, r0, r10
+0000028E 8505                 371  	br9 .BB.LABEL.3_16
+00000290                      372  .BB.LABEL.3_15:	; if_then_bb95
+00000290 0052                 373  	mov 0x00000000, r10
+00000292                      374  .BB.LABEL.3_16:	; if_break_bb96
+00000292                      375  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 707
+00000292 40063F0F             376  	dispose 0x00000000, 0x00000079, [r31]
+00000296                      377  _Com_RxPduHandle.1:
+00000296                      378  	.stack _Com_RxPduHandle.1 = 8
+00000296                      379  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 724
+00000296 80072108             380  	prepare 0x00000041, 0x00000000
+0000029A                      381  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 727
+0000029A 40160000             382  	movhi HIGHW1(#_Com_ConfigStd), r0, r2
+0000029E 22170100             383  	ld.w LOWW(#_Com_ConfigStd)[r2], r2
+000002A2 22170100             384  	ld.w 0x00000000[r2], r2
+000002A6                      385  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 733
+000002A6 0628                 386  	mov r6, r5
+000002A8 E42F4402             387  	mul 0x00000024, r5, r0
+000002AC C511                 388  	add r5, r2
+000002AE 22170100             389  	ld.w 0x00000000[r2], r2
+000002B2 6012                 390  	cmp 0x00000000, r2
+000002B4 06A0                 391  	mov r6, r20
+000002B6 8205                 392  	bz9 .BB.LABEL.4_2
+000002B8                      393  .BB.LABEL.4_1:	; if_then_bb
+000002B8                      394  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 735
+000002B8 E2C760F9             395  	jarl [r2], r31
+000002BC 6052                 396  	cmp 0x00000000, r10
+000002BE                      397  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 737
+000002BE 8205                 398  	bz9 .BB.LABEL.4_3
+000002C0                      399  .BB.LABEL.4_2:	; if_then_bb30
+000002C0                      400  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 752
+000002C0 C3A2                 401  	shl 0x00000003, r20
+000002C2                      402  	mov #_Com_RxIPduRunTimeState, r2
+000002C2 220600000000            -- mov         0x0,hp
+000002C8 D411                 403  	add r20, r2
+000002CA C21F0600             404  	set1 0x00000003, 0x00000006[r2]
+000002CE                      405  .BB.LABEL.4_3:	; if_break_bb37
+000002CE                      406  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 757
+000002CE 40063F08             407  	dispose 0x00000000, 0x00000041, [r31]
+000002D2                      408  _Com_RxSignalGroupTimeOutHandle.1:
+000002D2                      409  	.stack _Com_RxSignalGroupTimeOutHandle.1 = 16
+000002D2                      410  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 774
+000002D2 8007210E             411  	prepare 0x00000071, 0x00000000
+000002D6                      412  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 788
+000002D6 87A71900             413  	ld.bu 0x00000018[r7], r20
+000002DA A7AF1900             414  	ld.bu 0x00000019[r7], r21
+000002DE 8505                 415  	br9 .BB.LABEL.5_7
+000002E0                      416  .BB.LABEL.5_1:	; bb
+000002E0                      417  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 794
+000002E0 D4B6FF00             418  	andi 0x000000FF, r20, r22
+000002E4 D6B1                 419  	add r22, r22
+000002E6                      420  	mov #_Com_RxSignalGroupTimeOutCnt, r2
+000002E6 220600000000            -- mov         0x0,hp
+000002EC C2B1                 421  	add r2, r22
+000002EE F6170100             422  	ld.hu 0x00000000[r22], r2
+000002F2 6012                 423  	cmp 0x00000000, r2
+000002F4 8205                 424  	bz9 .BB.LABEL.5_6
+000002F6                      425  .BB.LABEL.5_2:	; if_then_bb
+000002F6                      426  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 796
+000002F6 36170000             427  	ld.h 0x00000000[r22], r2
+000002FA 5F12                 428  	add 0xFFFFFFFF, r2
+000002FC 76170000             429  	st.h r2, 0x00000000[r22]
+00000300                      430  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 797
+00000300 F6170100             431  	ld.hu 0x00000000[r22], r2
+00000304 6012                 432  	cmp 0x00000000, r2
+00000306 8A05                 433  	bnz9 .BB.LABEL.5_6
+00000308                      434  .BB.LABEL.5_3:	; if_then_bb46
+00000308                      435  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 855
+00000308 D416FF00             436  	andi 0x000000FF, r20, r2
+0000030C C212                 437  	shl 0x00000002, r2
+0000030E                      438  	mov #_Com_RxSigGrpTimeoutNotificationCfg, r5
+0000030E 250600000000            -- mov         0x0,tp
+00000314 C511                 439  	add r5, r2
+00000316 222F0100             440  	ld.w 0x00000000[r2], r5
+0000031A 602A                 441  	cmp 0x00000000, r5
+0000031C 8205                 442  	bz9 .BB.LABEL.5_5
+0000031E                      443  .BB.LABEL.5_4:	; if_then_bb60
+0000031E                      444  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 857
+0000031E 22170100             445  	ld.w 0x00000000[r2], r2
+00000322 E2C760F9             446  	jarl [r2], r31
+00000326                      447  .BB.LABEL.5_5:	; if_break_bb
+00000326                      448  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 860
+00000326 D416FF00             449  	andi 0x000000FF, r20, r2
+0000032A C211                 450  	add r2, r2
+0000032C                      451  	mov #_Com_RxSigGrpTimeoutVal, r5
+0000032C 250600000000            -- mov         0x0,tp
+00000332 C511                 452  	add r5, r2
+00000334 22170000             453  	ld.h 0x00000000[r2], r2
+00000338 76170000             454  	st.h r2, 0x00000000[r22]
+0000033C                      455  .BB.LABEL.5_6:	; if_break_bb73
+0000033C                      456  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 0
+0000033C 41A2                 457  	add 0x00000001, r20
+0000033E                      458  .BB.LABEL.5_7:	; bb76
+0000033E                      459  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 790
+0000033E D416FF00             460  	andi 0x000000FF, r20, r2
+00000342 F511                 461  	cmp r21, r2
+00000344 8105                 462  	bl9 .BB.LABEL.5_1
+00000346                      463  .BB.LABEL.5_8:	; return
+00000346                      464  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 864
+00000346 40063F0E             465  	dispose 0x00000000, 0x00000071, [r31]
+0000034A                      466  _Com_ResetRxPduBufferAndSignalBuffer.1:
+0000034A                      467  	.stack _Com_ResetRxPduBufferAndSignalBuffer.1 = 24
+0000034A                      468  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 895
+0000034A 8007218F             469  	prepare 0x00000479, 0x00000000
+0000034E 06A0                 470  	mov r6, r20
+00000350                      471  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 897
+00000350 40160000             472  	movhi HIGHW1(#_Com_ConfigStd), r0, r2
+00000354 22170100             473  	ld.w LOWW(#_Com_ConfigStd)[r2], r2
+00000358 22AF0100             474  	ld.w 0x00000000[r2], r21
+0000035C                      475  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 904
+0000035C 14B0                 476  	mov r20, r22
+0000035E E4B74402             477  	mul 0x00000024, r22, r0
+00000362 D5B1                 478  	add r21, r22
+00000364 F6BF0D00             479  	ld.hu 0x0000000C[r22], r23
+00000368                      480  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 905
+00000368 1410                 481  	mov r20, r2
+0000036A C312                 482  	shl 0x00000003, r2
+0000036C                      483  	mov #_Com_RxIPduInitState, r5
+0000036C 250600000000            -- mov         0x0,tp
+00000372 C229                 484  	add r2, r5
+00000374                      485  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 908
+00000374 E5C70100             486  	ld.hu 0x00000000[r5], r24
+00000378                      487  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 906
+00000378 80FF0000             488  	jarl _SchM_Enter_Com_Context, r31
+0000037C                      489  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 908
+0000037C                      490  	mov #_Com_RxIPduInitValue, r7
+0000037C 270600000000            -- mov         0x0,r7
+00000382 D739                 491  	add r23, r7
+00000384                      492  	mov #_Com_RxIPduRuntimeBuff, r2
+00000384 220600000000            -- mov         0x0,hp
+0000038A 1730                 493  	mov r23, r6
+0000038C C231                 494  	add r2, r6
+0000038E 1840                 495  	mov r24, r8
+00000390 80FF0000             496  	jarl _ILib_memcpy, r31
+00000394                      497  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 909
+00000394 80FF0000             498  	jarl _SchM_Exit_Com_Context, r31
+00000398                      499  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 916
+00000398 F6BF0F00             500  	ld.hu 0x0000000E[r22], r23
+0000039C F6B71100             501  	ld.hu 0x00000010[r22], r22
+000003A0 8505                 502  	br9 .BB.LABEL.6_2
+000003A2                      503  .BB.LABEL.6_1:	; bb
+000003A2                      504  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 919
+000003A2 40160000             505  	movhi HIGHW1(#_Com_ConfigStd), r0, r2
+000003A6 22170100             506  	ld.w LOWW(#_Com_ConfigStd)[r2], r2
+000003AA 22170900             507  	ld.w 0x00000008[r2], r2
+000003AE D72EFFFF             508  	andi 0x0000FFFF, r23, r5
+000003B2                      509  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 920
+000003B2 FC2F4002             510  	mul 0x0000001C, r5, r0
+000003B6 C511                 511  	add r5, r2
+000003B8                      512  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 921
+000003B8 22371500             513  	ld.w 0x00000014[r2], r6
+000003BC                      514  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 935
+000003BC E23F0500             515  	ld.hu 0x00000004[r2], r7
+000003C0 0042                 516  	mov 0x00000000, r8
+000003C2 80FF0000             517  	jarl _Com_InitSignalBuffer, r31
+000003C6 41BA                 518  	add 0x00000001, r23
+000003C8                      519  .BB.LABEL.6_2:	; bb66
+000003C8                      520  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 917
+000003C8 D716FFFF             521  	andi 0x0000FFFF, r23, r2
+000003CC F611                 522  	cmp r22, r2
+000003CE 8105                 523  	bl9 .BB.LABEL.6_1
+000003D0                      524  .BB.LABEL.6_3:	; bb73
+000003D0                      525  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 951
+000003D0 1410                 526  	mov r20, r2
+000003D2 E4174402             527  	mul 0x00000024, r2, r0
+000003D6 C2A9                 528  	add r2, r21
+000003D8                      529  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 952
+000003D8 95B71700             530  	ld.bu 0x00000016[r21], r22
+000003DC B5AF1700             531  	ld.bu 0x00000017[r21], r21
+000003E0 8505                 532  	br9 .BB.LABEL.6_8
+000003E2                      533  .BB.LABEL.6_4:	; bb80
+000003E2                      534  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 955
+000003E2 40160000             535  	movhi HIGHW1(#_Com_ConfigStd), r0, r2
+000003E6 22170100             536  	ld.w LOWW(#_Com_ConfigStd)[r2], r2
+000003EA 22171100             537  	ld.w 0x00000010[r2], r2
+000003EE D62EFF00             538  	andi 0x000000FF, r22, r5
+000003F2                      539  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 956
+000003F2 EC2F4002             540  	mul 0x0000000C, r5, r0
+000003F6 C511                 541  	add r5, r2
+000003F8                      542  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 957
+000003F8 E2BF0500             543  	ld.hu 0x00000004[r2], r23
+000003FC E2C70700             544  	ld.hu 0x00000006[r2], r24
+00000400 8505                 545  	br9 .BB.LABEL.6_6
+00000402                      546  .BB.LABEL.6_5:	; bb93
+00000402                      547  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 960
+00000402 40160000             548  	movhi HIGHW1(#_Com_ConfigStd), r0, r2
+00000406 22170100             549  	ld.w LOWW(#_Com_ConfigStd)[r2], r2
+0000040A 22171900             550  	ld.w 0x00000018[r2], r2
+0000040E D72EFFFF             551  	andi 0x0000FFFF, r23, r5
+00000412                      552  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 961
+00000412 F82F4002             553  	mul 0x00000018, r5, r0
+00000416 C511                 554  	add r5, r2
+00000418                      555  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 962
+00000418 22371500             556  	ld.w 0x00000014[r2], r6
+0000041C                      557  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 985
+0000041C E23F0100             558  	ld.hu 0x00000000[r2], r7
+00000420 0042                 559  	mov 0x00000000, r8
+00000422 80FF0000             560  	jarl _Com_InitSignalBuffer, r31
+00000426 41BA                 561  	add 0x00000001, r23
+00000428                      562  .BB.LABEL.6_6:	; bb111
+00000428                      563  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 958
+00000428 D716FFFF             564  	andi 0x0000FFFF, r23, r2
+0000042C F811                 565  	cmp r24, r2
+0000042E 8105                 566  	bl9 .BB.LABEL.6_5
+00000430                      567  .BB.LABEL.6_7:	; bb119
+00000430                      568  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 0
+00000430 41B2                 569  	add 0x00000001, r22
+00000432                      570  .BB.LABEL.6_8:	; bb122
+00000432                      571  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 953
+00000432 D616FF00             572  	andi 0x000000FF, r22, r2
+00000436 F511                 573  	cmp r21, r2
+00000438 8105                 574  	bl9 .BB.LABEL.6_4
+0000043A                      575  .BB.LABEL.6_9:	; bb130
+0000043A                      576  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 1004
+0000043A 1410                 577  	mov r20, r2
+0000043C C312                 578  	shl 0x00000003, r2
+0000043E                      579  	mov #_Com_RxIPduRunTimeState, r5
+0000043E 250600000000            -- mov         0x0,tp
+00000444 C229                 580  	add r2, r5
+00000446 85170700             581  	ld.bu 0x00000006[r5], r2
+0000044A                      582  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 1005
+0000044A C216F300             583  	andi 0x000000F3, r2, r2
+0000044E 45170600             584  	st.b r2, 0x00000006[r5]
+00000452                      585  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 1006
+00000452 C3A2                 586  	shl 0x00000003, r20
+00000454                      587  	mov #_Com_RxIPduInitState, r2
+00000454 220600000000            -- mov         0x0,hp
+0000045A D411                 588  	add r20, r2
+0000045C 22170000             589  	ld.h 0x00000000[r2], r2
+00000460 65170000             590  	st.h r2, 0x00000000[r5]
+00000464 40063F8F             591  	dispose 0x00000000, 0x00000479, [r31]
+00000468                      592  _Com_SignalRxIndication.1:
+00000468                      593  	.stack _Com_SignalRxIndication.1 = 4
+00000468                      594  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 1102
+00000468 80072100             595  	prepare 0x00000001, 0x00000000
+0000046C                      596  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 1113
+0000046C 80FF0000             597  	jarl _Com_RxSignalHandle.1, r31
+00000470 40063F00             598  	dispose 0x00000000, 0x00000001, [r31]
+00000474                      599  _Com_RxSignalHandle.1:
+00000474                      600  	.stack _Com_RxSignalHandle.1 = 16
+00000474                      601  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 1399
+00000474 8007210E             602  	prepare 0x00000071, 0x00000000
+00000478 06A0                 603  	mov r6, r20
+0000047A                      604  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 1405
+0000047A 40160000             605  	movhi HIGHW1(#_Com_ConfigStd), r0, r2
+0000047E 22170100             606  	ld.w LOWW(#_Com_ConfigStd)[r2], r2
+00000482 22170100             607  	ld.w 0x00000000[r2], r2
+00000486 F42F0F00             608  	ld.hu 0x0000000E[r20], r5
+0000048A E42F4402             609  	mul 0x00000024, r5, r0
+0000048E C511                 610  	add r5, r2
+00000490                      611  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 1406
+00000490 E2170D00             612  	ld.hu 0x0000000C[r2], r2
+00000494                      613  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 1402
+00000494 34AF1500             614  	ld.w 0x00000014[r20], r21
+00000498                      615  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 1464
+00000498 F4B70500             616  	ld.hu 0x00000004[r20], r22
+0000049C                      617  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 1406
+0000049C                      618  	mov #_Com_RxIPduRuntimeBuff, r9
+0000049C 290600000000            -- mov         0x0,r9
+000004A2 C249                 619  	add r2, r9
+000004A4 033A                 620  	mov 0x00000003, r7
+000004A6 1530                 621  	mov r21, r6
+000004A8 1440                 622  	mov r20, r8
+000004AA 80FF0000             623  	jarl _Com_SignalUnPackHandle, r31
+000004AE                      624  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 1464
+000004AE 0A30                 625  	mov r10, r6
+000004B0 0B38                 626  	mov r11, r7
+000004B2 1540                 627  	mov r21, r8
+000004B4 1648                 628  	mov r22, r9
+000004B6 80FF0000             629  	jarl _Com_RxSignalBuffHandle.1, r31
+000004BA                      630  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 1468
+000004BA 34170100             631  	ld.w 0x00000000[r20], r2
+000004BE 6012                 632  	cmp 0x00000000, r2
+000004C0 8205                 633  	bz9 .BB.LABEL.8_2
+000004C2                      634  .BB.LABEL.8_1:	; if_then_bb
+000004C2                      635  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 1470
+000004C2 E2C760F9             636  	jarl [r2], r31
+000004C6                      637  .BB.LABEL.8_2:	; return
+000004C6                      638  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 1476
+000004C6 40063F0E             639  	dispose 0x00000000, 0x00000071, [r31]
+000004CA                      640  _Com_RxSignalBuffHandle.1:
+000004CA                      641  	.stack _Com_RxSignalBuffHandle.1 = 0
+000004CA                      642  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 1634
+000004CA 6A42                 643  	cmp 0x0000000A, r8
+000004CC                      644  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 1636
+000004CC 8B05                 645  	bh9 .BB.LABEL.9_7
+000004CE                      646  .BB.LABEL.9_1:	; entry
+000004CE                      647  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 0
+000004CE C142                 648  	shl 0x00000001, r8
+000004D0 E80600000000         649  	jmp #.SWITCH.LABEL.9_8[r8]
+000004D6                      650  .SWITCH.LABEL.9_8:
+000004D6 8505                 651  	br9 .BB.LABEL.9_2
+000004D8 8505                 652  	br9 .BB.LABEL.9_5
+000004DA 8505                 653  	br9 .BB.LABEL.9_6
+000004DC 8505                 654  	br9 .BB.LABEL.9_4
+000004DE 8505                 655  	br9 .BB.LABEL.9_5
+000004E0 8505                 656  	br9 .BB.LABEL.9_6
+000004E2 8505                 657  	br9 .BB.LABEL.9_3
+000004E4 8505                 658  	br9 .BB.LABEL.9_4
+000004E6 8505                 659  	br9 .BB.LABEL.9_5
+000004E8 8505                 660  	br9 .BB.LABEL.9_6
+000004EA 8505                 661  	br9 .BB.LABEL.9_3
+000004EC                      662  .SWITCH.LABEL.9_8.END:
+000004EC                      663  .BB.LABEL.9_2:	; switch_clause_bb
+000004EC                      664  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 1640
+000004EC                      665  	mov #_Com_SignalBoolRuntimeBuff, r2
+000004EC 220600000000            -- mov         0x0,hp
+000004F2 C249                 666  	add r2, r9
+000004F4 5F32                 667  	add 0xFFFFFFFF, r6
+000004F6 0731                 668  	or r7, r6
+000004F8 6032                 669  	cmp 0x00000000, r6
+000004FA E2170000             670  	setf 0x00000002, r2
+000004FE 49170000             671  	st.b r2, 0x00000000[r9]
+00000502 7F00                 672  	jmp [r31]
+00000504                      673  .BB.LABEL.9_3:	; switch_clause_bb14
+00000504                      674  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 1646
+00000504                      675  	mov #_Com_Signal8BitRuntimeBuff, r2
+00000504 220600000000            -- mov         0x0,hp
+0000050A C249                 676  	add r2, r9
+0000050C 49370000             677  	st.b r6, 0x00000000[r9]
+00000510 7F00                 678  	jmp [r31]
+00000512                      679  .BB.LABEL.9_4:	; switch_clause_bb20
+00000512                      680  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 1652
+00000512 C949                 681  	add r9, r9
+00000514                      682  	mov #_Com_Signal16BitRuntimeBuff, r2
+00000514 220600000000            -- mov         0x0,hp
+0000051A C911                 683  	add r9, r2
+0000051C 62370000             684  	st.h r6, 0x00000000[r2]
+00000520 7F00                 685  	jmp [r31]
+00000522                      686  .BB.LABEL.9_5:	; switch_clause_bb26
+00000522                      687  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 1659
+00000522 C24A                 688  	shl 0x00000002, r9
+00000524                      689  	mov #_Com_Signal32BitRuntimeBuff, r2
+00000524 220600000000            -- mov         0x0,hp
+0000052A C911                 690  	add r9, r2
+0000052C 62370100             691  	st.w r6, 0x00000000[r2]
+00000530 7F00                 692  	jmp [r31]
+00000532                      693  .BB.LABEL.9_6:	; switch_clause_bb32
+00000532                      694  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 1666
+00000532 C34A                 695  	shl 0x00000003, r9
+00000534                      696  	mov #_Com_Signal64BitRuntimeBuff, r2
+00000534 220600000000            -- mov         0x0,hp
+0000053A C911                 697  	add r9, r2
+0000053C 623F0500             698  	st.w r7, 0x00000004[r2]
+00000540 62370100             699  	st.w r6, 0x00000000[r2]
+00000544                      700  .BB.LABEL.9_7:	; switch_break_bb
+00000544                      701  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 1676
+00000544 7F00                 702  	jmp [r31]
+00000546                      703  _Com_SignalGroupRxIndication.1:
+00000546                      704  	.stack _Com_SignalGroupRxIndication.1 = 28
+00000546                      705  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 1756
+00000546 800721CF             706  	prepare 0x00000679, 0x00000000
+0000054A 06A0                 707  	mov r6, r20
+0000054C 07A8                 708  	mov r7, r21
+0000054E 08B0                 709  	mov r8, r22
+00000550                      710  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 1763
+00000550 1638                 711  	mov r22, r7
+00000552 1540                 712  	mov r21, r8
+00000554 80FF0000             713  	jarl _Com_SignalGroupInvalidCalculate.1, r31
+00000558                      714  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 1797
+00000558 0ABE0000             715  	addi 0x00000000, r10, r23
+0000055C 8A05                 716  	bnz9 .BB.LABEL.10_6
+0000055E                      717  .BB.LABEL.10_1:	; if_then_bb
+0000055E                      718  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 1804
+0000055E F4C70500             719  	ld.hu 0x00000004[r20], r24
+00000562 F4CF0700             720  	ld.hu 0x00000006[r20], r25
+00000566 8505                 721  	br9 .BB.LABEL.10_3
+00000568                      722  .BB.LABEL.10_2:	; bb37
+00000568                      723  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 1808
+00000568 D83EFFFF             724  	andi 0x0000FFFF, r24, r7
+0000056C 1730                 725  	mov r23, r6
+0000056E 1640                 726  	mov r22, r8
+00000570 1548                 727  	mov r21, r9
+00000572 80FF0000             728  	jarl _Com_RxGroupSignalBuffHanlde.1, r31
+00000576 41C2                 729  	add 0x00000001, r24
+00000578                      730  .BB.LABEL.10_3:	; bb44
+00000578                      731  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 1806
+00000578 D816FFFF             732  	andi 0x0000FFFF, r24, r2
+0000057C F911                 733  	cmp r25, r2
+0000057E 8105                 734  	bl9 .BB.LABEL.10_2
+00000580                      735  .BB.LABEL.10_4:	; bb52
+00000580                      736  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 1813
+00000580 34170100             737  	ld.w 0x00000000[r20], r2
+00000584 6012                 738  	cmp 0x00000000, r2
+00000586 8205                 739  	bz9 .BB.LABEL.10_6
+00000588                      740  .BB.LABEL.10_5:	; if_then_bb59
+00000588                      741  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 1815
+00000588 E2C760F9             742  	jarl [r2], r31
+0000058C                      743  .BB.LABEL.10_6:	; return
+0000058C                      744  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 1822
+0000058C 40063FCF             745  	dispose 0x00000000, 0x00000679, [r31]
+00000590                      746  _Com_RxGroupSignalBuffHanlde.1:
+00000590                      747  	.stack _Com_RxGroupSignalBuffHanlde.1 = 12
+00000590                      748  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 1839
+00000590 8007210C             749  	prepare 0x00000061, 0x00000000
+00000594                      750  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 1845
+00000594 40160000             751  	movhi HIGHW1(#_Com_ConfigStd), r0, r2
+00000598 22170100             752  	ld.w LOWW(#_Com_ConfigStd)[r2], r2
+0000059C 22171900             753  	ld.w 0x00000018[r2], r2
+000005A0 F83F4002             754  	mul 0x00000018, r7, r0
+000005A4 C711                 755  	add r7, r2
+000005A6                      756  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 1847
+000005A6 22A71500             757  	ld.w 0x00000014[r2], r20
+000005AA                      758  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 1893
+000005AA E2AF0100             759  	ld.hu 0x00000000[r2], r21
+000005AE                      760  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 1886
+000005AE                      761  	mov #_Com_RxIPduRuntimeBuff, r9
+000005AE 290600000000            -- mov         0x0,r9
+000005B4 C849                 762  	add r8, r9
+000005B6 043A                 763  	mov 0x00000004, r7
+000005B8 1430                 764  	mov r20, r6
+000005BA 0240                 765  	mov r2, r8
+000005BC 80FF0000             766  	jarl _Com_SignalUnPackHandle, r31
+000005C0                      767  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 1893
+000005C0 0A30                 768  	mov r10, r6
+000005C2 0B38                 769  	mov r11, r7
+000005C4 1440                 770  	mov r20, r8
+000005C6 1548                 771  	mov r21, r9
+000005C8 80FF0000             772  	jarl _Com_RxSignalBuffHandle.1, r31
+000005CC                      773  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 1912
+000005CC 40063F0C             774  	dispose 0x00000000, 0x00000061, [r31]
+000005D0                      775  _Com_SignalGroupInvalidCalculate.1:
+000005D0                      776  	.stack _Com_SignalGroupInvalidCalculate.1 = 16
+000005D0                      777  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2217
+000005D0 8007210E             778  	prepare 0x00000071, 0x00000000
+000005D4                      779  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2234
+000005D4 E6A70500             780  	ld.hu 0x00000004[r6], r20
+000005D8 E6AF0700             781  	ld.hu 0x00000006[r6], r21
+000005DC 07B0                 782  	mov r7, r22
+000005DE 8505                 783  	br9 .BB.LABEL.12_2
+000005E0                      784  .BB.LABEL.12_1:	; bb
+000005E0                      785  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2238
+000005E0 40160000             786  	movhi HIGHW1(#_Com_ConfigStd), r0, r2
+000005E4 22170100             787  	ld.w LOWW(#_Com_ConfigStd)[r2], r2
+000005E8 22471900             788  	ld.w 0x00000018[r2], r8
+000005EC D416FFFF             789  	andi 0x0000FFFF, r20, r2
+000005F0 F8174002             790  	mul 0x00000018, r2, r0
+000005F4 C241                 791  	add r2, r8
+000005F6                      792  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2242
+000005F6 28371500             793  	ld.w 0x00000014[r8], r6
+000005FA                      794  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2261
+000005FA                      795  	mov #_Com_RxIPduRuntimeBuff, r9
+000005FA 290600000000            -- mov         0x0,r9
+00000600 D649                 796  	add r22, r9
+00000602 043A                 797  	mov 0x00000004, r7
+00000604 80FF0000             798  	jarl _Com_SignalUnPackHandle, r31
+00000608 41A2                 799  	add 0x00000001, r20
+0000060A                      800  .BB.LABEL.12_2:	; bb35
+0000060A                      801  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2236
+0000060A D416FFFF             802  	andi 0x0000FFFF, r20, r2
+0000060E F511                 803  	cmp r21, r2
+00000610 8105                 804  	bl9 .BB.LABEL.12_1
+00000612                      805  .BB.LABEL.12_3:	; bb42
+00000612                      806  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 0
+00000612 0052                 807  	mov 0x00000000, r10
+00000614                      808  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2296
+00000614 40063F0E             809  	dispose 0x00000000, 0x00000071, [r31]
+00000618                      810  _Com_RxSignalTimeOutHandle.1:
+00000618                      811  	.stack _Com_RxSignalTimeOutHandle.1 = 16
+00000618                      812  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2313
+00000618 8007210E             813  	prepare 0x00000071, 0x00000000
+0000061C                      814  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2317
+0000061C 87A71500             815  	ld.bu 0x00000014[r7], r20
+00000620 A7AF1500             816  	ld.bu 0x00000015[r7], r21
+00000624 8505                 817  	br9 .BB.LABEL.13_7
+00000626                      818  .BB.LABEL.13_1:	; bb
+00000626                      819  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2326
+00000626 D4B6FF00             820  	andi 0x000000FF, r20, r22
+0000062A D6B1                 821  	add r22, r22
+0000062C                      822  	mov #_Com_RxSignalTimeOutCnt, r2
+0000062C 220600000000            -- mov         0x0,hp
+00000632 C2B1                 823  	add r2, r22
+00000634                      824  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2327
+00000634 F6170100             825  	ld.hu 0x00000000[r22], r2
+00000638 6012                 826  	cmp 0x00000000, r2
+0000063A 8205                 827  	bz9 .BB.LABEL.13_6
+0000063C                      828  .BB.LABEL.13_2:	; if_then_bb
+0000063C                      829  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2329
+0000063C 5F12                 830  	add 0xFFFFFFFF, r2
+0000063E 76170000             831  	st.h r2, 0x00000000[r22]
+00000642                      832  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2330
+00000642 C206FFFF             833  	andi 0x0000FFFF, r2, r0
+00000646 8A05                 834  	bnz9 .BB.LABEL.13_6
+00000648                      835  .BB.LABEL.13_3:	; if_then_bb30
+00000648                      836  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2361
+00000648 D416FF00             837  	andi 0x000000FF, r20, r2
+0000064C C212                 838  	shl 0x00000002, r2
+0000064E                      839  	mov #_Com_RxSignalTimeoutNotificationCfg, r5
+0000064E 250600000000            -- mov         0x0,tp
+00000654 C511                 840  	add r5, r2
+00000656 222F0100             841  	ld.w 0x00000000[r2], r5
+0000065A 602A                 842  	cmp 0x00000000, r5
+0000065C 8205                 843  	bz9 .BB.LABEL.13_5
+0000065E                      844  .BB.LABEL.13_4:	; if_then_bb38
+0000065E                      845  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2363
+0000065E 22170100             846  	ld.w 0x00000000[r2], r2
+00000662 E2C760F9             847  	jarl [r2], r31
+00000666                      848  .BB.LABEL.13_5:	; if_break_bb
+00000666                      849  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2366
+00000666 D416FF00             850  	andi 0x000000FF, r20, r2
+0000066A C211                 851  	add r2, r2
+0000066C                      852  	mov #_Com_RxSignalTimeoutVal, r5
+0000066C 250600000000            -- mov         0x0,tp
+00000672 C511                 853  	add r5, r2
+00000674 22170000             854  	ld.h 0x00000000[r2], r2
+00000678 76170000             855  	st.h r2, 0x00000000[r22]
+0000067C                      856  .BB.LABEL.13_6:	; if_break_bb49
+0000067C                      857  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 0
+0000067C 41A2                 858  	add 0x00000001, r20
+0000067E                      859  .BB.LABEL.13_7:	; bb52
+0000067E                      860  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2318
+0000067E D416FF00             861  	andi 0x000000FF, r20, r2
+00000682 F511                 862  	cmp r21, r2
+00000684 8105                 863  	bl9 .BB.LABEL.13_1
+00000686                      864  .BB.LABEL.13_8:	; bb60
+00000686                      865  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2371
+00000686 40063F0E             866  	dispose 0x00000000, 0x00000071, [r31]
+0000068A                      867  _Com_RxIpduBaseDMTimeOutHandle.1:
+0000068A                      868  	.stack _Com_RxIpduBaseDMTimeOutHandle.1 = 12
+0000068A                      869  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2391
+0000068A 8007210C             870  	prepare 0x00000061, 0x00000000
+0000068E                      871  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2393
+0000068E E6170300             872  	ld.hu 0x00000002[r6], r2
+00000692 6012                 873  	cmp 0x00000000, r2
+00000694 07A0                 874  	mov r7, r20
+00000696 06A8                 875  	mov r6, r21
+00000698 8205                 876  	bz9 .BB.LABEL.14_3
+0000069A                      877  .BB.LABEL.14_1:	; if_then_bb
+0000069A                      878  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2395
+0000069A 5F12                 879  	add 0xFFFFFFFF, r2
+0000069C 75170200             880  	st.h r2, 0x00000002[r21]
+000006A0                      881  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2396
+000006A0 C206FFFF             882  	andi 0x0000FFFF, r2, r0
+000006A4 8A05                 883  	bnz9 .BB.LABEL.14_3
+000006A6                      884  .BB.LABEL.14_2:	; if_then_bb21
+000006A6                      885  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2399
+000006A6 1530                 886  	mov r21, r6
+000006A8 1438                 887  	mov r20, r7
+000006AA 80FF0000             888  	jarl _Com_RxDMTimeOutHandleSignal.1, r31
+000006AE                      889  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2403
+000006AE 1530                 890  	mov r21, r6
+000006B0 1438                 891  	mov r20, r7
+000006B2 80FF0000             892  	jarl _Com_RxDMTimeOutHandleSignalGroup.1, r31
+000006B6                      893  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2405
+000006B6 34170A00             894  	ld.h 0x0000000A[r20], r2
+000006BA 75170200             895  	st.h r2, 0x00000002[r21]
+000006BE                      896  .BB.LABEL.14_3:	; return
+000006BE                      897  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2408
+000006BE 40063F0C             898  	dispose 0x00000000, 0x00000061, [r31]
+000006C2                      899  _Com_RxDMTimeOutHandleSignal.1:
+000006C2                      900  	.stack _Com_RxDMTimeOutHandleSignal.1 = 12
+000006C2                      901  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2425
+000006C2 8007210C             902  	prepare 0x00000061, 0x00000000
+000006C6                      903  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2439
+000006C6 87A71500             904  	ld.bu 0x00000014[r7], r20
+000006CA A7AF1500             905  	ld.bu 0x00000015[r7], r21
+000006CE 8505                 906  	br9 .BB.LABEL.15_5
+000006D0                      907  .BB.LABEL.15_1:	; bb
+000006D0                      908  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2449
+000006D0 D416FF00             909  	andi 0x000000FF, r20, r2
+000006D4 C211                 910  	add r2, r2
+000006D6                      911  	mov #_Com_RxSignalTimeoutVal, r5
+000006D6 250600000000            -- mov         0x0,tp
+000006DC C229                 912  	add r2, r5
+000006DE E5170100             913  	ld.hu 0x00000000[r5], r2
+000006E2 6012                 914  	cmp 0x00000000, r2
+000006E4 8205                 915  	bz9 .BB.LABEL.15_4
+000006E6                      916  .BB.LABEL.15_2:	; if_then_bb
+000006E6                      917  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2476
+000006E6 D416FF00             918  	andi 0x000000FF, r20, r2
+000006EA C212                 919  	shl 0x00000002, r2
+000006EC                      920  	mov #_Com_RxSignalTimeoutNotificationCfg, r5
+000006EC 250600000000            -- mov         0x0,tp
+000006F2 C511                 921  	add r5, r2
+000006F4 222F0100             922  	ld.w 0x00000000[r2], r5
+000006F8 602A                 923  	cmp 0x00000000, r5
+000006FA 8205                 924  	bz9 .BB.LABEL.15_4
+000006FC                      925  .BB.LABEL.15_3:	; if_then_bb36
+000006FC                      926  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2478
+000006FC 22170100             927  	ld.w 0x00000000[r2], r2
+00000700 E2C760F9             928  	jarl [r2], r31
+00000704                      929  .BB.LABEL.15_4:	; if_break_bb41
+00000704                      930  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 0
+00000704 41A2                 931  	add 0x00000001, r20
+00000706                      932  .BB.LABEL.15_5:	; bb44
+00000706                      933  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2440
+00000706 D416FF00             934  	andi 0x000000FF, r20, r2
+0000070A F511                 935  	cmp r21, r2
+0000070C 8105                 936  	bl9 .BB.LABEL.15_1
+0000070E                      937  .BB.LABEL.15_6:	; bb52
+0000070E                      938  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2484
+0000070E 40063F0C             939  	dispose 0x00000000, 0x00000061, [r31]
+00000712                      940  _Com_RxDMTimeOutHandleSignalGroup.1:
+00000712                      941  	.stack _Com_RxDMTimeOutHandleSignalGroup.1 = 12
+00000712                      942  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2502
+00000712 8007210C             943  	prepare 0x00000061, 0x00000000
+00000716                      944  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2513
+00000716 87A71900             945  	ld.bu 0x00000018[r7], r20
+0000071A A7AF1900             946  	ld.bu 0x00000019[r7], r21
+0000071E 8505                 947  	br9 .BB.LABEL.16_5
+00000720                      948  .BB.LABEL.16_1:	; bb
+00000720                      949  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2523
+00000720 D416FF00             950  	andi 0x000000FF, r20, r2
+00000724 C211                 951  	add r2, r2
+00000726                      952  	mov #_Com_RxSigGrpTimeoutVal, r5
+00000726 250600000000            -- mov         0x0,tp
+0000072C C229                 953  	add r2, r5
+0000072E E5170100             954  	ld.hu 0x00000000[r5], r2
+00000732 6012                 955  	cmp 0x00000000, r2
+00000734 8205                 956  	bz9 .BB.LABEL.16_4
+00000736                      957  .BB.LABEL.16_2:	; if_then_bb
+00000736                      958  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2587
+00000736 D416FF00             959  	andi 0x000000FF, r20, r2
+0000073A C212                 960  	shl 0x00000002, r2
+0000073C                      961  	mov #_Com_RxSigGrpTimeoutNotificationCfg, r5
+0000073C 250600000000            -- mov         0x0,tp
+00000742 C511                 962  	add r5, r2
+00000744 222F0100             963  	ld.w 0x00000000[r2], r5
+00000748 602A                 964  	cmp 0x00000000, r5
+0000074A 8205                 965  	bz9 .BB.LABEL.16_4
+0000074C                      966  .BB.LABEL.16_3:	; if_then_bb44
+0000074C                      967  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2589
+0000074C 22170100             968  	ld.w 0x00000000[r2], r2
+00000750 E2C760F9             969  	jarl [r2], r31
+00000754                      970  .BB.LABEL.16_4:	; if_break_bb49
+00000754                      971  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 0
+00000754 41A2                 972  	add 0x00000001, r20
+00000756                      973  .BB.LABEL.16_5:	; bb52
+00000756                      974  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2514
+00000756 D416FF00             975  	andi 0x000000FF, r20, r2
+0000075A F511                 976  	cmp r21, r2
+0000075C 8105                 977  	bl9 .BB.LABEL.16_1
+0000075E                      978  .BB.LABEL.16_6:	; return
+0000075E                      979  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2595
+0000075E 40063F0C             980  	dispose 0x00000000, 0x00000061, [r31]
+00000762                      981  _Com_ResetRxPduTimeOut.1:
+00000762                      982  	.stack _Com_ResetRxPduTimeOut.1 = 0
+00000762                      983  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2613
+00000762 40160000             984  	movhi HIGHW1(#_Com_ConfigStd), r0, r2
+00000766                      985  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2615
+00000766 22170100             986  	ld.w LOWW(#_Com_ConfigStd)[r2], r2
+0000076A 22170100             987  	ld.w 0x00000000[r2], r2
+0000076E                      988  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2622
+0000076E 0628                 989  	mov r6, r5
+00000770 E42F4402             990  	mul 0x00000024, r5, r0
+00000774 C229                 991  	add r2, r5
+00000776                      992  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2623
+00000776 853F1500             993  	ld.bu 0x00000014[r5], r7
+0000077A                      994  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2622
+0000077A A5471500             995  	ld.bu 0x00000015[r5], r8
+0000077E                      996  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2624
+0000077E E839                 997  	cmp r8, r7
+00000780 E13F0000             998  	setf 0x00000001, r7
+00000784                      999  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2642
+00000784 C23A                1000  	shl 0x00000002, r7
+00000786                     1001  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2649
+00000786 85471900            1002  	ld.bu 0x00000018[r5], r8
+0000078A                     1003  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2648
+0000078A A52F1900            1004  	ld.bu 0x00000019[r5], r5
+0000078E                     1005  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2650
+0000078E E541                1006  	cmp r5, r8
+00000790                     1007  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2668
+00000790 E43F022B            1008  	cmov 0x00000001, 0x00000004, r7, r5
+00000794                     1009  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2677
+00000794 602A                1010  	cmp 0x00000000, r5
+00000796 8205                1011  	bz9 .BB.LABEL.17_4
+00000798                     1012  .BB.LABEL.17_1:	; if_then_bb
+00000798                     1013  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2680
+00000798 C5060400            1014  	andi 0x00000004, r5, r0
+0000079C 8205                1015  	bz9 .BB.LABEL.17_3
+0000079E                     1016  .BB.LABEL.17_2:	; if_then_bb74
+0000079E                     1017  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2682
+0000079E 0628                1018  	mov r6, r5
+000007A0 C32A                1019  	shl 0x00000003, r5
+000007A2                     1020  	mov #_Com_RxIPduRunTimeState, r7
+000007A2 270600000000            -- mov         0x0,r7
+000007A8 C539                1021  	add r5, r7
+000007AA 0628                1022  	mov r6, r5
+000007AC E42F4402            1023  	mul 0x00000024, r5, r0
+000007B0 C511                1024  	add r5, r2
+000007B2 22170800            1025  	ld.h 0x00000008[r2], r2
+000007B6 67170200            1026  	st.h r2, 0x00000002[r7]
+000007BA                     1027  .BB.LABEL.17_3:	; if_break_bb
+000007BA                     1028  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2694
+000007BA C332                1029  	shl 0x00000003, r6
+000007BC                     1030  	mov #_Com_RxIPduRunTimeState, r2
+000007BC 220600000000            -- mov         0x0,hp
+000007C2 C611                1031  	add r6, r2
+000007C4 082A                1032  	mov 0x00000008, r5
+000007C6                     1033  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2695
+000007C6 422F0700            1034  	st.b r5, 0x00000007[r2]
+000007CA                     1035  .BB.LABEL.17_4:	; return
+000007CA                     1036  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2699
+000007CA 7F00                1037  	jmp [r31]
+000007CC                     1038  _Com_DisableRxPduTimeOut.1:
+000007CC                     1039  	.stack _Com_DisableRxPduTimeOut.1 = 0
+000007CC                     1040  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2716
+000007CC 40160000            1041  	movhi HIGHW1(#_Com_ConfigStd), r0, r2
+000007D0                     1042  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2718
+000007D0 22170100            1043  	ld.w LOWW(#_Com_ConfigStd)[r2], r2
+000007D4 22170100            1044  	ld.w 0x00000000[r2], r2
+000007D8                     1045  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2722
+000007D8 0628                1046  	mov r6, r5
+000007DA E42F4402            1047  	mul 0x00000024, r5, r0
+000007DE C229                1048  	add r2, r5
+000007E0                     1049  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2723
+000007E0 853F1500            1050  	ld.bu 0x00000014[r5], r7
+000007E4 A52F1500            1051  	ld.bu 0x00000015[r5], r5
+000007E8 8505                1052  	br9 .BB.LABEL.18_2
+000007EA                     1053  .BB.LABEL.18_1:	; bb
+000007EA                     1054  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2726
+000007EA C746FF00            1055  	andi 0x000000FF, r7, r8
+000007EE C841                1056  	add r8, r8
+000007F0                     1057  	mov #_Com_RxSignalTimeOutCnt, r9
+000007F0 290600000000            -- mov         0x0,r9
+000007F6 C849                1058  	add r8, r9
+000007F8 69070000            1059  	st.h r0, 0x00000000[r9]
+000007FC 413A                1060  	add 0x00000001, r7
+000007FE                     1061  .BB.LABEL.18_2:	; bb27
+000007FE                     1062  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2724
+000007FE C746FF00            1063  	andi 0x000000FF, r7, r8
+00000802 E541                1064  	cmp r5, r8
+00000804 8105                1065  	bl9 .BB.LABEL.18_1
+00000806                     1066  .BB.LABEL.18_3:	; bb34
+00000806                     1067  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2731
+00000806 0628                1068  	mov r6, r5
+00000808 E42F4402            1069  	mul 0x00000024, r5, r0
+0000080C C511                1070  	add r5, r2
+0000080E                     1071  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2732
+0000080E 822F1900            1072  	ld.bu 0x00000018[r2], r5
+00000812 A2171900            1073  	ld.bu 0x00000019[r2], r2
+00000816 8505                1074  	br9 .BB.LABEL.18_5
+00000818                     1075  .BB.LABEL.18_4:	; bb41
+00000818                     1076  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2735
+00000818 C53EFF00            1077  	andi 0x000000FF, r5, r7
+0000081C C739                1078  	add r7, r7
+0000081E                     1079  	mov #_Com_RxSignalGroupTimeOutCnt, r8
+0000081E 280600000000            -- mov         0x0,r8
+00000824 C741                1080  	add r7, r8
+00000826 68070000            1081  	st.h r0, 0x00000000[r8]
+0000082A 412A                1082  	add 0x00000001, r5
+0000082C                     1083  .BB.LABEL.18_5:	; bb47
+0000082C                     1084  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2733
+0000082C C53EFF00            1085  	andi 0x000000FF, r5, r7
+00000830 E239                1086  	cmp r2, r7
+00000832 8105                1087  	bl9 .BB.LABEL.18_4
+00000834                     1088  .BB.LABEL.18_6:	; bb55
+00000834                     1089  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2739
+00000834 C332                1090  	shl 0x00000003, r6
+00000836                     1091  	mov #_Com_RxIPduRunTimeState, r2
+00000836 220600000000            -- mov         0x0,hp
+0000083C C611                1092  	add r6, r2
+0000083E 42070700            1093  	st.b r0, 0x00000007[r2]
+00000842                     1094  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2740
+00000842 62070200            1095  	st.h r0, 0x00000002[r2]
+00000846 7F00                1096  	jmp [r31]
+00000848                     1097  _Com_ResetUpdateDMTime.1:
+00000848                     1098  	.stack _Com_ResetUpdateDMTime.1 = 0
+00000848                     1099  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2760
+00000848 40160000            1100  	movhi HIGHW1(#_Com_ConfigStd), r0, r2
+0000084C                     1101  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2762
+0000084C 22170100            1102  	ld.w LOWW(#_Com_ConfigStd)[r2], r2
+00000850 22170100            1103  	ld.w 0x00000000[r2], r2
+00000854                     1104  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2772
+00000854 0628                1105  	mov r6, r5
+00000856 E42F4402            1106  	mul 0x00000024, r5, r0
+0000085A C229                1107  	add r2, r5
+0000085C                     1108  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2773
+0000085C 853F1500            1109  	ld.bu 0x00000014[r5], r7
+00000860                     1110  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2772
+00000860 A5471500            1111  	ld.bu 0x00000015[r5], r8
+00000864                     1112  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2774
+00000864 E839                1113  	cmp r8, r7
+00000866 E13F0000            1114  	setf 0x00000001, r7
+0000086A                     1115  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2797
+0000086A C23A                1116  	shl 0x00000002, r7
+0000086C                     1117  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2805
+0000086C 85471900            1118  	ld.bu 0x00000018[r5], r8
+00000870                     1119  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2804
+00000870 A52F1900            1120  	ld.bu 0x00000019[r5], r5
+00000874                     1121  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2806
+00000874 E541                1122  	cmp r5, r8
+00000876                     1123  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2829
+00000876 E43F022B            1124  	cmov 0x00000001, 0x00000004, r7, r5
+0000087A                     1125  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2838
+0000087A 602A                1126  	cmp 0x00000000, r5
+0000087C 8205                1127  	bz9 .BB.LABEL.19_4
+0000087E                     1128  .BB.LABEL.19_1:	; if_then_bb
+0000087E                     1129  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2840
+0000087E C5060400            1130  	andi 0x00000004, r5, r0
+00000882 8205                1131  	bz9 .BB.LABEL.19_3
+00000884                     1132  .BB.LABEL.19_2:	; if_then_bb75
+00000884                     1133  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2842
+00000884 0628                1134  	mov r6, r5
+00000886 C32A                1135  	shl 0x00000003, r5
+00000888                     1136  	mov #_Com_RxIPduRunTimeState, r7
+00000888 270600000000            -- mov         0x0,r7
+0000088E C539                1137  	add r5, r7
+00000890 0628                1138  	mov r6, r5
+00000892 E42F4402            1139  	mul 0x00000024, r5, r0
+00000896 C511                1140  	add r5, r2
+00000898 22170A00            1141  	ld.h 0x0000000A[r2], r2
+0000089C 67170200            1142  	st.h r2, 0x00000002[r7]
+000008A0                     1143  .BB.LABEL.19_3:	; if_break_bb
+000008A0                     1144  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2854
+000008A0 C332                1145  	shl 0x00000003, r6
+000008A2                     1146  	mov #_Com_RxIPduRunTimeState, r2
+000008A2 220600000000            -- mov         0x0,hp
+000008A8 C611                1147  	add r6, r2
+000008AA 082A                1148  	mov 0x00000008, r5
+000008AC                     1149  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2855
+000008AC 422F0700            1150  	st.b r5, 0x00000007[r2]
+000008B0                     1151  .BB.LABEL.19_4:	; if_break_bb91
+000008B0                     1152  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2861
+000008B0 7F00                1153  	jmp [r31]
+000008B2                     1154  _Com_CopyPduDataToRxBuffer.1:
+000008B2                     1155  	.stack _Com_CopyPduDataToRxBuffer.1 = 16
+000008B2                     1156  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2976
+000008B2 8007210E            1157  	prepare 0x00000071, 0x00000000
+000008B6 06A0                1158  	mov r6, r20
+000008B8 07A8                1159  	mov r7, r21
+000008BA                     1160  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2978
+000008BA 40160000            1161  	movhi HIGHW1(#_Com_ConfigStd), r0, r2
+000008BE 22170100            1162  	ld.w LOWW(#_Com_ConfigStd)[r2], r2
+000008C2 22B70100            1163  	ld.w 0x00000000[r2], r22
+000008C6                     1164  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2979
+000008C6 80FF0000            1165  	jarl _SchM_Enter_Com_Context, r31
+000008CA                     1166  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2981
+000008CA 1410                1167  	mov r20, r2
+000008CC E4174402            1168  	mul 0x00000024, r2, r0
+000008D0 C2B1                1169  	add r2, r22
+000008D2                     1170  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2983
+000008D2 F6170D00            1171  	ld.hu 0x0000000C[r22], r2
+000008D6 F5470900            1172  	ld.hu 0x00000008[r21], r8
+000008DA 353F0100            1173  	ld.w 0x00000000[r21], r7
+000008DE                     1174  	mov #_Com_RxIPduRuntimeBuff, r6
+000008DE 260600000000            -- mov         0x0,r6
+000008E4 C231                1175  	add r2, r6
+000008E6 80FF0000            1176  	jarl _ILib_memcpy, r31
+000008EA                     1177  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2995
+000008EA 80FF0000            1178  	jarl _SchM_Exit_Com_Context, r31
+000008EE                     1179  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2998
+000008EE C3A2                1180  	shl 0x00000003, r20
+000008F0                     1181  	mov #_Com_RxIPduRunTimeState, r2
+000008F0 220600000000            -- mov         0x0,hp
+000008F6 D411                1182  	add r20, r2
+000008F8 352F0800            1183  	ld.h 0x00000008[r21], r5
+000008FC 622F0000            1184  	st.h r5, 0x00000000[r2]
+00000900                     1185  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 2999
+00000900 40063F0E            1186  	dispose 0x00000000, 0x00000071, [r31]
+00000904                     1187  _Com_IndicationProcess.1:
+00000904                     1188  	.stack _Com_IndicationProcess.1 = 24
+00000904                     1189  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 3015
+00000904 8007218F            1190  	prepare 0x00000479, 0x00000000
+00000908                     1191  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 3017
+00000908 26A70000            1192  	ld.h 0x00000000[r6], r20
+0000090C 27170400            1193  	ld.h 0x00000004[r7], r2
+00000910 A2A1                1194  	sub r2, r20
+00000912                     1195  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 3030
+00000912 E7AF0F00            1196  	ld.hu 0x0000000E[r7], r21
+00000916 E7B71100            1197  	ld.hu 0x00000010[r7], r22
+0000091A E7BF0D00            1198  	ld.hu 0x0000000C[r7], r23
+0000091E 07C0                1199  	mov r7, r24
+00000920 8505                1200  	br9 .BB.LABEL.21_2
+00000922                     1201  .BB.LABEL.21_1:	; bb
+00000922                     1202  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 3033
+00000922 40160000            1203  	movhi HIGHW1(#_Com_ConfigStd), r0, r2
+00000926 22170100            1204  	ld.w LOWW(#_Com_ConfigStd)[r2], r2
+0000092A 22370900            1205  	ld.w 0x00000008[r2], r6
+0000092E D516FFFF            1206  	andi 0x0000FFFF, r21, r2
+00000932 FC174002            1207  	mul 0x0000001C, r2, r0
+00000936 C231                1208  	add r2, r6
+00000938                     1209  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 3051
+00000938 D43EFFFF            1210  	andi 0x0000FFFF, r20, r7
+0000093C 1740                1211  	mov r23, r8
+0000093E 80FF0000            1212  	jarl _Com_SignalRxIndication.1, r31
+00000942 41AA                1213  	add 0x00000001, r21
+00000944                     1214  .BB.LABEL.21_2:	; bb40
+00000944                     1215  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 3031
+00000944 D516FFFF            1216  	andi 0x0000FFFF, r21, r2
+00000948 F611                1217  	cmp r22, r2
+0000094A 8105                1218  	bl9 .BB.LABEL.21_1
+0000094C                     1219  .BB.LABEL.21_3:	; bb47
+0000094C                     1220  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 3059
+0000094C 98AF1700            1221  	ld.bu 0x00000016[r24], r21
+00000950 B8B71700            1222  	ld.bu 0x00000017[r24], r22
+00000954 8505                1223  	br9 .BB.LABEL.21_5
+00000956                     1224  .BB.LABEL.21_4:	; bb54
+00000956                     1225  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 3062
+00000956 40160000            1226  	movhi HIGHW1(#_Com_ConfigStd), r0, r2
+0000095A 22170100            1227  	ld.w LOWW(#_Com_ConfigStd)[r2], r2
+0000095E 22371100            1228  	ld.w 0x00000010[r2], r6
+00000962 D516FF00            1229  	andi 0x000000FF, r21, r2
+00000966 EC174002            1230  	mul 0x0000000C, r2, r0
+0000096A C231                1231  	add r2, r6
+0000096C                     1232  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 3080
+0000096C D43EFFFF            1233  	andi 0x0000FFFF, r20, r7
+00000970 1740                1234  	mov r23, r8
+00000972 80FF0000            1235  	jarl _Com_SignalGroupRxIndication.1, r31
+00000976 41AA                1236  	add 0x00000001, r21
+00000978                     1237  .BB.LABEL.21_5:	; bb66
+00000978                     1238  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 3060
+00000978 D516FF00            1239  	andi 0x000000FF, r21, r2
+0000097C F611                1240  	cmp r22, r2
+0000097E 8105                1241  	bl9 .BB.LABEL.21_4
+00000980                     1242  .BB.LABEL.21_6:	; return
+00000980                     1243  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 3115
+00000980 40063F8F            1244  	dispose 0x00000000, 0x00000479, [r31]
+00000984                     1245  _Com_RxIpduController:
+00000984                     1246  	.stack _Com_RxIpduController = 16
+00000984                     1247  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 3717
+00000984 8007210E            1248  	prepare 0x00000071, 0x00000000
+00000988 00A2                1249  	mov 0x00000000, r20
+0000098A 06A8                1250  	mov r6, r21
+0000098C 8505                1251  	br9 .BB.LABEL.22_13
+0000098E                     1252  .BB.LABEL.22_1:	; bb
+0000098E                     1253  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 3733
+0000098E 40160000            1254  	movhi HIGHW1(#_Com_ConfigStd), r0, r2
+00000992 22170100            1255  	ld.w LOWW(#_Com_ConfigStd)[r2], r2
+00000996 22170100            1256  	ld.w 0x00000000[r2], r2
+0000099A D42EFFFF            1257  	andi 0x0000FFFF, r20, r5
+0000099E                     1258  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 3734
+0000099E 0530                1259  	mov r5, r6
+000009A0 E4374402            1260  	mul 0x00000024, r6, r0
+000009A4 C231                1261  	add r2, r6
+000009A6 A6371300            1262  	ld.bu 0x00000013[r6], r6
+000009AA                     1263  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 3736
+000009AA 6032                1264  	cmp 0x00000000, r6
+000009AC 8205                1265  	bz9 .BB.LABEL.22_12
+000009AE                     1266  .BB.LABEL.22_2:	; if_then_bb
+000009AE                     1267  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 3738
+000009AE E42F4402            1268  	mul 0x00000024, r5, r0
+000009B2 C511                1269  	add r5, r2
+000009B4 82171300            1270  	ld.bu 0x00000012[r2], r2
+000009B8                     1271  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 3739
+000009B8 D42EFFFF            1272  	andi 0x0000FFFF, r20, r5
+000009BC                     1273  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 3740
+000009BC C32A                1274  	shl 0x00000003, r5
+000009BE                     1275  	mov #_Com_RxIPduRunTimeState, r22
+000009BE 360600000000            -- mov         0x0,r22
+000009C4 C5B1                1276  	add r5, r22
+000009C6 962F0700            1277  	ld.bu 0x00000006[r22], r5
+000009CA 46B2                1278  	add 0x00000006, r22
+000009CC C52E0100            1279  	andi 0x00000001, r5, r5
+000009D0 8505                1280  	br9 .BB.LABEL.22_5
+000009D2                     1281  .BB.LABEL.22_3:	; bb35
+000009D2                     1282  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 3743
+000009D2 C23EFFFF            1283  	andi 0x0000FFFF, r2, r7
+000009D6                     1284  	mov #_Com_RxIPduGroupsRef, r8
+000009D6 280600000000            -- mov         0x0,r8
+000009DC C741                1285  	add r7, r8
+000009DE                     1286  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 3744
+000009DE 883F0100            1287  	ld.bu 0x00000000[r8], r7
+000009E2                     1288  	mov #_Com_IpduGroupEnable, r8
+000009E2 280600000000            -- mov         0x0,r8
+000009E8 C741                1289  	add r7, r8
+000009EA 883F0100            1290  	ld.bu 0x00000000[r8], r7
+000009EE 603A                1291  	cmp 0x00000000, r7
+000009F0 8A05                1292  	bnz9 .BB.LABEL.22_6
+000009F2                     1293  .BB.LABEL.22_4:	; if_break_bb
+000009F2                     1294  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 0
+000009F2 4112                1295  	add 0x00000001, r2
+000009F4                     1296  .BB.LABEL.22_5:	; bb53
+000009F4                     1297  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 3741
+000009F4 C23EFFFF            1298  	andi 0x0000FFFF, r2, r7
+000009F8 E639                1299  	cmp r6, r7
+000009FA 8105                1300  	bl9 .BB.LABEL.22_3
+000009FC                     1301  .BB.LABEL.22_6:	; bb62
+000009FC                     1302  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 3750
+000009FC C200                1303  	zxh r2
+000009FE E611                1304  	cmp r6, r2
+00000A00 8905                1305  	bnc9 .BB.LABEL.22_10
+00000A02                     1306  .BB.LABEL.22_7:	; if_then_bb70
+00000A02                     1307  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 3753
+00000A02 602A                1308  	cmp 0x00000000, r5
+00000A04 8A05                1309  	bnz9 .BB.LABEL.22_12
+00000A06                     1310  .BB.LABEL.22_8:	; if_then_bb76
+00000A06                     1311  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 3755
+00000A06 80FF0000            1312  	jarl _SchM_Enter_Com_MultiCore_Lock, r31
+00000A0A                     1313  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 3756
+00000A0A D6070000            1314  	set1 0x00000000, 0x00000000[r22]
+00000A0E                     1315  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 3757
+00000A0E 80FF0000            1316  	jarl _SchM_Exit_Com_MultiCore_Lock, r31
+00000A12                     1317  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 3760
+00000A12 D436FFFF            1318  	andi 0x0000FFFF, r20, r6
+00000A16 80FF0000            1319  	jarl _Com_ResetRxPduTimeOut.1, r31
+00000A1A                     1320  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 3766
+00000A1A 60AA                1321  	cmp 0x00000000, r21
+00000A1C 8205                1322  	bz9 .BB.LABEL.22_12
+00000A1E                     1323  .BB.LABEL.22_9:	; if_then_bb89
+00000A1E                     1324  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 3770
+00000A1E D436FFFF            1325  	andi 0x0000FFFF, r20, r6
+00000A22 80FF0000            1326  	jarl _Com_ResetRxPduBufferAndSignalBuffer.1, r31
+00000A26 8505                1327  	br9 .BB.LABEL.22_12
+00000A28                     1328  .BB.LABEL.22_10:	; if_else_bb
+00000A28                     1329  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 0
+00000A28 602A                1330  	cmp 0x00000000, r5
+00000A2A                     1331  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 3787
+00000A2A 8205                1332  	bz9 .BB.LABEL.22_12
+00000A2C                     1333  .BB.LABEL.22_11:	; if_then_bb98
+00000A2C                     1334  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 3789
+00000A2C 80FF0000            1335  	jarl _SchM_Enter_Com_MultiCore_Lock, r31
+00000A30                     1336  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 3790
+00000A30 D6870000            1337  	clr1 0x00000000, 0x00000000[r22]
+00000A34                     1338  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 3791
+00000A34 80FF0000            1339  	jarl _SchM_Exit_Com_MultiCore_Lock, r31
+00000A38                     1340  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 3794
+00000A38 D436FFFF            1341  	andi 0x0000FFFF, r20, r6
+00000A3C 80FF0000            1342  	jarl _Com_DisableRxPduTimeOut.1, r31
+00000A40                     1343  .BB.LABEL.22_12:	; if_break_bb108
+00000A40                     1344  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 0
+00000A40 41A2                1345  	add 0x00000001, r20
+00000A42                     1346  .BB.LABEL.22_13:	; bb111
+00000A42                     1347  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 3727
+00000A42 D416FFFF            1348  	andi 0x0000FFFF, r20, r2
+00000A46 202E7600            1349  	movea 0x00000076, r0, r5
+00000A4A E511                1350  	cmp r5, r2
+00000A4C 8105                1351  	bl9 .BB.LABEL.22_1
+00000A4E                     1352  .BB.LABEL.22_14:	; return
+00000A4E                     1353  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 3801
+00000A4E 40063F0E            1354  	dispose 0x00000000, 0x00000071, [r31]
+00000A52                     1355  _Com_RxIndicationHandle:
+00000A52                     1356  	.stack _Com_RxIndicationHandle = 12
+00000A52                     1357  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 3819
+00000A52 8007210C            1358  	prepare 0x00000061, 0x00000000
+00000A56                     1359  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 3825
+00000A56 0610                1360  	mov r6, r2
+00000A58 C312                1361  	shl 0x00000003, r2
+00000A5A                     1362  	mov #_Com_RxIPduRunTimeState, r5
+00000A5A 250600000000            -- mov         0x0,tp
+00000A60 C229                1363  	add r2, r5
+00000A62 85170700            1364  	ld.bu 0x00000006[r5], r2
+00000A66 C2160100            1365  	andi 0x00000001, r2, r2
+00000A6A                     1366  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 3821
+00000A6A 40460000            1367  	movhi HIGHW1(#_Com_ConfigStd), r0, r8
+00000A6E 28470100            1368  	ld.w LOWW(#_Com_ConfigStd)[r8], r8
+00000A72 28470100            1369  	ld.w 0x00000000[r8], r8
+00000A76                     1370  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 3823
+00000A76 0648                1371  	mov r6, r9
+00000A78 E44F4402            1372  	mul 0x00000024, r9, r0
+00000A7C C941                1373  	add r9, r8
+00000A7E                     1374  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 3824
+00000A7E 284F0600            1375  	ld.h 0x00000006[r8], r9
+00000A82                     1376  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 3823
+00000A82 E8470500            1377  	ld.hu 0x00000004[r8], r8
+00000A86                     1378  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 3826
+00000A86 40560000            1379  	movhi HIGHW1(#_TestactiveEnable), r0, r10
+00000A8A 4A170000            1380  	st.b r2, LOWW(#_TestactiveEnable)[r10]
+00000A8E                     1381  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 3824
+00000A8E C849                1382  	add r8, r9
+00000A90                     1383  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 3825
+00000A90 462A                1384  	add 0x00000006, r5
+00000A92                     1385  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 3828
+00000A92 6012                1386  	cmp 0x00000000, r2
+00000A94 07A0                1387  	mov r7, r20
+00000A96 06A8                1388  	mov r6, r21
+00000A98 8205                1389  	bz9 .BB.LABEL.23_6
+00000A9A                     1390  .BB.LABEL.23_1:	; bb
+00000A9A                     1391  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 0
+00000A9A F4170900            1392  	ld.hu 0x00000008[r20], r2
+00000A9E E241                1393  	cmp r2, r8
+00000AA0 8B05                1394  	bh9 .BB.LABEL.23_6
+00000AA2                     1395  .BB.LABEL.23_2:	; bb52
+00000AA2 C900                1396  	zxh r9
+00000AA4 F4170900            1397  	ld.hu 0x00000008[r20], r2
+00000AA8 E249                1398  	cmp r2, r9
+00000AAA 8105                1399  	bl9 .BB.LABEL.23_6
+00000AAC                     1400  .BB.LABEL.23_3:	; if_then_bb
+00000AAC                     1401  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 3833
+00000AAC C5CF0000            1402  	tst1 0x00000001, 0x00000000[r5]
+00000AB0 8205                1403  	bz9 .BB.LABEL.23_5
+00000AB2                     1404  .BB.LABEL.23_4:	; if_then_bb80
+00000AB2                     1405  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 3837
+00000AB2 1530                1406  	mov r21, r6
+00000AB4 1438                1407  	mov r20, r7
+00000AB6 80FF0000            1408  	jarl _Com_ResetUpdateDMTime.1, r31
+00000ABA                     1409  .BB.LABEL.23_5:	; if_break_bb
+00000ABA                     1410  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 3876
+00000ABA 1530                1411  	mov r21, r6
+00000ABC 1438                1412  	mov r20, r7
+00000ABE 80FF0000            1413  	jarl _Com_CopyPduDataToRxBuffer.1, r31
+00000AC2                     1414  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 3877
+00000AC2 1530                1415  	mov r21, r6
+00000AC4 1438                1416  	mov r20, r7
+00000AC6 80FF0000            1417  	jarl _Com_RxPduHandle.1, r31
+00000ACA                     1418  .BB.LABEL.23_6:	; return
+00000ACA                     1419  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 3880
+00000ACA 40063F0C            1420  	dispose 0x00000000, 0x00000061, [r31]
+00000ACE                     1421  _Com_MainFunctionRxHandle:
+00000ACE                     1422  	.stack _Com_MainFunctionRxHandle = 28
+00000ACE                     1423  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 3896
+00000ACE 800721CF            1424  	prepare 0x00000679, 0x00000000
+00000AD2 06A60000            1425  	addi 0x00000000, r6, r20
+00000AD6                     1426  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 3900
+00000AD6 8A05                1427  	bnz9 .BB.LABEL.24_2
+00000AD8                     1428  .BB.LABEL.24_1:	; entry.bb132_crit_edge
+00000AD8                     1429  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 0
+00000AD8 00AA                1430  	mov 0x00000000, r21
+00000ADA 8505                1431  	br9 .BB.LABEL.24_15
+00000ADC                     1432  .BB.LABEL.24_2:	; bb11
+00000ADC 40AE0000            1433  	movhi HIGHW1(#_Com_ConfigStd), r0, r21
+00000AE0 35AF0100            1434  	ld.w LOWW(#_Com_ConfigStd)[r21], r21
+00000AE4 35AF2D00            1435  	ld.w 0x0000002C[r21], r21
+00000AE8 1410                1436  	mov r20, r2
+00000AEA C211                1437  	add r2, r2
+00000AEC D511                1438  	add r21, r2
+00000AEE E2AFFFFF            1439  	ld.hu 0xFFFFFFFE[r2], r21
+00000AF2 8505                1440  	br9 .BB.LABEL.24_15
+00000AF4                     1441  .BB.LABEL.24_3:	; bb24
+00000AF4                     1442  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 3906
+00000AF4 D5B6FFFF            1443  	andi 0x0000FFFF, r21, r22
+00000AF8                     1444  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 3907
+00000AF8 1628                1445  	mov r22, r5
+00000AFA E42F4402            1446  	mul 0x00000024, r5, r0
+00000AFE 22BF0100            1447  	ld.w 0x00000000[r2], r23
+00000B02 C5B9                1448  	add r5, r23
+00000B04                     1449  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 3906
+00000B04 1610                1450  	mov r22, r2
+00000B06 C312                1451  	shl 0x00000003, r2
+00000B08                     1452  	mov #_Com_RxIPduRunTimeState, r24
+00000B08 380600000000            -- mov         0x0,r24
+00000B0E C2C1                1453  	add r2, r24
+00000B10                     1454  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 3908
+00000B10 98170700            1455  	ld.bu 0x00000006[r24], r2
+00000B14 18CE0600            1456  	addi 0x00000006, r24, r25
+00000B18                     1457  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 3909
+00000B18 C2060100            1458  	andi 0x00000001, r2, r0
+00000B1C 8205                1459  	bz9 .BB.LABEL.24_14
+00000B1E                     1460  .BB.LABEL.24_4:	; if_then_bb
+00000B1E                     1461  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 3913
+00000B1E C2060800            1462  	andi 0x00000008, r2, r0
+00000B22 8205                1463  	bz9 .BB.LABEL.24_6
+00000B24                     1464  .BB.LABEL.24_5:	; if_then_bb56
+00000B24                     1465  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 3916
+00000B24 1830                1466  	mov r24, r6
+00000B26 1738                1467  	mov r23, r7
+00000B28 80FF0000            1468  	jarl _Com_IndicationProcess.1, r31
+00000B2C                     1469  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 3917
+00000B2C 19170000            1470  	ld.b 0x00000000[r25], r2
+00000B30 172A                1471  	mov 0xFFFFFFF7, r5
+00000B32 4511                1472  	and r5, r2
+00000B34 59170000            1473  	st.b r2, 0x00000000[r25]
+00000B38                     1474  .BB.LABEL.24_6:	; if_break_bb
+00000B38                     1475  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 3923
+00000B38 C2060200            1476  	andi 0x00000002, r2, r0
+00000B3C 8205                1477  	bz9 .BB.LABEL.24_14
+00000B3E                     1478  .BB.LABEL.24_7:	; if_then_bb76
+00000B3E                     1479  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 3926
+00000B3E C3B2                1480  	shl 0x00000003, r22
+00000B40                     1481  	mov #_Com_RxIPduRunTimeState, r2
+00000B40 220600000000            -- mov         0x0,hp
+00000B46 D611                1482  	add r22, r2
+00000B48 02B60700            1483  	addi 0x00000007, r2, r22
+00000B4C C2C70700            1484  	tst1 0x00000000, 0x00000007[r2]
+00000B50 8205                1485  	bz9 .BB.LABEL.24_9
+00000B52                     1486  .BB.LABEL.24_8:	; if_then_bb85
+00000B52                     1487  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 3928
+00000B52 1830                1488  	mov r24, r6
+00000B54 1738                1489  	mov r23, r7
+00000B56 80FF0000            1490  	jarl _Com_RxSignalTimeOutHandle.1, r31
+00000B5A                     1491  .BB.LABEL.24_9:	; if_break_bb88
+00000B5A                     1492  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 3933
+00000B5A D6CF0000            1493  	tst1 0x00000001, 0x00000000[r22]
+00000B5E 8205                1494  	bz9 .BB.LABEL.24_11
+00000B60                     1495  .BB.LABEL.24_10:	; if_then_bb97
+00000B60                     1496  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 3935
+00000B60 1830                1497  	mov r24, r6
+00000B62 1738                1498  	mov r23, r7
+00000B64 80FF0000            1499  	jarl _Com_RxSignalGroupTimeOutHandle.1, r31
+00000B68                     1500  .BB.LABEL.24_11:	; if_break_bb100
+00000B68                     1501  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 3940
+00000B68 96170100            1502  	ld.bu 0x00000000[r22], r2
+00000B6C C2060800            1503  	andi 0x00000008, r2, r0
+00000B70 8A05                1504  	bnz9 .BB.LABEL.24_13
+00000B72                     1505  .BB.LABEL.24_12:	; bb108
+00000B72                     1506  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 0
+00000B72 C2060400            1507  	andi 0x00000004, r2, r0
+00000B76 8205                1508  	bz9 .BB.LABEL.24_14
+00000B78                     1509  .BB.LABEL.24_13:	; if_then_bb124
+00000B78                     1510  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 3943
+00000B78 1830                1511  	mov r24, r6
+00000B7A 1738                1512  	mov r23, r7
+00000B7C 80FF0000            1513  	jarl _Com_RxIpduBaseDMTimeOutHandle.1, r31
+00000B80                     1514  .BB.LABEL.24_14:	; if_break_bb129
+00000B80                     1515  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 0
+00000B80 41AA                1516  	add 0x00000001, r21
+00000B82                     1517  .BB.LABEL.24_15:	; bb132
+00000B82                     1518  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 3904
+00000B82 40160000            1519  	movhi HIGHW1(#_Com_ConfigStd), r0, r2
+00000B86 22170100            1520  	ld.w LOWW(#_Com_ConfigStd)[r2], r2
+00000B8A 222F2D00            1521  	ld.w 0x0000002C[r2], r5
+00000B8E 1430                1522  	mov r20, r6
+00000B90 C631                1523  	add r6, r6
+00000B92 C629                1524  	add r6, r5
+00000B94 E52F0100            1525  	ld.hu 0x00000000[r5], r5
+00000B98 D536FFFF            1526  	andi 0x0000FFFF, r21, r6
+00000B9C E531                1527  	cmp r5, r6
+00000B9E 8105                1528  	bl9 .BB.LABEL.24_3
+00000BA0                     1529  .BB.LABEL.24_16:	; return
+00000BA0                     1530  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 3950
+00000BA0 40063FCF            1531  	dispose 0x00000000, 0x00000679, [r31]
+00000BA4                     1532  _Com_RxPduDMCtrHandle:
+00000BA4                     1533  	.stack _Com_RxPduDMCtrHandle = 8
+00000BA4                     1534  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 4036
+00000BA4 80072108            1535  	prepare 0x00000041, 0x00000000
+00000BA8 00A2                1536  	mov 0x00000000, r20
+00000BAA 8505                1537  	br9 .BB.LABEL.25_12
+00000BAC                     1538  .BB.LABEL.25_1:	; bb
+00000BAC                     1539  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 4047
+00000BAC 40160000            1540  	movhi HIGHW1(#_Com_ConfigStd), r0, r2
+00000BB0 22170100            1541  	ld.w LOWW(#_Com_ConfigStd)[r2], r2
+00000BB4 22170100            1542  	ld.w 0x00000000[r2], r2
+00000BB8 D42EFFFF            1543  	andi 0x0000FFFF, r20, r5
+00000BBC                     1544  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 4048
+00000BBC E42F4402            1545  	mul 0x00000024, r5, r0
+00000BC0 C511                1546  	add r5, r2
+00000BC2                     1547  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 4049
+00000BC2 A22F1300            1548  	ld.bu 0x00000013[r2], r5
+00000BC6                     1549  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 4051
+00000BC6 602A                1550  	cmp 0x00000000, r5
+00000BC8                     1551  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 4048
+00000BC8 82171300            1552  	ld.bu 0x00000012[r2], r2
+00000BCC                     1553  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 4051
+00000BCC 8205                1554  	bz9 .BB.LABEL.25_11
+00000BCE                     1555  .BB.LABEL.25_2:	; if_then_bb
+00000BCE                     1556  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 4053
+00000BCE D436FFFF            1557  	andi 0x0000FFFF, r20, r6
+00000BD2                     1558  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 4054
+00000BD2 C332                1559  	shl 0x00000003, r6
+00000BD4                     1560  	mov #_Com_RxIPduRunTimeState, r7
+00000BD4 270600000000            -- mov         0x0,r7
+00000BDA C639                1561  	add r6, r7
+00000BDC 87370700            1562  	ld.bu 0x00000006[r7], r6
+00000BE0 463A                1563  	add 0x00000006, r7
+00000BE2 C6360200            1564  	andi 0x00000002, r6, r6
+00000BE6 8505                1565  	br9 .BB.LABEL.25_5
+00000BE8                     1566  .BB.LABEL.25_3:	; bb34
+00000BE8                     1567  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 4057
+00000BE8 C246FFFF            1568  	andi 0x0000FFFF, r2, r8
+00000BEC                     1569  	mov #_Com_RxIPduGroupsRef, r9
+00000BEC 290600000000            -- mov         0x0,r9
+00000BF2 C849                1570  	add r8, r9
+00000BF4                     1571  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 4058
+00000BF4 89470100            1572  	ld.bu 0x00000000[r9], r8
+00000BF8                     1573  	mov #_Com_IpduGroupDMEnable, r9
+00000BF8 290600000000            -- mov         0x0,r9
+00000BFE C849                1574  	add r8, r9
+00000C00 89470100            1575  	ld.bu 0x00000000[r9], r8
+00000C04 6042                1576  	cmp 0x00000000, r8
+00000C06 8A05                1577  	bnz9 .BB.LABEL.25_6
+00000C08                     1578  .BB.LABEL.25_4:	; if_break_bb
+00000C08                     1579  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 0
+00000C08 4112                1580  	add 0x00000001, r2
+00000C0A                     1581  .BB.LABEL.25_5:	; bb52
+00000C0A                     1582  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 4055
+00000C0A C246FFFF            1583  	andi 0x0000FFFF, r2, r8
+00000C0E E541                1584  	cmp r5, r8
+00000C10 8105                1585  	bl9 .BB.LABEL.25_3
+00000C12                     1586  .BB.LABEL.25_6:	; bb61
+00000C12                     1587  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 4063
+00000C12 C200                1588  	zxh r2
+00000C14 E511                1589  	cmp r5, r2
+00000C16 8905                1590  	bnc9 .BB.LABEL.25_9
+00000C18                     1591  .BB.LABEL.25_7:	; if_then_bb69
+00000C18                     1592  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 4066
+00000C18 6032                1593  	cmp 0x00000000, r6
+00000C1A 8A05                1594  	bnz9 .BB.LABEL.25_11
+00000C1C                     1595  .BB.LABEL.25_8:	; if_then_bb75
+00000C1C                     1596  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 4068
+00000C1C C70F0000            1597  	set1 0x00000001, 0x00000000[r7]
+00000C20                     1598  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 4072
+00000C20 D436FFFF            1599  	andi 0x0000FFFF, r20, r6
+00000C24 80FF0000            1600  	jarl _Com_ResetRxPduTimeOut.1, r31
+00000C28 8505                1601  	br9 .BB.LABEL.25_11
+00000C2A                     1602  .BB.LABEL.25_9:	; if_else_bb
+00000C2A                     1603  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 0
+00000C2A 6032                1604  	cmp 0x00000000, r6
+00000C2C                     1605  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 4078
+00000C2C 8205                1606  	bz9 .BB.LABEL.25_11
+00000C2E                     1607  .BB.LABEL.25_10:	; if_then_bb89
+00000C2E                     1608  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 4080
+00000C2E C78F0000            1609  	clr1 0x00000001, 0x00000000[r7]
+00000C32                     1610  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 4083
+00000C32 D436FFFF            1611  	andi 0x0000FFFF, r20, r6
+00000C36 80FF0000            1612  	jarl _Com_DisableRxPduTimeOut.1, r31
+00000C3A                     1613  .BB.LABEL.25_11:	; if_break_bb99
+00000C3A                     1614  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 0
+00000C3A 41A2                1615  	add 0x00000001, r20
+00000C3C                     1616  .BB.LABEL.25_12:	; bb102
+00000C3C                     1617  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 4045
+00000C3C D416FFFF            1618  	andi 0x0000FFFF, r20, r2
+00000C40 202E7600            1619  	movea 0x00000076, r0, r5
+00000C44 E511                1620  	cmp r5, r2
+00000C46 8105                1621  	bl9 .BB.LABEL.25_1
+00000C48                     1622  .BB.LABEL.25_13:	; return
+00000C48                     1623  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Com/Com_RxInternal.c", 4089
+00000C48 40063F08            1624  	dispose 0x00000000, 0x00000041, [r31]
+00000000                     1625  	.section .data, data
+00000000                     1626  _TestactiveEnable:
+00000000 00                  1627  	.ds (1)
+
+Section List
+Attr     Size                Name
+
+TEXT         3148 (00000C4C) .text
+DATA            1 (00000001) .data
+
+Command Line Parameter
+-Xcpu=g3kh -Xreg_mode=32 -Xep=callee -Xcharacter_set=none -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\diagnostic -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\parameter_store -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu\port -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu\uart -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu\iic -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\vehicle_data_to_mpu -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\power_manage -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\mcu_cpu_sync -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\remote_control -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\can_cycle_send -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\project_configure -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\sdk\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\commonLib\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\hal\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\icu\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Icu_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\vss -ID:\wk\sirun\project\dazhong\code\mcu_app\ASW\CDD_FVM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\EEIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanTSyn -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\StbM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CSM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\RSA -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\RandomGen\CTR_DRBG -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\MAC\CMAC -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\Hash\sha256 -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\dh -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\AES -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CryInterface -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\SecOC -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\NvM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\MemIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\Fee -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\WdgM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\WdgIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Wdg_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Gpt_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Fls_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\wdg\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\gpt\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\fls\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\IpduM -ID:\wk\sirun\project\dazhong\code\mcu_app\ASW\APP -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\BswM -ID:\wk\sirun\project\dazhong\code\mcu_app\ASW\BSW_Ext -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\Dcm -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanTp -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Dem -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Libraries\E2E -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Libraries\Crc -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\NmIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanNm -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config\RTE\Rte -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config\RTE\SchM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Libraries\IStd -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\EcuM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\ComM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanSM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\Com -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\PDUR -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\CommonInclude -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config\RH850F1K -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Extend\inc -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Kernel\inc -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Portable\Mcu -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Portable\Processor -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Adc_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Can_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Dio_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Mcu_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Port_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\adc\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\can\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\dio\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\general -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\mcu\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\port\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\CanGeneral\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\Det\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\MemIf\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\SchM\include -DRH850_F1KM_S1_2MB -Xprn_path=DefaultBuild -Xno_warning=50013 -oD:\wk\sirun\project\dazhong\code\mcu_app\Toolchain\CSPLUS_V81200\DefaultBuild\Com_RxInternal.obj D:\wk\sirun\project\dazhong\code\mcu_app\Toolchain\CSPLUS_V81200\DefaultBuild\Com_RxInternal.asm 
+

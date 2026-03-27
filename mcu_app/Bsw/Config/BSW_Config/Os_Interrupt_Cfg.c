@@ -19,7 +19,7 @@
  * @file              : Os_Interrupt_Cfg.c
  * @license           : 
  * @licenseExpiryDate : 
- * @date              : 2026-03-03 20:34:16
+ * @date              : 2026-03-22 18:23:36
  * @customer          : iSoft
  * @description       : Configuration parameter of OS
  * @toolVersion       : 2.2.0.3
@@ -104,6 +104,51 @@ static Os_ICBType Os_ICB_TAUB0I12_IRQ;
 #include "Os_MemMap.h"
 #define OS_START_SEC_VAR_CLEARED_CORE0_UNSPECIFIED
 #include "Os_MemMap.h"
+static Os_ICBType Os_ICB_TAUB0I8_IRQ;
+#define OS_STOP_SEC_VAR_CLEARED_CORE0_UNSPECIFIED
+#include "Os_MemMap.h"
+#define OS_START_SEC_VAR_CLEARED_CORE0_UNSPECIFIED
+#include "Os_MemMap.h"
+static Os_ICBType Os_ICB_TAUB0I9_IRQ;
+#define OS_STOP_SEC_VAR_CLEARED_CORE0_UNSPECIFIED
+#include "Os_MemMap.h"
+#define OS_START_SEC_VAR_CLEARED_CORE0_UNSPECIFIED
+#include "Os_MemMap.h"
+static Os_ICBType Os_ICB_P1_IRQ;
+#define OS_STOP_SEC_VAR_CLEARED_CORE0_UNSPECIFIED
+#include "Os_MemMap.h"
+#define OS_START_SEC_VAR_CLEARED_CORE0_UNSPECIFIED
+#include "Os_MemMap.h"
+static Os_ICBType Os_ICB_P2_IRQ;
+#define OS_STOP_SEC_VAR_CLEARED_CORE0_UNSPECIFIED
+#include "Os_MemMap.h"
+#define OS_START_SEC_VAR_CLEARED_CORE0_UNSPECIFIED
+#include "Os_MemMap.h"
+static Os_ICBType Os_ICB_P5_IRQ;
+#define OS_STOP_SEC_VAR_CLEARED_CORE0_UNSPECIFIED
+#include "Os_MemMap.h"
+#define OS_START_SEC_VAR_CLEARED_CORE0_UNSPECIFIED
+#include "Os_MemMap.h"
+static Os_ICBType Os_ICB_P6_IRQ;
+#define OS_STOP_SEC_VAR_CLEARED_CORE0_UNSPECIFIED
+#include "Os_MemMap.h"
+#define OS_START_SEC_VAR_CLEARED_CORE0_UNSPECIFIED
+#include "Os_MemMap.h"
+static Os_ICBType Os_ICB_P7_IRQ;
+#define OS_STOP_SEC_VAR_CLEARED_CORE0_UNSPECIFIED
+#include "Os_MemMap.h"
+#define OS_START_SEC_VAR_CLEARED_CORE0_UNSPECIFIED
+#include "Os_MemMap.h"
+static Os_ICBType Os_ICB_P9_IRQ;
+#define OS_STOP_SEC_VAR_CLEARED_CORE0_UNSPECIFIED
+#include "Os_MemMap.h"
+#define OS_START_SEC_VAR_CLEARED_CORE0_UNSPECIFIED
+#include "Os_MemMap.h"
+static Os_ICBType Os_ICB_P14_IRQ;
+#define OS_STOP_SEC_VAR_CLEARED_CORE0_UNSPECIFIED
+#include "Os_MemMap.h"
+#define OS_START_SEC_VAR_CLEARED_CORE0_UNSPECIFIED
+#include "Os_MemMap.h"
 static Os_ICBType Os_ICB_RLIN34TX0_IRQ;
 #define OS_STOP_SEC_VAR_CLEARED_CORE0_UNSPECIFIED
 #include "Os_MemMap.h"
@@ -166,6 +211,15 @@ Os_ICBType* const Os_ICB[CFG_ISR_MAX] =
     &Os_ICB_TAUJ0I0_IRQ,
     &Os_ICB_TAUD0I9_IRQ,
     &Os_ICB_TAUB0I12_IRQ,
+    &Os_ICB_TAUB0I8_IRQ,
+    &Os_ICB_TAUB0I9_IRQ,
+    &Os_ICB_P1_IRQ,
+    &Os_ICB_P2_IRQ,
+    &Os_ICB_P5_IRQ,
+    &Os_ICB_P6_IRQ,
+    &Os_ICB_P7_IRQ,
+    &Os_ICB_P9_IRQ,
+    &Os_ICB_P14_IRQ,
     &Os_ICB_RLIN34TX0_IRQ,
     &Os_ICB_RLIN34RX1_IRQ,
     &Os_ICB_RLIN34ERR2_IRQ,
@@ -260,6 +314,69 @@ static Os_StackDataType Os_TAUB0I12_IRQ_Stack_Core0[128];
 #define OS_START_SEC_VAR_CLEARED_CORE0_32
 #include "Os_MemMap.h"
 /* PRQA S 3132 ++ */ /* VL_QAC_MagicNum */
+static Os_StackDataType Os_TAUB0I8_IRQ_Stack_Core0[128];
+/* PRQA S 3132 -- */
+#define OS_STOP_SEC_VAR_CLEARED_CORE0_32
+#include "Os_MemMap.h"
+#define OS_START_SEC_VAR_CLEARED_CORE0_32
+#include "Os_MemMap.h"
+/* PRQA S 3132 ++ */ /* VL_QAC_MagicNum */
+static Os_StackDataType Os_TAUB0I9_IRQ_Stack_Core0[128];
+/* PRQA S 3132 -- */
+#define OS_STOP_SEC_VAR_CLEARED_CORE0_32
+#include "Os_MemMap.h"
+#define OS_START_SEC_VAR_CLEARED_CORE0_32
+#include "Os_MemMap.h"
+/* PRQA S 3132 ++ */ /* VL_QAC_MagicNum */
+static Os_StackDataType Os_P1_IRQ_Stack_Core0[128];
+/* PRQA S 3132 -- */
+#define OS_STOP_SEC_VAR_CLEARED_CORE0_32
+#include "Os_MemMap.h"
+#define OS_START_SEC_VAR_CLEARED_CORE0_32
+#include "Os_MemMap.h"
+/* PRQA S 3132 ++ */ /* VL_QAC_MagicNum */
+static Os_StackDataType Os_P2_IRQ_Stack_Core0[128];
+/* PRQA S 3132 -- */
+#define OS_STOP_SEC_VAR_CLEARED_CORE0_32
+#include "Os_MemMap.h"
+#define OS_START_SEC_VAR_CLEARED_CORE0_32
+#include "Os_MemMap.h"
+/* PRQA S 3132 ++ */ /* VL_QAC_MagicNum */
+static Os_StackDataType Os_P5_IRQ_Stack_Core0[128];
+/* PRQA S 3132 -- */
+#define OS_STOP_SEC_VAR_CLEARED_CORE0_32
+#include "Os_MemMap.h"
+#define OS_START_SEC_VAR_CLEARED_CORE0_32
+#include "Os_MemMap.h"
+/* PRQA S 3132 ++ */ /* VL_QAC_MagicNum */
+static Os_StackDataType Os_P6_IRQ_Stack_Core0[128];
+/* PRQA S 3132 -- */
+#define OS_STOP_SEC_VAR_CLEARED_CORE0_32
+#include "Os_MemMap.h"
+#define OS_START_SEC_VAR_CLEARED_CORE0_32
+#include "Os_MemMap.h"
+/* PRQA S 3132 ++ */ /* VL_QAC_MagicNum */
+static Os_StackDataType Os_P7_IRQ_Stack_Core0[128];
+/* PRQA S 3132 -- */
+#define OS_STOP_SEC_VAR_CLEARED_CORE0_32
+#include "Os_MemMap.h"
+#define OS_START_SEC_VAR_CLEARED_CORE0_32
+#include "Os_MemMap.h"
+/* PRQA S 3132 ++ */ /* VL_QAC_MagicNum */
+static Os_StackDataType Os_P9_IRQ_Stack_Core0[128];
+/* PRQA S 3132 -- */
+#define OS_STOP_SEC_VAR_CLEARED_CORE0_32
+#include "Os_MemMap.h"
+#define OS_START_SEC_VAR_CLEARED_CORE0_32
+#include "Os_MemMap.h"
+/* PRQA S 3132 ++ */ /* VL_QAC_MagicNum */
+static Os_StackDataType Os_P14_IRQ_Stack_Core0[128];
+/* PRQA S 3132 -- */
+#define OS_STOP_SEC_VAR_CLEARED_CORE0_32
+#include "Os_MemMap.h"
+#define OS_START_SEC_VAR_CLEARED_CORE0_32
+#include "Os_MemMap.h"
+/* PRQA S 3132 ++ */ /* VL_QAC_MagicNum */
 static Os_StackDataType Os_RLIN34TX0_IRQ_Stack_Core0[128];
 /* PRQA S 3132 -- */
 #define OS_STOP_SEC_VAR_CLEARED_CORE0_32
@@ -288,7 +405,7 @@ static Os_StackDataType Os_RLIN35TX0_IRQ_Stack_Core0[128];
 #define OS_START_SEC_VAR_CLEARED_CORE0_32
 #include "Os_MemMap.h"
 /* PRQA S 3132 ++ */ /* VL_QAC_MagicNum */
-static Os_StackDataType Os_RLIN35RX1_IRQ_Stack_Core0[128];
+static Os_StackDataType Os_RLIN35RX1_IRQ_Stack_Core0[256];
 /* PRQA S 3132 -- */
 #define OS_STOP_SEC_VAR_CLEARED_CORE0_32
 #include "Os_MemMap.h"
@@ -344,6 +461,15 @@ const Os_StackType Os_ISR2Stack[CFG_ISR_MAX] =
 	{OS_STACK_TOP(Os_TAUJ0I0_IRQ_Stack_Core0), OS_STACK_BOTTOM(Os_TAUJ0I0_IRQ_Stack_Core0)},
 	{OS_STACK_TOP(Os_TAUD0I9_IRQ_Stack_Core0), OS_STACK_BOTTOM(Os_TAUD0I9_IRQ_Stack_Core0)},
 	{OS_STACK_TOP(Os_TAUB0I12_IRQ_Stack_Core0), OS_STACK_BOTTOM(Os_TAUB0I12_IRQ_Stack_Core0)},
+	{OS_STACK_TOP(Os_TAUB0I8_IRQ_Stack_Core0), OS_STACK_BOTTOM(Os_TAUB0I8_IRQ_Stack_Core0)},
+	{OS_STACK_TOP(Os_TAUB0I9_IRQ_Stack_Core0), OS_STACK_BOTTOM(Os_TAUB0I9_IRQ_Stack_Core0)},
+	{OS_STACK_TOP(Os_P1_IRQ_Stack_Core0), OS_STACK_BOTTOM(Os_P1_IRQ_Stack_Core0)},
+	{OS_STACK_TOP(Os_P2_IRQ_Stack_Core0), OS_STACK_BOTTOM(Os_P2_IRQ_Stack_Core0)},
+	{OS_STACK_TOP(Os_P5_IRQ_Stack_Core0), OS_STACK_BOTTOM(Os_P5_IRQ_Stack_Core0)},
+	{OS_STACK_TOP(Os_P6_IRQ_Stack_Core0), OS_STACK_BOTTOM(Os_P6_IRQ_Stack_Core0)},
+	{OS_STACK_TOP(Os_P7_IRQ_Stack_Core0), OS_STACK_BOTTOM(Os_P7_IRQ_Stack_Core0)},
+	{OS_STACK_TOP(Os_P9_IRQ_Stack_Core0), OS_STACK_BOTTOM(Os_P9_IRQ_Stack_Core0)},
+	{OS_STACK_TOP(Os_P14_IRQ_Stack_Core0), OS_STACK_BOTTOM(Os_P14_IRQ_Stack_Core0)},
 	{OS_STACK_TOP(Os_RLIN34TX0_IRQ_Stack_Core0), OS_STACK_BOTTOM(Os_RLIN34TX0_IRQ_Stack_Core0)},
 	{OS_STACK_TOP(Os_RLIN34RX1_IRQ_Stack_Core0), OS_STACK_BOTTOM(Os_RLIN34RX1_IRQ_Stack_Core0)},
 	{OS_STACK_TOP(Os_RLIN34ERR2_IRQ_Stack_Core0), OS_STACK_BOTTOM(Os_RLIN34ERR2_IRQ_Stack_Core0)},
@@ -423,6 +549,69 @@ const Os_IsrCfgType Os_IsrCfg[CFG_ISR_MAX] =
     },
     {
         OS_ISR_TAUB0I12_IRQ,/*OsIsrSrc*/
+        OS_ARCH_INT_CPU0,	/*OsIsrSrcType*/
+        OS_CORE_ID_0,
+        OS_ISR_CATEGORY2,	/*OsIsrCatType*/
+        TRUE,				/*OsNestedEnable*/
+    },
+    {
+        OS_ISR_TAUB0I8_IRQ,/*OsIsrSrc*/
+        OS_ARCH_INT_CPU0,	/*OsIsrSrcType*/
+        OS_CORE_ID_0,
+        OS_ISR_CATEGORY2,	/*OsIsrCatType*/
+        TRUE,				/*OsNestedEnable*/
+    },
+    {
+        OS_ISR_TAUB0I9_IRQ,/*OsIsrSrc*/
+        OS_ARCH_INT_CPU0,	/*OsIsrSrcType*/
+        OS_CORE_ID_0,
+        OS_ISR_CATEGORY2,	/*OsIsrCatType*/
+        TRUE,				/*OsNestedEnable*/
+    },
+    {
+        OS_ISR_P1_IRQ,/*OsIsrSrc*/
+        OS_ARCH_INT_CPU0,	/*OsIsrSrcType*/
+        OS_CORE_ID_0,
+        OS_ISR_CATEGORY2,	/*OsIsrCatType*/
+        TRUE,				/*OsNestedEnable*/
+    },
+    {
+        OS_ISR_P2_IRQ,/*OsIsrSrc*/
+        OS_ARCH_INT_CPU0,	/*OsIsrSrcType*/
+        OS_CORE_ID_0,
+        OS_ISR_CATEGORY2,	/*OsIsrCatType*/
+        TRUE,				/*OsNestedEnable*/
+    },
+    {
+        OS_ISR_P5_IRQ,/*OsIsrSrc*/
+        OS_ARCH_INT_CPU0,	/*OsIsrSrcType*/
+        OS_CORE_ID_0,
+        OS_ISR_CATEGORY2,	/*OsIsrCatType*/
+        TRUE,				/*OsNestedEnable*/
+    },
+    {
+        OS_ISR_P6_IRQ,/*OsIsrSrc*/
+        OS_ARCH_INT_CPU0,	/*OsIsrSrcType*/
+        OS_CORE_ID_0,
+        OS_ISR_CATEGORY2,	/*OsIsrCatType*/
+        TRUE,				/*OsNestedEnable*/
+    },
+    {
+        OS_ISR_P7_IRQ,/*OsIsrSrc*/
+        OS_ARCH_INT_CPU0,	/*OsIsrSrcType*/
+        OS_CORE_ID_0,
+        OS_ISR_CATEGORY2,	/*OsIsrCatType*/
+        TRUE,				/*OsNestedEnable*/
+    },
+    {
+        OS_ISR_P9_IRQ,/*OsIsrSrc*/
+        OS_ARCH_INT_CPU0,	/*OsIsrSrcType*/
+        OS_CORE_ID_0,
+        OS_ISR_CATEGORY2,	/*OsIsrCatType*/
+        TRUE,				/*OsNestedEnable*/
+    },
+    {
+        OS_ISR_P14_IRQ,/*OsIsrSrc*/
         OS_ARCH_INT_CPU0,	/*OsIsrSrcType*/
         OS_CORE_ID_0,
         OS_ISR_CATEGORY2,	/*OsIsrCatType*/

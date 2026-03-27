@@ -14,7 +14,7 @@
  *  @MCU                : R7F7015833
  *  @file               : Com_Cfg.h
  *  @author             : iSoft
- *  @date               : 2026-01-22 11:44:17
+ *  @date               : 2026-03-10 09:17:02
  *  @vendor             : iSoft
  *  @description        : 
  *  @specification(S)   : AUTOSAR Classic Platform R19-11
@@ -74,7 +74,7 @@
 
 #define COM_IPDUGROUP_NUMBER                       2u
 
-#define COM_RXIPDU_CALLOUT_NUMBER   36u
+#define COM_RXIPDU_CALLOUT_NUMBER   118u
 
 #define COM_RXIPDU_COUNTER_NUMBER   0u
 
@@ -102,17 +102,17 @@
 
 #define COM_SIGNALGROUPARRY_NUMBER  0u
 
-#define COM_RXSIG_TIMEOUT_NUMBER                       5u
+#define COM_RXSIG_TIMEOUT_NUMBER                       6u
 
-#define COM_RXSIGGRP_TIMEOUT_NUMBER                    0u
+#define COM_RXSIGGRP_TIMEOUT_NUMBER                    1u
 
-#define  COM_RXSIGNAL_INVALID_NUMBER        443u
+#define  COM_RXSIGNAL_INVALID_NUMBER        0u
 
-#define  COM_TXSIGNAL_INVALID_NUMBER        240u
+#define  COM_TXSIGNAL_INVALID_NUMBER        0u
 
-#define  COM_RXGRPSIG_INVALID_NUMBER        590u
+#define  COM_RXGRPSIG_INVALID_NUMBER        0u
 
-#define  COM_TXGRPSIG_INVALID_NUMBER        46u
+#define  COM_TXGRPSIG_INVALID_NUMBER        4u
 
 #define COM_RX_SIGNAL_8BIT_INVALIDVALUE_NUMBER    0u
 

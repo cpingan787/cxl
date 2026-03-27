@@ -17,24 +17,24 @@ Copyright ? 2024 SiRun (Beijing) . All rights reserved.
 #define PM_HAL_STATUS_OK    0           //成功
 #define PM_HAL_STATUS_ERR   -1          //失败
 
-#define PM_HAL_WAKEUP_SOURCE_NONE	       0	 //无有效唤醒源	
-#define PM_HAL_WAKEUP_SOURCE_CAN1	       1	 //can 1 唤醒
-#define PM_HAL_WAKEUP_SOURCE_CAN2	       2	 //can 2 唤醒
-#define PM_HAL_WAKEUP_SOURCE_CAN3	       3	 //can 3 唤醒
-#define PM_HAL_WAKEUP_SOURCE_CAN4	       4 	 //can 4 唤醒
-#define PM_HAL_WAKEUP_SOURCE_CAN5	       5	 //can 5 唤醒
-#define PM_HAL_WAKEUP_SOURCE_CAN6	       6	 //can 6 唤醒
-#define PM_HAL_WAKEUP_SOURCE_CAN7	       7	 //can 7 唤醒
-#define PM_HAL_WAKEUP_SOURCE_CAN8	       8	 //can 8 唤醒
-#define PM_HAL_WAKEUP_SOURCE_MPU	       9	 //MPU 唤醒
-#define PM_HAL_WAKEUP_SOURCE_KL15	       10	 //KL15 上电唤醒
-#define PM_HAL_WAKEUP_SOURCE_KL30	       11        //KL30 上电唤醒
-#define PM_HAL_WAKEUP_SOURCE_BLE	       12	 //蓝牙唤醒
-#define PM_HAL_WAKEUP_SOURCE_RTC	       13        //CPU定时唤醒
-#define PM_HAL_WAKEUP_SOURCE_MCURTC	       14        //MCU timed wake-up
-#define PM_HAL_WAKEUP_SOURCE_GSENSOR	       15        //MCU timed wake-up
+// #define PM_HAL_WAKEUP_SOURCE_NONE	       0	 //无有效唤醒源	
+// #define PM_HAL_WAKEUP_SOURCE_CAN1	       1	 //can 1 唤醒
+// #define PM_HAL_WAKEUP_SOURCE_CAN2	       2	 //can 2 唤醒
+// #define PM_HAL_WAKEUP_SOURCE_CAN3	       3	 //can 3 唤醒
+// #define PM_HAL_WAKEUP_SOURCE_CAN4	       4 	 //can 4 唤醒
+// #define PM_HAL_WAKEUP_SOURCE_CAN5	       5	 //can 5 唤醒
+// #define PM_HAL_WAKEUP_SOURCE_CAN6	       6	 //can 6 唤醒
+// #define PM_HAL_WAKEUP_SOURCE_CAN7	       7	 //can 7 唤醒
+// #define PM_HAL_WAKEUP_SOURCE_CAN8	       8	 //can 8 唤醒
+// #define PM_HAL_WAKEUP_SOURCE_MPU	       9	 //MPU 唤醒
+// #define PM_HAL_WAKEUP_SOURCE_KL15	       10	 //KL15 上电唤醒
+// #define PM_HAL_WAKEUP_SOURCE_KL30	       11        //KL30 上电唤醒
+// #define PM_HAL_WAKEUP_SOURCE_BLE	       12	 //蓝牙唤醒
+// #define PM_HAL_WAKEUP_SOURCE_RTC	       13        //CPU定时唤醒
+// #define PM_HAL_WAKEUP_SOURCE_MCURTC	       14        //MCU timed wake-up
+// #define PM_HAL_WAKEUP_SOURCE_GSENSOR	       15        //MCU timed wake-up
 
-#define PM_HAL_WAKEUP_SOURCE_MAX               16        //唤醒源最大值
+// #define PM_HAL_WAKEUP_SOURCE_MAX               16        //唤醒源最大值
 
 
 /*************************************************

@@ -33,6 +33,7 @@
 #include "Dio.h"
 #include "Adc.h"
 #include "Fls.h"
+#include "Icu.h"
 #include "Wdg_59_DriverA.h"
 #include "Wdg_59_DriverA_PBTypes.h"
 #include "Wdg_59_DriverB.h"
@@ -54,6 +55,8 @@
 #include "BswM_EcuM.h"
 #include "CanNm.h"
 #include "BswM_Ext.h"
+#include "EEIf.h"
+#include "Rte_EcuM.h"
 #include "peripheralHal.h"
 
 extern void Fls_test(void);
@@ -150,92 +153,6 @@ void TstCanSendMessage(void)
     Std_ReturnType tRet = Can_Write(CanConf_CanHardwareObject_CanHardwareObject_Tx0, &tPduInfo);
 }
 
-uint8 NmSleepMode = 0;
-uint8 gIOHwAbDI_KL30_St = 0;
-uint8 gIOHwAbDI_ACC_St = 0;
-uint8 gIOHwAbDI_IG1_St = 0;
-uint8 gIOHwAbDI_CanRx_St = 0;
-uint8 gIOHwAbDI_NAD_WAKEUP_MCU_St = 0;
-uint8 gIOHwAbDI_CDS_St = 0;
-uint8 gIOHwAbDI_ECALL_BUTTON_St = 0;
-uint8 gIOHwAbDI_IMU_INT1_St = 0;
-uint8 gIOHwAbDI_IMU_INT2_St = 0;
-uint8 gIOHwAbDI_RTC_St = 0;
-
-uint8 CAN_WK_FLG=0;
-uint8 IGN_WK_FLG=0;
-uint8 wkupsrc=0;
-uint8 keepsrc=0;
-void Power_Detect(void)
-{
-    // uint8 gIOHwAbDI_KL30_St = 0;
-    // uint8 gIOHwAbDI_ACC_St = 0;
-    // uint8 gIOHwAbDI_IG1_St = 0;
-
-    Nm_StateType nmStatePtr = 0;
-    Nm_ModeType nmModePtr = 0;
-
-    gIOHwAbDI_KL30_St = Dio_ReadChannel(DioConf_DioChannel_DIO_Channel_KL30_Voltage_DET_INT_Pin0_9);
-	gIOHwAbDI_ACC_St = Dio_ReadChannel(DioConf_DioChannel_DIO_Channel_ACC_INT_Pin8_5);
-	gIOHwAbDI_IG1_St = Dio_ReadChannel(DioConf_DioChannel_DIO_Channel_IG1_INT_Pin1_8);
-
-    gIOHwAbDI_CanRx_St = Dio_ReadChannel(DioConf_DioChannel_DIO_Channel_CanRx_DET_INT_Pin0_2);
-    gIOHwAbDI_NAD_WAKEUP_MCU_St = Dio_ReadChannel(DioConf_DioChannel_DIO_Channel_NAD_WAKEUP_MCU_Pin8_2);
-    gIOHwAbDI_CDS_St = Dio_ReadChannel(DioConf_DioChannel_DIO_Channel_CDS_STATE_Pin0_11);
-    gIOHwAbDI_ECALL_BUTTON_St = Dio_ReadChannel(DioConf_DioChannel_DIO_Channel_ECALL_BUTTON_DET_Pin9_5);
-    gIOHwAbDI_IMU_INT1_St = Dio_ReadChannel(DioConf_DioChannel_DIO_Channel_IMU_INT1_Pin8_1);
-    gIOHwAbDI_IMU_INT2_St = Dio_ReadChannel(DioConf_DioChannel_DIO_Channel_IMU_INT2_Pin8_3);
-    gIOHwAbDI_RTC_St = Dio_ReadChannel(DioConf_DioChannel_DIO_Channel_RTC_INT_Pin0_6);
-	
-	//if((gIOHwAbDI_IG1_St == STD_HIGH) && (NmSleepMode == 1))
-	if((gIOHwAbDI_IG1_St == STD_HIGH))
-    {
-        BswM_RequestMode(RPort_KL15_2,COND_KL15_OFF);
-
-        CanNm_GetState(0,&nmStatePtr,&nmModePtr);
-        if(NM_STATE_BUS_SLEEP == nmStatePtr )
-        {
-            BswM_RequestMode(RPort_CanNMIndi_1,COND_NM_ALLOWED_SLEEP);
-            Dio_WriteChannel(DioConf_DioChannel_DIO_Channel_CAN_STB_Pin8_6, STD_HIGH);
-        }
-        else
-        {
-            if((CAN_WK_FLG==0)&&(IGN_WK_FLG==0))
-            {
-                BswM_EcuM_CurrentWakeup(EcuMWakeupSource_CAN,ECUM_WKSTATUS_VALIDATED);
-                wkupsrc=2;
-                Com_SendSignal(IIAM_NWI_CONNCANFD_IAM_CONNCANFD_NM_CONTROLLER_0_IAM_Tx,&wkupsrc);
-                CAN_WK_FLG=1;
-            }
-            keepsrc=2;
-            Com_SendSignal(IIAM_NKI_CONNCANFD_IAM_CONNCANFD_NM_CONTROLLER_0_IAM_Tx,&keepsrc);
-        }
-	}
-	else
-	{
-        BswM_RequestMode(RPort_KL15_2,COND_KL15_ON);
-        if((IGN_WK_FLG==0)&&(CAN_WK_FLG==0))
-        {
-        wkupsrc=1;
-        Com_SendSignal(IIAM_NWI_CONNCANFD_IAM_CONNCANFD_NM_CONTROLLER_0_IAM_Tx,&wkupsrc);
-        Dio_WriteChannel(DioConf_DioChannel_DIO_Channel_CAN_STB_Pin8_6, STD_LOW);
-        IGN_WK_FLG=1;
-        }
-        CanNm_GetState(0,&nmStatePtr,&nmModePtr);
-        if((nmStatePtr!=NM_STATE_BUS_SLEEP))
-        {
-            keepsrc=3;
-            Com_SendSignal(IIAM_NKI_CONNCANFD_IAM_CONNCANFD_NM_CONTROLLER_0_IAM_Tx,&keepsrc);
-        }else
-        {
-            keepsrc=1;
-            Com_SendSignal(IIAM_NKI_CONNCANFD_IAM_CONNCANFD_NM_CONTROLLER_0_IAM_Tx,&keepsrc);  
-        }
-		// Dio_WriteChannel(DioConf_DioChannel_DIO_Channel_CAN_STB_Pin8_6, STD_LOW);
-		// ComM_RequestComMode(0,COMM_FULL_COMMUNICATION);/**go to sleep*/
-	}
-}
-
 void main(void)
 {
     Std_ReturnType GenReturnValue;
@@ -257,7 +174,7 @@ void main(void)
     Dio_WriteChannel(DioConf_DioChannel_DIO_Channel_KL30_DOWEN_DET_EN_Pin1_6, STD_HIGH);
     Dio_WriteChannel(DioConf_DioChannel_DIO_Channel_NAD_V2X_5V0__EN_Pin1_7, STD_HIGH);
     Dio_WriteChannel(DioConf_DioChannel_DIO_Channel_NAD_V2X_3V8_EN_Pin18_3, STD_HIGH);
-    Dio_WriteChannel(DioConf_DioChannel_DIO_Channel_CALL_BUTTON_PWR_EN_Pin1_0, STD_HIGH);
+    Dio_WriteChannel(DioConf_DioChannel_DIO_Channel_CALL_BUTTON_PWR_EN_Pin1_0, STD_LOW);
 
     Adc_Init(AdcConfigSet0);
     Adc_SetupResultBuffer(AdcConf_AdcGroup_AdcGroup0, Adc0_Group0_Buffer);
@@ -265,17 +182,13 @@ void main(void)
     Adc_EnableGroupNotification(AdcConf_AdcGroup_AdcGroup0);
     Adc_EnableGroupNotification(AdcConf_AdcGroup_AdcGroup1); 
 
-    // Mcu_SetMode(McuConf_McuModeSettingConf_McuModeSettingConf0);
-    // Mcu_SequencerInit(McuConf_McuLowPowerSequencer_McuLowPowerSequencer0);
 	
 	Gpt_Init(GptChannelConfigSet0);  
 
+    Icu_Init(IcuConfigSet);
+
     Fls_Init(FlsConfigSet);
-   // Fls_test();
-
     Fee_Init(&Fee_ConfigData);
-
-
     NvM_Init(NULL_PTR);
 
     NvM_RequestResultType InitNvMReadAllStatus = NVM_REQ_PENDING;
@@ -292,41 +205,8 @@ void main(void)
             break;
      }while(InitNvMReadAllStatus == NVM_REQ_PENDING);
 
-
     EcuM_Init();
 
-    /* Initialize CAN Driver */
-    // Can_Init(CanConfigSet0);
-	// Can_SetControllerMode(CanConf_CanController_CanController, CAN_T_START);
-    // /* Initialize BSW Modue */
-
-    // CanIf_Init(&CanIf_InitCfgSet);
-    // CanSM_Init(&CanSM_Config);
-
-    // PduR_Init(&PduR_PBConfigData);
-    // Com_Init(&Com_PBConfigData);
-
-    // ComM_Init(&ComM_Config);
-
-    // Com_IpduGroupVector IPDUGroupVector;
-    // Com_SetIpduGroup(IPDUGroupVector,0,TRUE);
-    // Com_SetIpduGroup(IPDUGroupVector,1,TRUE);
-
-    // ComM_RequestComMode(ComMUser_0, COMM_FULL_COMMUNICATION);
-
-    // ComM_CommunicationAllowed(ComMUser_0,TRUE);
-
-    // CanIf_SetControllerMode(CANIF_CANDRV_0_CANIF_CONTROLLER_0_IAM, CANIF_CS_STARTED);
-    // CanIf_SetPduMode(CANIF_CANDRV_0_CANIF_CONTROLLER_0_IAM, CANIF_ONLINE);
-
-    // Com_IpduGroupControl(Com_RxPduGroup_CONTROLLER_0_IAM,TRUE);
-    // Com_IpduGroupControl(Com_TxPduGroup_CONTROLLER_0_IAM,TRUE);
-
-//	TstCanSendMessage();
-	
-//	Can_MainFunction_Write();
-
-    //StartOS(OSDEFAULTAPPMODE);
     while (1)
     {
     }

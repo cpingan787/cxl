@@ -1,35 +1,9 @@
 #include "batteryHal.h"
 #include "peripheralHal.h"
 
-#if(0)
-//CHAR_ON
-#define BATTERY_CHARGE_PORT     GPIO_PRT23
-#define BATTERY_CHARGE_PIN      4
-#define BATTERY_CHARGE_PIN_MUX  P23_4_GPIO
-//5V_OUT_ON
-#define BATTERY_OUT_PORT        GPIO_PRT2
-#define BATTERY_OUT_PIN         3
-#define BATTERY_OUT_PIN_MUX     P2_3_GPIO
-//BATTERY_ON
-#define BATTERY_SWITCHON_PORT       GPIO_PRT6
-#define BATTERY_SWITCHON_PIN        5
-#define BATTERY_SWITCHON_PIN_MUX    P6_5_GPIO
-//CHECK_BATTERY
-#define BATTERY_CHECK_PORT      GPIO_PRT12
-#define BATTERY_CHECK_PIN       2
-#define BATTERY_CHECK_PIN_MUX   P12_2_GPIO
-
-static cy_stc_gpio_pin_config_t g_batteryPortPinCfg =
-{
-    .outVal = 0ul, // Pin output state 
-    .driveMode = CY_GPIO_DM_STRONG_IN_OFF, // Drive mode 
-    .hsiom = BATTERY_CHARGE_PIN_MUX, // HSIOM selection 
-    .intEdge = 0ul, // Interrupt Edge type
-    .intMask = 0ul, // Interrupt enable mask
-    .vtrip = 0ul, // Input buffer voltage trip type
-    .slewRate = 0ul, // Output buffer slew rate 
-    .driveSel = 0ul, // Drive strength 
-}; 
+#include "r_port.h"
+#include "r_cg_port.h"
+#include "Dio.h"
 
 /*************************************************
   Function:     BatteryHalInit
@@ -41,20 +15,48 @@ static cy_stc_gpio_pin_config_t g_batteryPortPinCfg =
 *************************************************/
 int16_t BatteryHalInit(void)
 {
-    //CHAR_ON pin init
-    g_batteryPortPinCfg.hsiom = BATTERY_CHARGE_PIN_MUX;
-    Cy_GPIO_Pin_Init(BATTERY_CHARGE_PORT,BATTERY_CHARGE_PIN,&g_batteryPortPinCfg);
-    //5V_OUT_ON pin init
-    g_batteryPortPinCfg.hsiom = BATTERY_OUT_PIN_MUX;
-    Cy_GPIO_Pin_Init(BATTERY_OUT_PORT,BATTERY_OUT_PIN,&g_batteryPortPinCfg);
-    
-    //BATTERY_ON pin init
-    g_batteryPortPinCfg.hsiom = BATTERY_SWITCHON_PIN_MUX;
-    Cy_GPIO_Pin_Init(BATTERY_SWITCHON_PORT,BATTERY_SWITCHON_PIN,&g_batteryPortPinCfg);
-    //CHECK_BATTERY pin init
-    g_batteryPortPinCfg.hsiom = BATTERY_CHECK_PIN_MUX;
-    Cy_GPIO_Pin_Init(BATTERY_CHECK_PORT,BATTERY_CHECK_PIN,&g_batteryPortPinCfg);
-    
+    /******** BUB_BOOST_EN ***********************/
+    PORT.PPCMD10 = _WRITE_PROTECT_COMMAND;
+    PORT.PDSC10 &= (uint32_t) ~_PORT_PMn15_MODE_UNUSED;
+    PORT.PDSC10 |= _PORT_PDSCn15_SLOW_MODE_SELECT;
+    PORT.PPCMD10 = _WRITE_PROTECT_COMMAND;
+    PORT.PODC10 &= (uint32_t) ~_PORT_PMn15_MODE_UNUSED;
+    PORT.PODC10 |= _PORT_PODCn15_PUSH_PULL;
+    PORT.PBDC10 &= (uint16_t) ~_PORT_PMn15_MODE_UNUSED;
+    PORT.PBDC10 |= _PORT_PBDCn15_PBDC_MODE_DISABLED;
+    PORT.P10 &= (uint16_t) ~_PORT_PMn15_MODE_UNUSED;
+    PORT.P10 |= _PORT_Pn15_OUTPUT_HIGH;
+    PORT.PM10 &= (uint16_t) ~_PORT_PMn15_MODE_UNUSED;
+    PORT.PM10 |= _PORT_PMn15_MODE_OUTPUT;
+
+    /******** BUB_CHARGE_EN ***********************/
+    PORT.PPCMD0 = _WRITE_PROTECT_COMMAND;
+    PORT.PDSC0 &= (uint32_t) ~_PORT_PMn13_MODE_UNUSED;
+    PORT.PDSC0 |= _PORT_PDSCn13_SLOW_MODE_SELECT;
+    PORT.PPCMD0 = _WRITE_PROTECT_COMMAND;
+    PORT.PODC0 &= (uint32_t) ~_PORT_PMn13_MODE_UNUSED;
+    PORT.PODC0 |= _PORT_PODCn13_PUSH_PULL;
+    PORT.PBDC0 &= (uint16_t) ~_PORT_PMn13_MODE_UNUSED;
+    PORT.PBDC0 |= _PORT_PBDCn13_PBDC_MODE_DISABLED;
+    PORT.P0 &= (uint16_t) ~_PORT_PMn13_MODE_UNUSED;
+    PORT.P0 |= _PORT_Pn13_OUTPUT_LOW;
+    PORT.PM0 &= (uint16_t) ~_PORT_PMn13_MODE_UNUSED;
+    PORT.PM0 |= _PORT_PMn13_MODE_OUTPUT;
+
+    /******** BUB_DisCharge_EN ***********************/
+    PORT.PPCMD20 = _WRITE_PROTECT_COMMAND;
+    PORT.PDSC20 &= (uint32_t) ~_PORT_PMn5_MODE_UNUSED;
+    PORT.PDSC20 |= _PORT_PDSCn5_SLOW_MODE_SELECT;
+    PORT.PPCMD20 = _WRITE_PROTECT_COMMAND;
+    PORT.PODC20 &= (uint32_t) ~_PORT_PMn5_MODE_UNUSED;
+    PORT.PODC20 |= _PORT_PODCn5_PUSH_PULL;
+    PORT.PBDC20 &= (uint16_t) ~_PORT_PMn5_MODE_UNUSED;
+    PORT.PBDC20 |= _PORT_PBDCn5_PBDC_MODE_DISABLED;
+    PORT.P20 &= (uint16_t) ~_PORT_PMn5_MODE_UNUSED;
+    PORT.P20 |= _PORT_Pn5_OUTPUT_LOW;
+    PORT.PM20 &= (uint16_t) ~_PORT_PMn5_MODE_UNUSED;
+    PORT.PM20 |= _PORT_PMn5_MODE_OUTPUT;
+
     return 0;
 }
 
@@ -68,10 +70,7 @@ int16_t BatteryHalInit(void)
 *************************************************/
 void BatteryHalEnableOut(void)
 {
-    //start battery switch
-    Cy_GPIO_Set(BATTERY_SWITCHON_PORT,BATTERY_SWITCHON_PIN);
-    //start battery boost
-    Cy_GPIO_Set(BATTERY_OUT_PORT,BATTERY_OUT_PIN);
+    R_PORT_SetGpioOutput(Port10, 15, 1);
 }
 
 /*************************************************
@@ -84,11 +83,9 @@ void BatteryHalEnableOut(void)
 *************************************************/
 void BatteryHalDisableOut(void)
 {
-    //close battery switch
-    Cy_GPIO_Clr(BATTERY_SWITCHON_PORT,BATTERY_SWITCHON_PIN);
-    //close battery boost
-    Cy_GPIO_Clr(BATTERY_OUT_PORT,BATTERY_OUT_PIN);
+    R_PORT_SetGpioOutput(Port10, 15, 0);
 }
+
 /*************************************************
   Function:     BatteryHalEnableCharge
   Description:  Battery enable charge
@@ -99,8 +96,7 @@ void BatteryHalDisableOut(void)
 *************************************************/
 void BatteryHalEnableCharge(void)
 {
-    //start battery charge
-    Cy_GPIO_Set(BATTERY_CHARGE_PORT,BATTERY_CHARGE_PIN);
+    R_PORT_SetGpioOutput(Port0, 13, 1);
 }
 /*************************************************
   Function:     BatteryHalDisableCharge
@@ -112,9 +108,9 @@ void BatteryHalEnableCharge(void)
 *************************************************/
 void BatteryHalDisableCharge(void)
 {
-    //start battery charge
-    Cy_GPIO_Clr(BATTERY_CHARGE_PORT,BATTERY_CHARGE_PIN);
+    R_PORT_SetGpioOutput(Port0, 13, 0);
 }
+
 /*************************************************
   Function:     BatteryHalGetVoltage
   Description:  Get battery voltage
@@ -128,7 +124,7 @@ int16_t BatteryHalGetVoltage(uint32_t *pVoltage)
 {
     int16_t ret = 0;
     uint32_t voltage;
-    ret = PeripheralHalAdGet(1,&voltage);
+    ret = PeripheralHalAdGet(AD0_CHANNEL_BUB_VOLTAGE_ADC, &voltage);
     if(ret == 0)
     {
         *pVoltage = voltage;
@@ -139,6 +135,7 @@ int16_t BatteryHalGetVoltage(uint32_t *pVoltage)
         return -1;
     }
 }
+
 /*************************************************
   Function:     BatteryHalGetNtc
   Description:  Get NTC AD value
@@ -152,7 +149,7 @@ int16_t BatteryHalGetNtc(uint32_t *pVoltage)
 {
     int16_t ret = 0;
     uint32_t voltage;
-    ret = PeripheralHalAdGet(2,&voltage);
+    ret = PeripheralHalAdGet(AD0_CHANNEL_BUB_TEMP_ADC, &voltage);
     if(ret == 0)
     {
         *pVoltage = voltage;
@@ -163,6 +160,7 @@ int16_t BatteryHalGetNtc(uint32_t *pVoltage)
         return -1;
     }
 }
+
 /*************************************************
   Function:     BatteryHalEnableCheck
   Description:  Battery enable check 
@@ -175,6 +173,7 @@ void BatteryHalEnableCheck(uint8_t flag)
 {
     
 }
+
 /*************************************************
   Function:     BatteryHalGetChargeState
   Description:  Battery enable check 
@@ -182,16 +181,21 @@ void BatteryHalEnableCheck(uint8_t flag)
   Output:       None
   Return:       0 : idle state
                 1 : charge state
-                2 : enabel state
+                2 : enable state
   Others:       None
 *************************************************/
 int16_t BatteryHalGetState(void)
 {
-  if(Cy_GPIO_Read(BATTERY_CHARGE_PORT, BATTERY_CHARGE_PIN))     return 1;
-  else if(Cy_GPIO_Read(BATTERY_SWITCHON_PORT, BATTERY_SWITCHON_PIN))        return 2;
-  else
-  {
-    return 0;
-  }
+    if(R_PORT_GetLevel(Port0, 13))
+    {
+        return 1;
+    }
+    else if(Dio_ReadChannel(DioConf_DioChannel_DIO_Channel_KL30_Voltage_DET_INT_Pin0_9) == STD_LOW)
+    {
+        return 2;
+    }
+    else
+    {
+        return 0;
+    }
 }
-#endif

@@ -14,7 +14,7 @@
  *  @MCU                : R7F7015833
  *  @file               : Dem_PBcfg.c
  *  @author             : iSoft
- *  @date               : 2026-01-22 21:07:13
+ *  @date               : 2026-03-20 20:50:24
  *  @vendor             : iSoft
  *  @description        : 
  *  @specification(S)   : AUTOSAR Classic Platform R19-11
@@ -49,6 +49,16 @@ static Std_ReturnType DemReadOccctr(uint8* Buffer)
 static Std_ReturnType DemReadAgingUpCnt(uint8* Buffer)
 {
     *Buffer = DemInternalData.AgingUpCnt;
+    return E_OK;
+}
+static Std_ReturnType DemReadFaultPendingCounter(uint8* Buffer)
+{
+    *Buffer = DemInternalData.FaultPendingCounter;
+    return E_OK;
+}
+static Std_ReturnType DemReadAgedCounter(uint8* Buffer)
+{
+    *Buffer = DemInternalData.AgedCounter;
     return E_OK;
 }
 #define DEM_STOP_SEC_CODE
@@ -98,6 +108,16 @@ static CONST(DemDataElementClassTypes,AUTOMATIC) DemDataElementClass[DEM_DATA_EL
         1u,/*DemDataElementDataSize*/
         DemReadOccctr,/*DemDataElementClass*/
     },
+    {
+        TRUE,
+        1u,/*DemDataElementDataSize*/
+        DemReadAgedCounter,/*DemDataElementClass*/
+    },
+    {
+        TRUE,
+        1u,/*DemDataElementDataSize*/
+        DemReadFaultPendingCounter,/*DemDataElementClass*/
+    },
 };
 #define DEM_STOP_SEC_CONST_UNSPECIFIED
 #include "Dem_MemMap.h"
@@ -115,6 +135,29 @@ static CONST(Dem_OperationCycleType,AUTOMATIC) DemOperationCycle[DEM_OPERATION_C
         TRUE,
         DEM_OPCYC_IGNITION
     }
+};
+#define DEM_STOP_SEC_CONST_UNSPECIFIED
+#include "Dem_MemMap.h"
+
+#define DEM_START_SEC_CONST_UNSPECIFIED
+#include "Dem_MemMap.h"
+/* DemEnableCondition */
+CONST(uint8,AUTOMATIC) DemEnableCondition[DEM_ENABLE_CONDITION_NUM_BYTE] =
+{
+    0xfu,
+
+};
+#define DEM_STOP_SEC_CONST_UNSPECIFIED
+#include "Dem_MemMap.h"
+
+#define DEM_START_SEC_CONST_UNSPECIFIED
+#include "Dem_MemMap.h"
+/* DemEnableConditionGroup */
+CONST(uint8,AUTOMATIC) DemEnableConditionGroup[DEM_ENABLE_CONDITION_GROUP_NUM][DEM_ENABLE_CONDITION_NUM_BYTE] =
+{
+    {0xbu,},
+    {0xfu,},
+    {0x8u,}
 };
 #define DEM_STOP_SEC_CONST_UNSPECIFIED
 #include "Dem_MemMap.h"
@@ -172,12 +215,13 @@ CONST(Dem_DidClassType,AUTOMATIC) DemDidClass[DEM_DID_CLASS_NUM] =
 #include "Dem_MemMap.h"
 CONST(uint16,AUTOMATIC) DemDidClassRef[DEM_DID_CLASS_REF_TOTAL_NUM] =
 {
-    /* FreezeFrameClass_ENVDATA_ALLDTCS */
+    /* DemFreezeFrameClass_GlobalFF */
     0x0u,
     0x1u,
     0x2u,
     0x3u,
     0x4u,
+    /* DemFreezeFrameClass_LocalFF_BE08 */
     0x5u
 };
 #define DEM_STOP_SEC_CONST_UNSPECIFIED
@@ -187,10 +231,15 @@ CONST(uint16,AUTOMATIC) DemDidClassRef[DEM_DID_CLASS_REF_TOTAL_NUM] =
 #include "Dem_MemMap.h"
 CONST(Dem_FreezeFrameClassType,AUTOMATIC) DemFreezeFrameClass[DEM_FREEZE_FRAME_CLASS_NUM] =
 {
-    { /* FreezeFrameClass_ENVDATA_ALLDTCS DID*/
-        20u,
+    { /* DemFreezeFrameClass_GlobalFF DID*/
+        13u,
         0u,
-        6u
+        5u
+    },
+    { /* DemFreezeFrameClass_LocalFF_BE08 DID*/
+        7u,
+        5u,
+        1u
     }
 };
 #define DEM_STOP_SEC_CONST_UNSPECIFIED
@@ -201,15 +250,10 @@ CONST(Dem_FreezeFrameClassType,AUTOMATIC) DemFreezeFrameClass[DEM_FREEZE_FRAME_C
 /* DemGeneral/DemFreezeFrameRecordClass */
 CONST(Dem_FreezeFrameRecordClassType,AUTOMATIC) DemFreezeFrameRecordClass[DEM_FREEZE_FRAME_RECORD_CLASS_NUM] =
 {
-    { /* FreezeFrameRecordClass_DTCSnapshotRecordNumber_Base_Variant_Data_Object_1 */
-        1u,                       /* DemFreezeFrameRecordNumber */
-        DEM_TRIGGER_ON_TEST_FAILED,   /* DemFreezeFrameRecordTrigger */
-        DEM_UPDATE_RECORD_NO       /* DemFreezeFrameRecordUpdate */
-    },
-    { /* FreezeFrameRecordClass_DTCSnapshotRecordNumber_Base_Variant_Data_Object_2 */
+    { /* FreezeFrameRecordClass_RecNum2_Local */
         2u,                       /* DemFreezeFrameRecordNumber */
         DEM_TRIGGER_ON_TEST_FAILED,   /* DemFreezeFrameRecordTrigger */
-        DEM_UPDATE_RECORD_YES       /* DemFreezeFrameRecordUpdate */
+        DEM_UPDATE_RECORD_NO       /* DemFreezeFrameRecordUpdate */
     }
 };
 #define DEM_STOP_SEC_CONST_UNSPECIFIED
@@ -219,9 +263,8 @@ CONST(Dem_FreezeFrameRecordClassType,AUTOMATIC) DemFreezeFrameRecordClass[DEM_FR
 #include "Dem_MemMap.h"
 CONST(uint8,AUTOMATIC) DemFreezeFrameRecordClassRef[DEM_FREEZE_FRAME_RECORD_CLASS_REF_TOTAL_NUM] =
 {
-    /* FreezeFrameRecNumClass_DTCSnapshotRecordNumber_Base_Variant_Data_Object */
-    0x0u,
-    0x1u
+    /* FreezeFrameRecNumClass_RecNum2_Local */
+    0x0u
 };
 #define DEM_STOP_SEC_CONST_UNSPECIFIED
 #include "Dem_MemMap.h"
@@ -230,9 +273,9 @@ CONST(uint8,AUTOMATIC) DemFreezeFrameRecordClassRef[DEM_FREEZE_FRAME_RECORD_CLAS
 #include "Dem_MemMap.h"
 CONST(Dem_FreezeFrameRecNumClassType,AUTOMATIC) DemFreezeFrameRecNumClass[DEM_FREEZE_FRAME_REC_NUM_CLASS_NUM] =
 {
-    { /* FreezeFrameRecNumClass_DTCSnapshotRecordNumber_Base_Variant_Data_Object */
+    { /* FreezeFrameRecNumClass_RecNum2_Local */
         0u,
-        2u,
+        1u,
     }
 };
 #define DEM_STOP_SEC_CONST_UNSPECIFIED
@@ -247,7 +290,7 @@ CONST(Dem_FreezeFrameRecNumClassType,AUTOMATIC) DemFreezeFrameRecNumClass[DEM_FR
 CONST(Dem_ExtendedDataRecordClassType,AUTOMATIC) DemExtendedDataRecordClass[DEM_EXTENDED_DATA_RECORD_CLASS_NUM] =
 {
     { /* ExtendedDataRecordClass_AgingCounter */
-        0x1u,
+        0x4u,
         DEM_TRIGGER_ON_CONFIRMED,/*DemExtendedDataRecordTrigger*/
         DEM_UPDATE_RECORD_YES,/*DemExtendedDataRecordUpdate*/
         6u,/*DemDataElementClassIndex*/
@@ -255,10 +298,26 @@ CONST(Dem_ExtendedDataRecordClassType,AUTOMATIC) DemExtendedDataRecordClass[DEM_
         1u,
     },
     { /* ExtendedDataRecordClass_OccurCounter */
-        0x2u,
+        0x1u,
         DEM_TRIGGER_ON_CONFIRMED,/*DemExtendedDataRecordTrigger*/
         DEM_UPDATE_RECORD_YES,/*DemExtendedDataRecordUpdate*/
         7u,/*DemDataElementClassIndex*/
+        1u,/*DemDataElementClassNum*/
+        1u,
+    },
+    { /* ExtendedDataRecordClass_AgingedCounter */
+        0x3u,
+        DEM_TRIGGER_ON_CONFIRMED,/*DemExtendedDataRecordTrigger*/
+        DEM_UPDATE_RECORD_YES,/*DemExtendedDataRecordUpdate*/
+        8u,/*DemDataElementClassIndex*/
+        1u,/*DemDataElementClassNum*/
+        1u,
+    },
+    { /* ExtendedDataRecordClass_FaultPendingCounter */
+        0x2u,
+        DEM_TRIGGER_ON_CONFIRMED,/*DemExtendedDataRecordTrigger*/
+        DEM_UPDATE_RECORD_YES,/*DemExtendedDataRecordUpdate*/
+        9u,/*DemDataElementClassIndex*/
         1u,/*DemDataElementClassNum*/
         1u,
     }
@@ -271,8 +330,10 @@ CONST(Dem_ExtendedDataRecordClassType,AUTOMATIC) DemExtendedDataRecordClass[DEM_
 CONST(uint8,AUTOMATIC) DemExtendedDataRecordClassRef[DEM_EXTENDED_DATA_RECORD_CLASS_REF_TOTAL_NUM] =
 {
     /* ExtendedDataClass_DTCExtendedDataRecordNumber */
-    0x0u,
-    0x1u
+    0x1u,
+    0x3u,
+    0x2u,
+    0x0u
 };
 #define DEM_STOP_SEC_CONST_UNSPECIFIED
 #include "Dem_MemMap.h"
@@ -284,7 +345,7 @@ CONST(Dem_ExtendedDataClassType,AUTOMATIC) DemExtendedDataClass[DEM_EXTENDED_DAT
 {
     { /* ExtendedDataClass_DTCExtendedDataRecordNumber */
         0u,
-        2u
+        4u
     }
 };
 #define DEM_STOP_SEC_CONST_UNSPECIFIED
@@ -296,7 +357,7 @@ CONST(Dem_ExtendedDataClassType,AUTOMATIC) DemExtendedDataClass[DEM_EXTENDED_DAT
 #define DEM_START_SEC_CONST_UNSPECIFIED
 #include "Dem_MemMap.h"
 /* DemDTC Mapping event */
-static CONST(Dem_EventIdType,AUTOMATIC) DemDTCMapping[58] =
+static CONST(Dem_EventIdType,AUTOMATIC) DemDTCMapping[59] =
 {
     0,
     1,
@@ -356,6 +417,7 @@ static CONST(Dem_EventIdType,AUTOMATIC) DemDTCMapping[58] =
     55,
     56,
     57,
+    58,
 };
 #define DEM_STOP_SEC_CONST_UNSPECIFIED
 #include "Dem_MemMap.h"
@@ -371,7 +433,7 @@ static CONST(Dem_DTCType,AUTOMATIC) DemDTC[DEM_DTC_NUM] =
         DEM_OBD_DTC_INVALID, /*DemObdDTC */
         DEM_DTC_KIND_ALL_DTCS,
         0xffu, /* DemDTCFunctionalUnit  */
-        DEM_SEVERITY_NO_SEVERITY, /* DemDTCSeverity */
+        DEM_SEVERITY_CHECK_AT_NEXT_HALT, /* DemDTCSeverity */
         DEM_GROUP_OF_DTC_INVALID, /* DTC GroupIndex */
         DEM_DTC_WWHOBD_CLASS_NOCLASS,/*DemWWHOBDDTCClass*/
         1,
@@ -383,7 +445,7 @@ static CONST(Dem_DTCType,AUTOMATIC) DemDTC[DEM_DTC_NUM] =
         DEM_OBD_DTC_INVALID, /*DemObdDTC */
         DEM_DTC_KIND_ALL_DTCS,
         0xffu, /* DemDTCFunctionalUnit  */
-        DEM_SEVERITY_NO_SEVERITY, /* DemDTCSeverity */
+        DEM_SEVERITY_CHECK_AT_NEXT_HALT, /* DemDTCSeverity */
         DEM_GROUP_OF_DTC_INVALID, /* DTC GroupIndex */
         DEM_DTC_WWHOBD_CLASS_NOCLASS,/*DemWWHOBDDTCClass*/
         1,
@@ -395,7 +457,7 @@ static CONST(Dem_DTCType,AUTOMATIC) DemDTC[DEM_DTC_NUM] =
         DEM_OBD_DTC_INVALID, /*DemObdDTC */
         DEM_DTC_KIND_ALL_DTCS,
         0xffu, /* DemDTCFunctionalUnit  */
-        DEM_SEVERITY_NO_SEVERITY, /* DemDTCSeverity */
+        DEM_SEVERITY_CHECK_AT_NEXT_HALT, /* DemDTCSeverity */
         DEM_GROUP_OF_DTC_INVALID, /* DTC GroupIndex */
         DEM_DTC_WWHOBD_CLASS_NOCLASS,/*DemWWHOBDDTCClass*/
         1,
@@ -407,7 +469,7 @@ static CONST(Dem_DTCType,AUTOMATIC) DemDTC[DEM_DTC_NUM] =
         DEM_OBD_DTC_INVALID, /*DemObdDTC */
         DEM_DTC_KIND_ALL_DTCS,
         0xffu, /* DemDTCFunctionalUnit  */
-        DEM_SEVERITY_NO_SEVERITY, /* DemDTCSeverity */
+        DEM_SEVERITY_CHECK_AT_NEXT_HALT, /* DemDTCSeverity */
         DEM_GROUP_OF_DTC_INVALID, /* DTC GroupIndex */
         DEM_DTC_WWHOBD_CLASS_NOCLASS,/*DemWWHOBDDTCClass*/
         1,
@@ -419,7 +481,7 @@ static CONST(Dem_DTCType,AUTOMATIC) DemDTC[DEM_DTC_NUM] =
         DEM_OBD_DTC_INVALID, /*DemObdDTC */
         DEM_DTC_KIND_ALL_DTCS,
         0xffu, /* DemDTCFunctionalUnit  */
-        DEM_SEVERITY_NO_SEVERITY, /* DemDTCSeverity */
+        DEM_SEVERITY_CHECK_AT_NEXT_HALT, /* DemDTCSeverity */
         DEM_GROUP_OF_DTC_INVALID, /* DTC GroupIndex */
         DEM_DTC_WWHOBD_CLASS_NOCLASS,/*DemWWHOBDDTCClass*/
         1,
@@ -431,7 +493,7 @@ static CONST(Dem_DTCType,AUTOMATIC) DemDTC[DEM_DTC_NUM] =
         DEM_OBD_DTC_INVALID, /*DemObdDTC */
         DEM_DTC_KIND_ALL_DTCS,
         0xffu, /* DemDTCFunctionalUnit  */
-        DEM_SEVERITY_NO_SEVERITY, /* DemDTCSeverity */
+        DEM_SEVERITY_CHECK_AT_NEXT_HALT, /* DemDTCSeverity */
         DEM_GROUP_OF_DTC_INVALID, /* DTC GroupIndex */
         DEM_DTC_WWHOBD_CLASS_NOCLASS,/*DemWWHOBDDTCClass*/
         1,
@@ -443,7 +505,7 @@ static CONST(Dem_DTCType,AUTOMATIC) DemDTC[DEM_DTC_NUM] =
         DEM_OBD_DTC_INVALID, /*DemObdDTC */
         DEM_DTC_KIND_ALL_DTCS,
         0xffu, /* DemDTCFunctionalUnit  */
-        DEM_SEVERITY_NO_SEVERITY, /* DemDTCSeverity */
+        DEM_SEVERITY_CHECK_AT_NEXT_HALT, /* DemDTCSeverity */
         DEM_GROUP_OF_DTC_INVALID, /* DTC GroupIndex */
         DEM_DTC_WWHOBD_CLASS_NOCLASS,/*DemWWHOBDDTCClass*/
         1,
@@ -455,7 +517,7 @@ static CONST(Dem_DTCType,AUTOMATIC) DemDTC[DEM_DTC_NUM] =
         DEM_OBD_DTC_INVALID, /*DemObdDTC */
         DEM_DTC_KIND_ALL_DTCS,
         0xffu, /* DemDTCFunctionalUnit  */
-        DEM_SEVERITY_NO_SEVERITY, /* DemDTCSeverity */
+        DEM_SEVERITY_CHECK_AT_NEXT_HALT, /* DemDTCSeverity */
         DEM_GROUP_OF_DTC_INVALID, /* DTC GroupIndex */
         DEM_DTC_WWHOBD_CLASS_NOCLASS,/*DemWWHOBDDTCClass*/
         1,
@@ -467,7 +529,7 @@ static CONST(Dem_DTCType,AUTOMATIC) DemDTC[DEM_DTC_NUM] =
         DEM_OBD_DTC_INVALID, /*DemObdDTC */
         DEM_DTC_KIND_ALL_DTCS,
         0xffu, /* DemDTCFunctionalUnit  */
-        DEM_SEVERITY_NO_SEVERITY, /* DemDTCSeverity */
+        DEM_SEVERITY_CHECK_AT_NEXT_HALT, /* DemDTCSeverity */
         DEM_GROUP_OF_DTC_INVALID, /* DTC GroupIndex */
         DEM_DTC_WWHOBD_CLASS_NOCLASS,/*DemWWHOBDDTCClass*/
         1,
@@ -479,7 +541,7 @@ static CONST(Dem_DTCType,AUTOMATIC) DemDTC[DEM_DTC_NUM] =
         DEM_OBD_DTC_INVALID, /*DemObdDTC */
         DEM_DTC_KIND_ALL_DTCS,
         0xffu, /* DemDTCFunctionalUnit  */
-        DEM_SEVERITY_NO_SEVERITY, /* DemDTCSeverity */
+        DEM_SEVERITY_CHECK_AT_NEXT_HALT, /* DemDTCSeverity */
         DEM_GROUP_OF_DTC_INVALID, /* DTC GroupIndex */
         DEM_DTC_WWHOBD_CLASS_NOCLASS,/*DemWWHOBDDTCClass*/
         1,
@@ -491,7 +553,7 @@ static CONST(Dem_DTCType,AUTOMATIC) DemDTC[DEM_DTC_NUM] =
         DEM_OBD_DTC_INVALID, /*DemObdDTC */
         DEM_DTC_KIND_ALL_DTCS,
         0xffu, /* DemDTCFunctionalUnit  */
-        DEM_SEVERITY_NO_SEVERITY, /* DemDTCSeverity */
+        DEM_SEVERITY_CHECK_AT_NEXT_HALT, /* DemDTCSeverity */
         DEM_GROUP_OF_DTC_INVALID, /* DTC GroupIndex */
         DEM_DTC_WWHOBD_CLASS_NOCLASS,/*DemWWHOBDDTCClass*/
         1,
@@ -503,7 +565,7 @@ static CONST(Dem_DTCType,AUTOMATIC) DemDTC[DEM_DTC_NUM] =
         DEM_OBD_DTC_INVALID, /*DemObdDTC */
         DEM_DTC_KIND_ALL_DTCS,
         0xffu, /* DemDTCFunctionalUnit  */
-        DEM_SEVERITY_NO_SEVERITY, /* DemDTCSeverity */
+        DEM_SEVERITY_CHECK_AT_NEXT_HALT, /* DemDTCSeverity */
         DEM_GROUP_OF_DTC_INVALID, /* DTC GroupIndex */
         DEM_DTC_WWHOBD_CLASS_NOCLASS,/*DemWWHOBDDTCClass*/
         1,
@@ -515,7 +577,7 @@ static CONST(Dem_DTCType,AUTOMATIC) DemDTC[DEM_DTC_NUM] =
         DEM_OBD_DTC_INVALID, /*DemObdDTC */
         DEM_DTC_KIND_ALL_DTCS,
         0xffu, /* DemDTCFunctionalUnit  */
-        DEM_SEVERITY_NO_SEVERITY, /* DemDTCSeverity */
+        DEM_SEVERITY_CHECK_AT_NEXT_HALT, /* DemDTCSeverity */
         DEM_GROUP_OF_DTC_INVALID, /* DTC GroupIndex */
         DEM_DTC_WWHOBD_CLASS_NOCLASS,/*DemWWHOBDDTCClass*/
         1,
@@ -527,7 +589,7 @@ static CONST(Dem_DTCType,AUTOMATIC) DemDTC[DEM_DTC_NUM] =
         DEM_OBD_DTC_INVALID, /*DemObdDTC */
         DEM_DTC_KIND_ALL_DTCS,
         0xffu, /* DemDTCFunctionalUnit  */
-        DEM_SEVERITY_NO_SEVERITY, /* DemDTCSeverity */
+        DEM_SEVERITY_CHECK_AT_NEXT_HALT, /* DemDTCSeverity */
         DEM_GROUP_OF_DTC_INVALID, /* DTC GroupIndex */
         DEM_DTC_WWHOBD_CLASS_NOCLASS,/*DemWWHOBDDTCClass*/
         1,
@@ -539,7 +601,7 @@ static CONST(Dem_DTCType,AUTOMATIC) DemDTC[DEM_DTC_NUM] =
         DEM_OBD_DTC_INVALID, /*DemObdDTC */
         DEM_DTC_KIND_ALL_DTCS,
         0xffu, /* DemDTCFunctionalUnit  */
-        DEM_SEVERITY_NO_SEVERITY, /* DemDTCSeverity */
+        DEM_SEVERITY_CHECK_AT_NEXT_HALT, /* DemDTCSeverity */
         DEM_GROUP_OF_DTC_INVALID, /* DTC GroupIndex */
         DEM_DTC_WWHOBD_CLASS_NOCLASS,/*DemWWHOBDDTCClass*/
         1,
@@ -551,7 +613,7 @@ static CONST(Dem_DTCType,AUTOMATIC) DemDTC[DEM_DTC_NUM] =
         DEM_OBD_DTC_INVALID, /*DemObdDTC */
         DEM_DTC_KIND_ALL_DTCS,
         0xffu, /* DemDTCFunctionalUnit  */
-        DEM_SEVERITY_NO_SEVERITY, /* DemDTCSeverity */
+        DEM_SEVERITY_CHECK_AT_NEXT_HALT, /* DemDTCSeverity */
         DEM_GROUP_OF_DTC_INVALID, /* DTC GroupIndex */
         DEM_DTC_WWHOBD_CLASS_NOCLASS,/*DemWWHOBDDTCClass*/
         1,
@@ -563,7 +625,7 @@ static CONST(Dem_DTCType,AUTOMATIC) DemDTC[DEM_DTC_NUM] =
         DEM_OBD_DTC_INVALID, /*DemObdDTC */
         DEM_DTC_KIND_ALL_DTCS,
         0xffu, /* DemDTCFunctionalUnit  */
-        DEM_SEVERITY_NO_SEVERITY, /* DemDTCSeverity */
+        DEM_SEVERITY_CHECK_AT_NEXT_HALT, /* DemDTCSeverity */
         DEM_GROUP_OF_DTC_INVALID, /* DTC GroupIndex */
         DEM_DTC_WWHOBD_CLASS_NOCLASS,/*DemWWHOBDDTCClass*/
         1,
@@ -575,7 +637,7 @@ static CONST(Dem_DTCType,AUTOMATIC) DemDTC[DEM_DTC_NUM] =
         DEM_OBD_DTC_INVALID, /*DemObdDTC */
         DEM_DTC_KIND_ALL_DTCS,
         0xffu, /* DemDTCFunctionalUnit  */
-        DEM_SEVERITY_NO_SEVERITY, /* DemDTCSeverity */
+        DEM_SEVERITY_CHECK_AT_NEXT_HALT, /* DemDTCSeverity */
         DEM_GROUP_OF_DTC_INVALID, /* DTC GroupIndex */
         DEM_DTC_WWHOBD_CLASS_NOCLASS,/*DemWWHOBDDTCClass*/
         1,
@@ -587,7 +649,7 @@ static CONST(Dem_DTCType,AUTOMATIC) DemDTC[DEM_DTC_NUM] =
         DEM_OBD_DTC_INVALID, /*DemObdDTC */
         DEM_DTC_KIND_ALL_DTCS,
         0xffu, /* DemDTCFunctionalUnit  */
-        DEM_SEVERITY_NO_SEVERITY, /* DemDTCSeverity */
+        DEM_SEVERITY_CHECK_AT_NEXT_HALT, /* DemDTCSeverity */
         DEM_GROUP_OF_DTC_INVALID, /* DTC GroupIndex */
         DEM_DTC_WWHOBD_CLASS_NOCLASS,/*DemWWHOBDDTCClass*/
         1,
@@ -599,7 +661,7 @@ static CONST(Dem_DTCType,AUTOMATIC) DemDTC[DEM_DTC_NUM] =
         DEM_OBD_DTC_INVALID, /*DemObdDTC */
         DEM_DTC_KIND_ALL_DTCS,
         0xffu, /* DemDTCFunctionalUnit  */
-        DEM_SEVERITY_NO_SEVERITY, /* DemDTCSeverity */
+        DEM_SEVERITY_CHECK_AT_NEXT_HALT, /* DemDTCSeverity */
         DEM_GROUP_OF_DTC_INVALID, /* DTC GroupIndex */
         DEM_DTC_WWHOBD_CLASS_NOCLASS,/*DemWWHOBDDTCClass*/
         1,
@@ -611,7 +673,7 @@ static CONST(Dem_DTCType,AUTOMATIC) DemDTC[DEM_DTC_NUM] =
         DEM_OBD_DTC_INVALID, /*DemObdDTC */
         DEM_DTC_KIND_ALL_DTCS,
         0xffu, /* DemDTCFunctionalUnit  */
-        DEM_SEVERITY_NO_SEVERITY, /* DemDTCSeverity */
+        DEM_SEVERITY_CHECK_AT_NEXT_HALT, /* DemDTCSeverity */
         DEM_GROUP_OF_DTC_INVALID, /* DTC GroupIndex */
         DEM_DTC_WWHOBD_CLASS_NOCLASS,/*DemWWHOBDDTCClass*/
         1,
@@ -623,7 +685,7 @@ static CONST(Dem_DTCType,AUTOMATIC) DemDTC[DEM_DTC_NUM] =
         DEM_OBD_DTC_INVALID, /*DemObdDTC */
         DEM_DTC_KIND_ALL_DTCS,
         0xffu, /* DemDTCFunctionalUnit  */
-        DEM_SEVERITY_NO_SEVERITY, /* DemDTCSeverity */
+        DEM_SEVERITY_CHECK_AT_NEXT_HALT, /* DemDTCSeverity */
         DEM_GROUP_OF_DTC_INVALID, /* DTC GroupIndex */
         DEM_DTC_WWHOBD_CLASS_NOCLASS,/*DemWWHOBDDTCClass*/
         1,
@@ -635,7 +697,7 @@ static CONST(Dem_DTCType,AUTOMATIC) DemDTC[DEM_DTC_NUM] =
         DEM_OBD_DTC_INVALID, /*DemObdDTC */
         DEM_DTC_KIND_ALL_DTCS,
         0xffu, /* DemDTCFunctionalUnit  */
-        DEM_SEVERITY_NO_SEVERITY, /* DemDTCSeverity */
+        DEM_SEVERITY_CHECK_AT_NEXT_HALT, /* DemDTCSeverity */
         DEM_GROUP_OF_DTC_INVALID, /* DTC GroupIndex */
         DEM_DTC_WWHOBD_CLASS_NOCLASS,/*DemWWHOBDDTCClass*/
         1,
@@ -647,7 +709,7 @@ static CONST(Dem_DTCType,AUTOMATIC) DemDTC[DEM_DTC_NUM] =
         DEM_OBD_DTC_INVALID, /*DemObdDTC */
         DEM_DTC_KIND_ALL_DTCS,
         0xffu, /* DemDTCFunctionalUnit  */
-        DEM_SEVERITY_NO_SEVERITY, /* DemDTCSeverity */
+        DEM_SEVERITY_CHECK_AT_NEXT_HALT, /* DemDTCSeverity */
         DEM_GROUP_OF_DTC_INVALID, /* DTC GroupIndex */
         DEM_DTC_WWHOBD_CLASS_NOCLASS,/*DemWWHOBDDTCClass*/
         1,
@@ -659,7 +721,7 @@ static CONST(Dem_DTCType,AUTOMATIC) DemDTC[DEM_DTC_NUM] =
         DEM_OBD_DTC_INVALID, /*DemObdDTC */
         DEM_DTC_KIND_ALL_DTCS,
         0xffu, /* DemDTCFunctionalUnit  */
-        DEM_SEVERITY_NO_SEVERITY, /* DemDTCSeverity */
+        DEM_SEVERITY_CHECK_AT_NEXT_HALT, /* DemDTCSeverity */
         DEM_GROUP_OF_DTC_INVALID, /* DTC GroupIndex */
         DEM_DTC_WWHOBD_CLASS_NOCLASS,/*DemWWHOBDDTCClass*/
         1,
@@ -671,7 +733,7 @@ static CONST(Dem_DTCType,AUTOMATIC) DemDTC[DEM_DTC_NUM] =
         DEM_OBD_DTC_INVALID, /*DemObdDTC */
         DEM_DTC_KIND_ALL_DTCS,
         0xffu, /* DemDTCFunctionalUnit  */
-        DEM_SEVERITY_NO_SEVERITY, /* DemDTCSeverity */
+        DEM_SEVERITY_CHECK_AT_NEXT_HALT, /* DemDTCSeverity */
         DEM_GROUP_OF_DTC_INVALID, /* DTC GroupIndex */
         DEM_DTC_WWHOBD_CLASS_NOCLASS,/*DemWWHOBDDTCClass*/
         1,
@@ -683,7 +745,7 @@ static CONST(Dem_DTCType,AUTOMATIC) DemDTC[DEM_DTC_NUM] =
         DEM_OBD_DTC_INVALID, /*DemObdDTC */
         DEM_DTC_KIND_ALL_DTCS,
         0xffu, /* DemDTCFunctionalUnit  */
-        DEM_SEVERITY_NO_SEVERITY, /* DemDTCSeverity */
+        DEM_SEVERITY_CHECK_AT_NEXT_HALT, /* DemDTCSeverity */
         DEM_GROUP_OF_DTC_INVALID, /* DTC GroupIndex */
         DEM_DTC_WWHOBD_CLASS_NOCLASS,/*DemWWHOBDDTCClass*/
         1,
@@ -695,7 +757,7 @@ static CONST(Dem_DTCType,AUTOMATIC) DemDTC[DEM_DTC_NUM] =
         DEM_OBD_DTC_INVALID, /*DemObdDTC */
         DEM_DTC_KIND_ALL_DTCS,
         0xffu, /* DemDTCFunctionalUnit  */
-        DEM_SEVERITY_NO_SEVERITY, /* DemDTCSeverity */
+        DEM_SEVERITY_CHECK_AT_NEXT_HALT, /* DemDTCSeverity */
         DEM_GROUP_OF_DTC_INVALID, /* DTC GroupIndex */
         DEM_DTC_WWHOBD_CLASS_NOCLASS,/*DemWWHOBDDTCClass*/
         1,
@@ -707,7 +769,7 @@ static CONST(Dem_DTCType,AUTOMATIC) DemDTC[DEM_DTC_NUM] =
         DEM_OBD_DTC_INVALID, /*DemObdDTC */
         DEM_DTC_KIND_ALL_DTCS,
         0xffu, /* DemDTCFunctionalUnit  */
-        DEM_SEVERITY_NO_SEVERITY, /* DemDTCSeverity */
+        DEM_SEVERITY_CHECK_AT_NEXT_HALT, /* DemDTCSeverity */
         DEM_GROUP_OF_DTC_INVALID, /* DTC GroupIndex */
         DEM_DTC_WWHOBD_CLASS_NOCLASS,/*DemWWHOBDDTCClass*/
         1,
@@ -719,7 +781,7 @@ static CONST(Dem_DTCType,AUTOMATIC) DemDTC[DEM_DTC_NUM] =
         DEM_OBD_DTC_INVALID, /*DemObdDTC */
         DEM_DTC_KIND_ALL_DTCS,
         0xffu, /* DemDTCFunctionalUnit  */
-        DEM_SEVERITY_NO_SEVERITY, /* DemDTCSeverity */
+        DEM_SEVERITY_CHECK_AT_NEXT_HALT, /* DemDTCSeverity */
         DEM_GROUP_OF_DTC_INVALID, /* DTC GroupIndex */
         DEM_DTC_WWHOBD_CLASS_NOCLASS,/*DemWWHOBDDTCClass*/
         1,
@@ -731,7 +793,7 @@ static CONST(Dem_DTCType,AUTOMATIC) DemDTC[DEM_DTC_NUM] =
         DEM_OBD_DTC_INVALID, /*DemObdDTC */
         DEM_DTC_KIND_ALL_DTCS,
         0xffu, /* DemDTCFunctionalUnit  */
-        DEM_SEVERITY_NO_SEVERITY, /* DemDTCSeverity */
+        DEM_SEVERITY_CHECK_AT_NEXT_HALT, /* DemDTCSeverity */
         DEM_GROUP_OF_DTC_INVALID, /* DTC GroupIndex */
         DEM_DTC_WWHOBD_CLASS_NOCLASS,/*DemWWHOBDDTCClass*/
         1,
@@ -743,7 +805,7 @@ static CONST(Dem_DTCType,AUTOMATIC) DemDTC[DEM_DTC_NUM] =
         DEM_OBD_DTC_INVALID, /*DemObdDTC */
         DEM_DTC_KIND_ALL_DTCS,
         0xffu, /* DemDTCFunctionalUnit  */
-        DEM_SEVERITY_NO_SEVERITY, /* DemDTCSeverity */
+        DEM_SEVERITY_CHECK_AT_NEXT_HALT, /* DemDTCSeverity */
         DEM_GROUP_OF_DTC_INVALID, /* DTC GroupIndex */
         DEM_DTC_WWHOBD_CLASS_NOCLASS,/*DemWWHOBDDTCClass*/
         1,
@@ -755,7 +817,7 @@ static CONST(Dem_DTCType,AUTOMATIC) DemDTC[DEM_DTC_NUM] =
         DEM_OBD_DTC_INVALID, /*DemObdDTC */
         DEM_DTC_KIND_ALL_DTCS,
         0xffu, /* DemDTCFunctionalUnit  */
-        DEM_SEVERITY_NO_SEVERITY, /* DemDTCSeverity */
+        DEM_SEVERITY_CHECK_AT_NEXT_HALT, /* DemDTCSeverity */
         DEM_GROUP_OF_DTC_INVALID, /* DTC GroupIndex */
         DEM_DTC_WWHOBD_CLASS_NOCLASS,/*DemWWHOBDDTCClass*/
         1,
@@ -767,7 +829,7 @@ static CONST(Dem_DTCType,AUTOMATIC) DemDTC[DEM_DTC_NUM] =
         DEM_OBD_DTC_INVALID, /*DemObdDTC */
         DEM_DTC_KIND_ALL_DTCS,
         0xffu, /* DemDTCFunctionalUnit  */
-        DEM_SEVERITY_NO_SEVERITY, /* DemDTCSeverity */
+        DEM_SEVERITY_CHECK_AT_NEXT_HALT, /* DemDTCSeverity */
         DEM_GROUP_OF_DTC_INVALID, /* DTC GroupIndex */
         DEM_DTC_WWHOBD_CLASS_NOCLASS,/*DemWWHOBDDTCClass*/
         1,
@@ -779,7 +841,7 @@ static CONST(Dem_DTCType,AUTOMATIC) DemDTC[DEM_DTC_NUM] =
         DEM_OBD_DTC_INVALID, /*DemObdDTC */
         DEM_DTC_KIND_ALL_DTCS,
         0xffu, /* DemDTCFunctionalUnit  */
-        DEM_SEVERITY_NO_SEVERITY, /* DemDTCSeverity */
+        DEM_SEVERITY_CHECK_AT_NEXT_HALT, /* DemDTCSeverity */
         DEM_GROUP_OF_DTC_INVALID, /* DTC GroupIndex */
         DEM_DTC_WWHOBD_CLASS_NOCLASS,/*DemWWHOBDDTCClass*/
         1,
@@ -791,7 +853,7 @@ static CONST(Dem_DTCType,AUTOMATIC) DemDTC[DEM_DTC_NUM] =
         DEM_OBD_DTC_INVALID, /*DemObdDTC */
         DEM_DTC_KIND_ALL_DTCS,
         0xffu, /* DemDTCFunctionalUnit  */
-        DEM_SEVERITY_NO_SEVERITY, /* DemDTCSeverity */
+        DEM_SEVERITY_CHECK_AT_NEXT_HALT, /* DemDTCSeverity */
         DEM_GROUP_OF_DTC_INVALID, /* DTC GroupIndex */
         DEM_DTC_WWHOBD_CLASS_NOCLASS,/*DemWWHOBDDTCClass*/
         1,
@@ -803,7 +865,7 @@ static CONST(Dem_DTCType,AUTOMATIC) DemDTC[DEM_DTC_NUM] =
         DEM_OBD_DTC_INVALID, /*DemObdDTC */
         DEM_DTC_KIND_ALL_DTCS,
         0xffu, /* DemDTCFunctionalUnit  */
-        DEM_SEVERITY_NO_SEVERITY, /* DemDTCSeverity */
+        DEM_SEVERITY_CHECK_AT_NEXT_HALT, /* DemDTCSeverity */
         DEM_GROUP_OF_DTC_INVALID, /* DTC GroupIndex */
         DEM_DTC_WWHOBD_CLASS_NOCLASS,/*DemWWHOBDDTCClass*/
         1,
@@ -815,7 +877,7 @@ static CONST(Dem_DTCType,AUTOMATIC) DemDTC[DEM_DTC_NUM] =
         DEM_OBD_DTC_INVALID, /*DemObdDTC */
         DEM_DTC_KIND_ALL_DTCS,
         0xffu, /* DemDTCFunctionalUnit  */
-        DEM_SEVERITY_NO_SEVERITY, /* DemDTCSeverity */
+        DEM_SEVERITY_CHECK_AT_NEXT_HALT, /* DemDTCSeverity */
         DEM_GROUP_OF_DTC_INVALID, /* DTC GroupIndex */
         DEM_DTC_WWHOBD_CLASS_NOCLASS,/*DemWWHOBDDTCClass*/
         1,
@@ -827,7 +889,7 @@ static CONST(Dem_DTCType,AUTOMATIC) DemDTC[DEM_DTC_NUM] =
         DEM_OBD_DTC_INVALID, /*DemObdDTC */
         DEM_DTC_KIND_ALL_DTCS,
         0xffu, /* DemDTCFunctionalUnit  */
-        DEM_SEVERITY_NO_SEVERITY, /* DemDTCSeverity */
+        DEM_SEVERITY_CHECK_AT_NEXT_HALT, /* DemDTCSeverity */
         DEM_GROUP_OF_DTC_INVALID, /* DTC GroupIndex */
         DEM_DTC_WWHOBD_CLASS_NOCLASS,/*DemWWHOBDDTCClass*/
         1,
@@ -839,7 +901,7 @@ static CONST(Dem_DTCType,AUTOMATIC) DemDTC[DEM_DTC_NUM] =
         DEM_OBD_DTC_INVALID, /*DemObdDTC */
         DEM_DTC_KIND_ALL_DTCS,
         0xffu, /* DemDTCFunctionalUnit  */
-        DEM_SEVERITY_NO_SEVERITY, /* DemDTCSeverity */
+        DEM_SEVERITY_CHECK_AT_NEXT_HALT, /* DemDTCSeverity */
         DEM_GROUP_OF_DTC_INVALID, /* DTC GroupIndex */
         DEM_DTC_WWHOBD_CLASS_NOCLASS,/*DemWWHOBDDTCClass*/
         1,
@@ -851,7 +913,7 @@ static CONST(Dem_DTCType,AUTOMATIC) DemDTC[DEM_DTC_NUM] =
         DEM_OBD_DTC_INVALID, /*DemObdDTC */
         DEM_DTC_KIND_ALL_DTCS,
         0xffu, /* DemDTCFunctionalUnit  */
-        DEM_SEVERITY_NO_SEVERITY, /* DemDTCSeverity */
+        DEM_SEVERITY_CHECK_AT_NEXT_HALT, /* DemDTCSeverity */
         DEM_GROUP_OF_DTC_INVALID, /* DTC GroupIndex */
         DEM_DTC_WWHOBD_CLASS_NOCLASS,/*DemWWHOBDDTCClass*/
         1,
@@ -863,7 +925,7 @@ static CONST(Dem_DTCType,AUTOMATIC) DemDTC[DEM_DTC_NUM] =
         DEM_OBD_DTC_INVALID, /*DemObdDTC */
         DEM_DTC_KIND_ALL_DTCS,
         0xffu, /* DemDTCFunctionalUnit  */
-        DEM_SEVERITY_NO_SEVERITY, /* DemDTCSeverity */
+        DEM_SEVERITY_CHECK_AT_NEXT_HALT, /* DemDTCSeverity */
         DEM_GROUP_OF_DTC_INVALID, /* DTC GroupIndex */
         DEM_DTC_WWHOBD_CLASS_NOCLASS,/*DemWWHOBDDTCClass*/
         1,
@@ -875,7 +937,7 @@ static CONST(Dem_DTCType,AUTOMATIC) DemDTC[DEM_DTC_NUM] =
         DEM_OBD_DTC_INVALID, /*DemObdDTC */
         DEM_DTC_KIND_ALL_DTCS,
         0xffu, /* DemDTCFunctionalUnit  */
-        DEM_SEVERITY_NO_SEVERITY, /* DemDTCSeverity */
+        DEM_SEVERITY_CHECK_AT_NEXT_HALT, /* DemDTCSeverity */
         DEM_GROUP_OF_DTC_INVALID, /* DTC GroupIndex */
         DEM_DTC_WWHOBD_CLASS_NOCLASS,/*DemWWHOBDDTCClass*/
         1,
@@ -887,7 +949,7 @@ static CONST(Dem_DTCType,AUTOMATIC) DemDTC[DEM_DTC_NUM] =
         DEM_OBD_DTC_INVALID, /*DemObdDTC */
         DEM_DTC_KIND_ALL_DTCS,
         0xffu, /* DemDTCFunctionalUnit  */
-        DEM_SEVERITY_NO_SEVERITY, /* DemDTCSeverity */
+        DEM_SEVERITY_CHECK_AT_NEXT_HALT, /* DemDTCSeverity */
         DEM_GROUP_OF_DTC_INVALID, /* DTC GroupIndex */
         DEM_DTC_WWHOBD_CLASS_NOCLASS,/*DemWWHOBDDTCClass*/
         1,
@@ -899,7 +961,7 @@ static CONST(Dem_DTCType,AUTOMATIC) DemDTC[DEM_DTC_NUM] =
         DEM_OBD_DTC_INVALID, /*DemObdDTC */
         DEM_DTC_KIND_ALL_DTCS,
         0xffu, /* DemDTCFunctionalUnit  */
-        DEM_SEVERITY_NO_SEVERITY, /* DemDTCSeverity */
+        DEM_SEVERITY_CHECK_AT_NEXT_HALT, /* DemDTCSeverity */
         DEM_GROUP_OF_DTC_INVALID, /* DTC GroupIndex */
         DEM_DTC_WWHOBD_CLASS_NOCLASS,/*DemWWHOBDDTCClass*/
         1,
@@ -911,7 +973,7 @@ static CONST(Dem_DTCType,AUTOMATIC) DemDTC[DEM_DTC_NUM] =
         DEM_OBD_DTC_INVALID, /*DemObdDTC */
         DEM_DTC_KIND_ALL_DTCS,
         0xffu, /* DemDTCFunctionalUnit  */
-        DEM_SEVERITY_NO_SEVERITY, /* DemDTCSeverity */
+        DEM_SEVERITY_CHECK_AT_NEXT_HALT, /* DemDTCSeverity */
         DEM_GROUP_OF_DTC_INVALID, /* DTC GroupIndex */
         DEM_DTC_WWHOBD_CLASS_NOCLASS,/*DemWWHOBDDTCClass*/
         1,
@@ -923,7 +985,7 @@ static CONST(Dem_DTCType,AUTOMATIC) DemDTC[DEM_DTC_NUM] =
         DEM_OBD_DTC_INVALID, /*DemObdDTC */
         DEM_DTC_KIND_ALL_DTCS,
         0xffu, /* DemDTCFunctionalUnit  */
-        DEM_SEVERITY_NO_SEVERITY, /* DemDTCSeverity */
+        DEM_SEVERITY_CHECK_AT_NEXT_HALT, /* DemDTCSeverity */
         DEM_GROUP_OF_DTC_INVALID, /* DTC GroupIndex */
         DEM_DTC_WWHOBD_CLASS_NOCLASS,/*DemWWHOBDDTCClass*/
         1,
@@ -935,7 +997,7 @@ static CONST(Dem_DTCType,AUTOMATIC) DemDTC[DEM_DTC_NUM] =
         DEM_OBD_DTC_INVALID, /*DemObdDTC */
         DEM_DTC_KIND_ALL_DTCS,
         0xffu, /* DemDTCFunctionalUnit  */
-        DEM_SEVERITY_NO_SEVERITY, /* DemDTCSeverity */
+        DEM_SEVERITY_CHECK_AT_NEXT_HALT, /* DemDTCSeverity */
         DEM_GROUP_OF_DTC_INVALID, /* DTC GroupIndex */
         DEM_DTC_WWHOBD_CLASS_NOCLASS,/*DemWWHOBDDTCClass*/
         1,
@@ -947,7 +1009,7 @@ static CONST(Dem_DTCType,AUTOMATIC) DemDTC[DEM_DTC_NUM] =
         DEM_OBD_DTC_INVALID, /*DemObdDTC */
         DEM_DTC_KIND_ALL_DTCS,
         0xffu, /* DemDTCFunctionalUnit  */
-        DEM_SEVERITY_NO_SEVERITY, /* DemDTCSeverity */
+        DEM_SEVERITY_CHECK_AT_NEXT_HALT, /* DemDTCSeverity */
         DEM_GROUP_OF_DTC_INVALID, /* DTC GroupIndex */
         DEM_DTC_WWHOBD_CLASS_NOCLASS,/*DemWWHOBDDTCClass*/
         1,
@@ -959,7 +1021,7 @@ static CONST(Dem_DTCType,AUTOMATIC) DemDTC[DEM_DTC_NUM] =
         DEM_OBD_DTC_INVALID, /*DemObdDTC */
         DEM_DTC_KIND_ALL_DTCS,
         0xffu, /* DemDTCFunctionalUnit  */
-        DEM_SEVERITY_NO_SEVERITY, /* DemDTCSeverity */
+        DEM_SEVERITY_CHECK_AT_NEXT_HALT, /* DemDTCSeverity */
         DEM_GROUP_OF_DTC_INVALID, /* DTC GroupIndex */
         DEM_DTC_WWHOBD_CLASS_NOCLASS,/*DemWWHOBDDTCClass*/
         1,
@@ -971,7 +1033,7 @@ static CONST(Dem_DTCType,AUTOMATIC) DemDTC[DEM_DTC_NUM] =
         DEM_OBD_DTC_INVALID, /*DemObdDTC */
         DEM_DTC_KIND_ALL_DTCS,
         0xffu, /* DemDTCFunctionalUnit  */
-        DEM_SEVERITY_NO_SEVERITY, /* DemDTCSeverity */
+        DEM_SEVERITY_CHECK_AT_NEXT_HALT, /* DemDTCSeverity */
         DEM_GROUP_OF_DTC_INVALID, /* DTC GroupIndex */
         DEM_DTC_WWHOBD_CLASS_NOCLASS,/*DemWWHOBDDTCClass*/
         1,
@@ -983,7 +1045,7 @@ static CONST(Dem_DTCType,AUTOMATIC) DemDTC[DEM_DTC_NUM] =
         DEM_OBD_DTC_INVALID, /*DemObdDTC */
         DEM_DTC_KIND_ALL_DTCS,
         0xffu, /* DemDTCFunctionalUnit  */
-        DEM_SEVERITY_NO_SEVERITY, /* DemDTCSeverity */
+        DEM_SEVERITY_CHECK_AT_NEXT_HALT, /* DemDTCSeverity */
         DEM_GROUP_OF_DTC_INVALID, /* DTC GroupIndex */
         DEM_DTC_WWHOBD_CLASS_NOCLASS,/*DemWWHOBDDTCClass*/
         1,
@@ -995,7 +1057,7 @@ static CONST(Dem_DTCType,AUTOMATIC) DemDTC[DEM_DTC_NUM] =
         DEM_OBD_DTC_INVALID, /*DemObdDTC */
         DEM_DTC_KIND_ALL_DTCS,
         0xffu, /* DemDTCFunctionalUnit  */
-        DEM_SEVERITY_NO_SEVERITY, /* DemDTCSeverity */
+        DEM_SEVERITY_CHECK_AT_NEXT_HALT, /* DemDTCSeverity */
         DEM_GROUP_OF_DTC_INVALID, /* DTC GroupIndex */
         DEM_DTC_WWHOBD_CLASS_NOCLASS,/*DemWWHOBDDTCClass*/
         1,
@@ -1007,7 +1069,7 @@ static CONST(Dem_DTCType,AUTOMATIC) DemDTC[DEM_DTC_NUM] =
         DEM_OBD_DTC_INVALID, /*DemObdDTC */
         DEM_DTC_KIND_ALL_DTCS,
         0xffu, /* DemDTCFunctionalUnit  */
-        DEM_SEVERITY_NO_SEVERITY, /* DemDTCSeverity */
+        DEM_SEVERITY_CHECK_AT_NEXT_HALT, /* DemDTCSeverity */
         DEM_GROUP_OF_DTC_INVALID, /* DTC GroupIndex */
         DEM_DTC_WWHOBD_CLASS_NOCLASS,/*DemWWHOBDDTCClass*/
         1,
@@ -1019,7 +1081,7 @@ static CONST(Dem_DTCType,AUTOMATIC) DemDTC[DEM_DTC_NUM] =
         DEM_OBD_DTC_INVALID, /*DemObdDTC */
         DEM_DTC_KIND_ALL_DTCS,
         0xffu, /* DemDTCFunctionalUnit  */
-        DEM_SEVERITY_NO_SEVERITY, /* DemDTCSeverity */
+        DEM_SEVERITY_CHECK_AT_NEXT_HALT, /* DemDTCSeverity */
         DEM_GROUP_OF_DTC_INVALID, /* DTC GroupIndex */
         DEM_DTC_WWHOBD_CLASS_NOCLASS,/*DemWWHOBDDTCClass*/
         1,
@@ -1031,7 +1093,7 @@ static CONST(Dem_DTCType,AUTOMATIC) DemDTC[DEM_DTC_NUM] =
         DEM_OBD_DTC_INVALID, /*DemObdDTC */
         DEM_DTC_KIND_ALL_DTCS,
         0xffu, /* DemDTCFunctionalUnit  */
-        DEM_SEVERITY_NO_SEVERITY, /* DemDTCSeverity */
+        DEM_SEVERITY_CHECK_AT_NEXT_HALT, /* DemDTCSeverity */
         DEM_GROUP_OF_DTC_INVALID, /* DTC GroupIndex */
         DEM_DTC_WWHOBD_CLASS_NOCLASS,/*DemWWHOBDDTCClass*/
         1,
@@ -1043,7 +1105,7 @@ static CONST(Dem_DTCType,AUTOMATIC) DemDTC[DEM_DTC_NUM] =
         DEM_OBD_DTC_INVALID, /*DemObdDTC */
         DEM_DTC_KIND_ALL_DTCS,
         0xffu, /* DemDTCFunctionalUnit  */
-        DEM_SEVERITY_NO_SEVERITY, /* DemDTCSeverity */
+        DEM_SEVERITY_CHECK_AT_NEXT_HALT, /* DemDTCSeverity */
         DEM_GROUP_OF_DTC_INVALID, /* DTC GroupIndex */
         DEM_DTC_WWHOBD_CLASS_NOCLASS,/*DemWWHOBDDTCClass*/
         1,
@@ -1055,11 +1117,23 @@ static CONST(Dem_DTCType,AUTOMATIC) DemDTC[DEM_DTC_NUM] =
         DEM_OBD_DTC_INVALID, /*DemObdDTC */
         DEM_DTC_KIND_ALL_DTCS,
         0xffu, /* DemDTCFunctionalUnit  */
-        DEM_SEVERITY_NO_SEVERITY, /* DemDTCSeverity */
+        DEM_SEVERITY_CHECK_AT_NEXT_HALT, /* DemDTCSeverity */
         DEM_GROUP_OF_DTC_INVALID, /* DTC GroupIndex */
         DEM_DTC_WWHOBD_CLASS_NOCLASS,/*DemWWHOBDDTCClass*/
         1,
         57,
+    },
+    { /* DTC_0x951511 */
+        0x951511u, /* DemDtcValue */
+        0u, /* DemDTCAttributesRef  */
+        DEM_OBD_DTC_INVALID, /*DemObdDTC */
+        DEM_DTC_KIND_ALL_DTCS,
+        0xffu, /* DemDTCFunctionalUnit  */
+        DEM_SEVERITY_CHECK_AT_NEXT_HALT, /* DemDTCSeverity */
+        DEM_GROUP_OF_DTC_INVALID, /* DTC GroupIndex */
+        DEM_DTC_WWHOBD_CLASS_NOCLASS,/*DemWWHOBDDTCClass*/
+        1,
+        58,
     }
 };
 #define DEM_STOP_SEC_CONST_UNSPECIFIED
@@ -1070,7 +1144,7 @@ static CONST(Dem_DTCType,AUTOMATIC) DemDTC[DEM_DTC_NUM] =
 /* DemDTCAttributes */
 static CONST(Dem_DTCAttributesType,AUTOMATIC) DemDTCAttributes[DEM_DTC_ATTRIBUTES_NUM] =
 {
-    { /* DTCAttributes_0 */
+    { /* DTCAttributes_LocalFF_BE08 */
         TRUE, /* DemAgingAllowed */
         0u, /* DemAgingCycleRef */
         40u, /* DemAgingCycleCounterThreshold */
@@ -1081,7 +1155,7 @@ static CONST(Dem_DTCAttributesType,AUTOMATIC) DemDTCAttributes[DEM_DTC_ATTRIBUTE
         FALSE, /* DemImmediateNvStorage */
         DEM_EVENT_SIGNIFICANCE_FAULT, /* DemDTCSignificance */
         0u, /* DemExtendedDataClassRef  */
-        0u, /* DemFreezeFrameClassRef  */
+        1u, /* DemFreezeFrameClassRef  */
         { 0u}, /* DemMemoryDestinationRef  */
         DEM_J1939_NODE_INVALID,/*DemJ1939DTC_J1939NodeRef*/
         DEM_J1939_FREEZE_FRAME_INVALID,/*DemJ1939ExpandedFreezeFrameClassRef*/
@@ -1447,6 +1521,12 @@ CONST(Dem_IndicatorAttributeType,AUTOMATIC) DemIndicatorAttribute[DEM_INDICATOR_
         Indicator_0, /* DemIndicatorRef  */
         DEM_INDICATOR_BLINKING, /* DemEventParameter_065800 : DemIndicatorAttribute_23 */
     },
+    { /* IndicatorAttribute_0x954100 */
+        0u, /* DemIndicatorFailureCycleCounterThreshold */
+        0u, /* DemIndicatorHealingCycleCounterThreshold */
+        Indicator_0, /* DemIndicatorRef  */
+        DEM_INDICATOR_BLINKING, /* DemEventParameter_065800 : DemIndicatorAttribute_23 */
+    },
 };
 #define DEM_STOP_SEC_CONST_UNSPECIFIED
 #include "Dem_MemMap.h"
@@ -1499,7 +1579,7 @@ static CONST(Dem_EventParameterType,AUTOMATIC) DemEventParameter[DEM_EVENT_PARAM
         DEM_EVENT_KIND_SWC, /* DemEventKind = DEM_EVENT_KIND_BSW or DEM_EVENT_KIND_SWC */
         REPORT_BEFORE_INIT, /* DemReportBehavior = REPORT_AFTER_INIT or REPORT_AFTER_INIT */
         0u, /* DemOperationCycleRef Reference: DemOperationCycle MULTI:1-1*/
-        DEM_ENABLE_CONDITION_GROUP_INVALID, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
+        0u, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
         DEM_STORAGE_CONDITION_GROUP_INVALID, /* DemStorageConditionGroupRef: Index Of DemStorageConditionGroup */
         DEM_COMPONENT_INVALID,/*DemComponentClassRef Reference: DemComponent */ /*if no component shall be DEM_COMPONENT_INVALID*/
         0xffu,/*DemComponentPriority*/
@@ -1523,7 +1603,7 @@ static CONST(Dem_EventParameterType,AUTOMATIC) DemEventParameter[DEM_EVENT_PARAM
         DEM_EVENT_KIND_SWC, /* DemEventKind = DEM_EVENT_KIND_BSW or DEM_EVENT_KIND_SWC */
         REPORT_BEFORE_INIT, /* DemReportBehavior = REPORT_AFTER_INIT or REPORT_AFTER_INIT */
         0u, /* DemOperationCycleRef Reference: DemOperationCycle MULTI:1-1*/
-        DEM_ENABLE_CONDITION_GROUP_INVALID, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
+        0u, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
         DEM_STORAGE_CONDITION_GROUP_INVALID, /* DemStorageConditionGroupRef: Index Of DemStorageConditionGroup */
         DEM_COMPONENT_INVALID,/*DemComponentClassRef Reference: DemComponent */ /*if no component shall be DEM_COMPONENT_INVALID*/
         0xffu,/*DemComponentPriority*/
@@ -1547,7 +1627,7 @@ static CONST(Dem_EventParameterType,AUTOMATIC) DemEventParameter[DEM_EVENT_PARAM
         DEM_EVENT_KIND_SWC, /* DemEventKind = DEM_EVENT_KIND_BSW or DEM_EVENT_KIND_SWC */
         REPORT_BEFORE_INIT, /* DemReportBehavior = REPORT_AFTER_INIT or REPORT_AFTER_INIT */
         0u, /* DemOperationCycleRef Reference: DemOperationCycle MULTI:1-1*/
-        DEM_ENABLE_CONDITION_GROUP_INVALID, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
+        0u, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
         DEM_STORAGE_CONDITION_GROUP_INVALID, /* DemStorageConditionGroupRef: Index Of DemStorageConditionGroup */
         DEM_COMPONENT_INVALID,/*DemComponentClassRef Reference: DemComponent */ /*if no component shall be DEM_COMPONENT_INVALID*/
         0xffu,/*DemComponentPriority*/
@@ -1571,7 +1651,7 @@ static CONST(Dem_EventParameterType,AUTOMATIC) DemEventParameter[DEM_EVENT_PARAM
         DEM_EVENT_KIND_SWC, /* DemEventKind = DEM_EVENT_KIND_BSW or DEM_EVENT_KIND_SWC */
         REPORT_BEFORE_INIT, /* DemReportBehavior = REPORT_AFTER_INIT or REPORT_AFTER_INIT */
         0u, /* DemOperationCycleRef Reference: DemOperationCycle MULTI:1-1*/
-        DEM_ENABLE_CONDITION_GROUP_INVALID, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
+        0u, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
         DEM_STORAGE_CONDITION_GROUP_INVALID, /* DemStorageConditionGroupRef: Index Of DemStorageConditionGroup */
         DEM_COMPONENT_INVALID,/*DemComponentClassRef Reference: DemComponent */ /*if no component shall be DEM_COMPONENT_INVALID*/
         0xffu,/*DemComponentPriority*/
@@ -1595,7 +1675,7 @@ static CONST(Dem_EventParameterType,AUTOMATIC) DemEventParameter[DEM_EVENT_PARAM
         DEM_EVENT_KIND_SWC, /* DemEventKind = DEM_EVENT_KIND_BSW or DEM_EVENT_KIND_SWC */
         REPORT_BEFORE_INIT, /* DemReportBehavior = REPORT_AFTER_INIT or REPORT_AFTER_INIT */
         0u, /* DemOperationCycleRef Reference: DemOperationCycle MULTI:1-1*/
-        DEM_ENABLE_CONDITION_GROUP_INVALID, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
+        0u, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
         DEM_STORAGE_CONDITION_GROUP_INVALID, /* DemStorageConditionGroupRef: Index Of DemStorageConditionGroup */
         DEM_COMPONENT_INVALID,/*DemComponentClassRef Reference: DemComponent */ /*if no component shall be DEM_COMPONENT_INVALID*/
         0xffu,/*DemComponentPriority*/
@@ -1619,7 +1699,7 @@ static CONST(Dem_EventParameterType,AUTOMATIC) DemEventParameter[DEM_EVENT_PARAM
         DEM_EVENT_KIND_SWC, /* DemEventKind = DEM_EVENT_KIND_BSW or DEM_EVENT_KIND_SWC */
         REPORT_BEFORE_INIT, /* DemReportBehavior = REPORT_AFTER_INIT or REPORT_AFTER_INIT */
         0u, /* DemOperationCycleRef Reference: DemOperationCycle MULTI:1-1*/
-        DEM_ENABLE_CONDITION_GROUP_INVALID, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
+        0u, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
         DEM_STORAGE_CONDITION_GROUP_INVALID, /* DemStorageConditionGroupRef: Index Of DemStorageConditionGroup */
         DEM_COMPONENT_INVALID,/*DemComponentClassRef Reference: DemComponent */ /*if no component shall be DEM_COMPONENT_INVALID*/
         0xffu,/*DemComponentPriority*/
@@ -1643,7 +1723,7 @@ static CONST(Dem_EventParameterType,AUTOMATIC) DemEventParameter[DEM_EVENT_PARAM
         DEM_EVENT_KIND_SWC, /* DemEventKind = DEM_EVENT_KIND_BSW or DEM_EVENT_KIND_SWC */
         REPORT_BEFORE_INIT, /* DemReportBehavior = REPORT_AFTER_INIT or REPORT_AFTER_INIT */
         0u, /* DemOperationCycleRef Reference: DemOperationCycle MULTI:1-1*/
-        DEM_ENABLE_CONDITION_GROUP_INVALID, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
+        0u, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
         DEM_STORAGE_CONDITION_GROUP_INVALID, /* DemStorageConditionGroupRef: Index Of DemStorageConditionGroup */
         DEM_COMPONENT_INVALID,/*DemComponentClassRef Reference: DemComponent */ /*if no component shall be DEM_COMPONENT_INVALID*/
         0xffu,/*DemComponentPriority*/
@@ -1667,7 +1747,7 @@ static CONST(Dem_EventParameterType,AUTOMATIC) DemEventParameter[DEM_EVENT_PARAM
         DEM_EVENT_KIND_SWC, /* DemEventKind = DEM_EVENT_KIND_BSW or DEM_EVENT_KIND_SWC */
         REPORT_BEFORE_INIT, /* DemReportBehavior = REPORT_AFTER_INIT or REPORT_AFTER_INIT */
         0u, /* DemOperationCycleRef Reference: DemOperationCycle MULTI:1-1*/
-        DEM_ENABLE_CONDITION_GROUP_INVALID, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
+        0u, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
         DEM_STORAGE_CONDITION_GROUP_INVALID, /* DemStorageConditionGroupRef: Index Of DemStorageConditionGroup */
         DEM_COMPONENT_INVALID,/*DemComponentClassRef Reference: DemComponent */ /*if no component shall be DEM_COMPONENT_INVALID*/
         0xffu,/*DemComponentPriority*/
@@ -1691,7 +1771,7 @@ static CONST(Dem_EventParameterType,AUTOMATIC) DemEventParameter[DEM_EVENT_PARAM
         DEM_EVENT_KIND_SWC, /* DemEventKind = DEM_EVENT_KIND_BSW or DEM_EVENT_KIND_SWC */
         REPORT_BEFORE_INIT, /* DemReportBehavior = REPORT_AFTER_INIT or REPORT_AFTER_INIT */
         0u, /* DemOperationCycleRef Reference: DemOperationCycle MULTI:1-1*/
-        DEM_ENABLE_CONDITION_GROUP_INVALID, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
+        0u, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
         DEM_STORAGE_CONDITION_GROUP_INVALID, /* DemStorageConditionGroupRef: Index Of DemStorageConditionGroup */
         DEM_COMPONENT_INVALID,/*DemComponentClassRef Reference: DemComponent */ /*if no component shall be DEM_COMPONENT_INVALID*/
         0xffu,/*DemComponentPriority*/
@@ -1715,7 +1795,7 @@ static CONST(Dem_EventParameterType,AUTOMATIC) DemEventParameter[DEM_EVENT_PARAM
         DEM_EVENT_KIND_SWC, /* DemEventKind = DEM_EVENT_KIND_BSW or DEM_EVENT_KIND_SWC */
         REPORT_BEFORE_INIT, /* DemReportBehavior = REPORT_AFTER_INIT or REPORT_AFTER_INIT */
         0u, /* DemOperationCycleRef Reference: DemOperationCycle MULTI:1-1*/
-        DEM_ENABLE_CONDITION_GROUP_INVALID, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
+        0u, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
         DEM_STORAGE_CONDITION_GROUP_INVALID, /* DemStorageConditionGroupRef: Index Of DemStorageConditionGroup */
         DEM_COMPONENT_INVALID,/*DemComponentClassRef Reference: DemComponent */ /*if no component shall be DEM_COMPONENT_INVALID*/
         0xffu,/*DemComponentPriority*/
@@ -1739,7 +1819,7 @@ static CONST(Dem_EventParameterType,AUTOMATIC) DemEventParameter[DEM_EVENT_PARAM
         DEM_EVENT_KIND_SWC, /* DemEventKind = DEM_EVENT_KIND_BSW or DEM_EVENT_KIND_SWC */
         REPORT_BEFORE_INIT, /* DemReportBehavior = REPORT_AFTER_INIT or REPORT_AFTER_INIT */
         0u, /* DemOperationCycleRef Reference: DemOperationCycle MULTI:1-1*/
-        DEM_ENABLE_CONDITION_GROUP_INVALID, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
+        0u, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
         DEM_STORAGE_CONDITION_GROUP_INVALID, /* DemStorageConditionGroupRef: Index Of DemStorageConditionGroup */
         DEM_COMPONENT_INVALID,/*DemComponentClassRef Reference: DemComponent */ /*if no component shall be DEM_COMPONENT_INVALID*/
         0xffu,/*DemComponentPriority*/
@@ -1763,7 +1843,7 @@ static CONST(Dem_EventParameterType,AUTOMATIC) DemEventParameter[DEM_EVENT_PARAM
         DEM_EVENT_KIND_SWC, /* DemEventKind = DEM_EVENT_KIND_BSW or DEM_EVENT_KIND_SWC */
         REPORT_BEFORE_INIT, /* DemReportBehavior = REPORT_AFTER_INIT or REPORT_AFTER_INIT */
         0u, /* DemOperationCycleRef Reference: DemOperationCycle MULTI:1-1*/
-        DEM_ENABLE_CONDITION_GROUP_INVALID, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
+        0u, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
         DEM_STORAGE_CONDITION_GROUP_INVALID, /* DemStorageConditionGroupRef: Index Of DemStorageConditionGroup */
         DEM_COMPONENT_INVALID,/*DemComponentClassRef Reference: DemComponent */ /*if no component shall be DEM_COMPONENT_INVALID*/
         0xffu,/*DemComponentPriority*/
@@ -1787,7 +1867,7 @@ static CONST(Dem_EventParameterType,AUTOMATIC) DemEventParameter[DEM_EVENT_PARAM
         DEM_EVENT_KIND_SWC, /* DemEventKind = DEM_EVENT_KIND_BSW or DEM_EVENT_KIND_SWC */
         REPORT_BEFORE_INIT, /* DemReportBehavior = REPORT_AFTER_INIT or REPORT_AFTER_INIT */
         0u, /* DemOperationCycleRef Reference: DemOperationCycle MULTI:1-1*/
-        DEM_ENABLE_CONDITION_GROUP_INVALID, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
+        0u, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
         DEM_STORAGE_CONDITION_GROUP_INVALID, /* DemStorageConditionGroupRef: Index Of DemStorageConditionGroup */
         DEM_COMPONENT_INVALID,/*DemComponentClassRef Reference: DemComponent */ /*if no component shall be DEM_COMPONENT_INVALID*/
         0xffu,/*DemComponentPriority*/
@@ -1811,7 +1891,7 @@ static CONST(Dem_EventParameterType,AUTOMATIC) DemEventParameter[DEM_EVENT_PARAM
         DEM_EVENT_KIND_SWC, /* DemEventKind = DEM_EVENT_KIND_BSW or DEM_EVENT_KIND_SWC */
         REPORT_BEFORE_INIT, /* DemReportBehavior = REPORT_AFTER_INIT or REPORT_AFTER_INIT */
         0u, /* DemOperationCycleRef Reference: DemOperationCycle MULTI:1-1*/
-        DEM_ENABLE_CONDITION_GROUP_INVALID, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
+        0u, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
         DEM_STORAGE_CONDITION_GROUP_INVALID, /* DemStorageConditionGroupRef: Index Of DemStorageConditionGroup */
         DEM_COMPONENT_INVALID,/*DemComponentClassRef Reference: DemComponent */ /*if no component shall be DEM_COMPONENT_INVALID*/
         0xffu,/*DemComponentPriority*/
@@ -1835,7 +1915,7 @@ static CONST(Dem_EventParameterType,AUTOMATIC) DemEventParameter[DEM_EVENT_PARAM
         DEM_EVENT_KIND_SWC, /* DemEventKind = DEM_EVENT_KIND_BSW or DEM_EVENT_KIND_SWC */
         REPORT_BEFORE_INIT, /* DemReportBehavior = REPORT_AFTER_INIT or REPORT_AFTER_INIT */
         0u, /* DemOperationCycleRef Reference: DemOperationCycle MULTI:1-1*/
-        DEM_ENABLE_CONDITION_GROUP_INVALID, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
+        0u, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
         DEM_STORAGE_CONDITION_GROUP_INVALID, /* DemStorageConditionGroupRef: Index Of DemStorageConditionGroup */
         DEM_COMPONENT_INVALID,/*DemComponentClassRef Reference: DemComponent */ /*if no component shall be DEM_COMPONENT_INVALID*/
         0xffu,/*DemComponentPriority*/
@@ -1859,7 +1939,7 @@ static CONST(Dem_EventParameterType,AUTOMATIC) DemEventParameter[DEM_EVENT_PARAM
         DEM_EVENT_KIND_SWC, /* DemEventKind = DEM_EVENT_KIND_BSW or DEM_EVENT_KIND_SWC */
         REPORT_BEFORE_INIT, /* DemReportBehavior = REPORT_AFTER_INIT or REPORT_AFTER_INIT */
         0u, /* DemOperationCycleRef Reference: DemOperationCycle MULTI:1-1*/
-        DEM_ENABLE_CONDITION_GROUP_INVALID, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
+        0u, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
         DEM_STORAGE_CONDITION_GROUP_INVALID, /* DemStorageConditionGroupRef: Index Of DemStorageConditionGroup */
         DEM_COMPONENT_INVALID,/*DemComponentClassRef Reference: DemComponent */ /*if no component shall be DEM_COMPONENT_INVALID*/
         0xffu,/*DemComponentPriority*/
@@ -1883,7 +1963,7 @@ static CONST(Dem_EventParameterType,AUTOMATIC) DemEventParameter[DEM_EVENT_PARAM
         DEM_EVENT_KIND_SWC, /* DemEventKind = DEM_EVENT_KIND_BSW or DEM_EVENT_KIND_SWC */
         REPORT_BEFORE_INIT, /* DemReportBehavior = REPORT_AFTER_INIT or REPORT_AFTER_INIT */
         0u, /* DemOperationCycleRef Reference: DemOperationCycle MULTI:1-1*/
-        DEM_ENABLE_CONDITION_GROUP_INVALID, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
+        0u, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
         DEM_STORAGE_CONDITION_GROUP_INVALID, /* DemStorageConditionGroupRef: Index Of DemStorageConditionGroup */
         DEM_COMPONENT_INVALID,/*DemComponentClassRef Reference: DemComponent */ /*if no component shall be DEM_COMPONENT_INVALID*/
         0xffu,/*DemComponentPriority*/
@@ -1907,7 +1987,7 @@ static CONST(Dem_EventParameterType,AUTOMATIC) DemEventParameter[DEM_EVENT_PARAM
         DEM_EVENT_KIND_SWC, /* DemEventKind = DEM_EVENT_KIND_BSW or DEM_EVENT_KIND_SWC */
         REPORT_BEFORE_INIT, /* DemReportBehavior = REPORT_AFTER_INIT or REPORT_AFTER_INIT */
         0u, /* DemOperationCycleRef Reference: DemOperationCycle MULTI:1-1*/
-        DEM_ENABLE_CONDITION_GROUP_INVALID, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
+        0u, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
         DEM_STORAGE_CONDITION_GROUP_INVALID, /* DemStorageConditionGroupRef: Index Of DemStorageConditionGroup */
         DEM_COMPONENT_INVALID,/*DemComponentClassRef Reference: DemComponent */ /*if no component shall be DEM_COMPONENT_INVALID*/
         0xffu,/*DemComponentPriority*/
@@ -1931,7 +2011,7 @@ static CONST(Dem_EventParameterType,AUTOMATIC) DemEventParameter[DEM_EVENT_PARAM
         DEM_EVENT_KIND_SWC, /* DemEventKind = DEM_EVENT_KIND_BSW or DEM_EVENT_KIND_SWC */
         REPORT_BEFORE_INIT, /* DemReportBehavior = REPORT_AFTER_INIT or REPORT_AFTER_INIT */
         0u, /* DemOperationCycleRef Reference: DemOperationCycle MULTI:1-1*/
-        DEM_ENABLE_CONDITION_GROUP_INVALID, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
+        0u, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
         DEM_STORAGE_CONDITION_GROUP_INVALID, /* DemStorageConditionGroupRef: Index Of DemStorageConditionGroup */
         DEM_COMPONENT_INVALID,/*DemComponentClassRef Reference: DemComponent */ /*if no component shall be DEM_COMPONENT_INVALID*/
         0xffu,/*DemComponentPriority*/
@@ -1955,7 +2035,7 @@ static CONST(Dem_EventParameterType,AUTOMATIC) DemEventParameter[DEM_EVENT_PARAM
         DEM_EVENT_KIND_SWC, /* DemEventKind = DEM_EVENT_KIND_BSW or DEM_EVENT_KIND_SWC */
         REPORT_BEFORE_INIT, /* DemReportBehavior = REPORT_AFTER_INIT or REPORT_AFTER_INIT */
         0u, /* DemOperationCycleRef Reference: DemOperationCycle MULTI:1-1*/
-        DEM_ENABLE_CONDITION_GROUP_INVALID, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
+        0u, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
         DEM_STORAGE_CONDITION_GROUP_INVALID, /* DemStorageConditionGroupRef: Index Of DemStorageConditionGroup */
         DEM_COMPONENT_INVALID,/*DemComponentClassRef Reference: DemComponent */ /*if no component shall be DEM_COMPONENT_INVALID*/
         0xffu,/*DemComponentPriority*/
@@ -1979,7 +2059,7 @@ static CONST(Dem_EventParameterType,AUTOMATIC) DemEventParameter[DEM_EVENT_PARAM
         DEM_EVENT_KIND_SWC, /* DemEventKind = DEM_EVENT_KIND_BSW or DEM_EVENT_KIND_SWC */
         REPORT_BEFORE_INIT, /* DemReportBehavior = REPORT_AFTER_INIT or REPORT_AFTER_INIT */
         0u, /* DemOperationCycleRef Reference: DemOperationCycle MULTI:1-1*/
-        DEM_ENABLE_CONDITION_GROUP_INVALID, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
+        0u, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
         DEM_STORAGE_CONDITION_GROUP_INVALID, /* DemStorageConditionGroupRef: Index Of DemStorageConditionGroup */
         DEM_COMPONENT_INVALID,/*DemComponentClassRef Reference: DemComponent */ /*if no component shall be DEM_COMPONENT_INVALID*/
         0xffu,/*DemComponentPriority*/
@@ -2003,7 +2083,7 @@ static CONST(Dem_EventParameterType,AUTOMATIC) DemEventParameter[DEM_EVENT_PARAM
         DEM_EVENT_KIND_SWC, /* DemEventKind = DEM_EVENT_KIND_BSW or DEM_EVENT_KIND_SWC */
         REPORT_BEFORE_INIT, /* DemReportBehavior = REPORT_AFTER_INIT or REPORT_AFTER_INIT */
         0u, /* DemOperationCycleRef Reference: DemOperationCycle MULTI:1-1*/
-        DEM_ENABLE_CONDITION_GROUP_INVALID, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
+        0u, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
         DEM_STORAGE_CONDITION_GROUP_INVALID, /* DemStorageConditionGroupRef: Index Of DemStorageConditionGroup */
         DEM_COMPONENT_INVALID,/*DemComponentClassRef Reference: DemComponent */ /*if no component shall be DEM_COMPONENT_INVALID*/
         0xffu,/*DemComponentPriority*/
@@ -2027,7 +2107,7 @@ static CONST(Dem_EventParameterType,AUTOMATIC) DemEventParameter[DEM_EVENT_PARAM
         DEM_EVENT_KIND_SWC, /* DemEventKind = DEM_EVENT_KIND_BSW or DEM_EVENT_KIND_SWC */
         REPORT_BEFORE_INIT, /* DemReportBehavior = REPORT_AFTER_INIT or REPORT_AFTER_INIT */
         0u, /* DemOperationCycleRef Reference: DemOperationCycle MULTI:1-1*/
-        DEM_ENABLE_CONDITION_GROUP_INVALID, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
+        0u, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
         DEM_STORAGE_CONDITION_GROUP_INVALID, /* DemStorageConditionGroupRef: Index Of DemStorageConditionGroup */
         DEM_COMPONENT_INVALID,/*DemComponentClassRef Reference: DemComponent */ /*if no component shall be DEM_COMPONENT_INVALID*/
         0xffu,/*DemComponentPriority*/
@@ -2051,7 +2131,7 @@ static CONST(Dem_EventParameterType,AUTOMATIC) DemEventParameter[DEM_EVENT_PARAM
         DEM_EVENT_KIND_SWC, /* DemEventKind = DEM_EVENT_KIND_BSW or DEM_EVENT_KIND_SWC */
         REPORT_BEFORE_INIT, /* DemReportBehavior = REPORT_AFTER_INIT or REPORT_AFTER_INIT */
         0u, /* DemOperationCycleRef Reference: DemOperationCycle MULTI:1-1*/
-        DEM_ENABLE_CONDITION_GROUP_INVALID, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
+        0u, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
         DEM_STORAGE_CONDITION_GROUP_INVALID, /* DemStorageConditionGroupRef: Index Of DemStorageConditionGroup */
         DEM_COMPONENT_INVALID,/*DemComponentClassRef Reference: DemComponent */ /*if no component shall be DEM_COMPONENT_INVALID*/
         0xffu,/*DemComponentPriority*/
@@ -2075,7 +2155,7 @@ static CONST(Dem_EventParameterType,AUTOMATIC) DemEventParameter[DEM_EVENT_PARAM
         DEM_EVENT_KIND_SWC, /* DemEventKind = DEM_EVENT_KIND_BSW or DEM_EVENT_KIND_SWC */
         REPORT_BEFORE_INIT, /* DemReportBehavior = REPORT_AFTER_INIT or REPORT_AFTER_INIT */
         0u, /* DemOperationCycleRef Reference: DemOperationCycle MULTI:1-1*/
-        DEM_ENABLE_CONDITION_GROUP_INVALID, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
+        0u, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
         DEM_STORAGE_CONDITION_GROUP_INVALID, /* DemStorageConditionGroupRef: Index Of DemStorageConditionGroup */
         DEM_COMPONENT_INVALID,/*DemComponentClassRef Reference: DemComponent */ /*if no component shall be DEM_COMPONENT_INVALID*/
         0xffu,/*DemComponentPriority*/
@@ -2099,7 +2179,7 @@ static CONST(Dem_EventParameterType,AUTOMATIC) DemEventParameter[DEM_EVENT_PARAM
         DEM_EVENT_KIND_SWC, /* DemEventKind = DEM_EVENT_KIND_BSW or DEM_EVENT_KIND_SWC */
         REPORT_BEFORE_INIT, /* DemReportBehavior = REPORT_AFTER_INIT or REPORT_AFTER_INIT */
         0u, /* DemOperationCycleRef Reference: DemOperationCycle MULTI:1-1*/
-        DEM_ENABLE_CONDITION_GROUP_INVALID, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
+        0u, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
         DEM_STORAGE_CONDITION_GROUP_INVALID, /* DemStorageConditionGroupRef: Index Of DemStorageConditionGroup */
         DEM_COMPONENT_INVALID,/*DemComponentClassRef Reference: DemComponent */ /*if no component shall be DEM_COMPONENT_INVALID*/
         0xffu,/*DemComponentPriority*/
@@ -2123,7 +2203,7 @@ static CONST(Dem_EventParameterType,AUTOMATIC) DemEventParameter[DEM_EVENT_PARAM
         DEM_EVENT_KIND_SWC, /* DemEventKind = DEM_EVENT_KIND_BSW or DEM_EVENT_KIND_SWC */
         REPORT_BEFORE_INIT, /* DemReportBehavior = REPORT_AFTER_INIT or REPORT_AFTER_INIT */
         0u, /* DemOperationCycleRef Reference: DemOperationCycle MULTI:1-1*/
-        DEM_ENABLE_CONDITION_GROUP_INVALID, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
+        0u, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
         DEM_STORAGE_CONDITION_GROUP_INVALID, /* DemStorageConditionGroupRef: Index Of DemStorageConditionGroup */
         DEM_COMPONENT_INVALID,/*DemComponentClassRef Reference: DemComponent */ /*if no component shall be DEM_COMPONENT_INVALID*/
         0xffu,/*DemComponentPriority*/
@@ -2147,7 +2227,7 @@ static CONST(Dem_EventParameterType,AUTOMATIC) DemEventParameter[DEM_EVENT_PARAM
         DEM_EVENT_KIND_SWC, /* DemEventKind = DEM_EVENT_KIND_BSW or DEM_EVENT_KIND_SWC */
         REPORT_BEFORE_INIT, /* DemReportBehavior = REPORT_AFTER_INIT or REPORT_AFTER_INIT */
         0u, /* DemOperationCycleRef Reference: DemOperationCycle MULTI:1-1*/
-        DEM_ENABLE_CONDITION_GROUP_INVALID, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
+        0u, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
         DEM_STORAGE_CONDITION_GROUP_INVALID, /* DemStorageConditionGroupRef: Index Of DemStorageConditionGroup */
         DEM_COMPONENT_INVALID,/*DemComponentClassRef Reference: DemComponent */ /*if no component shall be DEM_COMPONENT_INVALID*/
         0xffu,/*DemComponentPriority*/
@@ -2171,7 +2251,7 @@ static CONST(Dem_EventParameterType,AUTOMATIC) DemEventParameter[DEM_EVENT_PARAM
         DEM_EVENT_KIND_SWC, /* DemEventKind = DEM_EVENT_KIND_BSW or DEM_EVENT_KIND_SWC */
         REPORT_BEFORE_INIT, /* DemReportBehavior = REPORT_AFTER_INIT or REPORT_AFTER_INIT */
         0u, /* DemOperationCycleRef Reference: DemOperationCycle MULTI:1-1*/
-        DEM_ENABLE_CONDITION_GROUP_INVALID, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
+        0u, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
         DEM_STORAGE_CONDITION_GROUP_INVALID, /* DemStorageConditionGroupRef: Index Of DemStorageConditionGroup */
         DEM_COMPONENT_INVALID,/*DemComponentClassRef Reference: DemComponent */ /*if no component shall be DEM_COMPONENT_INVALID*/
         0xffu,/*DemComponentPriority*/
@@ -2195,7 +2275,7 @@ static CONST(Dem_EventParameterType,AUTOMATIC) DemEventParameter[DEM_EVENT_PARAM
         DEM_EVENT_KIND_SWC, /* DemEventKind = DEM_EVENT_KIND_BSW or DEM_EVENT_KIND_SWC */
         REPORT_BEFORE_INIT, /* DemReportBehavior = REPORT_AFTER_INIT or REPORT_AFTER_INIT */
         0u, /* DemOperationCycleRef Reference: DemOperationCycle MULTI:1-1*/
-        DEM_ENABLE_CONDITION_GROUP_INVALID, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
+        0u, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
         DEM_STORAGE_CONDITION_GROUP_INVALID, /* DemStorageConditionGroupRef: Index Of DemStorageConditionGroup */
         DEM_COMPONENT_INVALID,/*DemComponentClassRef Reference: DemComponent */ /*if no component shall be DEM_COMPONENT_INVALID*/
         0xffu,/*DemComponentPriority*/
@@ -2219,7 +2299,7 @@ static CONST(Dem_EventParameterType,AUTOMATIC) DemEventParameter[DEM_EVENT_PARAM
         DEM_EVENT_KIND_SWC, /* DemEventKind = DEM_EVENT_KIND_BSW or DEM_EVENT_KIND_SWC */
         REPORT_BEFORE_INIT, /* DemReportBehavior = REPORT_AFTER_INIT or REPORT_AFTER_INIT */
         0u, /* DemOperationCycleRef Reference: DemOperationCycle MULTI:1-1*/
-        DEM_ENABLE_CONDITION_GROUP_INVALID, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
+        0u, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
         DEM_STORAGE_CONDITION_GROUP_INVALID, /* DemStorageConditionGroupRef: Index Of DemStorageConditionGroup */
         DEM_COMPONENT_INVALID,/*DemComponentClassRef Reference: DemComponent */ /*if no component shall be DEM_COMPONENT_INVALID*/
         0xffu,/*DemComponentPriority*/
@@ -2243,7 +2323,7 @@ static CONST(Dem_EventParameterType,AUTOMATIC) DemEventParameter[DEM_EVENT_PARAM
         DEM_EVENT_KIND_SWC, /* DemEventKind = DEM_EVENT_KIND_BSW or DEM_EVENT_KIND_SWC */
         REPORT_BEFORE_INIT, /* DemReportBehavior = REPORT_AFTER_INIT or REPORT_AFTER_INIT */
         0u, /* DemOperationCycleRef Reference: DemOperationCycle MULTI:1-1*/
-        DEM_ENABLE_CONDITION_GROUP_INVALID, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
+        0u, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
         DEM_STORAGE_CONDITION_GROUP_INVALID, /* DemStorageConditionGroupRef: Index Of DemStorageConditionGroup */
         DEM_COMPONENT_INVALID,/*DemComponentClassRef Reference: DemComponent */ /*if no component shall be DEM_COMPONENT_INVALID*/
         0xffu,/*DemComponentPriority*/
@@ -2267,7 +2347,7 @@ static CONST(Dem_EventParameterType,AUTOMATIC) DemEventParameter[DEM_EVENT_PARAM
         DEM_EVENT_KIND_SWC, /* DemEventKind = DEM_EVENT_KIND_BSW or DEM_EVENT_KIND_SWC */
         REPORT_BEFORE_INIT, /* DemReportBehavior = REPORT_AFTER_INIT or REPORT_AFTER_INIT */
         0u, /* DemOperationCycleRef Reference: DemOperationCycle MULTI:1-1*/
-        DEM_ENABLE_CONDITION_GROUP_INVALID, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
+        0u, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
         DEM_STORAGE_CONDITION_GROUP_INVALID, /* DemStorageConditionGroupRef: Index Of DemStorageConditionGroup */
         DEM_COMPONENT_INVALID,/*DemComponentClassRef Reference: DemComponent */ /*if no component shall be DEM_COMPONENT_INVALID*/
         0xffu,/*DemComponentPriority*/
@@ -2291,7 +2371,7 @@ static CONST(Dem_EventParameterType,AUTOMATIC) DemEventParameter[DEM_EVENT_PARAM
         DEM_EVENT_KIND_SWC, /* DemEventKind = DEM_EVENT_KIND_BSW or DEM_EVENT_KIND_SWC */
         REPORT_BEFORE_INIT, /* DemReportBehavior = REPORT_AFTER_INIT or REPORT_AFTER_INIT */
         0u, /* DemOperationCycleRef Reference: DemOperationCycle MULTI:1-1*/
-        DEM_ENABLE_CONDITION_GROUP_INVALID, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
+        0u, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
         DEM_STORAGE_CONDITION_GROUP_INVALID, /* DemStorageConditionGroupRef: Index Of DemStorageConditionGroup */
         DEM_COMPONENT_INVALID,/*DemComponentClassRef Reference: DemComponent */ /*if no component shall be DEM_COMPONENT_INVALID*/
         0xffu,/*DemComponentPriority*/
@@ -2315,7 +2395,7 @@ static CONST(Dem_EventParameterType,AUTOMATIC) DemEventParameter[DEM_EVENT_PARAM
         DEM_EVENT_KIND_SWC, /* DemEventKind = DEM_EVENT_KIND_BSW or DEM_EVENT_KIND_SWC */
         REPORT_BEFORE_INIT, /* DemReportBehavior = REPORT_AFTER_INIT or REPORT_AFTER_INIT */
         0u, /* DemOperationCycleRef Reference: DemOperationCycle MULTI:1-1*/
-        DEM_ENABLE_CONDITION_GROUP_INVALID, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
+        0u, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
         DEM_STORAGE_CONDITION_GROUP_INVALID, /* DemStorageConditionGroupRef: Index Of DemStorageConditionGroup */
         DEM_COMPONENT_INVALID,/*DemComponentClassRef Reference: DemComponent */ /*if no component shall be DEM_COMPONENT_INVALID*/
         0xffu,/*DemComponentPriority*/
@@ -2339,7 +2419,7 @@ static CONST(Dem_EventParameterType,AUTOMATIC) DemEventParameter[DEM_EVENT_PARAM
         DEM_EVENT_KIND_SWC, /* DemEventKind = DEM_EVENT_KIND_BSW or DEM_EVENT_KIND_SWC */
         REPORT_BEFORE_INIT, /* DemReportBehavior = REPORT_AFTER_INIT or REPORT_AFTER_INIT */
         0u, /* DemOperationCycleRef Reference: DemOperationCycle MULTI:1-1*/
-        DEM_ENABLE_CONDITION_GROUP_INVALID, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
+        0u, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
         DEM_STORAGE_CONDITION_GROUP_INVALID, /* DemStorageConditionGroupRef: Index Of DemStorageConditionGroup */
         DEM_COMPONENT_INVALID,/*DemComponentClassRef Reference: DemComponent */ /*if no component shall be DEM_COMPONENT_INVALID*/
         0xffu,/*DemComponentPriority*/
@@ -2363,7 +2443,7 @@ static CONST(Dem_EventParameterType,AUTOMATIC) DemEventParameter[DEM_EVENT_PARAM
         DEM_EVENT_KIND_SWC, /* DemEventKind = DEM_EVENT_KIND_BSW or DEM_EVENT_KIND_SWC */
         REPORT_BEFORE_INIT, /* DemReportBehavior = REPORT_AFTER_INIT or REPORT_AFTER_INIT */
         0u, /* DemOperationCycleRef Reference: DemOperationCycle MULTI:1-1*/
-        DEM_ENABLE_CONDITION_GROUP_INVALID, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
+        0u, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
         DEM_STORAGE_CONDITION_GROUP_INVALID, /* DemStorageConditionGroupRef: Index Of DemStorageConditionGroup */
         DEM_COMPONENT_INVALID,/*DemComponentClassRef Reference: DemComponent */ /*if no component shall be DEM_COMPONENT_INVALID*/
         0xffu,/*DemComponentPriority*/
@@ -2387,7 +2467,7 @@ static CONST(Dem_EventParameterType,AUTOMATIC) DemEventParameter[DEM_EVENT_PARAM
         DEM_EVENT_KIND_SWC, /* DemEventKind = DEM_EVENT_KIND_BSW or DEM_EVENT_KIND_SWC */
         REPORT_BEFORE_INIT, /* DemReportBehavior = REPORT_AFTER_INIT or REPORT_AFTER_INIT */
         0u, /* DemOperationCycleRef Reference: DemOperationCycle MULTI:1-1*/
-        DEM_ENABLE_CONDITION_GROUP_INVALID, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
+        0u, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
         DEM_STORAGE_CONDITION_GROUP_INVALID, /* DemStorageConditionGroupRef: Index Of DemStorageConditionGroup */
         DEM_COMPONENT_INVALID,/*DemComponentClassRef Reference: DemComponent */ /*if no component shall be DEM_COMPONENT_INVALID*/
         0xffu,/*DemComponentPriority*/
@@ -2411,7 +2491,7 @@ static CONST(Dem_EventParameterType,AUTOMATIC) DemEventParameter[DEM_EVENT_PARAM
         DEM_EVENT_KIND_SWC, /* DemEventKind = DEM_EVENT_KIND_BSW or DEM_EVENT_KIND_SWC */
         REPORT_BEFORE_INIT, /* DemReportBehavior = REPORT_AFTER_INIT or REPORT_AFTER_INIT */
         0u, /* DemOperationCycleRef Reference: DemOperationCycle MULTI:1-1*/
-        DEM_ENABLE_CONDITION_GROUP_INVALID, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
+        0u, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
         DEM_STORAGE_CONDITION_GROUP_INVALID, /* DemStorageConditionGroupRef: Index Of DemStorageConditionGroup */
         DEM_COMPONENT_INVALID,/*DemComponentClassRef Reference: DemComponent */ /*if no component shall be DEM_COMPONENT_INVALID*/
         0xffu,/*DemComponentPriority*/
@@ -2435,7 +2515,7 @@ static CONST(Dem_EventParameterType,AUTOMATIC) DemEventParameter[DEM_EVENT_PARAM
         DEM_EVENT_KIND_SWC, /* DemEventKind = DEM_EVENT_KIND_BSW or DEM_EVENT_KIND_SWC */
         REPORT_BEFORE_INIT, /* DemReportBehavior = REPORT_AFTER_INIT or REPORT_AFTER_INIT */
         0u, /* DemOperationCycleRef Reference: DemOperationCycle MULTI:1-1*/
-        DEM_ENABLE_CONDITION_GROUP_INVALID, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
+        0u, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
         DEM_STORAGE_CONDITION_GROUP_INVALID, /* DemStorageConditionGroupRef: Index Of DemStorageConditionGroup */
         DEM_COMPONENT_INVALID,/*DemComponentClassRef Reference: DemComponent */ /*if no component shall be DEM_COMPONENT_INVALID*/
         0xffu,/*DemComponentPriority*/
@@ -2459,7 +2539,7 @@ static CONST(Dem_EventParameterType,AUTOMATIC) DemEventParameter[DEM_EVENT_PARAM
         DEM_EVENT_KIND_SWC, /* DemEventKind = DEM_EVENT_KIND_BSW or DEM_EVENT_KIND_SWC */
         REPORT_BEFORE_INIT, /* DemReportBehavior = REPORT_AFTER_INIT or REPORT_AFTER_INIT */
         0u, /* DemOperationCycleRef Reference: DemOperationCycle MULTI:1-1*/
-        DEM_ENABLE_CONDITION_GROUP_INVALID, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
+        0u, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
         DEM_STORAGE_CONDITION_GROUP_INVALID, /* DemStorageConditionGroupRef: Index Of DemStorageConditionGroup */
         DEM_COMPONENT_INVALID,/*DemComponentClassRef Reference: DemComponent */ /*if no component shall be DEM_COMPONENT_INVALID*/
         0xffu,/*DemComponentPriority*/
@@ -2483,7 +2563,7 @@ static CONST(Dem_EventParameterType,AUTOMATIC) DemEventParameter[DEM_EVENT_PARAM
         DEM_EVENT_KIND_BSW, /* DemEventKind = DEM_EVENT_KIND_BSW or DEM_EVENT_KIND_SWC */
         REPORT_AFTER_INIT, /* DemReportBehavior = REPORT_AFTER_INIT or REPORT_AFTER_INIT */
         0u, /* DemOperationCycleRef Reference: DemOperationCycle MULTI:1-1*/
-        DEM_ENABLE_CONDITION_GROUP_INVALID, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
+        0u, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
         DEM_STORAGE_CONDITION_GROUP_INVALID, /* DemStorageConditionGroupRef: Index Of DemStorageConditionGroup */
         DEM_COMPONENT_INVALID,/*DemComponentClassRef Reference: DemComponent */ /*if no component shall be DEM_COMPONENT_INVALID*/
         0xffu,/*DemComponentPriority*/
@@ -2507,7 +2587,7 @@ static CONST(Dem_EventParameterType,AUTOMATIC) DemEventParameter[DEM_EVENT_PARAM
         DEM_EVENT_KIND_SWC, /* DemEventKind = DEM_EVENT_KIND_BSW or DEM_EVENT_KIND_SWC */
         REPORT_BEFORE_INIT, /* DemReportBehavior = REPORT_AFTER_INIT or REPORT_AFTER_INIT */
         0u, /* DemOperationCycleRef Reference: DemOperationCycle MULTI:1-1*/
-        DEM_ENABLE_CONDITION_GROUP_INVALID, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
+        0u, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
         DEM_STORAGE_CONDITION_GROUP_INVALID, /* DemStorageConditionGroupRef: Index Of DemStorageConditionGroup */
         DEM_COMPONENT_INVALID,/*DemComponentClassRef Reference: DemComponent */ /*if no component shall be DEM_COMPONENT_INVALID*/
         0xffu,/*DemComponentPriority*/
@@ -2531,7 +2611,7 @@ static CONST(Dem_EventParameterType,AUTOMATIC) DemEventParameter[DEM_EVENT_PARAM
         DEM_EVENT_KIND_SWC, /* DemEventKind = DEM_EVENT_KIND_BSW or DEM_EVENT_KIND_SWC */
         REPORT_BEFORE_INIT, /* DemReportBehavior = REPORT_AFTER_INIT or REPORT_AFTER_INIT */
         0u, /* DemOperationCycleRef Reference: DemOperationCycle MULTI:1-1*/
-        DEM_ENABLE_CONDITION_GROUP_INVALID, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
+        0u, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
         DEM_STORAGE_CONDITION_GROUP_INVALID, /* DemStorageConditionGroupRef: Index Of DemStorageConditionGroup */
         DEM_COMPONENT_INVALID,/*DemComponentClassRef Reference: DemComponent */ /*if no component shall be DEM_COMPONENT_INVALID*/
         0xffu,/*DemComponentPriority*/
@@ -2555,7 +2635,7 @@ static CONST(Dem_EventParameterType,AUTOMATIC) DemEventParameter[DEM_EVENT_PARAM
         DEM_EVENT_KIND_SWC, /* DemEventKind = DEM_EVENT_KIND_BSW or DEM_EVENT_KIND_SWC */
         REPORT_BEFORE_INIT, /* DemReportBehavior = REPORT_AFTER_INIT or REPORT_AFTER_INIT */
         0u, /* DemOperationCycleRef Reference: DemOperationCycle MULTI:1-1*/
-        DEM_ENABLE_CONDITION_GROUP_INVALID, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
+        2u, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
         DEM_STORAGE_CONDITION_GROUP_INVALID, /* DemStorageConditionGroupRef: Index Of DemStorageConditionGroup */
         DEM_COMPONENT_INVALID,/*DemComponentClassRef Reference: DemComponent */ /*if no component shall be DEM_COMPONENT_INVALID*/
         0xffu,/*DemComponentPriority*/
@@ -2579,7 +2659,7 @@ static CONST(Dem_EventParameterType,AUTOMATIC) DemEventParameter[DEM_EVENT_PARAM
         DEM_EVENT_KIND_SWC, /* DemEventKind = DEM_EVENT_KIND_BSW or DEM_EVENT_KIND_SWC */
         REPORT_BEFORE_INIT, /* DemReportBehavior = REPORT_AFTER_INIT or REPORT_AFTER_INIT */
         0u, /* DemOperationCycleRef Reference: DemOperationCycle MULTI:1-1*/
-        DEM_ENABLE_CONDITION_GROUP_INVALID, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
+        2u, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
         DEM_STORAGE_CONDITION_GROUP_INVALID, /* DemStorageConditionGroupRef: Index Of DemStorageConditionGroup */
         DEM_COMPONENT_INVALID,/*DemComponentClassRef Reference: DemComponent */ /*if no component shall be DEM_COMPONENT_INVALID*/
         0xffu,/*DemComponentPriority*/
@@ -2603,7 +2683,7 @@ static CONST(Dem_EventParameterType,AUTOMATIC) DemEventParameter[DEM_EVENT_PARAM
         DEM_EVENT_KIND_SWC, /* DemEventKind = DEM_EVENT_KIND_BSW or DEM_EVENT_KIND_SWC */
         REPORT_BEFORE_INIT, /* DemReportBehavior = REPORT_AFTER_INIT or REPORT_AFTER_INIT */
         0u, /* DemOperationCycleRef Reference: DemOperationCycle MULTI:1-1*/
-        DEM_ENABLE_CONDITION_GROUP_INVALID, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
+        0u, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
         DEM_STORAGE_CONDITION_GROUP_INVALID, /* DemStorageConditionGroupRef: Index Of DemStorageConditionGroup */
         DEM_COMPONENT_INVALID,/*DemComponentClassRef Reference: DemComponent */ /*if no component shall be DEM_COMPONENT_INVALID*/
         0xffu,/*DemComponentPriority*/
@@ -2627,7 +2707,7 @@ static CONST(Dem_EventParameterType,AUTOMATIC) DemEventParameter[DEM_EVENT_PARAM
         DEM_EVENT_KIND_SWC, /* DemEventKind = DEM_EVENT_KIND_BSW or DEM_EVENT_KIND_SWC */
         REPORT_BEFORE_INIT, /* DemReportBehavior = REPORT_AFTER_INIT or REPORT_AFTER_INIT */
         0u, /* DemOperationCycleRef Reference: DemOperationCycle MULTI:1-1*/
-        DEM_ENABLE_CONDITION_GROUP_INVALID, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
+        0u, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
         DEM_STORAGE_CONDITION_GROUP_INVALID, /* DemStorageConditionGroupRef: Index Of DemStorageConditionGroup */
         DEM_COMPONENT_INVALID,/*DemComponentClassRef Reference: DemComponent */ /*if no component shall be DEM_COMPONENT_INVALID*/
         0xffu,/*DemComponentPriority*/
@@ -2651,7 +2731,7 @@ static CONST(Dem_EventParameterType,AUTOMATIC) DemEventParameter[DEM_EVENT_PARAM
         DEM_EVENT_KIND_SWC, /* DemEventKind = DEM_EVENT_KIND_BSW or DEM_EVENT_KIND_SWC */
         REPORT_BEFORE_INIT, /* DemReportBehavior = REPORT_AFTER_INIT or REPORT_AFTER_INIT */
         0u, /* DemOperationCycleRef Reference: DemOperationCycle MULTI:1-1*/
-        DEM_ENABLE_CONDITION_GROUP_INVALID, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
+        0u, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
         DEM_STORAGE_CONDITION_GROUP_INVALID, /* DemStorageConditionGroupRef: Index Of DemStorageConditionGroup */
         DEM_COMPONENT_INVALID,/*DemComponentClassRef Reference: DemComponent */ /*if no component shall be DEM_COMPONENT_INVALID*/
         0xffu,/*DemComponentPriority*/
@@ -2675,7 +2755,7 @@ static CONST(Dem_EventParameterType,AUTOMATIC) DemEventParameter[DEM_EVENT_PARAM
         DEM_EVENT_KIND_SWC, /* DemEventKind = DEM_EVENT_KIND_BSW or DEM_EVENT_KIND_SWC */
         REPORT_BEFORE_INIT, /* DemReportBehavior = REPORT_AFTER_INIT or REPORT_AFTER_INIT */
         0u, /* DemOperationCycleRef Reference: DemOperationCycle MULTI:1-1*/
-        DEM_ENABLE_CONDITION_GROUP_INVALID, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
+        0u, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
         DEM_STORAGE_CONDITION_GROUP_INVALID, /* DemStorageConditionGroupRef: Index Of DemStorageConditionGroup */
         DEM_COMPONENT_INVALID,/*DemComponentClassRef Reference: DemComponent */ /*if no component shall be DEM_COMPONENT_INVALID*/
         0xffu,/*DemComponentPriority*/
@@ -2699,7 +2779,7 @@ static CONST(Dem_EventParameterType,AUTOMATIC) DemEventParameter[DEM_EVENT_PARAM
         DEM_EVENT_KIND_SWC, /* DemEventKind = DEM_EVENT_KIND_BSW or DEM_EVENT_KIND_SWC */
         REPORT_BEFORE_INIT, /* DemReportBehavior = REPORT_AFTER_INIT or REPORT_AFTER_INIT */
         0u, /* DemOperationCycleRef Reference: DemOperationCycle MULTI:1-1*/
-        DEM_ENABLE_CONDITION_GROUP_INVALID, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
+        1u, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
         DEM_STORAGE_CONDITION_GROUP_INVALID, /* DemStorageConditionGroupRef: Index Of DemStorageConditionGroup */
         DEM_COMPONENT_INVALID,/*DemComponentClassRef Reference: DemComponent */ /*if no component shall be DEM_COMPONENT_INVALID*/
         0xffu,/*DemComponentPriority*/
@@ -2723,7 +2803,7 @@ static CONST(Dem_EventParameterType,AUTOMATIC) DemEventParameter[DEM_EVENT_PARAM
         DEM_EVENT_KIND_SWC, /* DemEventKind = DEM_EVENT_KIND_BSW or DEM_EVENT_KIND_SWC */
         REPORT_BEFORE_INIT, /* DemReportBehavior = REPORT_AFTER_INIT or REPORT_AFTER_INIT */
         0u, /* DemOperationCycleRef Reference: DemOperationCycle MULTI:1-1*/
-        DEM_ENABLE_CONDITION_GROUP_INVALID, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
+        1u, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
         DEM_STORAGE_CONDITION_GROUP_INVALID, /* DemStorageConditionGroupRef: Index Of DemStorageConditionGroup */
         DEM_COMPONENT_INVALID,/*DemComponentClassRef Reference: DemComponent */ /*if no component shall be DEM_COMPONENT_INVALID*/
         0xffu,/*DemComponentPriority*/
@@ -2747,7 +2827,7 @@ static CONST(Dem_EventParameterType,AUTOMATIC) DemEventParameter[DEM_EVENT_PARAM
         DEM_EVENT_KIND_SWC, /* DemEventKind = DEM_EVENT_KIND_BSW or DEM_EVENT_KIND_SWC */
         REPORT_BEFORE_INIT, /* DemReportBehavior = REPORT_AFTER_INIT or REPORT_AFTER_INIT */
         0u, /* DemOperationCycleRef Reference: DemOperationCycle MULTI:1-1*/
-        DEM_ENABLE_CONDITION_GROUP_INVALID, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
+        1u, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
         DEM_STORAGE_CONDITION_GROUP_INVALID, /* DemStorageConditionGroupRef: Index Of DemStorageConditionGroup */
         DEM_COMPONENT_INVALID,/*DemComponentClassRef Reference: DemComponent */ /*if no component shall be DEM_COMPONENT_INVALID*/
         0xffu,/*DemComponentPriority*/
@@ -2771,7 +2851,7 @@ static CONST(Dem_EventParameterType,AUTOMATIC) DemEventParameter[DEM_EVENT_PARAM
         DEM_EVENT_KIND_SWC, /* DemEventKind = DEM_EVENT_KIND_BSW or DEM_EVENT_KIND_SWC */
         REPORT_BEFORE_INIT, /* DemReportBehavior = REPORT_AFTER_INIT or REPORT_AFTER_INIT */
         0u, /* DemOperationCycleRef Reference: DemOperationCycle MULTI:1-1*/
-        DEM_ENABLE_CONDITION_GROUP_INVALID, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
+        1u, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
         DEM_STORAGE_CONDITION_GROUP_INVALID, /* DemStorageConditionGroupRef: Index Of DemStorageConditionGroup */
         DEM_COMPONENT_INVALID,/*DemComponentClassRef Reference: DemComponent */ /*if no component shall be DEM_COMPONENT_INVALID*/
         0xffu,/*DemComponentPriority*/
@@ -2795,7 +2875,7 @@ static CONST(Dem_EventParameterType,AUTOMATIC) DemEventParameter[DEM_EVENT_PARAM
         DEM_EVENT_KIND_SWC, /* DemEventKind = DEM_EVENT_KIND_BSW or DEM_EVENT_KIND_SWC */
         REPORT_BEFORE_INIT, /* DemReportBehavior = REPORT_AFTER_INIT or REPORT_AFTER_INIT */
         0u, /* DemOperationCycleRef Reference: DemOperationCycle MULTI:1-1*/
-        DEM_ENABLE_CONDITION_GROUP_INVALID, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
+        1u, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
         DEM_STORAGE_CONDITION_GROUP_INVALID, /* DemStorageConditionGroupRef: Index Of DemStorageConditionGroup */
         DEM_COMPONENT_INVALID,/*DemComponentClassRef Reference: DemComponent */ /*if no component shall be DEM_COMPONENT_INVALID*/
         0xffu,/*DemComponentPriority*/
@@ -2819,7 +2899,7 @@ static CONST(Dem_EventParameterType,AUTOMATIC) DemEventParameter[DEM_EVENT_PARAM
         DEM_EVENT_KIND_SWC, /* DemEventKind = DEM_EVENT_KIND_BSW or DEM_EVENT_KIND_SWC */
         REPORT_BEFORE_INIT, /* DemReportBehavior = REPORT_AFTER_INIT or REPORT_AFTER_INIT */
         0u, /* DemOperationCycleRef Reference: DemOperationCycle MULTI:1-1*/
-        DEM_ENABLE_CONDITION_GROUP_INVALID, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
+        1u, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
         DEM_STORAGE_CONDITION_GROUP_INVALID, /* DemStorageConditionGroupRef: Index Of DemStorageConditionGroup */
         DEM_COMPONENT_INVALID,/*DemComponentClassRef Reference: DemComponent */ /*if no component shall be DEM_COMPONENT_INVALID*/
         0xffu,/*DemComponentPriority*/
@@ -2843,7 +2923,7 @@ static CONST(Dem_EventParameterType,AUTOMATIC) DemEventParameter[DEM_EVENT_PARAM
         DEM_EVENT_KIND_SWC, /* DemEventKind = DEM_EVENT_KIND_BSW or DEM_EVENT_KIND_SWC */
         REPORT_BEFORE_INIT, /* DemReportBehavior = REPORT_AFTER_INIT or REPORT_AFTER_INIT */
         0u, /* DemOperationCycleRef Reference: DemOperationCycle MULTI:1-1*/
-        DEM_ENABLE_CONDITION_GROUP_INVALID, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
+        1u, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
         DEM_STORAGE_CONDITION_GROUP_INVALID, /* DemStorageConditionGroupRef: Index Of DemStorageConditionGroup */
         DEM_COMPONENT_INVALID,/*DemComponentClassRef Reference: DemComponent */ /*if no component shall be DEM_COMPONENT_INVALID*/
         0xffu,/*DemComponentPriority*/
@@ -2867,7 +2947,31 @@ static CONST(Dem_EventParameterType,AUTOMATIC) DemEventParameter[DEM_EVENT_PARAM
         DEM_EVENT_KIND_SWC, /* DemEventKind = DEM_EVENT_KIND_BSW or DEM_EVENT_KIND_SWC */
         REPORT_BEFORE_INIT, /* DemReportBehavior = REPORT_AFTER_INIT or REPORT_AFTER_INIT */
         0u, /* DemOperationCycleRef Reference: DemOperationCycle MULTI:1-1*/
-        DEM_ENABLE_CONDITION_GROUP_INVALID, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
+        1u, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
+        DEM_STORAGE_CONDITION_GROUP_INVALID, /* DemStorageConditionGroupRef: Index Of DemStorageConditionGroup */
+        DEM_COMPONENT_INVALID,/*DemComponentClassRef Reference: DemComponent */ /*if no component shall be DEM_COMPONENT_INVALID*/
+        0xffu,/*DemComponentPriority*/
+        DEM_EVENT_PARAMETER_INVALID,/*DemOBDGroupingAssociativeEventsRef*/
+    },
+    {  /* EventParameter_0x951511*/
+        NULL_PTR,  /* DemCallbackInitMForE */
+        NULL_PTR,  /* DemCallbackEventDataChanged */
+        NULL_PTR, /* DemCallbackClearEventAllowed */
+        0u, /* StatusChangedCbkStartIndex*/
+        0u, /* StatusChangedCbkNum */
+        58u, /* DemDTCRef */
+        0u, /* AlgorithmRef = DemDebounceCounterBasedClassRef: Index Of DemDebounceCounterBasedClass   */
+        58u, /* AlgorithmIndex = AlgorithmIndex_Counter++ */
+        DEM_DEBOUNCE_COUNTER_BASED, /* AlgorithmType */
+        58u, /* DemIndicatorAttributeStartIndex */
+        1u, /* AttrNum = COUNT Event/DemIndicatorAttribute */
+        0u,/*DemEventFailureCycleCounterThreshold*/
+        TRUE,/*DemEventAvailable*/
+        FALSE,  /* DemFFPrestorageSupported Range: true or false */
+        DEM_EVENT_KIND_SWC, /* DemEventKind = DEM_EVENT_KIND_BSW or DEM_EVENT_KIND_SWC */
+        REPORT_BEFORE_INIT, /* DemReportBehavior = REPORT_AFTER_INIT or REPORT_AFTER_INIT */
+        0u, /* DemOperationCycleRef Reference: DemOperationCycle MULTI:1-1*/
+        0u, /* DemEnableConditionGroupRef: Index Of DemEnableConditionGroup */
         DEM_STORAGE_CONDITION_GROUP_INVALID, /* DemStorageConditionGroupRef: Index Of DemStorageConditionGroup */
         DEM_COMPONENT_INVALID,/*DemComponentClassRef Reference: DemComponent */ /*if no component shall be DEM_COMPONENT_INVALID*/
         0xffu,/*DemComponentPriority*/

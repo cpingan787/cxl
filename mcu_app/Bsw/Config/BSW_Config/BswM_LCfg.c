@@ -14,7 +14,7 @@
  *  @MCU                : R7F7015833
  *  @file               : BswM_LCfg.c
  *  @author             : iSoft
- *  @date               : 2026-02-25 15:25:45
+ *  @date               : 2026-03-20 20:54:12
  *  @vendor             : iSoft
  *  @description        : 
  *  @specification(S)   : AUTOSAR Classic Platform R19-11
@@ -76,11 +76,12 @@ static CONST(BswM_EventRqstPortLCfgType, BSWM_CONST) BswM_EvRqstLCfg_Core0_Par0 
 /*********************BswMModeRequestPort******************/
 #define BSWM_START_SEC_CONST_UNSPECIFIED
 #include "BswM_MemMap.h"
-static CONST(BswM_RuleIndexType, BSWM_CONST) BswM_CanSMInd0Rule_Core0_Par0[7u] =
+static CONST(BswM_RuleIndexType, BSWM_CONST) BswM_CanSMInd0Rule_Core0_Par0[8u] =
 {
     7u,
     8u,
-    10u,
+    9u,
+    12u,
     13u,
     14u,
     15u,
@@ -96,7 +97,7 @@ static CONST(BswM_RqstPortLcCfgType, BSWM_CONST) BswM_CansmInd_LCfg_Core0_Par0[1
     /*RPort_CanSMIndi_Can : BswMCanSMIndication*/
     {
         &(BswM_CanSMInd0Rule_Core0_Par0[0]),        /*belongToRlue*/
-        7u,                    /*belongToRlueNum*/
+        8u,                    /*belongToRlueNum*/
         BSWM_IMMEDIATE    /*BswMRequestProcessing*/
     },
 };
@@ -122,7 +123,7 @@ static CONST(BswM_RuleIndexType, BSWM_CONST) BswM_DcmComModeRqstInd0Rule_Core0_P
     4u,
     5u,
     6u,
-    15u,
+    14u,
 };
 #define BSWM_STOP_SEC_CONST_UNSPECIFIED
 #include "BswM_MemMap.h"
@@ -179,19 +180,35 @@ static CONST(BswM_RuleIndexType, BSWM_CONST) BswM_EcuMWkSrcRqstInd0Rule_Core0_Pa
     7u,
     8u,
     9u,
-    10u,
+    17u,
 };
 #define BSWM_STOP_SEC_CONST_UNSPECIFIED
 #include "BswM_MemMap.h"
 
 #define BSWM_START_SEC_CONST_UNSPECIFIED
 #include "BswM_MemMap.h"
-static CONST(BswM_RqstPortLcCfgType, BSWM_CONST) BswM_EcuMWkSrcRqst_LCfg_Core0_Par0[1u] =
+static CONST(BswM_RuleIndexType, BSWM_CONST) BswM_EcuMWkSrcRqstInd1Rule_Core0_Par0[2u] =
+{
+    9u,
+    17u,
+};
+#define BSWM_STOP_SEC_CONST_UNSPECIFIED
+#include "BswM_MemMap.h"
+
+#define BSWM_START_SEC_CONST_UNSPECIFIED
+#include "BswM_MemMap.h"
+static CONST(BswM_RqstPortLcCfgType, BSWM_CONST) BswM_EcuMWkSrcRqst_LCfg_Core0_Par0[2u] =
 {
     /*RPort_Wks_Can : BswMEcuMWakeupSource*/
     {
         &(BswM_EcuMWkSrcRqstInd0Rule_Core0_Par0[0]),        /*belongToRlue*/
         4u,                    /*belongToRlueNum*/
+        BSWM_IMMEDIATE    /*BswMRequestProcessing*/
+    },
+    /*RPort_Wks_local : BswMEcuMWakeupSource*/
+    {
+        &(BswM_EcuMWkSrcRqstInd1Rule_Core0_Par0[0]),        /*belongToRlue*/
+        2u,                    /*belongToRlueNum*/
         BSWM_IMMEDIATE    /*BswMRequestProcessing*/
     },
 };
@@ -200,9 +217,10 @@ static CONST(BswM_RqstPortLcCfgType, BSWM_CONST) BswM_EcuMWkSrcRqst_LCfg_Core0_P
 
 #define BSWM_START_SEC_CONST_UNSPECIFIED
 #include "BswM_MemMap.h"
-static CONST(EcuM_WakeupSourceType, BSWM_CONST) BswM_EcuMWkSrcRef_Core0_Par0[1u] =
+static CONST(EcuM_WakeupSourceType, BSWM_CONST) BswM_EcuMWkSrcRef_Core0_Par0[2u] =
 {
     EcuMWakeupSource_CAN,
+    EcuMWakeupSource_Local,
 };
 #define BSWM_STOP_SEC_CONST_UNSPECIFIED
 #include "BswM_MemMap.h"
@@ -219,13 +237,12 @@ static CONST(BswM_RuleIndexType, BSWM_CONST) BswM_GeneRqstInd0Rule_Core0_Par0[2u
 
 #define BSWM_START_SEC_CONST_UNSPECIFIED
 #include "BswM_MemMap.h"
-static CONST(BswM_RuleIndexType, BSWM_CONST) BswM_GeneRqstInd1Rule_Core0_Par0[5u] =
+static CONST(BswM_RuleIndexType, BSWM_CONST) BswM_GeneRqstInd1Rule_Core0_Par0[4u] =
 {
     7u,
     8u,
-    9u,
+    10u,
     11u,
-    12u,
 };
 #define BSWM_STOP_SEC_CONST_UNSPECIFIED
 #include "BswM_MemMap.h"
@@ -252,7 +269,7 @@ static CONST(BswM_RqstPortLcCfgType, BSWM_CONST) BswM_GeneRqst_LCfg_Core0_Par0[3
     /*RPort_KL15_2 : BswMGenericRequest*/
     {
         &(BswM_GeneRqstInd1Rule_Core0_Par0[0]),        /*belongToRlue*/
-        5u,                    /*belongToRlueNum*/
+        4u,                    /*belongToRlueNum*/
         BSWM_IMMEDIATE    /*BswMRequestProcessing*/
     },
     /*RPort_AppInd_3 : BswMGenericRequest*/
@@ -550,32 +567,6 @@ static CONST(BswM_ActionListIndexType, BSWM_CONST) BswM_Rule8TrueActList_Core0_P
 
 #define BSWM_START_SEC_CODE
 #include "BswM_MemMap.h"
-static FUNC(BswM_RuleStateType, BSWM_CODE) BswM_Rule9Expression_Core0_Par0(void)
-{
-    BswM_RuleStateType result = BSWM_FALSE;
-    /* PRQA S 3415 ++*/ /* VL_BswM_3415 */    
-    if((ECUM_WKSTATUS_VALIDATED == BswM_GetEcuMWakeSrcStatus(0))
-    || (2u == BswM_GetGeneRqstStatus(1)))
-    /* PRQA S 3415 --*/ /* VL_BswM_3415 */
-    {
-        result = BSWM_TRUE;
-    }
-    return result;
-}
-#define BSWM_STOP_SEC_CODE
-#include "BswM_MemMap.h"
-
-#define BSWM_START_SEC_CONST_UNSPECIFIED
-#include "BswM_MemMap.h"
-static CONST(BswM_ActionListIndexType, BSWM_CONST) BswM_Rule9TrueActList_Core0_Par0[1u] =
-{
-    9u
-};
-#define BSWM_STOP_SEC_CONST_UNSPECIFIED
-#include "BswM_MemMap.h"
-
-#define BSWM_START_SEC_CODE
-#include "BswM_MemMap.h"
 static FUNC(BswM_RuleStateType, BSWM_CODE) BswM_RefLE_EcuM_WakeupSourceClear_EcuMWakeupSource_CAN2_Core0_Par0(void)
 {
     BswM_RuleStateType result = BSWM_FALSE;
@@ -593,12 +584,13 @@ static FUNC(BswM_RuleStateType, BSWM_CODE) BswM_RefLE_EcuM_WakeupSourceClear_Ecu
 
 #define BSWM_START_SEC_CODE
 #include "BswM_MemMap.h"
-static FUNC(BswM_RuleStateType, BSWM_CODE) BswM_Rule10Expression_Core0_Par0(void)
+static FUNC(BswM_RuleStateType, BSWM_CODE) BswM_Rule9Expression_Core0_Par0(void)
 {
     BswM_RuleStateType result = BSWM_FALSE;
     /* PRQA S 3415 ++*/ /* VL_BswM_3415 */    
     if((ECUM_WKSTATUS_EXPIRED == BswM_GetEcuMWakeSrcStatus(0))
-    || (BSWM_TRUE == BswM_RefLE_EcuM_WakeupSourceClear_EcuMWakeupSource_CAN2_Core0_Par0()))
+    || (BSWM_TRUE == BswM_RefLE_EcuM_WakeupSourceClear_EcuMWakeupSource_CAN2_Core0_Par0())
+    || (ECUM_WKSTATUS_EXPIRED == BswM_GetEcuMWakeSrcStatus(1)))
     /* PRQA S 3415 --*/ /* VL_BswM_3415 */
     {
         result = BSWM_TRUE;
@@ -610,7 +602,7 @@ static FUNC(BswM_RuleStateType, BSWM_CODE) BswM_Rule10Expression_Core0_Par0(void
 
 #define BSWM_START_SEC_CONST_UNSPECIFIED
 #include "BswM_MemMap.h"
-static CONST(BswM_ActionListIndexType, BSWM_CONST) BswM_Rule10TrueActList_Core0_Par0[1u] =
+static CONST(BswM_ActionListIndexType, BSWM_CONST) BswM_Rule9TrueActList_Core0_Par0[1u] =
 {
     10u
 };
@@ -619,7 +611,7 @@ static CONST(BswM_ActionListIndexType, BSWM_CONST) BswM_Rule10TrueActList_Core0_
 
 #define BSWM_START_SEC_CODE
 #include "BswM_MemMap.h"
-static FUNC(BswM_RuleStateType, BSWM_CODE) BswM_Rule11Expression_Core0_Par0(void)
+static FUNC(BswM_RuleStateType, BSWM_CODE) BswM_Rule10Expression_Core0_Par0(void)
 {
     BswM_RuleStateType result = BSWM_FALSE;
     if(2u == BswM_GetGeneRqstStatus(1))
@@ -633,7 +625,7 @@ static FUNC(BswM_RuleStateType, BSWM_CODE) BswM_Rule11Expression_Core0_Par0(void
 
 #define BSWM_START_SEC_CONST_UNSPECIFIED
 #include "BswM_MemMap.h"
-static CONST(BswM_ActionListIndexType, BSWM_CONST) BswM_Rule11TrueActList_Core0_Par0[1u] =
+static CONST(BswM_ActionListIndexType, BSWM_CONST) BswM_Rule10TrueActList_Core0_Par0[1u] =
 {
     11u
 };
@@ -642,7 +634,7 @@ static CONST(BswM_ActionListIndexType, BSWM_CONST) BswM_Rule11TrueActList_Core0_
 
 #define BSWM_START_SEC_CODE
 #include "BswM_MemMap.h"
-static FUNC(BswM_RuleStateType, BSWM_CODE) BswM_Rule12Expression_Core0_Par0(void)
+static FUNC(BswM_RuleStateType, BSWM_CODE) BswM_Rule11Expression_Core0_Par0(void)
 {
     BswM_RuleStateType result = BSWM_FALSE;
     if(1u == BswM_GetGeneRqstStatus(1))
@@ -656,7 +648,7 @@ static FUNC(BswM_RuleStateType, BSWM_CODE) BswM_Rule12Expression_Core0_Par0(void
 
 #define BSWM_START_SEC_CONST_UNSPECIFIED
 #include "BswM_MemMap.h"
-static CONST(BswM_ActionListIndexType, BSWM_CONST) BswM_Rule12TrueActList_Core0_Par0[1u] =
+static CONST(BswM_ActionListIndexType, BSWM_CONST) BswM_Rule11TrueActList_Core0_Par0[1u] =
 {
     12u
 };
@@ -665,7 +657,7 @@ static CONST(BswM_ActionListIndexType, BSWM_CONST) BswM_Rule12TrueActList_Core0_
 
 #define BSWM_START_SEC_CODE
 #include "BswM_MemMap.h"
-static FUNC(BswM_RuleStateType, BSWM_CODE) BswM_Rule13Expression_Core0_Par0(void)
+static FUNC(BswM_RuleStateType, BSWM_CODE) BswM_Rule12Expression_Core0_Par0(void)
 {
     BswM_RuleStateType result = BSWM_FALSE;
     if(CANSM_BSWM_NO_COMMUNICATION == BswM_GetCanSmIndStatus(0))
@@ -679,7 +671,7 @@ static FUNC(BswM_RuleStateType, BSWM_CODE) BswM_Rule13Expression_Core0_Par0(void
 
 #define BSWM_START_SEC_CONST_UNSPECIFIED
 #include "BswM_MemMap.h"
-static CONST(BswM_ActionListIndexType, BSWM_CONST) BswM_Rule13TrueActList_Core0_Par0[1u] =
+static CONST(BswM_ActionListIndexType, BSWM_CONST) BswM_Rule12TrueActList_Core0_Par0[1u] =
 {
     13u
 };
@@ -688,7 +680,7 @@ static CONST(BswM_ActionListIndexType, BSWM_CONST) BswM_Rule13TrueActList_Core0_
 
 #define BSWM_START_SEC_CODE
 #include "BswM_MemMap.h"
-static FUNC(BswM_RuleStateType, BSWM_CODE) BswM_Rule14Expression_Core0_Par0(void)
+static FUNC(BswM_RuleStateType, BSWM_CODE) BswM_Rule13Expression_Core0_Par0(void)
 {
     BswM_RuleStateType result = BSWM_FALSE;
     if(CANSM_BSWM_SILENT_COMMUNICATION == BswM_GetCanSmIndStatus(0))
@@ -702,7 +694,7 @@ static FUNC(BswM_RuleStateType, BSWM_CODE) BswM_Rule14Expression_Core0_Par0(void
 
 #define BSWM_START_SEC_CONST_UNSPECIFIED
 #include "BswM_MemMap.h"
-static CONST(BswM_ActionListIndexType, BSWM_CONST) BswM_Rule14TrueActList_Core0_Par0[1u] =
+static CONST(BswM_ActionListIndexType, BSWM_CONST) BswM_Rule13TrueActList_Core0_Par0[1u] =
 {
     14u
 };
@@ -728,7 +720,7 @@ static FUNC(BswM_RuleStateType, BSWM_CODE) BswM_RefLE_CanSMIndi_FullCom_BCan2_Co
 
 #define BSWM_START_SEC_CODE
 #include "BswM_MemMap.h"
-static FUNC(BswM_RuleStateType, BSWM_CODE) BswM_Rule15Expression_Core0_Par0(void)
+static FUNC(BswM_RuleStateType, BSWM_CODE) BswM_Rule14Expression_Core0_Par0(void)
 {
     BswM_RuleStateType result = BSWM_FALSE;
     /* PRQA S 3415 ++*/ /* VL_BswM_3415 */    
@@ -745,7 +737,7 @@ static FUNC(BswM_RuleStateType, BSWM_CODE) BswM_Rule15Expression_Core0_Par0(void
 
 #define BSWM_START_SEC_CONST_UNSPECIFIED
 #include "BswM_MemMap.h"
-static CONST(BswM_ActionListIndexType, BSWM_CONST) BswM_Rule15TrueActList_Core0_Par0[1u] =
+static CONST(BswM_ActionListIndexType, BSWM_CONST) BswM_Rule14TrueActList_Core0_Par0[1u] =
 {
     15u
 };
@@ -754,7 +746,7 @@ static CONST(BswM_ActionListIndexType, BSWM_CONST) BswM_Rule15TrueActList_Core0_
 
 #define BSWM_START_SEC_CODE
 #include "BswM_MemMap.h"
-static FUNC(BswM_RuleStateType, BSWM_CODE) BswM_Rule16Expression_Core0_Par0(void)
+static FUNC(BswM_RuleStateType, BSWM_CODE) BswM_Rule15Expression_Core0_Par0(void)
 {
     BswM_RuleStateType result = BSWM_FALSE;
     if(CANSM_BSWM_BUS_OFF == BswM_GetCanSmIndStatus(0))
@@ -768,16 +760,74 @@ static FUNC(BswM_RuleStateType, BSWM_CODE) BswM_Rule16Expression_Core0_Par0(void
 
 #define BSWM_START_SEC_CONST_UNSPECIFIED
 #include "BswM_MemMap.h"
-static CONST(BswM_ActionListIndexType, BSWM_CONST) BswM_Rule16TrueActList_Core0_Par0[1u] =
+static CONST(BswM_ActionListIndexType, BSWM_CONST) BswM_Rule15TrueActList_Core0_Par0[1u] =
 {
     16u
 };
 #define BSWM_STOP_SEC_CONST_UNSPECIFIED
 #include "BswM_MemMap.h"
 
+#define BSWM_START_SEC_CODE
+#include "BswM_MemMap.h"
+static FUNC(BswM_RuleStateType, BSWM_CODE) BswM_Rule16Expression_Core0_Par0(void)
+{
+    BswM_RuleStateType result = BSWM_FALSE;
+    if(CANSM_BSWM_FULL_COMMUNICATION == BswM_GetCanSmIndStatus(0))
+    {
+        result = BSWM_TRUE;
+    }
+    return result;
+}
+#define BSWM_STOP_SEC_CODE
+#include "BswM_MemMap.h"
+
 #define BSWM_START_SEC_CONST_UNSPECIFIED
 #include "BswM_MemMap.h"
-static CONST(BswM_RuleLcCfgType, BSWM_CONST) BswM_RuleLCfg_Core0_Par0[17u] =
+static CONST(BswM_ActionListIndexType, BSWM_CONST) BswM_Rule16FalseActList_Core0_Par0[1u] =
+{
+    18u
+};
+#define BSWM_STOP_SEC_CONST_UNSPECIFIED
+#include "BswM_MemMap.h"
+
+#define BSWM_START_SEC_CONST_UNSPECIFIED
+#include "BswM_MemMap.h"
+static CONST(BswM_ActionListIndexType, BSWM_CONST) BswM_Rule16TrueActList_Core0_Par0[1u] =
+{
+    17u
+};
+#define BSWM_STOP_SEC_CONST_UNSPECIFIED
+#include "BswM_MemMap.h"
+
+#define BSWM_START_SEC_CODE
+#include "BswM_MemMap.h"
+static FUNC(BswM_RuleStateType, BSWM_CODE) BswM_Rule17Expression_Core0_Par0(void)
+{
+    BswM_RuleStateType result = BSWM_FALSE;
+    /* PRQA S 3415 ++*/ /* VL_BswM_3415 */    
+    if((ECUM_WKSTATUS_VALIDATED == BswM_GetEcuMWakeSrcStatus(0))
+    || (ECUM_WKSTATUS_VALIDATED == BswM_GetEcuMWakeSrcStatus(1)))
+    /* PRQA S 3415 --*/ /* VL_BswM_3415 */
+    {
+        result = BSWM_TRUE;
+    }
+    return result;
+}
+#define BSWM_STOP_SEC_CODE
+#include "BswM_MemMap.h"
+
+#define BSWM_START_SEC_CONST_UNSPECIFIED
+#include "BswM_MemMap.h"
+static CONST(BswM_ActionListIndexType, BSWM_CONST) BswM_Rule17TrueActList_Core0_Par0[1u] =
+{
+    9u
+};
+#define BSWM_STOP_SEC_CONST_UNSPECIFIED
+#include "BswM_MemMap.h"
+
+#define BSWM_START_SEC_CONST_UNSPECIFIED
+#include "BswM_MemMap.h"
+static CONST(BswM_RuleLcCfgType, BSWM_CONST) BswM_RuleLCfg_Core0_Par0[18u] =
 {
     {
         BswM_Rule0Expression_Core0_Par0,        /*BswMRuleExpressionRef*/
@@ -895,8 +945,15 @@ static CONST(BswM_RuleLcCfgType, BSWM_CONST) BswM_RuleLCfg_Core0_Par0[17u] =
         BswM_Rule16Expression_Core0_Par0,        /*BswMRuleExpressionRef*/
         BSWM_FALSE,        /*BswMRuleInitState*/
         FALSE,    /*BswMNestedExecutionOnly*/
-        NULL_PTR,    /*BswMRuleFalseActionList*/
+        BswM_Rule16FalseActList_Core0_Par0, /*BswMRuleFalseActionList*/
         BswM_Rule16TrueActList_Core0_Par0, /*BswMRuleTrueActionList*/
+    },
+    {
+        BswM_Rule17Expression_Core0_Par0,        /*BswMRuleExpressionRef*/
+        BSWM_FALSE,        /*BswMRuleInitState*/
+        FALSE,    /*BswMNestedExecutionOnly*/
+        NULL_PTR,    /*BswMRuleFalseActionList*/
+        BswM_Rule17TrueActList_Core0_Par0, /*BswMRuleTrueActionList*/
     },
 };
 #define BSWM_STOP_SEC_CONST_UNSPECIFIED
@@ -906,7 +963,7 @@ static CONST(BswM_RuleLcCfgType, BSWM_CONST) BswM_RuleLCfg_Core0_Par0[17u] =
 
 #define BSWM_START_SEC_CONST_UNSPECIFIED
 #include "BswM_MemMap.h"
-static CONST(BswM_ActionType, BSWM_CONST) BswM_ActListItemsRefAction_Core0_Par0[27u] =
+static CONST(BswM_ActionType, BSWM_CONST) BswM_ActListItemsRefAction_Core0_Par0[33u] =
 {
     {
         BSWM_PDU_GROUP_SWITCH,
@@ -965,6 +1022,10 @@ static CONST(BswM_ActionType, BSWM_CONST) BswM_ActListItemsRefAction_Core0_Par0[
         1
     },
     {
+        BSWM_PDU_ROUTER_CONTROL,
+        1
+    },
+    {
         BSWM_ECUM_GO_DOWN_HALT_POLL,
         0
     },
@@ -973,6 +1034,10 @@ static CONST(BswM_ActionType, BSWM_CONST) BswM_ActListItemsRefAction_Core0_Par0[
         2
     },
     {
+        BSWM_PDU_ROUTER_CONTROL,
+        0
+    },
+    {
         BSWM_USER_CALLOUT,
         0
     },
@@ -1014,6 +1079,22 @@ static CONST(BswM_ActionType, BSWM_CONST) BswM_ActListItemsRefAction_Core0_Par0[
     },
     {
         BSWM_DEADLINE_MONITOR_CONTROL,
+        1
+    },
+    {
+        BSWM_DEADLINE_MONITOR_CONTROL,
+        0
+    },
+    {
+        BSWM_DEADLINE_MONITOR_CONTROL,
+        1
+    },
+    {
+        BSWM_PDU_ROUTER_CONTROL,
+        0
+    },
+    {
+        BSWM_PDU_ROUTER_CONTROL,
         1
     },
 };
@@ -1156,12 +1237,17 @@ static CONST(BswM_ActionListItemRefType, BSWM_CONST) BswM_ActList7Ref_Core0_Par0
 
 #define BSWM_START_SEC_CONST_UNSPECIFIED
 #include "BswM_MemMap.h"
-static CONST(BswM_ActionListItemRefType, BSWM_CONST) BswM_ActList8Ref_Core0_Par0[1u] =
+static CONST(BswM_ActionListItemRefType, BSWM_CONST) BswM_ActList8Ref_Core0_Par0[2u] =
 {
     {
         NULL_PTR,                                        /*actListRefIdx*/
         NULL_PTR,                                        /*ruleRefIdx*/
         &(BswM_ActListItemsRefAction_Core0_Par0[14u])    /*avActType*/
+    },
+    {
+        NULL_PTR,                                        /*actListRefIdx*/
+        NULL_PTR,                                        /*ruleRefIdx*/
+        &(BswM_ActListItemsRefAction_Core0_Par0[15u])    /*avActType*/
     },
 };
 #define BSWM_STOP_SEC_CONST_UNSPECIFIED
@@ -1169,12 +1255,17 @@ static CONST(BswM_ActionListItemRefType, BSWM_CONST) BswM_ActList8Ref_Core0_Par0
 
 #define BSWM_START_SEC_CONST_UNSPECIFIED
 #include "BswM_MemMap.h"
-static CONST(BswM_ActionListItemRefType, BSWM_CONST) BswM_ActList9Ref_Core0_Par0[1u] =
+static CONST(BswM_ActionListItemRefType, BSWM_CONST) BswM_ActList9Ref_Core0_Par0[2u] =
 {
     {
         NULL_PTR,                                        /*actListRefIdx*/
         NULL_PTR,                                        /*ruleRefIdx*/
-        &(BswM_ActListItemsRefAction_Core0_Par0[15u])    /*avActType*/
+        &(BswM_ActListItemsRefAction_Core0_Par0[16u])    /*avActType*/
+    },
+    {
+        NULL_PTR,                                        /*actListRefIdx*/
+        NULL_PTR,                                        /*ruleRefIdx*/
+        &(BswM_ActListItemsRefAction_Core0_Par0[17u])    /*avActType*/
     },
 };
 #define BSWM_STOP_SEC_CONST_UNSPECIFIED
@@ -1187,7 +1278,7 @@ static CONST(BswM_ActionListItemRefType, BSWM_CONST) BswM_ActList10Ref_Core0_Par
     {
         NULL_PTR,                                        /*actListRefIdx*/
         NULL_PTR,                                        /*ruleRefIdx*/
-        &(BswM_ActListItemsRefAction_Core0_Par0[16u])    /*avActType*/
+        &(BswM_ActListItemsRefAction_Core0_Par0[18u])    /*avActType*/
     },
 };
 #define BSWM_STOP_SEC_CONST_UNSPECIFIED
@@ -1200,7 +1291,7 @@ static CONST(BswM_ActionListItemRefType, BSWM_CONST) BswM_ActList11Ref_Core0_Par
     {
         NULL_PTR,                                        /*actListRefIdx*/
         NULL_PTR,                                        /*ruleRefIdx*/
-        &(BswM_ActListItemsRefAction_Core0_Par0[17u])    /*avActType*/
+        &(BswM_ActListItemsRefAction_Core0_Par0[19u])    /*avActType*/
     },
 };
 #define BSWM_STOP_SEC_CONST_UNSPECIFIED
@@ -1213,24 +1304,6 @@ static CONST(BswM_ActionListItemRefType, BSWM_CONST) BswM_ActList12Ref_Core0_Par
     {
         NULL_PTR,                                        /*actListRefIdx*/
         NULL_PTR,                                        /*ruleRefIdx*/
-        &(BswM_ActListItemsRefAction_Core0_Par0[18u])    /*avActType*/
-    },
-};
-#define BSWM_STOP_SEC_CONST_UNSPECIFIED
-#include "BswM_MemMap.h"
-
-#define BSWM_START_SEC_CONST_UNSPECIFIED
-#include "BswM_MemMap.h"
-static CONST(BswM_ActionListItemRefType, BSWM_CONST) BswM_ActList13Ref_Core0_Par0[2u] =
-{
-    {
-        NULL_PTR,                                        /*actListRefIdx*/
-        NULL_PTR,                                        /*ruleRefIdx*/
-        &(BswM_ActListItemsRefAction_Core0_Par0[19u])    /*avActType*/
-    },
-    {
-        NULL_PTR,                                        /*actListRefIdx*/
-        NULL_PTR,                                        /*ruleRefIdx*/
         &(BswM_ActListItemsRefAction_Core0_Par0[20u])    /*avActType*/
     },
 };
@@ -1239,7 +1312,7 @@ static CONST(BswM_ActionListItemRefType, BSWM_CONST) BswM_ActList13Ref_Core0_Par
 
 #define BSWM_START_SEC_CONST_UNSPECIFIED
 #include "BswM_MemMap.h"
-static CONST(BswM_ActionListItemRefType, BSWM_CONST) BswM_ActList14Ref_Core0_Par0[2u] =
+static CONST(BswM_ActionListItemRefType, BSWM_CONST) BswM_ActList13Ref_Core0_Par0[2u] =
 {
     {
         NULL_PTR,                                        /*actListRefIdx*/
@@ -1257,7 +1330,7 @@ static CONST(BswM_ActionListItemRefType, BSWM_CONST) BswM_ActList14Ref_Core0_Par
 
 #define BSWM_START_SEC_CONST_UNSPECIFIED
 #include "BswM_MemMap.h"
-static CONST(BswM_ActionListItemRefType, BSWM_CONST) BswM_ActList15Ref_Core0_Par0[2u] =
+static CONST(BswM_ActionListItemRefType, BSWM_CONST) BswM_ActList14Ref_Core0_Par0[2u] =
 {
     {
         NULL_PTR,                                        /*actListRefIdx*/
@@ -1275,7 +1348,7 @@ static CONST(BswM_ActionListItemRefType, BSWM_CONST) BswM_ActList15Ref_Core0_Par
 
 #define BSWM_START_SEC_CONST_UNSPECIFIED
 #include "BswM_MemMap.h"
-static CONST(BswM_ActionListItemRefType, BSWM_CONST) BswM_ActList16Ref_Core0_Par0[2u] =
+static CONST(BswM_ActionListItemRefType, BSWM_CONST) BswM_ActList15Ref_Core0_Par0[2u] =
 {
     {
         NULL_PTR,                                        /*actListRefIdx*/
@@ -1293,7 +1366,77 @@ static CONST(BswM_ActionListItemRefType, BSWM_CONST) BswM_ActList16Ref_Core0_Par
 
 #define BSWM_START_SEC_CONST_UNSPECIFIED
 #include "BswM_MemMap.h"
-static CONST(BswM_ActionListItemType, BSWM_CONST) BswM_ActionListItemsLCfg_Core0_Par0[27u] =
+static CONST(BswM_ActionListItemRefType, BSWM_CONST) BswM_ActList16Ref_Core0_Par0[2u] =
+{
+    {
+        NULL_PTR,                                        /*actListRefIdx*/
+        NULL_PTR,                                        /*ruleRefIdx*/
+        &(BswM_ActListItemsRefAction_Core0_Par0[27u])    /*avActType*/
+    },
+    {
+        NULL_PTR,                                        /*actListRefIdx*/
+        NULL_PTR,                                        /*ruleRefIdx*/
+        &(BswM_ActListItemsRefAction_Core0_Par0[28u])    /*avActType*/
+    },
+};
+#define BSWM_STOP_SEC_CONST_UNSPECIFIED
+#include "BswM_MemMap.h"
+
+#define BSWM_START_SEC_CONST_UNSPECIFIED
+#include "BswM_MemMap.h"
+static CONST(BswM_ActionListItemRefType, BSWM_CONST) BswM_ActList17Ref_Core0_Par0[1u] =
+{
+    {
+        NULL_PTR,                                        /*actListRefIdx*/
+        NULL_PTR,                                        /*ruleRefIdx*/
+        &(BswM_ActListItemsRefAction_Core0_Par0[29u])    /*avActType*/
+    },
+};
+#define BSWM_STOP_SEC_CONST_UNSPECIFIED
+#include "BswM_MemMap.h"
+
+#define BSWM_START_SEC_CONST_UNSPECIFIED
+#include "BswM_MemMap.h"
+static CONST(BswM_ActionListItemRefType, BSWM_CONST) BswM_ActList18Ref_Core0_Par0[1u] =
+{
+    {
+        NULL_PTR,                                        /*actListRefIdx*/
+        NULL_PTR,                                        /*ruleRefIdx*/
+        &(BswM_ActListItemsRefAction_Core0_Par0[30u])    /*avActType*/
+    },
+};
+#define BSWM_STOP_SEC_CONST_UNSPECIFIED
+#include "BswM_MemMap.h"
+
+#define BSWM_START_SEC_CONST_UNSPECIFIED
+#include "BswM_MemMap.h"
+static CONST(BswM_ActionListItemRefType, BSWM_CONST) BswM_ActList19Ref_Core0_Par0[1u] =
+{
+    {
+        NULL_PTR,                                        /*actListRefIdx*/
+        NULL_PTR,                                        /*ruleRefIdx*/
+        &(BswM_ActListItemsRefAction_Core0_Par0[31u])    /*avActType*/
+    },
+};
+#define BSWM_STOP_SEC_CONST_UNSPECIFIED
+#include "BswM_MemMap.h"
+
+#define BSWM_START_SEC_CONST_UNSPECIFIED
+#include "BswM_MemMap.h"
+static CONST(BswM_ActionListItemRefType, BSWM_CONST) BswM_ActList20Ref_Core0_Par0[1u] =
+{
+    {
+        NULL_PTR,                                        /*actListRefIdx*/
+        NULL_PTR,                                        /*ruleRefIdx*/
+        &(BswM_ActListItemsRefAction_Core0_Par0[32u])    /*avActType*/
+    },
+};
+#define BSWM_STOP_SEC_CONST_UNSPECIFIED
+#include "BswM_MemMap.h"
+
+#define BSWM_START_SEC_CONST_UNSPECIFIED
+#include "BswM_MemMap.h"
+static CONST(BswM_ActionListItemType, BSWM_CONST) BswM_ActionListItemsLCfg_Core0_Par0[33u] =
 {
     {
         0u,    /*actionItemIdx*/
@@ -1405,84 +1548,126 @@ static CONST(BswM_ActionListItemType, BSWM_CONST) BswM_ActionListItemsLCfg_Core0
         FALSE,    /*abortOnFail*/
         NULL_PTR,    /*BswMReportFailRuntimeErrorId*/
         BSWM_ACTIONITEM_ACTION,    /*actionItemType*/
-        &(BswM_ActList9Ref_Core0_Par0[0u])    /*actionRef*/
+        &(BswM_ActList8Ref_Core0_Par0[1u])    /*actionRef*/
     },
     {
         16u,    /*actionItemIdx*/
         FALSE,    /*abortOnFail*/
         NULL_PTR,    /*BswMReportFailRuntimeErrorId*/
         BSWM_ACTIONITEM_ACTION,    /*actionItemType*/
-        &(BswM_ActList10Ref_Core0_Par0[0u])    /*actionRef*/
+        &(BswM_ActList9Ref_Core0_Par0[0u])    /*actionRef*/
     },
     {
         17u,    /*actionItemIdx*/
         FALSE,    /*abortOnFail*/
         NULL_PTR,    /*BswMReportFailRuntimeErrorId*/
         BSWM_ACTIONITEM_ACTION,    /*actionItemType*/
-        &(BswM_ActList11Ref_Core0_Par0[0u])    /*actionRef*/
+        &(BswM_ActList9Ref_Core0_Par0[1u])    /*actionRef*/
     },
     {
         18u,    /*actionItemIdx*/
         FALSE,    /*abortOnFail*/
         NULL_PTR,    /*BswMReportFailRuntimeErrorId*/
         BSWM_ACTIONITEM_ACTION,    /*actionItemType*/
-        &(BswM_ActList12Ref_Core0_Par0[0u])    /*actionRef*/
+        &(BswM_ActList10Ref_Core0_Par0[0u])    /*actionRef*/
     },
     {
         19u,    /*actionItemIdx*/
         FALSE,    /*abortOnFail*/
         NULL_PTR,    /*BswMReportFailRuntimeErrorId*/
         BSWM_ACTIONITEM_ACTION,    /*actionItemType*/
-        &(BswM_ActList13Ref_Core0_Par0[0u])    /*actionRef*/
+        &(BswM_ActList11Ref_Core0_Par0[0u])    /*actionRef*/
     },
     {
         20u,    /*actionItemIdx*/
         FALSE,    /*abortOnFail*/
         NULL_PTR,    /*BswMReportFailRuntimeErrorId*/
         BSWM_ACTIONITEM_ACTION,    /*actionItemType*/
-        &(BswM_ActList13Ref_Core0_Par0[1u])    /*actionRef*/
+        &(BswM_ActList12Ref_Core0_Par0[0u])    /*actionRef*/
     },
     {
         21u,    /*actionItemIdx*/
         FALSE,    /*abortOnFail*/
         NULL_PTR,    /*BswMReportFailRuntimeErrorId*/
         BSWM_ACTIONITEM_ACTION,    /*actionItemType*/
-        &(BswM_ActList14Ref_Core0_Par0[0u])    /*actionRef*/
+        &(BswM_ActList13Ref_Core0_Par0[0u])    /*actionRef*/
     },
     {
         22u,    /*actionItemIdx*/
         FALSE,    /*abortOnFail*/
         NULL_PTR,    /*BswMReportFailRuntimeErrorId*/
         BSWM_ACTIONITEM_ACTION,    /*actionItemType*/
-        &(BswM_ActList14Ref_Core0_Par0[1u])    /*actionRef*/
+        &(BswM_ActList13Ref_Core0_Par0[1u])    /*actionRef*/
     },
     {
         23u,    /*actionItemIdx*/
         FALSE,    /*abortOnFail*/
         NULL_PTR,    /*BswMReportFailRuntimeErrorId*/
         BSWM_ACTIONITEM_ACTION,    /*actionItemType*/
-        &(BswM_ActList15Ref_Core0_Par0[0u])    /*actionRef*/
+        &(BswM_ActList14Ref_Core0_Par0[0u])    /*actionRef*/
     },
     {
         24u,    /*actionItemIdx*/
         FALSE,    /*abortOnFail*/
         NULL_PTR,    /*BswMReportFailRuntimeErrorId*/
         BSWM_ACTIONITEM_ACTION,    /*actionItemType*/
-        &(BswM_ActList15Ref_Core0_Par0[1u])    /*actionRef*/
+        &(BswM_ActList14Ref_Core0_Par0[1u])    /*actionRef*/
     },
     {
         25u,    /*actionItemIdx*/
         FALSE,    /*abortOnFail*/
         NULL_PTR,    /*BswMReportFailRuntimeErrorId*/
         BSWM_ACTIONITEM_ACTION,    /*actionItemType*/
-        &(BswM_ActList16Ref_Core0_Par0[0u])    /*actionRef*/
+        &(BswM_ActList15Ref_Core0_Par0[0u])    /*actionRef*/
     },
     {
         26u,    /*actionItemIdx*/
         FALSE,    /*abortOnFail*/
         NULL_PTR,    /*BswMReportFailRuntimeErrorId*/
         BSWM_ACTIONITEM_ACTION,    /*actionItemType*/
+        &(BswM_ActList15Ref_Core0_Par0[1u])    /*actionRef*/
+    },
+    {
+        27u,    /*actionItemIdx*/
+        FALSE,    /*abortOnFail*/
+        NULL_PTR,    /*BswMReportFailRuntimeErrorId*/
+        BSWM_ACTIONITEM_ACTION,    /*actionItemType*/
+        &(BswM_ActList16Ref_Core0_Par0[0u])    /*actionRef*/
+    },
+    {
+        28u,    /*actionItemIdx*/
+        FALSE,    /*abortOnFail*/
+        NULL_PTR,    /*BswMReportFailRuntimeErrorId*/
+        BSWM_ACTIONITEM_ACTION,    /*actionItemType*/
         &(BswM_ActList16Ref_Core0_Par0[1u])    /*actionRef*/
+    },
+    {
+        29u,    /*actionItemIdx*/
+        FALSE,    /*abortOnFail*/
+        NULL_PTR,    /*BswMReportFailRuntimeErrorId*/
+        BSWM_ACTIONITEM_ACTION,    /*actionItemType*/
+        &(BswM_ActList17Ref_Core0_Par0[0u])    /*actionRef*/
+    },
+    {
+        30u,    /*actionItemIdx*/
+        FALSE,    /*abortOnFail*/
+        NULL_PTR,    /*BswMReportFailRuntimeErrorId*/
+        BSWM_ACTIONITEM_ACTION,    /*actionItemType*/
+        &(BswM_ActList18Ref_Core0_Par0[0u])    /*actionRef*/
+    },
+    {
+        31u,    /*actionItemIdx*/
+        FALSE,    /*abortOnFail*/
+        NULL_PTR,    /*BswMReportFailRuntimeErrorId*/
+        BSWM_ACTIONITEM_ACTION,    /*actionItemType*/
+        &(BswM_ActList19Ref_Core0_Par0[0u])    /*actionRef*/
+    },
+    {
+        32u,    /*actionItemIdx*/
+        FALSE,    /*abortOnFail*/
+        NULL_PTR,    /*BswMReportFailRuntimeErrorId*/
+        BSWM_ACTIONITEM_ACTION,    /*actionItemType*/
+        &(BswM_ActList20Ref_Core0_Par0[0u])    /*actionRef*/
     },
 };
 #define BSWM_STOP_SEC_CONST_UNSPECIFIED
@@ -1490,7 +1675,7 @@ static CONST(BswM_ActionListItemType, BSWM_CONST) BswM_ActionListItemsLCfg_Core0
 
 #define BSWM_START_SEC_CONST_UNSPECIFIED
 #include "BswM_MemMap.h"
-static CONST(BswM_ActionListLCfgType, BSWM_CONST) BswM_ActionListLCfg_Core0_Par0[17u] =
+static CONST(BswM_ActionListLCfgType, BSWM_CONST) BswM_ActionListLCfg_Core0_Par0[21u] =
 {
     /* AL_DCM_Normal_Rx_Enable_CanChannel_0 */
     {
@@ -1552,64 +1737,92 @@ static CONST(BswM_ActionListLCfgType, BSWM_CONST) BswM_ActionListLCfg_Core0_Par0
     {
         BSWM_TRIGGER,    /* executeType */
         NULL_PTR,    /*actListPrior*/
-        1u,    /*BswMActionListItem*/
+        2u,    /*BswMActionListItem*/
         &(BswM_ActionListItemsLCfg_Core0_Par0[14u]),    /* actionItems */
     },
     /* AL_WakeupEventValidated */
     {
         BSWM_TRIGGER,    /* executeType */
         NULL_PTR,    /*actListPrior*/
-        1u,    /*BswMActionListItem*/
-        &(BswM_ActionListItemsLCfg_Core0_Par0[15u]),    /* actionItems */
+        2u,    /*BswMActionListItem*/
+        &(BswM_ActionListItemsLCfg_Core0_Par0[16u]),    /* actionItems */
     },
     /* AL_ClearWakeupEvent */
     {
         BSWM_TRIGGER,    /* executeType */
         NULL_PTR,    /*actListPrior*/
         1u,    /*BswMActionListItem*/
-        &(BswM_ActionListItemsLCfg_Core0_Par0[16u]),    /* actionItems */
+        &(BswM_ActionListItemsLCfg_Core0_Par0[18u]),    /* actionItems */
     },
     /* AL_KL15_ON_ComM_ReqFullCom */
     {
         BSWM_TRIGGER,    /* executeType */
         NULL_PTR,    /*actListPrior*/
         1u,    /*BswMActionListItem*/
-        &(BswM_ActionListItemsLCfg_Core0_Par0[17u]),    /* actionItems */
+        &(BswM_ActionListItemsLCfg_Core0_Par0[19u]),    /* actionItems */
     },
     /* AL_KL15_OFF_ComM_ReqNoCom */
     {
         BSWM_TRIGGER,    /* executeType */
         NULL_PTR,    /*actListPrior*/
         1u,    /*BswMActionListItem*/
-        &(BswM_ActionListItemsLCfg_Core0_Par0[18u]),    /* actionItems */
+        &(BswM_ActionListItemsLCfg_Core0_Par0[20u]),    /* actionItems */
     },
     /* AL_CanSMIndi_NoCom_BCan */
     {
         BSWM_TRIGGER,    /* executeType */
         NULL_PTR,    /*actListPrior*/
         2u,    /*BswMActionListItem*/
-        &(BswM_ActionListItemsLCfg_Core0_Par0[19u]),    /* actionItems */
+        &(BswM_ActionListItemsLCfg_Core0_Par0[21u]),    /* actionItems */
     },
     /* AL_CanSMIndi_SilentCom_BCan */
     {
         BSWM_TRIGGER,    /* executeType */
         NULL_PTR,    /*actListPrior*/
         2u,    /*BswMActionListItem*/
-        &(BswM_ActionListItemsLCfg_Core0_Par0[21u]),    /* actionItems */
+        &(BswM_ActionListItemsLCfg_Core0_Par0[23u]),    /* actionItems */
     },
     /* AL_CanSMIndi_FullCom_BCan */
     {
         BSWM_TRIGGER,    /* executeType */
         NULL_PTR,    /*actListPrior*/
         2u,    /*BswMActionListItem*/
-        &(BswM_ActionListItemsLCfg_Core0_Par0[23u]),    /* actionItems */
+        &(BswM_ActionListItemsLCfg_Core0_Par0[25u]),    /* actionItems */
     },
     /* AL__CanSMIndi_BusOff_BCan */
     {
         BSWM_TRIGGER,    /* executeType */
         NULL_PTR,    /*actListPrior*/
         2u,    /*BswMActionListItem*/
-        &(BswM_ActionListItemsLCfg_Core0_Par0[25u]),    /* actionItems */
+        &(BswM_ActionListItemsLCfg_Core0_Par0[27u]),    /* actionItems */
+    },
+    /* AL_RxEnableDM_CanChannel_0 */
+    {
+        BSWM_TRIGGER,    /* executeType */
+        NULL_PTR,    /*actListPrior*/
+        1u,    /*BswMActionListItem*/
+        &(BswM_ActionListItemsLCfg_Core0_Par0[29u]),    /* actionItems */
+    },
+    /* AL_RxDisableDM_CanChannel_0 */
+    {
+        BSWM_TRIGGER,    /* executeType */
+        NULL_PTR,    /*actListPrior*/
+        1u,    /*BswMActionListItem*/
+        &(BswM_ActionListItemsLCfg_Core0_Par0[30u]),    /* actionItems */
+    },
+    /* AL_EnableDiagPduGrop_BCan */
+    {
+        BSWM_TRIGGER,    /* executeType */
+        NULL_PTR,    /*actListPrior*/
+        1u,    /*BswMActionListItem*/
+        &(BswM_ActionListItemsLCfg_Core0_Par0[31u]),    /* actionItems */
+    },
+    /* AL_DisableDiagPduGrop_BCan */
+    {
+        BSWM_TRIGGER,    /* executeType */
+        NULL_PTR,    /*actListPrior*/
+        1u,    /*BswMActionListItem*/
+        &(BswM_ActionListItemsLCfg_Core0_Par0[32u]),    /* actionItems */
     },
 };
 #define BSWM_STOP_SEC_CONST_UNSPECIFIED
@@ -1867,6 +2080,45 @@ static CONST(BswM_ActionNMControlLCfgType, BSWM_CONST) BswM_NmControlLCfg_Core0_
 
 #define BSWM_START_SEC_CONST_UNSPECIFIED
 #include "BswM_MemMap.h"
+static CONST(PduR_RoutingPathGroupIdType, BSWM_CONST) BswM_PdurPathIdsLCfg_Core0_Par0[2u] =
+{
+    PduRRoutingPathGroup_Diag,
+    PduRRoutingPathGroup_Diag,
+};
+#define BSWM_STOP_SEC_CONST_UNSPECIFIED
+#include "BswM_MemMap.h"
+
+#define BSWM_START_SEC_CONST_UNSPECIFIED
+#include "BswM_MemMap.h"
+static CONST(boolean, BSWM_CONST) BswM_PdurCtrlInit1_Core0_Par0 = TRUE;
+
+#define BSWM_STOP_SEC_CONST_UNSPECIFIED
+#include "BswM_MemMap.h"
+
+#define BSWM_START_SEC_CONST_UNSPECIFIED
+#include "BswM_MemMap.h"
+static CONST(BswM_ActionPduRCtrlLCfgType, BSWM_CONST) BswM_PdurCtrlLCfg_Core0_Par0[2u] =
+{
+    /* BswMPduRouterControl*/
+    {
+        BSWM_PDUR_ENABLE,
+        NULL_PTR,
+        1u,        /*numOfPathGrp*/
+        &(BswM_PdurPathIdsLCfg_Core0_Par0[0U]),    /*pduPathIds*/
+    },
+    /* BswMPduRouterControl*/
+    {
+        BSWM_PDUR_DISABLE,
+        &BswM_PdurCtrlInit1_Core0_Par0,
+        1u,        /*numOfPathGrp*/
+        &(BswM_PdurPathIdsLCfg_Core0_Par0[1U]),    /*pduPathIds*/
+    },
+};
+#define BSWM_STOP_SEC_CONST_UNSPECIFIED
+#include "BswM_MemMap.h"
+
+#define BSWM_START_SEC_CONST_UNSPECIFIED
+#include "BswM_MemMap.h"
 static CONST(BswM_ActionUserCalloutLCfgType, BSWM_CONST) BswM_UserCallLCfg_Core0_Par0[3u] =
 {
     /* BswMUserCallout*/
@@ -1900,6 +2152,7 @@ static CONST(BswM_ActionItemsLCfgType, BSWM_CONST) BswM_ActionItemsLCfg_Core0_Pa
     &(BswM_EcuMGoDownHaltPollLCfg_Core0_Par0[0U]),    /*BswMEcuMGoDownHaltPoll*/
     &(BswM_EcuMStateSwitchLCfg_Core0_Par0[0U]),    /*BswMEcuMStateSwitch*/
     &(BswM_NmControlLCfg_Core0_Par0[0U]),    /*BswMNMControl*/
+    &(BswM_PdurCtrlLCfg_Core0_Par0[0U]),    /*BswMPduRouterControl*/
     &(BswM_UserCallLCfg_Core0_Par0[0U]),    /*BswMUserCallout*/
 };
 #define BSWM_STOP_SEC_CONST_UNSPECIFIED
@@ -1907,7 +2160,7 @@ static CONST(BswM_ActionItemsLCfgType, BSWM_CONST) BswM_ActionItemsLCfg_Core0_Pa
 
 #define BSWM_START_SEC_VAR_CLEARED_UNSPECIFIED
 #include "BswM_MemMap.h"
-static VAR(BswM_RuleRunTimeType, BSWM_VAR_CLEARED) BswM_RuleRunTime_Core0_Par0[17u];
+static VAR(BswM_RuleRunTimeType, BSWM_VAR_CLEARED) BswM_RuleRunTime_Core0_Par0[18u];
 #define BSWM_STOP_SEC_VAR_CLEARED_UNSPECIFIED
 #include "BswM_MemMap.h"
 
@@ -1918,11 +2171,11 @@ static CONST(BswM_PartitionLCfgType, BSWM_CONST) BswM_PartitionLCfg_Core0[1u] =
     {
         &BswM_EvRqstLCfg_Core0_Par0,    /*evRqstLCfg*/
         &BswM_ModeRqstLCfg_Core0_Par0,    /*modeRqstLCfg*/
-        17u,    /*numOfRules*/
+        18u,    /*numOfRules*/
         &(BswM_RuleLCfg_Core0_Par0[0]),    /*ruleLCfg*/
         0u,    /*numOfDefRules*/
         NULL_PTR,    /*defRuleRefLCfg*/
-        17u,    /*numOfActionList*/
+        21u,    /*numOfActionList*/
         &(BswM_ActionListLCfg_Core0_Par0[0]),    /*acListLCfg*/
         &BswM_ActionItemsLCfg_Core0_Par0,    /*acItemsLCfg*/
         &(BswM_RuleRunTime_Core0_Par0[0]),    /*ruleRutTimeStatus*/

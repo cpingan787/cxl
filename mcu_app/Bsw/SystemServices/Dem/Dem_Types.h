@@ -64,7 +64,7 @@ typedef uint8 Dem_DTCTranslationFormatType;
 #define DEM_DTC_TRANSLATION_J2012DA_FORMAT_04 0x04u
 
 typedef uint8 Dem_DTCSeverityType;
-#define DEM_SEVERITY_NO_SEVERITY           0x00u
+#define DEM_SEVERITY_NO_SEVERITY           0x03u
 #define DEM_SEVERITY_WWHOBD_CLASS_NO_CLASS 0x01u
 #define DEM_SEVERITY_WWHOBD_CLASS_A        0x02u
 #define DEM_SEVERITY_WWHOBD_CLASS_B1       0x04u

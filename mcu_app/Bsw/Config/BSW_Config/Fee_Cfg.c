@@ -14,7 +14,7 @@
  *  @MCU                : R7F7015833
  *  @file               : Fee_Cfg.c
  *  @author             : iSoft
- *  @date               : 2026-01-29 15:22:22
+ *  @date               : 2026-03-16 09:26:39
  *  @vendor             : iSoft
  *  @description        : 
  *  @specification(S)   : AUTOSAR Classic Platform R19-11
@@ -79,11 +79,11 @@ CONST(Fee_ClusterConfigType, FEE_CONST_PCCFG) Fee_ClusterConfig_FeeClusterGrp[CL
 /* PRQA S 3408,1531-- */ /* MISRA Rule 8.4,Rule 8.7 */
 {
     {
-        0x100u,
+        0x4000u,
         0x3000u,
     },
     {
-        0x3100u,
+        0x7000u,
         0x3000u,
     },
 };
@@ -101,7 +101,7 @@ Fee_ClusterGroupType Fee_ClusterGroupConfig[FEE_CLUSTER_GROUP_NUM] =
 #define FEE_START_SEC_PBCONFIG_DATA_UNSPECIFIED
 #include "Fee_MemMap.h"
 /* PRQA S 3408,1504++ */ /* MISRA Rule 8.4,Rule 8.7 */
-CONST(Fee_BlockConfigType, FEE_CONST_PBCFG) Fee_BlockConfig[53] =
+CONST(Fee_BlockConfigType, FEE_CONST_PBCFG) Fee_BlockConfig[54] =
 /* PRQA S 3408,1504++ */ /* MISRA Rule 8.4,Rule 8.7 */
 {
     {
@@ -124,13 +124,13 @@ CONST(Fee_BlockConfigType, FEE_CONST_PBCFG) Fee_BlockConfig[53] =
     },
     {
         0x300u,
-        0xc40u,
+        0xcd0u,
         FALSE,
         0u
     },
     {
         0x400u,
-        0xc0u,
+        0x100u,
         FALSE,
         0u
     },
@@ -422,6 +422,12 @@ CONST(Fee_BlockConfigType, FEE_CONST_PBCFG) Fee_BlockConfig[53] =
         FALSE,
         0u
     },
+    {
+        0x3500u,
+        0x18u,
+        FALSE,
+        0u
+    },
 };
 #define FEE_STOP_SEC_PBCONFIG_DATA_UNSPECIFIED
 #include "Fee_MemMap.h"
@@ -432,7 +438,7 @@ CONST(Fee_BlockConfigType, FEE_CONST_PBCFG) Fee_BlockConfig[53] =
 CONST(Fee_ConfigType, FEE_CONST_PBCFG) Fee_ConfigData =
 /* PRQA S 3408++ */ /* MISRA Rule 8.4 */
 {
-    53u,
+    54u,
     &Fee_BlockConfig[0]
 };
 #define FEE_STOP_SEC_PBCONFIG_DATA_UNSPECIFIED

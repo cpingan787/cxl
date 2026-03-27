@@ -30,6 +30,7 @@
 #include "Mcu.h"
 #include "Adc.h"
 #include "Gpt.h"
+#include "Icu.h"
 
 #include "Os_Arch_Processor.h"
 #include "Os_Interrupt_CfgData.h"
@@ -66,6 +67,9 @@
 #include "Rte_SecOC.h"
 #include "Com_Test.h"
 #include "Mem_Test.h"
+#include "Vss_Cfg.h"
+#include "PowManager.h"
+#include "Uds_Test.h"
 
 #include "r_port.h"
 #include "peripheralHal.h"
@@ -77,6 +81,7 @@
 #include "timerHal.h"
 #include "remoteControlTask.h"
 #include "canPeriodTask.h"
+
 /** DO NOT CHANGE THIS COMMENT!
 * <USERBLOCK User Includes>
 */
@@ -95,7 +100,6 @@
 /* ============================================ external data definitions =========================================== */
 
 /* ========================================== external function definitions ========================================= */
-extern void Power_Detect(void);
 
 /* ========================================== internal function definitions ========================================= */
 /*=======[T A S K S]==========================================*/
@@ -108,25 +112,43 @@ TASK(OsTask_Init)
     * <USERBLOCK OsTask_Init>
     */
     EcuM_StartupTwo();
-    EcuM_SetWakeupEvent(EcuMWakeupSource_Local);
 	
-	Adc_StartGroupConversion(AdcConf_AdcGroup_AdcGroup0);
-	// Adc_StartGroupConversion(AdcConf_AdcGroup_AdcGroup1);
+    Adc_StartGroupConversion(AdcConf_AdcGroup_AdcGroup0);
+	Adc_StartGroupConversion(AdcConf_AdcGroup_AdcGroup1);
 
     /* Enabling the Notification */
     Gpt_EnableNotification(GptConf_GptChannelConfiguration_GptChannelConfiguration0);
     Gpt_StartTimer(GptConf_GptChannelConfiguration_GptChannelConfiguration0, 20000); //1ms
-    // Gpt_EnableNotification(GptConf_GptChannelConfiguration_GptChannelConfiguration2);
-    // Gpt_StartTimer(GptConf_GptChannelConfiguration_GptChannelConfiguration2, 10000); //1ms
-    // Gpt_EnableNotification(GptConf_GptChannelConfiguration_GptChannelConfiguration3);
-    // Gpt_StartTimer(GptConf_GptChannelConfiguration_GptChannelConfiguration3, 0x1E8); //1s
 
-    //Can_SetControllerMode(CanConf_CanController_CanController, CAN_T_START);
-    ComM_RequestComMode(0,COMM_FULL_COMMUNICATION);
-    //BswM_CanSM_CurrentState(0,CANSM_BSWM_FULL_COMMUNICATION);
-    //CanIf_SetPduMode(CANIF_CANDRV_0_CANIF_CONTROLLER_0_IAM, CANIF_ONLINE);
+    Icu_EnableNotification(IcuConf_IcuChannel_IcuChannel_1_KL30);
+    Icu_EnableNotification(IcuConf_IcuChannel_IcuChannel_2_NAD);
+    Icu_EnableNotification(IcuConf_IcuChannel_IcuChannel_3_EcallBtn);
+    Icu_EnableNotification(IcuConf_IcuChannel_IcuChannel_4_Imu_Int1);
+    Icu_EnableNotification(IcuConf_IcuChannel_IcuChannel_5_Imu_Int2);
+    Icu_EnableNotification(IcuConf_IcuChannel_IcuChannel_6_Rtc_int);
+    
+    Icu_EnableEdgeDetection(IcuConf_IcuChannel_IcuChannel_1_KL30);
+    Icu_EnableEdgeDetection(IcuConf_IcuChannel_IcuChannel_2_NAD);
+    Icu_EnableEdgeDetection(IcuConf_IcuChannel_IcuChannel_3_EcallBtn);
+    Icu_EnableEdgeDetection(IcuConf_IcuChannel_IcuChannel_4_Imu_Int1);
+    Icu_EnableEdgeDetection(IcuConf_IcuChannel_IcuChannel_5_Imu_Int2);
+    Icu_EnableEdgeDetection(IcuConf_IcuChannel_IcuChannel_6_Rtc_int);
+
+    Icu_EnableWakeup(IcuConf_IcuChannel_IcuChannel_0_Crash);
+    Icu_EnableWakeup(IcuConf_IcuChannel_IcuChannel_1_KL30);
+    Icu_EnableWakeup(IcuConf_IcuChannel_IcuChannel_2_NAD);
+    Icu_EnableWakeup(IcuConf_IcuChannel_IcuChannel_3_EcallBtn);
+    Icu_EnableWakeup(IcuConf_IcuChannel_IcuChannel_4_Imu_Int1);
+    Icu_EnableWakeup(IcuConf_IcuChannel_IcuChannel_5_Imu_Int2);
+    Icu_EnableWakeup(IcuConf_IcuChannel_IcuChannel_6_Rtc_int);
+
+    Icu_StartSignalMeasurement(IcuConf_IcuChannel_IcuChannel_0_Crash); 
+
+    /**For K30 PowerON need to checck CAN wakeup */
+    Can_SetControllerMode(CanConf_CanController_CanController, CAN_T_WAKEUP);
+    Can_SetControllerMode(CanConf_CanController_CanController, CAN_T_START);
+    
     ComM_CommunicationAllowed(0,TRUE);
-
 	IpduM_Init(&IpduM_PBConfigData);
     E2EXf_Init(&E2EXf_Config);
 	StbM_Init(&StbM_Config);
@@ -140,7 +162,8 @@ TASK(OsTask_Init)
     Csm_Init(NULL_PTR);
     SecOC_Init(&SecOC_ConfigData);
     Csm_KeySetValid(CsmKey_SecOC_Key);
-
+    Vss_InitConfig();
+   
     Fvm_InitConfig();
     //Gpt_EnableNotification(GptConf_GptChannelConfiguration_GptChannelConfiguration0);
     Gpt_StartTimer(GptConf_GptChannelConfiguration_GptChannelConfiguration3, 2147483647); //1ms
@@ -162,6 +185,7 @@ TASK(OsTask_Init)
     TaskPowerManageInit();
     TaskVehicleDataToCpuInit();
     RemoteControlTaskInit();
+    DtcGpioInit();
     TBOX_PRINT("app system start\n");
 
     /** DO NOT CHANGE THIS COMMENT!
@@ -192,10 +216,11 @@ TASK(OsTask_1ms)
     * <USERBLOCK OsTask_1ms>
     */
     test1++;
+    Adc_StartGroupConversion(AdcConf_AdcGroup_AdcGroup1);
     /** DO NOT CHANGE THIS COMMENT!
     * </USERBLOCK>
     */
-    CanSM_MainFunction();
+    CanSM_MainFunction();/**passwakeup -Second: Start canif and controller */
     if (E_OK != TerminateTask())
     {
         while (1)
@@ -214,9 +239,9 @@ TASK(OsTask_5ms)
     */
     /* custom code.... */
     test5++;
-    //CanNm_MainFunction();
+    CanNm_MainFunction();/**passwakeup -third: Process NM passive start，and send NM message */
     
-    Com_MainFunctionRx_ComMainFunctionRx();
+    Com_MainFunctionRx_ComMainFunctionRx();/**passwakeup -Fourth: send COM message */
     #if COM_TESTMODE
     Com_Test();
     #endif
@@ -261,8 +286,10 @@ TASK(OsTask_10ms)
     /* custom code.... */
     test10++;
     BswM_MainFunction();
-    ComM_MainFunction_ComMChannel_0();
-	CanNm_MainFunction();
+    Power_Detect();
+    //CanNm_MainFunction();/**passwakeup -third:Process NM passive start，and send NM message */
+    ComM_MainFunction_ComMChannel_0();/**passwakeup -First:change to Full com */
+    // CanSM_MainFunction();/**passwakeup -Second:Start canif and controller */
     CanTp_MainFunction();
     Dcm_MainFunction();
     Dem_MainFunction();
@@ -277,6 +304,8 @@ TASK(OsTask_10ms)
 #if(CanTSyn_SlaveTestMODE == STD_ON)
     CanTSyn_SlaveTest();
 #endif
+
+    Uds_Test();
     /** DO NOT CHANGE THIS COMMENT!
     * </USERBLOCK>
     */
@@ -297,7 +326,7 @@ TASK(OsTask_50ms)
     * <USERBLOCK OsTask_50ms>
     */
     test50++;
-	// Power_Detect();
+    SystemTimeMs();
 
 #if(Mem_testMODE == STD_ON)
     NvM_test();
@@ -314,6 +343,8 @@ TASK(OsTask_50ms)
         }
     }
 }
+
+extern uint8 gIOHwAbDI_IG1_St;
 /*OsTask_100ms: Core0(CPU),Type = BASIC, Priority = 2*/
 TASK(OsTask_100ms)
 {
@@ -337,16 +368,22 @@ TASK(OsTask_100ms)
     }
     App_SecOC_ErrorLogProcess();
 
-    if((test100 % 10) == 0)
-    {
-        R_PORT_ToggleGpioOutput(APort1, 1);
-    }
-    TimerHalTestMain(100);
-    // LogHalTestMain(100);
     /** DO NOT CHANGE THIS COMMENT!
     * </USERBLOCK>
     */
 
+    if(test100 % 10 == 0)
+    {
+        CrashTimeElapsed = Icu_GetTimeElapsed(IcuConf_IcuChannel_IcuChannel_0_Crash);
+        R_PORT_ToggleGpioOutput(APort1, 1);
+    }
+	if(test100 % 200 == 0)
+	{
+		gIOHwAbDI_IG1_St = STD_HIGH;
+	}
+    TimerHalTestMain(100);
+    TaskAntDetect100ms();
+    // LogHalTestMain(100);
     if (E_OK != TerminateTask())
     {
         while (1)
@@ -392,8 +429,7 @@ void ShutdownHook(StatusType Error)
     */
     /* custom code.... */
     //EcuM_Shutdown();
-//    Mcu_SetMode(McuConf_McuModeSettingConf_McuModeSettingConf0);
-//    Mcu_SequencerInit(McuConf_McuLowPowerSequencer_McuLowPowerSequencer0);
+    Mcu_SetMode(McuConf_McuModeSettingConf_McuModeSettingConf0);
 
     /** DO NOT CHANGE THIS COMMENT!
     * </USERBLOCK>
@@ -570,6 +606,180 @@ ISR(ISR_TAUB0I12_IRQ_Handler)
     * <USERBLOCK TAUB0I12_IRQ>
     */
     //Gpt_CbkNotification(GPT_TAUB0_CH12);
+    /** DO NOT CHANGE THIS COMMENT!
+    * </USERBLOCK>
+    */
+}
+#define OS_STOP_SEC_CODE
+#include "Os_MemMap.h"
+/*
+ *ISR(ISR_TAUB0I8_IRQ_Handler: Core0(CPU))
+ */
+#define OS_START_SEC_CODE
+#include "Os_MemMap.h"
+ISR(ISR_TAUB0I8_IRQ_Handler)
+{
+    /* please insert your code here ... */
+    /** DO NOT CHANGE THIS COMMENT!
+    * <USERBLOCK TAUB0I8_IRQ>
+    */
+    /* custom code.... */
+    // Gpt_CbkNotification(GPT_TAUB0_CH08);
+    Icu_TimerIsr(ICU_TAUB0_CH08);
+    Icu_Edge_Detect_Crash();
+
+    /** DO NOT CHANGE THIS COMMENT!
+    * </USERBLOCK>
+    */
+}
+#define OS_STOP_SEC_CODE
+#include "Os_MemMap.h"
+/*
+ *ISR(ISR_TAUB0I9_IRQ_Handler: Core0(CPU))
+ */
+#define OS_START_SEC_CODE
+#include "Os_MemMap.h"
+ISR(ISR_TAUB0I9_IRQ_Handler)
+{
+    /* please insert your code here ... */
+    /** DO NOT CHANGE THIS COMMENT!
+    * <USERBLOCK TAUB0I9_IRQ>
+    */
+    /* custom code.... */
+    Icu_TimerIsr(ICU_TAUB0_CH09);
+    /** DO NOT CHANGE THIS COMMENT!
+    * </USERBLOCK>
+    */
+}
+#define OS_STOP_SEC_CODE
+#include "Os_MemMap.h"
+/*
+ *ISR(ISR_P1_IRQ_Handler: Core0(CPU))
+ */
+#define OS_START_SEC_CODE
+#include "Os_MemMap.h"
+ISR(ISR_P1_IRQ_Handler)
+{
+    /* please insert your code here ... */
+    /** DO NOT CHANGE THIS COMMENT!
+    * <USERBLOCK P1_IRQ>
+    */
+    /* custom code.... */
+    //Icu_ExternalInterruptIsr(ICU_EXT_INTP_CH01);
+    /** DO NOT CHANGE THIS COMMENT!
+    * </USERBLOCK>
+    */
+}
+#define OS_STOP_SEC_CODE
+#include "Os_MemMap.h"
+/*
+ *ISR(ISR_P2_IRQ_Handler: Core0(CPU))
+ */
+#define OS_START_SEC_CODE
+#include "Os_MemMap.h"
+ISR(ISR_P2_IRQ_Handler)
+{
+    /* please insert your code here ... */
+    /** DO NOT CHANGE THIS COMMENT!
+    * <USERBLOCK P2_IRQ>
+    */
+    /* custom code.... */
+    Icu_ExternalInterruptIsr(ICU_EXT_INTP_CH02);
+    /** DO NOT CHANGE THIS COMMENT!
+    * </USERBLOCK>
+    */
+}
+#define OS_STOP_SEC_CODE
+#include "Os_MemMap.h"
+/*
+ *ISR(ISR_P5_IRQ_Handler: Core0(CPU))
+ */
+#define OS_START_SEC_CODE
+#include "Os_MemMap.h"
+ISR(ISR_P5_IRQ_Handler)
+{
+    /* please insert your code here ... */
+    /** DO NOT CHANGE THIS COMMENT!
+    * <USERBLOCK P5_IRQ>
+    */
+    /* custom code.... */
+    Icu_ExternalInterruptIsr(ICU_EXT_INTP_CH05);
+    /** DO NOT CHANGE THIS COMMENT!
+    * </USERBLOCK>
+    */
+}
+#define OS_STOP_SEC_CODE
+#include "Os_MemMap.h"
+/*
+ *ISR(ISR_P6_IRQ_Handler: Core0(CPU))
+ */
+#define OS_START_SEC_CODE
+#include "Os_MemMap.h"
+ISR(ISR_P6_IRQ_Handler)
+{
+    /* please insert your code here ... */
+    /** DO NOT CHANGE THIS COMMENT!
+    * <USERBLOCK P6_IRQ>
+    */
+    /* custom code.... */
+    Icu_ExternalInterruptIsr(ICU_EXT_INTP_CH06);
+    /** DO NOT CHANGE THIS COMMENT!
+    * </USERBLOCK>
+    */
+}
+#define OS_STOP_SEC_CODE
+#include "Os_MemMap.h"
+/*
+ *ISR(ISR_P7_IRQ_Handler: Core0(CPU))
+ */
+#define OS_START_SEC_CODE
+#include "Os_MemMap.h"
+ISR(ISR_P7_IRQ_Handler)
+{
+    /* please insert your code here ... */
+    /** DO NOT CHANGE THIS COMMENT!
+    * <USERBLOCK P7_IRQ>
+    */
+    /* custom code.... */
+    Icu_ExternalInterruptIsr(ICU_EXT_INTP_CH07);
+    /** DO NOT CHANGE THIS COMMENT!
+    * </USERBLOCK>
+    */
+}
+#define OS_STOP_SEC_CODE
+#include "Os_MemMap.h"
+/*
+ *ISR(ISR_P9_IRQ_Handler: Core0(CPU))
+ */
+#define OS_START_SEC_CODE
+#include "Os_MemMap.h"
+ISR(ISR_P9_IRQ_Handler)
+{
+    /* please insert your code here ... */
+    /** DO NOT CHANGE THIS COMMENT!
+    * <USERBLOCK P9_IRQ>
+    */
+    /* custom code.... */
+    Icu_ExternalInterruptIsr(ICU_EXT_INTP_CH09);
+    /** DO NOT CHANGE THIS COMMENT!
+    * </USERBLOCK>
+    */
+}
+#define OS_STOP_SEC_CODE
+#include "Os_MemMap.h"
+/*
+ *ISR(ISR_P14_IRQ_Handler: Core0(CPU))
+ */
+#define OS_START_SEC_CODE
+#include "Os_MemMap.h"
+ISR(ISR_P14_IRQ_Handler)
+{
+    /* please insert your code here ... */
+    /** DO NOT CHANGE THIS COMMENT!
+    * <USERBLOCK P14_IRQ>
+    */
+    /* custom code.... */
+    Icu_ExternalInterruptIsr(ICU_EXT_INTP_CH14);
     /** DO NOT CHANGE THIS COMMENT!
     * </USERBLOCK>
     */
@@ -766,7 +976,6 @@ ISR(ISR_RIIC0TEI_IRQ_Handler)
 }
 #define OS_STOP_SEC_CODE
 #include "Os_MemMap.h"
-
 
 /* PRQA S 1532-- */ /* MISRA Rule 8.7 */
 /*=======[E N D   O F   F I L E]==============================================*/

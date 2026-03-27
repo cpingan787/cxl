@@ -2060,13 +2060,13 @@ Dem_SetDTCSuppression(uint32 DTC, Dem_DTCFormatType DTCFormat, boolean Suppressi
             for (uint16 iloop = 0u; iloop < EventRefNum; iloop++)
 #endif /* DEM_ONEDTCMAPPINGMUTILEVENT == STD_ON */
             {
-                if (NULL_PTR != Dem_CheckEventMemEntryExistsAlready(*pDTCMapping))
-                {
-                    ret = E_NOT_OK;
+                // if (NULL_PTR != Dem_CheckEventMemEntryExistsAlready(*pDTCMapping))
+                // {
+                //     ret = E_NOT_OK;
 #if (DEM_ONEDTCMAPPINGMUTILEVENT == STD_ON)
                     break;
 #endif /* DEM_ONEDTCMAPPINGMUTILEVENT == STD_ON */
-                }
+                // }
 #if (DEM_ONEDTCMAPPINGMUTILEVENT == STD_ON)
                 pDTCMapping++;
 #endif /* DEM_ONEDTCMAPPINGMUTILEVENT == STD_ON */

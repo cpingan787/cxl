@@ -240,7 +240,7 @@ define DEM_FF_RECNUM_CONFIGURED 2 */
 #define DEM_NVRAM_DIVADED    STD_OFF
 
 /* DemDtcStatusAvailabilityMask Range:0~255 */
-#define DEM_DTC_STATUS_AVAILABILITY_MASK 0x9u
+#define DEM_DTC_STATUS_AVAILABILITY_MASK 0xffu
 
 /*******************************************************************************
 *                          Memory Configuration
@@ -249,14 +249,14 @@ define DEM_FF_RECNUM_CONFIGURED 2 */
 #define DEM_MEM_DEST_TOTAL_NUM 1u
 
 /* MAX(DemGeneral/Dem<XX>Memory/DemMaxNumberEventEntry<XX>) */
-#define DEM_MEM_DEST_MAX_ENTRY_NUM 58u
+#define DEM_MEM_DEST_MAX_ENTRY_NUM 59u
 
 /* DemMaxNumberEventEntryPermanent Range:0~255 */
 #define DEM_MAX_NUMBER_EVENT_ENTRY_PERMANENT 0u
 
 /* DemPrimaryMemory 1-1 */
 /* DemMaxNumberEventEntryPrimary Range:1~255 */
-#define DEM_MAX_NUMBER_EVENT_ENTRY_PRIMARY 58u
+#define DEM_MAX_NUMBER_EVENT_ENTRY_PRIMARY 59u
 
 /* DemMirrorMemory 0-1 */
 /* DemMaxNumberEventEntryMirror Range:0~255 */
@@ -270,7 +270,8 @@ define DEM_FF_RECNUM_CONFIGURED 2 */
 #define DEM_NVRAM_BLOCKID_NUM 2
 
 /* DemGeneral/DemEventMemorySet/DemGlobalFreezeFrame */
-#define DEM_GLOBAL_FREEZE_FRAME_SUPPORT   STD_OFF
+#define DEM_GLOBAL_FREEZE_FRAME_SUPPORT   STD_ON
+#define DEM_GLOBAL_FREEZE_FRAME_LENGTH    13
 
 /*******************************************************************************
 *                          OBD Configuration
@@ -329,8 +330,8 @@ define DEM_OBD_PRIMARY_ECU 4*/
 #define DEM_TRIGGERONPASSEDEANLE STD_OFF
 #define DEM_TRIGGERONMIRROREANLE STD_OFF
 #define DEM_ONEDTCMAPPINGMUTILEVENT STD_OFF
-#define DEM_FAILURE_PENGDING_SAIC     STD_OFF
-#define DEM_AGEDCOUNT_SAIC     STD_OFF
+#define DEM_FAILURE_PENGDING_SAIC     STD_ON
+#define DEM_AGEDCOUNT_SAIC     STD_ON
 #define DEM_STATUSINDICATOR30ENABLE STD_OFF
 
 #endif /* DEM_CFG_H_ */

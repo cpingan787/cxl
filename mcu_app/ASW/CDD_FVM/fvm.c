@@ -67,11 +67,11 @@ Std_ReturnType Fvm_Init(const Fvm_ConfigType* pConfig)
     g_resetCounter = FVM_RESET_COUNT_INIT_VAL;
 	for (i = 0u; i < g_pFvmConfig->txSecocMsgNum; i++)
 	{
-		g_pFvmConfig->pTxMsgBuffer[i].messageCounter = FVM_MSG_COUNT_INIT_VAL + 1u;
+		g_pFvmConfig->pTxMsgBuffer[i].messageCounter = FVM_MSG_COUNT_INIT_VAL; // 第一帧数据的 Message Counter 规定是 0
 	} 
 	for (i = 0; i < g_pFvmConfig->rxSecocMsgNum; i++)
 	{
-		g_pFvmConfig->pRxMsgBuffer[i].messageCounter = FVM_MSG_COUNT_INIT_VAL + 1u;
+		g_pFvmConfig->pRxMsgBuffer[i].messageCounter = FVM_MSG_COUNT_INIT_VAL;
 	}
     
     /* 从NVM读取行程计数器 */
@@ -132,8 +132,20 @@ Std_ReturnType Fvm_SetTripCounter(uint32_t tripCounter)
             }
             return E_NOT_OK;
         }
+
+        if (tripCounter < g_tripCounter)
+        {
+            if (g_pFvmConfig->Fvm_ErrorNotification != NULL)
+            {
+                g_pFvmConfig->Fvm_ErrorNotification(FVM_E_COUNTER_DECREASED); 
+            }
+            return E_NOT_OK;
+        }
     }
-    
+    if (tripCounter == g_tripCounter)
+    {
+        return E_OK;
+    }
     g_tripCounter = tripCounter;
     if (g_pFvmConfig != NULL && g_pFvmConfig->Fvm_SaveTripCounter != NULL)
     {
@@ -426,149 +438,6 @@ Std_ReturnType Fvm_GetFreshnessValue(uint32_t canId, uint8_t* pFreshnessBytes)
     return E_OK;
 }
 
-// /*************************************************
-//  Function: Fvm_VerifyFreshnessValue
-//  Description: 验证新鲜值有效性，并构建完整新鲜值
-//  Input: pMsgBufer 历史新鲜值信息
-//         currentMsgCntL 当前接收的消息计数器低14位（从CAN消息中提取）
-//         currentMsgRstCntL 当前接收的复位计数器低2位（从CAN消息中提取）
-//  Output: pFreshnessBytes 输出的新鲜值指针
-//  Return: E_OK-成功, E_NOT_OK-失败
-//  Others:
-// *************************************************/
-// Std_ReturnType Fvm_VerifyFreshnessValue(uint32_t canId, uint16_t currentMsgCntL, uint8_t currentMsgRstCntL, uint8_t* pFreshnessBytes)
-// {
-//     int16_t msgIndex = 0;
-//     Fvm_FreshnessValue_t* pMsgBuffer;
-// 	uint8_t rstCntL = 0u;          /* 本地复位计数器的低2位 */
-// 	uint64_t tripRstCnt = 0u;     /* 当前行程+复位计数器的组合值（40位） */
-// 	uint64_t tripRstcntLast = 0u; /* 历史行程+复位计数器的组合值（40位） */
-//     uint32_t pMsgCntOut = 0u;
-//     uint32_t pTripCntOut = 0u;
-//     uint16_t pRstCntOut = 0u;
-    
-//     if (g_pFvmConfig != NULL)
-//     {
-//         if (g_fvmStatus == FVM_UNINIT)
-//         {
-//             if (g_pFvmConfig->Fvm_ErrorNotification != NULL)
-//             {
-//                 g_pFvmConfig->Fvm_ErrorNotification(FVM_E_NOT_INITIALIZED);
-//             }
-//             return E_NOT_OK;
-//         }
-        
-//         if (pFreshnessBytes == NULL)
-//         {
-//             if (g_pFvmConfig->Fvm_ErrorNotification != NULL)
-//             {
-//                 g_pFvmConfig->Fvm_ErrorNotification(FVM_E_INVALID_PARAM);
-//             }
-//             return E_NOT_OK;
-//         }
-//     }
-
-//     msgIndex = Fvm_FindMessageIndex(canId, FVM_INDEX_CFG_RX);
-//     if (msgIndex < 0)
-//     {
-//         if (g_pFvmConfig->Fvm_ErrorNotification != NULL)
-//         {
-//             g_pFvmConfig->Fvm_ErrorNotification(FVM_E_INVALID_PARAM);
-//         }
-//         return E_NOT_OK;
-//     }
-
-//     pMsgBuffer = &g_pFvmConfig->pRxMsgBuffer[msgIndex];
-
-//     rstCntL = (int8_t)(g_resetCounter & 0x03u);
-//     tripRstCnt = ((uint64_t)g_tripCounter << 16 ) + (uint64_t)g_resetCounter;
-//     tripRstcntLast = ((uint64_t)pMsgBuffer->tripCounter << 16) + (uint64_t)pMsgBuffer->resetCounter;
-
-// 	if (rstCntL == currentMsgRstCntL)
-// 	{				
-// 		/* 不需要调整，保持当前值 */
-// 	}
-// 	else if ((rstCntL - 1) == currentMsgRstCntL)
-// 	{
-// 		/* 减1，表示发生了借位 */
-// 		tripRstCnt -= 1u;
-// 	}
-// 	else if ((rstCntL + 1) == currentMsgRstCntL)
-// 	{
-// 		/* 加1，表示发生了进位 */
-// 		tripRstCnt += 1u;
-// 	}
-// 	else if (( rstCntL - 2) == currentMsgRstCntL)
-// 	{
-// 		/* 减2，表示发生了2次借位 */
-// 		tripRstCnt -= 2u;
-// 	}
-// 	else if ((rstCntL + 2) == currentMsgRstCntL)
-// 	{
-// 		/* 加2，表示发生了2次进位 */
-// 		tripRstCnt += 2u;
-// 	}
-// 	else
-// 	{
-// 		/* 获取新鲜值失败，返回错误 */
-//         if (g_pFvmConfig != NULL && g_pFvmConfig->Fvm_ErrorNotification != NULL)
-//         {
-//             g_pFvmConfig->Fvm_ErrorNotification(FVM_E_INVALID_PARAM);
-//         }
-// 		return E_NOT_OK;
-// 	}
-
-// 	if (tripRstCnt == tripRstcntLast)
-// 	{
-// 		if (currentMsgCntL > (pMsgBuffer->messageCounter & 0x3FFFu))/* 无进位 */
-// 		{
-// 			/* 低14位没有进位，高8位保持不变 */
-// 			pMsgCntOut = (pMsgBuffer->messageCounter & 0x3FC000u) | currentMsgCntL;
-// 		}
-// 		else /* 有进位 */
-// 		{
-// 			/* 低14位发生了进位，需要增加高8位 */
-// 			pMsgCntOut = ((pMsgBuffer->messageCounter & 0x3FC000u) + 0x4000u) | currentMsgCntL;
-// 		}
-		
-// 		/* tripCounter和resetCounter保持历史值 */
-// 		pTripCntOut = pMsgBuffer->tripCounter;
-// 		pRstCntOut = pMsgBuffer->resetCounter;
-// 	}
-// 	else if (tripRstCnt > tripRstcntLast)
-// 	{
-// 		/* 新鲜值增大，H=0（不需要进位） */
-// 		pMsgCntOut = currentMsgCntL;
-// 		pTripCntOut = g_tripCounter;
-// 		pRstCntOut = (uint16_t)tripRstCnt&0xFFFFu;
-// 	}
-// 	else
-// 	{
-// 		/* 新鲜值验证失败，返回错误 */
-//         if (g_pFvmConfig != NULL && g_pFvmConfig->Fvm_ErrorNotification != NULL)
-//         {
-//             g_pFvmConfig->Fvm_ErrorNotification(FVM_E_INVALID_PARAM);
-//         }
-// 		return -1;
-// 	}
-
-//     /* 更新历史新鲜值 */
-//     pMsgBuffer->tripCounter = pTripCntOut;
-//     pMsgBuffer->resetCounter = pRstCntOut;
-//     pMsgBuffer->messageCounter = pMsgCntOut;
-
-//     /* 大端序 */
-//     pFreshnessBytes[0] = (uint8_t)((pTripCntOut >> 16) & 0xFFu);
-//     pFreshnessBytes[1] = (uint8_t)((pTripCntOut >> 8) & 0xFFu);
-//     pFreshnessBytes[2] = (uint8_t)(pTripCntOut & 0xFFu);
-//     pFreshnessBytes[3] = (uint8_t)((pRstCntOut >> 8) & 0xFFu);
-//     pFreshnessBytes[4] = (uint8_t)(pRstCntOut & 0xFFu);
-//     pFreshnessBytes[5] = (uint8_t)((pMsgCntOut >> 14) & 0xFFu);
-//     pFreshnessBytes[6] = (uint8_t)((pMsgCntOut >> 6) & 0xFFu);
-//     pFreshnessBytes[7] = (uint8_t)(((pMsgCntOut & 0x3Fu) << 2) | (g_resetCounter & 0x03u));
-
-//     return E_OK;
-// }
 /*************************************************
  Function: Fvm_VerifyFreshnessValue
  Description: 验证新鲜值有效性，并构建完整新鲜值
@@ -722,7 +591,26 @@ Std_ReturnType Fvm_VerifyFreshnessValue(uint32_t canId, uint16_t currentMsgCntL,
 *************************************************/
 Std_ReturnType Fvm_ResetTripCounter(void)
 {
-    return Fvm_SetTripCounter(0);
+    if (g_pFvmConfig != NULL)
+    {
+        if (g_fvmStatus == FVM_UNINIT)
+        {
+            if (g_pFvmConfig->Fvm_ErrorNotification != NULL)
+            {
+                g_pFvmConfig->Fvm_ErrorNotification(FVM_E_NOT_INITIALIZED);
+            }
+            return E_NOT_OK;
+        }
+    }
+    
+    g_tripCounter = 0;
+    /* 同步将 0 写入 NVM */
+    if (g_pFvmConfig != NULL && g_pFvmConfig->Fvm_SaveTripCounter != NULL)
+    {
+        g_pFvmConfig->Fvm_SaveTripCounter(g_tripCounter);
+    }
+    
+    return E_OK;
 }
 
 /*************************************************
@@ -767,11 +655,11 @@ Std_ReturnType Fvm_UpdateSynCounters(uint32_t tripCounter, uint16_t resetCounter
 
 	for (i = 0u; i < g_pFvmConfig->txSecocMsgNum; i++)
 	{
-		g_pFvmConfig->pTxMsgBuffer[i].messageCounter = FVM_MSG_COUNT_INIT_VAL + 1u;
+		g_pFvmConfig->pTxMsgBuffer[i].messageCounter = FVM_MSG_COUNT_INIT_VAL;
 	} 
 	for (i = 0; i < g_pFvmConfig->rxSecocMsgNum; i++)
 	{
-		g_pFvmConfig->pRxMsgBuffer[i].messageCounter = FVM_MSG_COUNT_INIT_VAL + 1u;
+		g_pFvmConfig->pRxMsgBuffer[i].messageCounter = FVM_MSG_COUNT_INIT_VAL;
 	}
     
     return E_OK;

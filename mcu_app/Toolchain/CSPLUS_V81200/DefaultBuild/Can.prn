@@ -1,0 +1,2109 @@
+RH850 Family Assembler V2.07.00.03 Assemble Source List
+
+OFFSET   CODE                  NO  SOURCE STATEMENT
+
+00000000                        1  #CC-RH Compiler RH850 Assembler Source
+00000000                        2  #@	CC-RH Version : V2.07.00  [06 Dec 2024]
+00000000                        3  #@	Command : ..\..\Bsw\Mcal\can\src\Can.c -oDefaultBuild\Can.obj -Xcpu=g3kh -Xno_warning=20188,20111 -g -g_line -I..\..\Srcode\app\diagnostic -I..\..\Srcode\app\parameter_store -I..\..\Cpu\port -I..\..\Cpu\uart -I..\..\Cpu\iic -I..\..\Srcode\app\vehicle_data_to_mpu -I..\..\Srcode\app\power_manage -I..\..\Srcode\app\mcu_cpu_sync -I..\..\Srcode\app\remote_control -I..\..\Srcode\app\can_cycle_send -I..\..\Srcode\app\project_configure -I..\..\Srcode\sdk\include -I..\..\Srcode\commonLib\include -I..\..\Srcode\hal\include -I..\..\Bsw\Mcal\icu\include -I..\..\Bsw\Config\MCAL_Config\Icu_OutPut\include -I..\..\Bsw\Crypto\CRYPTO\vss -I..\..\ASW\CDD_FVM -I..\..\Bsw\Memory\EEIf -I..\..\Bsw\Communication\CAN\CanTSyn -I..\..\Bsw\SystemServices\StbM -I..\..\Bsw\Crypto\CSM -I..\..\Bsw\Crypto\CRYPTO\RSA -I..\..\Bsw\Crypto\CRYPTO\RandomGen\CTR_DRBG -I..\..\Bsw\Crypto\CRYPTO\MAC\CMAC -I..\..\Bsw\Crypto\CRYPTO\Hash\sha256 -I..\..\Bsw\Crypto\CRYPTO\dh -I..\..\Bsw\Crypto\CRYPTO\AES -I..\..\Bsw\Crypto\CRYPTO -I..\..\Bsw\Crypto\CryInterface -I..\..\Bsw\Communication\Common\SecOC -I..\..\Bsw\Memory\NvM -I..\..\Bsw\Memory\MemIf -I..\..\Bsw\Memory\Fee -I..\..\Bsw\SystemServices\WdgM -I..\..\Bsw\SystemServices\WdgIf -I..\..\Bsw\Config\MCAL_Config\Wdg_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Gpt_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Fls_OutPut\include -I..\..\Bsw\Mcal\wdg\include -I..\..\Bsw\Mcal\gpt\include -I..\..\Bsw\Mcal\fls\include -I..\..\Bsw\Communication\Common\IpduM -I..\..\ASW\APP -I..\..\Bsw\SystemServices\BswM -I..\..\ASW\BSW_Ext -I..\..\Bsw\Communication\Common\Dcm -I..\..\Bsw\Communication\CAN\CanTp -I..\..\Bsw\SystemServices\Dem -I..\..\Bsw\Libraries\E2E -I..\..\Bsw\Libraries\Crc -I..\..\Bsw\Communication\Common\NmIf -I..\..\Bsw\Communication\CAN\CanNm -I..\..\Bsw\Config\BSW_Config\RTE\Rte -I..\..\Bsw\Config\BSW_Config\RTE\SchM -I..\..\Bsw\Libraries\IStd -I..\..\Bsw\SystemServices\EcuM -I..\..\Bsw\SystemServices\ComM -I..\..\Bsw\Communication\CAN\CanSM -I..\..\Bsw\Communication\CAN\CanIf -I..\..\Bsw\Communication\Common\Com -I..\..\Bsw\Communication\Common\PDUR -I..\..\Cpu -I..\..\Bsw\CommonInclude -I..\..\Bsw\Config\BSW_Config -I..\..\Bsw\Config\BSW_Config\RH850F1K -I..\..\Bsw\SystemServices\Os\Extend\inc -I..\..\Bsw\SystemServices\Os\Kernel\inc -I..\..\Bsw\SystemServices\Os\Portable\Mcu -I..\..\Bsw\SystemServices\Os\Portable\Processor -I..\..\Bsw\Config\MCAL_Config\Adc_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Can_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Dio_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Mcu_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Port_OutPut\include -I..\..\Bsw\Mcal\adc\include -I..\..\Bsw\Mcal\can\include -I..\..\Bsw\Mcal\dio\include -I..\..\Bsw\Mcal\general -I..\..\Bsw\Mcal\mcu\include -I..\..\Bsw\Mcal\port\include -I..\..\Bsw\Mcal\stubs\CanGeneral\include -I..\..\Bsw\Mcal\stubs\Det\include -I..\..\Bsw\Mcal\stubs\MemIf\include -I..\..\Bsw\Mcal\stubs\SchM\include -DRH850_F1KM_S1_2MB -lang=c99 -Xfloat=fpu -Xround=zero -Xdiv -Xasm_path=DefaultBuild -Xasm_option=-Xprn_path=DefaultBuild -c -MAKEUD=DefaultBuild -Xexec_time=C:\Users\xlchen\AppData\Local\Temp\CSPlusBuildTool_6913fbcea4b3405080879e131f0145800mnl5114.obd
+00000000                        4  #@	compiled at Fri Mar 27 09:50:35 2026
+00000000                        5  
+00000000                        6  	.file "..\..\Bsw\Mcal\can\src\Can.c"
+00000000                        7  
+00000000                        8  	$reg_mode 32
+00000000                        9  	.dbl_size 8
+00000000                       10  
+00000000                       11  	.extern _Can_GaaRegs
+00000000                       12  	.extern _Can_GblInitialized
+00000000                       13  	.extern _Can_GaaHwAccessFlag
+00000000                       14  	.extern _Can_GaaGlobalStateTransition
+00000000                       15  	.extern _Can_GaaActiveControllers
+00000000                       16  	.extern _Can_GaaGlobalIntCount
+00000000                       17  	.extern _Can_GulPageID
+00000000                       18  	.extern _Can_GpConfig
+00000000                       19  	.extern _Can_GpPCController
+00000000                       20  	.extern _Can_GpPBController
+00000000                       21  	.extern _Can_GpHohConfig
+00000000                       22  	.extern _Can_GaaCtrlState
+00000000                       23  	.extern _Can_GaaMirrorGlobalReg
+00000000                       24  	.extern _Can_GaaMirrorChannelReg
+00000000                       25  	.extern _Can_GaaMirrorHohReg
+00000000                       26  	.public _Can_GetVersionInfo
+00000000                       27  	.extern _Det_ReportError
+00000000                       28  	.public _Can_Init
+00000000                       29  	.extern _Can_GlobalModeChange
+00000000                       30  	.extern _Dem_ReportErrorStatus
+00000000                       31  	.public _Can_ChangeBaudrate
+00000000                       32  	.extern _Can_CommonDetCheck
+00000000                       33  	.extern _EcuM_SetWakeupEvent
+00000000                       34  	.public _Can_CheckBaudrate
+00000000                       35  	.public _Can_SetBaudrate
+00000000                       36  	.public _Can_DisableControllerInterrupts
+00000000                       37  	.extern _SchM_Enter_Can_CAN_INTERRUPT_CONTROL_PROTECTION
+00000000                       38  	.extern _SchM_Exit_Can_CAN_INTERRUPT_CONTROL_PROTECTION
+00000000                       39  	.public _Can_EnableControllerInterrupts
+00000000                       40  	.public _Can_CheckWakeup
+00000000                       41  	.extern _Can_WaitRegisterChange
+00000000                       42  	.extern _Can_ChannelModeChange
+00000000                       43  	.public _Can_RAMTest
+00000000                       44  	.extern _Can_RamTst_Set_RAMData
+00000000                       45  	.extern _Can_RamTest_Checker_Algorithm
+00000000                       46  	.extern _Can_RamTst_WalkPath_Algorithm
+00000000                       47  	.public _Can_CheckHWConsistency
+00000000                       48  
+00000000                       49  	.section .text, text
+00000000                       50  _Can_GetVersionInfo:
+00000000                       51  	.stack _Can_GetVersionInfo = 4
+00000000                       52  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 648
+00000000 80072100              53  	prepare 0x00000001, 0x00000000
+00000004                       54  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 656
+00000004 6032                  55  	cmp 0x00000000, r6
+00000006 8A05                  56  	bnz9 .BB.LABEL.1_2
+00000008                       57  .BB.LABEL.1_1:	; if_then_bb
+00000008                       58  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 0
+00000008 014A                  59  	mov 0x00000001, r9
+0000000A 0742                  60  	mov 0x00000007, r8
+0000000C 003A                  61  	mov 0x00000000, r7
+0000000E 20365000              62  	movea 0x00000050, r0, r6
+00000012                       63  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 659
+00000012 80FF0000              64  	jarl _Det_ReportError, r31
+00000016 40063F00              65  	dispose 0x00000000, 0x00000001, [r31]
+0000001A                       66  .BB.LABEL.1_2:	; if_else_bb
+0000001A                       67  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 0
+0000001A 20163B00              68  	movea 0x0000003B, r0, r2
+0000001E                       69  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 667
+0000001E 66170000              70  	st.h r2, 0x00000000[r6]
+00000022 20165000              71  	movea 0x00000050, r0, r2
+00000026                       72  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 669
+00000026 66170200              73  	st.h r2, 0x00000002[r6]
+0000002A 0112                  74  	mov 0x00000001, r2
+0000002C                       75  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 671
+0000002C 46170500              76  	st.b r2, 0x00000005[r6]
+00000030                       77  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 673
+00000030 46070600              78  	st.b r0, 0x00000006[r6]
+00000034 0612                  79  	mov 0x00000006, r2
+00000036                       80  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 675
+00000036 46170700              81  	st.b r2, 0x00000007[r6]
+0000003A 40063F00              82  	dispose 0x00000000, 0x00000001, [r31]
+0000003E                       83  _Can_Init:
+0000003E                       84  	.stack _Can_Init = 16
+0000003E                       85  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 726
+0000003E 8207210C              86  	prepare 0x00000061, 0x00000004
+00000042                       87  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 746
+00000042 40160000              88  	movhi HIGHW1(#_Can_GblInitialized), r0, r2
+00000046 82170100              89  	ld.bu LOWW(#_Can_GblInitialized)[r2], r2
+0000004A 6112                  90  	cmp 0x00000001, r2
+0000004C 8A05                  91  	bnz9 .BB.LABEL.2_2
+0000004E                       92  .BB.LABEL.2_1:	; if_then_bb
+0000004E                       93  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 0
+0000004E 064A                  94  	mov 0x00000006, r9
+00000050 8505                  95  	br9 .BB.LABEL.2_4
+00000052                       96  .BB.LABEL.2_2:	; if_else_bb
+00000052                       97  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 756
+00000052 6032                  98  	cmp 0x00000000, r6
+00000054 8A05                  99  	bnz9 .BB.LABEL.2_5
+00000056                      100  .BB.LABEL.2_3:	; if_then_bb15
+00000056                      101  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 0
+00000056 014A                 102  	mov 0x00000001, r9
+00000058                      103  .BB.LABEL.2_4:	; if_then_bb15
+00000058 003A                 104  	mov 0x00000000, r7
+0000005A 20365000             105  	movea 0x00000050, r0, r6
+0000005E 0740                 106  	mov r7, r8
+00000060 80FF0000             107  	jarl _Det_ReportError, r31
+00000064                      108  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 914
+00000064 42063F0C             109  	dispose 0x00000004, 0x00000061, [r31]
+00000068                      110  .BB.LABEL.2_5:	; if_else_bb17
+00000068                      111  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 763
+00000068 26170100             112  	ld.w 0x00000000[r6], r2
+0000006C                      113  	mov 0x0ED40100, r5
+0000006C 25060001D40E            -- mov         0xed40100,tp
+00000072 E511                 114  	cmp r5, r2
+00000074 8205                 115  	bz9 .BB.LABEL.2_7
+00000076                      116  .BB.LABEL.2_6:	; if_then_bb24
+00000076                      117  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 0
+00000076 204EEF00             118  	movea 0x000000EF, r0, r9
+0000007A 8505                 119  	br9 .BB.LABEL.2_4
+0000007C                      120  .BB.LABEL.2_7:	; if_else_bb26
+0000007C                      121  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 776
+0000007C 40160000             122  	movhi HIGHW1(#_Can_GpConfig), r0, r2
+00000080 62370100             123  	st.w r6, LOWW(#_Can_GpConfig)[r2]
+00000084                      124  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 779
+00000084 26170900             125  	ld.w 0x00000008[r6], r2
+00000088 402E0000             126  	movhi HIGHW1(#_Can_GpPCController), r0, r5
+0000008C 65170100             127  	st.w r2, LOWW(#_Can_GpPCController)[r5]
+00000090                      128  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 785
+00000090 26170D00             129  	ld.w 0x0000000C[r6], r2
+00000094 402E0000             130  	movhi HIGHW1(#_Can_GpPBController), r0, r5
+00000098 65170100             131  	st.w r2, LOWW(#_Can_GpPBController)[r5]
+0000009C                      132  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 791
+0000009C 26171100             133  	ld.w 0x00000010[r6], r2
+000000A0 402E0000             134  	movhi HIGHW1(#_Can_GpHohConfig), r0, r5
+000000A4 65170100             135  	st.w r2, LOWW(#_Can_GpHohConfig)[r5]
+000000A8 0052                 136  	mov 0x00000000, r10
+000000AA 0AA0                 137  	mov r10, r20
+000000AC 8505                 138  	br9 .BB.LABEL.2_9
+000000AE                      139  .BB.LABEL.2_8:	; bb
+000000AE                      140  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 808
+000000AE D436FF00             141  	andi 0x000000FF, r20, r6
+000000B2 0610                 142  	mov r6, r2
+000000B4 C212                 143  	shl 0x00000002, r2
+000000B6                      144  	mov #_Can_GaaActiveControllers, r5
+000000B6 250600000000            -- mov         0x0,tp
+000000BC C229                 145  	add r2, r5
+000000BE 65070100             146  	st.w r0, 0x00000000[r5]
+000000C2                      147  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 810
+000000C2                      148  	mov #_Can_GaaGlobalStateTransition, r5
+000000C2 250600000000            -- mov         0x0,tp
+000000C8 C629                 149  	add r6, r5
+000000CA 45070000             150  	st.b r0, 0x00000000[r5]
+000000CE                      151  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 816
+000000CE                      152  	mov #_Can_GaaGlobalIntCount, r5
+000000CE 250600000000            -- mov         0x0,tp
+000000D4 C511                 153  	add r5, r2
+000000D6 62070100             154  	st.w r0, 0x00000000[r2]
+000000DA                      155  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 820
+000000DA 80FF0000             156  	jarl _Can_InitModule.1, r31
+000000DE 41A2                 157  	add 0x00000001, r20
+000000E0                      158  .BB.LABEL.2_9:	; bb53
+000000E0                      159  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 801
+000000E0 D406FF00             160  	andi 0x000000FF, r20, r0
+000000E4 8A05                 161  	bnz9 .BB.LABEL.2_11
+000000E6                      162  .BB.LABEL.2_10:	; bb53
+000000E6                      163  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 0
+000000E6 CA06FF00             164  	andi 0x000000FF, r10, r0
+000000EA 8205                 165  	bz9 .BB.LABEL.2_8
+000000EC                      166  .BB.LABEL.2_11:	; bb53.bb112_crit_edge
+000000EC 00A2                 167  	mov 0x00000000, r20
+000000EE 8505                 168  	br9 .BB.LABEL.2_15
+000000F0                      169  .BB.LABEL.2_12:	; bb71
+000000F0                      170  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 834
+000000F0 D416FF00             171  	andi 0x000000FF, r20, r2
+000000F4 0228                 172  	mov r2, r5
+000000F6 F42F4002             173  	mul 0x00000014, r5, r0
+000000FA                      174  	mov #_Can_GaaCtrlState, r6
+000000FA 260600000000            -- mov         0x0,r6
+00000100 C531                 175  	add r5, r6
+00000102 012A                 176  	mov 0x00000001, r5
+00000104 662F0100             177  	st.w r5, 0x00000000[r6]
+00000108                      178  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 836
+00000108 66070500             179  	st.w r0, 0x00000004[r6]
+0000010C                      180  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 838
+0000010C 46070800             181  	st.b r0, 0x00000008[r6]
+00000110                      182  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 840
+00000110 66070D00             183  	st.w r0, 0x0000000C[r6]
+00000114                      184  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 842
+00000114 66071100             185  	st.w r0, 0x00000010[r6]
+00000118                      186  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 845
+00000118 46070900             187  	st.b r0, 0x00000009[r6]
+0000011C                      188  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 850
+0000011C EC174402             189  	mul 0x0000002C, r2, r0
+00000120 402E0000             190  	movhi HIGHW1(#_Can_GpPCController), r0, r5
+00000124 252F0100             191  	ld.w LOWW(#_Can_GpPCController)[r5], r5
+00000128 C229                 192  	add r2, r5
+0000012A 85170100             193  	ld.bu 0x00000000[r5], r2
+0000012E 6112                 194  	cmp 0x00000001, r2
+00000130 8A05                 195  	bnz9 .BB.LABEL.2_14
+00000132                      196  .BB.LABEL.2_13:	; if_then_bb106
+00000132                      197  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 854
+00000132 D436FF00             198  	andi 0x000000FF, r20, r6
+00000136 80FF0000             199  	jarl _Can_InitController.1, r31
+0000013A                      200  .BB.LABEL.2_14:	; if_break_bb
+0000013A                      201  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 0
+0000013A 41A2                 202  	add 0x00000001, r20
+0000013C                      203  .BB.LABEL.2_15:	; bb112
+0000013C                      204  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 827
+0000013C D406FF00             205  	andi 0x000000FF, r20, r0
+00000140 8A05                 206  	bnz9 .BB.LABEL.2_17
+00000142                      207  .BB.LABEL.2_16:	; bb112
+00000142                      208  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 0
+00000142 CA06FF00             209  	andi 0x000000FF, r10, r0
+00000146 8205                 210  	bz9 .BB.LABEL.2_12
+00000148                      211  .BB.LABEL.2_17:	; bb112.bb137_crit_edge
+00000148 0012                 212  	mov 0x00000000, r2
+0000014A 8505                 213  	br9 .BB.LABEL.2_19
+0000014C                      214  .BB.LABEL.2_18:	; bb131
+0000014C                      215  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 870
+0000014C C22EFFFF             216  	andi 0x0000FFFF, r2, r5
+00000150                      217  	mov #_Can_GaaHwAccessFlag, r6
+00000150 260600000000            -- mov         0x0,r6
+00000156 C531                 218  	add r5, r6
+00000158 46070000             219  	st.b r0, 0x00000000[r6]
+0000015C 4112                 220  	add 0x00000001, r2
+0000015E                      221  .BB.LABEL.2_19:	; bb137
+0000015E                      222  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 867
+0000015E C22EFFFF             223  	andi 0x0000FFFF, r2, r5
+00000162 642A                 224  	cmp 0x00000004, r5
+00000164 8105                 225  	bl9 .BB.LABEL.2_18
+00000166                      226  .BB.LABEL.2_20:	; bb137.bb157_crit_edge
+00000166                      227  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 0
+00000166 00A2                 228  	mov 0x00000000, r20
+00000168 0AA8                 229  	mov r10, r21
+0000016A 8505                 230  	br9 .BB.LABEL.2_24
+0000016C                      231  .BB.LABEL.2_21:	; bb144
+0000016C 0512                 232  	mov 0x00000005, r2
+0000016E                      233  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 885
+0000016E 63170100             234  	st.w r2, 0x00000000[r3]
+00000172                      235  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 886
+00000172 D436FF00             236  	andi 0x000000FF, r20, r6
+00000176 0340                 237  	mov r3, r8
+00000178 003A                 238  	mov 0x00000000, r7
+0000017A 0748                 239  	mov r7, r9
+0000017C 80FF0000             240  	jarl _Can_GlobalModeChange, r31
+00000180                      241  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 889
+00000180 6052                 242  	cmp 0x00000000, r10
+00000182 8205                 243  	bz9 .BB.LABEL.2_23
+00000184                      244  .BB.LABEL.2_22:	; if_then_bb152
+00000184                      245  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 0
+00000184 01AA                 246  	mov 0x00000001, r21
+00000186                      247  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 892
+00000186 1530                 248  	mov r21, r6
+00000188 1538                 249  	mov r21, r7
+0000018A 80FF0000             250  	jarl _Dem_ReportErrorStatus, r31
+0000018E                      251  .BB.LABEL.2_23:	; if_break_bb154
+0000018E                      252  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 0
+0000018E 41A2                 253  	add 0x00000001, r20
+00000190                      254  .BB.LABEL.2_24:	; bb157
+00000190                      255  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 879
+00000190 D406FF00             256  	andi 0x000000FF, r20, r0
+00000194 8A05                 257  	bnz9 .BB.LABEL.2_26
+00000196                      258  .BB.LABEL.2_25:	; bb157
+00000196                      259  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 0
+00000196 D506FF00             260  	andi 0x000000FF, r21, r0
+0000019A 8205                 261  	bz9 .BB.LABEL.2_21
+0000019C                      262  .BB.LABEL.2_26:	; bb175
+0000019C                      263  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 905
+0000019C D506FF00             264  	andi 0x000000FF, r21, r0
+000001A0 8A05                 265  	bnz9 .BB.LABEL.2_28
+000001A2                      266  .BB.LABEL.2_27:	; if_then_bb181
+000001A2                      267  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 0
+000001A2 0132                 268  	mov 0x00000001, r6
+000001A4                      269  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 907
+000001A4 80FF0000             270  	jarl _Can_SetStatus.1, r31
+000001A8                      271  .BB.LABEL.2_28:	; return
+000001A8                      272  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 914
+000001A8 42063F0C             273  	dispose 0x00000004, 0x00000061, [r31]
+000001AC                      274  _Can_ChangeBaudrate:
+000001AC                      275  	.stack _Can_ChangeBaudrate = 12
+000001AC                      276  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 952
+000001AC 8007210C             277  	prepare 0x00000061, 0x00000000
+000001B0 06A0                 278  	mov r6, r20
+000001B2 07A8                 279  	mov r7, r21
+000001B4 0D32                 280  	mov 0x0000000D, r6
+000001B6                      281  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 967
+000001B6 1438                 282  	mov r20, r7
+000001B8 80FF0000             283  	jarl _Can_CommonDetCheck, r31
+000001BC                      284  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 968
+000001BC 6052                 285  	cmp 0x00000000, r10
+000001BE 8205                 286  	bz9 .BB.LABEL.3_3
+000001C0                      287  .BB.LABEL.3_1:	; entry.if_break_bb147_crit_edge
+000001C0                      288  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 0
+000001C0 0152                 289  	mov 0x00000001, r10
+000001C2                      290  .BB.LABEL.3_2:	; if_break_bb147
+000001C2                      291  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1076
+000001C2 40063F0C             292  	dispose 0x00000000, 0x00000061, [r31]
+000001C6                      293  .BB.LABEL.3_3:	; if_else_bb
+000001C6                      294  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 973
+000001C6 F4161400             295  	mulhi 0x00000014, r20, r2
+000001CA                      296  	mov #_Can_GaaCtrlState, r5
+000001CA 250600000000            -- mov         0x0,tp
+000001D0 C229                 297  	add r2, r5
+000001D2 25170100             298  	ld.w 0x00000000[r5], r2
+000001D6 6112                 299  	cmp 0x00000001, r2
+000001D8 8205                 300  	bz9 .BB.LABEL.3_6
+000001DA                      301  .BB.LABEL.3_4:	; if_then_bb21
+000001DA                      302  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 0
+000001DA 064A                 303  	mov 0x00000006, r9
+000001DC                      304  .BB.LABEL.3_5:	; if_then_bb21
+000001DC 0D42                 305  	mov 0x0000000D, r8
+000001DE 003A                 306  	mov 0x00000000, r7
+000001E0 20365000             307  	movea 0x00000050, r0, r6
+000001E4 80FF0000             308  	jarl _Det_ReportError, r31
+000001E8 0152                 309  	mov 0x00000001, r10
+000001EA                      310  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1076
+000001EA 40063F0C             311  	dispose 0x00000000, 0x00000061, [r31]
+000001EE                      312  .BB.LABEL.3_6:	; if_else_bb23
+000001EE                      313  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 984
+000001EE 1430                 314  	mov r20, r6
+000001F0 1538                 315  	mov r21, r7
+000001F2 80FF0000             316  	jarl _Can_SearchBaudrate.1, r31
+000001F6                      317  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 987
+000001F6 7F52                 318  	cmp 0xFFFFFFFF, r10
+000001F8 8A05                 319  	bnz9 .BB.LABEL.3_8
+000001FA                      320  .BB.LABEL.3_7:	; if_then_bb31
+000001FA                      321  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 0
+000001FA 084A                 322  	mov 0x00000008, r9
+000001FC 8505                 323  	br9 .BB.LABEL.3_5
+000001FE                      324  .BB.LABEL.3_8:	; if_else_bb33
+000001FE                      325  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1008
+000001FE F4161400             326  	mulhi 0x00000014, r20, r2
+00000202                      327  	mov #_Can_GaaCtrlState, r5
+00000202 250600000000            -- mov         0x0,tp
+00000208 C229                 328  	add r2, r5
+0000020A                      329  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 998
+0000020A 40160000             330  	movhi HIGHW1(#_Can_GpPBController), r0, r2
+0000020E 22170100             331  	ld.w LOWW(#_Can_GpPBController)[r2], r2
+00000212 1430                 332  	mov r20, r6
+00000214 C332                 333  	shl 0x00000003, r6
+00000216 C611                 334  	add r6, r2
+00000218 22170500             335  	ld.w 0x00000004[r2], r2
+0000021C                      336  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1002
+0000021C F4362C00             337  	mulhi 0x0000002C, r20, r6
+00000220 403E0000             338  	movhi HIGHW1(#_Can_GpPCController), r0, r7
+00000224 27470100             339  	ld.w LOWW(#_Can_GpPCController)[r7], r8
+00000228 C641                 340  	add r6, r8
+0000022A A8470100             341  	ld.bu 0x00000001[r8], r8
+0000022E                      342  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1005
+0000022E 273F0100             343  	ld.w LOWW(#_Can_GpPCController)[r7], r7
+00000232 C639                 344  	add r6, r7
+00000234 87370300             345  	ld.bu 0x00000002[r7], r6
+00000238                      346  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1008
+00000238 65570D00             347  	st.w r10, 0x0000000C[r5]
+0000023C                      348  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1012
+0000023C 0638                 349  	mov r6, r7
+0000023E C43A                 350  	shl 0x00000004, r7
+00000240 E8461C00             351  	mulhi 0x0000001C, r8, r8
+00000244                      352  	mov #_Can_GaaRegs, r9
+00000244 290600000000            -- mov         0x0,r9
+0000024A C849                 353  	add r8, r9
+0000024C 29470500             354  	ld.w 0x00000004[r9], r8
+00000250 C741                 355  	add r7, r8
+00000252 F4574002             356  	mul 0x00000014, r10, r0
+00000256 CA11                 357  	add r10, r2
+00000258 223F0500             358  	ld.w 0x00000004[r2], r7
+0000025C 683F0100             359  	st.w r7, 0x00000000[r8]
+00000260 1438                 360  	mov r20, r7
+00000262 C43A                 361  	shl 0x00000004, r7
+00000264                      362  	mov #_Can_GaaMirrorChannelReg, r8
+00000264 280600000000            -- mov         0x0,r8
+0000026A C741                 363  	add r7, r8
+0000026C 223F0500             364  	ld.w 0x00000004[r2], r7
+00000270 683F0100             365  	st.w r7, 0x00000000[r8]
+00000274                      366  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1026
+00000274 C532                 367  	shl 0x00000005, r6
+00000276 293F0D00             368  	ld.w 0x0000000C[r9], r7
+0000027A C639                 369  	add r6, r7
+0000027C 22570900             370  	ld.w 0x00000008[r2], r10
+00000280 67570100             371  	st.w r10, 0x00000000[r7]
+00000284 223F0900             372  	ld.w 0x00000008[r2], r7
+00000288 683F0D00             373  	st.w r7, 0x0000000C[r8]
+0000028C                      374  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1035
+0000028C 293F0D00             375  	ld.w 0x0000000C[r9], r7
+00000290 C639                 376  	add r6, r7
+00000292 22370D00             377  	ld.w 0x0000000C[r2], r6
+00000296 67370500             378  	st.w r6, 0x00000004[r7]
+0000029A 22170D00             379  	ld.w 0x0000000C[r2], r2
+0000029E 68170900             380  	st.w r2, 0x00000008[r8]
+000002A2                      381  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1054
+000002A2 A5170900             382  	ld.bu 0x00000009[r5], r2
+000002A6 6112                 383  	cmp 0x00000001, r2
+000002A8 8205                 384  	bz9 .BB.LABEL.3_10
+000002AA                      385  .BB.LABEL.3_9:	; if_else_bb33.if_break_bb147_crit_edge
+000002AA                      386  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 0
+000002AA 0052                 387  	mov 0x00000000, r10
+000002AC 8505                 388  	br9 .BB.LABEL.3_2
+000002AE                      389  .BB.LABEL.3_10:	; if_then_bb131
+000002AE                      390  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1057
+000002AE F4161400             391  	mulhi 0x00000014, r20, r2
+000002B2                      392  	mov #_Can_GaaCtrlState, r5
+000002B2 250600000000            -- mov         0x0,tp
+000002B8 C229                 393  	add r2, r5
+000002BA 45070900             394  	st.b r0, 0x00000009[r5]
+000002BE                      395  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1062
+000002BE 40160000             396  	movhi HIGHW1(#_Can_GpPCController), r0, r2
+000002C2 22170100             397  	ld.w LOWW(#_Can_GpPCController)[r2], r2
+000002C6 F42E2C00             398  	mulhi 0x0000002C, r20, r5
+000002CA C511                 399  	add r5, r2
+000002CC 82170D00             400  	ld.bu 0x0000000C[r2], r2
+000002D0 0132                 401  	mov 0x00000001, r6
+000002D2 E237C000             402  	shl r2, r6
+000002D6 80FF0000             403  	jarl _EcuM_SetWakeupEvent, r31
+000002DA 8505                 404  	br9 .BB.LABEL.3_9
+000002DC                      405  _Can_CheckBaudrate:
+000002DC                      406  	.stack _Can_CheckBaudrate = 12
+000002DC                      407  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1112
+000002DC 8007210C             408  	prepare 0x00000061, 0x00000000
+000002E0 06A0                 409  	mov r6, r20
+000002E2 07A8                 410  	mov r7, r21
+000002E4 0E32                 411  	mov 0x0000000E, r6
+000002E6                      412  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1123
+000002E6 1438                 413  	mov r20, r7
+000002E8 80FF0000             414  	jarl _Can_CommonDetCheck, r31
+000002EC                      415  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1124
+000002EC 6052                 416  	cmp 0x00000000, r10
+000002EE 8205                 417  	bz9 .BB.LABEL.4_3
+000002F0                      418  .BB.LABEL.4_1:	; entry.if_break_bb20_crit_edge
+000002F0                      419  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 0
+000002F0 0152                 420  	mov 0x00000001, r10
+000002F2                      421  .BB.LABEL.4_2:	; if_break_bb20
+000002F2                      422  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1150
+000002F2 40063F0C             423  	dispose 0x00000000, 0x00000061, [r31]
+000002F6                      424  .BB.LABEL.4_3:	; if_else_bb
+000002F6                      425  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1132
+000002F6 1430                 426  	mov r20, r6
+000002F8 1538                 427  	mov r21, r7
+000002FA 80FF0000             428  	jarl _Can_SearchBaudrate.1, r31
+000002FE                      429  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1133
+000002FE 7F52                 430  	cmp 0xFFFFFFFF, r10
+00000300 8205                 431  	bz9 .BB.LABEL.4_5
+00000302                      432  .BB.LABEL.4_4:	; if_else_bb.if_break_bb20_crit_edge
+00000302                      433  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 0
+00000302 0052                 434  	mov 0x00000000, r10
+00000304 8505                 435  	br9 .BB.LABEL.4_2
+00000306                      436  .BB.LABEL.4_5:	; if_else_bb18
+00000306 084A                 437  	mov 0x00000008, r9
+00000308 0E42                 438  	mov 0x0000000E, r8
+0000030A 003A                 439  	mov 0x00000000, r7
+0000030C 20365000             440  	movea 0x00000050, r0, r6
+00000310                      441  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1141
+00000310 80FF0000             442  	jarl _Det_ReportError, r31
+00000314 8505                 443  	br9 .BB.LABEL.4_1
+00000316                      444  _Can_SetBaudrate:
+00000316                      445  	.stack _Can_SetBaudrate = 12
+00000316                      446  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1189
+00000316 8007210C             447  	prepare 0x00000061, 0x00000000
+0000031A 06A0                 448  	mov r6, r20
+0000031C 07A8                 449  	mov r7, r21
+0000031E 0F32                 450  	mov 0x0000000F, r6
+00000320                      451  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1204
+00000320 1438                 452  	mov r20, r7
+00000322 80FF0000             453  	jarl _Can_CommonDetCheck, r31
+00000326                      454  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1205
+00000326 6052                 455  	cmp 0x00000000, r10
+00000328 8A05                 456  	bnz9 .BB.LABEL.5_8
+0000032A                      457  .BB.LABEL.5_1:	; if_else_bb
+0000032A                      458  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1210
+0000032A F4161400             459  	mulhi 0x00000014, r20, r2
+0000032E                      460  	mov #_Can_GaaCtrlState, r5
+0000032E 250600000000            -- mov         0x0,tp
+00000334 C229                 461  	add r2, r5
+00000336 25170100             462  	ld.w 0x00000000[r5], r2
+0000033A 6112                 463  	cmp 0x00000001, r2
+0000033C 8A05                 464  	bnz9 .BB.LABEL.5_3
+0000033E                      465  .BB.LABEL.5_2:	; bb
+0000033E                      466  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 0
+0000033E F4161400             467  	mulhi 0x00000014, r20, r2
+00000342                      468  	mov #_Can_GaaCtrlState, r5
+00000342 250600000000            -- mov         0x0,tp
+00000348 C229                 469  	add r2, r5
+0000034A 25170500             470  	ld.w 0x00000004[r5], r2
+0000034E 6012                 471  	cmp 0x00000000, r2
+00000350 8205                 472  	bz9 .BB.LABEL.5_5
+00000352                      473  .BB.LABEL.5_3:	; if_then_bb34
+00000352 064A                 474  	mov 0x00000006, r9
+00000354                      475  .BB.LABEL.5_4:	; if_then_bb34
+00000354 0F42                 476  	mov 0x0000000F, r8
+00000356 003A                 477  	mov 0x00000000, r7
+00000358 20365000             478  	movea 0x00000050, r0, r6
+0000035C 80FF0000             479  	jarl _Det_ReportError, r31
+00000360 0152                 480  	mov 0x00000001, r10
+00000362                      481  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1298
+00000362 40063F0C             482  	dispose 0x00000000, 0x00000061, [r31]
+00000366                      483  .BB.LABEL.5_5:	; if_else_bb36
+00000366                      484  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1224
+00000366 1430                 485  	mov r20, r6
+00000368 1538                 486  	mov r21, r7
+0000036A 80FF0000             487  	jarl _Can_SearchBaudrateID.1, r31
+0000036E                      488  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1228
+0000036E 7F52                 489  	cmp 0xFFFFFFFF, r10
+00000370 8A05                 490  	bnz9 .BB.LABEL.5_7
+00000372                      491  .BB.LABEL.5_6:	; if_then_bb44
+00000372                      492  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 0
+00000372 084A                 493  	mov 0x00000008, r9
+00000374 8505                 494  	br9 .BB.LABEL.5_4
+00000376                      495  .BB.LABEL.5_7:	; if_else_bb46
+00000376                      496  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1240
+00000376 40160000             497  	movhi HIGHW1(#_Can_GpPBController), r0, r2
+0000037A 22170100             498  	ld.w LOWW(#_Can_GpPBController)[r2], r2
+0000037E 1428                 499  	mov r20, r5
+00000380 C32A                 500  	shl 0x00000003, r5
+00000382 C511                 501  	add r5, r2
+00000384 22170500             502  	ld.w 0x00000004[r2], r2
+00000388                      503  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1244
+00000388 F42E2C00             504  	mulhi 0x0000002C, r20, r5
+0000038C 40360000             505  	movhi HIGHW1(#_Can_GpPCController), r0, r6
+00000390 263F0100             506  	ld.w LOWW(#_Can_GpPCController)[r6], r7
+00000394 C539                 507  	add r5, r7
+00000396 A73F0100             508  	ld.bu 0x00000001[r7], r7
+0000039A                      509  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1247
+0000039A 26370100             510  	ld.w LOWW(#_Can_GpPCController)[r6], r6
+0000039E C531                 511  	add r5, r6
+000003A0 862F0300             512  	ld.bu 0x00000002[r6], r5
+000003A4                      513  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1250
+000003A4 F4361400             514  	mulhi 0x00000014, r20, r6
+000003A8                      515  	mov #_Can_GaaCtrlState, r8
+000003A8 280600000000            -- mov         0x0,r8
+000003AE C641                 516  	add r6, r8
+000003B0 68570D00             517  	st.w r10, 0x0000000C[r8]
+000003B4                      518  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1254
+000003B4 0530                 519  	mov r5, r6
+000003B6 C432                 520  	shl 0x00000004, r6
+000003B8 E73E1C00             521  	mulhi 0x0000001C, r7, r7
+000003BC                      522  	mov #_Can_GaaRegs, r8
+000003BC 280600000000            -- mov         0x0,r8
+000003C2 C741                 523  	add r7, r8
+000003C4 283F0500             524  	ld.w 0x00000004[r8], r7
+000003C8 C639                 525  	add r6, r7
+000003CA F4574002             526  	mul 0x00000014, r10, r0
+000003CE CA11                 527  	add r10, r2
+000003D0 22370500             528  	ld.w 0x00000004[r2], r6
+000003D4 67370100             529  	st.w r6, 0x00000000[r7]
+000003D8 C4A2                 530  	shl 0x00000004, r20
+000003DA                      531  	mov #_Can_GaaMirrorChannelReg, r6
+000003DA 260600000000            -- mov         0x0,r6
+000003E0 D431                 532  	add r20, r6
+000003E2 223F0500             533  	ld.w 0x00000004[r2], r7
+000003E6 663F0100             534  	st.w r7, 0x00000000[r6]
+000003EA                      535  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1268
+000003EA C52A                 536  	shl 0x00000005, r5
+000003EC 283F0D00             537  	ld.w 0x0000000C[r8], r7
+000003F0 C539                 538  	add r5, r7
+000003F2 224F0900             539  	ld.w 0x00000008[r2], r9
+000003F6 674F0100             540  	st.w r9, 0x00000000[r7]
+000003FA 223F0900             541  	ld.w 0x00000008[r2], r7
+000003FE 663F0D00             542  	st.w r7, 0x0000000C[r6]
+00000402                      543  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1277
+00000402 283F0D00             544  	ld.w 0x0000000C[r8], r7
+00000406 C539                 545  	add r5, r7
+00000408 222F0D00             546  	ld.w 0x0000000C[r2], r5
+0000040C 672F0500             547  	st.w r5, 0x00000004[r7]
+00000410 22170D00             548  	ld.w 0x0000000C[r2], r2
+00000414 66170900             549  	st.w r2, 0x00000008[r6]
+00000418 0052                 550  	mov 0x00000000, r10
+0000041A                      551  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1293
+0000041A 40063F0C             552  	dispose 0x00000000, 0x00000061, [r31]
+0000041E                      553  .BB.LABEL.5_8:	; if_break_bb136
+0000041E                      554  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 0
+0000041E 0152                 555  	mov 0x00000001, r10
+00000420                      556  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1298
+00000420 40063F0C             557  	dispose 0x00000000, 0x00000061, [r31]
+00000424                      558  _Can_DisableControllerInterrupts:
+00000424                      559  	.stack _Can_DisableControllerInterrupts = 12
+00000424                      560  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1337
+00000424 8007210C             561  	prepare 0x00000061, 0x00000000
+00000428 06A0                 562  	mov r6, r20
+0000042A 0432                 563  	mov 0x00000004, r6
+0000042C                      564  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1348
+0000042C 1438                 565  	mov r20, r7
+0000042E 80FF0000             566  	jarl _Can_CommonDetCheck, r31
+00000432                      567  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1349
+00000432 6052                 568  	cmp 0x00000000, r10
+00000434 8A05                 569  	bnz9 .BB.LABEL.6_7
+00000436                      570  .BB.LABEL.6_1:	; if_else_bb
+00000436                      571  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1357
+00000436 40160000             572  	movhi HIGHW1(#_Can_GpPCController), r0, r2
+0000043A 22AF0100             573  	ld.w LOWW(#_Can_GpPCController)[r2], r21
+0000043E                      574  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1362
+0000043E F4162C00             575  	mulhi 0x0000002C, r20, r2
+00000442 D511                 576  	add r21, r2
+00000444 A2170300             577  	ld.bu 0x00000003[r2], r2
+00000448 6012                 578  	cmp 0x00000000, r2
+0000044A 8205                 579  	bz9 .BB.LABEL.6_7
+0000044C                      580  .BB.LABEL.6_2:	; if_then_bb19
+0000044C                      581  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1366
+0000044C 80FF0000             582  	jarl _SchM_Enter_Can_CAN_INTERRUPT_CONTROL_PROTECTION, r31
+00000450                      583  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1369
+00000450 F4161400             584  	mulhi 0x00000014, r20, r2
+00000454                      585  	mov #_Can_GaaCtrlState, r5
+00000454 250600000000            -- mov         0x0,tp
+0000045A C229                 586  	add r2, r5
+0000045C 25171100             587  	ld.w 0x00000010[r5], r2
+00000460 6012                 588  	cmp 0x00000000, r2
+00000462 8A05                 589  	bnz9 .BB.LABEL.6_6
+00000464                      590  .BB.LABEL.6_3:	; if_else_bb29
+00000464                      591  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1380
+00000464 F4162C00             592  	mulhi 0x0000002C, r20, r2
+00000468 C2A9                 593  	add r2, r21
+0000046A B5170100             594  	ld.bu 0x00000001[r21], r2
+0000046E E2161C00             595  	mulhi 0x0000001C, r2, r2
+00000472                      596  	mov #_Can_GaaRegs, r5
+00000472 250600000000            -- mov         0x0,tp
+00000478 C229                 597  	add r2, r5
+0000047A 25171100             598  	ld.w 0x00000010[r5], r2
+0000047E 022F0000             599  	ld.b 0x00000000[r2], r5
+00000482 852E8000             600  	ori 0x00000080, r5, r5
+00000486 422F0000             601  	st.b r5, 0x00000000[r2]
+0000048A                      602  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1387
+0000048A B5170100             603  	ld.bu 0x00000001[r21], r2
+0000048E C212                 604  	shl 0x00000002, r2
+00000490                      605  	mov #_Can_GaaGlobalIntCount, r5
+00000490 250600000000            -- mov         0x0,tp
+00000496 C229                 606  	add r2, r5
+00000498 25170100             607  	ld.w 0x00000000[r5], r2
+0000049C 4112                 608  	add 0x00000001, r2
+0000049E 65170100             609  	st.w r2, 0x00000000[r5]
+000004A2                      610  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1393
+000004A2 35171900             611  	ld.w 0x00000018[r21], r2
+000004A6 022F0000             612  	ld.b 0x00000000[r2], r5
+000004AA 852E8000             613  	ori 0x00000080, r5, r5
+000004AE 422F0000             614  	st.b r5, 0x00000000[r2]
+000004B2                      615  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1400
+000004B2 35171100             616  	ld.w 0x00000010[r21], r2
+000004B6 022F0000             617  	ld.b 0x00000000[r2], r5
+000004BA 852E8000             618  	ori 0x00000080, r5, r5
+000004BE 422F0000             619  	st.b r5, 0x00000000[r2]
+000004C2                      620  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1407
+000004C2 35171500             621  	ld.w 0x00000014[r21], r2
+000004C6 022F0000             622  	ld.b 0x00000000[r2], r5
+000004CA 852E8000             623  	ori 0x00000080, r5, r5
+000004CE 422F0000             624  	st.b r5, 0x00000000[r2]
+000004D2                      625  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1413
+000004D2 35171D00             626  	ld.w 0x0000001C[r21], r2
+000004D6 6012                 627  	cmp 0x00000000, r2
+000004D8                      628  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1407
+000004D8 352E1400             629  	movea 0x00000014, r21, r5
+000004DC                      630  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1413
+000004DC 8205                 631  	bz9 .BB.LABEL.6_5
+000004DE                      632  .BB.LABEL.6_4:	; if_then_bb99
+000004DE                      633  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1417
+000004DE 02370000             634  	ld.b 0x00000000[r2], r6
+000004E2 86368000             635  	ori 0x00000080, r6, r6
+000004E6 42370000             636  	st.b r6, 0x00000000[r2]
+000004EA                      637  .BB.LABEL.6_5:	; if_break_bb
+000004EA                      638  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1428
+000004EA 25170100             639  	ld.w 0x00000000[r5], r2
+000004EE 22170000             640  	ld.h 0x00000000[r2], r2
+000004F2                      641  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1430
+000004F2 1F00                 642  	syncp
+000004F4                      643  .BB.LABEL.6_6:	; if_break_bb117
+000004F4                      644  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1434
+000004F4 F4161400             645  	mulhi 0x00000014, r20, r2
+000004F8                      646  	mov #_Can_GaaCtrlState, r5
+000004F8 250600000000            -- mov         0x0,tp
+000004FE C229                 647  	add r2, r5
+00000500 25171100             648  	ld.w 0x00000010[r5], r2
+00000504 4112                 649  	add 0x00000001, r2
+00000506 65171100             650  	st.w r2, 0x00000010[r5]
+0000050A                      651  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1437
+0000050A 80FF0000             652  	jarl _SchM_Exit_Can_CAN_INTERRUPT_CONTROL_PROTECTION, r31
+0000050E                      653  .BB.LABEL.6_7:	; return
+0000050E                      654  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1445
+0000050E 40063F0C             655  	dispose 0x00000000, 0x00000061, [r31]
+00000512                      656  _Can_EnableControllerInterrupts:
+00000512                      657  	.stack _Can_EnableControllerInterrupts = 16
+00000512                      658  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1484
+00000512 8007210E             659  	prepare 0x00000071, 0x00000000
+00000516 06A0                 660  	mov r6, r20
+00000518 0532                 661  	mov 0x00000005, r6
+0000051A                      662  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1495
+0000051A 1438                 663  	mov r20, r7
+0000051C 80FF0000             664  	jarl _Can_CommonDetCheck, r31
+00000520                      665  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1496
+00000520 6052                 666  	cmp 0x00000000, r10
+00000522 EA070100             667  	bnz17 .BB.LABEL.7_12
+00000526                      668  .BB.LABEL.7_1:	; if_else_bb
+00000526                      669  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1504
+00000526 40160000             670  	movhi HIGHW1(#_Can_GpPCController), r0, r2
+0000052A 22AF0100             671  	ld.w LOWW(#_Can_GpPCController)[r2], r21
+0000052E                      672  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1509
+0000052E F4B62C00             673  	mulhi 0x0000002C, r20, r22
+00000532 D5B1                 674  	add r21, r22
+00000534 B6170300             675  	ld.bu 0x00000003[r22], r2
+00000538 43B2                 676  	add 0x00000003, r22
+0000053A 6012                 677  	cmp 0x00000000, r2
+0000053C E2070100             678  	bz17 .BB.LABEL.7_12
+00000540                      679  .BB.LABEL.7_2:	; if_then_bb19
+00000540                      680  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1512
+00000540 80FF0000             681  	jarl _SchM_Enter_Can_CAN_INTERRUPT_CONTROL_PROTECTION, r31
+00000544                      682  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1515
+00000544 F4161400             683  	mulhi 0x00000014, r20, r2
+00000548                      684  	mov #_Can_GaaCtrlState, r5
+00000548 250600000000            -- mov         0x0,tp
+0000054E C229                 685  	add r2, r5
+00000550 25171100             686  	ld.w 0x00000010[r5], r2
+00000554 6012                 687  	cmp 0x00000000, r2
+00000556 8205                 688  	bz9 .BB.LABEL.7_11
+00000558                      689  .BB.LABEL.7_3:	; if_else_bb29
+00000558                      690  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1522
+00000558 F4161400             691  	mulhi 0x00000014, r20, r2
+0000055C                      692  	mov #_Can_GaaCtrlState, r5
+0000055C 250600000000            -- mov         0x0,tp
+00000562 C229                 693  	add r2, r5
+00000564 25171100             694  	ld.w 0x00000010[r5], r2
+00000568 5F12                 695  	add 0xFFFFFFFF, r2
+0000056A 65171100             696  	st.w r2, 0x00000010[r5]
+0000056E                      697  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1525
+0000056E 25171100             698  	ld.w 0x00000010[r5], r2
+00000572 6012                 699  	cmp 0x00000000, r2
+00000574 8A05                 700  	bnz9 .BB.LABEL.7_11
+00000576                      701  .BB.LABEL.7_4:	; if_else_bb45
+00000576                      702  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1534
+00000576 F4162C00             703  	mulhi 0x0000002C, r20, r2
+0000057A D511                 704  	add r21, r2
+0000057C A22F0100             705  	ld.bu 0x00000001[r2], r5
+00000580 C22A                 706  	shl 0x00000002, r5
+00000582                      707  	mov #_Can_GaaGlobalIntCount, r6
+00000582 260600000000            -- mov         0x0,r6
+00000588 C629                 708  	add r6, r5
+0000058A 253F0100             709  	ld.w 0x00000000[r5], r7
+0000058E 5F3A                 710  	add 0xFFFFFFFF, r7
+00000590 653F0100             711  	st.w r7, 0x00000000[r5]
+00000594                      712  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1537
+00000594 A2170100             713  	ld.bu 0x00000001[r2], r2
+00000598 0228                 714  	mov r2, r5
+0000059A C22A                 715  	shl 0x00000002, r5
+0000059C C531                 716  	add r5, r6
+0000059E 262F0100             717  	ld.w 0x00000000[r6], r5
+000005A2 602A                 718  	cmp 0x00000000, r5
+000005A4 8A05                 719  	bnz9 .BB.LABEL.7_6
+000005A6                      720  .BB.LABEL.7_5:	; if_then_bb62
+000005A6                      721  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1539
+000005A6 E2161C00             722  	mulhi 0x0000001C, r2, r2
+000005AA                      723  	mov #_Can_GaaRegs, r5
+000005AA 250600000000            -- mov         0x0,tp
+000005B0 C229                 724  	add r2, r5
+000005B2 25171100             725  	ld.w 0x00000010[r5], r2
+000005B6 822F0100             726  	ld.bu 0x00000000[r2], r5
+000005BA C52E7F00             727  	andi 0x0000007F, r5, r5
+000005BE 422F0000             728  	st.b r5, 0x00000000[r2]
+000005C2                      729  .BB.LABEL.7_6:	; if_break_bb
+000005C2                      730  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1550
+000005C2 F4162C00             731  	mulhi 0x0000002C, r20, r2
+000005C6 D511                 732  	add r21, r2
+000005C8 222F1900             733  	ld.w 0x00000018[r2], r5
+000005CC 85370100             734  	ld.bu 0x00000000[r5], r6
+000005D0 C6367F00             735  	andi 0x0000007F, r6, r6
+000005D4 45370000             736  	st.b r6, 0x00000000[r5]
+000005D8                      737  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1553
+000005D8 222F1100             738  	ld.w 0x00000010[r2], r5
+000005DC 85370100             739  	ld.bu 0x00000000[r5], r6
+000005E0 C6367F00             740  	andi 0x0000007F, r6, r6
+000005E4 45370000             741  	st.b r6, 0x00000000[r5]
+000005E8                      742  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1556
+000005E8 22171500             743  	ld.w 0x00000014[r2], r2
+000005EC 822F0100             744  	ld.bu 0x00000000[r2], r5
+000005F0 C52E7F00             745  	andi 0x0000007F, r5, r5
+000005F4 422F0000             746  	st.b r5, 0x00000000[r2]
+000005F8                      747  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1561
+000005F8 F4161400             748  	mulhi 0x00000014, r20, r2
+000005FC                      749  	mov #_Can_GaaCtrlState, r5
+000005FC 250600000000            -- mov         0x0,tp
+00000602 C229                 750  	add r2, r5
+00000604 25170100             751  	ld.w 0x00000000[r5], r2
+00000608 6212                 752  	cmp 0x00000002, r2
+0000060A 8A05                 753  	bnz9 .BB.LABEL.7_11
+0000060C                      754  .BB.LABEL.7_7:	; bb
+0000060C                      755  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 0
+0000060C F4161400             756  	mulhi 0x00000014, r20, r2
+00000610                      757  	mov #_Can_GaaCtrlState, r5
+00000610 250600000000            -- mov         0x0,tp
+00000616 C229                 758  	add r2, r5
+00000618 25170500             759  	ld.w 0x00000004[r5], r2
+0000061C 6012                 760  	cmp 0x00000000, r2
+0000061E 8A05                 761  	bnz9 .BB.LABEL.7_11
+00000620                      762  .BB.LABEL.7_8:	; bb140
+00000620 D6DF0000             763  	tst1 0x00000003, 0x00000000[r22]
+00000624 8205                 764  	bz9 .BB.LABEL.7_11
+00000626                      765  .BB.LABEL.7_9:	; bb155
+00000626 F4162C00             766  	mulhi 0x0000002C, r20, r2
+0000062A D511                 767  	add r21, r2
+0000062C 22171D00             768  	ld.w 0x0000001C[r2], r2
+00000630 6012                 769  	cmp 0x00000000, r2
+00000632 8205                 770  	bz9 .BB.LABEL.7_11
+00000634                      771  .BB.LABEL.7_10:	; if_then_bb169
+00000634                      772  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1569
+00000634 F4162C00             773  	mulhi 0x0000002C, r20, r2
+00000638 C2A9                 774  	add r2, r21
+0000063A 35171D00             775  	ld.w 0x0000001C[r21], r2
+0000063E 822F0100             776  	ld.bu 0x00000000[r2], r5
+00000642 C52E7F00             777  	andi 0x0000007F, r5, r5
+00000646 422F0000             778  	st.b r5, 0x00000000[r2]
+0000064A                      779  .BB.LABEL.7_11:	; if_break_bb185
+0000064A                      780  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1584
+0000064A 80FF0000             781  	jarl _SchM_Exit_Can_CAN_INTERRUPT_CONTROL_PROTECTION, r31
+0000064E                      782  .BB.LABEL.7_12:	; return
+0000064E                      783  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1592
+0000064E 40063F0E             784  	dispose 0x00000000, 0x00000071, [r31]
+00000652                      785  _Can_CheckWakeup:
+00000652                      786  	.stack _Can_CheckWakeup = 8
+00000652                      787  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1627
+00000652 80072108             788  	prepare 0x00000041, 0x00000000
+00000656 06A0                 789  	mov r6, r20
+00000658 0B32                 790  	mov 0x0000000B, r6
+0000065A                      791  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1635
+0000065A 1438                 792  	mov r20, r7
+0000065C 80FF0000             793  	jarl _Can_CommonDetCheck, r31
+00000660                      794  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1636
+00000660 6052                 795  	cmp 0x00000000, r10
+00000662 8A05                 796  	bnz9 .BB.LABEL.8_4
+00000664                      797  .BB.LABEL.8_1:	; if_else_bb
+00000664                      798  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1645
+00000664 F4161400             799  	mulhi 0x00000014, r20, r2
+00000668                      800  	mov #_Can_GaaCtrlState, r5
+00000668 250600000000            -- mov         0x0,tp
+0000066E C229                 801  	add r2, r5
+00000670 A5170900             802  	ld.bu 0x00000009[r5], r2
+00000674 6112                 803  	cmp 0x00000001, r2
+00000676 8205                 804  	bz9 .BB.LABEL.8_3
+00000678                      805  .BB.LABEL.8_2:	; if_else_bb.if_break_bb30_crit_edge
+00000678                      806  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 0
+00000678 0152                 807  	mov 0x00000001, r10
+0000067A 8505                 808  	br9 .BB.LABEL.8_4
+0000067C                      809  .BB.LABEL.8_3:	; if_then_bb16
+0000067C                      810  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1648
+0000067C F4161400             811  	mulhi 0x00000014, r20, r2
+00000680                      812  	mov #_Can_GaaCtrlState, r5
+00000680 250600000000            -- mov         0x0,tp
+00000686 C229                 813  	add r2, r5
+00000688 45070900             814  	st.b r0, 0x00000009[r5]
+0000068C                      815  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1653
+0000068C 40160000             816  	movhi HIGHW1(#_Can_GpPCController), r0, r2
+00000690 22170100             817  	ld.w LOWW(#_Can_GpPCController)[r2], r2
+00000694 F42E2C00             818  	mulhi 0x0000002C, r20, r5
+00000698 C511                 819  	add r5, r2
+0000069A 82170D00             820  	ld.bu 0x0000000C[r2], r2
+0000069E 0132                 821  	mov 0x00000001, r6
+000006A0 E237C000             822  	shl r2, r6
+000006A4 80FF0000             823  	jarl _EcuM_SetWakeupEvent, r31
+000006A8 0052                 824  	mov 0x00000000, r10
+000006AA                      825  .BB.LABEL.8_4:	; if_break_bb30
+000006AA                      826  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1668
+000006AA 40063F08             827  	dispose 0x00000000, 0x00000041, [r31]
+000006AE                      828  _Can_SetStatus.1:
+000006AE                      829  	.stack _Can_SetStatus.1 = 0
+000006AE                      830  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1714
+000006AE 40160000             831  	movhi HIGHW1(#_Can_GblInitialized), r0, r2
+000006B2                      832  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1718
+000006B2 42370000             833  	st.b r6, LOWW(#_Can_GblInitialized)[r2]
+000006B6 7F00                 834  	jmp [r31]
+000006B8                      835  _Can_InitModule.1:
+000006B8                      836  	.stack _Can_InitModule.1 = 16
+000006B8                      837  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1755
+000006B8 8207210C             838  	prepare 0x00000061, 0x00000004
+000006BC 06A0                 839  	mov r6, r20
+000006BE                      840  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1772
+000006BE 40160000             841  	movhi HIGHW1(#_Can_GpConfig), r0, r2
+000006C2 22170100             842  	ld.w LOWW(#_Can_GpConfig)[r2], r2
+000006C6 22AF0500             843  	ld.w 0x00000004[r2], r21
+000006CA 0512                 844  	mov 0x00000005, r2
+000006CC                      845  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1781
+000006CC 63170100             846  	st.w r2, 0x00000000[r3]
+000006D0                      847  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1782
+000006D0 F4161C00             848  	mulhi 0x0000001C, r20, r2
+000006D4                      849  	mov #_Can_GaaRegs, r5
+000006D4 250600000000            -- mov         0x0,tp
+000006DA C229                 850  	add r2, r5
+000006DC 25170500             851  	ld.w 0x00000004[r5], r2
+000006E0 22368C00             852  	movea 0x0000008C, r2, r6
+000006E4 0348                 853  	mov r3, r9
+000006E6 0042                 854  	mov 0x00000000, r8
+000006E8 083A                 855  	mov 0x00000008, r7
+000006EA 80FF0000             856  	jarl _Can_WaitRegisterChange, r31
+000006EE                      857  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1786
+000006EE 6052                 858  	cmp 0x00000000, r10
+000006F0 8A05                 859  	bnz9 .BB.LABEL.10_2
+000006F2                      860  .BB.LABEL.10_1:	; if_else_bb
+000006F2                      861  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 0
+000006F2 0512                 862  	mov 0x00000005, r2
+000006F4                      863  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1800
+000006F4 63170100             864  	st.w r2, 0x00000000[r3]
+000006F8 004A                 865  	mov 0x00000000, r9
+000006FA 0340                 866  	mov r3, r8
+000006FC 013A                 867  	mov 0x00000001, r7
+000006FE                      868  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1801
+000006FE 1430                 869  	mov r20, r6
+00000700 80FF0000             870  	jarl _Can_GlobalModeChange, r31
+00000704                      871  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1804
+00000704 6052                 872  	cmp 0x00000000, r10
+00000706 8205                 873  	bz9 .BB.LABEL.10_3
+00000708                      874  .BB.LABEL.10_2:	; if_then_bb35
+00000708                      875  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 0
+00000708 01A2                 876  	mov 0x00000001, r20
+0000070A 1430                 877  	mov r20, r6
+0000070C 1438                 878  	mov r20, r7
+0000070E 80FF0000             879  	jarl _Dem_ReportErrorStatus, r31
+00000712 1450                 880  	mov r20, r10
+00000714                      881  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2012
+00000714 42063F0C             882  	dispose 0x00000004, 0x00000061, [r31]
+00000718                      883  .BB.LABEL.10_3:	; if_else_bb36
+00000718                      884  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1821
+00000718 F4161C00             885  	mulhi 0x0000001C, r20, r2
+0000071C                      886  	mov #_Can_GaaRegs, r5
+0000071C 250600000000            -- mov         0x0,tp
+00000722 C229                 887  	add r2, r5
+00000724 25170500             888  	ld.w 0x00000004[r5], r2
+00000728 0132                 889  	mov 0x00000001, r6
+0000072A 6237FD04             890  	st.w r6, 0x000004FC[r2]
+0000072E                      891  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1831
+0000072E 25170500             892  	ld.w 0x00000004[r5], r2
+00000732 62077504             893  	st.w r0, 0x00000474[r2]
+00000736                      894  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1852
+00000736 1410                 895  	mov r20, r2
+00000738 C512                 896  	shl 0x00000005, r2
+0000073A D511                 897  	add r21, r2
+0000073C 22370500             898  	ld.w 0x00000004[r2], r6
+00000740 253F0500             899  	ld.w 0x00000004[r5], r7
+00000744 6737A500             900  	st.w r6, 0x000000A4[r7]
+00000748                      901  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1861
+00000748 22170900             902  	ld.w 0x00000008[r2], r2
+0000074C 252F0500             903  	ld.w 0x00000004[r5], r5
+00000750 65178500             904  	st.w r2, 0x00000084[r5]
+00000754 0012                 905  	mov 0x00000000, r2
+00000756 8505                 906  	br9 .BB.LABEL.10_5
+00000758                      907  .BB.LABEL.10_4:	; bb
+00000758                      908  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1876
+00000758 1428                 909  	mov r20, r5
+0000075A C52A                 910  	shl 0x00000005, r5
+0000075C D529                 911  	add r21, r5
+0000075E 252F1500             912  	ld.w 0x00000014[r5], r5
+00000762 0230                 913  	mov r2, r6
+00000764 C232                 914  	shl 0x00000002, r6
+00000766 C629                 915  	add r6, r5
+00000768 F43E1C00             916  	mulhi 0x0000001C, r20, r7
+0000076C                      917  	mov #_Can_GaaRegs, r8
+0000076C 280600000000            -- mov         0x0,r8
+00000772 C741                 918  	add r7, r8
+00000774 283F0500             919  	ld.w 0x00000004[r8], r7
+00000778 C731                 920  	add r7, r6
+0000077A 252F0100             921  	ld.w 0x00000000[r5], r5
+0000077E 662F9103             922  	st.w r5, 0x00000390[r6]
+00000782 4112                 923  	add 0x00000001, r2
+00000784                      924  .BB.LABEL.10_5:	; bb84
+00000784                      925  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1871
+00000784 1428                 926  	mov r20, r5
+00000786 C52A                 927  	shl 0x00000005, r5
+00000788 D529                 928  	add r21, r5
+0000078A 852F0100             929  	ld.bu 0x00000000[r5], r5
+0000078E E511                 930  	cmp r5, r2
+00000790 8105                 931  	bl9 .BB.LABEL.10_4
+00000792                      932  .BB.LABEL.10_6:	; bb84.bb112_crit_edge
+00000792                      933  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 0
+00000792 0012                 934  	mov 0x00000000, r2
+00000794 8505                 935  	br9 .BB.LABEL.10_8
+00000796                      936  .BB.LABEL.10_7:	; bb94
+00000796                      937  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1896
+00000796 F42E1C00             938  	mulhi 0x0000001C, r20, r5
+0000079A                      939  	mov #_Can_GaaRegs, r6
+0000079A 260600000000            -- mov         0x0,r6
+000007A0 C531                 940  	add r5, r6
+000007A2 262F0500             941  	ld.w 0x00000004[r6], r5
+000007A6 0230                 942  	mov r2, r6
+000007A8 C232                 943  	shl 0x00000002, r6
+000007AA C629                 944  	add r6, r5
+000007AC 1438                 945  	mov r20, r7
+000007AE C53A                 946  	shl 0x00000005, r7
+000007B0 D539                 947  	add r21, r7
+000007B2 C639                 948  	add r6, r7
+000007B4 27370D00             949  	ld.w 0x0000000C[r7], r6
+000007B8 65379D00             950  	st.w r6, 0x0000009C[r5]
+000007BC 4112                 951  	add 0x00000001, r2
+000007BE                      952  .BB.LABEL.10_8:	; bb112
+000007BE                      953  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1892
+000007BE 1428                 954  	mov r20, r5
+000007C0 C52A                 955  	shl 0x00000005, r5
+000007C2 D529                 956  	add r21, r5
+000007C4 A52F0100             957  	ld.bu 0x00000001[r5], r5
+000007C8 E511                 958  	cmp r5, r2
+000007CA 8105                 959  	bl9 .BB.LABEL.10_7
+000007CC                      960  .BB.LABEL.10_9:	; bb112.bb215_crit_edge
+000007CC                      961  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 0
+000007CC 0012                 962  	mov 0x00000000, r2
+000007CE 0228                 963  	mov r2, r5
+000007D0 8505                 964  	br9 .BB.LABEL.10_15
+000007D2                      965  .BB.LABEL.10_10:	; bb122
+000007D2                      966  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1913
+000007D2 82460001             967  	ori 0x00000100, r2, r8
+000007D6 67479900             968  	st.w r8, 0x00000098[r7]
+000007DA 003A                 969  	mov 0x00000000, r7
+000007DC 8505                 970  	br9 .BB.LABEL.10_12
+000007DE                      971  .BB.LABEL.10_11:	; bb131
+000007DE                      972  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1932
+000007DE F4461C00             973  	mulhi 0x0000001C, r20, r8
+000007E2                      974  	mov #_Can_GaaRegs, r9
+000007E2 290600000000            -- mov         0x0,r9
+000007E8 C849                 975  	add r8, r9
+000007EA 29470900             976  	ld.w 0x00000008[r9], r8
+000007EE 0750                 977  	mov r7, r10
+000007F0 C452                 978  	shl 0x00000004, r10
+000007F2 CA41                 979  	add r10, r8
+000007F4                      980  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1928
+000007F4 1458                 981  	mov r20, r11
+000007F6 C55A                 982  	shl 0x00000005, r11
+000007F8 D559                 983  	add r21, r11
+000007FA 2B5F1900             984  	ld.w 0x00000018[r11], r11
+000007FE                      985  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1932
+000007FE 0560                 986  	mov r5, r12
+00000800 C462                 987  	shl 0x00000004, r12
+00000802 CC59                 988  	add r12, r11
+00000804 2B670100             989  	ld.w 0x00000000[r11], r12
+00000808 68670100             990  	st.w r12, 0x00000000[r8]
+0000080C                      991  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1944
+0000080C 29470900             992  	ld.w 0x00000008[r9], r8
+00000810 CA41                 993  	add r10, r8
+00000812 2B670500             994  	ld.w 0x00000004[r11], r12
+00000816 68670500             995  	st.w r12, 0x00000004[r8]
+0000081A                      996  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1956
+0000081A 29470900             997  	ld.w 0x00000008[r9], r8
+0000081E CA41                 998  	add r10, r8
+00000820 2B670900             999  	ld.w 0x00000008[r11], r12
+00000824 68670900            1000  	st.w r12, 0x00000008[r8]
+00000828                     1001  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1969
+00000828 29470900            1002  	ld.w 0x00000008[r9], r8
+0000082C C851                1003  	add r8, r10
+0000082E 2B470D00            1004  	ld.w 0x0000000C[r11], r8
+00000832 6A470D00            1005  	st.w r8, 0x0000000C[r10]
+00000836                     1006  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1981
+00000836 412A                1007  	add 0x00000001, r5
+00000838                     1008  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1980
+00000838 413A                1009  	add 0x00000001, r7
+0000083A                     1010  .BB.LABEL.10_12:	; bb193
+0000083A                     1011  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1924
+0000083A 6F3A                1012  	cmp 0x0000000F, r7
+0000083C 8B05                1013  	bh9 .BB.LABEL.10_14
+0000083E                     1014  .BB.LABEL.10_13:	; bb197
+0000083E                     1015  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 0
+0000083E E6470100            1016  	ld.hu 0x00000000[r6], r8
+00000842 E829                1017  	cmp r8, r5
+00000844 8105                1018  	bl9 .BB.LABEL.10_11
+00000846                     1019  .BB.LABEL.10_14:	; bb212
+00000846                     1020  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1984
+00000846 4112                1021  	add 0x00000001, r2
+00000848                     1022  .BB.LABEL.10_15:	; bb215
+00000848                     1023  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1910
+00000848 1430                1024  	mov r20, r6
+0000084A C532                1025  	shl 0x00000005, r6
+0000084C D531                1026  	add r21, r6
+0000084E E63F0300            1027  	ld.hu 0x00000002[r6], r7
+00000852 4232                1028  	add 0x00000002, r6
+00000854 F4461C00            1029  	mulhi 0x0000001C, r20, r8
+00000858                     1030  	mov #_Can_GaaRegs, r9
+00000858 290600000000            -- mov         0x0,r9
+0000085E C849                1031  	add r8, r9
+00000860 E729                1032  	cmp r7, r5
+00000862 293F0500            1033  	ld.w 0x00000004[r9], r7
+00000866 8105                1034  	bl9 .BB.LABEL.10_10
+00000868                     1035  .BB.LABEL.10_16:	; bb224
+00000868                     1036  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 1987
+00000868 67079900            1037  	st.w r0, 0x00000098[r7]
+0000086C                     1038  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2002
+0000086C F4161C00            1039  	mulhi 0x0000001C, r20, r2
+00000870                     1040  	mov #_Can_GaaRegs, r5
+00000870 250600000000            -- mov         0x0,tp
+00000876 C229                1041  	add r2, r5
+00000878 25171100            1042  	ld.w 0x00000010[r5], r2
+0000087C 82370100            1043  	ld.bu 0x00000000[r2], r6
+00000880 C6367F00            1044  	andi 0x0000007F, r6, r6
+00000884 42370000            1045  	st.b r6, 0x00000000[r2]
+00000888 25171100            1046  	ld.w 0x00000010[r5], r2
+0000088C 02170000            1047  	ld.b 0x00000000[r2], r2
+00000890 1F00                1048  	syncp
+00000892 0052                1049  	mov 0x00000000, r10
+00000894                     1050  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2008
+00000894 42063F0C            1051  	dispose 0x00000004, 0x00000061, [r31]
+00000898                     1052  _Can_InitController.1:
+00000898                     1053  	.stack _Can_InitController.1 = 32
+00000898                     1054  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2047
+00000898 8407218F            1055  	prepare 0x00000479, 0x00000008
+0000089C 06A0                1056  	mov r6, r20
+0000089E 0142                1057  	mov 0x00000001, r8
+000008A0                     1058  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2077
+000008A0 F447C210            1059  	shl r20, r8, r2
+000008A4                     1060  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2067
+000008A4 402E0000            1061  	movhi HIGHW1(#_Can_GpPCController), r0, r5
+000008A8 25AF0100            1062  	ld.w LOWW(#_Can_GpPCController)[r5], r21
+000008AC                     1063  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2073
+000008AC F42E2C00            1064  	mulhi 0x0000002C, r20, r5
+000008B0 D529                1065  	add r21, r5
+000008B2                     1066  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2070
+000008B2 40360000            1067  	movhi HIGHW1(#_Can_GpPBController), r0, r6
+000008B6 26B70100            1068  	ld.w LOWW(#_Can_GpPBController)[r6], r22
+000008BA                     1069  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2077
+000008BA A5BF0100            1070  	ld.bu 0x00000001[r5], r23
+000008BE 1730                1071  	mov r23, r6
+000008C0 C232                1072  	shl 0x00000002, r6
+000008C2                     1073  	mov #_Can_GaaActiveControllers, r7
+000008C2 270600000000            -- mov         0x0,r7
+000008C8 C639                1074  	add r6, r7
+000008CA                     1075  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2074
+000008CA 85C70300            1076  	ld.bu 0x00000002[r5], r24
+000008CE                     1077  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2077
+000008CE 272F0100            1078  	ld.w 0x00000000[r7], r5
+000008D2 0229                1079  	or r2, r5
+000008D4 672F0100            1080  	st.w r5, 0x00000000[r7]
+000008D8 0512                1081  	mov 0x00000005, r2
+000008DA                     1082  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2084
+000008DA 63170500            1083  	st.w r2, 0x00000004[r3]
+000008DE                     1084  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2085
+000008DE 63070100            1085  	st.w r0, 0x00000000[r3]
+000008E2 234E0400            1086  	movea 0x00000004, r3, r9
+000008E6 1730                1087  	mov r23, r6
+000008E8 1438                1088  	mov r20, r7
+000008EA 80FF0000            1089  	jarl _Can_ChannelModeChange, r31
+000008EE                     1090  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2088
+000008EE 6052                1091  	cmp 0x00000000, r10
+000008F0 8205                1092  	bz9 .BB.LABEL.11_2
+000008F2                     1093  .BB.LABEL.11_1:	; if_then_bb
+000008F2                     1094  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 0
+000008F2 01A2                1095  	mov 0x00000001, r20
+000008F4                     1096  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2091
+000008F4 1430                1097  	mov r20, r6
+000008F6 1438                1098  	mov r20, r7
+000008F8 80FF0000            1099  	jarl _Dem_ReportErrorStatus, r31
+000008FC                     1100  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2094
+000008FC 1450                1101  	mov r20, r10
+000008FE 44063F8F            1102  	dispose 0x00000008, 0x00000479, [r31]
+00000902                     1103  .BB.LABEL.11_2:	; if_else_bb
+00000902                     1104  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2107
+00000902 F7161C00            1105  	mulhi 0x0000001C, r23, r2
+00000906                     1106  	mov #_Can_GaaRegs, r5
+00000906 250600000000            -- mov         0x0,tp
+0000090C C229                1107  	add r2, r5
+0000090E 25170500            1108  	ld.w 0x00000004[r5], r2
+00000912 1830                1109  	mov r24, r6
+00000914 C432                1110  	shl 0x00000004, r6
+00000916 C611                1111  	add r6, r2
+00000918                     1112  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2102
+00000918 1430                1113  	mov r20, r6
+0000091A C332                1114  	shl 0x00000003, r6
+0000091C C6B1                1115  	add r6, r22
+0000091E 36370500            1116  	ld.w 0x00000004[r22], r6
+00000922                     1117  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2107
+00000922 263F0500            1118  	ld.w 0x00000004[r6], r7
+00000926 623F0100            1119  	st.w r7, 0x00000000[r2]
+0000092A 1410                1120  	mov r20, r2
+0000092C C412                1121  	shl 0x00000004, r2
+0000092E                     1122  	mov #_Can_GaaMirrorChannelReg, r7
+0000092E 270600000000            -- mov         0x0,r7
+00000934 C239                1123  	add r2, r7
+00000936 26170500            1124  	ld.w 0x00000004[r6], r2
+0000093A 67170100            1125  	st.w r2, 0x00000000[r7]
+0000093E                     1126  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2125
+0000093E 25170D00            1127  	ld.w 0x0000000C[r5], r2
+00000942 1840                1128  	mov r24, r8
+00000944 C542                1129  	shl 0x00000005, r8
+00000946 C811                1130  	add r8, r2
+00000948 264F0D00            1131  	ld.w 0x0000000C[r6], r9
+0000094C 624F0500            1132  	st.w r9, 0x00000004[r2]
+00000950 26170D00            1133  	ld.w 0x0000000C[r6], r2
+00000954 67170900            1134  	st.w r2, 0x00000008[r7]
+00000958                     1135  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2138
+00000958 25170D00            1136  	ld.w 0x0000000C[r5], r2
+0000095C C811                1137  	add r8, r2
+0000095E 262F0900            1138  	ld.w 0x00000008[r6], r5
+00000962 622F0100            1139  	st.w r5, 0x00000000[r2]
+00000966 26170900            1140  	ld.w 0x00000008[r6], r2
+0000096A 67170D00            1141  	st.w r2, 0x0000000C[r7]
+0000096E 0012                1142  	mov 0x00000000, r2
+00000970 8505                1143  	br9 .BB.LABEL.11_8
+00000972                     1144  .BB.LABEL.11_3:	; bb
+00000972                     1145  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2164
+00000972 402E0000            1146  	movhi HIGHW1(#_Can_GpHohConfig), r0, r5
+00000976 252F0100            1147  	ld.w LOWW(#_Can_GpHohConfig)[r5], r5
+0000097A                     1148  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2166
+0000097A 0230                1149  	mov r2, r6
+0000097C F8374002            1150  	mul 0x00000018, r6, r0
+00000980 C531                1151  	add r5, r6
+00000982 A6370500            1152  	ld.bu 0x00000005[r6], r6
+00000986 E6A1                1153  	cmp r6, r20
+00000988 8A05                1154  	bnz9 .BB.LABEL.11_7
+0000098A                     1155  .BB.LABEL.11_4:	; if_then_bb119
+0000098A                     1156  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2168
+0000098A 0230                1157  	mov r2, r6
+0000098C F8374002            1158  	mul 0x00000018, r6, r0
+00000990 C531                1159  	add r5, r6
+00000992 863F1100            1160  	ld.bu 0x00000010[r6], r7
+00000996 C23A                1161  	shl 0x00000002, r7
+00000998 F7461C00            1162  	mulhi 0x0000001C, r23, r8
+0000099C                     1163  	mov #_Can_GaaRegs, r9
+0000099C 290600000000            -- mov         0x0,r9
+000009A2 C849                1164  	add r8, r9
+000009A4 26370D00            1165  	ld.w 0x0000000C[r6], r6
+000009A8 0240                1166  	mov r2, r8
+000009AA F8474002            1167  	mul 0x00000018, r8, r0
+000009AE C829                1168  	add r8, r5
+000009B0 25471500            1169  	ld.w 0x00000014[r5], r8
+000009B4 6332                1170  	cmp 0x00000003, r6
+000009B6 29370500            1171  	ld.w 0x00000004[r9], r6
+000009BA 8A05                1172  	bnz9 .BB.LABEL.11_6
+000009BC                     1173  .BB.LABEL.11_5:	; switch_clause_bb
+000009BC                     1174  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2178
+000009BC C639                1175  	add r6, r7
+000009BE 0230                1176  	mov r2, r6
+000009C0 EC374002            1177  	mul 0x0000000C, r6, r0
+000009C4 6747B900            1178  	st.w r8, 0x000000B8[r7]
+000009C8                     1179  	mov #_Can_GaaMirrorHohReg, r7
+000009C8 270600000000            -- mov         0x0,r7
+000009CE C639                1180  	add r6, r7
+000009D0 252F1500            1181  	ld.w 0x00000014[r5], r5
+000009D4 672F0100            1182  	st.w r5, 0x00000000[r7]
+000009D8 8505                1183  	br9 .BB.LABEL.11_7
+000009DA                     1184  .BB.LABEL.11_6:	; switch_clause_bb144
+000009DA                     1185  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2210
+000009DA C639                1186  	add r6, r7
+000009DC 0230                1187  	mov r2, r6
+000009DE EC374002            1188  	mul 0x0000000C, r6, r0
+000009E2 67471901            1189  	st.w r8, 0x00000118[r7]
+000009E6                     1190  	mov #_Can_GaaMirrorHohReg, r7
+000009E6 270600000000            -- mov         0x0,r7
+000009EC C639                1191  	add r6, r7
+000009EE 252F1500            1192  	ld.w 0x00000014[r5], r5
+000009F2 672F0900            1193  	st.w r5, 0x00000008[r7]
+000009F6                     1194  .BB.LABEL.11_7:	; if_break_bb
+000009F6                     1195  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 0
+000009F6 4112                1196  	add 0x00000001, r2
+000009F8                     1197  .BB.LABEL.11_8:	; bb169
+000009F8                     1198  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2160
+000009F8 6412                1199  	cmp 0x00000004, r2
+000009FA 8105                1200  	bl9 .BB.LABEL.11_3
+000009FC                     1201  .BB.LABEL.11_9:	; bb174
+000009FC                     1202  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2235
+000009FC F7161C00            1203  	mulhi 0x0000001C, r23, r2
+00000A00                     1204  	mov #_Can_GaaRegs, r5
+00000A00 250600000000            -- mov         0x0,tp
+00000A06 C229                1205  	add r2, r5
+00000A08 25170500            1206  	ld.w 0x00000004[r5], r2
+00000A0C 1830                1207  	mov r24, r6
+00000A0E C232                1208  	shl 0x00000002, r6
+00000A10 C611                1209  	add r6, r2
+00000A12 F4362C00            1210  	mulhi 0x0000002C, r20, r6
+00000A16 C6A9                1211  	add r6, r21
+00000A18 35370900            1212  	ld.w 0x00000008[r21], r6
+00000A1C 62370104            1213  	st.w r6, 0x00000400[r2]
+00000A20                     1214  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2250
+00000A20 25170500            1215  	ld.w 0x00000004[r5], r2
+00000A24 C4C2                1216  	shl 0x00000004, r24
+00000A26 D811                1217  	add r24, r2
+00000A28 352F0500            1218  	ld.w 0x00000004[r21], r5
+00000A2C 852E0100            1219  	ori 0x00000001, r5, r5
+00000A30 622F0500            1220  	st.w r5, 0x00000004[r2]
+00000A34 C4A2                1221  	shl 0x00000004, r20
+00000A36                     1222  	mov #_Can_GaaMirrorChannelReg, r2
+00000A36 220600000000            -- mov         0x0,hp
+00000A3C D411                1223  	add r20, r2
+00000A3E 352F0500            1224  	ld.w 0x00000004[r21], r5
+00000A42 852E0100            1225  	ori 0x00000001, r5, r5
+00000A46 622F0500            1226  	st.w r5, 0x00000004[r2]
+00000A4A                     1227  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2265
+00000A4A 35171900            1228  	ld.w 0x00000018[r21], r2
+00000A4E 822F0100            1229  	ld.bu 0x00000000[r2], r5
+00000A52 C52E7F00            1230  	andi 0x0000007F, r5, r5
+00000A56 422F0000            1231  	st.b r5, 0x00000000[r2]
+00000A5A                     1232  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2268
+00000A5A 35171100            1233  	ld.w 0x00000010[r21], r2
+00000A5E 822F0100            1234  	ld.bu 0x00000000[r2], r5
+00000A62 C52E7F00            1235  	andi 0x0000007F, r5, r5
+00000A66 422F0000            1236  	st.b r5, 0x00000000[r2]
+00000A6A                     1237  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2271
+00000A6A 35171500            1238  	ld.w 0x00000014[r21], r2
+00000A6E 822F0100            1239  	ld.bu 0x00000000[r2], r5
+00000A72 C52E7F00            1240  	andi 0x0000007F, r5, r5
+00000A76 422F0000            1241  	st.b r5, 0x00000000[r2]
+00000A7A                     1242  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2275
+00000A7A 35171500            1243  	ld.w 0x00000014[r21], r2
+00000A7E 22170000            1244  	ld.h 0x00000000[r2], r2
+00000A82                     1245  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2277
+00000A82 1F00                1246  	syncp
+00000A84 0052                1247  	mov 0x00000000, r10
+00000A86                     1248  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2280
+00000A86 44063F8F            1249  	dispose 0x00000008, 0x00000479, [r31]
+00000A8A                     1250  _Can_SearchBaudrate.1:
+00000A8A                     1251  	.stack _Can_SearchBaudrate.1 = 0
+00000A8A                     1252  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2317
+00000A8A C332                1253  	shl 0x00000003, r6
+00000A8C                     1254  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2328
+00000A8C 40160000            1255  	movhi HIGHW1(#_Can_GpPBController), r0, r2
+00000A90 222F0100            1256  	ld.w LOWW(#_Can_GpPBController)[r2], r5
+00000A94 C629                1257  	add r6, r5
+00000A96 252F0500            1258  	ld.w 0x00000004[r5], r5
+00000A9A                     1259  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2331
+00000A9A 22170100            1260  	ld.w LOWW(#_Can_GpPBController)[r2], r2
+00000A9E C611                1261  	add r6, r2
+00000AA0 E2170300            1262  	ld.hu 0x00000002[r2], r2
+00000AA4 0032                1263  	mov 0x00000000, r6
+00000AA6 1F52                1264  	mov 0xFFFFFFFF, r10
+00000AA8 8505                1265  	br9 .BB.LABEL.12_2
+00000AAA                     1266  .BB.LABEL.12_1:	; bb
+00000AAA                     1267  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2340
+00000AAA 0640                1268  	mov r6, r8
+00000AAC F4474002            1269  	mul 0x00000014, r8, r0
+00000AB0 C541                1270  	add r5, r8
+00000AB2 E8470300            1271  	ld.hu 0x00000002[r8], r8
+00000AB6 E839                1272  	cmp r8, r7
+00000AB8                     1273  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2344
+00000AB8 E6572453            1274  	cmov 0x00000002, r6, r10, r10
+00000ABC                     1275  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2350
+00000ABC 4132                1276  	add 0x00000001, r6
+00000ABE                     1277  .BB.LABEL.12_2:	; bb32
+00000ABE                     1278  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2336
+00000ABE E231                1279  	cmp r2, r6
+00000AC0 8905                1280  	bnc9 .BB.LABEL.12_4
+00000AC2                     1281  .BB.LABEL.12_3:	; bb32
+00000AC2                     1282  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 0
+00000AC2 7F52                1283  	cmp 0xFFFFFFFF, r10
+00000AC4 8205                1284  	bz9 .BB.LABEL.12_1
+00000AC6                     1285  .BB.LABEL.12_4:	; bb48
+00000AC6                     1286  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2353
+00000AC6 7F00                1287  	jmp [r31]
+00000AC8                     1288  _Can_SearchBaudrateID.1:
+00000AC8                     1289  	.stack _Can_SearchBaudrateID.1 = 0
+00000AC8                     1290  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2386
+00000AC8 C332                1291  	shl 0x00000003, r6
+00000ACA                     1292  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2397
+00000ACA 40160000            1293  	movhi HIGHW1(#_Can_GpPBController), r0, r2
+00000ACE 222F0100            1294  	ld.w LOWW(#_Can_GpPBController)[r2], r5
+00000AD2 C629                1295  	add r6, r5
+00000AD4 252F0500            1296  	ld.w 0x00000004[r5], r5
+00000AD8                     1297  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2400
+00000AD8 22170100            1298  	ld.w LOWW(#_Can_GpPBController)[r2], r2
+00000ADC C611                1299  	add r6, r2
+00000ADE E2170300            1300  	ld.hu 0x00000002[r2], r2
+00000AE2 0032                1301  	mov 0x00000000, r6
+00000AE4 1F52                1302  	mov 0xFFFFFFFF, r10
+00000AE6 8505                1303  	br9 .BB.LABEL.13_2
+00000AE8                     1304  .BB.LABEL.13_1:	; bb
+00000AE8                     1305  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2409
+00000AE8 0640                1306  	mov r6, r8
+00000AEA F4474002            1307  	mul 0x00000014, r8, r0
+00000AEE C541                1308  	add r5, r8
+00000AF0 88470100            1309  	ld.bu 0x00000000[r8], r8
+00000AF4 C74EFF00            1310  	andi 0x000000FF, r7, r9
+00000AF8 E849                1311  	cmp r8, r9
+00000AFA                     1312  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2413
+00000AFA E6572453            1313  	cmov 0x00000002, r6, r10, r10
+00000AFE                     1314  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2419
+00000AFE 4132                1315  	add 0x00000001, r6
+00000B00                     1316  .BB.LABEL.13_2:	; bb33
+00000B00                     1317  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2405
+00000B00 E231                1318  	cmp r2, r6
+00000B02 8905                1319  	bnc9 .BB.LABEL.13_4
+00000B04                     1320  .BB.LABEL.13_3:	; bb33
+00000B04                     1321  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 0
+00000B04 7F52                1322  	cmp 0xFFFFFFFF, r10
+00000B06 8205                1323  	bz9 .BB.LABEL.13_1
+00000B08                     1324  .BB.LABEL.13_4:	; bb49
+00000B08                     1325  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2422
+00000B08 7F00                1326  	jmp [r31]
+00000B0A                     1327  _Can_RAMTest:
+00000B0A                     1328  	.stack _Can_RAMTest = 24
+00000B0A                     1329  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2475
+00000B0A 8207210F            1330  	prepare 0x00000079, 0x00000004
+00000B0E 0512                1331  	mov 0x00000005, r2
+00000B10                     1332  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2497
+00000B10 63170100            1333  	st.w r2, 0x00000000[r3]
+00000B14 20165400            1334  	movea 0x00000054, r0, r2
+00000B18                     1335  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2501
+00000B18 E231                1336  	cmp r2, r6
+00000B1A 06A0                1337  	mov r6, r20
+00000B1C 8105                1338  	bl9 .BB.LABEL.14_2
+00000B1E                     1339  .BB.LABEL.14_1:	; if_then_bb
+00000B1E                     1340  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 0
+00000B1E 0B4A                1341  	mov 0x0000000B, r9
+00000B20 20461400            1342  	movea 0x00000014, r0, r8
+00000B24 003A                1343  	mov 0x00000000, r7
+00000B26 20365000            1344  	movea 0x00000050, r0, r6
+00000B2A                     1345  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2504
+00000B2A 80FF0000            1346  	jarl _Det_ReportError, r31
+00000B2E 01AA                1347  	mov 0x00000001, r21
+00000B30 8505                1348  	br9 .BB.LABEL.14_8
+00000B32                     1349  .BB.LABEL.14_2:	; if_else_bb
+00000B32                     1350  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2557
+00000B32 1406ADFF            1351  	addi 0xFFFFFFAD, r20, r0
+00000B36 20AE4000            1352  	movea 0x00000040, r0, r21
+00000B3A 20B61000            1353  	movea 0x00000010, r0, r22
+00000B3E                     1354  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2563
+00000B3E F6AF24B3            1355  	cmov 0x00000002, r22, r21, r22
+00000B42 00AA                1356  	mov 0x00000000, r21
+00000B44 15B8                1357  	mov r21, r23
+00000B46 8505                1358  	br9 .BB.LABEL.14_6
+00000B48                     1359  .BB.LABEL.14_3:	; bb
+00000B48                     1360  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2590
+00000B48 40160000            1361  	movhi HIGHW1(#_Can_GaaRegs+0x00000004), r0, r2
+00000B4C 22170100            1362  	ld.w LOWW(#_Can_GaaRegs+0x00000004)[r2], r2
+00000B50 D72EFF00            1363  	andi 0x000000FF, r23, r5
+00000B54 C42A                1364  	shl 0x00000004, r5
+00000B56 C511                1365  	add r5, r2
+00000B58 22170900            1366  	ld.w 0x00000008[r2], r2
+00000B5C C2060100            1367  	andi 0x00000001, r2, r0
+00000B60 8A05                1368  	bnz9 .BB.LABEL.14_5
+00000B62                     1369  .BB.LABEL.14_4:	; if_then_bb36
+00000B62                     1370  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 0
+00000B62 0C4A                1371  	mov 0x0000000C, r9
+00000B64 20461400            1372  	movea 0x00000014, r0, r8
+00000B68 003A                1373  	mov 0x00000000, r7
+00000B6A 20365000            1374  	movea 0x00000050, r0, r6
+00000B6E                     1375  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2594
+00000B6E 80FF0000            1376  	jarl _Det_ReportError, r31
+00000B72 01AA                1377  	mov 0x00000001, r21
+00000B74                     1378  .BB.LABEL.14_5:	; if_break_bb39
+00000B74                     1379  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 0
+00000B74 41BA                1380  	add 0x00000001, r23
+00000B76                     1381  .BB.LABEL.14_6:	; bb42
+00000B76                     1382  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2584
+00000B76 D716FF00            1383  	andi 0x000000FF, r23, r2
+00000B7A 6512                1384  	cmp 0x00000005, r2
+00000B7C 8F05                1385  	bgt9 .BB.LABEL.14_8
+00000B7E                     1386  .BB.LABEL.14_7:	; bb42
+00000B7E                     1387  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 0
+00000B7E D506FF00            1388  	andi 0x000000FF, r21, r0
+00000B82 8205                1389  	bz9 .BB.LABEL.14_3
+00000B84                     1390  .BB.LABEL.14_8:	; if_break_bb62
+00000B84                     1391  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2607
+00000B84 D516FF00            1392  	andi 0x000000FF, r21, r2
+00000B88 6112                1393  	cmp 0x00000001, r2
+00000B8A 8205                1394  	bz9 .BB.LABEL.14_17
+00000B8C                     1395  .BB.LABEL.14_9:	; if_then_bb68
+00000B8C                     1396  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 0
+00000B8C 204E1400            1397  	movea 0x00000014, r0, r9
+00000B90 0340                1398  	mov r3, r8
+00000B92 013A                1399  	mov 0x00000001, r7
+00000B94 0032                1400  	mov 0x00000000, r6
+00000B96                     1401  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2611
+00000B96 80FF0000            1402  	jarl _Can_GlobalModeChange, r31
+00000B9A                     1403  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2615
+00000B9A 6052                1404  	cmp 0x00000000, r10
+00000B9C 8A05                1405  	bnz9 .BB.LABEL.14_16
+00000B9E                     1406  .BB.LABEL.14_10:	; if_else_bb77
+00000B9E                     1407  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2632
+00000B9E 40AE0000            1408  	movhi HIGHW1(#_Can_GaaRegs+0x00000004), r0, r21
+00000BA2 35AF0100            1409  	ld.w LOWW(#_Can_GaaRegs+0x00000004)[r21], r21
+00000BA6 0112                1410  	mov 0x00000001, r2
+00000BA8 7517FD04            1411  	st.w r2, 0x000004FC[r21]
+00000BAC 204E1400            1412  	movea 0x00000014, r0, r9
+00000BB0 0340                1413  	mov r3, r8
+00000BB2 023A                1414  	mov 0x00000002, r7
+00000BB4 0032                1415  	mov 0x00000000, r6
+00000BB6                     1416  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2650
+00000BB6 80FF0000            1417  	jarl _Can_GlobalModeChange, r31
+00000BBA                     1418  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2654
+00000BBA 6052                1419  	cmp 0x00000000, r10
+00000BBC 8A05                1420  	bnz9 .BB.LABEL.14_16
+00000BBE                     1421  .BB.LABEL.14_11:	; if_else_bb92
+00000BBE                     1422  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2665
+00000BBE 40AE0000            1423  	movhi HIGHW1(#_Can_GaaRegs+0x00000004), r0, r21
+00000BC2 35170100            1424  	ld.w LOWW(#_Can_GaaRegs+0x00000004)[r21], r2
+00000BC6 202E7575            1425  	movea 0x00007575, r0, r5
+00000BCA                     1426  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2669
+00000BCA 622F7D04            1427  	st.w r5, 0x0000047C[r2]
+00000BCE 802E8A8A            1428  	ori 0x00008A8A, r0, r5
+00000BD2 622F7D04            1429  	st.w r5, 0x0000047C[r2]
+00000BD6 042A                1430  	mov 0x00000004, r5
+00000BD8 622F6D04            1431  	st.w r5, 0x0000046C[r2]
+00000BDC                     1432  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2672
+00000BDC 35AF0100            1433  	ld.w LOWW(#_Can_GaaRegs+0x00000004)[r21], r21
+00000BE0 1410                1434  	mov r20, r2
+00000BE2 D012                1435  	shl 0x00000010, r2
+00000BE4 75176904            1436  	st.w r2, 0x00000468[r21]
+00000BE8                     1437  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2682
+00000BE8 40AE0000            1438  	movhi HIGHW1(#_Can_GulPageID), r0, r21
+00000BEC 75A70100            1439  	st.w r20, LOWW(#_Can_GulPageID)[r21]
+00000BF0                     1440  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2686
+00000BF0 D6AEFF00            1441  	andi 0x000000FF, r22, r21
+00000BF4 00A2                1442  	mov 0x00000000, r20
+00000BF6 1530                1443  	mov r21, r6
+00000BF8 1438                1444  	mov r20, r7
+00000BFA 1440                1445  	mov r20, r8
+00000BFC 80FF0000            1446  	jarl _Can_RamTst_Set_RAMData, r31
+00000C00                     1447  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2688
+00000C00 1530                1448  	mov r21, r6
+00000C02 1438                1449  	mov r20, r7
+00000C04 80FF0000            1450  	jarl _Can_RamTest_Checker_Algorithm, r31
+00000C08                     1451  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2689
+00000C08 6052                1452  	cmp 0x00000000, r10
+00000C0A 8A05                1453  	bnz9 .BB.LABEL.14_14
+00000C0C                     1454  .BB.LABEL.14_12:	; if_then_bb127
+00000C0C                     1455  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2691
+00000C0C D636FF00            1456  	andi 0x000000FF, r22, r6
+00000C10 003A                1457  	mov 0x00000000, r7
+00000C12 0740                1458  	mov r7, r8
+00000C14 80FF0000            1459  	jarl _Can_RamTst_WalkPath_Algorithm, r31
+00000C18                     1460  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2693
+00000C18 6052                1461  	cmp 0x00000000, r10
+00000C1A 8A05                1462  	bnz9 .BB.LABEL.14_14
+00000C1C                     1463  .BB.LABEL.14_13:	; if_then_bb136
+00000C1C                     1464  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2695
+00000C1C D636FF00            1465  	andi 0x000000FF, r22, r6
+00000C20 0142                1466  	mov 0x00000001, r8
+00000C22 003A                1467  	mov 0x00000000, r7
+00000C24 80FF0000            1468  	jarl _Can_RamTst_WalkPath_Algorithm, r31
+00000C28                     1469  .BB.LABEL.14_14:	; if_break_bb143
+00000C28                     1470  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 0
+00000C28 0AA8                1471  	mov r10, r21
+00000C2A                     1472  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2709
+00000C2A D636FF00            1473  	andi 0x000000FF, r22, r6
+00000C2E 00A2                1474  	mov 0x00000000, r20
+00000C30 1438                1475  	mov r20, r7
+00000C32 1440                1476  	mov r20, r8
+00000C34 80FF0000            1477  	jarl _Can_RamTst_Set_RAMData, r31
+00000C38                     1478  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2712
+00000C38 40160000            1479  	movhi HIGHW1(#_Can_GaaRegs+0x00000004), r0, r2
+00000C3C 22170100            1480  	ld.w LOWW(#_Can_GaaRegs+0x00000004)[r2], r2
+00000C40 62076D04            1481  	st.w r0, 0x0000046C[r2]
+00000C44 204E1400            1482  	movea 0x00000014, r0, r9
+00000C48 0340                1483  	mov r3, r8
+00000C4A 013A                1484  	mov 0x00000001, r7
+00000C4C                     1485  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2718
+00000C4C 1430                1486  	mov r20, r6
+00000C4E 80FF0000            1487  	jarl _Can_GlobalModeChange, r31
+00000C52                     1488  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2722
+00000C52 6052                1489  	cmp 0x00000000, r10
+00000C54 8A05                1490  	bnz9 .BB.LABEL.14_16
+00000C56                     1491  .BB.LABEL.14_15:	; if_else_bb160
+00000C56                     1492  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 0
+00000C56 204E1400            1493  	movea 0x00000014, r0, r9
+00000C5A 0340                1494  	mov r3, r8
+00000C5C 053A                1495  	mov 0x00000005, r7
+00000C5E 0032                1496  	mov 0x00000000, r6
+00000C60                     1497  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2733
+00000C60 80FF0000            1498  	jarl _Can_GlobalModeChange, r31
+00000C64                     1499  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2737
+00000C64 6052                1500  	cmp 0x00000000, r10
+00000C66 8205                1501  	bz9 .BB.LABEL.14_17
+00000C68                     1502  .BB.LABEL.14_16:	; if_then_bb168
+00000C68                     1503  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 0
+00000C68 01AA                1504  	mov 0x00000001, r21
+00000C6A 1530                1505  	mov r21, r6
+00000C6C 1538                1506  	mov r21, r7
+00000C6E 80FF0000            1507  	jarl _Dem_ReportErrorStatus, r31
+00000C72                     1508  .BB.LABEL.14_17:	; if_break_bb175
+00000C72                     1509  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2760
+00000C72 40160000            1510  	movhi HIGHW1(#_Can_GulPageID), r0, r2
+00000C76 62070100            1511  	st.w r0, LOWW(#_Can_GulPageID)[r2]
+00000C7A                     1512  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2762
+00000C7A 40160000            1513  	movhi HIGHW1(#_Can_GblInitialized), r0, r2
+00000C7E 42070000            1514  	st.b r0, LOWW(#_Can_GblInitialized)[r2]
+00000C82                     1515  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2765
+00000C82 D556FF00            1516  	andi 0x000000FF, r21, r10
+00000C86 42063F0F            1517  	dispose 0x00000004, 0x00000079, [r31]
+00000C8A                     1518  _Can_CheckHWConsistency:
+00000C8A                     1519  	.stack _Can_CheckHWConsistency = 8
+00000C8A                     1520  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2820
+00000C8A 80072108            1521  	prepare 0x00000041, 0x00000000
+00000C8E                     1522  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2832
+00000C8E 40160000            1523  	movhi HIGHW1(#_Can_GblInitialized), r0, r2
+00000C92 82170100            1524  	ld.bu LOWW(#_Can_GblInitialized)[r2], r2
+00000C96 6112                1525  	cmp 0x00000001, r2
+00000C98 06A0                1526  	mov r6, r20
+00000C9A 8A05                1527  	bnz9 .BB.LABEL.15_2
+00000C9C                     1528  .BB.LABEL.15_1:	; entry.if_break_bb_crit_edge
+00000C9C                     1529  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 0
+00000C9C 0052                1530  	mov 0x00000000, r10
+00000C9E 8505                1531  	br9 .BB.LABEL.15_3
+00000CA0                     1532  .BB.LABEL.15_2:	; if_then_bb
+00000CA0 054A                1533  	mov 0x00000005, r9
+00000CA2 20461100            1534  	movea 0x00000011, r0, r8
+00000CA6 003A                1535  	mov 0x00000000, r7
+00000CA8 20365000            1536  	movea 0x00000050, r0, r6
+00000CAC                     1537  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2836
+00000CAC 80FF0000            1538  	jarl _Det_ReportError, r31
+00000CB0 0152                1539  	mov 0x00000001, r10
+00000CB2                     1540  .BB.LABEL.15_3:	; if_break_bb
+00000CB2                     1541  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2847
+00000CB2 61A2                1542  	cmp 0x00000001, r20
+00000CB4 8305                1543  	bnh9 .BB.LABEL.15_5
+00000CB6                     1544  .BB.LABEL.15_4:	; if_then_bb20
+00000CB6                     1545  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 0
+00000CB6 0D4A                1546  	mov 0x0000000D, r9
+00000CB8 20461100            1547  	movea 0x00000011, r0, r8
+00000CBC 003A                1548  	mov 0x00000000, r7
+00000CBE 20365000            1549  	movea 0x00000050, r0, r6
+00000CC2                     1550  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2851
+00000CC2 80FF0000            1551  	jarl _Det_ReportError, r31
+00000CC6 0152                1552  	mov 0x00000001, r10
+00000CC8                     1553  .BB.LABEL.15_5:	; if_break_bb23
+00000CC8                     1554  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2861
+00000CC8 6152                1555  	cmp 0x00000001, r10
+00000CCA 8205                1556  	bz9 .BB.LABEL.15_9
+00000CCC                     1557  .BB.LABEL.15_6:	; if_then_bb29
+00000CCC                     1558  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2865
+00000CCC 60A2                1559  	cmp 0x00000000, r20
+00000CCE 8A05                1560  	bnz9 .BB.LABEL.15_8
+00000CD0                     1561  .BB.LABEL.15_7:	; if_then_bb34
+00000CD0                     1562  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2867
+00000CD0 80FF0000            1563  	jarl _Can_CheckConsistencyStatic.1, r31
+00000CD4 40063F08            1564  	dispose 0x00000000, 0x00000041, [r31]
+00000CD8                     1565  .BB.LABEL.15_8:	; if_else_bb36
+00000CD8                     1566  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2872
+00000CD8 80FF0000            1567  	jarl _Can_CheckConsistencyDynamic.1, r31
+00000CDC                     1568  .BB.LABEL.15_9:	; if_break_bb40
+00000CDC                     1569  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2882
+00000CDC 40063F08            1570  	dispose 0x00000000, 0x00000041, [r31]
+00000CE0                     1571  _Can_CheckConsistencyStatic.1:
+00000CE0                     1572  	.stack _Can_CheckConsistencyStatic.1 = 0
+00000CE0                     1573  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2932
+00000CE0 0052                1574  	mov 0x00000000, r10
+00000CE2 0A10                1575  	mov r10, r2
+00000CE4                     1576  .BB.LABEL.16_1:	; bb
+00000CE4                     1577  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2953
+00000CE4 402E0000            1578  	movhi HIGHW1(#_Can_GpConfig), r0, r5
+00000CE8 252F0100            1579  	ld.w LOWW(#_Can_GpConfig)[r5], r5
+00000CEC 252F0500            1580  	ld.w 0x00000004[r5], r5
+00000CF0                     1581  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2958
+00000CF0 C236FF00            1582  	andi 0x000000FF, r2, r6
+00000CF4                     1583  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2962
+00000CF4 0638                1584  	mov r6, r7
+00000CF6 C53A                1585  	shl 0x00000005, r7
+00000CF8 C539                1586  	add r5, r7
+00000CFA 0640                1587  	mov r6, r8
+00000CFC FC474002            1588  	mul 0x0000001C, r8, r0
+00000D00                     1589  	mov #_Can_GaaRegs, r9
+00000D00 290600000000            -- mov         0x0,r9
+00000D06 C849                1590  	add r8, r9
+00000D08 29470500            1591  	ld.w 0x00000004[r9], r8
+00000D0C 28478500            1592  	ld.w 0x00000084[r8], r8
+00000D10 273F0900            1593  	ld.w 0x00000008[r7], r7
+00000D14 E741                1594  	cmp r7, r8
+00000D16                     1595  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2964
+00000D16 E1571453            1596  	cmov 0x0000000A, 0x00000001, r10, r10
+00000D1A                     1597  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2978
+00000D1A 293F0500            1598  	ld.w 0x00000004[r9], r7
+00000D1E 273FFD04            1599  	ld.w 0x000004FC[r7], r7
+00000D22 613A                1600  	cmp 0x00000001, r7
+00000D24 8A05                1601  	bnz9 .BB.LABEL.16_3
+00000D26                     1602  .BB.LABEL.16_2:	; if_else_bb38
+00000D26                     1603  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2986
+00000D26 C23EFF00            1604  	andi 0x000000FF, r2, r7
+00000D2A FC3F4002            1605  	mul 0x0000001C, r7, r0
+00000D2E                     1606  	mov #_Can_GaaRegs, r8
+00000D2E 280600000000            -- mov         0x0,r8
+00000D34 C741                1607  	add r7, r8
+00000D36 283F0500            1608  	ld.w 0x00000004[r8], r7
+00000D3A 273F7504            1609  	ld.w 0x00000474[r7], r7
+00000D3E 603A                1610  	cmp 0x00000000, r7
+00000D40 8205                1611  	bz9 .BB.LABEL.16_4
+00000D42                     1612  .BB.LABEL.16_3:	; if_then_bb49
+00000D42                     1613  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 0
+00000D42 0152                1614  	mov 0x00000001, r10
+00000D44                     1615  .BB.LABEL.16_4:	; if_break_bb52
+00000D44                     1616  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 3006
+00000D44 CA3EFF00            1617  	andi 0x000000FF, r10, r7
+00000D48 613A                1618  	cmp 0x00000001, r7
+00000D4A E2070100            1619  	bz17 .BB.LABEL.16_20
+00000D4E                     1620  .BB.LABEL.16_5:	; if_break_bb52.bb84_crit_edge
+00000D4E                     1621  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 0
+00000D4E 003A                1622  	mov 0x00000000, r7
+00000D50 8505                1623  	br9 .BB.LABEL.16_7
+00000D52                     1624  .BB.LABEL.16_6:	; bb59
+00000D52                     1625  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 3011
+00000D52 0648                1626  	mov r6, r9
+00000D54 C54A                1627  	shl 0x00000005, r9
+00000D56 C549                1628  	add r5, r9
+00000D58 0758                1629  	mov r7, r11
+00000D5A C25A                1630  	shl 0x00000002, r11
+00000D5C CB49                1631  	add r11, r9
+00000D5E CB41                1632  	add r11, r8
+00000D60 28479D00            1633  	ld.w 0x0000009C[r8], r8
+00000D64 294F0D00            1634  	ld.w 0x0000000C[r9], r9
+00000D68 E941                1635  	cmp r9, r8
+00000D6A                     1636  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 3014
+00000D6A E1571453            1637  	cmov 0x0000000A, 0x00000001, r10, r10
+00000D6E 413A                1638  	add 0x00000001, r7
+00000D70                     1639  .BB.LABEL.16_7:	; bb84
+00000D70                     1640  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 3008
+00000D70 C246FF00            1641  	andi 0x000000FF, r2, r8
+00000D74 FC474002            1642  	mul 0x0000001C, r8, r0
+00000D78                     1643  	mov #_Can_GaaRegs, r9
+00000D78 290600000000            -- mov         0x0,r9
+00000D7E C849                1644  	add r8, r9
+00000D80 0640                1645  	mov r6, r8
+00000D82 C542                1646  	shl 0x00000005, r8
+00000D84 C541                1647  	add r5, r8
+00000D86 A8470100            1648  	ld.bu 0x00000001[r8], r8
+00000D8A E839                1649  	cmp r8, r7
+00000D8C 29470500            1650  	ld.w 0x00000004[r9], r8
+00000D90 8105                1651  	bl9 .BB.LABEL.16_6
+00000D92                     1652  .BB.LABEL.16_8:	; bb93
+00000D92                     1653  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 3022
+00000D92 283F9900            1654  	ld.w 0x00000098[r8], r7
+00000D96 C7060001            1655  	andi 0x00000100, r7, r0
+00000D9A                     1656  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 3025
+00000D9A E1571453            1657  	cmov 0x0000000A, 0x00000001, r10, r10
+00000D9E 003A                1658  	mov 0x00000000, r7
+00000DA0 0740                1659  	mov r7, r8
+00000DA2 8505                1660  	br9 .BB.LABEL.16_19
+00000DA4                     1661  .BB.LABEL.16_9:	; bb108
+00000DA4                     1662  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 3041
+00000DA4 C25EFF00            1663  	andi 0x000000FF, r2, r11
+00000DA8 FC5F4002            1664  	mul 0x0000001C, r11, r0
+00000DAC                     1665  	mov #_Can_GaaRegs, r12
+00000DAC 2C0600000000            -- mov         0x0,r12
+00000DB2 CB61                1666  	add r11, r12
+00000DB4 2C5F0500            1667  	ld.w 0x00000004[r12], r11
+00000DB8 6B479900            1668  	st.w r8, 0x00000098[r11]
+00000DBC 005A                1669  	mov 0x00000000, r11
+00000DBE 8505                1670  	br9 .BB.LABEL.16_16
+00000DC0                     1671  .BB.LABEL.16_10:	; bb116
+00000DC0                     1672  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 3049
+00000DC0 0660                1673  	mov r6, r12
+00000DC2 C562                1674  	shl 0x00000005, r12
+00000DC4 C561                1675  	add r5, r12
+00000DC6 2C671900            1676  	ld.w 0x00000018[r12], r12
+00000DCA                     1677  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 3052
+00000DCA 0768                1678  	mov r7, r13
+00000DCC C46A                1679  	shl 0x00000004, r13
+00000DCE CC69                1680  	add r12, r13
+00000DD0 C276FF00            1681  	andi 0x000000FF, r2, r14
+00000DD4 FC774002            1682  	mul 0x0000001C, r14, r0
+00000DD8                     1683  	mov #_Can_GaaRegs, r15
+00000DD8 2F0600000000            -- mov         0x0,r15
+00000DDE CE79                1684  	add r14, r15
+00000DE0 2F770900            1685  	ld.w 0x00000008[r15], r14
+00000DE4 0B78                1686  	mov r11, r15
+00000DE6 C47A                1687  	shl 0x00000004, r15
+00000DE8 CF71                1688  	add r15, r14
+00000DEA 2E770100            1689  	ld.w 0x00000000[r14], r14
+00000DEE 2D6F0100            1690  	ld.w 0x00000000[r13], r13
+00000DF2 ED71                1691  	cmp r13, r14
+00000DF4 8A05                1692  	bnz9 .BB.LABEL.16_14
+00000DF6                     1693  .BB.LABEL.16_11:	; bb136
+00000DF6                     1694  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 0
+00000DF6 0768                1695  	mov r7, r13
+00000DF8 C46A                1696  	shl 0x00000004, r13
+00000DFA CC69                1697  	add r12, r13
+00000DFC C276FF00            1698  	andi 0x000000FF, r2, r14
+00000E00 FC774002            1699  	mul 0x0000001C, r14, r0
+00000E04                     1700  	mov #_Can_GaaRegs, r15
+00000E04 2F0600000000            -- mov         0x0,r15
+00000E0A CE79                1701  	add r14, r15
+00000E0C 2F770900            1702  	ld.w 0x00000008[r15], r14
+00000E10 0B78                1703  	mov r11, r15
+00000E12 C47A                1704  	shl 0x00000004, r15
+00000E14 CF71                1705  	add r15, r14
+00000E16 2E770500            1706  	ld.w 0x00000004[r14], r14
+00000E1A 2D6F0500            1707  	ld.w 0x00000004[r13], r13
+00000E1E ED71                1708  	cmp r13, r14
+00000E20 8A05                1709  	bnz9 .BB.LABEL.16_14
+00000E22                     1710  .BB.LABEL.16_12:	; bb157
+00000E22 0768                1711  	mov r7, r13
+00000E24 C46A                1712  	shl 0x00000004, r13
+00000E26 CC69                1713  	add r12, r13
+00000E28 C266FF00            1714  	andi 0x000000FF, r2, r12
+00000E2C FC674002            1715  	mul 0x0000001C, r12, r0
+00000E30                     1716  	mov #_Can_GaaRegs, r14
+00000E30 2E0600000000            -- mov         0x0,r14
+00000E36 CC71                1717  	add r12, r14
+00000E38 2E670900            1718  	ld.w 0x00000008[r14], r12
+00000E3C 0B70                1719  	mov r11, r14
+00000E3E C472                1720  	shl 0x00000004, r14
+00000E40 CC71                1721  	add r12, r14
+00000E42 2E670900            1722  	ld.w 0x00000008[r14], r12
+00000E46 2D770900            1723  	ld.w 0x00000008[r13], r14
+00000E4A 486A                1724  	add 0x00000008, r13
+00000E4C EE61                1725  	cmp r14, r12
+00000E4E 8A05                1726  	bnz9 .BB.LABEL.16_14
+00000E50                     1727  .BB.LABEL.16_13:	; bb183
+00000E50 C266FF00            1728  	andi 0x000000FF, r2, r12
+00000E54 FC674002            1729  	mul 0x0000001C, r12, r0
+00000E58                     1730  	mov #_Can_GaaRegs, r14
+00000E58 2E0600000000            -- mov         0x0,r14
+00000E5E CC71                1731  	add r12, r14
+00000E60 2E670900            1732  	ld.w 0x00000008[r14], r12
+00000E64 0B70                1733  	mov r11, r14
+00000E66 C472                1734  	shl 0x00000004, r14
+00000E68 CC71                1735  	add r12, r14
+00000E6A 2E670D00            1736  	ld.w 0x0000000C[r14], r12
+00000E6E 2D6F0500            1737  	ld.w 0x00000004[r13], r13
+00000E72 ED61                1738  	cmp r13, r12
+00000E74 8205                1739  	bz9 .BB.LABEL.16_15
+00000E76                     1740  .BB.LABEL.16_14:	; if_then_bb210
+00000E76 0152                1741  	mov 0x00000001, r10
+00000E78                     1742  .BB.LABEL.16_15:	; if_break_bb212
+00000E78                     1743  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 3071
+00000E78 413A                1744  	add 0x00000001, r7
+00000E7A                     1745  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 3070
+00000E7A 415A                1746  	add 0x00000001, r11
+00000E7C                     1747  .BB.LABEL.16_16:	; bb217
+00000E7C                     1748  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 3045
+00000E7C 6F5A                1749  	cmp 0x0000000F, r11
+00000E7E 8B05                1750  	bh9 .BB.LABEL.16_18
+00000E80                     1751  .BB.LABEL.16_17:	; bb221
+00000E80                     1752  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 0
+00000E80 E9670100            1753  	ld.hu 0x00000000[r9], r12
+00000E84 EC39                1754  	cmp r12, r7
+00000E86 8105                1755  	bl9 .BB.LABEL.16_10
+00000E88                     1756  .BB.LABEL.16_18:	; bb237
+00000E88                     1757  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 3074
+00000E88 4142                1758  	add 0x00000001, r8
+00000E8A                     1759  .BB.LABEL.16_19:	; bb240
+00000E8A                     1760  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 3038
+00000E8A 0648                1761  	mov r6, r9
+00000E8C C54A                1762  	shl 0x00000005, r9
+00000E8E C549                1763  	add r5, r9
+00000E90 E95F0300            1764  	ld.hu 0x00000002[r9], r11
+00000E94 424A                1765  	add 0x00000002, r9
+00000E96 EB39                1766  	cmp r11, r7
+00000E98 8105                1767  	bl9 .BB.LABEL.16_9
+00000E9A                     1768  .BB.LABEL.16_20:	; if_break_bb251
+00000E9A                     1769  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 3084
+00000E9A CA3EFF00            1770  	andi 0x000000FF, r10, r7
+00000E9E 613A                1771  	cmp 0x00000001, r7
+00000EA0 8205                1772  	bz9 .BB.LABEL.16_24
+00000EA2                     1773  .BB.LABEL.16_21:	; if_then_bb257
+00000EA2                     1774  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 3089
+00000EA2 0638                1775  	mov r6, r7
+00000EA4 C53A                1776  	shl 0x00000005, r7
+00000EA6 C539                1777  	add r5, r7
+00000EA8 C246FF00            1778  	andi 0x000000FF, r2, r8
+00000EAC FC474002            1779  	mul 0x0000001C, r8, r0
+00000EB0                     1780  	mov #_Can_GaaRegs, r9
+00000EB0 290600000000            -- mov         0x0,r9
+00000EB6 C849                1781  	add r8, r9
+00000EB8 29470500            1782  	ld.w 0x00000004[r9], r8
+00000EBC 2847A500            1783  	ld.w 0x000000A4[r8], r8
+00000EC0 273F0500            1784  	ld.w 0x00000004[r7], r7
+00000EC4 E741                1785  	cmp r7, r8
+00000EC6                     1786  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 3091
+00000EC6 E1571453            1787  	cmov 0x0000000A, 0x00000001, r10, r10
+00000ECA 003A                1788  	mov 0x00000000, r7
+00000ECC 8505                1789  	br9 .BB.LABEL.16_23
+00000ECE                     1790  .BB.LABEL.16_22:	; bb274
+00000ECE                     1791  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 3103
+00000ECE 0640                1792  	mov r6, r8
+00000ED0 C542                1793  	shl 0x00000005, r8
+00000ED2 C541                1794  	add r5, r8
+00000ED4 C24EFF00            1795  	andi 0x000000FF, r2, r9
+00000ED8 FC4F4002            1796  	mul 0x0000001C, r9, r0
+00000EDC                     1797  	mov #_Can_GaaRegs, r11
+00000EDC 2B0600000000            -- mov         0x0,r11
+00000EE2 C959                1798  	add r9, r11
+00000EE4 2B4F0500            1799  	ld.w 0x00000004[r11], r9
+00000EE8 0758                1800  	mov r7, r11
+00000EEA C25A                1801  	shl 0x00000002, r11
+00000EEC CB49                1802  	add r11, r9
+00000EEE 294F9103            1803  	ld.w 0x00000390[r9], r9
+00000EF2 28471500            1804  	ld.w 0x00000014[r8], r8
+00000EF6 CB41                1805  	add r11, r8
+00000EF8 28470100            1806  	ld.w 0x00000000[r8], r8
+00000EFC E849                1807  	cmp r8, r9
+00000EFE                     1808  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 3107
+00000EFE E1571453            1809  	cmov 0x0000000A, 0x00000001, r10, r10
+00000F02 413A                1810  	add 0x00000001, r7
+00000F04                     1811  .BB.LABEL.16_23:	; bb299
+00000F04                     1812  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 3099
+00000F04 0640                1813  	mov r6, r8
+00000F06 C542                1814  	shl 0x00000005, r8
+00000F08 C541                1815  	add r5, r8
+00000F0A 88470100            1816  	ld.bu 0x00000000[r8], r8
+00000F0E E839                1817  	cmp r8, r7
+00000F10 8105                1818  	bl9 .BB.LABEL.16_22
+00000F12                     1819  .BB.LABEL.16_24:	; if_break_bb310
+00000F12                     1820  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 3121
+00000F12 4112                1821  	add 0x00000001, r2
+00000F14                     1822  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 2949
+00000F14 C206FF00            1823  	andi 0x000000FF, r2, r0
+00000F18 E2070100            1824  	bz17 .BB.LABEL.16_1
+00000F1C                     1825  .BB.LABEL.16_25:	; bb318
+00000F1C                     1826  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 3130
+00000F1C 8A00                1827  	zxb r10
+00000F1E 7F00                1828  	jmp [r31]
+00000F20                     1829  _Can_CheckConsistencyDynamic.1:
+00000F20                     1830  	.stack _Can_CheckConsistencyDynamic.1 = 24
+00000F20                     1831  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 3171
+00000F20 8007218F            1832  	prepare 0x00000479, 0x00000000
+00000F24 00A2                1833  	mov 0x00000000, r20
+00000F26 14A8                1834  	mov r20, r21
+00000F28 80070000            1835  	jr .BB.LABEL.17_18
+00000F2C                     1836  .BB.LABEL.17_1:	; bb
+00000F2C                     1837  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 3191
+00000F2C D5B6FF00            1838  	andi 0x000000FF, r21, r22
+00000F30 1610                1839  	mov r22, r2
+00000F32 EC174402            1840  	mul 0x0000002C, r2, r0
+00000F36 402E0000            1841  	movhi HIGHW1(#_Can_GpPCController), r0, r5
+00000F3A 25370100            1842  	ld.w LOWW(#_Can_GpPCController)[r5], r6
+00000F3E C231                1843  	add r2, r6
+00000F40 A6BF0100            1844  	ld.bu 0x00000001[r6], r23
+00000F44                     1845  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 3194
+00000F44 252F0100            1846  	ld.w LOWW(#_Can_GpPCController)[r5], r5
+00000F48 C229                1847  	add r2, r5
+00000F4A 85C70300            1848  	ld.bu 0x00000002[r5], r24
+00000F4E                     1849  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 3198
+00000F4E 80FF0000            1850  	jarl _SchM_Enter_Can_CAN_INTERRUPT_CONTROL_PROTECTION, r31
+00000F52                     1851  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 3200
+00000F52 1810                1852  	mov r24, r2
+00000F54 C412                1853  	shl 0x00000004, r2
+00000F56 F72E1C00            1854  	mulhi 0x0000001C, r23, r5
+00000F5A                     1855  	mov #_Can_GaaRegs, r6
+00000F5A 260600000000            -- mov         0x0,r6
+00000F60 C531                1856  	add r5, r6
+00000F62 262F0500            1857  	ld.w 0x00000004[r6], r5
+00000F66 C229                1858  	add r2, r5
+00000F68 25170100            1859  	ld.w 0x00000000[r5], r2
+00000F6C C4B2                1860  	shl 0x00000004, r22
+00000F6E                     1861  	mov #_Can_GaaMirrorChannelReg, r5
+00000F6E 250600000000            -- mov         0x0,tp
+00000F74 D629                1862  	add r22, r5
+00000F76 252F0100            1863  	ld.w 0x00000000[r5], r5
+00000F7A E511                1864  	cmp r5, r2
+00000F7C 8A05                1865  	bnz9 .BB.LABEL.17_3
+00000F7E                     1866  .BB.LABEL.17_2:	; bb37
+00000F7E                     1867  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 0
+00000F7E D516FF00            1868  	andi 0x000000FF, r21, r2
+00000F82 C412                1869  	shl 0x00000004, r2
+00000F84                     1870  	mov #_Can_GaaMirrorChannelReg, r5
+00000F84 250600000000            -- mov         0x0,tp
+00000F8A C229                1871  	add r2, r5
+00000F8C F7161C00            1872  	mulhi 0x0000001C, r23, r2
+00000F90                     1873  	mov #_Can_GaaRegs, r6
+00000F90 260600000000            -- mov         0x0,r6
+00000F96 C231                1874  	add r2, r6
+00000F98 26170500            1875  	ld.w 0x00000004[r6], r2
+00000F9C 1830                1876  	mov r24, r6
+00000F9E C432                1877  	shl 0x00000004, r6
+00000FA0 C611                1878  	add r6, r2
+00000FA2 22170500            1879  	ld.w 0x00000004[r2], r2
+00000FA6 252F0500            1880  	ld.w 0x00000004[r5], r5
+00000FAA E511                1881  	cmp r5, r2
+00000FAC 8205                1882  	bz9 .BB.LABEL.17_4
+00000FAE                     1883  .BB.LABEL.17_3:	; if_then_bb
+00000FAE 01A2                1884  	mov 0x00000001, r20
+00000FB0                     1885  .BB.LABEL.17_4:	; if_break_bb
+00000FB0                     1886  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 3219
+00000FB0 D516FF00            1887  	andi 0x000000FF, r21, r2
+00000FB4 C412                1888  	shl 0x00000004, r2
+00000FB6                     1889  	mov #_Can_GaaMirrorChannelReg, r5
+00000FB6 250600000000            -- mov         0x0,tp
+00000FBC C229                1890  	add r2, r5
+00000FBE F7161C00            1891  	mulhi 0x0000001C, r23, r2
+00000FC2                     1892  	mov #_Can_GaaRegs, r6
+00000FC2 260600000000            -- mov         0x0,r6
+00000FC8 C231                1893  	add r2, r6
+00000FCA 26170D00            1894  	ld.w 0x0000000C[r6], r2
+00000FCE 1830                1895  	mov r24, r6
+00000FD0 C532                1896  	shl 0x00000005, r6
+00000FD2 C611                1897  	add r6, r2
+00000FD4 22170500            1898  	ld.w 0x00000004[r2], r2
+00000FD8 252F0900            1899  	ld.w 0x00000008[r5], r5
+00000FDC E511                1900  	cmp r5, r2
+00000FDE 8A05                1901  	bnz9 .BB.LABEL.17_6
+00000FE0                     1902  .BB.LABEL.17_5:	; bb83
+00000FE0                     1903  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 0
+00000FE0 D516FF00            1904  	andi 0x000000FF, r21, r2
+00000FE4 C412                1905  	shl 0x00000004, r2
+00000FE6                     1906  	mov #_Can_GaaMirrorChannelReg, r5
+00000FE6 250600000000            -- mov         0x0,tp
+00000FEC C229                1907  	add r2, r5
+00000FEE F7161C00            1908  	mulhi 0x0000001C, r23, r2
+00000FF2                     1909  	mov #_Can_GaaRegs, r6
+00000FF2 260600000000            -- mov         0x0,r6
+00000FF8 C231                1910  	add r2, r6
+00000FFA 26170D00            1911  	ld.w 0x0000000C[r6], r2
+00000FFE C5C2                1912  	shl 0x00000005, r24
+00001000 D811                1913  	add r24, r2
+00001002 22170100            1914  	ld.w 0x00000000[r2], r2
+00001006 252F0D00            1915  	ld.w 0x0000000C[r5], r5
+0000100A E511                1916  	cmp r5, r2
+0000100C 8205                1917  	bz9 .BB.LABEL.17_7
+0000100E                     1918  .BB.LABEL.17_6:	; if_then_bb111
+0000100E 01A2                1919  	mov 0x00000001, r20
+00001010                     1920  .BB.LABEL.17_7:	; if_break_bb113
+00001010                     1921  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 3238
+00001010 80FF0000            1922  	jarl _SchM_Exit_Can_CAN_INTERRUPT_CONTROL_PROTECTION, r31
+00001014 00B2                1923  	mov 0x00000000, r22
+00001016 8505                1924  	br9 .BB.LABEL.17_15
+00001018                     1925  .BB.LABEL.17_8:	; bb114
+00001018                     1926  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 3247
+00001018 40160000            1927  	movhi HIGHW1(#_Can_GpHohConfig), r0, r2
+0000101C 22C70100            1928  	ld.w LOWW(#_Can_GpHohConfig)[r2], r24
+00001020                     1929  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 3251
+00001020 80FF0000            1930  	jarl _SchM_Enter_Can_CAN_INTERRUPT_CONTROL_PROTECTION, r31
+00001024                     1931  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 3253
+00001024 1610                1932  	mov r22, r2
+00001026 F8174002            1933  	mul 0x00000018, r2, r0
+0000102A D811                1934  	add r24, r2
+0000102C A2170500            1935  	ld.bu 0x00000005[r2], r2
+00001030 D52EFF00            1936  	andi 0x000000FF, r21, r5
+00001034 E229                1937  	cmp r2, r5
+00001036 8A05                1938  	bnz9 .BB.LABEL.17_14
+00001038                     1939  .BB.LABEL.17_9:	; if_then_bb127
+00001038                     1940  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 3255
+00001038 1610                1941  	mov r22, r2
+0000103A F8174002            1942  	mul 0x00000018, r2, r0
+0000103E C2C1                1943  	add r2, r24
+00001040 98171100            1944  	ld.bu 0x00000010[r24], r2
+00001044 C212                1945  	shl 0x00000002, r2
+00001046 F72E1C00            1946  	mulhi 0x0000001C, r23, r5
+0000104A                     1947  	mov #_Can_GaaRegs, r6
+0000104A 260600000000            -- mov         0x0,r6
+00001050 C531                1948  	add r5, r6
+00001052 382F0D00            1949  	ld.w 0x0000000C[r24], r5
+00001056                     1950  	mov #_Can_GaaMirrorHohReg, r7
+00001056 270600000000            -- mov         0x0,r7
+0000105C 632A                1951  	cmp 0x00000003, r5
+0000105E 262F0500            1952  	ld.w 0x00000004[r6], r5
+00001062 1630                1953  	mov r22, r6
+00001064 EC374002            1954  	mul 0x0000000C, r6, r0
+00001068 8A05                1955  	bnz9 .BB.LABEL.17_11
+0000106A                     1956  .BB.LABEL.17_10:	; switch_clause_bb
+0000106A                     1957  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 3264
+0000106A C639                1958  	add r6, r7
+0000106C C511                1959  	add r5, r2
+0000106E 2217B900            1960  	ld.w 0x000000B8[r2], r2
+00001072 272F0100            1961  	ld.w 0x00000000[r7], r5
+00001076 8505                1962  	br9 .BB.LABEL.17_12
+00001078                     1963  .BB.LABEL.17_11:	; switch_clause_bb154
+00001078                     1964  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 3291
+00001078 C639                1965  	add r6, r7
+0000107A C511                1966  	add r5, r2
+0000107C 22171901            1967  	ld.w 0x00000118[r2], r2
+00001080 272F0900            1968  	ld.w 0x00000008[r7], r5
+00001084                     1969  .BB.LABEL.17_12:	; switch_clause_bb154
+00001084                     1970  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 0
+00001084 E511                1971  	cmp r5, r2
+00001086 8205                1972  	bz9 .BB.LABEL.17_14
+00001088                     1973  .BB.LABEL.17_13:	; if_then_bb175
+00001088 01A2                1974  	mov 0x00000001, r20
+0000108A                     1975  .BB.LABEL.17_14:	; if_break_bb179
+0000108A                     1976  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 3310
+0000108A 80FF0000            1977  	jarl _SchM_Exit_Can_CAN_INTERRUPT_CONTROL_PROTECTION, r31
+0000108E 41B2                1978  	add 0x00000001, r22
+00001090                     1979  .BB.LABEL.17_15:	; bb182
+00001090                     1980  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 3242
+00001090 63B2                1981  	cmp 0x00000003, r22
+00001092 8B05                1982  	bh9 .BB.LABEL.17_17
+00001094                     1983  .BB.LABEL.17_16:	; bb182
+00001094                     1984  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 0
+00001094 D406FF00            1985  	andi 0x000000FF, r20, r0
+00001098 8205                1986  	bz9 .BB.LABEL.17_8
+0000109A                     1987  .BB.LABEL.17_17:	; bb199
+0000109A 41AA                1988  	add 0x00000001, r21
+0000109C                     1989  .BB.LABEL.17_18:	; bb202
+0000109C                     1990  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 3186
+0000109C D506FF00            1991  	andi 0x000000FF, r21, r0
+000010A0 E2070100            1992  	bz17 .BB.LABEL.17_1
+000010A4                     1993  .BB.LABEL.17_19:	; bb202.bb230_crit_edge
+000010A4                     1994  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 0
+000010A4 00AA                1995  	mov 0x00000000, r21
+000010A6 8505                1996  	br9 .BB.LABEL.17_21
+000010A8                     1997  .BB.LABEL.17_20:	; bb209
+000010A8                     1998  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 3324
+000010A8 80FF0000            1999  	jarl _SchM_Enter_Can_CAN_INTERRUPT_CONTROL_PROTECTION, r31
+000010AC                     2000  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 3326
+000010AC D516FF00            2001  	andi 0x000000FF, r21, r2
+000010B0 0228                2002  	mov r2, r5
+000010B2 C22A                2003  	shl 0x00000002, r5
+000010B4                     2004  	mov #_Can_GaaMirrorGlobalReg, r6
+000010B4 260600000000            -- mov         0x0,r6
+000010BA C531                2005  	add r5, r6
+000010BC FC174002            2006  	mul 0x0000001C, r2, r0
+000010C0                     2007  	mov #_Can_GaaRegs, r5
+000010C0 250600000000            -- mov         0x0,tp
+000010C6 C229                2008  	add r2, r5
+000010C8 25170500            2009  	ld.w 0x00000004[r5], r2
+000010CC 22B78900            2010  	ld.w 0x00000088[r2], r22
+000010D0 26BF0100            2011  	ld.w 0x00000000[r6], r23
+000010D4                     2012  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 3335
+000010D4 80FF0000            2013  	jarl _SchM_Exit_Can_CAN_INTERRUPT_CONTROL_PROTECTION, r31
+000010D8                     2014  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 3326
+000010D8 F7B1                2015  	cmp r23, r22
+000010DA                     2016  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 3329
+000010DA E1A714A3            2017  	cmov 0x0000000A, 0x00000001, r20, r20
+000010DE                     2018  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 3335
+000010DE 41AA                2019  	add 0x00000001, r21
+000010E0                     2020  .BB.LABEL.17_21:	; bb230
+000010E0                     2021  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 3317
+000010E0 D506FF00            2022  	andi 0x000000FF, r21, r0
+000010E4 8A05                2023  	bnz9 .BB.LABEL.17_23
+000010E6                     2024  .BB.LABEL.17_22:	; bb230
+000010E6                     2025  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 0
+000010E6 D406FF00            2026  	andi 0x000000FF, r20, r0
+000010EA 8205                2027  	bz9 .BB.LABEL.17_20
+000010EC                     2028  .BB.LABEL.17_23:	; bb248
+000010EC                     2029  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/can/src/Can.c", 3340
+000010EC D456FF00            2030  	andi 0x000000FF, r20, r10
+000010F0 40063F8F            2031  	dispose 0x00000000, 0x00000479, [r31]
+
+Section List
+Attr     Size                Name
+
+TEXT         4340 (000010F4) .text
+
+Command Line Parameter
+-Xcpu=g3kh -Xreg_mode=32 -Xep=callee -Xcharacter_set=none -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\diagnostic -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\parameter_store -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu\port -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu\uart -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu\iic -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\vehicle_data_to_mpu -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\power_manage -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\mcu_cpu_sync -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\remote_control -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\can_cycle_send -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\project_configure -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\sdk\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\commonLib\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\hal\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\icu\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Icu_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\vss -ID:\wk\sirun\project\dazhong\code\mcu_app\ASW\CDD_FVM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\EEIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanTSyn -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\StbM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CSM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\RSA -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\RandomGen\CTR_DRBG -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\MAC\CMAC -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\Hash\sha256 -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\dh -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\AES -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CryInterface -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\SecOC -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\NvM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\MemIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\Fee -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\WdgM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\WdgIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Wdg_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Gpt_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Fls_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\wdg\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\gpt\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\fls\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\IpduM -ID:\wk\sirun\project\dazhong\code\mcu_app\ASW\APP -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\BswM -ID:\wk\sirun\project\dazhong\code\mcu_app\ASW\BSW_Ext -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\Dcm -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanTp -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Dem -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Libraries\E2E -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Libraries\Crc -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\NmIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanNm -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config\RTE\Rte -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config\RTE\SchM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Libraries\IStd -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\EcuM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\ComM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanSM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\Com -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\PDUR -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\CommonInclude -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config\RH850F1K -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Extend\inc -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Kernel\inc -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Portable\Mcu -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Portable\Processor -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Adc_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Can_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Dio_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Mcu_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Port_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\adc\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\can\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\dio\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\general -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\mcu\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\port\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\CanGeneral\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\Det\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\MemIf\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\SchM\include -DRH850_F1KM_S1_2MB -Xprn_path=DefaultBuild -Xno_warning=50013 -oD:\wk\sirun\project\dazhong\code\mcu_app\Toolchain\CSPLUS_V81200\DefaultBuild\Can.obj D:\wk\sirun\project\dazhong\code\mcu_app\Toolchain\CSPLUS_V81200\DefaultBuild\Can.asm 
+

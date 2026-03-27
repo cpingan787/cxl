@@ -1,0 +1,386 @@
+RH850 Family Assembler V2.07.00.03 Assemble Source List
+
+OFFSET   CODE                  NO  SOURCE STATEMENT
+
+00000000                        1  #CC-RH Compiler RH850 Assembler Source
+00000000                        2  #@	CC-RH Version : V2.07.00  [06 Dec 2024]
+00000000                        3  #@	Command : ..\..\Bsw\SystemServices\BswM\BswM_DetCheck.c -oDefaultBuild\BswM_DetCheck.obj -Xcpu=g3kh -Xno_warning=20188,20111 -g -g_line -I..\..\Srcode\app\diagnostic -I..\..\Srcode\app\parameter_store -I..\..\Cpu\port -I..\..\Cpu\uart -I..\..\Cpu\iic -I..\..\Srcode\app\vehicle_data_to_mpu -I..\..\Srcode\app\power_manage -I..\..\Srcode\app\mcu_cpu_sync -I..\..\Srcode\app\remote_control -I..\..\Srcode\app\can_cycle_send -I..\..\Srcode\app\project_configure -I..\..\Srcode\sdk\include -I..\..\Srcode\commonLib\include -I..\..\Srcode\hal\include -I..\..\Bsw\Mcal\icu\include -I..\..\Bsw\Config\MCAL_Config\Icu_OutPut\include -I..\..\Bsw\Crypto\CRYPTO\vss -I..\..\ASW\CDD_FVM -I..\..\Bsw\Memory\EEIf -I..\..\Bsw\Communication\CAN\CanTSyn -I..\..\Bsw\SystemServices\StbM -I..\..\Bsw\Crypto\CSM -I..\..\Bsw\Crypto\CRYPTO\RSA -I..\..\Bsw\Crypto\CRYPTO\RandomGen\CTR_DRBG -I..\..\Bsw\Crypto\CRYPTO\MAC\CMAC -I..\..\Bsw\Crypto\CRYPTO\Hash\sha256 -I..\..\Bsw\Crypto\CRYPTO\dh -I..\..\Bsw\Crypto\CRYPTO\AES -I..\..\Bsw\Crypto\CRYPTO -I..\..\Bsw\Crypto\CryInterface -I..\..\Bsw\Communication\Common\SecOC -I..\..\Bsw\Memory\NvM -I..\..\Bsw\Memory\MemIf -I..\..\Bsw\Memory\Fee -I..\..\Bsw\SystemServices\WdgM -I..\..\Bsw\SystemServices\WdgIf -I..\..\Bsw\Config\MCAL_Config\Wdg_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Gpt_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Fls_OutPut\include -I..\..\Bsw\Mcal\wdg\include -I..\..\Bsw\Mcal\gpt\include -I..\..\Bsw\Mcal\fls\include -I..\..\Bsw\Communication\Common\IpduM -I..\..\ASW\APP -I..\..\Bsw\SystemServices\BswM -I..\..\ASW\BSW_Ext -I..\..\Bsw\Communication\Common\Dcm -I..\..\Bsw\Communication\CAN\CanTp -I..\..\Bsw\SystemServices\Dem -I..\..\Bsw\Libraries\E2E -I..\..\Bsw\Libraries\Crc -I..\..\Bsw\Communication\Common\NmIf -I..\..\Bsw\Communication\CAN\CanNm -I..\..\Bsw\Config\BSW_Config\RTE\Rte -I..\..\Bsw\Config\BSW_Config\RTE\SchM -I..\..\Bsw\Libraries\IStd -I..\..\Bsw\SystemServices\EcuM -I..\..\Bsw\SystemServices\ComM -I..\..\Bsw\Communication\CAN\CanSM -I..\..\Bsw\Communication\CAN\CanIf -I..\..\Bsw\Communication\Common\Com -I..\..\Bsw\Communication\Common\PDUR -I..\..\Cpu -I..\..\Bsw\CommonInclude -I..\..\Bsw\Config\BSW_Config -I..\..\Bsw\Config\BSW_Config\RH850F1K -I..\..\Bsw\SystemServices\Os\Extend\inc -I..\..\Bsw\SystemServices\Os\Kernel\inc -I..\..\Bsw\SystemServices\Os\Portable\Mcu -I..\..\Bsw\SystemServices\Os\Portable\Processor -I..\..\Bsw\Config\MCAL_Config\Adc_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Can_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Dio_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Mcu_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Port_OutPut\include -I..\..\Bsw\Mcal\adc\include -I..\..\Bsw\Mcal\can\include -I..\..\Bsw\Mcal\dio\include -I..\..\Bsw\Mcal\general -I..\..\Bsw\Mcal\mcu\include -I..\..\Bsw\Mcal\port\include -I..\..\Bsw\Mcal\stubs\CanGeneral\include -I..\..\Bsw\Mcal\stubs\Det\include -I..\..\Bsw\Mcal\stubs\MemIf\include -I..\..\Bsw\Mcal\stubs\SchM\include -DRH850_F1KM_S1_2MB -lang=c99 -Xfloat=fpu -Xround=zero -Xdiv -Xasm_path=DefaultBuild -Xasm_option=-Xprn_path=DefaultBuild -c -MAKEUD=DefaultBuild -Xexec_time=C:\Users\xlchen\AppData\Local\Temp\CSPlusBuildTool_ba700e1bc6754d04870582f4b0a27bfcp0osn3b1.w45
+00000000                        4  #@	compiled at Fri Mar 27 09:50:57 2026
+00000000                        5  
+00000000                        6  	.file "..\..\Bsw\SystemServices\BswM\BswM_DetCheck.c"
+00000000                        7  
+00000000                        8  	$reg_mode 32
+00000000                        9  	.dbl_size 8
+00000000                       10  
+00000000                       11  	.extern _BswM_RuntimeStatus
+00000000                       12  	.public _BswM_ChkBswMInitStatus
+00000000                       13  	.extern _Det_ReportError
+00000000                       14  	.public _BswM_DetChkCanSMInd
+00000000                       15  	.public _BswM_DetChkComMInd
+00000000                       16  	.public _BswM_DetChkComMInitRst
+00000000                       17  	.public _BswM_DetChkDcmUpdate
+00000000                       18  	.public _BswM_DetChkDcmModeCurState
+00000000                       19  	.public _BswM_DetChkEcuMCurWakeUp
+00000000                       20  	.public _BswM_DetChkRequestedState
+00000000                       21  	.public _BswM_DetChkEcuMCurState
+00000000                       22  	.public _BswM_DetChkNmCarWkUp
+00000000                       23  	.public _BswM_DetChkGenericRqst
+00000000                       24  	.extern _BswM_GetPartitionIdx
+00000000                       25  	.public _BswM_DetChkWgmParRst
+00000000                       26  
+00000000                       27  	.section .text, text
+00000000                       28  _BswM_ChkBswMInitStatus:
+00000000                       29  	.stack _BswM_ChkBswMInitStatus = 8
+00000000                       30  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 59
+00000000 80072108              31  	prepare 0x00000041, 0x00000000
+00000004                       32  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 63
+00000004 40160000              33  	movhi HIGHW1(#_BswM_RuntimeStatus+0x00000004), r0, r2
+00000008 22170100              34  	ld.w LOWW(#_BswM_RuntimeStatus+0x00000004)[r2], r2
+0000000C 6112                  35  	cmp 0x00000001, r2
+0000000E 0640                  36  	mov r6, r8
+00000010 8205                  37  	bz9 .BB.LABEL.1_2
+00000012                       38  .BB.LABEL.1_1:	; if_then_bb
+00000012                       39  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 0
+00000012 01A2                  40  	mov 0x00000001, r20
+00000014 003A                  41  	mov 0x00000000, r7
+00000016 20362A00              42  	movea 0x0000002A, r0, r6
+0000001A                       43  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 67
+0000001A 1448                  44  	mov r20, r9
+0000001C 80FF0000              45  	jarl _Det_ReportError, r31
+00000020 1450                  46  	mov r20, r10
+00000022 40063F08              47  	dispose 0x00000000, 0x00000041, [r31]
+00000026                       48  .BB.LABEL.1_2:	; if_break_bb
+00000026                       49  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 0
+00000026 0052                  50  	mov 0x00000000, r10
+00000028                       51  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 70
+00000028 40063F08              52  	dispose 0x00000000, 0x00000041, [r31]
+0000002C                       53  _BswM_DetChkCanSMInd:
+0000002C                       54  	.stack _BswM_DetChkCanSMInd = 8
+0000002C                       55  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 88
+0000002C 80072108              56  	prepare 0x00000041, 0x00000000
+00000030 06A0                  57  	mov r6, r20
+00000032 0532                  58  	mov 0x00000005, r6
+00000034                       59  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 92
+00000034 80FF0000              60  	jarl _BswM_ChkBswMInitStatus, r31
+00000038 6052                  61  	cmp 0x00000000, r10
+0000003A 8205                  62  	bz9 .BB.LABEL.2_3
+0000003C                       63  .BB.LABEL.2_1:	; entry.if_break_bb13_crit_edge
+0000003C                       64  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 0
+0000003C 0152                  65  	mov 0x00000001, r10
+0000003E                       66  .BB.LABEL.2_2:	; if_break_bb13
+0000003E                       67  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 111
+0000003E 40063F08              68  	dispose 0x00000000, 0x00000041, [r31]
+00000042                       69  .BB.LABEL.2_3:	; if_else_bb
+00000042                       70  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 96
+00000042 64A2                  71  	cmp 0x00000004, r20
+00000044 8F05                  72  	bgt9 .BB.LABEL.2_5
+00000046                       73  .BB.LABEL.2_4:	; if_else_bb.if_break_bb13_crit_edge
+00000046                       74  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 0
+00000046 0052                  75  	mov 0x00000000, r10
+00000048 8505                  76  	br9 .BB.LABEL.2_2
+0000004A                       77  .BB.LABEL.2_5:	; if_then_bb10
+0000004A 0542                  78  	mov 0x00000005, r8
+0000004C 003A                  79  	mov 0x00000000, r7
+0000004E 20362A00              80  	movea 0x0000002A, r0, r6
+00000052                       81  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 100
+00000052 0848                  82  	mov r8, r9
+00000054 80FF0000              83  	jarl _Det_ReportError, r31
+00000058 8505                  84  	br9 .BB.LABEL.2_1
+0000005A                       85  _BswM_DetChkComMInd:
+0000005A                       86  	.stack _BswM_DetChkComMInd = 8
+0000005A                       87  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 131
+0000005A 80072108              88  	prepare 0x00000041, 0x00000000
+0000005E 06A0                  89  	mov r6, r20
+00000060 0E32                  90  	mov 0x0000000E, r6
+00000062                       91  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 135
+00000062 80FF0000              92  	jarl _BswM_ChkBswMInitStatus, r31
+00000066 6052                  93  	cmp 0x00000000, r10
+00000068 8205                  94  	bz9 .BB.LABEL.3_3
+0000006A                       95  .BB.LABEL.3_1:	; entry.if_break_bb36_crit_edge
+0000006A                       96  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 0
+0000006A 0152                  97  	mov 0x00000001, r10
+0000006C                       98  .BB.LABEL.3_2:	; if_break_bb36
+0000006C                       99  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 155
+0000006C 40063F08             100  	dispose 0x00000000, 0x00000041, [r31]
+00000070                      101  .BB.LABEL.3_3:	; if_else_bb
+00000070                      102  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 139
+00000070 62A2                 103  	cmp 0x00000002, r20
+00000072 8B05                 104  	bh9 .BB.LABEL.3_5
+00000074                      105  .BB.LABEL.3_4:	; if_else_bb.if_break_bb36_crit_edge
+00000074                      106  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 0
+00000074 0052                 107  	mov 0x00000000, r10
+00000076 8505                 108  	br9 .BB.LABEL.3_2
+00000078                      109  .BB.LABEL.3_5:	; if_then_bb33
+00000078 054A                 110  	mov 0x00000005, r9
+0000007A 0E42                 111  	mov 0x0000000E, r8
+0000007C 003A                 112  	mov 0x00000000, r7
+0000007E 20362A00             113  	movea 0x0000002A, r0, r6
+00000082                      114  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 144
+00000082 80FF0000             115  	jarl _Det_ReportError, r31
+00000086 8505                 116  	br9 .BB.LABEL.3_1
+00000088                      117  _BswM_DetChkComMInitRst:
+00000088                      118  	.stack _BswM_DetChkComMInitRst = 4
+00000088                      119  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 189
+00000088 80072100             120  	prepare 0x00000001, 0x00000000
+0000008C 20362200             121  	movea 0x00000022, r0, r6
+00000090                      122  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 193
+00000090 80FF0000             123  	jarl _BswM_ChkBswMInitStatus, r31
+00000094                      124  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 195
+00000094 6052                 125  	cmp 0x00000000, r10
+00000096 EA570000             126  	setf 0x0000000A, r10
+0000009A                      127  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 198
+0000009A 40063F00             128  	dispose 0x00000000, 0x00000001, [r31]
+0000009E                      129  _BswM_DetChkDcmUpdate:
+0000009E                      130  	.stack _BswM_DetChkDcmUpdate = 4
+0000009E                      131  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 203
+0000009E 80072100             132  	prepare 0x00000001, 0x00000000
+000000A2 20361400             133  	movea 0x00000014, r0, r6
+000000A6                      134  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 207
+000000A6 80FF0000             135  	jarl _BswM_ChkBswMInitStatus, r31
+000000AA                      136  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 209
+000000AA 6052                 137  	cmp 0x00000000, r10
+000000AC EA570000             138  	setf 0x0000000A, r10
+000000B0                      139  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 212
+000000B0 40063F00             140  	dispose 0x00000000, 0x00000001, [r31]
+000000B4                      141  _BswM_DetChkDcmModeCurState:
+000000B4                      142  	.stack _BswM_DetChkDcmModeCurState = 8
+000000B4                      143  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 215
+000000B4 80072108             144  	prepare 0x00000041, 0x00000000
+000000B8 06A0                 145  	mov r6, r20
+000000BA 0632                 146  	mov 0x00000006, r6
+000000BC                      147  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 219
+000000BC 80FF0000             148  	jarl _BswM_ChkBswMInitStatus, r31
+000000C0 6052                 149  	cmp 0x00000000, r10
+000000C2 8205                 150  	bz9 .BB.LABEL.6_3
+000000C4                      151  .BB.LABEL.6_1:	; entry.if_break_bb14_crit_edge
+000000C4                      152  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 0
+000000C4 0152                 153  	mov 0x00000001, r10
+000000C6                      154  .BB.LABEL.6_2:	; if_break_bb14
+000000C6                      155  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 238
+000000C6 40063F08             156  	dispose 0x00000000, 0x00000041, [r31]
+000000CA                      157  .BB.LABEL.6_3:	; if_else_bb
+000000CA                      158  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 224
+000000CA 6BA2                 159  	cmp 0x0000000B, r20
+000000CC 8B05                 160  	bh9 .BB.LABEL.6_5
+000000CE                      161  .BB.LABEL.6_4:	; if_else_bb.if_break_bb14_crit_edge
+000000CE                      162  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 0
+000000CE 0052                 163  	mov 0x00000000, r10
+000000D0 8505                 164  	br9 .BB.LABEL.6_2
+000000D2                      165  .BB.LABEL.6_5:	; if_then_bb11
+000000D2 054A                 166  	mov 0x00000005, r9
+000000D4 0642                 167  	mov 0x00000006, r8
+000000D6 003A                 168  	mov 0x00000000, r7
+000000D8 20362A00             169  	movea 0x0000002A, r0, r6
+000000DC                      170  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 227
+000000DC 80FF0000             171  	jarl _Det_ReportError, r31
+000000E0 8505                 172  	br9 .BB.LABEL.6_1
+000000E2                      173  _BswM_DetChkEcuMCurWakeUp:
+000000E2                      174  	.stack _BswM_DetChkEcuMCurWakeUp = 8
+000000E2                      175  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 243
+000000E2 80072108             176  	prepare 0x00000041, 0x00000000
+000000E6 06A0                 177  	mov r6, r20
+000000E8 20361000             178  	movea 0x00000010, r0, r6
+000000EC                      179  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 247
+000000EC 80FF0000             180  	jarl _BswM_ChkBswMInitStatus, r31
+000000F0 6052                 181  	cmp 0x00000000, r10
+000000F2 8205                 182  	bz9 .BB.LABEL.7_3
+000000F4                      183  .BB.LABEL.7_1:	; entry.if_break_bb48_crit_edge
+000000F4                      184  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 0
+000000F4 0152                 185  	mov 0x00000001, r10
+000000F6                      186  .BB.LABEL.7_2:	; if_break_bb48
+000000F6                      187  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 271
+000000F6 40063F08             188  	dispose 0x00000000, 0x00000041, [r31]
+000000FA                      189  .BB.LABEL.7_3:	; if_else_bb
+000000FA                      190  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 251
+000000FA 63A2                 191  	cmp 0x00000003, r20
+000000FC 8B05                 192  	bh9 .BB.LABEL.7_5
+000000FE                      193  .BB.LABEL.7_4:	; if_else_bb.if_break_bb48_crit_edge
+000000FE                      194  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 0
+000000FE 0052                 195  	mov 0x00000000, r10
+00000100 8505                 196  	br9 .BB.LABEL.7_2
+00000102                      197  .BB.LABEL.7_5:	; if_then_bb45
+00000102 054A                 198  	mov 0x00000005, r9
+00000104 20461000             199  	movea 0x00000010, r0, r8
+00000108 003A                 200  	mov 0x00000000, r7
+0000010A 20362A00             201  	movea 0x0000002A, r0, r6
+0000010E                      202  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 260
+0000010E 80FF0000             203  	jarl _Det_ReportError, r31
+00000112 8505                 204  	br9 .BB.LABEL.7_1
+00000114                      205  _BswM_DetChkRequestedState:
+00000114                      206  	.stack _BswM_DetChkRequestedState = 12
+00000114                      207  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 274
+00000114 8007210C             208  	prepare 0x00000061, 0x00000000
+00000118 06A0                 209  	mov r6, r20
+0000011A 07A8                 210  	mov r7, r21
+0000011C 20362300             211  	movea 0x00000023, r0, r6
+00000120                      212  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 278
+00000120 80FF0000             213  	jarl _BswM_ChkBswMInitStatus, r31
+00000124 6052                 214  	cmp 0x00000000, r10
+00000126 8205                 215  	bz9 .BB.LABEL.8_3
+00000128                      216  .BB.LABEL.8_1:	; entry.if_break_bb40_crit_edge
+00000128                      217  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 0
+00000128 0152                 218  	mov 0x00000001, r10
+0000012A                      219  .BB.LABEL.8_2:	; if_break_bb40
+0000012A                      220  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 305
+0000012A 40063F0C             221  	dispose 0x00000000, 0x00000061, [r31]
+0000012E                      222  .BB.LABEL.8_3:	; if_else_bb
+0000012E                      223  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 282
+0000012E 3416CEFF             224  	movea 0xFFFFFFCE, r20, r2
+00000132 8200                 225  	zxb r2
+00000134 6212                 226  	cmp 0x00000002, r2
+00000136 8105                 227  	bl9 .BB.LABEL.8_6
+00000138                      228  .BB.LABEL.8_4:	; if_then_bb28
+00000138                      229  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 0
+00000138 044A                 230  	mov 0x00000004, r9
+0000013A                      231  .BB.LABEL.8_5:	; if_then_bb28
+0000013A 20462300             232  	movea 0x00000023, r0, r8
+0000013E 003A                 233  	mov 0x00000000, r7
+00000140 20362A00             234  	movea 0x0000002A, r0, r6
+00000144 80FF0000             235  	jarl _Det_ReportError, r31
+00000148 0152                 236  	mov 0x00000001, r10
+0000014A                      237  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 305
+0000014A 40063F0C             238  	dispose 0x00000000, 0x00000061, [r31]
+0000014E                      239  .BB.LABEL.8_6:	; if_else_bb30
+0000014E                      240  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 291
+0000014E 62AA                 241  	cmp 0x00000002, r21
+00000150 8F05                 242  	bgt9 .BB.LABEL.8_8
+00000152                      243  .BB.LABEL.8_7:	; if_else_bb30.if_break_bb40_crit_edge
+00000152                      244  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 0
+00000152 0052                 245  	mov 0x00000000, r10
+00000154 8505                 246  	br9 .BB.LABEL.8_2
+00000156                      247  .BB.LABEL.8_8:	; if_then_bb36
+00000156 054A                 248  	mov 0x00000005, r9
+00000158 8505                 249  	br9 .BB.LABEL.8_5
+0000015A                      250  _BswM_DetChkEcuMCurState:
+0000015A                      251  	.stack _BswM_DetChkEcuMCurState = 4
+0000015A                      252  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 307
+0000015A 80072100             253  	prepare 0x00000001, 0x00000000
+0000015E 0F32                 254  	mov 0x0000000F, r6
+00000160                      255  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 311
+00000160 80FF0000             256  	jarl _BswM_ChkBswMInitStatus, r31
+00000164                      257  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 313
+00000164 6052                 258  	cmp 0x00000000, r10
+00000166 EA570000             259  	setf 0x0000000A, r10
+0000016A                      260  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 316
+0000016A 40063F00             261  	dispose 0x00000000, 0x00000001, [r31]
+0000016E                      262  _BswM_DetChkNmCarWkUp:
+0000016E                      263  	.stack _BswM_DetChkNmCarWkUp = 4
+0000016E                      264  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 498
+0000016E 80072100             265  	prepare 0x00000001, 0x00000000
+00000172 20362400             266  	movea 0x00000024, r0, r6
+00000176                      267  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 502
+00000176 80FF0000             268  	jarl _BswM_ChkBswMInitStatus, r31
+0000017A                      269  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 504
+0000017A 6052                 270  	cmp 0x00000000, r10
+0000017C EA570000             271  	setf 0x0000000A, r10
+00000180                      272  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 507
+00000180 40063F00             273  	dispose 0x00000000, 0x00000001, [r31]
+00000184                      274  _BswM_DetChkGenericRqst:
+00000184                      275  	.stack _BswM_DetChkGenericRqst = 12
+00000184                      276  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 567
+00000184 82072108             277  	prepare 0x00000041, 0x00000004
+00000188 06A0                 278  	mov r6, r20
+0000018A 0232                 279  	mov 0x00000002, r6
+0000018C                      280  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 575
+0000018C 80FF0000             281  	jarl _BswM_ChkBswMInitStatus, r31
+00000190 6052                 282  	cmp 0x00000000, r10
+00000192 8205                 283  	bz9 .BB.LABEL.11_2
+00000194                      284  .BB.LABEL.11_1:	; entry.if_break_bb70_crit_edge
+00000194                      285  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 0
+00000194 0152                 286  	mov 0x00000001, r10
+00000196 8505                 287  	br9 .BB.LABEL.11_11
+00000198                      288  .BB.LABEL.11_2:	; if_else_bb
+00000198 23360200             289  	movea 0x00000002, r3, r6
+0000019C                      290  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 581
+0000019C 80FF0000             291  	jarl _BswM_GetPartitionIdx, r31
+000001A0                      292  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 582
+000001A0 6152                 293  	cmp 0x00000001, r10
+000001A2 8A05                 294  	bnz9 .BB.LABEL.11_10
+000001A4                      295  .BB.LABEL.11_3:	; if_then_bb16
+000001A4                      296  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 584
+000001A4 40160000             297  	movhi HIGHW1(#_BswM_RuntimeStatus+0x00000008), r0, r2
+000001A8 22170100             298  	ld.w LOWW(#_BswM_RuntimeStatus+0x00000008)[r2], r2
+000001AC E32F0300             299  	ld.hu 0x00000002[r3], r5
+000001B0 0530                 300  	mov r5, r6
+000001B2 C532                 301  	shl 0x00000005, r6
+000001B4 C611                 302  	add r6, r2
+000001B6 22170900             303  	ld.w 0x00000008[r2], r2
+000001BA                      304  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 585
+000001BA E2172900             305  	ld.hu 0x00000028[r2], r2
+000001BE 0032                 306  	mov 0x00000000, r6
+000001C0 8505                 307  	br9 .BB.LABEL.11_6
+000001C2                      308  .BB.LABEL.11_4:	; bb
+000001C2                      309  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 587
+000001C2 403E0000             310  	movhi HIGHW1(#_BswM_RuntimeStatus+0x0000000C), r0, r7
+000001C6 273F0100             311  	ld.w LOWW(#_BswM_RuntimeStatus+0x0000000C)[r7], r7
+000001CA 0540                 312  	mov r5, r8
+000001CC E8474402             313  	mul 0x00000028, r8, r0
+000001D0 C839                 314  	add r8, r7
+000001D2 273F0500             315  	ld.w 0x00000004[r7], r7
+000001D6 273F3100             316  	ld.w 0x00000030[r7], r7
+000001DA C646FFFF             317  	andi 0x0000FFFF, r6, r8
+000001DE C841                 318  	add r8, r8
+000001E0 C839                 319  	add r8, r7
+000001E2 E73F0100             320  	ld.hu 0x00000000[r7], r7
+000001E6 E7A1                 321  	cmp r7, r20
+000001E8 8205                 322  	bz9 .BB.LABEL.11_7
+000001EA                      323  .BB.LABEL.11_5:	; if_break_bb
+000001EA                      324  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 0
+000001EA 4132                 325  	add 0x00000001, r6
+000001EC                      326  .BB.LABEL.11_6:	; bb47
+000001EC                      327  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 585
+000001EC C63EFFFF             328  	andi 0x0000FFFF, r6, r7
+000001F0 E239                 329  	cmp r2, r7
+000001F2 8105                 330  	bl9 .BB.LABEL.11_4
+000001F4                      331  .BB.LABEL.11_7:	; bb56
+000001F4                      332  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 592
+000001F4 C600                 333  	zxh r6
+000001F6 E231                 334  	cmp r2, r6
+000001F8 8205                 335  	bz9 .BB.LABEL.11_9
+000001FA                      336  .BB.LABEL.11_8:	; bb56.if_break_bb70_crit_edge
+000001FA                      337  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 0
+000001FA 0052                 338  	mov 0x00000000, r10
+000001FC 8505                 339  	br9 .BB.LABEL.11_11
+000001FE                      340  .BB.LABEL.11_9:	; if_then_bb64
+000001FE 044A                 341  	mov 0x00000004, r9
+00000200 0242                 342  	mov 0x00000002, r8
+00000202 003A                 343  	mov 0x00000000, r7
+00000204 20362A00             344  	movea 0x0000002A, r0, r6
+00000208                      345  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 595
+00000208 80FF0000             346  	jarl _Det_ReportError, r31
+0000020C 0152                 347  	mov 0x00000001, r10
+0000020E 42063F08             348  	dispose 0x00000004, 0x00000041, [r31]
+00000212                      349  .BB.LABEL.11_10:	; if_else_bb67
+00000212                      350  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 0
+00000212 00A2                 351  	mov 0x00000000, r20
+00000214 064A                 352  	mov 0x00000006, r9
+00000216 0242                 353  	mov 0x00000002, r8
+00000218 20362A00             354  	movea 0x0000002A, r0, r6
+0000021C                      355  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 604
+0000021C 1438                 356  	mov r20, r7
+0000021E 80FF0000             357  	jarl _Det_ReportError, r31
+00000222 1450                 358  	mov r20, r10
+00000224                      359  .BB.LABEL.11_11:	; if_break_bb70
+00000224                      360  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 608
+00000224 42063F08             361  	dispose 0x00000004, 0x00000041, [r31]
+00000228                      362  _BswM_DetChkWgmParRst:
+00000228                      363  	.stack _BswM_DetChkWgmParRst = 4
+00000228                      364  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 692
+00000228 80072100             365  	prepare 0x00000001, 0x00000000
+0000022C 20361100             366  	movea 0x00000011, r0, r6
+00000230                      367  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 696
+00000230 80FF0000             368  	jarl _BswM_ChkBswMInitStatus, r31
+00000234                      369  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 698
+00000234 6052                 370  	cmp 0x00000000, r10
+00000236 EA570000             371  	setf 0x0000000A, r10
+0000023A                      372  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/BswM/BswM_DetCheck.c", 701
+0000023A 40063F00             373  	dispose 0x00000000, 0x00000001, [r31]
+
+Section List
+Attr     Size                Name
+
+TEXT          574 (0000023E) .text
+
+Command Line Parameter
+-Xcpu=g3kh -Xreg_mode=32 -Xep=callee -Xcharacter_set=none -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\diagnostic -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\parameter_store -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu\port -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu\uart -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu\iic -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\vehicle_data_to_mpu -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\power_manage -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\mcu_cpu_sync -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\remote_control -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\can_cycle_send -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\project_configure -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\sdk\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\commonLib\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\hal\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\icu\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Icu_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\vss -ID:\wk\sirun\project\dazhong\code\mcu_app\ASW\CDD_FVM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\EEIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanTSyn -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\StbM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CSM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\RSA -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\RandomGen\CTR_DRBG -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\MAC\CMAC -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\Hash\sha256 -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\dh -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\AES -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CryInterface -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\SecOC -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\NvM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\MemIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\Fee -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\WdgM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\WdgIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Wdg_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Gpt_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Fls_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\wdg\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\gpt\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\fls\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\IpduM -ID:\wk\sirun\project\dazhong\code\mcu_app\ASW\APP -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\BswM -ID:\wk\sirun\project\dazhong\code\mcu_app\ASW\BSW_Ext -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\Dcm -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanTp -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Dem -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Libraries\E2E -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Libraries\Crc -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\NmIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanNm -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config\RTE\Rte -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config\RTE\SchM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Libraries\IStd -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\EcuM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\ComM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanSM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\Com -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\PDUR -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\CommonInclude -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config\RH850F1K -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Extend\inc -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Kernel\inc -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Portable\Mcu -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Portable\Processor -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Adc_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Can_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Dio_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Mcu_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Port_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\adc\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\can\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\dio\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\general -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\mcu\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\port\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\CanGeneral\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\Det\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\MemIf\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\SchM\include -DRH850_F1KM_S1_2MB -Xprn_path=DefaultBuild -Xno_warning=50013 -oD:\wk\sirun\project\dazhong\code\mcu_app\Toolchain\CSPLUS_V81200\DefaultBuild\BswM_DetCheck.obj D:\wk\sirun\project\dazhong\code\mcu_app\Toolchain\CSPLUS_V81200\DefaultBuild\BswM_DetCheck.asm 
+

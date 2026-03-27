@@ -78,7 +78,7 @@
 #define PDUR_TP_TXCONFIRMATION                STD_ON
 
 #define PDUR_ROUTINGPATH_MAX                  255u
-#define PDUR_ROUTING_PATH_GROUP_MAX           0u
+#define PDUR_ROUTING_PATH_GROUP_MAX           1u
 
 #define PDUR_NUMBER_OF_QUEUES                 0u
 #define PDUR_NUMBER_OF_BUFFERS                0u

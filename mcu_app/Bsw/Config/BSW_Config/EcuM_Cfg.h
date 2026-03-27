@@ -14,7 +14,7 @@
  *  @MCU                : R7F7015833
  *  @file               : EcuM_Cfg.h
  *  @author             : iSoft
- *  @date               : 2026-01-16 11:18:39
+ *  @date               : 2026-03-13 14:19:58
  *  @vendor             : iSoft
  *  @description        : 
  *  @specification(S)   : AUTOSAR Classic Platform R19-11

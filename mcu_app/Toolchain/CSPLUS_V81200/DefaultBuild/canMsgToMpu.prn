@@ -1,0 +1,1117 @@
+RH850 Family Assembler V2.07.00.03 Assemble Source List
+
+OFFSET   CODE                  NO  SOURCE STATEMENT
+
+00000000                        1  #CC-RH Compiler RH850 Assembler Source
+00000000                        2  #@	CC-RH Version : V2.07.00  [06 Dec 2024]
+00000000                        3  #@	Command : ..\..\Srcode\app\vehicle_data_to_mpu\canMsgToMpu.c -oDefaultBuild\canMsgToMpu.obj -Xcpu=g3kh -Xno_warning=20188,20111 -g -g_line -I..\..\Srcode\app\diagnostic -I..\..\Srcode\app\parameter_store -I..\..\Cpu\port -I..\..\Cpu\uart -I..\..\Cpu\iic -I..\..\Srcode\app\vehicle_data_to_mpu -I..\..\Srcode\app\power_manage -I..\..\Srcode\app\mcu_cpu_sync -I..\..\Srcode\app\remote_control -I..\..\Srcode\app\can_cycle_send -I..\..\Srcode\app\project_configure -I..\..\Srcode\sdk\include -I..\..\Srcode\commonLib\include -I..\..\Srcode\hal\include -I..\..\Bsw\Mcal\icu\include -I..\..\Bsw\Config\MCAL_Config\Icu_OutPut\include -I..\..\Bsw\Crypto\CRYPTO\vss -I..\..\ASW\CDD_FVM -I..\..\Bsw\Memory\EEIf -I..\..\Bsw\Communication\CAN\CanTSyn -I..\..\Bsw\SystemServices\StbM -I..\..\Bsw\Crypto\CSM -I..\..\Bsw\Crypto\CRYPTO\RSA -I..\..\Bsw\Crypto\CRYPTO\RandomGen\CTR_DRBG -I..\..\Bsw\Crypto\CRYPTO\MAC\CMAC -I..\..\Bsw\Crypto\CRYPTO\Hash\sha256 -I..\..\Bsw\Crypto\CRYPTO\dh -I..\..\Bsw\Crypto\CRYPTO\AES -I..\..\Bsw\Crypto\CRYPTO -I..\..\Bsw\Crypto\CryInterface -I..\..\Bsw\Communication\Common\SecOC -I..\..\Bsw\Memory\NvM -I..\..\Bsw\Memory\MemIf -I..\..\Bsw\Memory\Fee -I..\..\Bsw\SystemServices\WdgM -I..\..\Bsw\SystemServices\WdgIf -I..\..\Bsw\Config\MCAL_Config\Wdg_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Gpt_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Fls_OutPut\include -I..\..\Bsw\Mcal\wdg\include -I..\..\Bsw\Mcal\gpt\include -I..\..\Bsw\Mcal\fls\include -I..\..\Bsw\Communication\Common\IpduM -I..\..\ASW\APP -I..\..\Bsw\SystemServices\BswM -I..\..\ASW\BSW_Ext -I..\..\Bsw\Communication\Common\Dcm -I..\..\Bsw\Communication\CAN\CanTp -I..\..\Bsw\SystemServices\Dem -I..\..\Bsw\Libraries\E2E -I..\..\Bsw\Libraries\Crc -I..\..\Bsw\Communication\Common\NmIf -I..\..\Bsw\Communication\CAN\CanNm -I..\..\Bsw\Config\BSW_Config\RTE\Rte -I..\..\Bsw\Config\BSW_Config\RTE\SchM -I..\..\Bsw\Libraries\IStd -I..\..\Bsw\SystemServices\EcuM -I..\..\Bsw\SystemServices\ComM -I..\..\Bsw\Communication\CAN\CanSM -I..\..\Bsw\Communication\CAN\CanIf -I..\..\Bsw\Communication\Common\Com -I..\..\Bsw\Communication\Common\PDUR -I..\..\Cpu -I..\..\Bsw\CommonInclude -I..\..\Bsw\Config\BSW_Config -I..\..\Bsw\Config\BSW_Config\RH850F1K -I..\..\Bsw\SystemServices\Os\Extend\inc -I..\..\Bsw\SystemServices\Os\Kernel\inc -I..\..\Bsw\SystemServices\Os\Portable\Mcu -I..\..\Bsw\SystemServices\Os\Portable\Processor -I..\..\Bsw\Config\MCAL_Config\Adc_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Can_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Dio_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Mcu_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Port_OutPut\include -I..\..\Bsw\Mcal\adc\include -I..\..\Bsw\Mcal\can\include -I..\..\Bsw\Mcal\dio\include -I..\..\Bsw\Mcal\general -I..\..\Bsw\Mcal\mcu\include -I..\..\Bsw\Mcal\port\include -I..\..\Bsw\Mcal\stubs\CanGeneral\include -I..\..\Bsw\Mcal\stubs\Det\include -I..\..\Bsw\Mcal\stubs\MemIf\include -I..\..\Bsw\Mcal\stubs\SchM\include -DRH850_F1KM_S1_2MB -lang=c99 -Xfloat=fpu -Xround=zero -Xdiv -Xasm_path=DefaultBuild -Xasm_option=-Xprn_path=DefaultBuild -c -MAKEUD=DefaultBuild -Xexec_time=C:\Users\xlchen\AppData\Local\Temp\CSPlusBuildTool_15405ff8bfc44fbdb354dddf7ec6dcd6ciba442l.syn
+00000000                        4  #@	compiled at Fri Mar 27 09:50:32 2026
+00000000                        5  
+00000000                        6  	.file "..\..\Srcode\app\vehicle_data_to_mpu\canMsgToMpu.c"
+00000000                        7  
+00000000                        8  	$reg_mode 32
+00000000                        9  	.dbl_size 8
+00000000                       10  
+00000000                       11  	.public _g_canRxToCpuConfigureBuffer, 400
+00000000                       12  	.public _g_txBuffer, 1411
+00000000                       13  	.public _g_txBufferCount, 2
+00000000                       14  	.public _g_txByteOffset, 2
+00000000                       15  	.extern _SuspendAllInterrupts
+00000000                       16  	.extern _ResumeAllInterrupts
+00000000                       17  	.extern _memcpy
+00000000                       18  	.public _SaveCanMsgToBuffer
+00000000                       19  	.public _CanMsgReceiveFromBuffer
+00000000                       20  	.public _CanMsgTansmitToCpuInitialize
+00000000                       21  	.public _CanMsgTransmitToCpu
+00000000                       22  	.extern _LogHalPrint
+00000000                       23  	.extern _MpuHalTransmit
+00000000                       24  	.public _GetCanMsgConfigureBufferSize
+00000000                       25  	.public _CanMsgConfigureBufferAdd
+00000000                       26  	.public _SetCanMsgConfigureBufferInvalidData
+00000000                       27  	.public _SetCanMsgConfigureBufferValidData
+00000000                       28  	.public _CanMsgConfigureBufferDataIsValid
+00000000                       29  
+00000000                       30  	.section .text, text
+00000000                       31  _CpuCanRxQueueIsEmpty.1:
+00000000                       32  	.stack _CpuCanRxQueueIsEmpty.1 = 0
+00000000                       33  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 58
+00000000 40160000              34  	movhi HIGHW1(#_g_cpuCanRxQueueWrite.4), r0, r2
+00000004 E2170100              35  	ld.hu LOWW(#_g_cpuCanRxQueueWrite.4)[r2], r2
+00000008 402E0000              36  	movhi HIGHW1(#_g_cpuCanRxQueueRead.5), r0, r5
+0000000C E52F0100              37  	ld.hu LOWW(#_g_cpuCanRxQueueRead.5)[r5], r5
+00000010 E511                  38  	cmp r5, r2
+00000012 E2570000              39  	setf 0x00000002, r10
+00000016                       40  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 59
+00000016 7F00                  41  	jmp [r31]
+00000018                       42  _CpuCanRxQueueIsFull.1:
+00000018                       43  	.stack _CpuCanRxQueueIsFull.1 = 0
+00000018                       44  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 61
+00000018 40160000              45  	movhi HIGHW1(#_g_cpuCanRxQueueRead.5), r0, r2
+0000001C                       46  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 63
+0000001C E2170100              47  	ld.hu LOWW(#_g_cpuCanRxQueueRead.5)[r2], r2
+00000020 E231                  48  	cmp r2, r6
+00000022 E2570000              49  	setf 0x00000002, r10
+00000026                       50  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 64
+00000026 7F00                  51  	jmp [r31]
+00000028                       52  _CpuCanRxQueueGetNextIndex.1:
+00000028                       53  	.stack _CpuCanRxQueueGetNextIndex.1 = 0
+00000028                       54  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 66
+00000028 4132                  55  	add 0x00000001, r6
+0000002A                       56  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 69
+0000002A C616FFFF              57  	andi 0x0000FFFF, r6, r2
+0000002E 6912                  58  	cmp 0x00000009, r2
+00000030                       59  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 71
+00000030 E0371E53              60  	cmov 0x0000000F, 0x00000000, r6, r10
+00000034                       61  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 74
+00000034 CA00                  62  	zxh r10
+00000036 7F00                  63  	jmp [r31]
+00000038                       64  _CpuCanRxQueuePush.1:
+00000038                       65  	.stack _CpuCanRxQueuePush.1 = 28
+00000038                       66  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 76
+00000038 800721CF              67  	prepare 0x00000679, 0x00000000
+0000003C 09A60000              68  	addi 0x00000000, r9, r20
+00000040 08A8                  69  	mov r8, r21
+00000042 07B0                  70  	mov r7, r22
+00000044 06B8                  71  	mov r6, r23
+00000046                       72  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 81
+00000046 8A05                  73  	bnz9 .BB.LABEL.4_2
+00000048                       74  .BB.LABEL.4_1:	; entry
+00000048                       75  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 0
+00000048 60AA                  76  	cmp 0x00000000, r21
+0000004A 8A05                  77  	bnz9 .BB.LABEL.4_7
+0000004C                       78  .BB.LABEL.4_2:	; if_break_bb
+0000004C                       79  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 86
+0000004C 80FF0000              80  	jarl _SuspendAllInterrupts, r31
+00000050                       81  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 87
+00000050 40160000              82  	movhi HIGHW1(#_g_cpuCanRxQueueWrite.4), r0, r2
+00000054                       83  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 88
+00000054 E2C70100              84  	ld.hu LOWW(#_g_cpuCanRxQueueWrite.4)[r2], r24
+00000058 1830                  85  	mov r24, r6
+0000005A 80FF0000              86  	jarl _CpuCanRxQueueGetNextIndex.1, r31
+0000005E 0AC8                  87  	mov r10, r25
+00000060                       88  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 89
+00000060 1930                  89  	mov r25, r6
+00000062 80FF0000              90  	jarl _CpuCanRxQueueIsFull.1, r31
+00000066 6052                  91  	cmp 0x00000000, r10
+00000068 8205                  92  	bz9 .BB.LABEL.4_4
+0000006A                       93  .BB.LABEL.4_3:	; if_then_bb30
+0000006A                       94  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 91
+0000006A 80FF0000              95  	jarl _ResumeAllInterrupts, r31
+0000006E 1F52                  96  	mov 0xFFFFFFFF, r10
+00000070                       97  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 92
+00000070 40063FCF              98  	dispose 0x00000000, 0x00000679, [r31]
+00000074                       99  .BB.LABEL.4_4:	; if_break_bb32
+00000074                      100  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 95
+00000074 1810                 101  	mov r24, r2
+00000076 EC174802             102  	mul 0x0000004C, r2, r0
+0000007A                      103  	mov #_g_cpuCanRxQueue.3, r5
+0000007A 250600000000            -- mov         0x0,tp
+00000080 C229                 104  	add r2, r5
+00000082 45BF0000             105  	st.b r23, 0x00000000[r5]
+00000086                      106  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 96
+00000086 65B70500             107  	st.w r22, 0x00000004[r5]
+0000008A                      108  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 97
+0000008A 45AF0800             109  	st.b r21, 0x00000008[r5]
+0000008E                      110  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 98
+0000008E 60AA                 111  	cmp 0x00000000, r21
+00000090 8205                 112  	bz9 .BB.LABEL.4_6
+00000092                      113  .BB.LABEL.4_5:	; if_then_bb53
+00000092                      114  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 100
+00000092 ECC74802             115  	mul 0x0000004C, r24, r0
+00000096                      116  	mov #_g_cpuCanRxQueue.3, r6
+00000096 260600000000            -- mov         0x0,r6
+0000009C D831                 117  	add r24, r6
+0000009E 4932                 118  	add 0x00000009, r6
+000000A0 1438                 119  	mov r20, r7
+000000A2 1540                 120  	mov r21, r8
+000000A4 80FF0000             121  	jarl _memcpy, r31
+000000A8                      122  .BB.LABEL.4_6:	; if_break_bb63
+000000A8                      123  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 102
+000000A8 40160000             124  	movhi HIGHW1(#_g_cpuCanRxQueueWrite.4), r0, r2
+000000AC 62CF0000             125  	st.h r25, LOWW(#_g_cpuCanRxQueueWrite.4)[r2]
+000000B0                      126  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 103
+000000B0 80FF0000             127  	jarl _ResumeAllInterrupts, r31
+000000B4 0052                 128  	mov 0x00000000, r10
+000000B6                      129  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 105
+000000B6 40063FCF             130  	dispose 0x00000000, 0x00000679, [r31]
+000000BA                      131  .BB.LABEL.4_7:	; bb66
+000000BA                      132  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 0
+000000BA 1F52                 133  	mov 0xFFFFFFFF, r10
+000000BC                      134  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 106
+000000BC 40063FCF             135  	dispose 0x00000000, 0x00000679, [r31]
+000000C0                      136  _CpuCanRxQueuePeek.1:
+000000C0                      137  	.stack _CpuCanRxQueuePeek.1 = 8
+000000C0                      138  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 108
+000000C0 80072108             139  	prepare 0x00000041, 0x00000000
+000000C4 06A60000             140  	addi 0x00000000, r6, r20
+000000C8                      141  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 112
+000000C8 8205                 142  	bz9 .BB.LABEL.5_4
+000000CA                      143  .BB.LABEL.5_1:	; if_break_bb
+000000CA                      144  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 117
+000000CA 80FF0000             145  	jarl _SuspendAllInterrupts, r31
+000000CE                      146  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 118
+000000CE 80FF0000             147  	jarl _CpuCanRxQueueIsEmpty.1, r31
+000000D2 6052                 148  	cmp 0x00000000, r10
+000000D4 8205                 149  	bz9 .BB.LABEL.5_3
+000000D6                      150  .BB.LABEL.5_2:	; if_then_bb11
+000000D6                      151  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 120
+000000D6 80FF0000             152  	jarl _ResumeAllInterrupts, r31
+000000DA 1F52                 153  	mov 0xFFFFFFFF, r10
+000000DC                      154  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 121
+000000DC 40063F08             155  	dispose 0x00000000, 0x00000041, [r31]
+000000E0                      156  .BB.LABEL.5_3:	; if_break_bb13
+000000E0                      157  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 124
+000000E0 40160000             158  	movhi HIGHW1(#_g_cpuCanRxQueueRead.5), r0, r2
+000000E4                      159  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 125
+000000E4 E2170100             160  	ld.hu LOWW(#_g_cpuCanRxQueueRead.5)[r2], r2
+000000E8 EC174802             161  	mul 0x0000004C, r2, r0
+000000EC                      162  	mov #_g_cpuCanRxQueue.3, r7
+000000EC 270600000000            -- mov         0x0,r7
+000000F2 C239                 163  	add r2, r7
+000000F4 20464C00             164  	movea 0x0000004C, r0, r8
+000000F8 1430                 165  	mov r20, r6
+000000FA 80FF0000             166  	jarl _memcpy, r31
+000000FE                      167  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 126
+000000FE 80FF0000             168  	jarl _ResumeAllInterrupts, r31
+00000102 0052                 169  	mov 0x00000000, r10
+00000104                      170  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 128
+00000104 40063F08             171  	dispose 0x00000000, 0x00000041, [r31]
+00000108                      172  .BB.LABEL.5_4:	; bb23
+00000108                      173  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 0
+00000108 1F52                 174  	mov 0xFFFFFFFF, r10
+0000010A                      175  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 129
+0000010A 40063F08             176  	dispose 0x00000000, 0x00000041, [r31]
+0000010E                      177  _CpuCanRxQueueDrop.1:
+0000010E                      178  	.stack _CpuCanRxQueueDrop.1 = 8
+0000010E                      179  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 131
+0000010E 80072108             180  	prepare 0x00000041, 0x00000000
+00000112                      181  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 135
+00000112 80FF0000             182  	jarl _SuspendAllInterrupts, r31
+00000116                      183  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 136
+00000116 80FF0000             184  	jarl _CpuCanRxQueueIsEmpty.1, r31
+0000011A 6052                 185  	cmp 0x00000000, r10
+0000011C 8205                 186  	bz9 .BB.LABEL.6_2
+0000011E                      187  .BB.LABEL.6_1:	; if_then_bb
+0000011E                      188  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 138
+0000011E 80FF0000             189  	jarl _ResumeAllInterrupts, r31
+00000122 1F52                 190  	mov 0xFFFFFFFF, r10
+00000124                      191  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 139
+00000124 40063F08             192  	dispose 0x00000000, 0x00000041, [r31]
+00000128                      193  .BB.LABEL.6_2:	; if_break_bb
+00000128                      194  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 142
+00000128 40A60000             195  	movhi HIGHW1(#_g_cpuCanRxQueueRead.5), r0, r20
+0000012C                      196  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 143
+0000012C F4370100             197  	ld.hu LOWW(#_g_cpuCanRxQueueRead.5)[r20], r6
+00000130 80FF0000             198  	jarl _CpuCanRxQueueGetNextIndex.1, r31
+00000134 74570000             199  	st.h r10, LOWW(#_g_cpuCanRxQueueRead.5)[r20]
+00000138                      200  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 144
+00000138 80FF0000             201  	jarl _ResumeAllInterrupts, r31
+0000013C 0052                 202  	mov 0x00000000, r10
+0000013E                      203  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 146
+0000013E 40063F08             204  	dispose 0x00000000, 0x00000041, [r31]
+00000142                      205  _CanMsgCopyFromQueueNode.1:
+00000142                      206  	.stack _CanMsgCopyFromQueueNode.1 = 4
+00000142                      207  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 149
+00000142 80072100             208  	prepare 0x00000001, 0x00000000
+00000146                      209  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 151
+00000146 6032                 210  	cmp 0x00000000, r6
+00000148 8205                 211  	bz9 .BB.LABEL.7_6
+0000014A                      212  .BB.LABEL.7_1:	; entry
+0000014A                      213  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 0
+0000014A 6042                 214  	cmp 0x00000000, r8
+0000014C 8205                 215  	bz9 .BB.LABEL.7_6
+0000014E                      216  .BB.LABEL.7_2:	; if_break_bb
+0000014E                      217  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 156
+0000014E 603A                 218  	cmp 0x00000000, r7
+00000150 8205                 219  	bz9 .BB.LABEL.7_4
+00000152                      220  .BB.LABEL.7_3:	; if_then_bb20
+00000152                      221  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 158
+00000152 06170000             222  	ld.b 0x00000000[r6], r2
+00000156 47170000             223  	st.b r2, 0x00000000[r7]
+0000015A                      224  .BB.LABEL.7_4:	; if_break_bb25
+0000015A                      225  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 160
+0000015A 26170500             226  	ld.w 0x00000004[r6], r2
+0000015E 68170100             227  	st.w r2, 0x00000000[r8]
+00000162                      228  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 161
+00000162 06170800             229  	ld.b 0x00000008[r6], r2
+00000166 48174400             230  	st.b r2, 0x00000044[r8]
+0000016A                      231  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 162
+0000016A 48074500             232  	st.b r0, 0x00000045[r8]
+0000016E                      233  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 163
+0000016E 86170900             234  	ld.bu 0x00000008[r6], r2
+00000172 6012                 235  	cmp 0x00000000, r2
+00000174 8205                 236  	bz9 .BB.LABEL.7_6
+00000176                      237  .BB.LABEL.7_5:	; if_then_bb45
+00000176                      238  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 165
+00000176 063E0900             239  	addi 0x00000009, r6, r7
+0000017A 4442                 240  	add 0x00000004, r8
+0000017C 0830                 241  	mov r8, r6
+0000017E 0240                 242  	mov r2, r8
+00000180 80FF0000             243  	jarl _memcpy, r31
+00000184                      244  .BB.LABEL.7_6:	; return
+00000184                      245  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 167
+00000184 40063F00             246  	dispose 0x00000000, 0x00000001, [r31]
+00000188                      247  _StackInit.1:
+00000188                      248  	.stack _StackInit.1 = 0
+00000188                      249  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 170
+00000188 6607C800             250  	st.h r0, 0x000000C8[r6]
+0000018C                      251  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 172
+0000018C 7F00                 252  	jmp [r31]
+0000018E                      253  _StackPush.1:
+0000018E                      254  	.stack _StackPush.1 = 0
+0000018E                      255  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 175
+0000018E 2617C800             256  	ld.h 0x000000C8[r6], r2
+00000192 202E6300             257  	movea 0x00000063, r0, r5
+00000196                      258  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 177
+00000196 E511                 259  	cmp r5, r2
+00000198 8B05                 260  	bh9 .BB.LABEL.9_2
+0000019A                      261  .BB.LABEL.9_1:	; if_break_bb
+0000019A                      262  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 181
+0000019A C211                 263  	add r2, r2
+0000019C C611                 264  	add r6, r2
+0000019E 623F0000             265  	st.h r7, 0x00000000[r2]
+000001A2                      266  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 182
+000001A2 2617C800             267  	ld.h 0x000000C8[r6], r2
+000001A6 4112                 268  	add 0x00000001, r2
+000001A8 6617C800             269  	st.h r2, 0x000000C8[r6]
+000001AC                      270  .BB.LABEL.9_2:	; return
+000001AC                      271  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 183
+000001AC 7F00                 272  	jmp [r31]
+000001AE                      273  _StackPop.1:
+000001AE                      274  	.stack _StackPop.1 = 0
+000001AE                      275  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 185
+000001AE 2617C800             276  	ld.h 0x000000C8[r6], r2
+000001B2                      277  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 187
+000001B2 6012                 278  	cmp 0x00000000, r2
+000001B4 8705                 279  	ble9 .BB.LABEL.10_2
+000001B6                      280  .BB.LABEL.10_1:	; if_break_bb
+000001B6                      281  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 191
+000001B6 5F12                 282  	add 0xFFFFFFFF, r2
+000001B8 6617C800             283  	st.h r2, 0x000000C8[r6]
+000001BC                      284  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 192
+000001BC E200                 285  	sxh r2
+000001BE C211                 286  	add r2, r2
+000001C0 C231                 287  	add r2, r6
+000001C2 26570000             288  	ld.h 0x00000000[r6], r10
+000001C6 7F00                 289  	jmp [r31]
+000001C8                      290  .BB.LABEL.10_2:	; bb22
+000001C8                      291  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 0
+000001C8 0052                 292  	mov 0x00000000, r10
+000001CA                      293  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 193
+000001CA 7F00                 294  	jmp [r31]
+000001CC                      295  _StackTop.1:
+000001CC                      296  	.stack _StackTop.1 = 0
+000001CC                      297  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 195
+000001CC 2617C800             298  	ld.h 0x000000C8[r6], r2
+000001D0                      299  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 197
+000001D0 6012                 300  	cmp 0x00000000, r2
+000001D2 8205                 301  	bz9 .BB.LABEL.11_2
+000001D4                      302  .BB.LABEL.11_1:	; if_break_bb
+000001D4                      303  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 201
+000001D4 C211                 304  	add r2, r2
+000001D6 C611                 305  	add r6, r2
+000001D8 2257FEFF             306  	ld.h 0xFFFFFFFE[r2], r10
+000001DC 7F00                 307  	jmp [r31]
+000001DE                      308  .BB.LABEL.11_2:	; bb19
+000001DE                      309  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 0
+000001DE 0052                 310  	mov 0x00000000, r10
+000001E0                      311  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 202
+000001E0 7F00                 312  	jmp [r31]
+000001E2                      313  _StackIsEmpty.1:
+000001E2                      314  	.stack _StackIsEmpty.1 = 0
+000001E2                      315  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 204
+000001E2 2617C800             316  	ld.h 0x000000C8[r6], r2
+000001E6                      317  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 210
+000001E6 6012                 318  	cmp 0x00000000, r2
+000001E8 EF570000             319  	setf 0x0000000F, r10
+000001EC                      320  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 211
+000001EC 7F00                 321  	jmp [r31]
+000001EE                      322  _Partition.1:
+000001EE                      323  	.stack _Partition.1 = 24
+000001EE                      324  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 213
+000001EE 8207210F             325  	prepare 0x00000079, 0x00000004
+000001F2 06A0                 326  	mov r6, r20
+000001F4 07A8                 327  	mov r7, r21
+000001F6 08B0                 328  	mov r8, r22
+000001F8 0330                 329  	mov r3, r6
+000001FA 8505                 330  	br9 .BB.LABEL.13_9
+000001FC                      331  .BB.LABEL.13_1:	; bb11
+000001FC                      332  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 223
+000001FC 5FB2                 333  	add 0xFFFFFFFF, r22
+000001FE                      334  .BB.LABEL.13_2:	; bb14
+000001FE                      335  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 221
+000001FE 1510                 336  	mov r21, r2
+00000200 E200                 337  	sxh r2
+00000202 1628                 338  	mov r22, r5
+00000204 E500                 339  	sxh r5
+00000206 E511                 340  	cmp r5, r2
+00000208 8E05                 341  	bge9 .BB.LABEL.13_4
+0000020A                      342  .BB.LABEL.13_3:	; bb21
+0000020A                      343  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 0
+0000020A 1610                 344  	mov r22, r2
+0000020C E200                 345  	sxh r2
+0000020E C212                 346  	shl 0x00000002, r2
+00000210 D411                 347  	add r20, r2
+00000212 22170100             348  	ld.w 0x00000000[r2], r2
+00000216 232F0100             349  	ld.w 0x00000000[r3], r5
+0000021A E511                 350  	cmp r5, r2
+0000021C 8905                 351  	bnc9 .BB.LABEL.13_1
+0000021E                      352  .BB.LABEL.13_4:	; bb38
+0000021E                      353  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 225
+0000021E 1530                 354  	mov r21, r6
+00000220 E600                 355  	sxh r6
+00000222 C232                 356  	shl 0x00000002, r6
+00000224 D431                 357  	add r20, r6
+00000226 16B8                 358  	mov r22, r23
+00000228 F700                 359  	sxh r23
+0000022A C2BA                 360  	shl 0x00000002, r23
+0000022C D4B9                 361  	add r20, r23
+0000022E 0442                 362  	mov 0x00000004, r8
+00000230 1738                 363  	mov r23, r7
+00000232 80FF0000             364  	jarl _memcpy, r31
+00000236 8505                 365  	br9 .BB.LABEL.13_6
+00000238                      366  .BB.LABEL.13_5:	; bb50
+00000238                      367  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 228
+00000238 41AA                 368  	add 0x00000001, r21
+0000023A                      369  .BB.LABEL.13_6:	; bb53
+0000023A                      370  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 226
+0000023A 1510                 371  	mov r21, r2
+0000023C E200                 372  	sxh r2
+0000023E 1628                 373  	mov r22, r5
+00000240 E500                 374  	sxh r5
+00000242 E511                 375  	cmp r5, r2
+00000244 8E05                 376  	bge9 .BB.LABEL.13_8
+00000246                      377  .BB.LABEL.13_7:	; bb60
+00000246                      378  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 0
+00000246 1510                 379  	mov r21, r2
+00000248 E200                 380  	sxh r2
+0000024A C212                 381  	shl 0x00000002, r2
+0000024C D411                 382  	add r20, r2
+0000024E 22170100             383  	ld.w 0x00000000[r2], r2
+00000252 232F0100             384  	ld.w 0x00000000[r3], r5
+00000256 E511                 385  	cmp r5, r2
+00000258 8305                 386  	bnh9 .BB.LABEL.13_5
+0000025A                      387  .BB.LABEL.13_8:	; bb80
+0000025A                      388  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 230
+0000025A 1538                 389  	mov r21, r7
+0000025C E700                 390  	sxh r7
+0000025E 1730                 391  	mov r23, r6
+00000260                      392  .BB.LABEL.13_9:	; bb80
+00000260                      393  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 0
+00000260 C23A                 394  	shl 0x00000002, r7
+00000262 D439                 395  	add r20, r7
+00000264 0442                 396  	mov 0x00000004, r8
+00000266 80FF0000             397  	jarl _memcpy, r31
+0000026A                      398  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 219
+0000026A 1510                 399  	mov r21, r2
+0000026C E200                 400  	sxh r2
+0000026E 1628                 401  	mov r22, r5
+00000270 E500                 402  	sxh r5
+00000272 E511                 403  	cmp r5, r2
+00000274 8605                 404  	blt9 .BB.LABEL.13_2
+00000276                      405  .BB.LABEL.13_10:	; bb101
+00000276                      406  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 232
+00000276 F500                 407  	sxh r21
+00000278 1510                 408  	mov r21, r2
+0000027A C212                 409  	shl 0x00000002, r2
+0000027C 1430                 410  	mov r20, r6
+0000027E C231                 411  	add r2, r6
+00000280 0442                 412  	mov 0x00000004, r8
+00000282 0338                 413  	mov r3, r7
+00000284 80FF0000             414  	jarl _memcpy, r31
+00000288                      415  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 234
+00000288 1550                 416  	mov r21, r10
+0000028A 42063F0F             417  	dispose 0x00000004, 0x00000079, [r31]
+0000028E                      418  _CanMsgConfigureSortLittleToBig.1:
+0000028E                      419  	.stack _CanMsgConfigureSortLittleToBig.1 = 24
+0000028E                      420  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 236
+0000028E 8007218F             421  	prepare 0x00000479, 0x00000000
+00000292 07A60000             422  	addi 0x00000000, r7, r20
+00000296 06A8                 423  	mov r6, r21
+00000298                      424  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 241
+00000298 8205                 425  	bz9 .BB.LABEL.14_8
+0000029A                      426  .BB.LABEL.14_1:	; if_break_bb
+0000029A                      427  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 246
+0000029A                      428  	mov #_g_stack.2, r22
+0000029A 360600000000            -- mov         0x0,r22
+000002A0 1630                 429  	mov r22, r6
+000002A2 80FF0000             430  	jarl _StackInit.1, r31
+000002A6 003A                 431  	mov 0x00000000, r7
+000002A8                      432  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 247
+000002A8 1630                 433  	mov r22, r6
+000002AA 80FF0000             434  	jarl _StackPush.1, r31
+000002AE                      435  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 245
+000002AE 5FA2                 436  	add 0xFFFFFFFF, r20
+000002B0                      437  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 248
+000002B0 1438                 438  	mov r20, r7
+000002B2 E700                 439  	sxh r7
+000002B4 1630                 440  	mov r22, r6
+000002B6 8505                 441  	br9 .BB.LABEL.14_6
+000002B8                      442  .BB.LABEL.14_2:	; bb15
+000002B8                      443  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 251
+000002B8                      444  	mov #_g_stack.2, r20
+000002B8 340600000000            -- mov         0x0,r20
+000002BE 1430                 445  	mov r20, r6
+000002C0 80FF0000             446  	jarl _StackTop.1, r31
+000002C4 0AB0                 447  	mov r10, r22
+000002C6                      448  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 252
+000002C6 1430                 449  	mov r20, r6
+000002C8 80FF0000             450  	jarl _StackPop.1, r31
+000002CC                      451  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 253
+000002CC 1430                 452  	mov r20, r6
+000002CE 80FF0000             453  	jarl _StackTop.1, r31
+000002D2 0AB8                 454  	mov r10, r23
+000002D4                      455  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 254
+000002D4 1430                 456  	mov r20, r6
+000002D6 80FF0000             457  	jarl _StackPop.1, r31
+000002DA                      458  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 256
+000002DA 1530                 459  	mov r21, r6
+000002DC 1738                 460  	mov r23, r7
+000002DE 1640                 461  	mov r22, r8
+000002E0 80FF0000             462  	jarl _Partition.1, r31
+000002E4                      463  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 257
+000002E4 0A16FFFF             464  	addi 0xFFFFFFFF, r10, r2
+000002E8 F711                 465  	cmp r23, r2
+000002EA 0AA0                 466  	mov r10, r20
+000002EC 8705                 467  	ble9 .BB.LABEL.14_4
+000002EE                      468  .BB.LABEL.14_3:	; if_then_bb32
+000002EE                      469  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 259
+000002EE                      470  	mov #_g_stack.2, r24
+000002EE 380600000000            -- mov         0x0,r24
+000002F4 1830                 471  	mov r24, r6
+000002F6 1738                 472  	mov r23, r7
+000002F8 80FF0000             473  	jarl _StackPush.1, r31
+000002FC                      474  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 260
+000002FC 143EFFFF             475  	addi 0xFFFFFFFF, r20, r7
+00000300 E700                 476  	sxh r7
+00000302 1830                 477  	mov r24, r6
+00000304 80FF0000             478  	jarl _StackPush.1, r31
+00000308                      479  .BB.LABEL.14_4:	; if_break_bb38
+00000308                      480  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 262
+00000308 14160100             481  	addi 0x00000001, r20, r2
+0000030C F611                 482  	cmp r22, r2
+0000030E 8E05                 483  	bge9 .BB.LABEL.14_7
+00000310                      484  .BB.LABEL.14_5:	; if_then_bb47
+00000310                      485  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 264
+00000310 41A2                 486  	add 0x00000001, r20
+00000312 1438                 487  	mov r20, r7
+00000314 E700                 488  	sxh r7
+00000316                      489  	mov #_g_stack.2, r20
+00000316 340600000000            -- mov         0x0,r20
+0000031C 1430                 490  	mov r20, r6
+0000031E 80FF0000             491  	jarl _StackPush.1, r31
+00000322                      492  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 265
+00000322 1430                 493  	mov r20, r6
+00000324 1638                 494  	mov r22, r7
+00000326                      495  .BB.LABEL.14_6:	; if_then_bb47
+00000326                      496  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 0
+00000326 80FF0000             497  	jarl _StackPush.1, r31
+0000032A                      498  .BB.LABEL.14_7:	; bb54
+0000032A                      499  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 249
+0000032A                      500  	mov #_g_stack.2, r6
+0000032A 260600000000            -- mov         0x0,r6
+00000330 80FF0000             501  	jarl _StackIsEmpty.1, r31
+00000334 6052                 502  	cmp 0x00000000, r10
+00000336 8A05                 503  	bnz9 .BB.LABEL.14_2
+00000338                      504  .BB.LABEL.14_8:	; return
+00000338                      505  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 268
+00000338 40063F8F             506  	dispose 0x00000000, 0x00000479, [r31]
+0000033C                      507  _GetIndexFromCanMsgConfigureBuffer.1:
+0000033C                      508  	.stack _GetIndexFromCanMsgConfigureBuffer.1 = 0
+0000033C                      509  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 271
+0000033C 40160000             510  	movhi HIGHW1(#_g_canRxToCpuConfigure.1), r0, r2
+00000340                      511  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 284
+00000340 22170100             512  	ld.w LOWW(#_g_canRxToCpuConfigure.1)[r2], r2
+00000344                      513  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 286
+00000344 6012                 514  	cmp 0x00000000, r2
+00000346 8205                 515  	bz9 .BB.LABEL.15_12
+00000348                      516  .BB.LABEL.15_1:	; if_break_bb
+00000348                      517  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 292
+00000348 5F12                 518  	add 0xFFFFFFFF, r2
+0000034A 0052                 519  	mov 0x00000000, r10
+0000034C 0A28                 520  	mov r10, r5
+0000034E 8505                 521  	br9 .BB.LABEL.15_11
+00000350                      522  .BB.LABEL.15_2:	; bb16
+00000350                      523  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 295
+00000350 0240                 524  	mov r2, r8
+00000352 AA41                 525  	sub r10, r8
+00000354 6142                 526  	cmp 0x00000001, r8
+00000356 8B05                 527  	bh9 .BB.LABEL.15_7
+00000358                      528  .BB.LABEL.15_3:	; if_then_bb23
+00000358                      529  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 297
+00000358 E62E9001             530  	mulhi 0x00000190, r6, r5
+0000035C                      531  	mov #_g_canRxToCpuConfigureBuffer, r8
+0000035C 280600000000            -- mov         0x0,r8
+00000362 C541                 532  	add r5, r8
+00000364 0A28                 533  	mov r10, r5
+00000366 C22A                 534  	shl 0x00000002, r5
+00000368 C541                 535  	add r5, r8
+0000036A 282F0100             536  	ld.w 0x00000000[r8], r5
+0000036E E539                 537  	cmp r5, r7
+00000370 8A05                 538  	bnz9 .BB.LABEL.15_5
+00000372                      539  .BB.LABEL.15_4:	; if_then_bb36
+00000372                      540  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 299
+00000372 EA00                 541  	sxh r10
+00000374 7F00                 542  	jmp [r31]
+00000376                      543  .BB.LABEL.15_5:	; if_else_bb
+00000376                      544  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 301
+00000376 E62E9001             545  	mulhi 0x00000190, r6, r5
+0000037A                      546  	mov #_g_canRxToCpuConfigureBuffer, r6
+0000037A 260600000000            -- mov         0x0,r6
+00000380 C531                 547  	add r5, r6
+00000382 0228                 548  	mov r2, r5
+00000384 C22A                 549  	shl 0x00000002, r5
+00000386 C531                 550  	add r5, r6
+00000388 262F0100             551  	ld.w 0x00000000[r6], r5
+0000038C E539                 552  	cmp r5, r7
+0000038E 8A05                 553  	bnz9 .BB.LABEL.15_12
+00000390                      554  .BB.LABEL.15_6:	; if_then_bb51
+00000390                      555  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 303
+00000390 0250                 556  	mov r2, r10
+00000392 EA00                 557  	sxh r10
+00000394 7F00                 558  	jmp [r31]
+00000396                      559  .BB.LABEL.15_7:	; if_break_bb57
+00000396                      560  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 308
+00000396 E6469001             561  	mulhi 0x00000190, r6, r8
+0000039A                      562  	mov #_g_canRxToCpuConfigureBuffer, r9
+0000039A 290600000000            -- mov         0x0,r9
+000003A0 C849                 563  	add r8, r9
+000003A2                      564  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 307
+000003A2 0A40                 565  	mov r10, r8
+000003A4 C241                 566  	add r2, r8
+000003A6 8142                 567  	shr 0x00000001, r8
+000003A8                      568  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 308
+000003A8 0858                 569  	mov r8, r11
+000003AA C25A                 570  	shl 0x00000002, r11
+000003AC CB49                 571  	add r11, r9
+000003AE 294F0100             572  	ld.w 0x00000000[r9], r9
+000003B2 E939                 573  	cmp r9, r7
+000003B4 8305                 574  	bnh9 .BB.LABEL.15_9
+000003B6                      575  .BB.LABEL.15_8:	; if_break_bb57.if_break_bb78_crit_edge
+000003B6                      576  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 0
+000003B6 0850                 577  	mov r8, r10
+000003B8 8505                 578  	br9 .BB.LABEL.15_10
+000003BA                      579  .BB.LABEL.15_9:	; if_else_bb76
+000003BA 0810                 580  	mov r8, r2
+000003BC                      581  .BB.LABEL.15_10:	; if_break_bb78
+000003BC 412A                 582  	add 0x00000001, r5
+000003BE                      583  .BB.LABEL.15_11:	; bb81
+000003BE 20463200             584  	movea 0x00000032, r0, r8
+000003C2                      585  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 293
+000003C2 E829                 586  	cmp r8, r5
+000003C4 8105                 587  	bl9 .BB.LABEL.15_2
+000003C6                      588  .BB.LABEL.15_12:	; bb90
+000003C6                      589  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 0
+000003C6 1F52                 590  	mov 0xFFFFFFFF, r10
+000003C8                      591  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 318
+000003C8 7F00                 592  	jmp [r31]
+000003CA                      593  _SaveCanMsgToBuffer:
+000003CA                      594  	.stack _SaveCanMsgToBuffer = 20
+000003CA                      595  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 320
+000003CA 8007210F             596  	prepare 0x00000079, 0x00000000
+000003CE 09A0                 597  	mov r9, r20
+000003D0 08A8                 598  	mov r8, r21
+000003D2 07B0                 599  	mov r7, r22
+000003D4 06BE0000             600  	addi 0x00000000, r6, r23
+000003D8                      601  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 323
+000003D8 8205                 602  	bz9 .BB.LABEL.16_2
+000003DA                      603  .BB.LABEL.16_1:	; entry.bb35_crit_edge
+000003DA                      604  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 0
+000003DA 8056FFFF             605  	ori 0x0000FFFF, r0, r10
+000003DE 8505                 606  	br9 .BB.LABEL.16_5
+000003E0                      607  .BB.LABEL.16_2:	; if_break_bb
+000003E0                      608  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 327
+000003E0 1506C0FF             609  	addi 0xFFFFFFC0, r21, r0
+000003E4 8F05                 610  	bgt9 .BB.LABEL.16_1
+000003E6                      611  .BB.LABEL.16_3:	; if_break_bb17
+000003E6                      612  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 333
+000003E6 1730                 613  	mov r23, r6
+000003E8 1638                 614  	mov r22, r7
+000003EA 80FF0000             615  	jarl _GetIndexFromCanMsgConfigureBuffer.1, r31
+000003EE                      616  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 334
+000003EE 6052                 617  	cmp 0x00000000, r10
+000003F0 8C05                 618  	bp9 .BB.LABEL.16_6
+000003F2                      619  .BB.LABEL.16_4:	; if_break_bb17.bb35_crit_edge
+000003F2                      620  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 0
+000003F2 0052                 621  	mov 0x00000000, r10
+000003F4                      622  .BB.LABEL.16_5:	; bb35
+000003F4                      623  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 346
+000003F4 EA00                 624  	sxh r10
+000003F6 40063F0F             625  	dispose 0x00000000, 0x00000079, [r31]
+000003FA                      626  .BB.LABEL.16_6:	; if_break_bb28
+000003FA                      627  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 345
+000003FA 1730                 628  	mov r23, r6
+000003FC 1638                 629  	mov r22, r7
+000003FE 1540                 630  	mov r21, r8
+00000400 1448                 631  	mov r20, r9
+00000402 80FF0000             632  	jarl _CpuCanRxQueuePush.1, r31
+00000406 40063F0F             633  	dispose 0x00000000, 0x00000079, [r31]
+0000040A                      634  _CanMsgReceiveFromBuffer:
+0000040A                      635  	.stack _CanMsgReceiveFromBuffer = 88
+0000040A                      636  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 348
+0000040A A607210C             637  	prepare 0x00000061, 0x0000004C
+0000040E 07A60000             638  	addi 0x00000000, r7, r20
+00000412 06A8                 639  	mov r6, r21
+00000414                      640  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 352
+00000414 8205                 641  	bz9 .BB.LABEL.17_3
+00000416                      642  .BB.LABEL.17_1:	; if_break_bb
+00000416                      643  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 0
+00000416 0330                 644  	mov r3, r6
+00000418                      645  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 357
+00000418 80FF0000             646  	jarl _CpuCanRxQueuePeek.1, r31
+0000041C 6052                 647  	cmp 0x00000000, r10
+0000041E 8A05                 648  	bnz9 .BB.LABEL.17_3
+00000420                      649  .BB.LABEL.17_2:	; if_break_bb14
+00000420                      650  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 0
+00000420 0330                 651  	mov r3, r6
+00000422                      652  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 362
+00000422 1538                 653  	mov r21, r7
+00000424 1440                 654  	mov r20, r8
+00000426 80FF0000             655  	jarl _CanMsgCopyFromQueueNode.1, r31
+0000042A                      656  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 363
+0000042A 80FF0000             657  	jarl _CpuCanRxQueueDrop.1, r31
+0000042E 0052                 658  	mov 0x00000000, r10
+00000430                      659  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 365
+00000430 66063F0C             660  	dispose 0x0000004C, 0x00000061, [r31]
+00000434                      661  .BB.LABEL.17_3:	; bb19
+00000434                      662  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 0
+00000434 1F52                 663  	mov 0xFFFFFFFF, r10
+00000436                      664  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 366
+00000436 66063F0C             665  	dispose 0x0000004C, 0x00000061, [r31]
+0000043A                      666  _CanMsgTansmitToCpuInitialize:
+0000043A                      667  	.stack _CanMsgTansmitToCpuInitialize = 0
+0000043A                      668  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 368
+0000043A 0052                 669  	mov 0x00000000, r10
+0000043C                      670  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 388
+0000043C 7F00                 671  	jmp [r31]
+0000043E                      672  _CanMsgTransmitToCpu:
+0000043E                      673  	.stack _CanMsgTransmitToCpu = 184
+0000043E                      674  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 390
+0000043E BE07210F             675  	prepare 0x00000079, 0x0000007C
+00000442 231ED8FF             676  	movea 0xFFFFFFD8, r3, r3
+00000446                      677  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 399
+00000446 40160000             678  	movhi HIGHW1(#_g_txByteOffset), r0, r2
+0000044A 022A                 679  	mov 0x00000002, r5
+0000044C 622F0000             680  	st.h r5, LOWW(#_g_txByteOffset)[r2]
+00000450 0012                 681  	mov 0x00000000, r2
+00000452 06A0                 682  	mov r6, r20
+00000454 80070000             683  	jr .BB.LABEL.19_12
+00000458                      684  .BB.LABEL.19_1:	; bb
+00000458                      685  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 405
+00000458 40160000             686  	movhi HIGHW1(#_g_txByteOffset), r0, r2
+0000045C E2170100             687  	ld.hu LOWW(#_g_txByteOffset)[r2], r2
+00000460                      688  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 404
+00000460 832F0D00             689  	ld.bu 0x0000000C[r3], r5
+00000464                      690  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 405
+00000464 C229                 691  	add r2, r5
+00000466 462A                 692  	add 0x00000006, r5
+00000468 C500                 693  	zxh r5
+0000046A 05067DFA             694  	addi 0xFFFFFA7D, r5, r0
+0000046E EF070100             695  	bgt17 .BB.LABEL.19_13
+00000472                      696  .BB.LABEL.19_2:	; if_break_bb
+00000472                      697  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 0
+00000472 233E5000             698  	movea 0x00000050, r3, r7
+00000476 23360300             699  	movea 0x00000003, r3, r6
+0000047A                      700  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 410
+0000047A 80FF0000             701  	jarl _CanMsgReceiveFromBuffer, r31
+0000047E 6052                 702  	cmp 0x00000000, r10
+00000480 EA070100             703  	bnz17 .BB.LABEL.19_13
+00000484                      704  .BB.LABEL.19_3:	; if_break_bb31
+00000484                      705  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 415
+00000484 23175100             706  	ld.w 0x00000050[r3], r2
+00000488 02069FFC             707  	addi 0xFFFFFC9F, r2, r0
+0000048C 8A05                 708  	bnz9 .BB.LABEL.19_8
+0000048E                      709  .BB.LABEL.19_4:	; if_then_bb37
+0000048E                      710  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 417
+0000048E 833F9500             711  	ld.bu 0x00000094[r3], r7
+00000492                      712  	mov #.STR.1, r6
+00000492 260600000000            -- mov         0x0,r6
+00000498 80FF0000             713  	jarl _LogHalPrint, r31
+0000049C 00AA                 714  	mov 0x00000000, r21
+0000049E 8505                 715  	br9 .BB.LABEL.19_6
+000004A0                      716  .BB.LABEL.19_5:	; bb41
+000004A0                      717  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 420
+000004A0 D516FF00             718  	andi 0x000000FF, r21, r2
+000004A4 232E5000             719  	movea 0x00000050, r3, r5
+000004A8 C229                 720  	add r2, r5
+000004AA 853F0500             721  	ld.bu 0x00000004[r5], r7
+000004AE                      722  	mov #.STR.1502, r6
+000004AE 260600000000            -- mov         0x0,r6
+000004B4 80FF0000             723  	jarl _LogHalPrint, r31
+000004B8 41AA                 724  	add 0x00000001, r21
+000004BA                      725  .BB.LABEL.19_6:	; bb51
+000004BA                      726  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 418
+000004BA D516FF00             727  	andi 0x000000FF, r21, r2
+000004BE 832F9500             728  	ld.bu 0x00000094[r3], r5
+000004C2 E511                 729  	cmp r5, r2
+000004C4 8105                 730  	bl9 .BB.LABEL.19_5
+000004C6                      731  .BB.LABEL.19_7:	; bb60
+000004C6                      732  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 422
+000004C6                      733  	mov #.STR.1503, r6
+000004C6 260600000000            -- mov         0x0,r6
+000004CC 80FF0000             734  	jarl _LogHalPrint, r31
+000004D0                      735  .BB.LABEL.19_8:	; if_break_bb61
+000004D0                      736  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 425
+000004D0 40160000             737  	movhi HIGHW1(#_g_txByteOffset), r0, r2
+000004D4 E22F0100             738  	ld.hu LOWW(#_g_txByteOffset)[r2], r5
+000004D8                      739  	mov #_g_txBuffer, r6
+000004D8 260600000000            -- mov         0x0,r6
+000004DE C629                 740  	add r6, r5
+000004E0 233E0300             741  	movea 0x00000003, r3, r7
+000004E4 073F0000             742  	ld.b 0x00000000[r7], r7
+000004E8 453F0000             743  	st.b r7, 0x00000000[r5]
+000004EC 222F0000             744  	ld.h LOWW(#_g_txByteOffset)[r2], r5
+000004F0 412A                 745  	add 0x00000001, r5
+000004F2 622F0000             746  	st.h r5, LOWW(#_g_txByteOffset)[r2]
+000004F6                      747  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 426
+000004F6 C500                 748  	zxh r5
+000004F8 C629                 749  	add r6, r5
+000004FA 233F5100             750  	ld.w 0x00000050[r3], r7
+000004FE 983A                 751  	shr 0x00000018, r7
+00000500 453F0000             752  	st.b r7, 0x00000000[r5]
+00000504 222F0000             753  	ld.h LOWW(#_g_txByteOffset)[r2], r5
+00000508 412A                 754  	add 0x00000001, r5
+0000050A 622F0000             755  	st.h r5, LOWW(#_g_txByteOffset)[r2]
+0000050E                      756  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 427
+0000050E C500                 757  	zxh r5
+00000510 C629                 758  	add r6, r5
+00000512 233F5100             759  	ld.w 0x00000050[r3], r7
+00000516 903A                 760  	shr 0x00000010, r7
+00000518 453F0000             761  	st.b r7, 0x00000000[r5]
+0000051C 222F0000             762  	ld.h LOWW(#_g_txByteOffset)[r2], r5
+00000520 412A                 763  	add 0x00000001, r5
+00000522 622F0000             764  	st.h r5, LOWW(#_g_txByteOffset)[r2]
+00000526                      765  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 428
+00000526 C500                 766  	zxh r5
+00000528 C629                 767  	add r6, r5
+0000052A 233F5100             768  	ld.w 0x00000050[r3], r7
+0000052E 883A                 769  	shr 0x00000008, r7
+00000530 453F0000             770  	st.b r7, 0x00000000[r5]
+00000534 222F0000             771  	ld.h LOWW(#_g_txByteOffset)[r2], r5
+00000538 412A                 772  	add 0x00000001, r5
+0000053A 622F0000             773  	st.h r5, LOWW(#_g_txByteOffset)[r2]
+0000053E                      774  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 429
+0000053E C500                 775  	zxh r5
+00000540 C629                 776  	add r6, r5
+00000542 233F5100             777  	ld.w 0x00000050[r3], r7
+00000546 453F0000             778  	st.b r7, 0x00000000[r5]
+0000054A 222F0000             779  	ld.h LOWW(#_g_txByteOffset)[r2], r5
+0000054E 412A                 780  	add 0x00000001, r5
+00000550 622F0000             781  	st.h r5, LOWW(#_g_txByteOffset)[r2]
+00000554                      782  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 430
+00000554 C500                 783  	zxh r5
+00000556 C531                 784  	add r5, r6
+00000558 832F9500             785  	ld.bu 0x00000094[r3], r5
+0000055C 462F0000             786  	st.b r5, 0x00000000[r6]
+00000560 22370000             787  	ld.h LOWW(#_g_txByteOffset)[r2], r6
+00000564 4132                 788  	add 0x00000001, r6
+00000566 62370000             789  	st.h r6, LOWW(#_g_txByteOffset)[r2]
+0000056A 0012                 790  	mov 0x00000000, r2
+0000056C 8505                 791  	br9 .BB.LABEL.19_10
+0000056E                      792  .BB.LABEL.19_9:	; bb114
+0000056E                      793  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 433
+0000056E 40360000             794  	movhi HIGHW1(#_g_txByteOffset), r0, r6
+00000572 E63F0100             795  	ld.hu LOWW(#_g_txByteOffset)[r6], r7
+00000576                      796  	mov #_g_txBuffer, r8
+00000576 280600000000            -- mov         0x0,r8
+0000057C C741                 797  	add r7, r8
+0000057E C23EFFFF             798  	andi 0x0000FFFF, r2, r7
+00000582 234E5000             799  	movea 0x00000050, r3, r9
+00000586 C749                 800  	add r7, r9
+00000588 093F0400             801  	ld.b 0x00000004[r9], r7
+0000058C 483F0000             802  	st.b r7, 0x00000000[r8]
+00000590 263F0000             803  	ld.h LOWW(#_g_txByteOffset)[r6], r7
+00000594 413A                 804  	add 0x00000001, r7
+00000596 663F0000             805  	st.h r7, LOWW(#_g_txByteOffset)[r6]
+0000059A 4112                 806  	add 0x00000001, r2
+0000059C                      807  .BB.LABEL.19_10:	; bb128
+0000059C                      808  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 431
+0000059C C236FFFF             809  	andi 0x0000FFFF, r2, r6
+000005A0 E531                 810  	cmp r5, r6
+000005A2 8605                 811  	blt9 .BB.LABEL.19_9
+000005A4                      812  .BB.LABEL.19_11:	; bb137
+000005A4                      813  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 435
+000005A4 40160000             814  	movhi HIGHW1(#_g_txBufferCount), r0, r2
+000005A8 22170000             815  	ld.h LOWW(#_g_txBufferCount)[r2], r2
+000005AC 4112                 816  	add 0x00000001, r2
+000005AE                      817  .BB.LABEL.19_12:	; bb140
+000005AE                      818  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 0
+000005AE 402E0000             819  	movhi HIGHW1(#_g_txBufferCount), r0, r5
+000005B2 65170000             820  	st.h r2, LOWW(#_g_txBufferCount)[r5]
+000005B6 23360400             821  	movea 0x00000004, r3, r6
+000005BA                      822  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 402
+000005BA 80FF0000             823  	jarl _CpuCanRxQueuePeek.1, r31
+000005BE 6052                 824  	cmp 0x00000000, r10
+000005C0 E2070100             825  	bz17 .BB.LABEL.19_1
+000005C4                      826  .BB.LABEL.19_13:	; bb147
+000005C4                      827  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 438
+000005C4 40160000             828  	movhi HIGHW1(#_g_txBufferCount), r0, r2
+000005C8 E2170100             829  	ld.hu LOWW(#_g_txBufferCount)[r2], r2
+000005CC 6012                 830  	cmp 0x00000000, r2
+000005CE 8205                 831  	bz9 .BB.LABEL.19_15
+000005D0                      832  .BB.LABEL.19_14:	; if_break_bb155
+000005D0                      833  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 443
+000005D0 8812                 834  	shr 0x00000008, r2
+000005D2                      835  	mov #_g_txBuffer, r5
+000005D2 250600000000            -- mov         0x0,tp
+000005D8 45170000             836  	st.b r2, 0x00000000[r5]
+000005DC                      837  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 444
+000005DC 40AE0000             838  	movhi HIGHW1(#_g_txBufferCount), r0, r21
+000005E0 15170000             839  	ld.b LOWW(#_g_txBufferCount)[r21], r2
+000005E4 45170100             840  	st.b r2, 0x00000001[r5]
+000005E8 02B2                 841  	mov 0x00000002, r22
+000005EA                      842  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 446
+000005EA 43B79800             843  	st.b r22, 0x00000098[r3]
+000005EE                      844  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 447
+000005EE 43B79900             845  	st.b r22, 0x00000099[r3]
+000005F2                      846  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 448
+000005F2 43079A00             847  	st.b r0, 0x0000009A[r3]
+000005F6                      848  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 449
+000005F6 40BE0000             849  	movhi HIGHW1(#_g_txByteOffset), r0, r23
+000005FA 37170000             850  	ld.h LOWW(#_g_txByteOffset)[r23], r2
+000005FE 63179C00             851  	st.h r2, 0x0000009C[r3]
+00000602                      852  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 450
+00000602 37170000             853  	ld.h LOWW(#_g_txByteOffset)[r23], r2
+00000606 63179E00             854  	st.h r2, 0x0000009E[r3]
+0000060A                      855  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 451
+0000060A 632FA100             856  	st.w r5, 0x000000A0[r3]
+0000060E 233E9800             857  	movea 0x00000098, r3, r7
+00000612                      858  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 452
+00000612 1430                 859  	mov r20, r6
+00000614 80FF0000             860  	jarl _MpuHalTransmit, r31
+00000618                      861  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 454
+00000618 77B70000             862  	st.h r22, LOWW(#_g_txByteOffset)[r23]
+0000061C                      863  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 455
+0000061C 75070000             864  	st.h r0, LOWW(#_g_txBufferCount)[r21]
+00000620                      865  .BB.LABEL.19_15:	; bb176
+00000620                      866  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 0
+00000620 0052                 867  	mov 0x00000000, r10
+00000622 231E2800             868  	movea 0x00000028, r3, r3
+00000626                      869  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 457
+00000626 7E063F0F             870  	dispose 0x0000007C, 0x00000079, [r31]
+0000062A                      871  _GetCanMsgConfigureBufferSize:
+0000062A                      872  	.stack _GetCanMsgConfigureBufferSize = 0
+0000062A                      873  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 459
+0000062A 6032                 874  	cmp 0x00000000, r6
+0000062C 20166400             875  	movea 0x00000064, r0, r2
+00000630                      876  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 465
+00000630 FF171453             877  	cmov 0x0000000A, 0xFFFFFFFF, r2, r10
+00000634                      878  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 466
+00000634 7F00                 879  	jmp [r31]
+00000636                      880  _CanMsgConfigureBufferAdd:
+00000636                      881  	.stack _CanMsgConfigureBufferAdd = 0
+00000636                      882  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 468
+00000636 6032                 883  	cmp 0x00000000, r6
+00000638                      884  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 470
+00000638 8A05                 885  	bnz9 .BB.LABEL.21_3
+0000063A                      886  .BB.LABEL.21_1:	; if_break_bb
+0000063A                      887  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 474
+0000063A 0610                 888  	mov r6, r2
+0000063C C312                 889  	shl 0x00000003, r2
+0000063E                      890  	mov #_g_canRxToCpuConfigure.1, r5
+0000063E 250600000000            -- mov         0x0,tp
+00000644 C229                 891  	add r2, r5
+00000646 25170500             892  	ld.w 0x00000004[r5], r2
+0000064A 202E6300             893  	movea 0x00000063, r0, r5
+0000064E E511                 894  	cmp r5, r2
+00000650 8B05                 895  	bh9 .BB.LABEL.21_3
+00000652                      896  .BB.LABEL.21_2:	; if_break_bb17
+00000652                      897  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 478
+00000652 E6169001             898  	mulhi 0x00000190, r6, r2
+00000656                      899  	mov #_g_canRxToCpuConfigureBuffer, r5
+00000656 250600000000            -- mov         0x0,tp
+0000065C C229                 900  	add r2, r5
+0000065E C332                 901  	shl 0x00000003, r6
+00000660                      902  	mov #_g_canRxToCpuConfigure.1, r2
+00000660 220600000000            -- mov         0x0,hp
+00000666 C611                 903  	add r6, r2
+00000668 22370500             904  	ld.w 0x00000004[r2], r6
+0000066C C232                 905  	shl 0x00000002, r6
+0000066E C629                 906  	add r6, r5
+00000670 27370100             907  	ld.w 0x00000000[r7], r6
+00000674 65370100             908  	st.w r6, 0x00000000[r5]
+00000678                      909  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 480
+00000678 222F0500             910  	ld.w 0x00000004[r2], r5
+0000067C 412A                 911  	add 0x00000001, r5
+0000067E 622F0500             912  	st.w r5, 0x00000004[r2]
+00000682 0052                 913  	mov 0x00000000, r10
+00000684                      914  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 481
+00000684 7F00                 915  	jmp [r31]
+00000686                      916  .BB.LABEL.21_3:	; bb40
+00000686                      917  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 0
+00000686 1F52                 918  	mov 0xFFFFFFFF, r10
+00000688                      919  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 482
+00000688 7F00                 920  	jmp [r31]
+0000068A                      921  _SetCanMsgConfigureBufferInvalidData:
+0000068A                      922  	.stack _SetCanMsgConfigureBufferInvalidData = 4
+0000068A                      923  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 484
+0000068A 80072100             924  	prepare 0x00000001, 0x00000000
+0000068E                      925  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 487
+0000068E 80FF0000             926  	jarl _SuspendAllInterrupts, r31
+00000692 0012                 927  	mov 0x00000000, r2
+00000694 8505                 928  	br9 .BB.LABEL.22_2
+00000696                      929  .BB.LABEL.22_1:	; bb
+00000696                      930  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 490
+00000696 0228                 931  	mov r2, r5
+00000698 C32A                 932  	shl 0x00000003, r5
+0000069A                      933  	mov #_g_canRxToCpuConfigure.1, r6
+0000069A 260600000000            -- mov         0x0,r6
+000006A0 C531                 934  	add r5, r6
+000006A2 66070100             935  	st.w r0, 0x00000000[r6]
+000006A6                      936  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 491
+000006A6 66070500             937  	st.w r0, 0x00000004[r6]
+000006AA 4112                 938  	add 0x00000001, r2
+000006AC                      939  .BB.LABEL.22_2:	; bb9
+000006AC                      940  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 488
+000006AC 6012                 941  	cmp 0x00000000, r2
+000006AE 8205                 942  	bz9 .BB.LABEL.22_1
+000006B0                      943  .BB.LABEL.22_3:	; bb13
+000006B0                      944  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 493
+000006B0 40160000             945  	movhi HIGHW1(#_g_cpuCanRxQueueWrite.4), r0, r2
+000006B4 62070000             946  	st.h r0, LOWW(#_g_cpuCanRxQueueWrite.4)[r2]
+000006B8                      947  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 494
+000006B8 40160000             948  	movhi HIGHW1(#_g_cpuCanRxQueueRead.5), r0, r2
+000006BC 62070000             949  	st.h r0, LOWW(#_g_cpuCanRxQueueRead.5)[r2]
+000006C0                      950  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 495
+000006C0 80FF0000             951  	jarl _ResumeAllInterrupts, r31
+000006C4 40063F00             952  	dispose 0x00000000, 0x00000001, [r31]
+000006C8                      953  _SetCanMsgConfigureBufferValidData:
+000006C8                      954  	.stack _SetCanMsgConfigureBufferValidData = 8
+000006C8                      955  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 498
+000006C8 80072108             956  	prepare 0x00000041, 0x00000000
+000006CC 00A2                 957  	mov 0x00000000, r20
+000006CE 8505                 958  	br9 .BB.LABEL.23_2
+000006D0                      959  .BB.LABEL.23_1:	; bb
+000006D0                      960  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 503
+000006D0 1410                 961  	mov r20, r2
+000006D2 C312                 962  	shl 0x00000003, r2
+000006D4                      963  	mov #_g_canRxToCpuConfigure.1, r5
+000006D4 250600000000            -- mov         0x0,tp
+000006DA C229                 964  	add r2, r5
+000006DC E53F0500             965  	ld.hu 0x00000004[r5], r7
+000006E0 1410                 966  	mov r20, r2
+000006E2 F0177202             967  	mulu 0x00000190, r2, r0
+000006E6                      968  	mov #_g_canRxToCpuConfigureBuffer, r6
+000006E6 260600000000            -- mov         0x0,r6
+000006EC C231                 969  	add r2, r6
+000006EE 80FF0000             970  	jarl _CanMsgConfigureSortLittleToBig.1, r31
+000006F2 41A2                 971  	add 0x00000001, r20
+000006F4                      972  .BB.LABEL.23_2:	; bb11
+000006F4                      973  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 501
+000006F4 60A2                 974  	cmp 0x00000000, r20
+000006F6 8205                 975  	bz9 .BB.LABEL.23_1
+000006F8                      976  .BB.LABEL.23_3:	; bb11.bb27_crit_edge
+000006F8                      977  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 0
+000006F8 0012                 978  	mov 0x00000000, r2
+000006FA 8505                 979  	br9 .BB.LABEL.23_5
+000006FC                      980  .BB.LABEL.23_4:	; bb16
+000006FC                      981  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 507
+000006FC 0228                 982  	mov r2, r5
+000006FE C32A                 983  	shl 0x00000003, r5
+00000700                      984  	mov #_g_canRxToCpuConfigure.1, r6
+00000700 260600000000            -- mov         0x0,r6
+00000706 C531                 985  	add r5, r6
+00000708 262F0500             986  	ld.w 0x00000004[r6], r5
+0000070C 662F0100             987  	st.w r5, 0x00000000[r6]
+00000710 4112                 988  	add 0x00000001, r2
+00000712                      989  .BB.LABEL.23_5:	; bb27
+00000712                      990  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 505
+00000712 6012                 991  	cmp 0x00000000, r2
+00000714 8205                 992  	bz9 .BB.LABEL.23_4
+00000716                      993  .BB.LABEL.23_6:	; return
+00000716                      994  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 509
+00000716 40063F08             995  	dispose 0x00000000, 0x00000041, [r31]
+0000071A                      996  _CanMsgConfigureBufferDataIsValid:
+0000071A                      997  	.stack _CanMsgConfigureBufferDataIsValid = 0
+0000071A                      998  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 513
+0000071A 40160000             999  	movhi HIGHW1(#_g_canRxToCpuConfigure.1), r0, r2
+0000071E 22170100            1000  	ld.w LOWW(#_g_canRxToCpuConfigure.1)[r2], r2
+00000722                     1001  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 519
+00000722 6012                1002  	cmp 0x00000000, r2
+00000724 EA570000            1003  	setf 0x0000000A, r10
+00000728                     1004  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/app/vehicle_data_to_mpu/canMsgToMpu.c", 521
+00000728 7F00                1005  	jmp [r31]
+00000000                     1006  	.section .bss, bss
+00000000                     1007  	.align 4
+00000000                     1008  _g_canRxToCpuConfigureBuffer:
+00000000                     1009  	.ds (400)
+00000190                     1010  	.align 4
+00000190                     1011  _g_canRxToCpuConfigure.1:
+00000190                     1012  	.ds (8)
+00000198                     1013  	.align 2
+00000198                     1014  _g_stack.2:
+00000198                     1015  	.ds (202)
+00000262 0000                1016  	.align 4
+00000264                     1017  _g_cpuCanRxQueue.3:
+00000264                     1018  	.ds (760)
+0000055C                     1019  _g_txBuffer:
+0000055C                     1020  	.ds (1411)
+00000000                     1021  	.section .data, data
+00000000                     1022  	.align 2
+00000000                     1023  _g_cpuCanRxQueueWrite.4:
+00000000 0000                1024  	.ds (2)
+00000002                     1025  	.align 2
+00000002                     1026  _g_cpuCanRxQueueRead.5:
+00000002 0000                1027  	.ds (2)
+00000004                     1028  	.align 2
+00000004                     1029  _g_txBufferCount:
+00000004 0000                1030  	.ds (2)
+00000006                     1031  	.align 2
+00000006                     1032  _g_txByteOffset:
+00000006 0200                1033  	.dhw 0x0002
+00000000                     1034  	.section .const, const
+00000000                     1035  .STR.1:
+00000000 43                  1036  	.db 0x43,0x41,0x4E,0x20,0x49,0x44,0x20,0x30,0x78,0x33,0x36,0x31,0x2C,0x20,0x44,0x4C
+00000001 41              
+00000002 4E              
+00000003 20              
+00000004 49              
+00000005 44              
+00000006 20              
+00000007 30              
+00000008 78              
+00000009 33              
+0000000A 36              
+0000000B 31              
+0000000C 2C              
+0000000D 20              
+0000000E 44              
+0000000F 4C              
+00000010 43                  1037  	.db 0x43,0x3A,0x20,0x25,0x64,0x2C,0x20,0x44,0x61,0x74,0x61,0x3A,0x20
+00000011 3A              
+00000012 20              
+00000013 25              
+00000014 64              
+00000015 2C              
+00000016 20              
+00000017 44              
+00000018 61              
+00000019 74              
+0000001A 61              
+0000001B 3A              
+0000001C 20              
+0000001D 00                  1038  	.ds (1)
+0000001E                     1039  .STR.1502:
+0000001E 30                  1040  	.db 0x30,0x78,0x25,0x30,0x32,0x58,0x20
+0000001F 78              
+00000020 25              
+00000021 30              
+00000022 32              
+00000023 58              
+00000024 20              
+00000025 00                  1041  	.ds (1)
+00000026                     1042  .STR.1503:
+00000026 0A                  1043  	.db 0x0A
+00000027 00                  1044  	.ds (1)
+
+Section List
+Attr     Size                Name
+
+TEXT         1834 (0000072A) .text
+DATA            8 (00000008) .data
+BSS          2783 (00000ADF) .bss
+CONST          40 (00000028) .const
+
+Command Line Parameter
+-Xcpu=g3kh -Xreg_mode=32 -Xep=callee -Xcharacter_set=none -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\diagnostic -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\parameter_store -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu\port -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu\uart -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu\iic -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\vehicle_data_to_mpu -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\power_manage -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\mcu_cpu_sync -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\remote_control -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\can_cycle_send -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\project_configure -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\sdk\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\commonLib\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\hal\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\icu\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Icu_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\vss -ID:\wk\sirun\project\dazhong\code\mcu_app\ASW\CDD_FVM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\EEIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanTSyn -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\StbM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CSM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\RSA -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\RandomGen\CTR_DRBG -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\MAC\CMAC -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\Hash\sha256 -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\dh -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\AES -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CryInterface -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\SecOC -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\NvM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\MemIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\Fee -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\WdgM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\WdgIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Wdg_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Gpt_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Fls_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\wdg\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\gpt\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\fls\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\IpduM -ID:\wk\sirun\project\dazhong\code\mcu_app\ASW\APP -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\BswM -ID:\wk\sirun\project\dazhong\code\mcu_app\ASW\BSW_Ext -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\Dcm -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanTp -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Dem -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Libraries\E2E -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Libraries\Crc -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\NmIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanNm -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config\RTE\Rte -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config\RTE\SchM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Libraries\IStd -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\EcuM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\ComM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanSM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\Com -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\PDUR -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\CommonInclude -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config\RH850F1K -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Extend\inc -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Kernel\inc -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Portable\Mcu -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Portable\Processor -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Adc_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Can_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Dio_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Mcu_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Port_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\adc\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\can\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\dio\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\general -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\mcu\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\port\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\CanGeneral\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\Det\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\MemIf\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\SchM\include -DRH850_F1KM_S1_2MB -Xprn_path=DefaultBuild -Xno_warning=50013 -oD:\wk\sirun\project\dazhong\code\mcu_app\Toolchain\CSPLUS_V81200\DefaultBuild\canMsgToMpu.obj D:\wk\sirun\project\dazhong\code\mcu_app\Toolchain\CSPLUS_V81200\DefaultBuild\canMsgToMpu.asm 
+

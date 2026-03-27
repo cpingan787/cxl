@@ -2,6 +2,15 @@
 #include "stdlib.h"
 #include "stateSyncSdk.h"
 #include "peripheralHal.h"
+#include "r_cg_macrodriver.h"
+#include "r_cg_port.h"
+#include "r_port.h"
+
+#include "Dem.h"
+#include "Rte_Dem_Type.h"
+#include "Dem_PBcfg.h"
+
+#include "taskDtcProcess.h"
 
 #define CPU_INFO_FAILURE_TIME 30 // cpu信息失效时间 单位：秒
 
@@ -14,10 +23,10 @@ static CpuNetInfoSync_t g_cpuNetInfo;         // MPU 网络信息存储
 static CpuHalStateSync_t g_cpuHalState;       // MPU硬件信息存储
 static CpuTspStateSync_t g_cpuTspState;       // MPU平台连接信息
 // static GsensorStateSync_t g_gsensorState;          //G-Sensor状态
+static CpuDtcSync_t g_cpuMpuDtcInfo;                // MPU故障码信息存储
+static MpuFaultExtStatusSync_t g_mpuFaultExtStatus; // 保存 MPU 故障同步扩展状态
 
-static StateSyncGnssAntState_e g_gnssAntState = E_STATE_SYNC_GNSS_ANT_STATE_INIT;
-
-static uint16_t float_to_uint16_trunc(float f)
+static uint16_t FloatToUint16Trunc(float f)
 {
     union
     {
@@ -50,91 +59,6 @@ static uint16_t float_to_uint16_trunc(float f)
         if (sign)
             int_part = -int_part;
         return (uint16_t)int_part;
-    }
-}
-
-/*************************************************
-  天线检测使能判断
-*************************************************/
-static uint8_t check_monitor_enable(void)
-{
-    // 1. 燃油车非发动机启动状态
-    // 2. KL30电压在9V~16V之间
-    // 3. usgmd满足条件且持续1s以上
-    // 4. EPTStCmdOn=false且上电完成超1s
-    uint32_t kl30Voltage = 0;
-    int16_t ret = PeripheralHalAdGet(AD0_CHANNEL_KL30, &kl30Voltage);
-    if (ret != 0 || kl30Voltage < 9000 || kl30Voltage > 16000)
-    {
-        return 0;
-    }
-    return 1;
-}
-
-static uint16_t antCountShort = 0;
-static uint16_t antCountOpen = 0;
-static uint16_t antCountNormal = 0;
-static void StateSyncSetGnssAntState()
-{
-    uint8_t monitor_enable = check_monitor_enable();
-    uint32_t gnssAntADC0 = 0;
-    uint32_t gnssAntADC1 = 0;
-    int16_t ret = PeripheralHalAdGet(AD0_CHANNEL_MCU_GPS_ANT_ADC0, &gnssAntADC0);
-    if (ret != 0)
-    {
-        return;
-    }
-    ret = PeripheralHalAdGet(AD0_CHANNEL_MCU_GPS_ANT_ADC1, &gnssAntADC1);
-    if (ret != 0)
-    {
-        return;
-    }
-    if (!monitor_enable)
-    {
-        antCountShort = 0;
-        antCountOpen = 0;
-        antCountNormal = 0;
-        g_gnssAntState = E_STATE_SYNC_GNSS_ANT_STATE_INIT;
-        return;
-    }
-    else if (monitor_enable)
-    {
-        if ((gnssAntADC0 >= 2150 && gnssAntADC0 <= 2350) && (gnssAntADC1 >= 100 && gnssAntADC1 <= 300))
-        {
-            antCountShort = 0;
-            antCountOpen = 0;
-            antCountNormal++;
-            if (antCountNormal * g_processCycleTime >= 5000)
-            {
-                g_gnssAntState = E_STATE_SYNC_GNSS_ANT_STATE_NORMAL;
-                antCountNormal = 0;
-            }
-        }
-        else if ((gnssAntADC0 < 100) && (gnssAntADC1 < 100))
-        {
-            antCountShort++;
-            antCountOpen = 0;
-            antCountNormal = 0;
-            if (antCountShort * g_processCycleTime >= 5000)
-            {
-                g_gnssAntState = E_STATE_SYNC_GNSS_ANT_STATE_SHORT_CIRCUIT;
-                antCountShort = 0;
-            }
-        }
-        else if ((gnssAntADC0 >= 2150 && gnssAntADC0 <= 2350) && (gnssAntADC1 >= 2150 && gnssAntADC1 <= 2350))
-        {
-            antCountOpen++;
-            antCountNormal = 0;
-            antCountShort = 0;
-            if (antCountOpen * g_processCycleTime >= 5000)
-            {
-                g_gnssAntState = E_STATE_SYNC_GNSS_ANT_STATE_OPEN_CIRCUIT;
-                antCountOpen = 0;
-            }
-        }
-        else
-        {
-        }
     }
 }
 
@@ -176,6 +100,14 @@ int16_t StateSyncSdkInit(int16_t mpuHandle, uint16_t cycleTime)
     g_cpuTspState.failureTime = CPU_INFO_FAILURE_TIME * 1000;
     g_cpuTspState.timeCount = 0;
     g_cpuTspState.validity = 0;
+
+    g_cpuMpuDtcInfo.failureTime = CPU_INFO_FAILURE_TIME * 1000;
+    g_cpuMpuDtcInfo.timeCount = 0;
+    g_cpuMpuDtcInfo.validity = 0;
+
+    g_mpuFaultExtStatus.failureTime = CPU_INFO_FAILURE_TIME * 1000;
+    g_mpuFaultExtStatus.timeCount = 0;
+    g_mpuFaultExtStatus.validity = 0;
 
     // g_gsensorState.state = 1;
     // g_gsensorState.failureTime = CPU_INFO_FAILURE_TIME*1000;
@@ -253,6 +185,142 @@ static double Uint8ArrayToDouble(const uint8_t byteArray[8], uint8_t littleEndia
 }
 
 /*************************************************
+  Function:       StateSyncParseGnssData
+  Description:    解析gnss数据
+  Input:          msgData: 接收到的gnss数据包指针
+  Output:         无
+  Return:         无
+  Others:
+*************************************************/
+static void StateSyncParseGnssData(MpuHalDataPack_t *msgData)
+{
+    uint8_t temp[4];
+    g_cpuLocationInfo.locationInfo.moduleState = msgData->pDataBuffer[0];
+    DtcQueryState_e gnssAntState = DtcGetObjState(E_DTC_QUERY_GPS_ANT);
+    if (gnssAntState == E_DTC_QUERY_STATE_NORMAL)
+    {
+        g_cpuLocationInfo.locationInfo.wireState = 0;
+    }
+    else if (gnssAntState == E_DTC_QUERY_STATE_OPEN)
+    {
+        g_cpuLocationInfo.locationInfo.wireState = 1;
+    }
+    else if ((gnssAntState == E_DTC_QUERY_STATE_SHORT_GND) || (gnssAntState == E_DTC_QUERY_STATE_SHORT_BAT))
+    {
+        g_cpuLocationInfo.locationInfo.wireState = 2;
+    }
+    g_cpuLocationInfo.locationInfo.locationState = msgData->pDataBuffer[2];
+    g_cpuLocationInfo.locationInfo.longitude = msgData->pDataBuffer[3] << 24 | msgData->pDataBuffer[4] << 16 | msgData->pDataBuffer[5] << 8 | msgData->pDataBuffer[6];
+    g_cpuLocationInfo.locationInfo.latitude = msgData->pDataBuffer[7] << 24 | msgData->pDataBuffer[8] << 16 | msgData->pDataBuffer[9] << 8 | msgData->pDataBuffer[10];
+    // TBOX_PRINT("moduleState: %d, wireState: %d, locationState: %d, longitude: %d, latitude: %d\r\n", g_cpuLocationInfo.locationInfo.moduleState, g_cpuLocationInfo.locationInfo.wireState, g_cpuLocationInfo.locationInfo.locationState, g_cpuLocationInfo.locationInfo.longitude, g_cpuLocationInfo.locationInfo.latitude);
+    uint8_t dlob[8];
+    uint8_t dlat[8];
+    for (uint8_t i = 0; i < 8; i++)
+    {
+        dlob[i] = msgData->pDataBuffer[11 + i];
+        dlat[i] = msgData->pDataBuffer[19 + i];
+    }
+    g_cpuLocationInfo.locationInfo.flongitude = Uint8ArrayToDouble(dlob, 0);
+    g_cpuLocationInfo.locationInfo.flatitude = Uint8ArrayToDouble(dlat, 0);
+    // TBOX_PRINT("flongitude: %f, flatitude: %f\r\n", g_cpuLocationInfo.locationInfo.flongitude, g_cpuLocationInfo.locationInfo.flatitude);
+    g_cpuLocationInfo.locationInfo.altitude = msgData->pDataBuffer[27] << 8 | msgData->pDataBuffer[28];
+    g_cpuLocationInfo.locationInfo.speed = msgData->pDataBuffer[29] << 8 | msgData->pDataBuffer[30];
+    g_cpuLocationInfo.locationInfo.heading = msgData->pDataBuffer[31] << 8 | msgData->pDataBuffer[32];
+    // TBOX_PRINT("altitude: %d, speed: %d, heading: %d\r\n", g_cpuLocationInfo.locationInfo.altitude, g_cpuLocationInfo.locationInfo.speed, g_cpuLocationInfo.locationInfo.heading);
+    g_cpuLocationInfo.locationInfo.accuracy = msgData->pDataBuffer[33] << 8 | msgData->pDataBuffer[34];
+    g_cpuLocationInfo.locationInfo.svsNum = msgData->pDataBuffer[35];
+    g_cpuLocationInfo.locationInfo.useSvsnum = msgData->pDataBuffer[36];
+    g_cpuLocationInfo.locationInfo.timeStamp = msgData->pDataBuffer[37] << 24 | msgData->pDataBuffer[38] << 16 | msgData->pDataBuffer[39] << 8 | msgData->pDataBuffer[40];
+    g_cpuLocationInfo.locationInfo.svwFlags = msgData->pDataBuffer[41] << 8 | msgData->pDataBuffer[42];
+    // TBOX_PRINT("accuracy: %d, svsNum: %d, useSvsnum: %d, timeStamp: %d, svwFlags: %d\r\n", g_cpuLocationInfo.locationInfo.accuracy, g_cpuLocationInfo.locationInfo.svsNum, g_cpuLocationInfo.locationInfo.useSvsnum, g_cpuLocationInfo.locationInfo.timeStamp, g_cpuLocationInfo.locationInfo.svwFlags);
+    memcpy(temp, msgData->pDataBuffer + 43, 4);
+    g_cpuLocationInfo.locationInfo.svwBearing = Uint8ArrayToFloat(temp, 0);
+    memcpy(temp, msgData->pDataBuffer + 47, 4);
+    g_cpuLocationInfo.locationInfo.svwSpeed = Uint8ArrayToFloat(temp, 0);
+    // TBOX_PRINT("svwBearing: %f, svwSpeed: %f\r\n", g_cpuLocationInfo.locationInfo.svwBearing, g_cpuLocationInfo.locationInfo.svwSpeed);
+    memcpy(temp, msgData->pDataBuffer + 51, 4);
+    float fpdop = Uint8ArrayToFloat(temp, 0) * 100.0;
+    uint16_t pdop = FloatToUint16Trunc(fpdop);
+    g_cpuLocationInfo.locationInfo.svwPdop = pdop;
+    memcpy(temp, msgData->pDataBuffer + 55, 4);
+    float fhdop = Uint8ArrayToFloat(temp, 0) * 100.0;
+    uint16_t hdop = FloatToUint16Trunc(fhdop);
+    g_cpuLocationInfo.locationInfo.svwHdop = hdop;
+    memcpy(temp, msgData->pDataBuffer + 59, 4);
+    float fvdop = Uint8ArrayToFloat(temp, 0) * 100.0;
+    uint16_t vdop = FloatToUint16Trunc(fvdop);
+    g_cpuLocationInfo.locationInfo.svwVdop = vdop;
+    // TBOX_PRINT("fpdop: %f, fhdop: %f, fvdop: %f\r\n", fpdop, fhdop, fvdop);
+    // TBOX_PRINT("svwPdop: %d, svwHdop: %d, svwVdop: %d\r\n", g_cpuLocationInfo.locationInfo.svwPdop, g_cpuLocationInfo.locationInfo.svwHdop, g_cpuLocationInfo.locationInfo.svwVdop);
+    uint8_t dAlt[8];
+    memcpy(dAlt, msgData->pDataBuffer + 63, 8);
+    g_cpuLocationInfo.locationInfo.svwAltitude = Uint8ArrayToDouble(dAlt, 0);
+    // TBOX_PRINT("svwAltitude: %f\r\n", g_cpuLocationInfo.locationInfo.svwAltitude);
+    memcpy(temp, msgData->pDataBuffer + 71, 4);
+    g_cpuLocationInfo.locationInfo.svwEastVelocity = Uint8ArrayToFloat(temp, 0);
+    memcpy(temp, msgData->pDataBuffer + 75, 4);
+    g_cpuLocationInfo.locationInfo.svwNorthVelocity = Uint8ArrayToFloat(temp, 0);
+    memcpy(temp, msgData->pDataBuffer + 79, 4);
+    g_cpuLocationInfo.locationInfo.svwUpVelocity = Uint8ArrayToFloat(temp, 0);
+    // TBOX_PRINT("svwEastVelocity: %f, svwNorthVelocity: %f, svwUpVelocity: %f\r\n", g_cpuLocationInfo.locationInfo.svwEastVelocity, g_cpuLocationInfo.locationInfo.svwNorthVelocity, g_cpuLocationInfo.locationInfo.svwUpVelocity);
+    memcpy(temp, msgData->pDataBuffer + 83, 4);
+    g_cpuLocationInfo.locationInfo.svwEastVelocityStdDeviation = Uint8ArrayToFloat(temp, 0);
+    memcpy(temp, msgData->pDataBuffer + 87, 4);
+    g_cpuLocationInfo.locationInfo.svwNorthVelocityStdDeviation = Uint8ArrayToFloat(temp, 0);
+    memcpy(temp, msgData->pDataBuffer + 91, 4);
+    g_cpuLocationInfo.locationInfo.svwUpVelocityStdDeviation = Uint8ArrayToFloat(temp, 0);
+    // TBOX_PRINT("svwEastVelocityStdDeviation: %f, svwNorthVelocityStdDeviation: %f, svwUpVelocityStdDeviation: %f\r\n", g_cpuLocationInfo.locationInfo.svwEastVelocityStdDeviation, g_cpuLocationInfo.locationInfo.svwNorthVelocityStdDeviation, g_cpuLocationInfo.locationInfo.svwUpVelocityStdDeviation);
+    g_cpuLocationInfo.locationInfo.svwTimestamp = msgData->pDataBuffer[95] << 56 | msgData->pDataBuffer[96] << 48 | msgData->pDataBuffer[97] << 40 | msgData->pDataBuffer[98] << 32 | msgData->pDataBuffer[99] << 24 | msgData->pDataBuffer[100] << 16 | msgData->pDataBuffer[101] << 8 | msgData->pDataBuffer[102];
+    memcpy(temp, msgData->pDataBuffer + 103, 4);
+    g_cpuLocationInfo.locationInfo.svwHorizontalAccuracy = Uint8ArrayToFloat(temp, 0);
+    memcpy(temp, msgData->pDataBuffer + 107, 4);
+    g_cpuLocationInfo.locationInfo.svwMagneticDeviation = Uint8ArrayToFloat(temp, 0);
+    // TBOX_PRINT("svwTimestamp: %lld, svwHorizontalAccuracy: %f, svwMagneticDeviation: %f\r\n", g_cpuLocationInfo.locationInfo.svwTimestamp, g_cpuLocationInfo.locationInfo.svwHorizontalAccuracy, g_cpuLocationInfo.locationInfo.svwMagneticDeviation);
+    g_cpuLocationInfo.timeCount = 0;
+    g_cpuLocationInfo.validity = 1;
+}
+
+/*************************************************
+  Function:       StateSyncParseSatelliteData
+  Description:    解析卫星数据
+  Input:          msgData: 接收到的卫星数据包指针
+  Output:         无
+  Return:         无
+  Others:
+*************************************************/
+static void StateSyncParseSatelliteData(MpuHalDataPack_t *msgData)
+{
+    //如果在can传输过程中有卫星信息更新，丢弃，不在 CAN 上传输
+    if(StateSyncgGetSatCanState()==1)
+    {
+        return;
+    }
+    uint8_t temp[4];
+    g_cpuSatelliteInfo.satelliteInfo.svsNum = msgData->pDataBuffer[0];
+    uint8_t len = (g_cpuSatelliteInfo.satelliteInfo.svsNum) > 127 ? 127 : g_cpuSatelliteInfo.satelliteInfo.svsNum;
+    // TBOX_PRINT("svsNum: %d\r\n", len);
+    for (uint8_t i = 0; i < len; i++)
+    {
+        g_cpuSatelliteInfo.satelliteInfo.svList[i].svId = msgData->pDataBuffer[1 + i * 14] << 8 | msgData->pDataBuffer[2 + i * 14];
+        memcpy(temp, msgData->pDataBuffer + (3 + i * 14), 4);
+        float fcn = Uint8ArrayToFloat(temp, 0);
+        uint16_t cn = FloatToUint16Trunc(fcn);
+        g_cpuSatelliteInfo.satelliteInfo.svList[i].cN0Dbhz = cn;
+        memcpy(temp, msgData->pDataBuffer + (7 + i * 14), 4);
+        float fele = Uint8ArrayToFloat(temp, 0);
+        uint16_t ele = FloatToUint16Trunc(fele);
+        g_cpuSatelliteInfo.satelliteInfo.svList[i].elevation = ele;
+        memcpy(temp, msgData->pDataBuffer + (11 + i * 14), 4);
+        float fazim = Uint8ArrayToFloat(temp, 0);
+        uint16_t azim = FloatToUint16Trunc(fazim);
+        g_cpuSatelliteInfo.satelliteInfo.svList[i].azimuth = azim;
+        // TBOX_PRINT("svId: %d, cN0Dbhz: %d, elevation: %d, azimuth: %d\r\n", g_cpuSatelliteInfo.satelliteInfo.svList[i].svId, g_cpuSatelliteInfo.satelliteInfo.svList[i].cN0Dbhz, g_cpuSatelliteInfo.satelliteInfo.svList[i].elevation, g_cpuSatelliteInfo.satelliteInfo.svList[i].azimuth);
+    }
+    g_cpuSatelliteInfo.timeCount = 0;
+    g_cpuSatelliteInfo.validity = 1;
+}
+
+/*************************************************
   Function:       StateSyncSdkCycleProcess
   Description:    状态同步模块周期调用接口
   Input:          pRxData：传入接收到的CPU数据
@@ -263,119 +331,17 @@ static double Uint8ArrayToDouble(const uint8_t byteArray[8], uint8_t littleEndia
 *************************************************/
 void StateSyncSdkCycleProcess(MpuHalDataPack_t *msgData)
 {
-    StateSyncSetGnssAntState();
     if (msgData != NULL && msgData->aid == 0x01)
     {
         if (msgData->mid == E_STATE_SYNC_LOCALTION_INFO_MID)
         {
-            uint8_t temp[4];
             if ((msgData->subcommand & 0x7F) == 0x01)
             {
-                g_cpuLocationInfo.locationInfo.moduleState = msgData->pDataBuffer[0];
-                if(g_gnssAntState == E_STATE_SYNC_GNSS_ANT_STATE_NORMAL)
-                {
-                    g_cpuLocationInfo.locationInfo.wireState = 0;
-                }
-                else if (g_gnssAntState==E_STATE_SYNC_GNSS_ANT_STATE_OPEN_CIRCUIT)
-                {
-                    g_cpuLocationInfo.locationInfo.wireState = 1;
-                }
-                else if (g_gnssAntState==E_STATE_SYNC_GNSS_ANT_STATE_SHORT_CIRCUIT)
-                {
-                    g_cpuLocationInfo.locationInfo.wireState = 2;
-                }
-                g_cpuLocationInfo.locationInfo.locationState = msgData->pDataBuffer[2];
-                g_cpuLocationInfo.locationInfo.longitude = msgData->pDataBuffer[3] << 24 | msgData->pDataBuffer[4] << 16 | msgData->pDataBuffer[5] << 8 | msgData->pDataBuffer[6];
-                g_cpuLocationInfo.locationInfo.latitude = msgData->pDataBuffer[7] << 24 | msgData->pDataBuffer[8] << 16 | msgData->pDataBuffer[9] << 8 | msgData->pDataBuffer[10];
-                // TBOX_PRINT("moduleState: %d, wireState: %d, locationState: %d, longitude: %d, latitude: %d\r\n", g_cpuLocationInfo.locationInfo.moduleState, g_cpuLocationInfo.locationInfo.wireState, g_cpuLocationInfo.locationInfo.locationState, g_cpuLocationInfo.locationInfo.longitude, g_cpuLocationInfo.locationInfo.latitude);
-                uint8_t dlob[8];
-                uint8_t dlat[8];
-                for (uint8_t i = 0; i < 8; i++)
-                {
-                    dlob[i] = msgData->pDataBuffer[11 + i];
-                    dlat[i] = msgData->pDataBuffer[19 + i];
-                }
-                g_cpuLocationInfo.locationInfo.flongitude = Uint8ArrayToDouble(dlob, 0);
-                g_cpuLocationInfo.locationInfo.flatitude = Uint8ArrayToDouble(dlat, 0);
-                // TBOX_PRINT("flongitude: %f, flatitude: %f\r\n", g_cpuLocationInfo.locationInfo.flongitude, g_cpuLocationInfo.locationInfo.flatitude);
-                g_cpuLocationInfo.locationInfo.altitude = msgData->pDataBuffer[27] << 8 | msgData->pDataBuffer[28];
-                g_cpuLocationInfo.locationInfo.speed = msgData->pDataBuffer[29] << 8 | msgData->pDataBuffer[30];
-                g_cpuLocationInfo.locationInfo.heading = msgData->pDataBuffer[31] << 8 | msgData->pDataBuffer[32];
-                // TBOX_PRINT("altitude: %d, speed: %d, heading: %d\r\n", g_cpuLocationInfo.locationInfo.altitude, g_cpuLocationInfo.locationInfo.speed, g_cpuLocationInfo.locationInfo.heading);
-                g_cpuLocationInfo.locationInfo.accuracy = msgData->pDataBuffer[33] << 8 | msgData->pDataBuffer[34];
-                g_cpuLocationInfo.locationInfo.svsNum = msgData->pDataBuffer[35];
-                g_cpuLocationInfo.locationInfo.useSvsnum = msgData->pDataBuffer[36];
-                g_cpuLocationInfo.locationInfo.timeStamp = msgData->pDataBuffer[37] << 24 | msgData->pDataBuffer[38] << 16 | msgData->pDataBuffer[39] << 8 | msgData->pDataBuffer[40];
-                g_cpuLocationInfo.locationInfo.svwFlags = msgData->pDataBuffer[41] << 8 | msgData->pDataBuffer[42];
-                // TBOX_PRINT("accuracy: %d, svsNum: %d, useSvsnum: %d, timeStamp: %d, svwFlags: %d\r\n", g_cpuLocationInfo.locationInfo.accuracy, g_cpuLocationInfo.locationInfo.svsNum, g_cpuLocationInfo.locationInfo.useSvsnum, g_cpuLocationInfo.locationInfo.timeStamp, g_cpuLocationInfo.locationInfo.svwFlags);
-                memcpy(temp, msgData->pDataBuffer + 43, 4);
-                g_cpuLocationInfo.locationInfo.svwBearing = Uint8ArrayToFloat(temp, 0);
-                memcpy(temp, msgData->pDataBuffer + 47, 4);
-                g_cpuLocationInfo.locationInfo.svwSpeed = Uint8ArrayToFloat(temp, 0);
-                // TBOX_PRINT("svwBearing: %f, svwSpeed: %f\r\n", g_cpuLocationInfo.locationInfo.svwBearing, g_cpuLocationInfo.locationInfo.svwSpeed);
-                memcpy(temp, msgData->pDataBuffer + 51, 4);
-                float fpdop = Uint8ArrayToFloat(temp, 0);
-                uint16_t pdop = float_to_uint16_trunc(fpdop);
-                g_cpuLocationInfo.locationInfo.svwPdop = pdop;
-                memcpy(temp, msgData->pDataBuffer + 55, 4);
-                float fhdop = Uint8ArrayToFloat(temp, 0);
-                uint16_t hdop = float_to_uint16_trunc(fhdop);
-                g_cpuLocationInfo.locationInfo.svwHdop = hdop;
-                memcpy(temp, msgData->pDataBuffer + 59, 4);
-                float fvdop = Uint8ArrayToFloat(temp, 0);
-                uint16_t vdop = float_to_uint16_trunc(fvdop);
-                g_cpuLocationInfo.locationInfo.svwVdop = vdop;
-                // TBOX_PRINT("svwPdop: %d, svwHdop: %d, svwVdop: %d\r\n", g_cpuLocationInfo.locationInfo.svwPdop, g_cpuLocationInfo.locationInfo.svwHdop, g_cpuLocationInfo.locationInfo.svwVdop);
-                uint8_t dAlt[8];
-                memcpy(dAlt, msgData->pDataBuffer + 63, 8);
-                g_cpuLocationInfo.locationInfo.svwAltitude = Uint8ArrayToDouble(dAlt, 0);
-                // TBOX_PRINT("svwAltitude: %f\r\n", g_cpuLocationInfo.locationInfo.svwAltitude);
-                memcpy(temp, msgData->pDataBuffer + 71, 4);
-                g_cpuLocationInfo.locationInfo.svwEastVelocity = Uint8ArrayToFloat(temp, 0);
-                memcpy(temp, msgData->pDataBuffer + 75, 4);
-                g_cpuLocationInfo.locationInfo.svwNorthVelocity = Uint8ArrayToFloat(temp, 0);
-                memcpy(temp, msgData->pDataBuffer + 79, 4);
-                g_cpuLocationInfo.locationInfo.svwUpVelocity = Uint8ArrayToFloat(temp, 0);
-                // TBOX_PRINT("svwEastVelocity: %f, svwNorthVelocity: %f, svwUpVelocity: %f\r\n", g_cpuLocationInfo.locationInfo.svwEastVelocity, g_cpuLocationInfo.locationInfo.svwNorthVelocity, g_cpuLocationInfo.locationInfo.svwUpVelocity);
-                memcpy(temp, msgData->pDataBuffer + 83, 4);
-                g_cpuLocationInfo.locationInfo.svwEastVelocityStdDeviation = Uint8ArrayToFloat(temp, 0);
-                memcpy(temp, msgData->pDataBuffer + 87, 4);
-                g_cpuLocationInfo.locationInfo.svwNorthVelocityStdDeviation = Uint8ArrayToFloat(temp, 0);
-                memcpy(temp, msgData->pDataBuffer + 91, 4);
-                g_cpuLocationInfo.locationInfo.svwUpVelocityStdDeviation = Uint8ArrayToFloat(temp, 0);
-                // TBOX_PRINT("svwEastVelocityStdDeviation: %f, svwNorthVelocityStdDeviation: %f, svwUpVelocityStdDeviation: %f\r\n", g_cpuLocationInfo.locationInfo.svwEastVelocityStdDeviation, g_cpuLocationInfo.locationInfo.svwNorthVelocityStdDeviation, g_cpuLocationInfo.locationInfo.svwUpVelocityStdDeviation);
-                g_cpuLocationInfo.locationInfo.svwTimestamp = msgData->pDataBuffer[95] << 56 | msgData->pDataBuffer[96] << 48 | msgData->pDataBuffer[97] << 40 | msgData->pDataBuffer[98] << 32 | msgData->pDataBuffer[99] << 24 | msgData->pDataBuffer[100] << 16 | msgData->pDataBuffer[101] << 8 | msgData->pDataBuffer[102];
-                memcpy(temp, msgData->pDataBuffer + 103, 4);
-                g_cpuLocationInfo.locationInfo.svwHorizontalAccuracy = Uint8ArrayToFloat(temp, 0);
-                memcpy(temp, msgData->pDataBuffer + 107, 4);
-                g_cpuLocationInfo.locationInfo.svwMagneticDeviation = Uint8ArrayToFloat(temp, 0);
-                // TBOX_PRINT("svwTimestamp: %lld, svwHorizontalAccuracy: %f, svwMagneticDeviation: %f\r\n", g_cpuLocationInfo.locationInfo.svwTimestamp, g_cpuLocationInfo.locationInfo.svwHorizontalAccuracy, g_cpuLocationInfo.locationInfo.svwMagneticDeviation);
-                g_cpuLocationInfo.timeCount = 0;
-                g_cpuLocationInfo.validity = 1;
+                StateSyncParseGnssData(msgData);
             }
             else if ((msgData->subcommand & 0x7F) == 0x02)
             {
-                g_cpuSatelliteInfo.satelliteInfo.svsNum = msgData->pDataBuffer[0];
-                uint8_t len = (g_cpuSatelliteInfo.satelliteInfo.svsNum) > 127 ? 127 : g_cpuSatelliteInfo.satelliteInfo.svsNum;
-                for (uint8_t i = 0; i < len; i++)
-                {
-                    g_cpuSatelliteInfo.satelliteInfo.svList[i].svId = msgData->pDataBuffer[1 + i * 14] << 8 | msgData->pDataBuffer[2 + i * 14];
-                    memcpy(temp, msgData->pDataBuffer + (3 + i * 14), 4);
-                    float fcn = Uint8ArrayToFloat(temp, 0);
-                    uint16_t cn = float_to_uint16_trunc(fcn);
-                    g_cpuSatelliteInfo.satelliteInfo.svList[i].cN0Dbhz = cn;
-                    memcpy(temp, msgData->pDataBuffer + (7 + i * 14), 4);
-                    float fele = Uint8ArrayToFloat(temp, 0);
-                    uint16_t ele = float_to_uint16_trunc(fele);
-                    g_cpuSatelliteInfo.satelliteInfo.svList[i].elevation = ele;
-                    memcpy(temp, msgData->pDataBuffer + (11 + i * 14), 4);
-                    float fazim = Uint8ArrayToFloat(temp, 0);
-                    uint16_t azim = float_to_uint16_trunc(fazim);
-                    g_cpuSatelliteInfo.satelliteInfo.svList[i].azimuth = azim;
-                    // TBOX_PRINT("svId: %d, cN0Dbhz: %d, elevation: %d, azimuth: %d\r\n", g_cpuSatelliteInfo.satelliteInfo.svList[i].svId, g_cpuSatelliteInfo.satelliteInfo.svList[i].cN0Dbhz, g_cpuSatelliteInfo.satelliteInfo.svList[i].elevation, g_cpuSatelliteInfo.satelliteInfo.svList[i].azimuth);
-                }
-                g_cpuSatelliteInfo.timeCount = 0;
-                g_cpuSatelliteInfo.validity = 1;
+                StateSyncParseSatelliteData(msgData);
             }
         }
         else if (msgData->mid == E_STATE_SYNC_NET_INFO_MID)
@@ -443,6 +409,18 @@ void StateSyncSdkCycleProcess(MpuHalDataPack_t *msgData)
     if ((g_cpuTspState.validity == 1) && (g_cpuTspState.timeCount++ > (g_cpuTspState.failureTime) / g_processCycleTime))
     {
         g_cpuTspState.validity = 0;
+    }
+
+    if ((g_cpuMpuDtcInfo.validity == 1) && (g_cpuMpuDtcInfo.timeCount++ > (g_cpuMpuDtcInfo.failureTime) / g_processCycleTime))
+    {
+        g_cpuMpuDtcInfo.validity = 0;
+    }
+
+    if ((g_mpuFaultExtStatus.validity == 1) &&
+        (g_mpuFaultExtStatus.timeCount++ >
+         (g_mpuFaultExtStatus.failureTime / g_processCycleTime)))
+    {
+        g_mpuFaultExtStatus.validity = 0;
     }
     return;
 }
@@ -611,25 +589,6 @@ int16_t StateSyncGetTspState(TspStateSync_t *tspState)
     return 0;
 }
 
-/*************************************************
-  Function:       StateSyncGetGnssAntState
-  Description:    获取GNSS天线状态( 正常 短路 断路 )
-  Input:          无
-  Output:         state：状态 0 初始化 1 正常 2 短路 3 断路
-  Return:         0：成功
-                  -1：失败
-  Others:
-*************************************************/
-uint8_t StateSyncGetGnssAntState(uint8_t *state)
-{
-    if (state == NULL || (g_gnssAntState < 0 && g_gnssAntState > 3))
-    {
-        return -1;
-    }
-    *state = g_gnssAntState;
-    return 0;
-}
-
 #if 0
 /*************************************************
   Function:       StateSyncGetGsersorState
@@ -656,3 +615,317 @@ int16_t StateSyncGetGsensorState(uint8_t *state)
     
 }
 #endif
+
+int16_t StateSyncGetMpuFaultExtStatus(MpuFaultExtStatus_t *extStatus) // 获取 MPU 故障同步扩展状态
+{
+    uint8_t *pSrc = NULL;
+    uint8_t *pDst = NULL;
+    uint16_t i = 0;
+    if (extStatus == NULL)
+    {
+        return -1;
+    }
+    if (g_mpuFaultExtStatus.validity == 0)
+    {
+        return -1;
+    }
+    pSrc = (uint8_t *)&g_mpuFaultExtStatus.extStatus;
+    pDst = (uint8_t *)extStatus;
+    for (i = 0; i < sizeof(MpuFaultExtStatus_t); i++)
+    {
+        pDst[i] = pSrc[i];
+    }
+    return 0;
+}
+
+#define MCU_SEND_CPU_FAULT_SUBCOMMAND 0x02 /* 协议子命令0x02，表示McuFault，即MCU发送故障状态给CPU */
+#define MCU_SEND_CPU_FAULT_PERIOD_MS 1000  /* 1Hz发送一次 */
+#define MCU_SEND_CPU_FAULT_BITMAP_LEN 4    /* 长度为4字节 */
+#define MCU_SEND_CPU_FAULT_BIT_COUNT 14    /*共14个bit */
+
+static int16_t g_mcuDtcSyncMpuHandle = -1; /* MPU通信句柄 */
+static uint16_t g_mcuDtcSyncCycleTime = 0; /* 当前模块的周期调用时间，5ms */
+static uint16_t g_mcuDtcSyncTimeCount = 0; /* 累计到1000ms后触发一次发送 */
+static uint8_t g_mcuDtcSyncData[MCU_SEND_CPU_FAULT_BITMAP_LEN] = {0};
+static MpuHalDataPack_t g_mcuDtcSyncPack;
+
+static const McuSendCpuFaultMap_t g_mcuSendCpuFaultMap[MCU_SEND_CPU_FAULT_BIT_COUNT] =
+    {
+        {0, (Dem_EventIdType)EventParameter_0x95A011},
+        {1, (Dem_EventIdType)EventParameter_0x95A013},
+        {2, (Dem_EventIdType)EventParameter_0x95A111},
+        {3, (Dem_EventIdType)EventParameter_0x95A113},
+        {4, (Dem_EventIdType)EventParameter_0x95A311},
+        {5, (Dem_EventIdType)EventParameter_0x95A313},
+        {6, (Dem_EventIdType)EventParameter_0x95A411},
+        {7, (Dem_EventIdType)EventParameter_0x95A413},
+        {8, (Dem_EventIdType)EventParameter_0x95A711},
+        {9, (Dem_EventIdType)EventParameter_0x95A713},
+        {10, (Dem_EventIdType)EventParameter_0x953311},
+        {11, (Dem_EventIdType)EventParameter_0x953313},
+        {12, (Dem_EventIdType)EventParameter_0x953312},
+        {13, (Dem_EventIdType)EventParameter_0x951171}};
+
+static uint8_t McuSendCpuFaultIsFailed(Dem_EventIdType eventId) // 判断某个Dem事件当前是否处于故障状态
+{
+    Dem_UdsStatusByteType eventStatus = 0;
+    if (eventId == 0)
+    {
+        return 0;
+    }
+    if (Dem_GetEventStatus(eventId, &eventStatus) != E_OK) // 读取当前事件状态，如果失败
+    {
+        return 0;
+    }
+    return ((eventStatus & DEM_UDS_STATUS_TF) != 0) ? 1u : 0;
+}
+
+static void McuSendCpuFaultSetBit(uint8_t *pData, uint8_t bitIndex)
+{
+    uint8_t byteIndex;
+    uint8_t bitOffset;
+    if ((pData == NULL) || (bitIndex >= 32))
+    {
+        return;
+    }
+    byteIndex = (uint8_t)(3 - (bitIndex / 8));
+    bitOffset = (uint8_t)(bitIndex % 8);
+    pData[byteIndex] |= (uint8_t)(1 << bitOffset);
+}
+
+static uint32_t McuSendCpuFaultBuildBitmap(uint8_t *pData)
+{
+    uint32_t i;
+    uint32_t bitmap = 0;
+    if (pData == NULL)
+    {
+        return 0;
+    }
+    memset(pData, 0, MCU_SEND_CPU_FAULT_BITMAP_LEN);
+
+    for (i = 0u; i < MCU_SEND_CPU_FAULT_BIT_COUNT; i++)
+    {
+        if (McuSendCpuFaultIsFailed(g_mcuSendCpuFaultMap[i].eventId) != 0) // 如果对应Dem事件当前有故障
+        {
+            McuSendCpuFaultSetBit(pData, g_mcuSendCpuFaultMap[i].bitIndex); // 对应协议bit位置1
+        }
+    }
+    bitmap |= ((uint32_t)pData[0] << 24); // 把第1字节放到uint32最高8位 */
+    bitmap |= ((uint32_t)pData[1] << 16);
+    bitmap |= ((uint32_t)pData[2] << 8);
+    bitmap |= ((uint32_t)pData[3] << 0);
+    return bitmap;
+}
+
+int16_t McuSendCpuFaultSyncInit(int16_t mpuHandle, uint16_t cycleTime)
+{
+    if ((mpuHandle < 0) || (cycleTime == 0))
+    {
+        return -1;
+    }
+    g_mcuDtcSyncMpuHandle = mpuHandle;
+    g_mcuDtcSyncCycleTime = cycleTime;
+    g_mcuDtcSyncTimeCount = 0;
+    memset(g_mcuDtcSyncData, 0, sizeof(g_mcuDtcSyncData));
+    memset(&g_mcuDtcSyncPack, 0, sizeof(g_mcuDtcSyncPack));
+    return 0;
+}
+
+void McuSendCpuFaultSyncCycleProcess(void)
+{
+    uint32_t bitmap;
+
+    if ((g_mcuDtcSyncMpuHandle < 0) || (g_mcuDtcSyncCycleTime == 0))
+    {
+        return;
+    }
+    if (g_mcuDtcSyncTimeCount < MCU_SEND_CPU_FAULT_PERIOD_MS)
+    {
+        g_mcuDtcSyncTimeCount = (uint16_t)(g_mcuDtcSyncTimeCount + g_mcuDtcSyncCycleTime);
+    }
+    if (g_mcuDtcSyncTimeCount < MCU_SEND_CPU_FAULT_PERIOD_MS)
+    {
+        return;
+    }
+    g_mcuDtcSyncTimeCount = 0;
+    bitmap = McuSendCpuFaultBuildBitmap(g_mcuDtcSyncData);
+    g_mcuDtcSyncPack.aid = 0x30u;
+    g_mcuDtcSyncPack.mid = 0x01u;
+    g_mcuDtcSyncPack.subcommand = MCU_SEND_CPU_FAULT_SUBCOMMAND;
+    g_mcuDtcSyncPack.pDataBuffer = g_mcuDtcSyncData;
+    g_mcuDtcSyncPack.dataBufferSize = sizeof(g_mcuDtcSyncData);
+    g_mcuDtcSyncPack.dataLength = MCU_SEND_CPU_FAULT_BITMAP_LEN;
+    MpuHalTransmit(g_mcuDtcSyncMpuHandle, &g_mcuDtcSyncPack);
+    TBOX_PRINT("tx mcu fault bitmap = 0x%08X\r\n", bitmap); /* 打印调试 */
+    TBOX_PRINT("tx raw data: %02X %02X %02X %02X\r\n",
+               g_mcuDtcSyncData[0],
+               g_mcuDtcSyncData[1],
+               g_mcuDtcSyncData[2],
+               g_mcuDtcSyncData[3]);
+}
+
+/*************************************************
+  Function:       MpuDtcSyncSdkCycleProcess
+  Description:    MPU故障码同步处理函数
+  Input:          msgData：MPU数据消息包
+  Output:         无
+  Return:         无
+  Others:         处理AID=0x30, MID=0x01的MPU故障码数据
+*************************************************/
+
+#define MCU_RECV_MPU_FAULT_BITMAP_LEN 4
+#define MCU_RECV_MPU_FAULT_BIT_COUNT 21
+
+typedef struct // 协议位号->Dem事件ID的映射结构体
+{
+    uint8_t bitIndex;        // bitIndex 表示故障在协议中的位号
+    Dem_EventIdType eventId; // eventId 表示该位故障对应的 Dem 事件 ID
+} McuRecvMpuFaultMap_t;
+
+// 移除 static const，改为运行时初始化，避免编译器链接时的静态初始化问题
+static McuRecvMpuFaultMap_t g_mcuRecvMpuFaultMap[MCU_RECV_MPU_FAULT_BIT_COUNT];
+
+static void InitMcuRecvMpuFaultMap(void)
+{
+    g_mcuRecvMpuFaultMap[0].bitIndex = 0;
+    g_mcuRecvMpuFaultMap[0].eventId = EventParameter_0x957111;
+    g_mcuRecvMpuFaultMap[1].bitIndex = 1;
+    g_mcuRecvMpuFaultMap[1].eventId = EventParameter_0x957113;
+    g_mcuRecvMpuFaultMap[2].bitIndex = 2;
+    g_mcuRecvMpuFaultMap[2].eventId = EventParameter_0x953111;
+    g_mcuRecvMpuFaultMap[3].bitIndex = 3;
+    g_mcuRecvMpuFaultMap[3].eventId = EventParameter_0x953113;
+    g_mcuRecvMpuFaultMap[4].bitIndex = 4;
+    g_mcuRecvMpuFaultMap[4].eventId = EventParameter_0x953512;
+    g_mcuRecvMpuFaultMap[5].bitIndex = 5;
+    g_mcuRecvMpuFaultMap[5].eventId = EventParameter_0x954100;
+    g_mcuRecvMpuFaultMap[6].bitIndex = 6;
+    g_mcuRecvMpuFaultMap[6].eventId = EventParameter_0x954200;
+    g_mcuRecvMpuFaultMap[7].bitIndex = 7;
+    g_mcuRecvMpuFaultMap[7].eventId = EventParameter_0xE26200;
+    g_mcuRecvMpuFaultMap[8].bitIndex = 8;
+    g_mcuRecvMpuFaultMap[8].eventId = EventParameter_0xE2A287;
+    g_mcuRecvMpuFaultMap[9].bitIndex = 9;
+    g_mcuRecvMpuFaultMap[9].eventId = EventParameter_0xE2A2F0;
+    g_mcuRecvMpuFaultMap[10].bitIndex = 10;
+    g_mcuRecvMpuFaultMap[10].eventId = EventParameter_0xE298F0;
+    g_mcuRecvMpuFaultMap[11].bitIndex = 11;
+    g_mcuRecvMpuFaultMap[11].eventId = EventParameter_0xE2A2F1;
+    g_mcuRecvMpuFaultMap[12].bitIndex = 12;
+    g_mcuRecvMpuFaultMap[12].eventId = EventParameter_0xE298F1;
+    g_mcuRecvMpuFaultMap[13].bitIndex = 13;
+    g_mcuRecvMpuFaultMap[13].eventId = EventParameter_0xE29887;
+    g_mcuRecvMpuFaultMap[14].bitIndex = 14;
+    g_mcuRecvMpuFaultMap[14].eventId = EventParameter_0xE28000;
+    g_mcuRecvMpuFaultMap[15].bitIndex = 15;
+    g_mcuRecvMpuFaultMap[15].eventId = EventParameter_0xE28200;
+    g_mcuRecvMpuFaultMap[16].bitIndex = 16;
+    g_mcuRecvMpuFaultMap[16].eventId = 0;
+    g_mcuRecvMpuFaultMap[17].bitIndex = 17;
+    g_mcuRecvMpuFaultMap[17].eventId = 0;
+    g_mcuRecvMpuFaultMap[18].bitIndex = 18;
+    g_mcuRecvMpuFaultMap[18].eventId = 0;
+    g_mcuRecvMpuFaultMap[19].bitIndex = 19;
+    g_mcuRecvMpuFaultMap[19].eventId = 0;
+    g_mcuRecvMpuFaultMap[20].bitIndex = 20;
+    g_mcuRecvMpuFaultMap[20].eventId = 0;
+}
+
+static uint32_t McuRecvMpuFaultBitmapToU32(const uint8_t *pData) // 把mcu接收到的4字节MPU故障位转换成uint32_t
+{
+    uint32_t value = 0;
+    value |= ((uint32_t)pData[0] << 24); // 取第 1 个字节放到最高 8 位，按大端格式拼接
+    value |= ((uint32_t)pData[1] << 16); // 取第 2 个字节放到次高 8 位
+    value |= ((uint32_t)pData[2] << 8);  // 取第 3 个字节放到次低 8 位
+    value |= ((uint32_t)pData[3] << 0);  // 取第 4 个字节放到最低 8 位
+    return value;
+}
+
+static void StateSyncUpdateDtcInfo(uint32_t faultBitmap)
+{
+    g_cpuMpuDtcInfo.dtcState.dtcBitmap = faultBitmap;
+}
+
+void MpuDtcSyncSdkCycleProcess(MpuHalDataPack_t *msgData)
+{
+    uint32_t faultBitmap = 0; // 保存解析后的32位故障位图
+    uint32_t i = 0;
+    static uint8_t s_faultMapInitialized = 0; // 标志位：映射表是否已初始化
+
+    // 首次调用时初始化故障映射表
+    if (s_faultMapInitialized == 0)
+    {
+        InitMcuRecvMpuFaultMap();
+        s_faultMapInitialized = 1;
+    }
+
+    if (msgData == NULL)
+    {
+        return;
+    }
+    if ((msgData->aid != 0x30) || (msgData->mid != 0x01))
+    {
+        return;
+    }
+    if (msgData->dataLength < MCU_RECV_MPU_FAULT_BITMAP_LEN) // 判断消息长度是否至少有 4 字节
+    {
+        return;
+    }
+
+    faultBitmap = McuRecvMpuFaultBitmapToU32(msgData->pDataBuffer);
+    StateSyncUpdateDtcInfo(faultBitmap);
+#if (0)
+    for (i = 0; i < MCU_RECV_MPU_FAULT_BIT_COUNT; i++) // 遍历每一个故障位
+    {
+        uint32_t mask = 0;                        // 定义当前故障位的掩码变量
+        uint8_t bitValue = 0;                     // 定义当前故障位的值，0 表示正常，1 表示故障
+        if (g_mcuRecvMpuFaultMap[i].eventId == 0) // 如果当前故障位还没有配置真实的 Dem 事件 ID
+        {
+            continue; // 跳过当前故障位，避免误操作
+        }
+        mask = (1u << g_mcuRecvMpuFaultMap[i].bitIndex); // 根据当前位号生成位掩码
+        bitValue = ((faultBitmap & mask) != 0) ? 1 : 0;  // 提取当前故障位的值，非 0 表示故障，0 表示正常
+        if (bitValue == 1)                               // 如果当前故障位解析结果为 1
+        {
+            Dem_SetEventStatus(
+                g_mcuRecvMpuFaultMap[i].eventId,
+                DEM_EVENT_STATUS_FAILED);
+        }
+        else // 如果当前故障位解析结果为 0
+        {
+            Dem_SetEventStatus(
+                g_mcuRecvMpuFaultMap[i].eventId,
+                DEM_EVENT_STATUS_PASSED);
+        }
+    }
+#endif
+    g_cpuMpuDtcInfo.timeCount = 0; // 收到新的故障同步报文后，把超时计数清零
+    g_cpuMpuDtcInfo.validity = 1;  // 标记当前故障同步数据有效
+}
+
+int16_t StateSyncGetDtcstate(CpuDtcSync_t *dtcInfo)
+{
+    uint8_t *pSrc = NULL;
+    uint8_t *pDes = NULL;
+    uint8_t i = 0;
+
+    if (dtcInfo == NULL)
+    {
+        return -1;
+    }
+
+    if (g_cpuMpuDtcInfo.validity == 0)
+    {
+        return -1;
+    }
+
+    pSrc = (uint8_t *)&g_cpuMpuDtcInfo;
+    pDes = (uint8_t *)dtcInfo;
+
+    for (i = 0; i < sizeof(CpuDtcSync_t); i++)
+    {
+        pDes[i] = pSrc[i];
+    }
+
+    return 0;
+}

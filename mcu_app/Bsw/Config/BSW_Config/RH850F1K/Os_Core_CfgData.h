@@ -19,7 +19,7 @@
  * @file              : Os_Core_CfgData.h
  * @license           : 
  * @licenseExpiryDate : 
- * @date              : 2026-03-03 20:34:17
+ * @date              : 2026-03-22 18:23:37
  * @customer          : iSoft
  * @description       : Configuration parameter of OS
  * @toolVersion       : 2.2.0.3
@@ -54,6 +54,15 @@ extern void Os_ISR_ADCA1I1_IRQ_Handler(void);
 extern void Os_ISR_TAUJ0I0_IRQ_Handler(void);
 extern void Os_ISR_TAUD0I9_IRQ_Handler(void);
 extern void Os_ISR_TAUB0I12_IRQ_Handler(void);
+extern void Os_ISR_TAUB0I8_IRQ_Handler(void);
+extern void Os_ISR_TAUB0I9_IRQ_Handler(void);
+extern void Os_ISR_P1_IRQ_Handler(void);
+extern void Os_ISR_P2_IRQ_Handler(void);
+extern void Os_ISR_P5_IRQ_Handler(void);
+extern void Os_ISR_P6_IRQ_Handler(void);
+extern void Os_ISR_P7_IRQ_Handler(void);
+extern void Os_ISR_P9_IRQ_Handler(void);
+extern void Os_ISR_P14_IRQ_Handler(void);
 extern void Os_ISR_RLIN34TX0_IRQ_Handler(void);
 extern void Os_ISR_RLIN34RX1_IRQ_Handler(void);
 extern void Os_ISR_RLIN34ERR2_IRQ_Handler(void);

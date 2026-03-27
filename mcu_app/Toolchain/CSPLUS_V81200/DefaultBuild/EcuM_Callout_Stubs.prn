@@ -1,0 +1,418 @@
+RH850 Family Assembler V2.07.00.03 Assemble Source List
+
+OFFSET   CODE                  NO  SOURCE STATEMENT
+
+00000000                        1  #CC-RH Compiler RH850 Assembler Source
+00000000                        2  #@	CC-RH Version : V2.07.00  [06 Dec 2024]
+00000000                        3  #@	Command : ..\..\Bsw\Config\BSW_Config\EcuM_Callout_Stubs.c -oDefaultBuild\EcuM_Callout_Stubs.obj -Xcpu=g3kh -Xno_warning=20188,20111 -g -g_line -I..\..\Srcode\app\diagnostic -I..\..\Srcode\app\parameter_store -I..\..\Cpu\port -I..\..\Cpu\uart -I..\..\Cpu\iic -I..\..\Srcode\app\vehicle_data_to_mpu -I..\..\Srcode\app\power_manage -I..\..\Srcode\app\mcu_cpu_sync -I..\..\Srcode\app\remote_control -I..\..\Srcode\app\can_cycle_send -I..\..\Srcode\app\project_configure -I..\..\Srcode\sdk\include -I..\..\Srcode\commonLib\include -I..\..\Srcode\hal\include -I..\..\Bsw\Mcal\icu\include -I..\..\Bsw\Config\MCAL_Config\Icu_OutPut\include -I..\..\Bsw\Crypto\CRYPTO\vss -I..\..\ASW\CDD_FVM -I..\..\Bsw\Memory\EEIf -I..\..\Bsw\Communication\CAN\CanTSyn -I..\..\Bsw\SystemServices\StbM -I..\..\Bsw\Crypto\CSM -I..\..\Bsw\Crypto\CRYPTO\RSA -I..\..\Bsw\Crypto\CRYPTO\RandomGen\CTR_DRBG -I..\..\Bsw\Crypto\CRYPTO\MAC\CMAC -I..\..\Bsw\Crypto\CRYPTO\Hash\sha256 -I..\..\Bsw\Crypto\CRYPTO\dh -I..\..\Bsw\Crypto\CRYPTO\AES -I..\..\Bsw\Crypto\CRYPTO -I..\..\Bsw\Crypto\CryInterface -I..\..\Bsw\Communication\Common\SecOC -I..\..\Bsw\Memory\NvM -I..\..\Bsw\Memory\MemIf -I..\..\Bsw\Memory\Fee -I..\..\Bsw\SystemServices\WdgM -I..\..\Bsw\SystemServices\WdgIf -I..\..\Bsw\Config\MCAL_Config\Wdg_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Gpt_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Fls_OutPut\include -I..\..\Bsw\Mcal\wdg\include -I..\..\Bsw\Mcal\gpt\include -I..\..\Bsw\Mcal\fls\include -I..\..\Bsw\Communication\Common\IpduM -I..\..\ASW\APP -I..\..\Bsw\SystemServices\BswM -I..\..\ASW\BSW_Ext -I..\..\Bsw\Communication\Common\Dcm -I..\..\Bsw\Communication\CAN\CanTp -I..\..\Bsw\SystemServices\Dem -I..\..\Bsw\Libraries\E2E -I..\..\Bsw\Libraries\Crc -I..\..\Bsw\Communication\Common\NmIf -I..\..\Bsw\Communication\CAN\CanNm -I..\..\Bsw\Config\BSW_Config\RTE\Rte -I..\..\Bsw\Config\BSW_Config\RTE\SchM -I..\..\Bsw\Libraries\IStd -I..\..\Bsw\SystemServices\EcuM -I..\..\Bsw\SystemServices\ComM -I..\..\Bsw\Communication\CAN\CanSM -I..\..\Bsw\Communication\CAN\CanIf -I..\..\Bsw\Communication\Common\Com -I..\..\Bsw\Communication\Common\PDUR -I..\..\Cpu -I..\..\Bsw\CommonInclude -I..\..\Bsw\Config\BSW_Config -I..\..\Bsw\Config\BSW_Config\RH850F1K -I..\..\Bsw\SystemServices\Os\Extend\inc -I..\..\Bsw\SystemServices\Os\Kernel\inc -I..\..\Bsw\SystemServices\Os\Portable\Mcu -I..\..\Bsw\SystemServices\Os\Portable\Processor -I..\..\Bsw\Config\MCAL_Config\Adc_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Can_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Dio_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Mcu_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Port_OutPut\include -I..\..\Bsw\Mcal\adc\include -I..\..\Bsw\Mcal\can\include -I..\..\Bsw\Mcal\dio\include -I..\..\Bsw\Mcal\general -I..\..\Bsw\Mcal\mcu\include -I..\..\Bsw\Mcal\port\include -I..\..\Bsw\Mcal\stubs\CanGeneral\include -I..\..\Bsw\Mcal\stubs\Det\include -I..\..\Bsw\Mcal\stubs\MemIf\include -I..\..\Bsw\Mcal\stubs\SchM\include -DRH850_F1KM_S1_2MB -lang=c99 -Xfloat=fpu -Xround=zero -Xdiv -Xasm_path=DefaultBuild -Xasm_option=-Xprn_path=DefaultBuild -c -MAKEUD=DefaultBuild -Xexec_time=C:\Users\xlchen\AppData\Local\Temp\CSPlusBuildTool_81a9ed02fd5d43f5bc354f3f5b9b099aoemousqs.yh4
+00000000                        4  #@	compiled at Fri Mar 27 09:51:00 2026
+00000000                        5  
+00000000                        6  	.file "..\..\Bsw\Config\BSW_Config\EcuM_Callout_Stubs.c"
+00000000                        7  
+00000000                        8  	$reg_mode 32
+00000000                        9  	.dbl_size 8
+00000000                       10  
+00000000                       11  	.extern _EcuMRunData
+00000000                       12  	.extern _EcuM_ConfigPtr
+00000000                       13  	.extern _EcuM_Config
+00000000                       14  	.extern _validNmMsgFlag
+00000000                       15  	.public _EcuM_ErrorHook
+00000000                       16  	.public _EcuM_McuSetMode
+00000000                       17  	.extern _Mcu_WakeUpFactor_Preparation
+00000000                       18  	.extern _Mcu_SetMode
+00000000                       19  	.public _EcuM_AL_DriverInitZero
+00000000                       20  	.extern _Dem_PreInit
+00000000                       21  	.public _EcuM_DeterminePbConfiguration
+00000000                       22  	.public _EcuM_AL_DriverInitOne
+00000000                       23  	.extern _Can_Init
+00000000                       24  	.public _EcuM_AL_DriverInitBswM
+00000000                       25  	.extern _CanIf_Init
+00000000                       26  	.extern _CanSM_Init
+00000000                       27  	.extern _PduR_Init
+00000000                       28  	.extern _Com_Init
+00000000                       29  	.extern _ComM_Init
+00000000                       30  	.extern _Nm_Init
+00000000                       31  	.extern _CanNm_Init
+00000000                       32  	.extern _CanTp_Init
+00000000                       33  	.extern _Dcm_Init
+00000000                       34  	.extern _Dem_Init
+00000000                       35  	.extern _BswM_EcuM_CurrentState
+00000000                       36  	.public _EcuM_OnGoOffOne
+00000000                       37  	.extern _Dem_Shutdown
+00000000                       38  	.extern _NvM_WriteAll
+00000000                       39  	.extern _Wdg_59_DriverA_TriggerFunc
+00000000                       40  	.extern _NvM_MainFunction
+00000000                       41  	.extern _Fee_MainFunction
+00000000                       42  	.extern _Fls_MainFunction
+00000000                       43  	.extern _NvM_GetErrorStatus
+00000000                       44  	.public _EcuM_OnGoOffTwo
+00000000                       45  	.public _EcuM_AL_SwitchOff
+00000000                       46  	.public _EcuM_AL_Reset
+00000000                       47  	.public _EcuM_EnableWakeupSources
+00000000                       48  	.public _EcuM_GenerateRamHash
+00000000                       49  	.public _EcuM_SleepActivity
+00000000                       50  	.public _EcuM_StartCheckWakeup
+00000000                       51  	.public _EcuM_EndCheckWakeup
+00000000                       52  	.public _EcuM_CheckRamHash
+00000000                       53  	.public _EcuM_DisableWakeupSources
+00000000                       54  	.public _EcuM_StartWakeupSources
+00000000                       55  	.extern _CanSM_StartWakeupSource
+00000000                       56  	.public _EcuM_CheckValidation
+00000000                       57  	.extern _EcuM_ValidateWakeupEvent
+00000000                       58  	.public _EcuM_StopWakeupSources
+00000000                       59  	.extern _CanSM_StopWakeupSource
+00000000                       60  	.public _EcuM_CurrentTimestampMS
+00000000                       61  	.extern _GetCoreID
+00000000                       62  	.extern _GetCounterValue
+00000000                       63  	.public _EcuM_CalculateElapsedMS
+00000000                       64  	.extern _GetElapsedValue
+00000000                       65  	.public _EcuM_CheckWakeup
+00000000                       66  
+00000000                       67  	.section .text, text
+00000000                       68  _EcuM_ErrorHook:
+00000000                       69  	.stack _EcuM_ErrorHook = 0
+00000000                       70  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 107
+00000000 7F00                  71  	jmp [r31]
+00000002                       72  _EcuM_McuSetMode:
+00000002                       73  	.stack _EcuM_McuSetMode = 8
+00000002                       74  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 133
+00000002 80072108              75  	prepare 0x00000041, 0x00000000
+00000006 00A2                  76  	mov 0x00000000, r20
+00000008                       77  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 143
+00000008 1430                  78  	mov r20, r6
+0000000A 80FF0000              79  	jarl _Mcu_WakeUpFactor_Preparation, r31
+0000000E                       80  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 144
+0000000E 1430                  81  	mov r20, r6
+00000010 80FF0000              82  	jarl _Mcu_SetMode, r31
+00000014 40063F08              83  	dispose 0x00000000, 0x00000041, [r31]
+00000018                       84  _EcuM_AL_DriverInitZero:
+00000018                       85  	.stack _EcuM_AL_DriverInitZero = 4
+00000018                       86  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 188
+00000018 80072100              87  	prepare 0x00000001, 0x00000000
+0000001C                       88  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 193
+0000001C 80FF0000              89  	jarl _Dem_PreInit, r31
+00000020 40063F00              90  	dispose 0x00000000, 0x00000001, [r31]
+00000024                       91  _EcuM_DeterminePbConfiguration:
+00000024                       92  	.stack _EcuM_DeterminePbConfiguration = 0
+00000024                       93  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 222
+00000024                       94  	mov #_EcuM_Config, r10
+00000024 2A0600000000            -- mov         0x0,r10
+0000002A 7F00                  95  	jmp [r31]
+0000002C                       96  _EcuM_AL_DriverInitOne:
+0000002C                       97  	.stack _EcuM_AL_DriverInitOne = 4
+0000002C                       98  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 239
+0000002C 80072100              99  	prepare 0x00000001, 0x00000000
+00000030                      100  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 244
+00000030 40160000             101  	movhi HIGHW1(#_EcuM_ConfigPtr), r0, r2
+00000034 22170100             102  	ld.w LOWW(#_EcuM_ConfigPtr)[r2], r2
+00000038 22170D00             103  	ld.w 0x0000000C[r2], r2
+0000003C                      104  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 245
+0000003C 22370500             105  	ld.w 0x00000004[r2], r6
+00000040 80FF0000             106  	jarl _Can_Init, r31
+00000044 40063F00             107  	dispose 0x00000000, 0x00000001, [r31]
+00000048                      108  _EcuM_AL_DriverInitBswM:
+00000048                      109  	.stack _EcuM_AL_DriverInitBswM = 8
+00000048                      110  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 260
+00000048 80072108             111  	prepare 0x00000041, 0x00000000
+0000004C                      112  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 266
+0000004C 6032                 113  	cmp 0x00000000, r6
+0000004E                      114  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 265
+0000004E 40160000             115  	movhi HIGHW1(#_EcuM_ConfigPtr), r0, r2
+00000052 22170100             116  	ld.w LOWW(#_EcuM_ConfigPtr)[r2], r2
+00000056 22A70D00             117  	ld.w 0x0000000C[r2], r20
+0000005A                      118  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 266
+0000005A 8A05                 119  	bnz9 .BB.LABEL.6_2
+0000005C                      120  .BB.LABEL.6_1:	; if_then_bb
+0000005C                      121  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 268
+0000005C 34370900             122  	ld.w 0x00000008[r20], r6
+00000060 80FF0000             123  	jarl _CanIf_Init, r31
+00000064                      124  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 269
+00000064 34370D00             125  	ld.w 0x0000000C[r20], r6
+00000068 80FF0000             126  	jarl _CanSM_Init, r31
+0000006C                      127  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 270
+0000006C 34371100             128  	ld.w 0x00000010[r20], r6
+00000070 80FF0000             129  	jarl _PduR_Init, r31
+00000074                      130  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 271
+00000074 34371500             131  	ld.w 0x00000014[r20], r6
+00000078 80FF0000             132  	jarl _Com_Init, r31
+0000007C                      133  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 272
+0000007C 34371900             134  	ld.w 0x00000018[r20], r6
+00000080 80FF0000             135  	jarl _ComM_Init, r31
+00000084                      136  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 273
+00000084 34371D00             137  	ld.w 0x0000001C[r20], r6
+00000088 80FF0000             138  	jarl _Nm_Init, r31
+0000008C                      139  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 274
+0000008C 34372100             140  	ld.w 0x00000020[r20], r6
+00000090 80FF0000             141  	jarl _CanNm_Init, r31
+00000094                      142  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 275
+00000094 34372500             143  	ld.w 0x00000024[r20], r6
+00000098 80FF0000             144  	jarl _CanTp_Init, r31
+0000009C 8505                 145  	br9 .BB.LABEL.6_4
+0000009E                      146  .BB.LABEL.6_2:	; if_else_bb
+0000009E                      147  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 284
+0000009E 6132                 148  	cmp 0x00000001, r6
+000000A0 8A05                 149  	bnz9 .BB.LABEL.6_4
+000000A2                      150  .BB.LABEL.6_3:	; if_then_bb46
+000000A2                      151  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 286
+000000A2 34372900             152  	ld.w 0x00000028[r20], r6
+000000A6 80FF0000             153  	jarl _Dcm_Init, r31
+000000AA                      154  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 287
+000000AA 34372D00             155  	ld.w 0x0000002C[r20], r6
+000000AE 80FF0000             156  	jarl _Dem_Init, r31
+000000B2                      157  .BB.LABEL.6_4:	; if_break_bb58
+000000B2                      158  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 0
+000000B2 20363000             159  	movea 0x00000030, r0, r6
+000000B6                      160  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 306
+000000B6 40160000             161  	movhi HIGHW1(#_EcuMRunData), r0, r2
+000000BA 42370000             162  	st.b r6, LOWW(#_EcuMRunData)[r2]
+000000BE                      163  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 307
+000000BE 80FF0000             164  	jarl _BswM_EcuM_CurrentState, r31
+000000C2 40063F08             165  	dispose 0x00000000, 0x00000041, [r31]
+000000C6                      166  _EcuM_OnGoOffOne:
+000000C6                      167  	.stack _EcuM_OnGoOffOne = 12
+000000C6                      168  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 354
+000000C6 82072108             169  	prepare 0x00000041, 0x00000004
+000000CA 0212                 170  	mov 0x00000002, r2
+000000CC                      171  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 364
+000000CC 63170100             172  	st.w r2, 0x00000000[r3]
+000000D0                      173  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 365
+000000D0 80FF0000             174  	jarl _Dem_Shutdown, r31
+000000D4                      175  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 366
+000000D4 80FF0000             176  	jarl _NvM_WriteAll, r31
+000000D8 00A2                 177  	mov 0x00000000, r20
+000000DA                      178  .BB.LABEL.7_1:	; bb
+000000DA                      179  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 0
+000000DA 0132                 180  	mov 0x00000001, r6
+000000DC                      181  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 369
+000000DC 80FF0000             182  	jarl _Wdg_59_DriverA_TriggerFunc, r31
+000000E0                      183  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 371
+000000E0 80FF0000             184  	jarl _NvM_MainFunction, r31
+000000E4                      185  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 372
+000000E4 80FF0000             186  	jarl _Fee_MainFunction, r31
+000000E8                      187  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 373
+000000E8 80FF0000             188  	jarl _Fls_MainFunction, r31
+000000EC 0338                 189  	mov r3, r7
+000000EE 0032                 190  	mov 0x00000000, r6
+000000F0                      191  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 374
+000000F0 80FF0000             192  	jarl _NvM_GetErrorStatus, r31
+000000F4                      193  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 370
+000000F4 41A2                 194  	add 0x00000001, r20
+000000F6                      195  	mov 0x0007A11F, r2
+000000F6 22061FA10700            -- mov         0x7a11f,hp
+000000FC                      196  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 375
+000000FC E2A1                 197  	cmp r2, r20
+000000FE 8B05                 198  	bh9 .BB.LABEL.7_3
+00000100                      199  .BB.LABEL.7_2:	; if_break_bb
+00000100                      200  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 367
+00000100 23170100             201  	ld.w 0x00000000[r3], r2
+00000104 6212                 202  	cmp 0x00000002, r2
+00000106 8205                 203  	bz9 .BB.LABEL.7_1
+00000108                      204  .BB.LABEL.7_3:	; return
+00000108                      205  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 383
+00000108 42063F08             206  	dispose 0x00000004, 0x00000041, [r31]
+0000010C                      207  _EcuM_OnGoOffTwo:
+0000010C                      208  	.stack _EcuM_OnGoOffTwo = 12
+0000010C                      209  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 396
+0000010C 82072108             210  	prepare 0x00000041, 0x00000004
+00000110 0212                 211  	mov 0x00000002, r2
+00000112                      212  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 409
+00000112 63170100             213  	st.w r2, 0x00000000[r3]
+00000116                      214  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 410
+00000116 80FF0000             215  	jarl _Dem_Shutdown, r31
+0000011A                      216  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 411
+0000011A 80FF0000             217  	jarl _NvM_WriteAll, r31
+0000011E 00A2                 218  	mov 0x00000000, r20
+00000120                      219  .BB.LABEL.8_1:	; bb
+00000120                      220  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 415
+00000120 80FF0000             221  	jarl _NvM_MainFunction, r31
+00000124                      222  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 416
+00000124 80FF0000             223  	jarl _Fee_MainFunction, r31
+00000128                      224  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 417
+00000128 80FF0000             225  	jarl _Fls_MainFunction, r31
+0000012C 0338                 226  	mov r3, r7
+0000012E 0032                 227  	mov 0x00000000, r6
+00000130                      228  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 418
+00000130 80FF0000             229  	jarl _NvM_GetErrorStatus, r31
+00000134                      230  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 414
+00000134 41A2                 231  	add 0x00000001, r20
+00000136 20168713             232  	movea 0x00001387, r0, r2
+0000013A                      233  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 419
+0000013A E2A1                 234  	cmp r2, r20
+0000013C 8B05                 235  	bh9 .BB.LABEL.8_3
+0000013E                      236  .BB.LABEL.8_2:	; if_break_bb
+0000013E                      237  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 412
+0000013E 23170100             238  	ld.w 0x00000000[r3], r2
+00000142 6212                 239  	cmp 0x00000002, r2
+00000144 8205                 240  	bz9 .BB.LABEL.8_1
+00000146                      241  .BB.LABEL.8_3:	; return
+00000146                      242  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 424
+00000146 42063F08             243  	dispose 0x00000004, 0x00000041, [r31]
+0000014A                      244  _EcuM_AL_SwitchOff:
+0000014A                      245  	.stack _EcuM_AL_SwitchOff = 8
+0000014A                      246  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 437
+0000014A 80072108             247  	prepare 0x00000041, 0x00000000
+0000014E 00A2                 248  	mov 0x00000000, r20
+00000150                      249  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 446
+00000150 1430                 250  	mov r20, r6
+00000152 80FF0000             251  	jarl _Mcu_WakeUpFactor_Preparation, r31
+00000156                      252  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 447
+00000156 1430                 253  	mov r20, r6
+00000158 80FF0000             254  	jarl _Mcu_SetMode, r31
+0000015C 40063F08             255  	dispose 0x00000000, 0x00000041, [r31]
+00000160                      256  _EcuM_AL_Reset:
+00000160                      257  	.stack _EcuM_AL_Reset = 0
+00000160                      258  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 463
+00000160 7F00                 259  	jmp [r31]
+00000162                      260  _EcuM_EnableWakeupSources:
+00000162                      261  	.stack _EcuM_EnableWakeupSources = 0
+00000162                      262  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 490
+00000162 7F00                 263  	jmp [r31]
+00000164                      264  _EcuM_GenerateRamHash:
+00000164                      265  	.stack _EcuM_GenerateRamHash = 0
+00000164                      266  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 531
+00000164 7F00                 267  	jmp [r31]
+00000166                      268  _EcuM_SleepActivity:
+00000166                      269  	.stack _EcuM_SleepActivity = 0
+00000166                      270  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 555
+00000166 7F00                 271  	jmp [r31]
+00000168                      272  _EcuM_StartCheckWakeup:
+00000168                      273  	.stack _EcuM_StartCheckWakeup = 0
+00000168                      274  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 583
+00000168 7F00                 275  	jmp [r31]
+0000016A                      276  _EcuM_EndCheckWakeup:
+0000016A                      277  	.stack _EcuM_EndCheckWakeup = 0
+0000016A                      278  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 611
+0000016A 7F00                 279  	jmp [r31]
+0000016C                      280  _EcuM_CheckRamHash:
+0000016C                      281  	.stack _EcuM_CheckRamHash = 0
+0000016C                      282  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 648
+0000016C 0152                 283  	mov 0x00000001, r10
+0000016E                      284  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 661
+0000016E 7F00                 285  	jmp [r31]
+00000170                      286  _EcuM_DisableWakeupSources:
+00000170                      287  	.stack _EcuM_DisableWakeupSources = 0
+00000170                      288  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 675
+00000170 7F00                 289  	jmp [r31]
+00000172                      290  _EcuM_StartWakeupSources:
+00000172                      291  	.stack _EcuM_StartWakeupSources = 4
+00000172                      292  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 748
+00000172 80072100             293  	prepare 0x00000001, 0x00000000
+00000176 0032                 294  	mov 0x00000000, r6
+00000178                      295  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 757
+00000178 80FF0000             296  	jarl _CanSM_StartWakeupSource, r31
+0000017C                      297  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 758
+0000017C 40063F00             298  	dispose 0x00000000, 0x00000001, [r31]
+00000180                      299  _EcuM_CheckValidation:
+00000180                      300  	.stack _EcuM_CheckValidation = 4
+00000180                      301  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 776
+00000180 80072100             302  	prepare 0x00000001, 0x00000000
+00000184                      303  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 781
+00000184 0606C0FF             304  	addi 0xFFFFFFC0, r6, r0
+00000188 8205                 305  	bz9 .BB.LABEL.19_4
+0000018A                      306  .BB.LABEL.19_1:	; entry
+0000018A                      307  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 0
+0000018A 0606E0FF             308  	addi 0xFFFFFFE0, r6, r0
+0000018E 8A05                 309  	bnz9 .BB.LABEL.19_5
+00000190                      310  .BB.LABEL.19_2:	; switch_clause_bb
+00000190                      311  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 788
+00000190 40160000             312  	movhi HIGHW1(#_validNmMsgFlag), r0, r2
+00000194 82170100             313  	ld.bu LOWW(#_validNmMsgFlag)[r2], r2
+00000198 6112                 314  	cmp 0x00000001, r2
+0000019A 8A05                 315  	bnz9 .BB.LABEL.19_5
+0000019C                      316  .BB.LABEL.19_3:	; if_then_bb
+0000019C                      317  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 790
+0000019C 80FF0000             318  	jarl _EcuM_ValidateWakeupEvent, r31
+000001A0                      319  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 791
+000001A0 40160000             320  	movhi HIGHW1(#_validNmMsgFlag), r0, r2
+000001A4 42070000             321  	st.b r0, LOWW(#_validNmMsgFlag)[r2]
+000001A8 40063F00             322  	dispose 0x00000000, 0x00000001, [r31]
+000001AC                      323  .BB.LABEL.19_4:	; switch_clause_bb7
+000001AC                      324  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 802
+000001AC 80FF0000             325  	jarl _EcuM_ValidateWakeupEvent, r31
+000001B0                      326  .BB.LABEL.19_5:	; return
+000001B0                      327  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 811
+000001B0 40063F00             328  	dispose 0x00000000, 0x00000001, [r31]
+000001B4                      329  _EcuM_StopWakeupSources:
+000001B4                      330  	.stack _EcuM_StopWakeupSources = 4
+000001B4                      331  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 824
+000001B4 80072100             332  	prepare 0x00000001, 0x00000000
+000001B8 0032                 333  	mov 0x00000000, r6
+000001BA                      334  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 833
+000001BA 80FF0000             335  	jarl _CanSM_StopWakeupSource, r31
+000001BE                      336  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 834
+000001BE 40063F00             337  	dispose 0x00000000, 0x00000001, [r31]
+000001C2                      338  _EcuM_CurrentTimestampMS:
+000001C2                      339  	.stack _EcuM_CurrentTimestampMS = 8
+000001C2                      340  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 850
+000001C2 82072100             341  	prepare 0x00000001, 0x00000004
+000001C6                      342  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 852
+000001C6 63070100             343  	st.w r0, 0x00000000[r3]
+000001CA                      344  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 854
+000001CA 80FF0000             345  	jarl _GetCoreID, r31
+000001CE                      346  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 855
+000001CE 6052                 347  	cmp 0x00000000, r10
+000001D0 8A05                 348  	bnz9 .BB.LABEL.21_2
+000001D2                      349  .BB.LABEL.21_1:	; switch_clause_bb
+000001D2                      350  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 0
+000001D2 0338                 351  	mov r3, r7
+000001D4 0032                 352  	mov 0x00000000, r6
+000001D6                      353  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 859
+000001D6 80FF0000             354  	jarl _GetCounterValue, r31
+000001DA 2016E803             355  	movea 0x000003E8, r0, r2
+000001DE                      356  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 862
+000001DE 232F0100             357  	ld.w 0x00000000[r3], r5
+000001E2 E22F2002             358  	mul r2, r5, r0
+000001E6 E22F8202             359  	divhu r2, r5, r0
+000001EA 632F0100             360  	st.w r5, 0x00000000[r3]
+000001EE                      361  .BB.LABEL.21_2:	; bb11
+000001EE                      362  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 871
+000001EE 23570100             363  	ld.w 0x00000000[r3], r10
+000001F2                      364  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 872
+000001F2 42063F00             365  	dispose 0x00000004, 0x00000001, [r31]
+000001F6                      366  _EcuM_CalculateElapsedMS:
+000001F6                      367  	.stack _EcuM_CalculateElapsedMS = 20
+000001F6                      368  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 884
+000001F6 8407210C             369  	prepare 0x00000061, 0x00000008
+000001FA 06A0                 370  	mov r6, r20
+000001FC                      371  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 886
+000001FC 63070500             372  	st.w r0, 0x00000004[r3]
+00000200                      373  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 889
+00000200 80FF0000             374  	jarl _GetCoreID, r31
+00000204                      375  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 890
+00000204 6052                 376  	cmp 0x00000000, r10
+00000206 8A05                 377  	bnz9 .BB.LABEL.22_2
+00000208                      378  .BB.LABEL.22_1:	; switch_clause_bb
+00000208                      379  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 0
+00000208 20AEE803             380  	movea 0x000003E8, r0, r21
+0000020C                      381  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 896
+0000020C F5A72002             382  	mul r21, r20, r0
+00000210 F5A78202             383  	divhu r21, r20, r0
+00000214 63A70100             384  	st.w r20, 0x00000000[r3]
+00000218 23460400             385  	movea 0x00000004, r3, r8
+0000021C 0338                 386  	mov r3, r7
+0000021E 0032                 387  	mov 0x00000000, r6
+00000220                      388  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 898
+00000220 80FF0000             389  	jarl _GetElapsedValue, r31
+00000224                      390  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 900
+00000224 23170500             391  	ld.w 0x00000004[r3], r2
+00000228 F5172002             392  	mul r21, r2, r0
+0000022C F5178202             393  	divhu r21, r2, r0
+00000230 63170500             394  	st.w r2, 0x00000004[r3]
+00000234                      395  .BB.LABEL.22_2:	; bb16
+00000234                      396  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 909
+00000234 23570500             397  	ld.w 0x00000004[r3], r10
+00000238                      398  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 910
+00000238 44063F0C             399  	dispose 0x00000008, 0x00000061, [r31]
+0000023C                      400  _EcuM_CheckWakeup:
+0000023C                      401  	.stack _EcuM_CheckWakeup = 0
+0000023C                      402  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/EcuM_Callout_Stubs.c", 929
+0000023C 7F00                 403  	jmp [r31]
+
+Section List
+Attr     Size                Name
+
+TEXT          574 (0000023E) .text
+
+Command Line Parameter
+-Xcpu=g3kh -Xreg_mode=32 -Xep=callee -Xcharacter_set=none -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\diagnostic -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\parameter_store -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu\port -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu\uart -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu\iic -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\vehicle_data_to_mpu -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\power_manage -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\mcu_cpu_sync -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\remote_control -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\can_cycle_send -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\project_configure -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\sdk\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\commonLib\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\hal\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\icu\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Icu_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\vss -ID:\wk\sirun\project\dazhong\code\mcu_app\ASW\CDD_FVM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\EEIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanTSyn -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\StbM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CSM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\RSA -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\RandomGen\CTR_DRBG -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\MAC\CMAC -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\Hash\sha256 -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\dh -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\AES -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CryInterface -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\SecOC -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\NvM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\MemIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\Fee -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\WdgM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\WdgIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Wdg_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Gpt_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Fls_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\wdg\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\gpt\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\fls\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\IpduM -ID:\wk\sirun\project\dazhong\code\mcu_app\ASW\APP -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\BswM -ID:\wk\sirun\project\dazhong\code\mcu_app\ASW\BSW_Ext -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\Dcm -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanTp -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Dem -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Libraries\E2E -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Libraries\Crc -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\NmIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanNm -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config\RTE\Rte -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config\RTE\SchM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Libraries\IStd -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\EcuM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\ComM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanSM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\Com -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\PDUR -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\CommonInclude -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config\RH850F1K -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Extend\inc -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Kernel\inc -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Portable\Mcu -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Portable\Processor -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Adc_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Can_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Dio_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Mcu_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Port_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\adc\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\can\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\dio\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\general -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\mcu\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\port\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\CanGeneral\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\Det\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\MemIf\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\SchM\include -DRH850_F1KM_S1_2MB -Xprn_path=DefaultBuild -Xno_warning=50013 -oD:\wk\sirun\project\dazhong\code\mcu_app\Toolchain\CSPLUS_V81200\DefaultBuild\EcuM_Callout_Stubs.obj D:\wk\sirun\project\dazhong\code\mcu_app\Toolchain\CSPLUS_V81200\DefaultBuild\EcuM_Callout_Stubs.asm 
+

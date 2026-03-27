@@ -1,8 +1,8 @@
 /*************************************************
 Copyright ? 2024 SiRun (Beijing) . All rights reserved.
-  File Name:       timeSyncSdk
-  Author:          lei.wang
-  Created Time:    2024
+  File Name:       timeSyncSdk.h
+  Author:          donghua.xi
+  Created Time:    2025
   Description:     time sync with MPU
    Others:      // 其它说明
 *************************************************/
@@ -39,7 +39,7 @@ void TimeSyncSdkCycleProcess(MpuHalDataPack_t *msgData);
   Function:       TimeSyncSdkGetRealTime
   Description:    获取有格式的时间
   Input:          无
-  Output:         timeSrc：时间源
+  Output:         timeSrc：时间源 0-无效 1-NTP 2-GNSS
                   pYear：年
                   pMonth：月
                   pDay：日
@@ -54,12 +54,13 @@ int16_t TimeSyncSdkGetRealTime(uint8_t *timeSrc,uint32_t *pYear,uint8_t *pMonth,
 
 /*************************************************
   Function:       TimeSyncSdkGetUtcTime
-  Description:    获取有格式的时间
+  Description:    获取时间戳( 基于2000年)
   Input:          无
-  Output:         pUtc:UTC时间戳
-  Return:         0：成功
-                  -1：失败
-  Others:         
+  Output:         pTime:时间戳 单位：秒
+  Return:         0：成功, 同步后的时间
+                  1：未同步的时间
+                  -1: 失败
+  Others:
 *************************************************/
 int16_t TimeSyncSdkGetUtcTime(uint32_t *pUtc);
 

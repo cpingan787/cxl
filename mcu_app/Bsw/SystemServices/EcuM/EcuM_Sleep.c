@@ -41,6 +41,8 @@
 #include "EcuM_Internal.h"
 #if (ECUM_COMM_PNC_ENABLED == STD_ON) || (ECUM_COMM_CHANNEL_ENABLED == STD_ON)
 #include "ComM_EcuM.h"
+#include "Dio.h"
+#include "Rte_EcuM.h"
 #endif /* ECUM_COMM_PNC_ENABLED == STD_ON */
 /*******************************************************************************
 **                      Private Macro Definitions                             **
@@ -567,6 +569,10 @@ static FUNC(void, ECUM_CODE) EcuM_GoSleep(void)
     }
 }
 
+uint8 SLEEP_WAKE=0;
+extern uint8 CAN_WK_FLG;
+extern uint8 IGN_WK_FLG;
+
 /*Activity sequence for HALT*/
 static FUNC(void, ECUM_CODE) EcuM_HaltSequence(void)
 {
@@ -624,8 +630,11 @@ ECUM_HALT_SEQ:
     /* When a wakeup occurs and is not pending or validated, EcuM continues to sleep */
     while (TRUE)
     {
+        Mcu_CheckWakeSource();
         pendWks = EcuM_GetPendingWakeupEvents();
         ValidatedWks = EcuM_GetValidatedWakeupEvents();
+        // ValidatedWks |= Mcu_CheckWakeSource();
+
         if (((ECUM_ALL_WKSOURCE & pendWks) == 0u) && ((ECUM_ALL_WKSOURCE & ValidatedWks) == 0u))
         {
             sleepModeId = EcuMRunData.SdtgLast.Mode;

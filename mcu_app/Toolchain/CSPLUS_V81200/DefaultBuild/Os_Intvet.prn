@@ -1,0 +1,2260 @@
+RH850 Family Assembler V2.07.00.03 Assemble Source List
+
+OFFSET   CODE                  NO  SOURCE STATEMENT
+
+00000000                        1  #CC-RH Compiler RH850 Assembler Source
+00000000                        2  #@	CC-RH Version : V2.07.00  [06 Dec 2024]
+00000000                        3  #@	Command : ..\..\Bsw\Config\BSW_Config\Os_Intvet.c -oDefaultBuild\Os_Intvet.obj -Xcpu=g3kh -Xno_warning=20188,20111 -g -g_line -I..\..\Srcode\app\diagnostic -I..\..\Srcode\app\parameter_store -I..\..\Cpu\port -I..\..\Cpu\uart -I..\..\Cpu\iic -I..\..\Srcode\app\vehicle_data_to_mpu -I..\..\Srcode\app\power_manage -I..\..\Srcode\app\mcu_cpu_sync -I..\..\Srcode\app\remote_control -I..\..\Srcode\app\can_cycle_send -I..\..\Srcode\app\project_configure -I..\..\Srcode\sdk\include -I..\..\Srcode\commonLib\include -I..\..\Srcode\hal\include -I..\..\Bsw\Mcal\icu\include -I..\..\Bsw\Config\MCAL_Config\Icu_OutPut\include -I..\..\Bsw\Crypto\CRYPTO\vss -I..\..\ASW\CDD_FVM -I..\..\Bsw\Memory\EEIf -I..\..\Bsw\Communication\CAN\CanTSyn -I..\..\Bsw\SystemServices\StbM -I..\..\Bsw\Crypto\CSM -I..\..\Bsw\Crypto\CRYPTO\RSA -I..\..\Bsw\Crypto\CRYPTO\RandomGen\CTR_DRBG -I..\..\Bsw\Crypto\CRYPTO\MAC\CMAC -I..\..\Bsw\Crypto\CRYPTO\Hash\sha256 -I..\..\Bsw\Crypto\CRYPTO\dh -I..\..\Bsw\Crypto\CRYPTO\AES -I..\..\Bsw\Crypto\CRYPTO -I..\..\Bsw\Crypto\CryInterface -I..\..\Bsw\Communication\Common\SecOC -I..\..\Bsw\Memory\NvM -I..\..\Bsw\Memory\MemIf -I..\..\Bsw\Memory\Fee -I..\..\Bsw\SystemServices\WdgM -I..\..\Bsw\SystemServices\WdgIf -I..\..\Bsw\Config\MCAL_Config\Wdg_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Gpt_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Fls_OutPut\include -I..\..\Bsw\Mcal\wdg\include -I..\..\Bsw\Mcal\gpt\include -I..\..\Bsw\Mcal\fls\include -I..\..\Bsw\Communication\Common\IpduM -I..\..\ASW\APP -I..\..\Bsw\SystemServices\BswM -I..\..\ASW\BSW_Ext -I..\..\Bsw\Communication\Common\Dcm -I..\..\Bsw\Communication\CAN\CanTp -I..\..\Bsw\SystemServices\Dem -I..\..\Bsw\Libraries\E2E -I..\..\Bsw\Libraries\Crc -I..\..\Bsw\Communication\Common\NmIf -I..\..\Bsw\Communication\CAN\CanNm -I..\..\Bsw\Config\BSW_Config\RTE\Rte -I..\..\Bsw\Config\BSW_Config\RTE\SchM -I..\..\Bsw\Libraries\IStd -I..\..\Bsw\SystemServices\EcuM -I..\..\Bsw\SystemServices\ComM -I..\..\Bsw\Communication\CAN\CanSM -I..\..\Bsw\Communication\CAN\CanIf -I..\..\Bsw\Communication\Common\Com -I..\..\Bsw\Communication\Common\PDUR -I..\..\Cpu -I..\..\Bsw\CommonInclude -I..\..\Bsw\Config\BSW_Config -I..\..\Bsw\Config\BSW_Config\RH850F1K -I..\..\Bsw\SystemServices\Os\Extend\inc -I..\..\Bsw\SystemServices\Os\Kernel\inc -I..\..\Bsw\SystemServices\Os\Portable\Mcu -I..\..\Bsw\SystemServices\Os\Portable\Processor -I..\..\Bsw\Config\MCAL_Config\Adc_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Can_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Dio_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Mcu_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Port_OutPut\include -I..\..\Bsw\Mcal\adc\include -I..\..\Bsw\Mcal\can\include -I..\..\Bsw\Mcal\dio\include -I..\..\Bsw\Mcal\general -I..\..\Bsw\Mcal\mcu\include -I..\..\Bsw\Mcal\port\include -I..\..\Bsw\Mcal\stubs\CanGeneral\include -I..\..\Bsw\Mcal\stubs\Det\include -I..\..\Bsw\Mcal\stubs\MemIf\include -I..\..\Bsw\Mcal\stubs\SchM\include -DRH850_F1KM_S1_2MB -lang=c99 -Xfloat=fpu -Xround=zero -Xdiv -Xasm_path=DefaultBuild -Xasm_option=-Xprn_path=DefaultBuild -c -MAKEUD=DefaultBuild -Xexec_time=C:\Users\xlchen\AppData\Local\Temp\CSPlusBuildTool_09a0e99508f5423988aae6ff96936be6umgvfinv.x0d
+00000000                        4  #@	compiled at Fri Mar 27 09:50:20 2026
+00000000                        5  
+00000000                        6  	.file "..\..\Bsw\Config\BSW_Config\Os_Intvet.c"
+00000000                        7  
+00000000                        8  	$reg_mode 32
+00000000                        9  	.dbl_size 8
+00000000                       10  
+00000000                       11  	.extern _Os_SCB_FA_Inf
+00000000                       12  	.extern _Os_IsrNestStack
+00000000                       13  	.extern _Os_ISR2Stack
+00000000                       14  	.extern _Os_IsrCfg
+00000000                       15  	.extern _Os_ArchTempSp
+00000000                       16  	.extern _Os_TaskCBExt
+00000000                       17  	.public _Os_ISR_SystemTimer_Core_0_Handler0
+00000000                       18  	.extern _Os_EnterISR2
+00000000                       19  	.extern _Os_ArchSystemTimerCore0
+00000000                       20  	.extern _Os_ExitISR2
+00000000                       21  	.extern _Os_ISR2Exit
+00000000                       22  	.public _Os_ISR_RCAN1ERR_IRQ_Handler
+00000000                       23  	.extern _ISR_RCAN1ERR_IRQ_Handler
+00000000                       24  	.public _Os_ISR_RCAN1TRX_IRQ_Handler
+00000000                       25  	.extern _ISR_RCAN1TRX_IRQ_Handler
+00000000                       26  	.public _Os_ISR_RCANGRECC0_IRQ_Handler
+00000000                       27  	.extern _ISR_RCANGRECC0_IRQ_Handler
+00000000                       28  	.public _Os_ISR_ADCA0I1_IRQ_Handler
+00000000                       29  	.extern _ISR_ADCA0I1_IRQ_Handler
+00000000                       30  	.public _Os_ISR_ADCA1I1_IRQ_Handler
+00000000                       31  	.extern _ISR_ADCA1I1_IRQ_Handler
+00000000                       32  	.public _Os_ISR_TAUJ0I0_IRQ_Handler
+00000000                       33  	.extern _ISR_TAUJ0I0_IRQ_Handler
+00000000                       34  	.public _Os_ISR_TAUD0I9_IRQ_Handler
+00000000                       35  	.extern _ISR_TAUD0I9_IRQ_Handler
+00000000                       36  	.public _Os_ISR_TAUB0I12_IRQ_Handler
+00000000                       37  	.extern _ISR_TAUB0I12_IRQ_Handler
+00000000                       38  	.public _Os_ISR_TAUB0I8_IRQ_Handler
+00000000                       39  	.extern _ISR_TAUB0I8_IRQ_Handler
+00000000                       40  	.public _Os_ISR_TAUB0I9_IRQ_Handler
+00000000                       41  	.extern _ISR_TAUB0I9_IRQ_Handler
+00000000                       42  	.public _Os_ISR_P1_IRQ_Handler
+00000000                       43  	.extern _ISR_P1_IRQ_Handler
+00000000                       44  	.public _Os_ISR_P2_IRQ_Handler
+00000000                       45  	.extern _ISR_P2_IRQ_Handler
+00000000                       46  	.public _Os_ISR_P5_IRQ_Handler
+00000000                       47  	.extern _ISR_P5_IRQ_Handler
+00000000                       48  	.public _Os_ISR_P6_IRQ_Handler
+00000000                       49  	.extern _ISR_P6_IRQ_Handler
+00000000                       50  	.public _Os_ISR_P7_IRQ_Handler
+00000000                       51  	.extern _ISR_P7_IRQ_Handler
+00000000                       52  	.public _Os_ISR_P9_IRQ_Handler
+00000000                       53  	.extern _ISR_P9_IRQ_Handler
+00000000                       54  	.public _Os_ISR_P14_IRQ_Handler
+00000000                       55  	.extern _ISR_P14_IRQ_Handler
+00000000                       56  	.public _Os_ISR_RLIN34TX0_IRQ_Handler
+00000000                       57  	.extern _ISR_RLIN34TX0_IRQ_Handler
+00000000                       58  	.public _Os_ISR_RLIN34RX1_IRQ_Handler
+00000000                       59  	.extern _ISR_RLIN34RX1_IRQ_Handler
+00000000                       60  	.public _Os_ISR_RLIN34ERR2_IRQ_Handler
+00000000                       61  	.extern _ISR_RLIN34ERR2_IRQ_Handler
+00000000                       62  	.public _Os_ISR_RLIN35TX0_IRQ_Handler
+00000000                       63  	.extern _ISR_RLIN35TX0_IRQ_Handler
+00000000                       64  	.public _Os_ISR_RLIN35RX1_IRQ_Handler
+00000000                       65  	.extern _ISR_RLIN35RX1_IRQ_Handler
+00000000                       66  	.public _Os_ISR_RLIN35ERR2_IRQ_Handler
+00000000                       67  	.extern _ISR_RLIN35ERR2_IRQ_Handler
+00000000                       68  	.public _Os_ISR_RIIC0TI_IRQ_Handler
+00000000                       69  	.extern _ISR_RIIC0TI_IRQ_Handler
+00000000                       70  	.public _Os_ISR_RIIC0EE_IRQ_Handler
+00000000                       71  	.extern _ISR_RIIC0EE_IRQ_Handler
+00000000                       72  	.public _Os_ISR_RIIC0RI_IRQ_Handler
+00000000                       73  	.extern _ISR_RIIC0RI_IRQ_Handler
+00000000                       74  	.public _Os_ISR_RIIC0TEI_IRQ_Handler
+00000000                       75  	.extern _ISR_RIIC0TEI_IRQ_Handler
+00000000                       76  
+00000000                       77  	.section .text, text
+00000000                       78  _Os_Kernel_GetSysRunningTaskID.1:
+00000000                       79  	.stack _Os_Kernel_GetSysRunningTaskID.1 = 0
+00000000                       80  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/inc/Os_Kernel2Port.h", 177
+00000000 40160000              81  	movhi HIGHW1(#_Os_SCB_FA_Inf+0x0000003C), r0, r2
+00000004 22570100              82  	ld.w LOWW(#_Os_SCB_FA_Inf+0x0000003C)[r2], r10
+00000008                       83  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/inc/Os_Kernel2Port.h", 178
+00000008 7F00                  84  	jmp [r31]
+0000000A                       85  _Os_Kernel_GetIntNestNumISR2.1:
+0000000A                       86  	.stack _Os_Kernel_GetIntNestNumISR2.1 = 0
+0000000A                       87  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/inc/Os_Kernel2Port.h", 201
+0000000A 40160000              88  	movhi HIGHW1(#_Os_SCB_FA_Inf+0x00000064), r0, r2
+0000000E                       89  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/inc/Os_Kernel2Port.h", 202
+0000000E 82570100              90  	ld.bu LOWW(#_Os_SCB_FA_Inf+0x00000064)[r2], r10
+00000012 7F00                  91  	jmp [r31]
+00000014                       92  _Os_ISR_SystemTimer_Core_0_Handler0:
+00000014                       93  	.stack _Os_ISR_SystemTimer_Core_0_Handler0 = 8
+00000014                       94  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 56
+00000014 80072108              95  	prepare 0x00000041, 0x00000000
+00000018                       96  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 59
+00000018 80FF0000              97  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+0000001C 6052                  98  	cmp 0x00000000, r10
+0000001E 8A05                  99  	bnz9 .BB.LABEL.3_2
+00000020                      100  .BB.LABEL.3_1:	; if_then_bb
+00000020                      101  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 0
+00000020 40160000             102  	movhi HIGHW1(#_Os_TaskCBExt), r0, r2
+00000024 22A70100             103  	ld.w LOWW(#_Os_TaskCBExt)[r2], r20
+00000028 80FF0000             104  	jarl _Os_Kernel_GetSysRunningTaskID.1, r31
+0000002C 8505                 105  	br9 .BB.LABEL.3_3
+0000002E                      106  .BB.LABEL.3_2:	; if_else_bb
+0000002E 40160000             107  	movhi HIGHW1(#_Os_IsrNestStack), r0, r2
+00000032 22A70100             108  	ld.w LOWW(#_Os_IsrNestStack)[r2], r20
+00000036 80FF0000             109  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+0000003A                      110  .BB.LABEL.3_3:	; if_else_bb
+0000003A C252                 111  	shl 0x00000002, r10
+0000003C CAA1                 112  	add r10, r20
+0000003E 40160000             113  	movhi HIGHW1(#_Os_ArchTempSp), r0, r2
+00000042 22170100             114  	ld.w LOWW(#_Os_ArchTempSp)[r2], r2
+00000046 74170100             115  	st.w r2, 0x00000000[r20]
+0000004A 40160000             116  	movhi HIGHW1(#_Os_ISR2Stack), r0, r2
+0000004E 22170100             117  	ld.w LOWW(#_Os_ISR2Stack)[r2], r2
+00000052 1C2A                 118  	mov 0xFFFFFFFC, r5
+00000054 4511                 119  	and r5, r2
+00000056 402E0000             120  	movhi HIGHW1(#_Os_ArchTempSp), r0, r5
+0000005A 65170100             121  	st.w r2, LOWW(#_Os_ArchTempSp)[r5]
+0000005E                      122  	._line_top inline_asm
+0000005E                      123      mov #_Os_ArchTempSp, r7;
+0000005E 270600000000            -- mov         0x0,r7
+00000064 271F0100             124      ld.w 0[r7], sp;
+00000068                      125  	._line_end inline_asm
+00000068 0032                 126  	mov 0x00000000, r6
+0000006A 80FF0000             127  	jarl _Os_EnterISR2, r31
+0000006E 40160000             128  	movhi HIGHW1(#_Os_IsrCfg+0x00000010), r0, r2
+00000072 82170100             129  	ld.bu LOWW(#_Os_IsrCfg+0x00000010)[r2], r2
+00000076 6112                 130  	cmp 0x00000001, r2
+00000078 8A05                 131  	bnz9 .BB.LABEL.3_5
+0000007A                      132  .BB.LABEL.3_4:	; if_then_bb26
+0000007A E5174000             133  	stsr 0x00000005, r2, 0x00000000
+0000007E 202E5FFF             134  	movea 0xFFFFFF5F, r0, r5
+00000082 4511                 135  	and r5, r2
+00000084 E22F2000             136  	ldsr r2, 5
+00000088                      137  .BB.LABEL.3_5:	; bb31
+00000088                      138  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 62
+00000088 80FF0000             139  	jarl _Os_ArchSystemTimerCore0, r31
+0000008C                      140  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 65
+0000008C E5174000             141  	stsr 0x00000005, r2, 0x00000000
+00000090 8216A000             142  	ori 0x000000A0, r2, r2
+00000094 E22F2000             143  	ldsr r2, 5
+00000098 0032                 144  	mov 0x00000000, r6
+0000009A 80FF0000             145  	jarl _Os_ExitISR2, r31
+0000009E 80FF0000             146  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+000000A2 6052                 147  	cmp 0x00000000, r10
+000000A4 8A05                 148  	bnz9 .BB.LABEL.3_7
+000000A6                      149  .BB.LABEL.3_6:	; if_then_bb41
+000000A6                      150  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 0
+000000A6 40160000             151  	movhi HIGHW1(#_Os_TaskCBExt), r0, r2
+000000AA 22A70100             152  	ld.w LOWW(#_Os_TaskCBExt)[r2], r20
+000000AE 80FF0000             153  	jarl _Os_Kernel_GetSysRunningTaskID.1, r31
+000000B2 8505                 154  	br9 .BB.LABEL.3_8
+000000B4                      155  .BB.LABEL.3_7:	; if_else_bb46
+000000B4 40160000             156  	movhi HIGHW1(#_Os_IsrNestStack), r0, r2
+000000B8 22A70100             157  	ld.w LOWW(#_Os_IsrNestStack)[r2], r20
+000000BC 80FF0000             158  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+000000C0                      159  .BB.LABEL.3_8:	; if_else_bb46
+000000C0 C252                 160  	shl 0x00000002, r10
+000000C2 CAA1                 161  	add r10, r20
+000000C4 34170100             162  	ld.w 0x00000000[r20], r2
+000000C8 402E0000             163  	movhi HIGHW1(#_Os_ArchTempSp), r0, r5
+000000CC 65170100             164  	st.w r2, LOWW(#_Os_ArchTempSp)[r5]
+000000D0 80FF0000             165  	jarl _Os_ISR2Exit, r31
+000000D4                      166  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 68
+000000D4 40063F08             167  	dispose 0x00000000, 0x00000041, [r31]
+000000D8                      168  _Os_ISR_RCAN1ERR_IRQ_Handler:
+000000D8                      169  	.stack _Os_ISR_RCAN1ERR_IRQ_Handler = 8
+000000D8                      170  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 74
+000000D8 80072108             171  	prepare 0x00000041, 0x00000000
+000000DC                      172  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 77
+000000DC 80FF0000             173  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+000000E0 6052                 174  	cmp 0x00000000, r10
+000000E2 8A05                 175  	bnz9 .BB.LABEL.4_2
+000000E4                      176  .BB.LABEL.4_1:	; if_then_bb
+000000E4                      177  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 0
+000000E4 40160000             178  	movhi HIGHW1(#_Os_TaskCBExt), r0, r2
+000000E8 22A70100             179  	ld.w LOWW(#_Os_TaskCBExt)[r2], r20
+000000EC 80FF0000             180  	jarl _Os_Kernel_GetSysRunningTaskID.1, r31
+000000F0 8505                 181  	br9 .BB.LABEL.4_3
+000000F2                      182  .BB.LABEL.4_2:	; if_else_bb
+000000F2 40160000             183  	movhi HIGHW1(#_Os_IsrNestStack), r0, r2
+000000F6 22A70100             184  	ld.w LOWW(#_Os_IsrNestStack)[r2], r20
+000000FA 80FF0000             185  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+000000FE                      186  .BB.LABEL.4_3:	; if_else_bb
+000000FE C252                 187  	shl 0x00000002, r10
+00000100 CAA1                 188  	add r10, r20
+00000102 40160000             189  	movhi HIGHW1(#_Os_ArchTempSp), r0, r2
+00000106 22170100             190  	ld.w LOWW(#_Os_ArchTempSp)[r2], r2
+0000010A 74170100             191  	st.w r2, 0x00000000[r20]
+0000010E 40160000             192  	movhi HIGHW1(#_Os_ISR2Stack+0x00000008), r0, r2
+00000112 22170100             193  	ld.w LOWW(#_Os_ISR2Stack+0x00000008)[r2], r2
+00000116 1C2A                 194  	mov 0xFFFFFFFC, r5
+00000118 4511                 195  	and r5, r2
+0000011A 402E0000             196  	movhi HIGHW1(#_Os_ArchTempSp), r0, r5
+0000011E 65170100             197  	st.w r2, LOWW(#_Os_ArchTempSp)[r5]
+00000122                      198  	._line_top inline_asm
+00000122                      199      mov #_Os_ArchTempSp, r7;
+00000122 270600000000            -- mov         0x0,r7
+00000128 271F0100             200      ld.w 0[r7], sp;
+0000012C                      201  	._line_end inline_asm
+0000012C 0132                 202  	mov 0x00000001, r6
+0000012E 80FF0000             203  	jarl _Os_EnterISR2, r31
+00000132 40160000             204  	movhi HIGHW1(#_Os_IsrCfg+0x00000024), r0, r2
+00000136 82170100             205  	ld.bu LOWW(#_Os_IsrCfg+0x00000024)[r2], r2
+0000013A 6112                 206  	cmp 0x00000001, r2
+0000013C 8A05                 207  	bnz9 .BB.LABEL.4_5
+0000013E                      208  .BB.LABEL.4_4:	; if_then_bb26
+0000013E E5174000             209  	stsr 0x00000005, r2, 0x00000000
+00000142 202E5FFF             210  	movea 0xFFFFFF5F, r0, r5
+00000146 4511                 211  	and r5, r2
+00000148 E22F2000             212  	ldsr r2, 5
+0000014C                      213  .BB.LABEL.4_5:	; bb31
+0000014C                      214  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 79
+0000014C 80FF0000             215  	jarl _ISR_RCAN1ERR_IRQ_Handler, r31
+00000150                      216  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 82
+00000150 E5174000             217  	stsr 0x00000005, r2, 0x00000000
+00000154 8216A000             218  	ori 0x000000A0, r2, r2
+00000158 E22F2000             219  	ldsr r2, 5
+0000015C 0132                 220  	mov 0x00000001, r6
+0000015E 80FF0000             221  	jarl _Os_ExitISR2, r31
+00000162 80FF0000             222  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+00000166 6052                 223  	cmp 0x00000000, r10
+00000168 8A05                 224  	bnz9 .BB.LABEL.4_7
+0000016A                      225  .BB.LABEL.4_6:	; if_then_bb41
+0000016A                      226  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 0
+0000016A 40160000             227  	movhi HIGHW1(#_Os_TaskCBExt), r0, r2
+0000016E 22A70100             228  	ld.w LOWW(#_Os_TaskCBExt)[r2], r20
+00000172 80FF0000             229  	jarl _Os_Kernel_GetSysRunningTaskID.1, r31
+00000176 8505                 230  	br9 .BB.LABEL.4_8
+00000178                      231  .BB.LABEL.4_7:	; if_else_bb46
+00000178 40160000             232  	movhi HIGHW1(#_Os_IsrNestStack), r0, r2
+0000017C 22A70100             233  	ld.w LOWW(#_Os_IsrNestStack)[r2], r20
+00000180 80FF0000             234  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+00000184                      235  .BB.LABEL.4_8:	; if_else_bb46
+00000184 C252                 236  	shl 0x00000002, r10
+00000186 CAA1                 237  	add r10, r20
+00000188 34170100             238  	ld.w 0x00000000[r20], r2
+0000018C 402E0000             239  	movhi HIGHW1(#_Os_ArchTempSp), r0, r5
+00000190 65170100             240  	st.w r2, LOWW(#_Os_ArchTempSp)[r5]
+00000194 80FF0000             241  	jarl _Os_ISR2Exit, r31
+00000198                      242  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 85
+00000198 40063F08             243  	dispose 0x00000000, 0x00000041, [r31]
+0000019C                      244  _Os_ISR_RCAN1TRX_IRQ_Handler:
+0000019C                      245  	.stack _Os_ISR_RCAN1TRX_IRQ_Handler = 8
+0000019C                      246  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 90
+0000019C 80072108             247  	prepare 0x00000041, 0x00000000
+000001A0                      248  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 93
+000001A0 80FF0000             249  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+000001A4 6052                 250  	cmp 0x00000000, r10
+000001A6 8A05                 251  	bnz9 .BB.LABEL.5_2
+000001A8                      252  .BB.LABEL.5_1:	; if_then_bb
+000001A8                      253  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 0
+000001A8 40160000             254  	movhi HIGHW1(#_Os_TaskCBExt), r0, r2
+000001AC 22A70100             255  	ld.w LOWW(#_Os_TaskCBExt)[r2], r20
+000001B0 80FF0000             256  	jarl _Os_Kernel_GetSysRunningTaskID.1, r31
+000001B4 8505                 257  	br9 .BB.LABEL.5_3
+000001B6                      258  .BB.LABEL.5_2:	; if_else_bb
+000001B6 40160000             259  	movhi HIGHW1(#_Os_IsrNestStack), r0, r2
+000001BA 22A70100             260  	ld.w LOWW(#_Os_IsrNestStack)[r2], r20
+000001BE 80FF0000             261  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+000001C2                      262  .BB.LABEL.5_3:	; if_else_bb
+000001C2 C252                 263  	shl 0x00000002, r10
+000001C4 CAA1                 264  	add r10, r20
+000001C6 40160000             265  	movhi HIGHW1(#_Os_ArchTempSp), r0, r2
+000001CA 22170100             266  	ld.w LOWW(#_Os_ArchTempSp)[r2], r2
+000001CE 74170100             267  	st.w r2, 0x00000000[r20]
+000001D2 40160000             268  	movhi HIGHW1(#_Os_ISR2Stack+0x00000010), r0, r2
+000001D6 22170100             269  	ld.w LOWW(#_Os_ISR2Stack+0x00000010)[r2], r2
+000001DA 1C2A                 270  	mov 0xFFFFFFFC, r5
+000001DC 4511                 271  	and r5, r2
+000001DE 402E0000             272  	movhi HIGHW1(#_Os_ArchTempSp), r0, r5
+000001E2 65170100             273  	st.w r2, LOWW(#_Os_ArchTempSp)[r5]
+000001E6                      274  	._line_top inline_asm
+000001E6                      275      mov #_Os_ArchTempSp, r7;
+000001E6 270600000000            -- mov         0x0,r7
+000001EC 271F0100             276      ld.w 0[r7], sp;
+000001F0                      277  	._line_end inline_asm
+000001F0 0232                 278  	mov 0x00000002, r6
+000001F2 80FF0000             279  	jarl _Os_EnterISR2, r31
+000001F6 40160000             280  	movhi HIGHW1(#_Os_IsrCfg+0x00000038), r0, r2
+000001FA 82170100             281  	ld.bu LOWW(#_Os_IsrCfg+0x00000038)[r2], r2
+000001FE 6112                 282  	cmp 0x00000001, r2
+00000200 8A05                 283  	bnz9 .BB.LABEL.5_5
+00000202                      284  .BB.LABEL.5_4:	; if_then_bb26
+00000202 E5174000             285  	stsr 0x00000005, r2, 0x00000000
+00000206 202E5FFF             286  	movea 0xFFFFFF5F, r0, r5
+0000020A 4511                 287  	and r5, r2
+0000020C E22F2000             288  	ldsr r2, 5
+00000210                      289  .BB.LABEL.5_5:	; bb31
+00000210                      290  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 95
+00000210 80FF0000             291  	jarl _ISR_RCAN1TRX_IRQ_Handler, r31
+00000214                      292  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 98
+00000214 E5174000             293  	stsr 0x00000005, r2, 0x00000000
+00000218 8216A000             294  	ori 0x000000A0, r2, r2
+0000021C E22F2000             295  	ldsr r2, 5
+00000220 0232                 296  	mov 0x00000002, r6
+00000222 80FF0000             297  	jarl _Os_ExitISR2, r31
+00000226 80FF0000             298  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+0000022A 6052                 299  	cmp 0x00000000, r10
+0000022C 8A05                 300  	bnz9 .BB.LABEL.5_7
+0000022E                      301  .BB.LABEL.5_6:	; if_then_bb41
+0000022E                      302  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 0
+0000022E 40160000             303  	movhi HIGHW1(#_Os_TaskCBExt), r0, r2
+00000232 22A70100             304  	ld.w LOWW(#_Os_TaskCBExt)[r2], r20
+00000236 80FF0000             305  	jarl _Os_Kernel_GetSysRunningTaskID.1, r31
+0000023A 8505                 306  	br9 .BB.LABEL.5_8
+0000023C                      307  .BB.LABEL.5_7:	; if_else_bb46
+0000023C 40160000             308  	movhi HIGHW1(#_Os_IsrNestStack), r0, r2
+00000240 22A70100             309  	ld.w LOWW(#_Os_IsrNestStack)[r2], r20
+00000244 80FF0000             310  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+00000248                      311  .BB.LABEL.5_8:	; if_else_bb46
+00000248 C252                 312  	shl 0x00000002, r10
+0000024A CAA1                 313  	add r10, r20
+0000024C 34170100             314  	ld.w 0x00000000[r20], r2
+00000250 402E0000             315  	movhi HIGHW1(#_Os_ArchTempSp), r0, r5
+00000254 65170100             316  	st.w r2, LOWW(#_Os_ArchTempSp)[r5]
+00000258 80FF0000             317  	jarl _Os_ISR2Exit, r31
+0000025C                      318  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 101
+0000025C 40063F08             319  	dispose 0x00000000, 0x00000041, [r31]
+00000260                      320  _Os_ISR_RCANGRECC0_IRQ_Handler:
+00000260                      321  	.stack _Os_ISR_RCANGRECC0_IRQ_Handler = 8
+00000260                      322  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 106
+00000260 80072108             323  	prepare 0x00000041, 0x00000000
+00000264                      324  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 109
+00000264 80FF0000             325  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+00000268 6052                 326  	cmp 0x00000000, r10
+0000026A 8A05                 327  	bnz9 .BB.LABEL.6_2
+0000026C                      328  .BB.LABEL.6_1:	; if_then_bb
+0000026C                      329  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 0
+0000026C 40160000             330  	movhi HIGHW1(#_Os_TaskCBExt), r0, r2
+00000270 22A70100             331  	ld.w LOWW(#_Os_TaskCBExt)[r2], r20
+00000274 80FF0000             332  	jarl _Os_Kernel_GetSysRunningTaskID.1, r31
+00000278 8505                 333  	br9 .BB.LABEL.6_3
+0000027A                      334  .BB.LABEL.6_2:	; if_else_bb
+0000027A 40160000             335  	movhi HIGHW1(#_Os_IsrNestStack), r0, r2
+0000027E 22A70100             336  	ld.w LOWW(#_Os_IsrNestStack)[r2], r20
+00000282 80FF0000             337  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+00000286                      338  .BB.LABEL.6_3:	; if_else_bb
+00000286 C252                 339  	shl 0x00000002, r10
+00000288 CAA1                 340  	add r10, r20
+0000028A 40160000             341  	movhi HIGHW1(#_Os_ArchTempSp), r0, r2
+0000028E 22170100             342  	ld.w LOWW(#_Os_ArchTempSp)[r2], r2
+00000292 74170100             343  	st.w r2, 0x00000000[r20]
+00000296 40160000             344  	movhi HIGHW1(#_Os_ISR2Stack+0x00000018), r0, r2
+0000029A 22170100             345  	ld.w LOWW(#_Os_ISR2Stack+0x00000018)[r2], r2
+0000029E 1C2A                 346  	mov 0xFFFFFFFC, r5
+000002A0 4511                 347  	and r5, r2
+000002A2 402E0000             348  	movhi HIGHW1(#_Os_ArchTempSp), r0, r5
+000002A6 65170100             349  	st.w r2, LOWW(#_Os_ArchTempSp)[r5]
+000002AA                      350  	._line_top inline_asm
+000002AA                      351      mov #_Os_ArchTempSp, r7;
+000002AA 270600000000            -- mov         0x0,r7
+000002B0 271F0100             352      ld.w 0[r7], sp;
+000002B4                      353  	._line_end inline_asm
+000002B4 0332                 354  	mov 0x00000003, r6
+000002B6 80FF0000             355  	jarl _Os_EnterISR2, r31
+000002BA 40160000             356  	movhi HIGHW1(#_Os_IsrCfg+0x0000004C), r0, r2
+000002BE 82170100             357  	ld.bu LOWW(#_Os_IsrCfg+0x0000004C)[r2], r2
+000002C2 6112                 358  	cmp 0x00000001, r2
+000002C4 8A05                 359  	bnz9 .BB.LABEL.6_5
+000002C6                      360  .BB.LABEL.6_4:	; if_then_bb26
+000002C6 E5174000             361  	stsr 0x00000005, r2, 0x00000000
+000002CA 202E5FFF             362  	movea 0xFFFFFF5F, r0, r5
+000002CE 4511                 363  	and r5, r2
+000002D0 E22F2000             364  	ldsr r2, 5
+000002D4                      365  .BB.LABEL.6_5:	; bb31
+000002D4                      366  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 111
+000002D4 80FF0000             367  	jarl _ISR_RCANGRECC0_IRQ_Handler, r31
+000002D8                      368  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 114
+000002D8 E5174000             369  	stsr 0x00000005, r2, 0x00000000
+000002DC 8216A000             370  	ori 0x000000A0, r2, r2
+000002E0 E22F2000             371  	ldsr r2, 5
+000002E4 0332                 372  	mov 0x00000003, r6
+000002E6 80FF0000             373  	jarl _Os_ExitISR2, r31
+000002EA 80FF0000             374  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+000002EE 6052                 375  	cmp 0x00000000, r10
+000002F0 8A05                 376  	bnz9 .BB.LABEL.6_7
+000002F2                      377  .BB.LABEL.6_6:	; if_then_bb41
+000002F2                      378  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 0
+000002F2 40160000             379  	movhi HIGHW1(#_Os_TaskCBExt), r0, r2
+000002F6 22A70100             380  	ld.w LOWW(#_Os_TaskCBExt)[r2], r20
+000002FA 80FF0000             381  	jarl _Os_Kernel_GetSysRunningTaskID.1, r31
+000002FE 8505                 382  	br9 .BB.LABEL.6_8
+00000300                      383  .BB.LABEL.6_7:	; if_else_bb46
+00000300 40160000             384  	movhi HIGHW1(#_Os_IsrNestStack), r0, r2
+00000304 22A70100             385  	ld.w LOWW(#_Os_IsrNestStack)[r2], r20
+00000308 80FF0000             386  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+0000030C                      387  .BB.LABEL.6_8:	; if_else_bb46
+0000030C C252                 388  	shl 0x00000002, r10
+0000030E CAA1                 389  	add r10, r20
+00000310 34170100             390  	ld.w 0x00000000[r20], r2
+00000314 402E0000             391  	movhi HIGHW1(#_Os_ArchTempSp), r0, r5
+00000318 65170100             392  	st.w r2, LOWW(#_Os_ArchTempSp)[r5]
+0000031C 80FF0000             393  	jarl _Os_ISR2Exit, r31
+00000320                      394  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 117
+00000320 40063F08             395  	dispose 0x00000000, 0x00000041, [r31]
+00000324                      396  _Os_ISR_ADCA0I1_IRQ_Handler:
+00000324                      397  	.stack _Os_ISR_ADCA0I1_IRQ_Handler = 8
+00000324                      398  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 122
+00000324 80072108             399  	prepare 0x00000041, 0x00000000
+00000328                      400  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 125
+00000328 80FF0000             401  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+0000032C 6052                 402  	cmp 0x00000000, r10
+0000032E 8A05                 403  	bnz9 .BB.LABEL.7_2
+00000330                      404  .BB.LABEL.7_1:	; if_then_bb
+00000330                      405  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 0
+00000330 40160000             406  	movhi HIGHW1(#_Os_TaskCBExt), r0, r2
+00000334 22A70100             407  	ld.w LOWW(#_Os_TaskCBExt)[r2], r20
+00000338 80FF0000             408  	jarl _Os_Kernel_GetSysRunningTaskID.1, r31
+0000033C 8505                 409  	br9 .BB.LABEL.7_3
+0000033E                      410  .BB.LABEL.7_2:	; if_else_bb
+0000033E 40160000             411  	movhi HIGHW1(#_Os_IsrNestStack), r0, r2
+00000342 22A70100             412  	ld.w LOWW(#_Os_IsrNestStack)[r2], r20
+00000346 80FF0000             413  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+0000034A                      414  .BB.LABEL.7_3:	; if_else_bb
+0000034A C252                 415  	shl 0x00000002, r10
+0000034C CAA1                 416  	add r10, r20
+0000034E 40160000             417  	movhi HIGHW1(#_Os_ArchTempSp), r0, r2
+00000352 22170100             418  	ld.w LOWW(#_Os_ArchTempSp)[r2], r2
+00000356 74170100             419  	st.w r2, 0x00000000[r20]
+0000035A 40160000             420  	movhi HIGHW1(#_Os_ISR2Stack+0x00000020), r0, r2
+0000035E 22170100             421  	ld.w LOWW(#_Os_ISR2Stack+0x00000020)[r2], r2
+00000362 1C2A                 422  	mov 0xFFFFFFFC, r5
+00000364 4511                 423  	and r5, r2
+00000366 402E0000             424  	movhi HIGHW1(#_Os_ArchTempSp), r0, r5
+0000036A 65170100             425  	st.w r2, LOWW(#_Os_ArchTempSp)[r5]
+0000036E                      426  	._line_top inline_asm
+0000036E                      427      mov #_Os_ArchTempSp, r7;
+0000036E 270600000000            -- mov         0x0,r7
+00000374 271F0100             428      ld.w 0[r7], sp;
+00000378                      429  	._line_end inline_asm
+00000378 0432                 430  	mov 0x00000004, r6
+0000037A 80FF0000             431  	jarl _Os_EnterISR2, r31
+0000037E 40160000             432  	movhi HIGHW1(#_Os_IsrCfg+0x00000060), r0, r2
+00000382 82170100             433  	ld.bu LOWW(#_Os_IsrCfg+0x00000060)[r2], r2
+00000386 6112                 434  	cmp 0x00000001, r2
+00000388 8A05                 435  	bnz9 .BB.LABEL.7_5
+0000038A                      436  .BB.LABEL.7_4:	; if_then_bb26
+0000038A E5174000             437  	stsr 0x00000005, r2, 0x00000000
+0000038E 202E5FFF             438  	movea 0xFFFFFF5F, r0, r5
+00000392 4511                 439  	and r5, r2
+00000394 E22F2000             440  	ldsr r2, 5
+00000398                      441  .BB.LABEL.7_5:	; bb31
+00000398                      442  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 127
+00000398 80FF0000             443  	jarl _ISR_ADCA0I1_IRQ_Handler, r31
+0000039C                      444  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 130
+0000039C E5174000             445  	stsr 0x00000005, r2, 0x00000000
+000003A0 8216A000             446  	ori 0x000000A0, r2, r2
+000003A4 E22F2000             447  	ldsr r2, 5
+000003A8 0432                 448  	mov 0x00000004, r6
+000003AA 80FF0000             449  	jarl _Os_ExitISR2, r31
+000003AE 80FF0000             450  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+000003B2 6052                 451  	cmp 0x00000000, r10
+000003B4 8A05                 452  	bnz9 .BB.LABEL.7_7
+000003B6                      453  .BB.LABEL.7_6:	; if_then_bb41
+000003B6                      454  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 0
+000003B6 40160000             455  	movhi HIGHW1(#_Os_TaskCBExt), r0, r2
+000003BA 22A70100             456  	ld.w LOWW(#_Os_TaskCBExt)[r2], r20
+000003BE 80FF0000             457  	jarl _Os_Kernel_GetSysRunningTaskID.1, r31
+000003C2 8505                 458  	br9 .BB.LABEL.7_8
+000003C4                      459  .BB.LABEL.7_7:	; if_else_bb46
+000003C4 40160000             460  	movhi HIGHW1(#_Os_IsrNestStack), r0, r2
+000003C8 22A70100             461  	ld.w LOWW(#_Os_IsrNestStack)[r2], r20
+000003CC 80FF0000             462  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+000003D0                      463  .BB.LABEL.7_8:	; if_else_bb46
+000003D0 C252                 464  	shl 0x00000002, r10
+000003D2 CAA1                 465  	add r10, r20
+000003D4 34170100             466  	ld.w 0x00000000[r20], r2
+000003D8 402E0000             467  	movhi HIGHW1(#_Os_ArchTempSp), r0, r5
+000003DC 65170100             468  	st.w r2, LOWW(#_Os_ArchTempSp)[r5]
+000003E0 80FF0000             469  	jarl _Os_ISR2Exit, r31
+000003E4                      470  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 133
+000003E4 40063F08             471  	dispose 0x00000000, 0x00000041, [r31]
+000003E8                      472  _Os_ISR_ADCA1I1_IRQ_Handler:
+000003E8                      473  	.stack _Os_ISR_ADCA1I1_IRQ_Handler = 8
+000003E8                      474  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 138
+000003E8 80072108             475  	prepare 0x00000041, 0x00000000
+000003EC                      476  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 141
+000003EC 80FF0000             477  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+000003F0 6052                 478  	cmp 0x00000000, r10
+000003F2 8A05                 479  	bnz9 .BB.LABEL.8_2
+000003F4                      480  .BB.LABEL.8_1:	; if_then_bb
+000003F4                      481  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 0
+000003F4 40160000             482  	movhi HIGHW1(#_Os_TaskCBExt), r0, r2
+000003F8 22A70100             483  	ld.w LOWW(#_Os_TaskCBExt)[r2], r20
+000003FC 80FF0000             484  	jarl _Os_Kernel_GetSysRunningTaskID.1, r31
+00000400 8505                 485  	br9 .BB.LABEL.8_3
+00000402                      486  .BB.LABEL.8_2:	; if_else_bb
+00000402 40160000             487  	movhi HIGHW1(#_Os_IsrNestStack), r0, r2
+00000406 22A70100             488  	ld.w LOWW(#_Os_IsrNestStack)[r2], r20
+0000040A 80FF0000             489  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+0000040E                      490  .BB.LABEL.8_3:	; if_else_bb
+0000040E C252                 491  	shl 0x00000002, r10
+00000410 CAA1                 492  	add r10, r20
+00000412 40160000             493  	movhi HIGHW1(#_Os_ArchTempSp), r0, r2
+00000416 22170100             494  	ld.w LOWW(#_Os_ArchTempSp)[r2], r2
+0000041A 74170100             495  	st.w r2, 0x00000000[r20]
+0000041E 40160000             496  	movhi HIGHW1(#_Os_ISR2Stack+0x00000028), r0, r2
+00000422 22170100             497  	ld.w LOWW(#_Os_ISR2Stack+0x00000028)[r2], r2
+00000426 1C2A                 498  	mov 0xFFFFFFFC, r5
+00000428 4511                 499  	and r5, r2
+0000042A 402E0000             500  	movhi HIGHW1(#_Os_ArchTempSp), r0, r5
+0000042E 65170100             501  	st.w r2, LOWW(#_Os_ArchTempSp)[r5]
+00000432                      502  	._line_top inline_asm
+00000432                      503      mov #_Os_ArchTempSp, r7;
+00000432 270600000000            -- mov         0x0,r7
+00000438 271F0100             504      ld.w 0[r7], sp;
+0000043C                      505  	._line_end inline_asm
+0000043C 0532                 506  	mov 0x00000005, r6
+0000043E 80FF0000             507  	jarl _Os_EnterISR2, r31
+00000442 40160000             508  	movhi HIGHW1(#_Os_IsrCfg+0x00000074), r0, r2
+00000446 82170100             509  	ld.bu LOWW(#_Os_IsrCfg+0x00000074)[r2], r2
+0000044A 6112                 510  	cmp 0x00000001, r2
+0000044C 8A05                 511  	bnz9 .BB.LABEL.8_5
+0000044E                      512  .BB.LABEL.8_4:	; if_then_bb26
+0000044E E5174000             513  	stsr 0x00000005, r2, 0x00000000
+00000452 202E5FFF             514  	movea 0xFFFFFF5F, r0, r5
+00000456 4511                 515  	and r5, r2
+00000458 E22F2000             516  	ldsr r2, 5
+0000045C                      517  .BB.LABEL.8_5:	; bb31
+0000045C                      518  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 143
+0000045C 80FF0000             519  	jarl _ISR_ADCA1I1_IRQ_Handler, r31
+00000460                      520  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 146
+00000460 E5174000             521  	stsr 0x00000005, r2, 0x00000000
+00000464 8216A000             522  	ori 0x000000A0, r2, r2
+00000468 E22F2000             523  	ldsr r2, 5
+0000046C 0532                 524  	mov 0x00000005, r6
+0000046E 80FF0000             525  	jarl _Os_ExitISR2, r31
+00000472 80FF0000             526  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+00000476 6052                 527  	cmp 0x00000000, r10
+00000478 8A05                 528  	bnz9 .BB.LABEL.8_7
+0000047A                      529  .BB.LABEL.8_6:	; if_then_bb41
+0000047A                      530  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 0
+0000047A 40160000             531  	movhi HIGHW1(#_Os_TaskCBExt), r0, r2
+0000047E 22A70100             532  	ld.w LOWW(#_Os_TaskCBExt)[r2], r20
+00000482 80FF0000             533  	jarl _Os_Kernel_GetSysRunningTaskID.1, r31
+00000486 8505                 534  	br9 .BB.LABEL.8_8
+00000488                      535  .BB.LABEL.8_7:	; if_else_bb46
+00000488 40160000             536  	movhi HIGHW1(#_Os_IsrNestStack), r0, r2
+0000048C 22A70100             537  	ld.w LOWW(#_Os_IsrNestStack)[r2], r20
+00000490 80FF0000             538  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+00000494                      539  .BB.LABEL.8_8:	; if_else_bb46
+00000494 C252                 540  	shl 0x00000002, r10
+00000496 CAA1                 541  	add r10, r20
+00000498 34170100             542  	ld.w 0x00000000[r20], r2
+0000049C 402E0000             543  	movhi HIGHW1(#_Os_ArchTempSp), r0, r5
+000004A0 65170100             544  	st.w r2, LOWW(#_Os_ArchTempSp)[r5]
+000004A4 80FF0000             545  	jarl _Os_ISR2Exit, r31
+000004A8                      546  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 149
+000004A8 40063F08             547  	dispose 0x00000000, 0x00000041, [r31]
+000004AC                      548  _Os_ISR_TAUJ0I0_IRQ_Handler:
+000004AC                      549  	.stack _Os_ISR_TAUJ0I0_IRQ_Handler = 8
+000004AC                      550  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 154
+000004AC 80072108             551  	prepare 0x00000041, 0x00000000
+000004B0                      552  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 157
+000004B0 80FF0000             553  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+000004B4 6052                 554  	cmp 0x00000000, r10
+000004B6 8A05                 555  	bnz9 .BB.LABEL.9_2
+000004B8                      556  .BB.LABEL.9_1:	; if_then_bb
+000004B8                      557  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 0
+000004B8 40160000             558  	movhi HIGHW1(#_Os_TaskCBExt), r0, r2
+000004BC 22A70100             559  	ld.w LOWW(#_Os_TaskCBExt)[r2], r20
+000004C0 80FF0000             560  	jarl _Os_Kernel_GetSysRunningTaskID.1, r31
+000004C4 8505                 561  	br9 .BB.LABEL.9_3
+000004C6                      562  .BB.LABEL.9_2:	; if_else_bb
+000004C6 40160000             563  	movhi HIGHW1(#_Os_IsrNestStack), r0, r2
+000004CA 22A70100             564  	ld.w LOWW(#_Os_IsrNestStack)[r2], r20
+000004CE 80FF0000             565  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+000004D2                      566  .BB.LABEL.9_3:	; if_else_bb
+000004D2 C252                 567  	shl 0x00000002, r10
+000004D4 CAA1                 568  	add r10, r20
+000004D6 40160000             569  	movhi HIGHW1(#_Os_ArchTempSp), r0, r2
+000004DA 22170100             570  	ld.w LOWW(#_Os_ArchTempSp)[r2], r2
+000004DE 74170100             571  	st.w r2, 0x00000000[r20]
+000004E2 40160000             572  	movhi HIGHW1(#_Os_ISR2Stack+0x00000030), r0, r2
+000004E6 22170100             573  	ld.w LOWW(#_Os_ISR2Stack+0x00000030)[r2], r2
+000004EA 1C2A                 574  	mov 0xFFFFFFFC, r5
+000004EC 4511                 575  	and r5, r2
+000004EE 402E0000             576  	movhi HIGHW1(#_Os_ArchTempSp), r0, r5
+000004F2 65170100             577  	st.w r2, LOWW(#_Os_ArchTempSp)[r5]
+000004F6                      578  	._line_top inline_asm
+000004F6                      579      mov #_Os_ArchTempSp, r7;
+000004F6 270600000000            -- mov         0x0,r7
+000004FC 271F0100             580      ld.w 0[r7], sp;
+00000500                      581  	._line_end inline_asm
+00000500 0632                 582  	mov 0x00000006, r6
+00000502 80FF0000             583  	jarl _Os_EnterISR2, r31
+00000506 40160000             584  	movhi HIGHW1(#_Os_IsrCfg+0x00000088), r0, r2
+0000050A 82170100             585  	ld.bu LOWW(#_Os_IsrCfg+0x00000088)[r2], r2
+0000050E 6112                 586  	cmp 0x00000001, r2
+00000510 8A05                 587  	bnz9 .BB.LABEL.9_5
+00000512                      588  .BB.LABEL.9_4:	; if_then_bb26
+00000512 E5174000             589  	stsr 0x00000005, r2, 0x00000000
+00000516 202E5FFF             590  	movea 0xFFFFFF5F, r0, r5
+0000051A 4511                 591  	and r5, r2
+0000051C E22F2000             592  	ldsr r2, 5
+00000520                      593  .BB.LABEL.9_5:	; bb31
+00000520                      594  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 159
+00000520 80FF0000             595  	jarl _ISR_TAUJ0I0_IRQ_Handler, r31
+00000524                      596  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 162
+00000524 E5174000             597  	stsr 0x00000005, r2, 0x00000000
+00000528 8216A000             598  	ori 0x000000A0, r2, r2
+0000052C E22F2000             599  	ldsr r2, 5
+00000530 0632                 600  	mov 0x00000006, r6
+00000532 80FF0000             601  	jarl _Os_ExitISR2, r31
+00000536 80FF0000             602  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+0000053A 6052                 603  	cmp 0x00000000, r10
+0000053C 8A05                 604  	bnz9 .BB.LABEL.9_7
+0000053E                      605  .BB.LABEL.9_6:	; if_then_bb41
+0000053E                      606  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 0
+0000053E 40160000             607  	movhi HIGHW1(#_Os_TaskCBExt), r0, r2
+00000542 22A70100             608  	ld.w LOWW(#_Os_TaskCBExt)[r2], r20
+00000546 80FF0000             609  	jarl _Os_Kernel_GetSysRunningTaskID.1, r31
+0000054A 8505                 610  	br9 .BB.LABEL.9_8
+0000054C                      611  .BB.LABEL.9_7:	; if_else_bb46
+0000054C 40160000             612  	movhi HIGHW1(#_Os_IsrNestStack), r0, r2
+00000550 22A70100             613  	ld.w LOWW(#_Os_IsrNestStack)[r2], r20
+00000554 80FF0000             614  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+00000558                      615  .BB.LABEL.9_8:	; if_else_bb46
+00000558 C252                 616  	shl 0x00000002, r10
+0000055A CAA1                 617  	add r10, r20
+0000055C 34170100             618  	ld.w 0x00000000[r20], r2
+00000560 402E0000             619  	movhi HIGHW1(#_Os_ArchTempSp), r0, r5
+00000564 65170100             620  	st.w r2, LOWW(#_Os_ArchTempSp)[r5]
+00000568 80FF0000             621  	jarl _Os_ISR2Exit, r31
+0000056C                      622  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 165
+0000056C 40063F08             623  	dispose 0x00000000, 0x00000041, [r31]
+00000570                      624  _Os_ISR_TAUD0I9_IRQ_Handler:
+00000570                      625  	.stack _Os_ISR_TAUD0I9_IRQ_Handler = 8
+00000570                      626  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 170
+00000570 80072108             627  	prepare 0x00000041, 0x00000000
+00000574                      628  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 173
+00000574 80FF0000             629  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+00000578 6052                 630  	cmp 0x00000000, r10
+0000057A 8A05                 631  	bnz9 .BB.LABEL.10_2
+0000057C                      632  .BB.LABEL.10_1:	; if_then_bb
+0000057C                      633  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 0
+0000057C 40160000             634  	movhi HIGHW1(#_Os_TaskCBExt), r0, r2
+00000580 22A70100             635  	ld.w LOWW(#_Os_TaskCBExt)[r2], r20
+00000584 80FF0000             636  	jarl _Os_Kernel_GetSysRunningTaskID.1, r31
+00000588 8505                 637  	br9 .BB.LABEL.10_3
+0000058A                      638  .BB.LABEL.10_2:	; if_else_bb
+0000058A 40160000             639  	movhi HIGHW1(#_Os_IsrNestStack), r0, r2
+0000058E 22A70100             640  	ld.w LOWW(#_Os_IsrNestStack)[r2], r20
+00000592 80FF0000             641  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+00000596                      642  .BB.LABEL.10_3:	; if_else_bb
+00000596 C252                 643  	shl 0x00000002, r10
+00000598 CAA1                 644  	add r10, r20
+0000059A 40160000             645  	movhi HIGHW1(#_Os_ArchTempSp), r0, r2
+0000059E 22170100             646  	ld.w LOWW(#_Os_ArchTempSp)[r2], r2
+000005A2 74170100             647  	st.w r2, 0x00000000[r20]
+000005A6 40160000             648  	movhi HIGHW1(#_Os_ISR2Stack+0x00000038), r0, r2
+000005AA 22170100             649  	ld.w LOWW(#_Os_ISR2Stack+0x00000038)[r2], r2
+000005AE 1C2A                 650  	mov 0xFFFFFFFC, r5
+000005B0 4511                 651  	and r5, r2
+000005B2 402E0000             652  	movhi HIGHW1(#_Os_ArchTempSp), r0, r5
+000005B6 65170100             653  	st.w r2, LOWW(#_Os_ArchTempSp)[r5]
+000005BA                      654  	._line_top inline_asm
+000005BA                      655      mov #_Os_ArchTempSp, r7;
+000005BA 270600000000            -- mov         0x0,r7
+000005C0 271F0100             656      ld.w 0[r7], sp;
+000005C4                      657  	._line_end inline_asm
+000005C4 0732                 658  	mov 0x00000007, r6
+000005C6 80FF0000             659  	jarl _Os_EnterISR2, r31
+000005CA 40160000             660  	movhi HIGHW1(#_Os_IsrCfg+0x0000009C), r0, r2
+000005CE 82170100             661  	ld.bu LOWW(#_Os_IsrCfg+0x0000009C)[r2], r2
+000005D2 6112                 662  	cmp 0x00000001, r2
+000005D4 8A05                 663  	bnz9 .BB.LABEL.10_5
+000005D6                      664  .BB.LABEL.10_4:	; if_then_bb26
+000005D6 E5174000             665  	stsr 0x00000005, r2, 0x00000000
+000005DA 202E5FFF             666  	movea 0xFFFFFF5F, r0, r5
+000005DE 4511                 667  	and r5, r2
+000005E0 E22F2000             668  	ldsr r2, 5
+000005E4                      669  .BB.LABEL.10_5:	; bb31
+000005E4                      670  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 175
+000005E4 80FF0000             671  	jarl _ISR_TAUD0I9_IRQ_Handler, r31
+000005E8                      672  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 178
+000005E8 E5174000             673  	stsr 0x00000005, r2, 0x00000000
+000005EC 8216A000             674  	ori 0x000000A0, r2, r2
+000005F0 E22F2000             675  	ldsr r2, 5
+000005F4 0732                 676  	mov 0x00000007, r6
+000005F6 80FF0000             677  	jarl _Os_ExitISR2, r31
+000005FA 80FF0000             678  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+000005FE 6052                 679  	cmp 0x00000000, r10
+00000600 8A05                 680  	bnz9 .BB.LABEL.10_7
+00000602                      681  .BB.LABEL.10_6:	; if_then_bb41
+00000602                      682  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 0
+00000602 40160000             683  	movhi HIGHW1(#_Os_TaskCBExt), r0, r2
+00000606 22A70100             684  	ld.w LOWW(#_Os_TaskCBExt)[r2], r20
+0000060A 80FF0000             685  	jarl _Os_Kernel_GetSysRunningTaskID.1, r31
+0000060E 8505                 686  	br9 .BB.LABEL.10_8
+00000610                      687  .BB.LABEL.10_7:	; if_else_bb46
+00000610 40160000             688  	movhi HIGHW1(#_Os_IsrNestStack), r0, r2
+00000614 22A70100             689  	ld.w LOWW(#_Os_IsrNestStack)[r2], r20
+00000618 80FF0000             690  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+0000061C                      691  .BB.LABEL.10_8:	; if_else_bb46
+0000061C C252                 692  	shl 0x00000002, r10
+0000061E CAA1                 693  	add r10, r20
+00000620 34170100             694  	ld.w 0x00000000[r20], r2
+00000624 402E0000             695  	movhi HIGHW1(#_Os_ArchTempSp), r0, r5
+00000628 65170100             696  	st.w r2, LOWW(#_Os_ArchTempSp)[r5]
+0000062C 80FF0000             697  	jarl _Os_ISR2Exit, r31
+00000630                      698  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 181
+00000630 40063F08             699  	dispose 0x00000000, 0x00000041, [r31]
+00000634                      700  _Os_ISR_TAUB0I12_IRQ_Handler:
+00000634                      701  	.stack _Os_ISR_TAUB0I12_IRQ_Handler = 8
+00000634                      702  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 186
+00000634 80072108             703  	prepare 0x00000041, 0x00000000
+00000638                      704  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 189
+00000638 80FF0000             705  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+0000063C 6052                 706  	cmp 0x00000000, r10
+0000063E 8A05                 707  	bnz9 .BB.LABEL.11_2
+00000640                      708  .BB.LABEL.11_1:	; if_then_bb
+00000640                      709  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 0
+00000640 40160000             710  	movhi HIGHW1(#_Os_TaskCBExt), r0, r2
+00000644 22A70100             711  	ld.w LOWW(#_Os_TaskCBExt)[r2], r20
+00000648 80FF0000             712  	jarl _Os_Kernel_GetSysRunningTaskID.1, r31
+0000064C 8505                 713  	br9 .BB.LABEL.11_3
+0000064E                      714  .BB.LABEL.11_2:	; if_else_bb
+0000064E 40160000             715  	movhi HIGHW1(#_Os_IsrNestStack), r0, r2
+00000652 22A70100             716  	ld.w LOWW(#_Os_IsrNestStack)[r2], r20
+00000656 80FF0000             717  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+0000065A                      718  .BB.LABEL.11_3:	; if_else_bb
+0000065A C252                 719  	shl 0x00000002, r10
+0000065C CAA1                 720  	add r10, r20
+0000065E 40160000             721  	movhi HIGHW1(#_Os_ArchTempSp), r0, r2
+00000662 22170100             722  	ld.w LOWW(#_Os_ArchTempSp)[r2], r2
+00000666 74170100             723  	st.w r2, 0x00000000[r20]
+0000066A 40160000             724  	movhi HIGHW1(#_Os_ISR2Stack+0x00000040), r0, r2
+0000066E 22170100             725  	ld.w LOWW(#_Os_ISR2Stack+0x00000040)[r2], r2
+00000672 1C2A                 726  	mov 0xFFFFFFFC, r5
+00000674 4511                 727  	and r5, r2
+00000676 402E0000             728  	movhi HIGHW1(#_Os_ArchTempSp), r0, r5
+0000067A 65170100             729  	st.w r2, LOWW(#_Os_ArchTempSp)[r5]
+0000067E                      730  	._line_top inline_asm
+0000067E                      731      mov #_Os_ArchTempSp, r7;
+0000067E 270600000000            -- mov         0x0,r7
+00000684 271F0100             732      ld.w 0[r7], sp;
+00000688                      733  	._line_end inline_asm
+00000688 0832                 734  	mov 0x00000008, r6
+0000068A 80FF0000             735  	jarl _Os_EnterISR2, r31
+0000068E 40160000             736  	movhi HIGHW1(#_Os_IsrCfg+0x000000B0), r0, r2
+00000692 82170100             737  	ld.bu LOWW(#_Os_IsrCfg+0x000000B0)[r2], r2
+00000696 6112                 738  	cmp 0x00000001, r2
+00000698 8A05                 739  	bnz9 .BB.LABEL.11_5
+0000069A                      740  .BB.LABEL.11_4:	; if_then_bb26
+0000069A E5174000             741  	stsr 0x00000005, r2, 0x00000000
+0000069E 202E5FFF             742  	movea 0xFFFFFF5F, r0, r5
+000006A2 4511                 743  	and r5, r2
+000006A4 E22F2000             744  	ldsr r2, 5
+000006A8                      745  .BB.LABEL.11_5:	; bb31
+000006A8                      746  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 191
+000006A8 80FF0000             747  	jarl _ISR_TAUB0I12_IRQ_Handler, r31
+000006AC                      748  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 194
+000006AC E5174000             749  	stsr 0x00000005, r2, 0x00000000
+000006B0 8216A000             750  	ori 0x000000A0, r2, r2
+000006B4 E22F2000             751  	ldsr r2, 5
+000006B8 0832                 752  	mov 0x00000008, r6
+000006BA 80FF0000             753  	jarl _Os_ExitISR2, r31
+000006BE 80FF0000             754  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+000006C2 6052                 755  	cmp 0x00000000, r10
+000006C4 8A05                 756  	bnz9 .BB.LABEL.11_7
+000006C6                      757  .BB.LABEL.11_6:	; if_then_bb41
+000006C6                      758  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 0
+000006C6 40160000             759  	movhi HIGHW1(#_Os_TaskCBExt), r0, r2
+000006CA 22A70100             760  	ld.w LOWW(#_Os_TaskCBExt)[r2], r20
+000006CE 80FF0000             761  	jarl _Os_Kernel_GetSysRunningTaskID.1, r31
+000006D2 8505                 762  	br9 .BB.LABEL.11_8
+000006D4                      763  .BB.LABEL.11_7:	; if_else_bb46
+000006D4 40160000             764  	movhi HIGHW1(#_Os_IsrNestStack), r0, r2
+000006D8 22A70100             765  	ld.w LOWW(#_Os_IsrNestStack)[r2], r20
+000006DC 80FF0000             766  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+000006E0                      767  .BB.LABEL.11_8:	; if_else_bb46
+000006E0 C252                 768  	shl 0x00000002, r10
+000006E2 CAA1                 769  	add r10, r20
+000006E4 34170100             770  	ld.w 0x00000000[r20], r2
+000006E8 402E0000             771  	movhi HIGHW1(#_Os_ArchTempSp), r0, r5
+000006EC 65170100             772  	st.w r2, LOWW(#_Os_ArchTempSp)[r5]
+000006F0 80FF0000             773  	jarl _Os_ISR2Exit, r31
+000006F4                      774  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 197
+000006F4 40063F08             775  	dispose 0x00000000, 0x00000041, [r31]
+000006F8                      776  _Os_ISR_TAUB0I8_IRQ_Handler:
+000006F8                      777  	.stack _Os_ISR_TAUB0I8_IRQ_Handler = 8
+000006F8                      778  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 202
+000006F8 80072108             779  	prepare 0x00000041, 0x00000000
+000006FC                      780  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 205
+000006FC 80FF0000             781  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+00000700 6052                 782  	cmp 0x00000000, r10
+00000702 8A05                 783  	bnz9 .BB.LABEL.12_2
+00000704                      784  .BB.LABEL.12_1:	; if_then_bb
+00000704                      785  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 0
+00000704 40160000             786  	movhi HIGHW1(#_Os_TaskCBExt), r0, r2
+00000708 22A70100             787  	ld.w LOWW(#_Os_TaskCBExt)[r2], r20
+0000070C 80FF0000             788  	jarl _Os_Kernel_GetSysRunningTaskID.1, r31
+00000710 8505                 789  	br9 .BB.LABEL.12_3
+00000712                      790  .BB.LABEL.12_2:	; if_else_bb
+00000712 40160000             791  	movhi HIGHW1(#_Os_IsrNestStack), r0, r2
+00000716 22A70100             792  	ld.w LOWW(#_Os_IsrNestStack)[r2], r20
+0000071A 80FF0000             793  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+0000071E                      794  .BB.LABEL.12_3:	; if_else_bb
+0000071E C252                 795  	shl 0x00000002, r10
+00000720 CAA1                 796  	add r10, r20
+00000722 40160000             797  	movhi HIGHW1(#_Os_ArchTempSp), r0, r2
+00000726 22170100             798  	ld.w LOWW(#_Os_ArchTempSp)[r2], r2
+0000072A 74170100             799  	st.w r2, 0x00000000[r20]
+0000072E 40160000             800  	movhi HIGHW1(#_Os_ISR2Stack+0x00000048), r0, r2
+00000732 22170100             801  	ld.w LOWW(#_Os_ISR2Stack+0x00000048)[r2], r2
+00000736 1C2A                 802  	mov 0xFFFFFFFC, r5
+00000738 4511                 803  	and r5, r2
+0000073A 402E0000             804  	movhi HIGHW1(#_Os_ArchTempSp), r0, r5
+0000073E 65170100             805  	st.w r2, LOWW(#_Os_ArchTempSp)[r5]
+00000742                      806  	._line_top inline_asm
+00000742                      807      mov #_Os_ArchTempSp, r7;
+00000742 270600000000            -- mov         0x0,r7
+00000748 271F0100             808      ld.w 0[r7], sp;
+0000074C                      809  	._line_end inline_asm
+0000074C 0932                 810  	mov 0x00000009, r6
+0000074E 80FF0000             811  	jarl _Os_EnterISR2, r31
+00000752 40160000             812  	movhi HIGHW1(#_Os_IsrCfg+0x000000C4), r0, r2
+00000756 82170100             813  	ld.bu LOWW(#_Os_IsrCfg+0x000000C4)[r2], r2
+0000075A 6112                 814  	cmp 0x00000001, r2
+0000075C 8A05                 815  	bnz9 .BB.LABEL.12_5
+0000075E                      816  .BB.LABEL.12_4:	; if_then_bb26
+0000075E E5174000             817  	stsr 0x00000005, r2, 0x00000000
+00000762 202E5FFF             818  	movea 0xFFFFFF5F, r0, r5
+00000766 4511                 819  	and r5, r2
+00000768 E22F2000             820  	ldsr r2, 5
+0000076C                      821  .BB.LABEL.12_5:	; bb31
+0000076C                      822  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 207
+0000076C 80FF0000             823  	jarl _ISR_TAUB0I8_IRQ_Handler, r31
+00000770                      824  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 210
+00000770 E5174000             825  	stsr 0x00000005, r2, 0x00000000
+00000774 8216A000             826  	ori 0x000000A0, r2, r2
+00000778 E22F2000             827  	ldsr r2, 5
+0000077C 0932                 828  	mov 0x00000009, r6
+0000077E 80FF0000             829  	jarl _Os_ExitISR2, r31
+00000782 80FF0000             830  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+00000786 6052                 831  	cmp 0x00000000, r10
+00000788 8A05                 832  	bnz9 .BB.LABEL.12_7
+0000078A                      833  .BB.LABEL.12_6:	; if_then_bb41
+0000078A                      834  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 0
+0000078A 40160000             835  	movhi HIGHW1(#_Os_TaskCBExt), r0, r2
+0000078E 22A70100             836  	ld.w LOWW(#_Os_TaskCBExt)[r2], r20
+00000792 80FF0000             837  	jarl _Os_Kernel_GetSysRunningTaskID.1, r31
+00000796 8505                 838  	br9 .BB.LABEL.12_8
+00000798                      839  .BB.LABEL.12_7:	; if_else_bb46
+00000798 40160000             840  	movhi HIGHW1(#_Os_IsrNestStack), r0, r2
+0000079C 22A70100             841  	ld.w LOWW(#_Os_IsrNestStack)[r2], r20
+000007A0 80FF0000             842  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+000007A4                      843  .BB.LABEL.12_8:	; if_else_bb46
+000007A4 C252                 844  	shl 0x00000002, r10
+000007A6 CAA1                 845  	add r10, r20
+000007A8 34170100             846  	ld.w 0x00000000[r20], r2
+000007AC 402E0000             847  	movhi HIGHW1(#_Os_ArchTempSp), r0, r5
+000007B0 65170100             848  	st.w r2, LOWW(#_Os_ArchTempSp)[r5]
+000007B4 80FF0000             849  	jarl _Os_ISR2Exit, r31
+000007B8                      850  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 213
+000007B8 40063F08             851  	dispose 0x00000000, 0x00000041, [r31]
+000007BC                      852  _Os_ISR_TAUB0I9_IRQ_Handler:
+000007BC                      853  	.stack _Os_ISR_TAUB0I9_IRQ_Handler = 8
+000007BC                      854  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 218
+000007BC 80072108             855  	prepare 0x00000041, 0x00000000
+000007C0                      856  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 221
+000007C0 80FF0000             857  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+000007C4 6052                 858  	cmp 0x00000000, r10
+000007C6 8A05                 859  	bnz9 .BB.LABEL.13_2
+000007C8                      860  .BB.LABEL.13_1:	; if_then_bb
+000007C8                      861  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 0
+000007C8 40160000             862  	movhi HIGHW1(#_Os_TaskCBExt), r0, r2
+000007CC 22A70100             863  	ld.w LOWW(#_Os_TaskCBExt)[r2], r20
+000007D0 80FF0000             864  	jarl _Os_Kernel_GetSysRunningTaskID.1, r31
+000007D4 8505                 865  	br9 .BB.LABEL.13_3
+000007D6                      866  .BB.LABEL.13_2:	; if_else_bb
+000007D6 40160000             867  	movhi HIGHW1(#_Os_IsrNestStack), r0, r2
+000007DA 22A70100             868  	ld.w LOWW(#_Os_IsrNestStack)[r2], r20
+000007DE 80FF0000             869  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+000007E2                      870  .BB.LABEL.13_3:	; if_else_bb
+000007E2 C252                 871  	shl 0x00000002, r10
+000007E4 CAA1                 872  	add r10, r20
+000007E6 40160000             873  	movhi HIGHW1(#_Os_ArchTempSp), r0, r2
+000007EA 22170100             874  	ld.w LOWW(#_Os_ArchTempSp)[r2], r2
+000007EE 74170100             875  	st.w r2, 0x00000000[r20]
+000007F2 40160000             876  	movhi HIGHW1(#_Os_ISR2Stack+0x00000050), r0, r2
+000007F6 22170100             877  	ld.w LOWW(#_Os_ISR2Stack+0x00000050)[r2], r2
+000007FA 1C2A                 878  	mov 0xFFFFFFFC, r5
+000007FC 4511                 879  	and r5, r2
+000007FE 402E0000             880  	movhi HIGHW1(#_Os_ArchTempSp), r0, r5
+00000802 65170100             881  	st.w r2, LOWW(#_Os_ArchTempSp)[r5]
+00000806                      882  	._line_top inline_asm
+00000806                      883      mov #_Os_ArchTempSp, r7;
+00000806 270600000000            -- mov         0x0,r7
+0000080C 271F0100             884      ld.w 0[r7], sp;
+00000810                      885  	._line_end inline_asm
+00000810 0A32                 886  	mov 0x0000000A, r6
+00000812 80FF0000             887  	jarl _Os_EnterISR2, r31
+00000816 40160000             888  	movhi HIGHW1(#_Os_IsrCfg+0x000000D8), r0, r2
+0000081A 82170100             889  	ld.bu LOWW(#_Os_IsrCfg+0x000000D8)[r2], r2
+0000081E 6112                 890  	cmp 0x00000001, r2
+00000820 8A05                 891  	bnz9 .BB.LABEL.13_5
+00000822                      892  .BB.LABEL.13_4:	; if_then_bb26
+00000822 E5174000             893  	stsr 0x00000005, r2, 0x00000000
+00000826 202E5FFF             894  	movea 0xFFFFFF5F, r0, r5
+0000082A 4511                 895  	and r5, r2
+0000082C E22F2000             896  	ldsr r2, 5
+00000830                      897  .BB.LABEL.13_5:	; bb31
+00000830                      898  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 223
+00000830 80FF0000             899  	jarl _ISR_TAUB0I9_IRQ_Handler, r31
+00000834                      900  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 226
+00000834 E5174000             901  	stsr 0x00000005, r2, 0x00000000
+00000838 8216A000             902  	ori 0x000000A0, r2, r2
+0000083C E22F2000             903  	ldsr r2, 5
+00000840 0A32                 904  	mov 0x0000000A, r6
+00000842 80FF0000             905  	jarl _Os_ExitISR2, r31
+00000846 80FF0000             906  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+0000084A 6052                 907  	cmp 0x00000000, r10
+0000084C 8A05                 908  	bnz9 .BB.LABEL.13_7
+0000084E                      909  .BB.LABEL.13_6:	; if_then_bb41
+0000084E                      910  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 0
+0000084E 40160000             911  	movhi HIGHW1(#_Os_TaskCBExt), r0, r2
+00000852 22A70100             912  	ld.w LOWW(#_Os_TaskCBExt)[r2], r20
+00000856 80FF0000             913  	jarl _Os_Kernel_GetSysRunningTaskID.1, r31
+0000085A 8505                 914  	br9 .BB.LABEL.13_8
+0000085C                      915  .BB.LABEL.13_7:	; if_else_bb46
+0000085C 40160000             916  	movhi HIGHW1(#_Os_IsrNestStack), r0, r2
+00000860 22A70100             917  	ld.w LOWW(#_Os_IsrNestStack)[r2], r20
+00000864 80FF0000             918  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+00000868                      919  .BB.LABEL.13_8:	; if_else_bb46
+00000868 C252                 920  	shl 0x00000002, r10
+0000086A CAA1                 921  	add r10, r20
+0000086C 34170100             922  	ld.w 0x00000000[r20], r2
+00000870 402E0000             923  	movhi HIGHW1(#_Os_ArchTempSp), r0, r5
+00000874 65170100             924  	st.w r2, LOWW(#_Os_ArchTempSp)[r5]
+00000878 80FF0000             925  	jarl _Os_ISR2Exit, r31
+0000087C                      926  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 229
+0000087C 40063F08             927  	dispose 0x00000000, 0x00000041, [r31]
+00000880                      928  _Os_ISR_P1_IRQ_Handler:
+00000880                      929  	.stack _Os_ISR_P1_IRQ_Handler = 8
+00000880                      930  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 234
+00000880 80072108             931  	prepare 0x00000041, 0x00000000
+00000884                      932  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 237
+00000884 80FF0000             933  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+00000888 6052                 934  	cmp 0x00000000, r10
+0000088A 8A05                 935  	bnz9 .BB.LABEL.14_2
+0000088C                      936  .BB.LABEL.14_1:	; if_then_bb
+0000088C                      937  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 0
+0000088C 40160000             938  	movhi HIGHW1(#_Os_TaskCBExt), r0, r2
+00000890 22A70100             939  	ld.w LOWW(#_Os_TaskCBExt)[r2], r20
+00000894 80FF0000             940  	jarl _Os_Kernel_GetSysRunningTaskID.1, r31
+00000898 8505                 941  	br9 .BB.LABEL.14_3
+0000089A                      942  .BB.LABEL.14_2:	; if_else_bb
+0000089A 40160000             943  	movhi HIGHW1(#_Os_IsrNestStack), r0, r2
+0000089E 22A70100             944  	ld.w LOWW(#_Os_IsrNestStack)[r2], r20
+000008A2 80FF0000             945  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+000008A6                      946  .BB.LABEL.14_3:	; if_else_bb
+000008A6 C252                 947  	shl 0x00000002, r10
+000008A8 CAA1                 948  	add r10, r20
+000008AA 40160000             949  	movhi HIGHW1(#_Os_ArchTempSp), r0, r2
+000008AE 22170100             950  	ld.w LOWW(#_Os_ArchTempSp)[r2], r2
+000008B2 74170100             951  	st.w r2, 0x00000000[r20]
+000008B6 40160000             952  	movhi HIGHW1(#_Os_ISR2Stack+0x00000058), r0, r2
+000008BA 22170100             953  	ld.w LOWW(#_Os_ISR2Stack+0x00000058)[r2], r2
+000008BE 1C2A                 954  	mov 0xFFFFFFFC, r5
+000008C0 4511                 955  	and r5, r2
+000008C2 402E0000             956  	movhi HIGHW1(#_Os_ArchTempSp), r0, r5
+000008C6 65170100             957  	st.w r2, LOWW(#_Os_ArchTempSp)[r5]
+000008CA                      958  	._line_top inline_asm
+000008CA                      959      mov #_Os_ArchTempSp, r7;
+000008CA 270600000000            -- mov         0x0,r7
+000008D0 271F0100             960      ld.w 0[r7], sp;
+000008D4                      961  	._line_end inline_asm
+000008D4 0B32                 962  	mov 0x0000000B, r6
+000008D6 80FF0000             963  	jarl _Os_EnterISR2, r31
+000008DA 40160000             964  	movhi HIGHW1(#_Os_IsrCfg+0x000000EC), r0, r2
+000008DE 82170100             965  	ld.bu LOWW(#_Os_IsrCfg+0x000000EC)[r2], r2
+000008E2 6112                 966  	cmp 0x00000001, r2
+000008E4 8A05                 967  	bnz9 .BB.LABEL.14_5
+000008E6                      968  .BB.LABEL.14_4:	; if_then_bb26
+000008E6 E5174000             969  	stsr 0x00000005, r2, 0x00000000
+000008EA 202E5FFF             970  	movea 0xFFFFFF5F, r0, r5
+000008EE 4511                 971  	and r5, r2
+000008F0 E22F2000             972  	ldsr r2, 5
+000008F4                      973  .BB.LABEL.14_5:	; bb31
+000008F4                      974  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 239
+000008F4 80FF0000             975  	jarl _ISR_P1_IRQ_Handler, r31
+000008F8                      976  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 242
+000008F8 E5174000             977  	stsr 0x00000005, r2, 0x00000000
+000008FC 8216A000             978  	ori 0x000000A0, r2, r2
+00000900 E22F2000             979  	ldsr r2, 5
+00000904 0B32                 980  	mov 0x0000000B, r6
+00000906 80FF0000             981  	jarl _Os_ExitISR2, r31
+0000090A 80FF0000             982  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+0000090E 6052                 983  	cmp 0x00000000, r10
+00000910 8A05                 984  	bnz9 .BB.LABEL.14_7
+00000912                      985  .BB.LABEL.14_6:	; if_then_bb41
+00000912                      986  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 0
+00000912 40160000             987  	movhi HIGHW1(#_Os_TaskCBExt), r0, r2
+00000916 22A70100             988  	ld.w LOWW(#_Os_TaskCBExt)[r2], r20
+0000091A 80FF0000             989  	jarl _Os_Kernel_GetSysRunningTaskID.1, r31
+0000091E 8505                 990  	br9 .BB.LABEL.14_8
+00000920                      991  .BB.LABEL.14_7:	; if_else_bb46
+00000920 40160000             992  	movhi HIGHW1(#_Os_IsrNestStack), r0, r2
+00000924 22A70100             993  	ld.w LOWW(#_Os_IsrNestStack)[r2], r20
+00000928 80FF0000             994  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+0000092C                      995  .BB.LABEL.14_8:	; if_else_bb46
+0000092C C252                 996  	shl 0x00000002, r10
+0000092E CAA1                 997  	add r10, r20
+00000930 34170100             998  	ld.w 0x00000000[r20], r2
+00000934 402E0000             999  	movhi HIGHW1(#_Os_ArchTempSp), r0, r5
+00000938 65170100            1000  	st.w r2, LOWW(#_Os_ArchTempSp)[r5]
+0000093C 80FF0000            1001  	jarl _Os_ISR2Exit, r31
+00000940                     1002  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 245
+00000940 40063F08            1003  	dispose 0x00000000, 0x00000041, [r31]
+00000944                     1004  _Os_ISR_P2_IRQ_Handler:
+00000944                     1005  	.stack _Os_ISR_P2_IRQ_Handler = 8
+00000944                     1006  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 250
+00000944 80072108            1007  	prepare 0x00000041, 0x00000000
+00000948                     1008  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 253
+00000948 80FF0000            1009  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+0000094C 6052                1010  	cmp 0x00000000, r10
+0000094E 8A05                1011  	bnz9 .BB.LABEL.15_2
+00000950                     1012  .BB.LABEL.15_1:	; if_then_bb
+00000950                     1013  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 0
+00000950 40160000            1014  	movhi HIGHW1(#_Os_TaskCBExt), r0, r2
+00000954 22A70100            1015  	ld.w LOWW(#_Os_TaskCBExt)[r2], r20
+00000958 80FF0000            1016  	jarl _Os_Kernel_GetSysRunningTaskID.1, r31
+0000095C 8505                1017  	br9 .BB.LABEL.15_3
+0000095E                     1018  .BB.LABEL.15_2:	; if_else_bb
+0000095E 40160000            1019  	movhi HIGHW1(#_Os_IsrNestStack), r0, r2
+00000962 22A70100            1020  	ld.w LOWW(#_Os_IsrNestStack)[r2], r20
+00000966 80FF0000            1021  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+0000096A                     1022  .BB.LABEL.15_3:	; if_else_bb
+0000096A C252                1023  	shl 0x00000002, r10
+0000096C CAA1                1024  	add r10, r20
+0000096E 40160000            1025  	movhi HIGHW1(#_Os_ArchTempSp), r0, r2
+00000972 22170100            1026  	ld.w LOWW(#_Os_ArchTempSp)[r2], r2
+00000976 74170100            1027  	st.w r2, 0x00000000[r20]
+0000097A 40160000            1028  	movhi HIGHW1(#_Os_ISR2Stack+0x00000060), r0, r2
+0000097E 22170100            1029  	ld.w LOWW(#_Os_ISR2Stack+0x00000060)[r2], r2
+00000982 1C2A                1030  	mov 0xFFFFFFFC, r5
+00000984 4511                1031  	and r5, r2
+00000986 402E0000            1032  	movhi HIGHW1(#_Os_ArchTempSp), r0, r5
+0000098A 65170100            1033  	st.w r2, LOWW(#_Os_ArchTempSp)[r5]
+0000098E                     1034  	._line_top inline_asm
+0000098E                     1035      mov #_Os_ArchTempSp, r7;
+0000098E 270600000000            -- mov         0x0,r7
+00000994 271F0100            1036      ld.w 0[r7], sp;
+00000998                     1037  	._line_end inline_asm
+00000998 0C32                1038  	mov 0x0000000C, r6
+0000099A 80FF0000            1039  	jarl _Os_EnterISR2, r31
+0000099E 40160000            1040  	movhi HIGHW1(#_Os_IsrCfg+0x00000100), r0, r2
+000009A2 82170100            1041  	ld.bu LOWW(#_Os_IsrCfg+0x00000100)[r2], r2
+000009A6 6112                1042  	cmp 0x00000001, r2
+000009A8 8A05                1043  	bnz9 .BB.LABEL.15_5
+000009AA                     1044  .BB.LABEL.15_4:	; if_then_bb26
+000009AA E5174000            1045  	stsr 0x00000005, r2, 0x00000000
+000009AE 202E5FFF            1046  	movea 0xFFFFFF5F, r0, r5
+000009B2 4511                1047  	and r5, r2
+000009B4 E22F2000            1048  	ldsr r2, 5
+000009B8                     1049  .BB.LABEL.15_5:	; bb31
+000009B8                     1050  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 255
+000009B8 80FF0000            1051  	jarl _ISR_P2_IRQ_Handler, r31
+000009BC                     1052  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 258
+000009BC E5174000            1053  	stsr 0x00000005, r2, 0x00000000
+000009C0 8216A000            1054  	ori 0x000000A0, r2, r2
+000009C4 E22F2000            1055  	ldsr r2, 5
+000009C8 0C32                1056  	mov 0x0000000C, r6
+000009CA 80FF0000            1057  	jarl _Os_ExitISR2, r31
+000009CE 80FF0000            1058  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+000009D2 6052                1059  	cmp 0x00000000, r10
+000009D4 8A05                1060  	bnz9 .BB.LABEL.15_7
+000009D6                     1061  .BB.LABEL.15_6:	; if_then_bb41
+000009D6                     1062  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 0
+000009D6 40160000            1063  	movhi HIGHW1(#_Os_TaskCBExt), r0, r2
+000009DA 22A70100            1064  	ld.w LOWW(#_Os_TaskCBExt)[r2], r20
+000009DE 80FF0000            1065  	jarl _Os_Kernel_GetSysRunningTaskID.1, r31
+000009E2 8505                1066  	br9 .BB.LABEL.15_8
+000009E4                     1067  .BB.LABEL.15_7:	; if_else_bb46
+000009E4 40160000            1068  	movhi HIGHW1(#_Os_IsrNestStack), r0, r2
+000009E8 22A70100            1069  	ld.w LOWW(#_Os_IsrNestStack)[r2], r20
+000009EC 80FF0000            1070  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+000009F0                     1071  .BB.LABEL.15_8:	; if_else_bb46
+000009F0 C252                1072  	shl 0x00000002, r10
+000009F2 CAA1                1073  	add r10, r20
+000009F4 34170100            1074  	ld.w 0x00000000[r20], r2
+000009F8 402E0000            1075  	movhi HIGHW1(#_Os_ArchTempSp), r0, r5
+000009FC 65170100            1076  	st.w r2, LOWW(#_Os_ArchTempSp)[r5]
+00000A00 80FF0000            1077  	jarl _Os_ISR2Exit, r31
+00000A04                     1078  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 261
+00000A04 40063F08            1079  	dispose 0x00000000, 0x00000041, [r31]
+00000A08                     1080  _Os_ISR_P5_IRQ_Handler:
+00000A08                     1081  	.stack _Os_ISR_P5_IRQ_Handler = 8
+00000A08                     1082  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 266
+00000A08 80072108            1083  	prepare 0x00000041, 0x00000000
+00000A0C                     1084  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 269
+00000A0C 80FF0000            1085  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+00000A10 6052                1086  	cmp 0x00000000, r10
+00000A12 8A05                1087  	bnz9 .BB.LABEL.16_2
+00000A14                     1088  .BB.LABEL.16_1:	; if_then_bb
+00000A14                     1089  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 0
+00000A14 40160000            1090  	movhi HIGHW1(#_Os_TaskCBExt), r0, r2
+00000A18 22A70100            1091  	ld.w LOWW(#_Os_TaskCBExt)[r2], r20
+00000A1C 80FF0000            1092  	jarl _Os_Kernel_GetSysRunningTaskID.1, r31
+00000A20 8505                1093  	br9 .BB.LABEL.16_3
+00000A22                     1094  .BB.LABEL.16_2:	; if_else_bb
+00000A22 40160000            1095  	movhi HIGHW1(#_Os_IsrNestStack), r0, r2
+00000A26 22A70100            1096  	ld.w LOWW(#_Os_IsrNestStack)[r2], r20
+00000A2A 80FF0000            1097  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+00000A2E                     1098  .BB.LABEL.16_3:	; if_else_bb
+00000A2E C252                1099  	shl 0x00000002, r10
+00000A30 CAA1                1100  	add r10, r20
+00000A32 40160000            1101  	movhi HIGHW1(#_Os_ArchTempSp), r0, r2
+00000A36 22170100            1102  	ld.w LOWW(#_Os_ArchTempSp)[r2], r2
+00000A3A 74170100            1103  	st.w r2, 0x00000000[r20]
+00000A3E 40160000            1104  	movhi HIGHW1(#_Os_ISR2Stack+0x00000068), r0, r2
+00000A42 22170100            1105  	ld.w LOWW(#_Os_ISR2Stack+0x00000068)[r2], r2
+00000A46 1C2A                1106  	mov 0xFFFFFFFC, r5
+00000A48 4511                1107  	and r5, r2
+00000A4A 402E0000            1108  	movhi HIGHW1(#_Os_ArchTempSp), r0, r5
+00000A4E 65170100            1109  	st.w r2, LOWW(#_Os_ArchTempSp)[r5]
+00000A52                     1110  	._line_top inline_asm
+00000A52                     1111      mov #_Os_ArchTempSp, r7;
+00000A52 270600000000            -- mov         0x0,r7
+00000A58 271F0100            1112      ld.w 0[r7], sp;
+00000A5C                     1113  	._line_end inline_asm
+00000A5C 0D32                1114  	mov 0x0000000D, r6
+00000A5E 80FF0000            1115  	jarl _Os_EnterISR2, r31
+00000A62 40160000            1116  	movhi HIGHW1(#_Os_IsrCfg+0x00000114), r0, r2
+00000A66 82170100            1117  	ld.bu LOWW(#_Os_IsrCfg+0x00000114)[r2], r2
+00000A6A 6112                1118  	cmp 0x00000001, r2
+00000A6C 8A05                1119  	bnz9 .BB.LABEL.16_5
+00000A6E                     1120  .BB.LABEL.16_4:	; if_then_bb26
+00000A6E E5174000            1121  	stsr 0x00000005, r2, 0x00000000
+00000A72 202E5FFF            1122  	movea 0xFFFFFF5F, r0, r5
+00000A76 4511                1123  	and r5, r2
+00000A78 E22F2000            1124  	ldsr r2, 5
+00000A7C                     1125  .BB.LABEL.16_5:	; bb31
+00000A7C                     1126  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 271
+00000A7C 80FF0000            1127  	jarl _ISR_P5_IRQ_Handler, r31
+00000A80                     1128  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 274
+00000A80 E5174000            1129  	stsr 0x00000005, r2, 0x00000000
+00000A84 8216A000            1130  	ori 0x000000A0, r2, r2
+00000A88 E22F2000            1131  	ldsr r2, 5
+00000A8C 0D32                1132  	mov 0x0000000D, r6
+00000A8E 80FF0000            1133  	jarl _Os_ExitISR2, r31
+00000A92 80FF0000            1134  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+00000A96 6052                1135  	cmp 0x00000000, r10
+00000A98 8A05                1136  	bnz9 .BB.LABEL.16_7
+00000A9A                     1137  .BB.LABEL.16_6:	; if_then_bb41
+00000A9A                     1138  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 0
+00000A9A 40160000            1139  	movhi HIGHW1(#_Os_TaskCBExt), r0, r2
+00000A9E 22A70100            1140  	ld.w LOWW(#_Os_TaskCBExt)[r2], r20
+00000AA2 80FF0000            1141  	jarl _Os_Kernel_GetSysRunningTaskID.1, r31
+00000AA6 8505                1142  	br9 .BB.LABEL.16_8
+00000AA8                     1143  .BB.LABEL.16_7:	; if_else_bb46
+00000AA8 40160000            1144  	movhi HIGHW1(#_Os_IsrNestStack), r0, r2
+00000AAC 22A70100            1145  	ld.w LOWW(#_Os_IsrNestStack)[r2], r20
+00000AB0 80FF0000            1146  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+00000AB4                     1147  .BB.LABEL.16_8:	; if_else_bb46
+00000AB4 C252                1148  	shl 0x00000002, r10
+00000AB6 CAA1                1149  	add r10, r20
+00000AB8 34170100            1150  	ld.w 0x00000000[r20], r2
+00000ABC 402E0000            1151  	movhi HIGHW1(#_Os_ArchTempSp), r0, r5
+00000AC0 65170100            1152  	st.w r2, LOWW(#_Os_ArchTempSp)[r5]
+00000AC4 80FF0000            1153  	jarl _Os_ISR2Exit, r31
+00000AC8                     1154  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 277
+00000AC8 40063F08            1155  	dispose 0x00000000, 0x00000041, [r31]
+00000ACC                     1156  _Os_ISR_P6_IRQ_Handler:
+00000ACC                     1157  	.stack _Os_ISR_P6_IRQ_Handler = 8
+00000ACC                     1158  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 282
+00000ACC 80072108            1159  	prepare 0x00000041, 0x00000000
+00000AD0                     1160  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 285
+00000AD0 80FF0000            1161  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+00000AD4 6052                1162  	cmp 0x00000000, r10
+00000AD6 8A05                1163  	bnz9 .BB.LABEL.17_2
+00000AD8                     1164  .BB.LABEL.17_1:	; if_then_bb
+00000AD8                     1165  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 0
+00000AD8 40160000            1166  	movhi HIGHW1(#_Os_TaskCBExt), r0, r2
+00000ADC 22A70100            1167  	ld.w LOWW(#_Os_TaskCBExt)[r2], r20
+00000AE0 80FF0000            1168  	jarl _Os_Kernel_GetSysRunningTaskID.1, r31
+00000AE4 8505                1169  	br9 .BB.LABEL.17_3
+00000AE6                     1170  .BB.LABEL.17_2:	; if_else_bb
+00000AE6 40160000            1171  	movhi HIGHW1(#_Os_IsrNestStack), r0, r2
+00000AEA 22A70100            1172  	ld.w LOWW(#_Os_IsrNestStack)[r2], r20
+00000AEE 80FF0000            1173  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+00000AF2                     1174  .BB.LABEL.17_3:	; if_else_bb
+00000AF2 C252                1175  	shl 0x00000002, r10
+00000AF4 CAA1                1176  	add r10, r20
+00000AF6 40160000            1177  	movhi HIGHW1(#_Os_ArchTempSp), r0, r2
+00000AFA 22170100            1178  	ld.w LOWW(#_Os_ArchTempSp)[r2], r2
+00000AFE 74170100            1179  	st.w r2, 0x00000000[r20]
+00000B02 40160000            1180  	movhi HIGHW1(#_Os_ISR2Stack+0x00000070), r0, r2
+00000B06 22170100            1181  	ld.w LOWW(#_Os_ISR2Stack+0x00000070)[r2], r2
+00000B0A 1C2A                1182  	mov 0xFFFFFFFC, r5
+00000B0C 4511                1183  	and r5, r2
+00000B0E 402E0000            1184  	movhi HIGHW1(#_Os_ArchTempSp), r0, r5
+00000B12 65170100            1185  	st.w r2, LOWW(#_Os_ArchTempSp)[r5]
+00000B16                     1186  	._line_top inline_asm
+00000B16                     1187      mov #_Os_ArchTempSp, r7;
+00000B16 270600000000            -- mov         0x0,r7
+00000B1C 271F0100            1188      ld.w 0[r7], sp;
+00000B20                     1189  	._line_end inline_asm
+00000B20 0E32                1190  	mov 0x0000000E, r6
+00000B22 80FF0000            1191  	jarl _Os_EnterISR2, r31
+00000B26 40160000            1192  	movhi HIGHW1(#_Os_IsrCfg+0x00000128), r0, r2
+00000B2A 82170100            1193  	ld.bu LOWW(#_Os_IsrCfg+0x00000128)[r2], r2
+00000B2E 6112                1194  	cmp 0x00000001, r2
+00000B30 8A05                1195  	bnz9 .BB.LABEL.17_5
+00000B32                     1196  .BB.LABEL.17_4:	; if_then_bb26
+00000B32 E5174000            1197  	stsr 0x00000005, r2, 0x00000000
+00000B36 202E5FFF            1198  	movea 0xFFFFFF5F, r0, r5
+00000B3A 4511                1199  	and r5, r2
+00000B3C E22F2000            1200  	ldsr r2, 5
+00000B40                     1201  .BB.LABEL.17_5:	; bb31
+00000B40                     1202  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 287
+00000B40 80FF0000            1203  	jarl _ISR_P6_IRQ_Handler, r31
+00000B44                     1204  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 290
+00000B44 E5174000            1205  	stsr 0x00000005, r2, 0x00000000
+00000B48 8216A000            1206  	ori 0x000000A0, r2, r2
+00000B4C E22F2000            1207  	ldsr r2, 5
+00000B50 0E32                1208  	mov 0x0000000E, r6
+00000B52 80FF0000            1209  	jarl _Os_ExitISR2, r31
+00000B56 80FF0000            1210  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+00000B5A 6052                1211  	cmp 0x00000000, r10
+00000B5C 8A05                1212  	bnz9 .BB.LABEL.17_7
+00000B5E                     1213  .BB.LABEL.17_6:	; if_then_bb41
+00000B5E                     1214  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 0
+00000B5E 40160000            1215  	movhi HIGHW1(#_Os_TaskCBExt), r0, r2
+00000B62 22A70100            1216  	ld.w LOWW(#_Os_TaskCBExt)[r2], r20
+00000B66 80FF0000            1217  	jarl _Os_Kernel_GetSysRunningTaskID.1, r31
+00000B6A 8505                1218  	br9 .BB.LABEL.17_8
+00000B6C                     1219  .BB.LABEL.17_7:	; if_else_bb46
+00000B6C 40160000            1220  	movhi HIGHW1(#_Os_IsrNestStack), r0, r2
+00000B70 22A70100            1221  	ld.w LOWW(#_Os_IsrNestStack)[r2], r20
+00000B74 80FF0000            1222  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+00000B78                     1223  .BB.LABEL.17_8:	; if_else_bb46
+00000B78 C252                1224  	shl 0x00000002, r10
+00000B7A CAA1                1225  	add r10, r20
+00000B7C 34170100            1226  	ld.w 0x00000000[r20], r2
+00000B80 402E0000            1227  	movhi HIGHW1(#_Os_ArchTempSp), r0, r5
+00000B84 65170100            1228  	st.w r2, LOWW(#_Os_ArchTempSp)[r5]
+00000B88 80FF0000            1229  	jarl _Os_ISR2Exit, r31
+00000B8C                     1230  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 293
+00000B8C 40063F08            1231  	dispose 0x00000000, 0x00000041, [r31]
+00000B90                     1232  _Os_ISR_P7_IRQ_Handler:
+00000B90                     1233  	.stack _Os_ISR_P7_IRQ_Handler = 8
+00000B90                     1234  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 298
+00000B90 80072108            1235  	prepare 0x00000041, 0x00000000
+00000B94                     1236  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 301
+00000B94 80FF0000            1237  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+00000B98 6052                1238  	cmp 0x00000000, r10
+00000B9A 8A05                1239  	bnz9 .BB.LABEL.18_2
+00000B9C                     1240  .BB.LABEL.18_1:	; if_then_bb
+00000B9C                     1241  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 0
+00000B9C 40160000            1242  	movhi HIGHW1(#_Os_TaskCBExt), r0, r2
+00000BA0 22A70100            1243  	ld.w LOWW(#_Os_TaskCBExt)[r2], r20
+00000BA4 80FF0000            1244  	jarl _Os_Kernel_GetSysRunningTaskID.1, r31
+00000BA8 8505                1245  	br9 .BB.LABEL.18_3
+00000BAA                     1246  .BB.LABEL.18_2:	; if_else_bb
+00000BAA 40160000            1247  	movhi HIGHW1(#_Os_IsrNestStack), r0, r2
+00000BAE 22A70100            1248  	ld.w LOWW(#_Os_IsrNestStack)[r2], r20
+00000BB2 80FF0000            1249  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+00000BB6                     1250  .BB.LABEL.18_3:	; if_else_bb
+00000BB6 C252                1251  	shl 0x00000002, r10
+00000BB8 CAA1                1252  	add r10, r20
+00000BBA 40160000            1253  	movhi HIGHW1(#_Os_ArchTempSp), r0, r2
+00000BBE 22170100            1254  	ld.w LOWW(#_Os_ArchTempSp)[r2], r2
+00000BC2 74170100            1255  	st.w r2, 0x00000000[r20]
+00000BC6 40160000            1256  	movhi HIGHW1(#_Os_ISR2Stack+0x00000078), r0, r2
+00000BCA 22170100            1257  	ld.w LOWW(#_Os_ISR2Stack+0x00000078)[r2], r2
+00000BCE 1C2A                1258  	mov 0xFFFFFFFC, r5
+00000BD0 4511                1259  	and r5, r2
+00000BD2 402E0000            1260  	movhi HIGHW1(#_Os_ArchTempSp), r0, r5
+00000BD6 65170100            1261  	st.w r2, LOWW(#_Os_ArchTempSp)[r5]
+00000BDA                     1262  	._line_top inline_asm
+00000BDA                     1263      mov #_Os_ArchTempSp, r7;
+00000BDA 270600000000            -- mov         0x0,r7
+00000BE0 271F0100            1264      ld.w 0[r7], sp;
+00000BE4                     1265  	._line_end inline_asm
+00000BE4 0F32                1266  	mov 0x0000000F, r6
+00000BE6 80FF0000            1267  	jarl _Os_EnterISR2, r31
+00000BEA 40160000            1268  	movhi HIGHW1(#_Os_IsrCfg+0x0000013C), r0, r2
+00000BEE 82170100            1269  	ld.bu LOWW(#_Os_IsrCfg+0x0000013C)[r2], r2
+00000BF2 6112                1270  	cmp 0x00000001, r2
+00000BF4 8A05                1271  	bnz9 .BB.LABEL.18_5
+00000BF6                     1272  .BB.LABEL.18_4:	; if_then_bb26
+00000BF6 E5174000            1273  	stsr 0x00000005, r2, 0x00000000
+00000BFA 202E5FFF            1274  	movea 0xFFFFFF5F, r0, r5
+00000BFE 4511                1275  	and r5, r2
+00000C00 E22F2000            1276  	ldsr r2, 5
+00000C04                     1277  .BB.LABEL.18_5:	; bb31
+00000C04                     1278  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 303
+00000C04 80FF0000            1279  	jarl _ISR_P7_IRQ_Handler, r31
+00000C08                     1280  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 306
+00000C08 E5174000            1281  	stsr 0x00000005, r2, 0x00000000
+00000C0C 8216A000            1282  	ori 0x000000A0, r2, r2
+00000C10 E22F2000            1283  	ldsr r2, 5
+00000C14 0F32                1284  	mov 0x0000000F, r6
+00000C16 80FF0000            1285  	jarl _Os_ExitISR2, r31
+00000C1A 80FF0000            1286  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+00000C1E 6052                1287  	cmp 0x00000000, r10
+00000C20 8A05                1288  	bnz9 .BB.LABEL.18_7
+00000C22                     1289  .BB.LABEL.18_6:	; if_then_bb41
+00000C22                     1290  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 0
+00000C22 40160000            1291  	movhi HIGHW1(#_Os_TaskCBExt), r0, r2
+00000C26 22A70100            1292  	ld.w LOWW(#_Os_TaskCBExt)[r2], r20
+00000C2A 80FF0000            1293  	jarl _Os_Kernel_GetSysRunningTaskID.1, r31
+00000C2E 8505                1294  	br9 .BB.LABEL.18_8
+00000C30                     1295  .BB.LABEL.18_7:	; if_else_bb46
+00000C30 40160000            1296  	movhi HIGHW1(#_Os_IsrNestStack), r0, r2
+00000C34 22A70100            1297  	ld.w LOWW(#_Os_IsrNestStack)[r2], r20
+00000C38 80FF0000            1298  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+00000C3C                     1299  .BB.LABEL.18_8:	; if_else_bb46
+00000C3C C252                1300  	shl 0x00000002, r10
+00000C3E CAA1                1301  	add r10, r20
+00000C40 34170100            1302  	ld.w 0x00000000[r20], r2
+00000C44 402E0000            1303  	movhi HIGHW1(#_Os_ArchTempSp), r0, r5
+00000C48 65170100            1304  	st.w r2, LOWW(#_Os_ArchTempSp)[r5]
+00000C4C 80FF0000            1305  	jarl _Os_ISR2Exit, r31
+00000C50                     1306  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 309
+00000C50 40063F08            1307  	dispose 0x00000000, 0x00000041, [r31]
+00000C54                     1308  _Os_ISR_P9_IRQ_Handler:
+00000C54                     1309  	.stack _Os_ISR_P9_IRQ_Handler = 8
+00000C54                     1310  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 314
+00000C54 80072108            1311  	prepare 0x00000041, 0x00000000
+00000C58                     1312  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 317
+00000C58 80FF0000            1313  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+00000C5C 6052                1314  	cmp 0x00000000, r10
+00000C5E 8A05                1315  	bnz9 .BB.LABEL.19_2
+00000C60                     1316  .BB.LABEL.19_1:	; if_then_bb
+00000C60                     1317  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 0
+00000C60 40160000            1318  	movhi HIGHW1(#_Os_TaskCBExt), r0, r2
+00000C64 22A70100            1319  	ld.w LOWW(#_Os_TaskCBExt)[r2], r20
+00000C68 80FF0000            1320  	jarl _Os_Kernel_GetSysRunningTaskID.1, r31
+00000C6C 8505                1321  	br9 .BB.LABEL.19_3
+00000C6E                     1322  .BB.LABEL.19_2:	; if_else_bb
+00000C6E 40160000            1323  	movhi HIGHW1(#_Os_IsrNestStack), r0, r2
+00000C72 22A70100            1324  	ld.w LOWW(#_Os_IsrNestStack)[r2], r20
+00000C76 80FF0000            1325  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+00000C7A                     1326  .BB.LABEL.19_3:	; if_else_bb
+00000C7A C252                1327  	shl 0x00000002, r10
+00000C7C CAA1                1328  	add r10, r20
+00000C7E 40160000            1329  	movhi HIGHW1(#_Os_ArchTempSp), r0, r2
+00000C82 22170100            1330  	ld.w LOWW(#_Os_ArchTempSp)[r2], r2
+00000C86 74170100            1331  	st.w r2, 0x00000000[r20]
+00000C8A 40160000            1332  	movhi HIGHW1(#_Os_ISR2Stack+0x00000080), r0, r2
+00000C8E 22170100            1333  	ld.w LOWW(#_Os_ISR2Stack+0x00000080)[r2], r2
+00000C92 1C2A                1334  	mov 0xFFFFFFFC, r5
+00000C94 4511                1335  	and r5, r2
+00000C96 402E0000            1336  	movhi HIGHW1(#_Os_ArchTempSp), r0, r5
+00000C9A 65170100            1337  	st.w r2, LOWW(#_Os_ArchTempSp)[r5]
+00000C9E                     1338  	._line_top inline_asm
+00000C9E                     1339      mov #_Os_ArchTempSp, r7;
+00000C9E 270600000000            -- mov         0x0,r7
+00000CA4 271F0100            1340      ld.w 0[r7], sp;
+00000CA8                     1341  	._line_end inline_asm
+00000CA8 20361000            1342  	movea 0x00000010, r0, r6
+00000CAC 80FF0000            1343  	jarl _Os_EnterISR2, r31
+00000CB0 40160000            1344  	movhi HIGHW1(#_Os_IsrCfg+0x00000150), r0, r2
+00000CB4 82170100            1345  	ld.bu LOWW(#_Os_IsrCfg+0x00000150)[r2], r2
+00000CB8 6112                1346  	cmp 0x00000001, r2
+00000CBA 8A05                1347  	bnz9 .BB.LABEL.19_5
+00000CBC                     1348  .BB.LABEL.19_4:	; if_then_bb26
+00000CBC E5174000            1349  	stsr 0x00000005, r2, 0x00000000
+00000CC0 202E5FFF            1350  	movea 0xFFFFFF5F, r0, r5
+00000CC4 4511                1351  	and r5, r2
+00000CC6 E22F2000            1352  	ldsr r2, 5
+00000CCA                     1353  .BB.LABEL.19_5:	; bb31
+00000CCA                     1354  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 319
+00000CCA 80FF0000            1355  	jarl _ISR_P9_IRQ_Handler, r31
+00000CCE                     1356  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 322
+00000CCE E5174000            1357  	stsr 0x00000005, r2, 0x00000000
+00000CD2 8216A000            1358  	ori 0x000000A0, r2, r2
+00000CD6 E22F2000            1359  	ldsr r2, 5
+00000CDA 20361000            1360  	movea 0x00000010, r0, r6
+00000CDE 80FF0000            1361  	jarl _Os_ExitISR2, r31
+00000CE2 80FF0000            1362  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+00000CE6 6052                1363  	cmp 0x00000000, r10
+00000CE8 8A05                1364  	bnz9 .BB.LABEL.19_7
+00000CEA                     1365  .BB.LABEL.19_6:	; if_then_bb41
+00000CEA                     1366  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 0
+00000CEA 40160000            1367  	movhi HIGHW1(#_Os_TaskCBExt), r0, r2
+00000CEE 22A70100            1368  	ld.w LOWW(#_Os_TaskCBExt)[r2], r20
+00000CF2 80FF0000            1369  	jarl _Os_Kernel_GetSysRunningTaskID.1, r31
+00000CF6 8505                1370  	br9 .BB.LABEL.19_8
+00000CF8                     1371  .BB.LABEL.19_7:	; if_else_bb46
+00000CF8 40160000            1372  	movhi HIGHW1(#_Os_IsrNestStack), r0, r2
+00000CFC 22A70100            1373  	ld.w LOWW(#_Os_IsrNestStack)[r2], r20
+00000D00 80FF0000            1374  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+00000D04                     1375  .BB.LABEL.19_8:	; if_else_bb46
+00000D04 C252                1376  	shl 0x00000002, r10
+00000D06 CAA1                1377  	add r10, r20
+00000D08 34170100            1378  	ld.w 0x00000000[r20], r2
+00000D0C 402E0000            1379  	movhi HIGHW1(#_Os_ArchTempSp), r0, r5
+00000D10 65170100            1380  	st.w r2, LOWW(#_Os_ArchTempSp)[r5]
+00000D14 80FF0000            1381  	jarl _Os_ISR2Exit, r31
+00000D18                     1382  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 325
+00000D18 40063F08            1383  	dispose 0x00000000, 0x00000041, [r31]
+00000D1C                     1384  _Os_ISR_P14_IRQ_Handler:
+00000D1C                     1385  	.stack _Os_ISR_P14_IRQ_Handler = 8
+00000D1C                     1386  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 330
+00000D1C 80072108            1387  	prepare 0x00000041, 0x00000000
+00000D20                     1388  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 333
+00000D20 80FF0000            1389  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+00000D24 6052                1390  	cmp 0x00000000, r10
+00000D26 8A05                1391  	bnz9 .BB.LABEL.20_2
+00000D28                     1392  .BB.LABEL.20_1:	; if_then_bb
+00000D28                     1393  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 0
+00000D28 40160000            1394  	movhi HIGHW1(#_Os_TaskCBExt), r0, r2
+00000D2C 22A70100            1395  	ld.w LOWW(#_Os_TaskCBExt)[r2], r20
+00000D30 80FF0000            1396  	jarl _Os_Kernel_GetSysRunningTaskID.1, r31
+00000D34 8505                1397  	br9 .BB.LABEL.20_3
+00000D36                     1398  .BB.LABEL.20_2:	; if_else_bb
+00000D36 40160000            1399  	movhi HIGHW1(#_Os_IsrNestStack), r0, r2
+00000D3A 22A70100            1400  	ld.w LOWW(#_Os_IsrNestStack)[r2], r20
+00000D3E 80FF0000            1401  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+00000D42                     1402  .BB.LABEL.20_3:	; if_else_bb
+00000D42 C252                1403  	shl 0x00000002, r10
+00000D44 CAA1                1404  	add r10, r20
+00000D46 40160000            1405  	movhi HIGHW1(#_Os_ArchTempSp), r0, r2
+00000D4A 22170100            1406  	ld.w LOWW(#_Os_ArchTempSp)[r2], r2
+00000D4E 74170100            1407  	st.w r2, 0x00000000[r20]
+00000D52 40160000            1408  	movhi HIGHW1(#_Os_ISR2Stack+0x00000088), r0, r2
+00000D56 22170100            1409  	ld.w LOWW(#_Os_ISR2Stack+0x00000088)[r2], r2
+00000D5A 1C2A                1410  	mov 0xFFFFFFFC, r5
+00000D5C 4511                1411  	and r5, r2
+00000D5E 402E0000            1412  	movhi HIGHW1(#_Os_ArchTempSp), r0, r5
+00000D62 65170100            1413  	st.w r2, LOWW(#_Os_ArchTempSp)[r5]
+00000D66                     1414  	._line_top inline_asm
+00000D66                     1415      mov #_Os_ArchTempSp, r7;
+00000D66 270600000000            -- mov         0x0,r7
+00000D6C 271F0100            1416      ld.w 0[r7], sp;
+00000D70                     1417  	._line_end inline_asm
+00000D70 20361100            1418  	movea 0x00000011, r0, r6
+00000D74 80FF0000            1419  	jarl _Os_EnterISR2, r31
+00000D78 40160000            1420  	movhi HIGHW1(#_Os_IsrCfg+0x00000164), r0, r2
+00000D7C 82170100            1421  	ld.bu LOWW(#_Os_IsrCfg+0x00000164)[r2], r2
+00000D80 6112                1422  	cmp 0x00000001, r2
+00000D82 8A05                1423  	bnz9 .BB.LABEL.20_5
+00000D84                     1424  .BB.LABEL.20_4:	; if_then_bb26
+00000D84 E5174000            1425  	stsr 0x00000005, r2, 0x00000000
+00000D88 202E5FFF            1426  	movea 0xFFFFFF5F, r0, r5
+00000D8C 4511                1427  	and r5, r2
+00000D8E E22F2000            1428  	ldsr r2, 5
+00000D92                     1429  .BB.LABEL.20_5:	; bb31
+00000D92                     1430  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 335
+00000D92 80FF0000            1431  	jarl _ISR_P14_IRQ_Handler, r31
+00000D96                     1432  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 338
+00000D96 E5174000            1433  	stsr 0x00000005, r2, 0x00000000
+00000D9A 8216A000            1434  	ori 0x000000A0, r2, r2
+00000D9E E22F2000            1435  	ldsr r2, 5
+00000DA2 20361100            1436  	movea 0x00000011, r0, r6
+00000DA6 80FF0000            1437  	jarl _Os_ExitISR2, r31
+00000DAA 80FF0000            1438  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+00000DAE 6052                1439  	cmp 0x00000000, r10
+00000DB0 8A05                1440  	bnz9 .BB.LABEL.20_7
+00000DB2                     1441  .BB.LABEL.20_6:	; if_then_bb41
+00000DB2                     1442  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 0
+00000DB2 40160000            1443  	movhi HIGHW1(#_Os_TaskCBExt), r0, r2
+00000DB6 22A70100            1444  	ld.w LOWW(#_Os_TaskCBExt)[r2], r20
+00000DBA 80FF0000            1445  	jarl _Os_Kernel_GetSysRunningTaskID.1, r31
+00000DBE 8505                1446  	br9 .BB.LABEL.20_8
+00000DC0                     1447  .BB.LABEL.20_7:	; if_else_bb46
+00000DC0 40160000            1448  	movhi HIGHW1(#_Os_IsrNestStack), r0, r2
+00000DC4 22A70100            1449  	ld.w LOWW(#_Os_IsrNestStack)[r2], r20
+00000DC8 80FF0000            1450  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+00000DCC                     1451  .BB.LABEL.20_8:	; if_else_bb46
+00000DCC C252                1452  	shl 0x00000002, r10
+00000DCE CAA1                1453  	add r10, r20
+00000DD0 34170100            1454  	ld.w 0x00000000[r20], r2
+00000DD4 402E0000            1455  	movhi HIGHW1(#_Os_ArchTempSp), r0, r5
+00000DD8 65170100            1456  	st.w r2, LOWW(#_Os_ArchTempSp)[r5]
+00000DDC 80FF0000            1457  	jarl _Os_ISR2Exit, r31
+00000DE0                     1458  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 341
+00000DE0 40063F08            1459  	dispose 0x00000000, 0x00000041, [r31]
+00000DE4                     1460  _Os_ISR_RLIN34TX0_IRQ_Handler:
+00000DE4                     1461  	.stack _Os_ISR_RLIN34TX0_IRQ_Handler = 8
+00000DE4                     1462  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 346
+00000DE4 80072108            1463  	prepare 0x00000041, 0x00000000
+00000DE8                     1464  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 349
+00000DE8 80FF0000            1465  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+00000DEC 6052                1466  	cmp 0x00000000, r10
+00000DEE 8A05                1467  	bnz9 .BB.LABEL.21_2
+00000DF0                     1468  .BB.LABEL.21_1:	; if_then_bb
+00000DF0                     1469  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 0
+00000DF0 40160000            1470  	movhi HIGHW1(#_Os_TaskCBExt), r0, r2
+00000DF4 22A70100            1471  	ld.w LOWW(#_Os_TaskCBExt)[r2], r20
+00000DF8 80FF0000            1472  	jarl _Os_Kernel_GetSysRunningTaskID.1, r31
+00000DFC 8505                1473  	br9 .BB.LABEL.21_3
+00000DFE                     1474  .BB.LABEL.21_2:	; if_else_bb
+00000DFE 40160000            1475  	movhi HIGHW1(#_Os_IsrNestStack), r0, r2
+00000E02 22A70100            1476  	ld.w LOWW(#_Os_IsrNestStack)[r2], r20
+00000E06 80FF0000            1477  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+00000E0A                     1478  .BB.LABEL.21_3:	; if_else_bb
+00000E0A C252                1479  	shl 0x00000002, r10
+00000E0C CAA1                1480  	add r10, r20
+00000E0E 40160000            1481  	movhi HIGHW1(#_Os_ArchTempSp), r0, r2
+00000E12 22170100            1482  	ld.w LOWW(#_Os_ArchTempSp)[r2], r2
+00000E16 74170100            1483  	st.w r2, 0x00000000[r20]
+00000E1A 40160000            1484  	movhi HIGHW1(#_Os_ISR2Stack+0x00000090), r0, r2
+00000E1E 22170100            1485  	ld.w LOWW(#_Os_ISR2Stack+0x00000090)[r2], r2
+00000E22 1C2A                1486  	mov 0xFFFFFFFC, r5
+00000E24 4511                1487  	and r5, r2
+00000E26 402E0000            1488  	movhi HIGHW1(#_Os_ArchTempSp), r0, r5
+00000E2A 65170100            1489  	st.w r2, LOWW(#_Os_ArchTempSp)[r5]
+00000E2E                     1490  	._line_top inline_asm
+00000E2E                     1491      mov #_Os_ArchTempSp, r7;
+00000E2E 270600000000            -- mov         0x0,r7
+00000E34 271F0100            1492      ld.w 0[r7], sp;
+00000E38                     1493  	._line_end inline_asm
+00000E38 20361200            1494  	movea 0x00000012, r0, r6
+00000E3C 80FF0000            1495  	jarl _Os_EnterISR2, r31
+00000E40 40160000            1496  	movhi HIGHW1(#_Os_IsrCfg+0x00000178), r0, r2
+00000E44 82170100            1497  	ld.bu LOWW(#_Os_IsrCfg+0x00000178)[r2], r2
+00000E48 6112                1498  	cmp 0x00000001, r2
+00000E4A 8A05                1499  	bnz9 .BB.LABEL.21_5
+00000E4C                     1500  .BB.LABEL.21_4:	; if_then_bb26
+00000E4C E5174000            1501  	stsr 0x00000005, r2, 0x00000000
+00000E50 202E5FFF            1502  	movea 0xFFFFFF5F, r0, r5
+00000E54 4511                1503  	and r5, r2
+00000E56 E22F2000            1504  	ldsr r2, 5
+00000E5A                     1505  .BB.LABEL.21_5:	; bb31
+00000E5A                     1506  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 351
+00000E5A 80FF0000            1507  	jarl _ISR_RLIN34TX0_IRQ_Handler, r31
+00000E5E                     1508  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 354
+00000E5E E5174000            1509  	stsr 0x00000005, r2, 0x00000000
+00000E62 8216A000            1510  	ori 0x000000A0, r2, r2
+00000E66 E22F2000            1511  	ldsr r2, 5
+00000E6A 20361200            1512  	movea 0x00000012, r0, r6
+00000E6E 80FF0000            1513  	jarl _Os_ExitISR2, r31
+00000E72 80FF0000            1514  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+00000E76 6052                1515  	cmp 0x00000000, r10
+00000E78 8A05                1516  	bnz9 .BB.LABEL.21_7
+00000E7A                     1517  .BB.LABEL.21_6:	; if_then_bb41
+00000E7A                     1518  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 0
+00000E7A 40160000            1519  	movhi HIGHW1(#_Os_TaskCBExt), r0, r2
+00000E7E 22A70100            1520  	ld.w LOWW(#_Os_TaskCBExt)[r2], r20
+00000E82 80FF0000            1521  	jarl _Os_Kernel_GetSysRunningTaskID.1, r31
+00000E86 8505                1522  	br9 .BB.LABEL.21_8
+00000E88                     1523  .BB.LABEL.21_7:	; if_else_bb46
+00000E88 40160000            1524  	movhi HIGHW1(#_Os_IsrNestStack), r0, r2
+00000E8C 22A70100            1525  	ld.w LOWW(#_Os_IsrNestStack)[r2], r20
+00000E90 80FF0000            1526  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+00000E94                     1527  .BB.LABEL.21_8:	; if_else_bb46
+00000E94 C252                1528  	shl 0x00000002, r10
+00000E96 CAA1                1529  	add r10, r20
+00000E98 34170100            1530  	ld.w 0x00000000[r20], r2
+00000E9C 402E0000            1531  	movhi HIGHW1(#_Os_ArchTempSp), r0, r5
+00000EA0 65170100            1532  	st.w r2, LOWW(#_Os_ArchTempSp)[r5]
+00000EA4 80FF0000            1533  	jarl _Os_ISR2Exit, r31
+00000EA8                     1534  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 357
+00000EA8 40063F08            1535  	dispose 0x00000000, 0x00000041, [r31]
+00000EAC                     1536  _Os_ISR_RLIN34RX1_IRQ_Handler:
+00000EAC                     1537  	.stack _Os_ISR_RLIN34RX1_IRQ_Handler = 8
+00000EAC                     1538  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 362
+00000EAC 80072108            1539  	prepare 0x00000041, 0x00000000
+00000EB0                     1540  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 365
+00000EB0 80FF0000            1541  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+00000EB4 6052                1542  	cmp 0x00000000, r10
+00000EB6 8A05                1543  	bnz9 .BB.LABEL.22_2
+00000EB8                     1544  .BB.LABEL.22_1:	; if_then_bb
+00000EB8                     1545  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 0
+00000EB8 40160000            1546  	movhi HIGHW1(#_Os_TaskCBExt), r0, r2
+00000EBC 22A70100            1547  	ld.w LOWW(#_Os_TaskCBExt)[r2], r20
+00000EC0 80FF0000            1548  	jarl _Os_Kernel_GetSysRunningTaskID.1, r31
+00000EC4 8505                1549  	br9 .BB.LABEL.22_3
+00000EC6                     1550  .BB.LABEL.22_2:	; if_else_bb
+00000EC6 40160000            1551  	movhi HIGHW1(#_Os_IsrNestStack), r0, r2
+00000ECA 22A70100            1552  	ld.w LOWW(#_Os_IsrNestStack)[r2], r20
+00000ECE 80FF0000            1553  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+00000ED2                     1554  .BB.LABEL.22_3:	; if_else_bb
+00000ED2 C252                1555  	shl 0x00000002, r10
+00000ED4 CAA1                1556  	add r10, r20
+00000ED6 40160000            1557  	movhi HIGHW1(#_Os_ArchTempSp), r0, r2
+00000EDA 22170100            1558  	ld.w LOWW(#_Os_ArchTempSp)[r2], r2
+00000EDE 74170100            1559  	st.w r2, 0x00000000[r20]
+00000EE2 40160000            1560  	movhi HIGHW1(#_Os_ISR2Stack+0x00000098), r0, r2
+00000EE6 22170100            1561  	ld.w LOWW(#_Os_ISR2Stack+0x00000098)[r2], r2
+00000EEA 1C2A                1562  	mov 0xFFFFFFFC, r5
+00000EEC 4511                1563  	and r5, r2
+00000EEE 402E0000            1564  	movhi HIGHW1(#_Os_ArchTempSp), r0, r5
+00000EF2 65170100            1565  	st.w r2, LOWW(#_Os_ArchTempSp)[r5]
+00000EF6                     1566  	._line_top inline_asm
+00000EF6                     1567      mov #_Os_ArchTempSp, r7;
+00000EF6 270600000000            -- mov         0x0,r7
+00000EFC 271F0100            1568      ld.w 0[r7], sp;
+00000F00                     1569  	._line_end inline_asm
+00000F00 20361300            1570  	movea 0x00000013, r0, r6
+00000F04 80FF0000            1571  	jarl _Os_EnterISR2, r31
+00000F08 40160000            1572  	movhi HIGHW1(#_Os_IsrCfg+0x0000018C), r0, r2
+00000F0C 82170100            1573  	ld.bu LOWW(#_Os_IsrCfg+0x0000018C)[r2], r2
+00000F10 6112                1574  	cmp 0x00000001, r2
+00000F12 8A05                1575  	bnz9 .BB.LABEL.22_5
+00000F14                     1576  .BB.LABEL.22_4:	; if_then_bb26
+00000F14 E5174000            1577  	stsr 0x00000005, r2, 0x00000000
+00000F18 202E5FFF            1578  	movea 0xFFFFFF5F, r0, r5
+00000F1C 4511                1579  	and r5, r2
+00000F1E E22F2000            1580  	ldsr r2, 5
+00000F22                     1581  .BB.LABEL.22_5:	; bb31
+00000F22                     1582  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 367
+00000F22 80FF0000            1583  	jarl _ISR_RLIN34RX1_IRQ_Handler, r31
+00000F26                     1584  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 370
+00000F26 E5174000            1585  	stsr 0x00000005, r2, 0x00000000
+00000F2A 8216A000            1586  	ori 0x000000A0, r2, r2
+00000F2E E22F2000            1587  	ldsr r2, 5
+00000F32 20361300            1588  	movea 0x00000013, r0, r6
+00000F36 80FF0000            1589  	jarl _Os_ExitISR2, r31
+00000F3A 80FF0000            1590  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+00000F3E 6052                1591  	cmp 0x00000000, r10
+00000F40 8A05                1592  	bnz9 .BB.LABEL.22_7
+00000F42                     1593  .BB.LABEL.22_6:	; if_then_bb41
+00000F42                     1594  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 0
+00000F42 40160000            1595  	movhi HIGHW1(#_Os_TaskCBExt), r0, r2
+00000F46 22A70100            1596  	ld.w LOWW(#_Os_TaskCBExt)[r2], r20
+00000F4A 80FF0000            1597  	jarl _Os_Kernel_GetSysRunningTaskID.1, r31
+00000F4E 8505                1598  	br9 .BB.LABEL.22_8
+00000F50                     1599  .BB.LABEL.22_7:	; if_else_bb46
+00000F50 40160000            1600  	movhi HIGHW1(#_Os_IsrNestStack), r0, r2
+00000F54 22A70100            1601  	ld.w LOWW(#_Os_IsrNestStack)[r2], r20
+00000F58 80FF0000            1602  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+00000F5C                     1603  .BB.LABEL.22_8:	; if_else_bb46
+00000F5C C252                1604  	shl 0x00000002, r10
+00000F5E CAA1                1605  	add r10, r20
+00000F60 34170100            1606  	ld.w 0x00000000[r20], r2
+00000F64 402E0000            1607  	movhi HIGHW1(#_Os_ArchTempSp), r0, r5
+00000F68 65170100            1608  	st.w r2, LOWW(#_Os_ArchTempSp)[r5]
+00000F6C 80FF0000            1609  	jarl _Os_ISR2Exit, r31
+00000F70                     1610  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 373
+00000F70 40063F08            1611  	dispose 0x00000000, 0x00000041, [r31]
+00000F74                     1612  _Os_ISR_RLIN34ERR2_IRQ_Handler:
+00000F74                     1613  	.stack _Os_ISR_RLIN34ERR2_IRQ_Handler = 8
+00000F74                     1614  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 378
+00000F74 80072108            1615  	prepare 0x00000041, 0x00000000
+00000F78                     1616  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 381
+00000F78 80FF0000            1617  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+00000F7C 6052                1618  	cmp 0x00000000, r10
+00000F7E 8A05                1619  	bnz9 .BB.LABEL.23_2
+00000F80                     1620  .BB.LABEL.23_1:	; if_then_bb
+00000F80                     1621  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 0
+00000F80 40160000            1622  	movhi HIGHW1(#_Os_TaskCBExt), r0, r2
+00000F84 22A70100            1623  	ld.w LOWW(#_Os_TaskCBExt)[r2], r20
+00000F88 80FF0000            1624  	jarl _Os_Kernel_GetSysRunningTaskID.1, r31
+00000F8C 8505                1625  	br9 .BB.LABEL.23_3
+00000F8E                     1626  .BB.LABEL.23_2:	; if_else_bb
+00000F8E 40160000            1627  	movhi HIGHW1(#_Os_IsrNestStack), r0, r2
+00000F92 22A70100            1628  	ld.w LOWW(#_Os_IsrNestStack)[r2], r20
+00000F96 80FF0000            1629  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+00000F9A                     1630  .BB.LABEL.23_3:	; if_else_bb
+00000F9A C252                1631  	shl 0x00000002, r10
+00000F9C CAA1                1632  	add r10, r20
+00000F9E 40160000            1633  	movhi HIGHW1(#_Os_ArchTempSp), r0, r2
+00000FA2 22170100            1634  	ld.w LOWW(#_Os_ArchTempSp)[r2], r2
+00000FA6 74170100            1635  	st.w r2, 0x00000000[r20]
+00000FAA 40160000            1636  	movhi HIGHW1(#_Os_ISR2Stack+0x000000A0), r0, r2
+00000FAE 22170100            1637  	ld.w LOWW(#_Os_ISR2Stack+0x000000A0)[r2], r2
+00000FB2 1C2A                1638  	mov 0xFFFFFFFC, r5
+00000FB4 4511                1639  	and r5, r2
+00000FB6 402E0000            1640  	movhi HIGHW1(#_Os_ArchTempSp), r0, r5
+00000FBA 65170100            1641  	st.w r2, LOWW(#_Os_ArchTempSp)[r5]
+00000FBE                     1642  	._line_top inline_asm
+00000FBE                     1643      mov #_Os_ArchTempSp, r7;
+00000FBE 270600000000            -- mov         0x0,r7
+00000FC4 271F0100            1644      ld.w 0[r7], sp;
+00000FC8                     1645  	._line_end inline_asm
+00000FC8 20361400            1646  	movea 0x00000014, r0, r6
+00000FCC 80FF0000            1647  	jarl _Os_EnterISR2, r31
+00000FD0 40160000            1648  	movhi HIGHW1(#_Os_IsrCfg+0x000001A0), r0, r2
+00000FD4 82170100            1649  	ld.bu LOWW(#_Os_IsrCfg+0x000001A0)[r2], r2
+00000FD8 6112                1650  	cmp 0x00000001, r2
+00000FDA 8A05                1651  	bnz9 .BB.LABEL.23_5
+00000FDC                     1652  .BB.LABEL.23_4:	; if_then_bb26
+00000FDC E5174000            1653  	stsr 0x00000005, r2, 0x00000000
+00000FE0 202E5FFF            1654  	movea 0xFFFFFF5F, r0, r5
+00000FE4 4511                1655  	and r5, r2
+00000FE6 E22F2000            1656  	ldsr r2, 5
+00000FEA                     1657  .BB.LABEL.23_5:	; bb31
+00000FEA                     1658  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 383
+00000FEA 80FF0000            1659  	jarl _ISR_RLIN34ERR2_IRQ_Handler, r31
+00000FEE                     1660  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 386
+00000FEE E5174000            1661  	stsr 0x00000005, r2, 0x00000000
+00000FF2 8216A000            1662  	ori 0x000000A0, r2, r2
+00000FF6 E22F2000            1663  	ldsr r2, 5
+00000FFA 20361400            1664  	movea 0x00000014, r0, r6
+00000FFE 80FF0000            1665  	jarl _Os_ExitISR2, r31
+00001002 80FF0000            1666  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+00001006 6052                1667  	cmp 0x00000000, r10
+00001008 8A05                1668  	bnz9 .BB.LABEL.23_7
+0000100A                     1669  .BB.LABEL.23_6:	; if_then_bb41
+0000100A                     1670  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 0
+0000100A 40160000            1671  	movhi HIGHW1(#_Os_TaskCBExt), r0, r2
+0000100E 22A70100            1672  	ld.w LOWW(#_Os_TaskCBExt)[r2], r20
+00001012 80FF0000            1673  	jarl _Os_Kernel_GetSysRunningTaskID.1, r31
+00001016 8505                1674  	br9 .BB.LABEL.23_8
+00001018                     1675  .BB.LABEL.23_7:	; if_else_bb46
+00001018 40160000            1676  	movhi HIGHW1(#_Os_IsrNestStack), r0, r2
+0000101C 22A70100            1677  	ld.w LOWW(#_Os_IsrNestStack)[r2], r20
+00001020 80FF0000            1678  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+00001024                     1679  .BB.LABEL.23_8:	; if_else_bb46
+00001024 C252                1680  	shl 0x00000002, r10
+00001026 CAA1                1681  	add r10, r20
+00001028 34170100            1682  	ld.w 0x00000000[r20], r2
+0000102C 402E0000            1683  	movhi HIGHW1(#_Os_ArchTempSp), r0, r5
+00001030 65170100            1684  	st.w r2, LOWW(#_Os_ArchTempSp)[r5]
+00001034 80FF0000            1685  	jarl _Os_ISR2Exit, r31
+00001038                     1686  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 389
+00001038 40063F08            1687  	dispose 0x00000000, 0x00000041, [r31]
+0000103C                     1688  _Os_ISR_RLIN35TX0_IRQ_Handler:
+0000103C                     1689  	.stack _Os_ISR_RLIN35TX0_IRQ_Handler = 8
+0000103C                     1690  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 394
+0000103C 80072108            1691  	prepare 0x00000041, 0x00000000
+00001040                     1692  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 397
+00001040 80FF0000            1693  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+00001044 6052                1694  	cmp 0x00000000, r10
+00001046 8A05                1695  	bnz9 .BB.LABEL.24_2
+00001048                     1696  .BB.LABEL.24_1:	; if_then_bb
+00001048                     1697  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 0
+00001048 40160000            1698  	movhi HIGHW1(#_Os_TaskCBExt), r0, r2
+0000104C 22A70100            1699  	ld.w LOWW(#_Os_TaskCBExt)[r2], r20
+00001050 80FF0000            1700  	jarl _Os_Kernel_GetSysRunningTaskID.1, r31
+00001054 8505                1701  	br9 .BB.LABEL.24_3
+00001056                     1702  .BB.LABEL.24_2:	; if_else_bb
+00001056 40160000            1703  	movhi HIGHW1(#_Os_IsrNestStack), r0, r2
+0000105A 22A70100            1704  	ld.w LOWW(#_Os_IsrNestStack)[r2], r20
+0000105E 80FF0000            1705  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+00001062                     1706  .BB.LABEL.24_3:	; if_else_bb
+00001062 C252                1707  	shl 0x00000002, r10
+00001064 CAA1                1708  	add r10, r20
+00001066 40160000            1709  	movhi HIGHW1(#_Os_ArchTempSp), r0, r2
+0000106A 22170100            1710  	ld.w LOWW(#_Os_ArchTempSp)[r2], r2
+0000106E 74170100            1711  	st.w r2, 0x00000000[r20]
+00001072 40160000            1712  	movhi HIGHW1(#_Os_ISR2Stack+0x000000A8), r0, r2
+00001076 22170100            1713  	ld.w LOWW(#_Os_ISR2Stack+0x000000A8)[r2], r2
+0000107A 1C2A                1714  	mov 0xFFFFFFFC, r5
+0000107C 4511                1715  	and r5, r2
+0000107E 402E0000            1716  	movhi HIGHW1(#_Os_ArchTempSp), r0, r5
+00001082 65170100            1717  	st.w r2, LOWW(#_Os_ArchTempSp)[r5]
+00001086                     1718  	._line_top inline_asm
+00001086                     1719      mov #_Os_ArchTempSp, r7;
+00001086 270600000000            -- mov         0x0,r7
+0000108C 271F0100            1720      ld.w 0[r7], sp;
+00001090                     1721  	._line_end inline_asm
+00001090 20361500            1722  	movea 0x00000015, r0, r6
+00001094 80FF0000            1723  	jarl _Os_EnterISR2, r31
+00001098 40160000            1724  	movhi HIGHW1(#_Os_IsrCfg+0x000001B4), r0, r2
+0000109C 82170100            1725  	ld.bu LOWW(#_Os_IsrCfg+0x000001B4)[r2], r2
+000010A0 6112                1726  	cmp 0x00000001, r2
+000010A2 8A05                1727  	bnz9 .BB.LABEL.24_5
+000010A4                     1728  .BB.LABEL.24_4:	; if_then_bb26
+000010A4 E5174000            1729  	stsr 0x00000005, r2, 0x00000000
+000010A8 202E5FFF            1730  	movea 0xFFFFFF5F, r0, r5
+000010AC 4511                1731  	and r5, r2
+000010AE E22F2000            1732  	ldsr r2, 5
+000010B2                     1733  .BB.LABEL.24_5:	; bb31
+000010B2                     1734  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 399
+000010B2 80FF0000            1735  	jarl _ISR_RLIN35TX0_IRQ_Handler, r31
+000010B6                     1736  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 402
+000010B6 E5174000            1737  	stsr 0x00000005, r2, 0x00000000
+000010BA 8216A000            1738  	ori 0x000000A0, r2, r2
+000010BE E22F2000            1739  	ldsr r2, 5
+000010C2 20361500            1740  	movea 0x00000015, r0, r6
+000010C6 80FF0000            1741  	jarl _Os_ExitISR2, r31
+000010CA 80FF0000            1742  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+000010CE 6052                1743  	cmp 0x00000000, r10
+000010D0 8A05                1744  	bnz9 .BB.LABEL.24_7
+000010D2                     1745  .BB.LABEL.24_6:	; if_then_bb41
+000010D2                     1746  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 0
+000010D2 40160000            1747  	movhi HIGHW1(#_Os_TaskCBExt), r0, r2
+000010D6 22A70100            1748  	ld.w LOWW(#_Os_TaskCBExt)[r2], r20
+000010DA 80FF0000            1749  	jarl _Os_Kernel_GetSysRunningTaskID.1, r31
+000010DE 8505                1750  	br9 .BB.LABEL.24_8
+000010E0                     1751  .BB.LABEL.24_7:	; if_else_bb46
+000010E0 40160000            1752  	movhi HIGHW1(#_Os_IsrNestStack), r0, r2
+000010E4 22A70100            1753  	ld.w LOWW(#_Os_IsrNestStack)[r2], r20
+000010E8 80FF0000            1754  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+000010EC                     1755  .BB.LABEL.24_8:	; if_else_bb46
+000010EC C252                1756  	shl 0x00000002, r10
+000010EE CAA1                1757  	add r10, r20
+000010F0 34170100            1758  	ld.w 0x00000000[r20], r2
+000010F4 402E0000            1759  	movhi HIGHW1(#_Os_ArchTempSp), r0, r5
+000010F8 65170100            1760  	st.w r2, LOWW(#_Os_ArchTempSp)[r5]
+000010FC 80FF0000            1761  	jarl _Os_ISR2Exit, r31
+00001100                     1762  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 405
+00001100 40063F08            1763  	dispose 0x00000000, 0x00000041, [r31]
+00001104                     1764  _Os_ISR_RLIN35RX1_IRQ_Handler:
+00001104                     1765  	.stack _Os_ISR_RLIN35RX1_IRQ_Handler = 8
+00001104                     1766  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 410
+00001104 80072108            1767  	prepare 0x00000041, 0x00000000
+00001108                     1768  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 413
+00001108 80FF0000            1769  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+0000110C 6052                1770  	cmp 0x00000000, r10
+0000110E 8A05                1771  	bnz9 .BB.LABEL.25_2
+00001110                     1772  .BB.LABEL.25_1:	; if_then_bb
+00001110                     1773  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 0
+00001110 40160000            1774  	movhi HIGHW1(#_Os_TaskCBExt), r0, r2
+00001114 22A70100            1775  	ld.w LOWW(#_Os_TaskCBExt)[r2], r20
+00001118 80FF0000            1776  	jarl _Os_Kernel_GetSysRunningTaskID.1, r31
+0000111C 8505                1777  	br9 .BB.LABEL.25_3
+0000111E                     1778  .BB.LABEL.25_2:	; if_else_bb
+0000111E 40160000            1779  	movhi HIGHW1(#_Os_IsrNestStack), r0, r2
+00001122 22A70100            1780  	ld.w LOWW(#_Os_IsrNestStack)[r2], r20
+00001126 80FF0000            1781  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+0000112A                     1782  .BB.LABEL.25_3:	; if_else_bb
+0000112A C252                1783  	shl 0x00000002, r10
+0000112C CAA1                1784  	add r10, r20
+0000112E 40160000            1785  	movhi HIGHW1(#_Os_ArchTempSp), r0, r2
+00001132 22170100            1786  	ld.w LOWW(#_Os_ArchTempSp)[r2], r2
+00001136 74170100            1787  	st.w r2, 0x00000000[r20]
+0000113A 40160000            1788  	movhi HIGHW1(#_Os_ISR2Stack+0x000000B0), r0, r2
+0000113E 22170100            1789  	ld.w LOWW(#_Os_ISR2Stack+0x000000B0)[r2], r2
+00001142 1C2A                1790  	mov 0xFFFFFFFC, r5
+00001144 4511                1791  	and r5, r2
+00001146 402E0000            1792  	movhi HIGHW1(#_Os_ArchTempSp), r0, r5
+0000114A 65170100            1793  	st.w r2, LOWW(#_Os_ArchTempSp)[r5]
+0000114E                     1794  	._line_top inline_asm
+0000114E                     1795      mov #_Os_ArchTempSp, r7;
+0000114E 270600000000            -- mov         0x0,r7
+00001154 271F0100            1796      ld.w 0[r7], sp;
+00001158                     1797  	._line_end inline_asm
+00001158 20361600            1798  	movea 0x00000016, r0, r6
+0000115C 80FF0000            1799  	jarl _Os_EnterISR2, r31
+00001160 40160000            1800  	movhi HIGHW1(#_Os_IsrCfg+0x000001C8), r0, r2
+00001164 82170100            1801  	ld.bu LOWW(#_Os_IsrCfg+0x000001C8)[r2], r2
+00001168 6112                1802  	cmp 0x00000001, r2
+0000116A 8A05                1803  	bnz9 .BB.LABEL.25_5
+0000116C                     1804  .BB.LABEL.25_4:	; if_then_bb26
+0000116C E5174000            1805  	stsr 0x00000005, r2, 0x00000000
+00001170 202E5FFF            1806  	movea 0xFFFFFF5F, r0, r5
+00001174 4511                1807  	and r5, r2
+00001176 E22F2000            1808  	ldsr r2, 5
+0000117A                     1809  .BB.LABEL.25_5:	; bb31
+0000117A                     1810  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 415
+0000117A 80FF0000            1811  	jarl _ISR_RLIN35RX1_IRQ_Handler, r31
+0000117E                     1812  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 418
+0000117E E5174000            1813  	stsr 0x00000005, r2, 0x00000000
+00001182 8216A000            1814  	ori 0x000000A0, r2, r2
+00001186 E22F2000            1815  	ldsr r2, 5
+0000118A 20361600            1816  	movea 0x00000016, r0, r6
+0000118E 80FF0000            1817  	jarl _Os_ExitISR2, r31
+00001192 80FF0000            1818  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+00001196 6052                1819  	cmp 0x00000000, r10
+00001198 8A05                1820  	bnz9 .BB.LABEL.25_7
+0000119A                     1821  .BB.LABEL.25_6:	; if_then_bb41
+0000119A                     1822  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 0
+0000119A 40160000            1823  	movhi HIGHW1(#_Os_TaskCBExt), r0, r2
+0000119E 22A70100            1824  	ld.w LOWW(#_Os_TaskCBExt)[r2], r20
+000011A2 80FF0000            1825  	jarl _Os_Kernel_GetSysRunningTaskID.1, r31
+000011A6 8505                1826  	br9 .BB.LABEL.25_8
+000011A8                     1827  .BB.LABEL.25_7:	; if_else_bb46
+000011A8 40160000            1828  	movhi HIGHW1(#_Os_IsrNestStack), r0, r2
+000011AC 22A70100            1829  	ld.w LOWW(#_Os_IsrNestStack)[r2], r20
+000011B0 80FF0000            1830  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+000011B4                     1831  .BB.LABEL.25_8:	; if_else_bb46
+000011B4 C252                1832  	shl 0x00000002, r10
+000011B6 CAA1                1833  	add r10, r20
+000011B8 34170100            1834  	ld.w 0x00000000[r20], r2
+000011BC 402E0000            1835  	movhi HIGHW1(#_Os_ArchTempSp), r0, r5
+000011C0 65170100            1836  	st.w r2, LOWW(#_Os_ArchTempSp)[r5]
+000011C4 80FF0000            1837  	jarl _Os_ISR2Exit, r31
+000011C8                     1838  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 421
+000011C8 40063F08            1839  	dispose 0x00000000, 0x00000041, [r31]
+000011CC                     1840  _Os_ISR_RLIN35ERR2_IRQ_Handler:
+000011CC                     1841  	.stack _Os_ISR_RLIN35ERR2_IRQ_Handler = 8
+000011CC                     1842  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 426
+000011CC 80072108            1843  	prepare 0x00000041, 0x00000000
+000011D0                     1844  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 429
+000011D0 80FF0000            1845  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+000011D4 6052                1846  	cmp 0x00000000, r10
+000011D6 8A05                1847  	bnz9 .BB.LABEL.26_2
+000011D8                     1848  .BB.LABEL.26_1:	; if_then_bb
+000011D8                     1849  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 0
+000011D8 40160000            1850  	movhi HIGHW1(#_Os_TaskCBExt), r0, r2
+000011DC 22A70100            1851  	ld.w LOWW(#_Os_TaskCBExt)[r2], r20
+000011E0 80FF0000            1852  	jarl _Os_Kernel_GetSysRunningTaskID.1, r31
+000011E4 8505                1853  	br9 .BB.LABEL.26_3
+000011E6                     1854  .BB.LABEL.26_2:	; if_else_bb
+000011E6 40160000            1855  	movhi HIGHW1(#_Os_IsrNestStack), r0, r2
+000011EA 22A70100            1856  	ld.w LOWW(#_Os_IsrNestStack)[r2], r20
+000011EE 80FF0000            1857  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+000011F2                     1858  .BB.LABEL.26_3:	; if_else_bb
+000011F2 C252                1859  	shl 0x00000002, r10
+000011F4 CAA1                1860  	add r10, r20
+000011F6 40160000            1861  	movhi HIGHW1(#_Os_ArchTempSp), r0, r2
+000011FA 22170100            1862  	ld.w LOWW(#_Os_ArchTempSp)[r2], r2
+000011FE 74170100            1863  	st.w r2, 0x00000000[r20]
+00001202 40160000            1864  	movhi HIGHW1(#_Os_ISR2Stack+0x000000B8), r0, r2
+00001206 22170100            1865  	ld.w LOWW(#_Os_ISR2Stack+0x000000B8)[r2], r2
+0000120A 1C2A                1866  	mov 0xFFFFFFFC, r5
+0000120C 4511                1867  	and r5, r2
+0000120E 402E0000            1868  	movhi HIGHW1(#_Os_ArchTempSp), r0, r5
+00001212 65170100            1869  	st.w r2, LOWW(#_Os_ArchTempSp)[r5]
+00001216                     1870  	._line_top inline_asm
+00001216                     1871      mov #_Os_ArchTempSp, r7;
+00001216 270600000000            -- mov         0x0,r7
+0000121C 271F0100            1872      ld.w 0[r7], sp;
+00001220                     1873  	._line_end inline_asm
+00001220 20361700            1874  	movea 0x00000017, r0, r6
+00001224 80FF0000            1875  	jarl _Os_EnterISR2, r31
+00001228 40160000            1876  	movhi HIGHW1(#_Os_IsrCfg+0x000001DC), r0, r2
+0000122C 82170100            1877  	ld.bu LOWW(#_Os_IsrCfg+0x000001DC)[r2], r2
+00001230 6112                1878  	cmp 0x00000001, r2
+00001232 8A05                1879  	bnz9 .BB.LABEL.26_5
+00001234                     1880  .BB.LABEL.26_4:	; if_then_bb26
+00001234 E5174000            1881  	stsr 0x00000005, r2, 0x00000000
+00001238 202E5FFF            1882  	movea 0xFFFFFF5F, r0, r5
+0000123C 4511                1883  	and r5, r2
+0000123E E22F2000            1884  	ldsr r2, 5
+00001242                     1885  .BB.LABEL.26_5:	; bb31
+00001242                     1886  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 431
+00001242 80FF0000            1887  	jarl _ISR_RLIN35ERR2_IRQ_Handler, r31
+00001246                     1888  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 434
+00001246 E5174000            1889  	stsr 0x00000005, r2, 0x00000000
+0000124A 8216A000            1890  	ori 0x000000A0, r2, r2
+0000124E E22F2000            1891  	ldsr r2, 5
+00001252 20361700            1892  	movea 0x00000017, r0, r6
+00001256 80FF0000            1893  	jarl _Os_ExitISR2, r31
+0000125A 80FF0000            1894  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+0000125E 6052                1895  	cmp 0x00000000, r10
+00001260 8A05                1896  	bnz9 .BB.LABEL.26_7
+00001262                     1897  .BB.LABEL.26_6:	; if_then_bb41
+00001262                     1898  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 0
+00001262 40160000            1899  	movhi HIGHW1(#_Os_TaskCBExt), r0, r2
+00001266 22A70100            1900  	ld.w LOWW(#_Os_TaskCBExt)[r2], r20
+0000126A 80FF0000            1901  	jarl _Os_Kernel_GetSysRunningTaskID.1, r31
+0000126E 8505                1902  	br9 .BB.LABEL.26_8
+00001270                     1903  .BB.LABEL.26_7:	; if_else_bb46
+00001270 40160000            1904  	movhi HIGHW1(#_Os_IsrNestStack), r0, r2
+00001274 22A70100            1905  	ld.w LOWW(#_Os_IsrNestStack)[r2], r20
+00001278 80FF0000            1906  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+0000127C                     1907  .BB.LABEL.26_8:	; if_else_bb46
+0000127C C252                1908  	shl 0x00000002, r10
+0000127E CAA1                1909  	add r10, r20
+00001280 34170100            1910  	ld.w 0x00000000[r20], r2
+00001284 402E0000            1911  	movhi HIGHW1(#_Os_ArchTempSp), r0, r5
+00001288 65170100            1912  	st.w r2, LOWW(#_Os_ArchTempSp)[r5]
+0000128C 80FF0000            1913  	jarl _Os_ISR2Exit, r31
+00001290                     1914  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 437
+00001290 40063F08            1915  	dispose 0x00000000, 0x00000041, [r31]
+00001294                     1916  _Os_ISR_RIIC0TI_IRQ_Handler:
+00001294                     1917  	.stack _Os_ISR_RIIC0TI_IRQ_Handler = 8
+00001294                     1918  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 442
+00001294 80072108            1919  	prepare 0x00000041, 0x00000000
+00001298                     1920  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 445
+00001298 80FF0000            1921  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+0000129C 6052                1922  	cmp 0x00000000, r10
+0000129E 8A05                1923  	bnz9 .BB.LABEL.27_2
+000012A0                     1924  .BB.LABEL.27_1:	; if_then_bb
+000012A0                     1925  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 0
+000012A0 40160000            1926  	movhi HIGHW1(#_Os_TaskCBExt), r0, r2
+000012A4 22A70100            1927  	ld.w LOWW(#_Os_TaskCBExt)[r2], r20
+000012A8 80FF0000            1928  	jarl _Os_Kernel_GetSysRunningTaskID.1, r31
+000012AC 8505                1929  	br9 .BB.LABEL.27_3
+000012AE                     1930  .BB.LABEL.27_2:	; if_else_bb
+000012AE 40160000            1931  	movhi HIGHW1(#_Os_IsrNestStack), r0, r2
+000012B2 22A70100            1932  	ld.w LOWW(#_Os_IsrNestStack)[r2], r20
+000012B6 80FF0000            1933  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+000012BA                     1934  .BB.LABEL.27_3:	; if_else_bb
+000012BA C252                1935  	shl 0x00000002, r10
+000012BC CAA1                1936  	add r10, r20
+000012BE 40160000            1937  	movhi HIGHW1(#_Os_ArchTempSp), r0, r2
+000012C2 22170100            1938  	ld.w LOWW(#_Os_ArchTempSp)[r2], r2
+000012C6 74170100            1939  	st.w r2, 0x00000000[r20]
+000012CA 40160000            1940  	movhi HIGHW1(#_Os_ISR2Stack+0x000000C0), r0, r2
+000012CE 22170100            1941  	ld.w LOWW(#_Os_ISR2Stack+0x000000C0)[r2], r2
+000012D2 1C2A                1942  	mov 0xFFFFFFFC, r5
+000012D4 4511                1943  	and r5, r2
+000012D6 402E0000            1944  	movhi HIGHW1(#_Os_ArchTempSp), r0, r5
+000012DA 65170100            1945  	st.w r2, LOWW(#_Os_ArchTempSp)[r5]
+000012DE                     1946  	._line_top inline_asm
+000012DE                     1947      mov #_Os_ArchTempSp, r7;
+000012DE 270600000000            -- mov         0x0,r7
+000012E4 271F0100            1948      ld.w 0[r7], sp;
+000012E8                     1949  	._line_end inline_asm
+000012E8 20361800            1950  	movea 0x00000018, r0, r6
+000012EC 80FF0000            1951  	jarl _Os_EnterISR2, r31
+000012F0 40160000            1952  	movhi HIGHW1(#_Os_IsrCfg+0x000001F0), r0, r2
+000012F4 82170100            1953  	ld.bu LOWW(#_Os_IsrCfg+0x000001F0)[r2], r2
+000012F8 6112                1954  	cmp 0x00000001, r2
+000012FA 8A05                1955  	bnz9 .BB.LABEL.27_5
+000012FC                     1956  .BB.LABEL.27_4:	; if_then_bb26
+000012FC E5174000            1957  	stsr 0x00000005, r2, 0x00000000
+00001300 202E5FFF            1958  	movea 0xFFFFFF5F, r0, r5
+00001304 4511                1959  	and r5, r2
+00001306 E22F2000            1960  	ldsr r2, 5
+0000130A                     1961  .BB.LABEL.27_5:	; bb31
+0000130A                     1962  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 447
+0000130A 80FF0000            1963  	jarl _ISR_RIIC0TI_IRQ_Handler, r31
+0000130E                     1964  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 450
+0000130E E5174000            1965  	stsr 0x00000005, r2, 0x00000000
+00001312 8216A000            1966  	ori 0x000000A0, r2, r2
+00001316 E22F2000            1967  	ldsr r2, 5
+0000131A 20361800            1968  	movea 0x00000018, r0, r6
+0000131E 80FF0000            1969  	jarl _Os_ExitISR2, r31
+00001322 80FF0000            1970  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+00001326 6052                1971  	cmp 0x00000000, r10
+00001328 8A05                1972  	bnz9 .BB.LABEL.27_7
+0000132A                     1973  .BB.LABEL.27_6:	; if_then_bb41
+0000132A                     1974  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 0
+0000132A 40160000            1975  	movhi HIGHW1(#_Os_TaskCBExt), r0, r2
+0000132E 22A70100            1976  	ld.w LOWW(#_Os_TaskCBExt)[r2], r20
+00001332 80FF0000            1977  	jarl _Os_Kernel_GetSysRunningTaskID.1, r31
+00001336 8505                1978  	br9 .BB.LABEL.27_8
+00001338                     1979  .BB.LABEL.27_7:	; if_else_bb46
+00001338 40160000            1980  	movhi HIGHW1(#_Os_IsrNestStack), r0, r2
+0000133C 22A70100            1981  	ld.w LOWW(#_Os_IsrNestStack)[r2], r20
+00001340 80FF0000            1982  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+00001344                     1983  .BB.LABEL.27_8:	; if_else_bb46
+00001344 C252                1984  	shl 0x00000002, r10
+00001346 CAA1                1985  	add r10, r20
+00001348 34170100            1986  	ld.w 0x00000000[r20], r2
+0000134C 402E0000            1987  	movhi HIGHW1(#_Os_ArchTempSp), r0, r5
+00001350 65170100            1988  	st.w r2, LOWW(#_Os_ArchTempSp)[r5]
+00001354 80FF0000            1989  	jarl _Os_ISR2Exit, r31
+00001358                     1990  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 453
+00001358 40063F08            1991  	dispose 0x00000000, 0x00000041, [r31]
+0000135C                     1992  _Os_ISR_RIIC0EE_IRQ_Handler:
+0000135C                     1993  	.stack _Os_ISR_RIIC0EE_IRQ_Handler = 8
+0000135C                     1994  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 458
+0000135C 80072108            1995  	prepare 0x00000041, 0x00000000
+00001360                     1996  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 461
+00001360 80FF0000            1997  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+00001364 6052                1998  	cmp 0x00000000, r10
+00001366 8A05                1999  	bnz9 .BB.LABEL.28_2
+00001368                     2000  .BB.LABEL.28_1:	; if_then_bb
+00001368                     2001  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 0
+00001368 40160000            2002  	movhi HIGHW1(#_Os_TaskCBExt), r0, r2
+0000136C 22A70100            2003  	ld.w LOWW(#_Os_TaskCBExt)[r2], r20
+00001370 80FF0000            2004  	jarl _Os_Kernel_GetSysRunningTaskID.1, r31
+00001374 8505                2005  	br9 .BB.LABEL.28_3
+00001376                     2006  .BB.LABEL.28_2:	; if_else_bb
+00001376 40160000            2007  	movhi HIGHW1(#_Os_IsrNestStack), r0, r2
+0000137A 22A70100            2008  	ld.w LOWW(#_Os_IsrNestStack)[r2], r20
+0000137E 80FF0000            2009  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+00001382                     2010  .BB.LABEL.28_3:	; if_else_bb
+00001382 C252                2011  	shl 0x00000002, r10
+00001384 CAA1                2012  	add r10, r20
+00001386 40160000            2013  	movhi HIGHW1(#_Os_ArchTempSp), r0, r2
+0000138A 22170100            2014  	ld.w LOWW(#_Os_ArchTempSp)[r2], r2
+0000138E 74170100            2015  	st.w r2, 0x00000000[r20]
+00001392 40160000            2016  	movhi HIGHW1(#_Os_ISR2Stack+0x000000C8), r0, r2
+00001396 22170100            2017  	ld.w LOWW(#_Os_ISR2Stack+0x000000C8)[r2], r2
+0000139A 1C2A                2018  	mov 0xFFFFFFFC, r5
+0000139C 4511                2019  	and r5, r2
+0000139E 402E0000            2020  	movhi HIGHW1(#_Os_ArchTempSp), r0, r5
+000013A2 65170100            2021  	st.w r2, LOWW(#_Os_ArchTempSp)[r5]
+000013A6                     2022  	._line_top inline_asm
+000013A6                     2023      mov #_Os_ArchTempSp, r7;
+000013A6 270600000000            -- mov         0x0,r7
+000013AC 271F0100            2024      ld.w 0[r7], sp;
+000013B0                     2025  	._line_end inline_asm
+000013B0 20361900            2026  	movea 0x00000019, r0, r6
+000013B4 80FF0000            2027  	jarl _Os_EnterISR2, r31
+000013B8 40160000            2028  	movhi HIGHW1(#_Os_IsrCfg+0x00000204), r0, r2
+000013BC 82170100            2029  	ld.bu LOWW(#_Os_IsrCfg+0x00000204)[r2], r2
+000013C0 6112                2030  	cmp 0x00000001, r2
+000013C2 8A05                2031  	bnz9 .BB.LABEL.28_5
+000013C4                     2032  .BB.LABEL.28_4:	; if_then_bb26
+000013C4 E5174000            2033  	stsr 0x00000005, r2, 0x00000000
+000013C8 202E5FFF            2034  	movea 0xFFFFFF5F, r0, r5
+000013CC 4511                2035  	and r5, r2
+000013CE E22F2000            2036  	ldsr r2, 5
+000013D2                     2037  .BB.LABEL.28_5:	; bb31
+000013D2                     2038  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 463
+000013D2 80FF0000            2039  	jarl _ISR_RIIC0EE_IRQ_Handler, r31
+000013D6                     2040  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 466
+000013D6 E5174000            2041  	stsr 0x00000005, r2, 0x00000000
+000013DA 8216A000            2042  	ori 0x000000A0, r2, r2
+000013DE E22F2000            2043  	ldsr r2, 5
+000013E2 20361900            2044  	movea 0x00000019, r0, r6
+000013E6 80FF0000            2045  	jarl _Os_ExitISR2, r31
+000013EA 80FF0000            2046  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+000013EE 6052                2047  	cmp 0x00000000, r10
+000013F0 8A05                2048  	bnz9 .BB.LABEL.28_7
+000013F2                     2049  .BB.LABEL.28_6:	; if_then_bb41
+000013F2                     2050  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 0
+000013F2 40160000            2051  	movhi HIGHW1(#_Os_TaskCBExt), r0, r2
+000013F6 22A70100            2052  	ld.w LOWW(#_Os_TaskCBExt)[r2], r20
+000013FA 80FF0000            2053  	jarl _Os_Kernel_GetSysRunningTaskID.1, r31
+000013FE 8505                2054  	br9 .BB.LABEL.28_8
+00001400                     2055  .BB.LABEL.28_7:	; if_else_bb46
+00001400 40160000            2056  	movhi HIGHW1(#_Os_IsrNestStack), r0, r2
+00001404 22A70100            2057  	ld.w LOWW(#_Os_IsrNestStack)[r2], r20
+00001408 80FF0000            2058  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+0000140C                     2059  .BB.LABEL.28_8:	; if_else_bb46
+0000140C C252                2060  	shl 0x00000002, r10
+0000140E CAA1                2061  	add r10, r20
+00001410 34170100            2062  	ld.w 0x00000000[r20], r2
+00001414 402E0000            2063  	movhi HIGHW1(#_Os_ArchTempSp), r0, r5
+00001418 65170100            2064  	st.w r2, LOWW(#_Os_ArchTempSp)[r5]
+0000141C 80FF0000            2065  	jarl _Os_ISR2Exit, r31
+00001420                     2066  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 469
+00001420 40063F08            2067  	dispose 0x00000000, 0x00000041, [r31]
+00001424                     2068  _Os_ISR_RIIC0RI_IRQ_Handler:
+00001424                     2069  	.stack _Os_ISR_RIIC0RI_IRQ_Handler = 8
+00001424                     2070  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 474
+00001424 80072108            2071  	prepare 0x00000041, 0x00000000
+00001428                     2072  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 477
+00001428 80FF0000            2073  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+0000142C 6052                2074  	cmp 0x00000000, r10
+0000142E 8A05                2075  	bnz9 .BB.LABEL.29_2
+00001430                     2076  .BB.LABEL.29_1:	; if_then_bb
+00001430                     2077  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 0
+00001430 40160000            2078  	movhi HIGHW1(#_Os_TaskCBExt), r0, r2
+00001434 22A70100            2079  	ld.w LOWW(#_Os_TaskCBExt)[r2], r20
+00001438 80FF0000            2080  	jarl _Os_Kernel_GetSysRunningTaskID.1, r31
+0000143C 8505                2081  	br9 .BB.LABEL.29_3
+0000143E                     2082  .BB.LABEL.29_2:	; if_else_bb
+0000143E 40160000            2083  	movhi HIGHW1(#_Os_IsrNestStack), r0, r2
+00001442 22A70100            2084  	ld.w LOWW(#_Os_IsrNestStack)[r2], r20
+00001446 80FF0000            2085  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+0000144A                     2086  .BB.LABEL.29_3:	; if_else_bb
+0000144A C252                2087  	shl 0x00000002, r10
+0000144C CAA1                2088  	add r10, r20
+0000144E 40160000            2089  	movhi HIGHW1(#_Os_ArchTempSp), r0, r2
+00001452 22170100            2090  	ld.w LOWW(#_Os_ArchTempSp)[r2], r2
+00001456 74170100            2091  	st.w r2, 0x00000000[r20]
+0000145A 40160000            2092  	movhi HIGHW1(#_Os_ISR2Stack+0x000000D0), r0, r2
+0000145E 22170100            2093  	ld.w LOWW(#_Os_ISR2Stack+0x000000D0)[r2], r2
+00001462 1C2A                2094  	mov 0xFFFFFFFC, r5
+00001464 4511                2095  	and r5, r2
+00001466 402E0000            2096  	movhi HIGHW1(#_Os_ArchTempSp), r0, r5
+0000146A 65170100            2097  	st.w r2, LOWW(#_Os_ArchTempSp)[r5]
+0000146E                     2098  	._line_top inline_asm
+0000146E                     2099      mov #_Os_ArchTempSp, r7;
+0000146E 270600000000            -- mov         0x0,r7
+00001474 271F0100            2100      ld.w 0[r7], sp;
+00001478                     2101  	._line_end inline_asm
+00001478 20361A00            2102  	movea 0x0000001A, r0, r6
+0000147C 80FF0000            2103  	jarl _Os_EnterISR2, r31
+00001480 40160000            2104  	movhi HIGHW1(#_Os_IsrCfg+0x00000218), r0, r2
+00001484 82170100            2105  	ld.bu LOWW(#_Os_IsrCfg+0x00000218)[r2], r2
+00001488 6112                2106  	cmp 0x00000001, r2
+0000148A 8A05                2107  	bnz9 .BB.LABEL.29_5
+0000148C                     2108  .BB.LABEL.29_4:	; if_then_bb26
+0000148C E5174000            2109  	stsr 0x00000005, r2, 0x00000000
+00001490 202E5FFF            2110  	movea 0xFFFFFF5F, r0, r5
+00001494 4511                2111  	and r5, r2
+00001496 E22F2000            2112  	ldsr r2, 5
+0000149A                     2113  .BB.LABEL.29_5:	; bb31
+0000149A                     2114  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 479
+0000149A 80FF0000            2115  	jarl _ISR_RIIC0RI_IRQ_Handler, r31
+0000149E                     2116  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 482
+0000149E E5174000            2117  	stsr 0x00000005, r2, 0x00000000
+000014A2 8216A000            2118  	ori 0x000000A0, r2, r2
+000014A6 E22F2000            2119  	ldsr r2, 5
+000014AA 20361A00            2120  	movea 0x0000001A, r0, r6
+000014AE 80FF0000            2121  	jarl _Os_ExitISR2, r31
+000014B2 80FF0000            2122  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+000014B6 6052                2123  	cmp 0x00000000, r10
+000014B8 8A05                2124  	bnz9 .BB.LABEL.29_7
+000014BA                     2125  .BB.LABEL.29_6:	; if_then_bb41
+000014BA                     2126  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 0
+000014BA 40160000            2127  	movhi HIGHW1(#_Os_TaskCBExt), r0, r2
+000014BE 22A70100            2128  	ld.w LOWW(#_Os_TaskCBExt)[r2], r20
+000014C2 80FF0000            2129  	jarl _Os_Kernel_GetSysRunningTaskID.1, r31
+000014C6 8505                2130  	br9 .BB.LABEL.29_8
+000014C8                     2131  .BB.LABEL.29_7:	; if_else_bb46
+000014C8 40160000            2132  	movhi HIGHW1(#_Os_IsrNestStack), r0, r2
+000014CC 22A70100            2133  	ld.w LOWW(#_Os_IsrNestStack)[r2], r20
+000014D0 80FF0000            2134  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+000014D4                     2135  .BB.LABEL.29_8:	; if_else_bb46
+000014D4 C252                2136  	shl 0x00000002, r10
+000014D6 CAA1                2137  	add r10, r20
+000014D8 34170100            2138  	ld.w 0x00000000[r20], r2
+000014DC 402E0000            2139  	movhi HIGHW1(#_Os_ArchTempSp), r0, r5
+000014E0 65170100            2140  	st.w r2, LOWW(#_Os_ArchTempSp)[r5]
+000014E4 80FF0000            2141  	jarl _Os_ISR2Exit, r31
+000014E8                     2142  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 485
+000014E8 40063F08            2143  	dispose 0x00000000, 0x00000041, [r31]
+000014EC                     2144  _Os_ISR_RIIC0TEI_IRQ_Handler:
+000014EC                     2145  	.stack _Os_ISR_RIIC0TEI_IRQ_Handler = 8
+000014EC                     2146  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 490
+000014EC 80072108            2147  	prepare 0x00000041, 0x00000000
+000014F0                     2148  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 493
+000014F0 80FF0000            2149  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+000014F4 6052                2150  	cmp 0x00000000, r10
+000014F6 8A05                2151  	bnz9 .BB.LABEL.30_2
+000014F8                     2152  .BB.LABEL.30_1:	; if_then_bb
+000014F8                     2153  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 0
+000014F8 40160000            2154  	movhi HIGHW1(#_Os_TaskCBExt), r0, r2
+000014FC 22A70100            2155  	ld.w LOWW(#_Os_TaskCBExt)[r2], r20
+00001500 80FF0000            2156  	jarl _Os_Kernel_GetSysRunningTaskID.1, r31
+00001504 8505                2157  	br9 .BB.LABEL.30_3
+00001506                     2158  .BB.LABEL.30_2:	; if_else_bb
+00001506 40160000            2159  	movhi HIGHW1(#_Os_IsrNestStack), r0, r2
+0000150A 22A70100            2160  	ld.w LOWW(#_Os_IsrNestStack)[r2], r20
+0000150E 80FF0000            2161  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+00001512                     2162  .BB.LABEL.30_3:	; if_else_bb
+00001512 C252                2163  	shl 0x00000002, r10
+00001514 CAA1                2164  	add r10, r20
+00001516 40160000            2165  	movhi HIGHW1(#_Os_ArchTempSp), r0, r2
+0000151A 22170100            2166  	ld.w LOWW(#_Os_ArchTempSp)[r2], r2
+0000151E 74170100            2167  	st.w r2, 0x00000000[r20]
+00001522 40160000            2168  	movhi HIGHW1(#_Os_ISR2Stack+0x000000D8), r0, r2
+00001526 22170100            2169  	ld.w LOWW(#_Os_ISR2Stack+0x000000D8)[r2], r2
+0000152A 1C2A                2170  	mov 0xFFFFFFFC, r5
+0000152C 4511                2171  	and r5, r2
+0000152E 402E0000            2172  	movhi HIGHW1(#_Os_ArchTempSp), r0, r5
+00001532 65170100            2173  	st.w r2, LOWW(#_Os_ArchTempSp)[r5]
+00001536                     2174  	._line_top inline_asm
+00001536                     2175      mov #_Os_ArchTempSp, r7;
+00001536 270600000000            -- mov         0x0,r7
+0000153C 271F0100            2176      ld.w 0[r7], sp;
+00001540                     2177  	._line_end inline_asm
+00001540 20361B00            2178  	movea 0x0000001B, r0, r6
+00001544 80FF0000            2179  	jarl _Os_EnterISR2, r31
+00001548 40160000            2180  	movhi HIGHW1(#_Os_IsrCfg+0x0000022C), r0, r2
+0000154C 82170100            2181  	ld.bu LOWW(#_Os_IsrCfg+0x0000022C)[r2], r2
+00001550 6112                2182  	cmp 0x00000001, r2
+00001552 8A05                2183  	bnz9 .BB.LABEL.30_5
+00001554                     2184  .BB.LABEL.30_4:	; if_then_bb26
+00001554 E5174000            2185  	stsr 0x00000005, r2, 0x00000000
+00001558 202E5FFF            2186  	movea 0xFFFFFF5F, r0, r5
+0000155C 4511                2187  	and r5, r2
+0000155E E22F2000            2188  	ldsr r2, 5
+00001562                     2189  .BB.LABEL.30_5:	; bb31
+00001562                     2190  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 495
+00001562 80FF0000            2191  	jarl _ISR_RIIC0TEI_IRQ_Handler, r31
+00001566                     2192  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 498
+00001566 E5174000            2193  	stsr 0x00000005, r2, 0x00000000
+0000156A 8216A000            2194  	ori 0x000000A0, r2, r2
+0000156E E22F2000            2195  	ldsr r2, 5
+00001572 20361B00            2196  	movea 0x0000001B, r0, r6
+00001576 80FF0000            2197  	jarl _Os_ExitISR2, r31
+0000157A 80FF0000            2198  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+0000157E 6052                2199  	cmp 0x00000000, r10
+00001580 8A05                2200  	bnz9 .BB.LABEL.30_7
+00001582                     2201  .BB.LABEL.30_6:	; if_then_bb41
+00001582                     2202  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 0
+00001582 40160000            2203  	movhi HIGHW1(#_Os_TaskCBExt), r0, r2
+00001586 22A70100            2204  	ld.w LOWW(#_Os_TaskCBExt)[r2], r20
+0000158A 80FF0000            2205  	jarl _Os_Kernel_GetSysRunningTaskID.1, r31
+0000158E 8505                2206  	br9 .BB.LABEL.30_8
+00001590                     2207  .BB.LABEL.30_7:	; if_else_bb46
+00001590 40160000            2208  	movhi HIGHW1(#_Os_IsrNestStack), r0, r2
+00001594 22A70100            2209  	ld.w LOWW(#_Os_IsrNestStack)[r2], r20
+00001598 80FF0000            2210  	jarl _Os_Kernel_GetIntNestNumISR2.1, r31
+0000159C                     2211  .BB.LABEL.30_8:	; if_else_bb46
+0000159C C252                2212  	shl 0x00000002, r10
+0000159E CAA1                2213  	add r10, r20
+000015A0 34170100            2214  	ld.w 0x00000000[r20], r2
+000015A4 402E0000            2215  	movhi HIGHW1(#_Os_ArchTempSp), r0, r5
+000015A8 65170100            2216  	st.w r2, LOWW(#_Os_ArchTempSp)[r5]
+000015AC 80FF0000            2217  	jarl _Os_ISR2Exit, r31
+000015B0                     2218  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Config/BSW_Config/Os_Intvet.c", 501
+000015B0 40063F08            2219  	dispose 0x00000000, 0x00000041, [r31]
+
+Section List
+Attr     Size                Name
+
+TEXT         5556 (000015B4) .text
+
+Command Line Parameter
+-Xcpu=g3kh -Xreg_mode=32 -Xep=callee -Xcharacter_set=none -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\diagnostic -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\parameter_store -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu\port -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu\uart -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu\iic -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\vehicle_data_to_mpu -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\power_manage -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\mcu_cpu_sync -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\remote_control -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\can_cycle_send -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\project_configure -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\sdk\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\commonLib\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\hal\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\icu\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Icu_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\vss -ID:\wk\sirun\project\dazhong\code\mcu_app\ASW\CDD_FVM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\EEIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanTSyn -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\StbM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CSM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\RSA -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\RandomGen\CTR_DRBG -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\MAC\CMAC -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\Hash\sha256 -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\dh -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\AES -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CryInterface -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\SecOC -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\NvM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\MemIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\Fee -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\WdgM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\WdgIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Wdg_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Gpt_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Fls_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\wdg\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\gpt\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\fls\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\IpduM -ID:\wk\sirun\project\dazhong\code\mcu_app\ASW\APP -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\BswM -ID:\wk\sirun\project\dazhong\code\mcu_app\ASW\BSW_Ext -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\Dcm -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanTp -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Dem -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Libraries\E2E -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Libraries\Crc -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\NmIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanNm -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config\RTE\Rte -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config\RTE\SchM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Libraries\IStd -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\EcuM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\ComM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanSM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\Com -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\PDUR -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\CommonInclude -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config\RH850F1K -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Extend\inc -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Kernel\inc -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Portable\Mcu -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Portable\Processor -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Adc_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Can_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Dio_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Mcu_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Port_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\adc\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\can\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\dio\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\general -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\mcu\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\port\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\CanGeneral\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\Det\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\MemIf\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\SchM\include -DRH850_F1KM_S1_2MB -Xprn_path=DefaultBuild -Xno_warning=50013 -oD:\wk\sirun\project\dazhong\code\mcu_app\Toolchain\CSPLUS_V81200\DefaultBuild\Os_Intvet.obj D:\wk\sirun\project\dazhong\code\mcu_app\Toolchain\CSPLUS_V81200\DefaultBuild\Os_Intvet.asm 
+

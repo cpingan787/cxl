@@ -1,0 +1,516 @@
+RH850 Family Assembler V2.07.00.03 Assemble Source List
+
+OFFSET   CODE                  NO  SOURCE STATEMENT
+
+00000000                        1  #CC-RH Compiler RH850 Assembler Source
+00000000                        2  #@	CC-RH Version : V2.07.00  [06 Dec 2024]
+00000000                        3  #@	Command : ..\..\Cpu\uart\r_cg_uart.c -oDefaultBuild\r_cg_uart.obj -Xcpu=g3kh -Xno_warning=20188,20111 -g -g_line -I..\..\Srcode\app\diagnostic -I..\..\Srcode\app\parameter_store -I..\..\Cpu\port -I..\..\Cpu\uart -I..\..\Cpu\iic -I..\..\Srcode\app\vehicle_data_to_mpu -I..\..\Srcode\app\power_manage -I..\..\Srcode\app\mcu_cpu_sync -I..\..\Srcode\app\remote_control -I..\..\Srcode\app\can_cycle_send -I..\..\Srcode\app\project_configure -I..\..\Srcode\sdk\include -I..\..\Srcode\commonLib\include -I..\..\Srcode\hal\include -I..\..\Bsw\Mcal\icu\include -I..\..\Bsw\Config\MCAL_Config\Icu_OutPut\include -I..\..\Bsw\Crypto\CRYPTO\vss -I..\..\ASW\CDD_FVM -I..\..\Bsw\Memory\EEIf -I..\..\Bsw\Communication\CAN\CanTSyn -I..\..\Bsw\SystemServices\StbM -I..\..\Bsw\Crypto\CSM -I..\..\Bsw\Crypto\CRYPTO\RSA -I..\..\Bsw\Crypto\CRYPTO\RandomGen\CTR_DRBG -I..\..\Bsw\Crypto\CRYPTO\MAC\CMAC -I..\..\Bsw\Crypto\CRYPTO\Hash\sha256 -I..\..\Bsw\Crypto\CRYPTO\dh -I..\..\Bsw\Crypto\CRYPTO\AES -I..\..\Bsw\Crypto\CRYPTO -I..\..\Bsw\Crypto\CryInterface -I..\..\Bsw\Communication\Common\SecOC -I..\..\Bsw\Memory\NvM -I..\..\Bsw\Memory\MemIf -I..\..\Bsw\Memory\Fee -I..\..\Bsw\SystemServices\WdgM -I..\..\Bsw\SystemServices\WdgIf -I..\..\Bsw\Config\MCAL_Config\Wdg_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Gpt_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Fls_OutPut\include -I..\..\Bsw\Mcal\wdg\include -I..\..\Bsw\Mcal\gpt\include -I..\..\Bsw\Mcal\fls\include -I..\..\Bsw\Communication\Common\IpduM -I..\..\ASW\APP -I..\..\Bsw\SystemServices\BswM -I..\..\ASW\BSW_Ext -I..\..\Bsw\Communication\Common\Dcm -I..\..\Bsw\Communication\CAN\CanTp -I..\..\Bsw\SystemServices\Dem -I..\..\Bsw\Libraries\E2E -I..\..\Bsw\Libraries\Crc -I..\..\Bsw\Communication\Common\NmIf -I..\..\Bsw\Communication\CAN\CanNm -I..\..\Bsw\Config\BSW_Config\RTE\Rte -I..\..\Bsw\Config\BSW_Config\RTE\SchM -I..\..\Bsw\Libraries\IStd -I..\..\Bsw\SystemServices\EcuM -I..\..\Bsw\SystemServices\ComM -I..\..\Bsw\Communication\CAN\CanSM -I..\..\Bsw\Communication\CAN\CanIf -I..\..\Bsw\Communication\Common\Com -I..\..\Bsw\Communication\Common\PDUR -I..\..\Cpu -I..\..\Bsw\CommonInclude -I..\..\Bsw\Config\BSW_Config -I..\..\Bsw\Config\BSW_Config\RH850F1K -I..\..\Bsw\SystemServices\Os\Extend\inc -I..\..\Bsw\SystemServices\Os\Kernel\inc -I..\..\Bsw\SystemServices\Os\Portable\Mcu -I..\..\Bsw\SystemServices\Os\Portable\Processor -I..\..\Bsw\Config\MCAL_Config\Adc_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Can_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Dio_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Mcu_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Port_OutPut\include -I..\..\Bsw\Mcal\adc\include -I..\..\Bsw\Mcal\can\include -I..\..\Bsw\Mcal\dio\include -I..\..\Bsw\Mcal\general -I..\..\Bsw\Mcal\mcu\include -I..\..\Bsw\Mcal\port\include -I..\..\Bsw\Mcal\stubs\CanGeneral\include -I..\..\Bsw\Mcal\stubs\Det\include -I..\..\Bsw\Mcal\stubs\MemIf\include -I..\..\Bsw\Mcal\stubs\SchM\include -DRH850_F1KM_S1_2MB -lang=c99 -Xfloat=fpu -Xround=zero -Xdiv -Xasm_path=DefaultBuild -Xasm_option=-Xprn_path=DefaultBuild -c -MAKEUD=DefaultBuild -Xexec_time=C:\Users\xlchen\AppData\Local\Temp\CSPlusBuildTool_a4ad922ed926470f9707d277c8d1af4cgg30i0ls.3xe
+00000000                        4  #@	compiled at Fri Mar 27 09:49:58 2026
+00000000                        5  
+00000000                        6  	.file "..\..\Cpu\uart\r_cg_uart.c"
+00000000                        7  
+00000000                        8  	$reg_mode 32
+00000000                        9  	.dbl_size 8
+00000000                       10  
+00000000                       11  	.public _g_cg_sync_read, 4
+00000000                       12  	.public _gp_uart4_tx_address, 4
+00000000                       13  	.public _g_uart4_tx_count, 2
+00000000                       14  	.public _gp_uart4_rx_address, 4
+00000000                       15  	.public _g_uart4_rx_count, 2
+00000000                       16  	.public _g_uart4_rx_length, 2
+00000000                       17  	.public _gp_uart5_tx_address, 4
+00000000                       18  	.public _g_uart5_tx_count, 2
+00000000                       19  	.public _gp_uart5_rx_address, 4
+00000000                       20  	.public _g_uart5_rx_count, 2
+00000000                       21  	.public _g_uart5_rx_length, 2
+00000000                       22  	.public _R_UART4_Create
+00000000                       23  	.public _R_UART4_Start
+00000000                       24  	.public _R_UART4_Stop
+00000000                       25  	.public _R_UART4_Receive
+00000000                       26  	.public _R_UART4_Send
+00000000                       27  	.public _R_UART5_Create
+00000000                       28  	.public _R_UART5_Start
+00000000                       29  	.public _R_UART5_Stop
+00000000                       30  	.public _R_UART5_Receive
+00000000                       31  	.public _R_UART5_Send
+00000000                       32  	.public _R_UART4_SendStatus
+00000000                       33  	.public _R_UART5_SendStatus
+00000000                       34  
+00000000                       35  	.section .text, text
+00000000                       36  _R_UART4_Create:
+00000000                       37  	.stack _R_UART4_Create = 0
+00000000                       38  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 264
+00000000 4016CEFF              39  	movhi 0x0000FFCE, r0, r2
+00000004 42070E21              40  	st.b r0, 0x0000210E[r2]
+00000008 202E5000              41  	movea 0x00000050, r0, r5
+0000000C                       42  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 287
+0000000C 422F0121              43  	st.b r5, 0x00002101[r2]
+00000010 202E1C00              44  	movea 0x0000001C, r0, r5
+00000014                       45  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 288
+00000014 622F0221              46  	st.h r5, 0x00002102[r2]
+00000018 012A                  47  	mov 0x00000001, r5
+0000001A                       48  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 289
+0000001A 422F0821              49  	st.b r5, 0x00002108[r2]
+0000001E 0D32                  50  	mov 0x0000000D, r6
+00000020                       51  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 290
+00000020 42370D21              52  	st.b r6, 0x0000210D[r2]
+00000024                       53  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 291
+00000024 42070921              54  	st.b r0, 0x00002109[r2]
+00000028                       55  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 293
+00000028 422F0E21              56  	st.b r5, 0x0000210E[r2]
+0000002C                       57  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 295
+0000002C 82170F21              58  	ld.bu 0x0000210E[r2], r2
+00000030 402E0000              59  	movhi HIGHW1(#_g_cg_sync_read), r0, r5
+00000034 65170100              60  	st.w r2, LOWW(#_g_cg_sync_read)[r5]
+00000038                       61  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 296
+00000038 1F00                  62  	syncp
+0000003A                       63  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 298
+0000003A 4016C1FF              64  	movhi 0x0000FFC1, r0, r2
+0000003E E22F3140              65  	ld.hu 0x00004030[r2], r5
+00000042 C52EFDFF              66  	andi 0x0000FFFD, r5, r5
+00000046 622F3040              67  	st.h r5, 0x00004030[r2]
+0000004A                       68  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 299
+0000004A E22F3141              69  	ld.hu 0x00004130[r2], r5
+0000004E C52EFDFF              70  	andi 0x0000FFFD, r5, r5
+00000052 622F3041              71  	st.h r5, 0x00004130[r2]
+00000056                       72  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 300
+00000056 222F3003              73  	ld.h 0x00000330[r2], r5
+0000005A 852E0200              74  	ori 0x00000002, r5, r5
+0000005E 622F3003              75  	st.h r5, 0x00000330[r2]
+00000062                       76  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 301
+00000062 E22F3104              77  	ld.hu 0x00000430[r2], r5
+00000066 C52EFDFF              78  	andi 0x0000FFFD, r5, r5
+0000006A 622F3004              79  	st.h r5, 0x00000430[r2]
+0000006E                       80  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 302
+0000006E E22F3105              81  	ld.hu 0x00000530[r2], r5
+00000072 C52EFDFF              82  	andi 0x0000FFFD, r5, r5
+00000076 622F3005              83  	st.h r5, 0x00000530[r2]
+0000007A                       84  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 303
+0000007A 222F3006              85  	ld.h 0x00000630[r2], r5
+0000007E 852E0200              86  	ori 0x00000002, r5, r5
+00000082 622F3006              87  	st.h r5, 0x00000630[r2]
+00000086                       88  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 304
+00000086 222F300A              89  	ld.h 0x00000A30[r2], r5
+0000008A 852E0200              90  	ori 0x00000002, r5, r5
+0000008E 622F300A              91  	st.h r5, 0x00000A30[r2]
+00000092                       92  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 305
+00000092 222F3004              93  	ld.h 0x00000430[r2], r5
+00000096 852E0200              94  	ori 0x00000002, r5, r5
+0000009A 622F3004              95  	st.h r5, 0x00000430[r2]
+0000009E                       96  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 307
+0000009E E22F3140              97  	ld.hu 0x00004030[r2], r5
+000000A2 C52EFBFF              98  	andi 0x0000FFFB, r5, r5
+000000A6 622F3040              99  	st.h r5, 0x00004030[r2]
+000000AA                      100  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 308
+000000AA E22F3141             101  	ld.hu 0x00004130[r2], r5
+000000AE C52EFBFF             102  	andi 0x0000FFFB, r5, r5
+000000B2 622F3041             103  	st.h r5, 0x00004130[r2]
+000000B6                      104  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 309
+000000B6 222F3003             105  	ld.h 0x00000330[r2], r5
+000000BA 852E0400             106  	ori 0x00000004, r5, r5
+000000BE 622F3003             107  	st.h r5, 0x00000330[r2]
+000000C2                      108  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 310
+000000C2 E22F3104             109  	ld.hu 0x00000430[r2], r5
+000000C6 C52EFBFF             110  	andi 0x0000FFFB, r5, r5
+000000CA 622F3004             111  	st.h r5, 0x00000430[r2]
+000000CE                      112  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 311
+000000CE E22F3105             113  	ld.hu 0x00000530[r2], r5
+000000D2 C52EFBFF             114  	andi 0x0000FFFB, r5, r5
+000000D6 622F3005             115  	st.h r5, 0x00000530[r2]
+000000DA                      116  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 312
+000000DA E22F3106             117  	ld.hu 0x00000630[r2], r5
+000000DE C52EFBFF             118  	andi 0x0000FFFB, r5, r5
+000000E2 622F3006             119  	st.h r5, 0x00000630[r2]
+000000E6                      120  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 313
+000000E6 222F3004             121  	ld.h 0x00000430[r2], r5
+000000EA 852E0400             122  	ori 0x00000004, r5, r5
+000000EE 622F3004             123  	st.h r5, 0x00000430[r2]
+000000F2                      124  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 314
+000000F2 E22F3103             125  	ld.hu 0x00000330[r2], r5
+000000F6 C52EFBFF             126  	andi 0x0000FFFB, r5, r5
+000000FA 622F3003             127  	st.h r5, 0x00000330[r2]
+000000FE 7F00                 128  	jmp [r31]
+00000100                      129  _R_UART4_Start:
+00000100                      130  	.stack _R_UART4_Start = 0
+00000100                      131  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 325
+00000100 80070512429C         132  	ld23.b 0xFFCE2120[r0], r2
+00000106 82160300             133  	ori 0x00000003, r2, r2
+0000010A 80070D12429C         134  	st23.b r2, 0xFFCE2120[r0]
+00000110 7F00                 135  	jmp [r31]
+00000112                      136  _R_UART4_Stop:
+00000112                      137  	.stack _R_UART4_Stop = 0
+00000112                      138  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 345
+00000112 C03FD2B1             139  	set1 0x00000007, 0xFFFFB1D2[r0]
+00000116                      140  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 347
+00000116 C03FD4B1             141  	set1 0x00000007, 0xFFFFB1D4[r0]
+0000011A                      142  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 349
+0000011A C03FD6B1             143  	set1 0x00000007, 0xFFFFB1D6[r0]
+0000011E                      144  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 351
+0000011E 4016CEFF             145  	movhi 0x0000FFCE, r0, r2
+00000122 822F2121             146  	ld.bu 0x00002120[r2], r5
+00000126 C52EFC00             147  	andi 0x000000FC, r5, r5
+0000012A 422F2021             148  	st.b r5, 0x00002120[r2]
+0000012E                      149  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 353
+0000012E 822F0F21             150  	ld.bu 0x0000210E[r2], r5
+00000132 40360000             151  	movhi HIGHW1(#_g_cg_sync_read), r0, r6
+00000136 662F0100             152  	st.w r5, LOWW(#_g_cg_sync_read)[r6]
+0000013A                      153  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 354
+0000013A 1F00                 154  	syncp
+0000013C                      155  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 356
+0000013C C0A7D3B1             156  	clr1 0x00000004, 0xFFFFB1D3[r0]
+00000140                      157  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 358
+00000140 C0A7D5B1             158  	clr1 0x00000004, 0xFFFFB1D5[r0]
+00000144                      159  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 360
+00000144 C0A7D7B1             160  	clr1 0x00000004, 0xFFFFB1D7[r0]
+00000148                      161  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 362
+00000148 82170F21             162  	ld.bu 0x0000210E[r2], r2
+0000014C 66170100             163  	st.w r2, LOWW(#_g_cg_sync_read)[r6]
+00000150                      164  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 363
+00000150 1F00                 165  	syncp
+00000152 7F00                 166  	jmp [r31]
+00000154                      167  _R_UART4_Receive:
+00000154                      168  	.stack _R_UART4_Receive = 0
+00000154                      169  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 375
+00000154 603A                 170  	cmp 0x00000000, r7
+00000156                      171  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 379
+00000156 8A05                 172  	bnz9 .BB.LABEL.4_2
+00000158                      173  .BB.LABEL.4_1:	; entry.if_break_bb16_crit_edge
+00000158                      174  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 0
+00000158 20568100             175  	movea 0x00000081, r0, r10
+0000015C 8505                 176  	br9 .BB.LABEL.4_4
+0000015E                      177  .BB.LABEL.4_2:	; if_else_bb
+0000015E 4016CEFF             178  	movhi 0x0000FFCE, r0, r2
+00000162                      179  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 385
+00000162 C2EF1221             180  	tst1 0x00000005, 0x00002112[r2]
+00000166 8205                 181  	bz9 .BB.LABEL.4_5
+00000168                      182  .BB.LABEL.4_3:	; if_else_bb.if_break_bb16_crit_edge
+00000168                      183  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 0
+00000168 0052                 184  	mov 0x00000000, r10
+0000016A                      185  .BB.LABEL.4_4:	; if_break_bb16
+0000016A                      186  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 394
+0000016A 7F00                 187  	jmp [r31]
+0000016C                      188  .BB.LABEL.4_5:	; if_then_bb13
+0000016C                      189  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 387
+0000016C 40160000             190  	movhi HIGHW1(#_g_uart4_rx_count), r0, r2
+00000170 62070000             191  	st.h r0, LOWW(#_g_uart4_rx_count)[r2]
+00000174                      192  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 388
+00000174 40160000             193  	movhi HIGHW1(#_g_uart4_rx_length), r0, r2
+00000178 623F0000             194  	st.h r7, LOWW(#_g_uart4_rx_length)[r2]
+0000017C                      195  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 389
+0000017C 40160000             196  	movhi HIGHW1(#_gp_uart4_rx_address), r0, r2
+00000180 62370100             197  	st.w r6, LOWW(#_gp_uart4_rx_address)[r2]
+00000184 8505                 198  	br9 .BB.LABEL.4_3
+00000186                      199  _R_UART4_Send:
+00000186                      200  	.stack _R_UART4_Send = 0
+00000186                      201  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 405
+00000186 603A                 202  	cmp 0x00000000, r7
+00000188                      203  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 409
+00000188 8A05                 204  	bnz9 .BB.LABEL.5_2
+0000018A                      205  .BB.LABEL.5_1:	; entry.if_break_bb24_crit_edge
+0000018A                      206  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 0
+0000018A 20568100             207  	movea 0x00000081, r0, r10
+0000018E 8505                 208  	br9 .BB.LABEL.5_5
+00000190                      209  .BB.LABEL.5_2:	; if_else_bb
+00000190                      210  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 415
+00000190 40160000             211  	movhi HIGHW1(#_gp_uart4_tx_address), r0, r2
+00000194 62370100             212  	st.w r6, LOWW(#_gp_uart4_tx_address)[r2]
+00000198                      213  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 416
+00000198 40160000             214  	movhi HIGHW1(#_g_uart4_tx_count), r0, r2
+0000019C 623F0000             215  	st.h r7, LOWW(#_g_uart4_tx_count)[r2]
+000001A0 4016CEFF             216  	movhi 0x0000FFCE, r0, r2
+000001A4                      217  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 418
+000001A4 C2E71221             218  	tst1 0x00000004, 0x00002112[r2]
+000001A8 8205                 219  	bz9 .BB.LABEL.5_4
+000001AA                      220  .BB.LABEL.5_3:	; if_else_bb.if_break_bb24_crit_edge
+000001AA                      221  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 0
+000001AA 20568000             222  	movea 0x00000080, r0, r10
+000001AE 8505                 223  	br9 .BB.LABEL.5_5
+000001B0                      224  .BB.LABEL.5_4:	; if_then_bb15
+000001B0                      225  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 421
+000001B0 C03FD2B1             226  	set1 0x00000007, 0xFFFFB1D2[r0]
+000001B4                      227  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 422
+000001B4 C0A7D3B1             228  	clr1 0x00000004, 0xFFFFB1D3[r0]
+000001B8                      229  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 423
+000001B8 40160000             230  	movhi HIGHW1(#_gp_uart4_tx_address), r0, r2
+000001BC 222F0100             231  	ld.w LOWW(#_gp_uart4_tx_address)[r2], r5
+000001C0 852F0100             232  	ld.bu 0x00000000[r5], r5
+000001C4 A0074D2A429C         233  	st23.h r5, 0xFFCE2124[r0]
+000001CA                      234  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 424
+000001CA 222F0100             235  	ld.w LOWW(#_gp_uart4_tx_address)[r2], r5
+000001CE 412A                 236  	add 0x00000001, r5
+000001D0 622F0100             237  	st.w r5, LOWW(#_gp_uart4_tx_address)[r2]
+000001D4                      238  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 425
+000001D4 40160000             239  	movhi HIGHW1(#_g_uart4_tx_count), r0, r2
+000001D8 222F0000             240  	ld.h LOWW(#_g_uart4_tx_count)[r2], r5
+000001DC 5F2A                 241  	add 0xFFFFFFFF, r5
+000001DE 622F0000             242  	st.h r5, LOWW(#_g_uart4_tx_count)[r2]
+000001E2                      243  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 427
+000001E2 C0A7D3B1             244  	clr1 0x00000004, 0xFFFFB1D3[r0]
+000001E6                      245  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 428
+000001E6 C0BFD2B1             246  	clr1 0x00000007, 0xFFFFB1D2[r0]
+000001EA 0052                 247  	mov 0x00000000, r10
+000001EC                      248  .BB.LABEL.5_5:	; if_break_bb24
+000001EC                      249  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 436
+000001EC 7F00                 250  	jmp [r31]
+000001EE                      251  _R_UART5_Create:
+000001EE                      252  	.stack _R_UART5_Create = 0
+000001EE                      253  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 446
+000001EE 4016CEFF             254  	movhi 0x0000FFCE, r0, r2
+000001F2 42074E21             255  	st.b r0, 0x0000214E[r2]
+000001F6 202E5200             256  	movea 0x00000052, r0, r5
+000001FA                      257  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 469
+000001FA 422F4121             258  	st.b r5, 0x00002141[r2]
+000001FE 202E1C00             259  	movea 0x0000001C, r0, r5
+00000202                      260  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 470
+00000202 622F4221             261  	st.h r5, 0x00002142[r2]
+00000206 012A                 262  	mov 0x00000001, r5
+00000208                      263  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 471
+00000208 422F4821             264  	st.b r5, 0x00002148[r2]
+0000020C 0C32                 265  	mov 0x0000000C, r6
+0000020E                      266  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 472
+0000020E 42374D21             267  	st.b r6, 0x0000214D[r2]
+00000212                      268  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 473
+00000212 42074921             269  	st.b r0, 0x00002149[r2]
+00000216                      270  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 475
+00000216 422F4E21             271  	st.b r5, 0x0000214E[r2]
+0000021A                      272  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 477
+0000021A 82174F21             273  	ld.bu 0x0000214E[r2], r2
+0000021E 402E0000             274  	movhi HIGHW1(#_g_cg_sync_read), r0, r5
+00000222 65170100             275  	st.w r2, LOWW(#_g_cg_sync_read)[r5]
+00000226                      276  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 478
+00000226 1F00                 277  	syncp
+00000228                      278  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 480
+00000228 4016C1FF             279  	movhi 0x0000FFC1, r0, r2
+0000022C E22F0540             280  	ld.hu 0x00004004[r2], r5
+00000230 C52EEFFF             281  	andi 0x0000FFEF, r5, r5
+00000234 622F0440             282  	st.h r5, 0x00004004[r2]
+00000238                      283  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 481
+00000238 E22F0541             284  	ld.hu 0x00004104[r2], r5
+0000023C C52EEFFF             285  	andi 0x0000FFEF, r5, r5
+00000240 622F0441             286  	st.h r5, 0x00004104[r2]
+00000244                      287  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 482
+00000244 222F0403             288  	ld.h 0x00000304[r2], r5
+00000248 852E1000             289  	ori 0x00000010, r5, r5
+0000024C 622F0403             290  	st.h r5, 0x00000304[r2]
+00000250                      291  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 483
+00000250 E22F0504             292  	ld.hu 0x00000404[r2], r5
+00000254 C52EEFFF             293  	andi 0x0000FFEF, r5, r5
+00000258 622F0404             294  	st.h r5, 0x00000404[r2]
+0000025C                      295  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 484
+0000025C E22F0505             296  	ld.hu 0x00000504[r2], r5
+00000260 C52EEFFF             297  	andi 0x0000FFEF, r5, r5
+00000264 622F0405             298  	st.h r5, 0x00000504[r2]
+00000268                      299  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 485
+00000268 222F0406             300  	ld.h 0x00000604[r2], r5
+0000026C 852E1000             301  	ori 0x00000010, r5, r5
+00000270 622F0406             302  	st.h r5, 0x00000604[r2]
+00000274                      303  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 486
+00000274 222F040A             304  	ld.h 0x00000A04[r2], r5
+00000278 852E1000             305  	ori 0x00000010, r5, r5
+0000027C 622F040A             306  	st.h r5, 0x00000A04[r2]
+00000280                      307  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 487
+00000280 222F0404             308  	ld.h 0x00000404[r2], r5
+00000284 852E1000             309  	ori 0x00000010, r5, r5
+00000288 622F0404             310  	st.h r5, 0x00000404[r2]
+0000028C                      311  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 489
+0000028C E22F0540             312  	ld.hu 0x00004004[r2], r5
+00000290 C52EDFFF             313  	andi 0x0000FFDF, r5, r5
+00000294 622F0440             314  	st.h r5, 0x00004004[r2]
+00000298                      315  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 490
+00000298 E22F0541             316  	ld.hu 0x00004104[r2], r5
+0000029C C52EDFFF             317  	andi 0x0000FFDF, r5, r5
+000002A0 622F0441             318  	st.h r5, 0x00004104[r2]
+000002A4                      319  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 491
+000002A4 222F0403             320  	ld.h 0x00000304[r2], r5
+000002A8 852E2000             321  	ori 0x00000020, r5, r5
+000002AC 622F0403             322  	st.h r5, 0x00000304[r2]
+000002B0                      323  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 492
+000002B0 E22F0504             324  	ld.hu 0x00000404[r2], r5
+000002B4 C52EDFFF             325  	andi 0x0000FFDF, r5, r5
+000002B8 622F0404             326  	st.h r5, 0x00000404[r2]
+000002BC                      327  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 493
+000002BC E22F0505             328  	ld.hu 0x00000504[r2], r5
+000002C0 C52EDFFF             329  	andi 0x0000FFDF, r5, r5
+000002C4 622F0405             330  	st.h r5, 0x00000504[r2]
+000002C8                      331  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 494
+000002C8 222F0404             332  	ld.h 0x00000404[r2], r5
+000002CC 852E2000             333  	ori 0x00000020, r5, r5
+000002D0 622F0404             334  	st.h r5, 0x00000404[r2]
+000002D4                      335  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 495
+000002D4 E22F0503             336  	ld.hu 0x00000304[r2], r5
+000002D8 C52EDFFF             337  	andi 0x0000FFDF, r5, r5
+000002DC 622F0403             338  	st.h r5, 0x00000304[r2]
+000002E0 7F00                 339  	jmp [r31]
+000002E2                      340  _R_UART5_Start:
+000002E2                      341  	.stack _R_UART5_Start = 0
+000002E2                      342  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 506
+000002E2 80070516429C         343  	ld23.b 0xFFCE2160[r0], r2
+000002E8 82160300             344  	ori 0x00000003, r2, r2
+000002EC 80070D16429C         345  	st23.b r2, 0xFFCE2160[r0]
+000002F2 7F00                 346  	jmp [r31]
+000002F4                      347  _R_UART5_Stop:
+000002F4                      348  	.stack _R_UART5_Stop = 0
+000002F4                      349  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 532
+000002F4 4016CEFF             350  	movhi 0x0000FFCE, r0, r2
+000002F8 822F6121             351  	ld.bu 0x00002160[r2], r5
+000002FC C52EFC00             352  	andi 0x000000FC, r5, r5
+00000300 422F6021             353  	st.b r5, 0x00002160[r2]
+00000304                      354  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 534
+00000304 822F4F21             355  	ld.bu 0x0000214E[r2], r5
+00000308 40360000             356  	movhi HIGHW1(#_g_cg_sync_read), r0, r6
+0000030C 662F0100             357  	st.w r5, LOWW(#_g_cg_sync_read)[r6]
+00000310                      358  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 535
+00000310 1F00                 359  	syncp
+00000312                      360  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 543
+00000312 82174F21             361  	ld.bu 0x0000214E[r2], r2
+00000316 66170100             362  	st.w r2, LOWW(#_g_cg_sync_read)[r6]
+0000031A                      363  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 544
+0000031A 1F00                 364  	syncp
+0000031C 7F00                 365  	jmp [r31]
+0000031E                      366  _R_UART5_Receive:
+0000031E                      367  	.stack _R_UART5_Receive = 0
+0000031E                      368  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 556
+0000031E 603A                 369  	cmp 0x00000000, r7
+00000320                      370  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 560
+00000320 8205                 371  	bz9 .BB.LABEL.9_3
+00000322                      372  .BB.LABEL.9_1:	; if_else_bb
+00000322                      373  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 0
+00000322 4016CEFF             374  	movhi 0x0000FFCE, r0, r2
+00000326                      375  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 566
+00000326 C2EF5221             376  	tst1 0x00000005, 0x00002152[r2]
+0000032A 8A05                 377  	bnz9 .BB.LABEL.9_3
+0000032C                      378  .BB.LABEL.9_2:	; if_then_bb13
+0000032C                      379  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 568
+0000032C 40160000             380  	movhi HIGHW1(#_g_uart5_rx_count), r0, r2
+00000330 62070000             381  	st.h r0, LOWW(#_g_uart5_rx_count)[r2]
+00000334                      382  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 569
+00000334 40160000             383  	movhi HIGHW1(#_g_uart5_rx_length), r0, r2
+00000338 623F0000             384  	st.h r7, LOWW(#_g_uart5_rx_length)[r2]
+0000033C                      385  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 570
+0000033C 40160000             386  	movhi HIGHW1(#_gp_uart5_rx_address), r0, r2
+00000340 62370100             387  	st.w r6, LOWW(#_gp_uart5_rx_address)[r2]
+00000344 0052                 388  	mov 0x00000000, r10
+00000346 7F00                 389  	jmp [r31]
+00000348                      390  .BB.LABEL.9_3:	; if_break_bb17
+00000348                      391  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 0
+00000348 20568100             392  	movea 0x00000081, r0, r10
+0000034C                      393  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 579
+0000034C 7F00                 394  	jmp [r31]
+0000034E                      395  _R_UART5_Send:
+0000034E                      396  	.stack _R_UART5_Send = 0
+0000034E                      397  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 590
+0000034E 603A                 398  	cmp 0x00000000, r7
+00000350                      399  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 594
+00000350 8A05                 400  	bnz9 .BB.LABEL.10_2
+00000352                      401  .BB.LABEL.10_1:	; entry.if_break_bb24_crit_edge
+00000352                      402  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 0
+00000352 20568100             403  	movea 0x00000081, r0, r10
+00000356 8505                 404  	br9 .BB.LABEL.10_5
+00000358                      405  .BB.LABEL.10_2:	; if_else_bb
+00000358                      406  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 600
+00000358 40160000             407  	movhi HIGHW1(#_gp_uart5_tx_address), r0, r2
+0000035C 62370100             408  	st.w r6, LOWW(#_gp_uart5_tx_address)[r2]
+00000360                      409  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 601
+00000360 40160000             410  	movhi HIGHW1(#_g_uart5_tx_count), r0, r2
+00000364 623F0000             411  	st.h r7, LOWW(#_g_uart5_tx_count)[r2]
+00000368 4016CEFF             412  	movhi 0x0000FFCE, r0, r2
+0000036C                      413  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 603
+0000036C C2E75221             414  	tst1 0x00000004, 0x00002152[r2]
+00000370 8205                 415  	bz9 .BB.LABEL.10_4
+00000372                      416  .BB.LABEL.10_3:	; if_else_bb.if_break_bb24_crit_edge
+00000372                      417  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 0
+00000372 20568000             418  	movea 0x00000080, r0, r10
+00000376 8505                 419  	br9 .BB.LABEL.10_5
+00000378                      420  .BB.LABEL.10_4:	; if_then_bb15
+00000378                      421  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 606
+00000378 C03FDAB1             422  	set1 0x00000007, 0xFFFFB1DA[r0]
+0000037C                      423  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 607
+0000037C C0A7DBB1             424  	clr1 0x00000004, 0xFFFFB1DB[r0]
+00000380                      425  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 608
+00000380 40160000             426  	movhi HIGHW1(#_gp_uart5_tx_address), r0, r2
+00000384 222F0100             427  	ld.w LOWW(#_gp_uart5_tx_address)[r2], r5
+00000388 852F0100             428  	ld.bu 0x00000000[r5], r5
+0000038C A0074D2E429C         429  	st23.h r5, 0xFFCE2164[r0]
+00000392                      430  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 609
+00000392 222F0100             431  	ld.w LOWW(#_gp_uart5_tx_address)[r2], r5
+00000396 412A                 432  	add 0x00000001, r5
+00000398 622F0100             433  	st.w r5, LOWW(#_gp_uart5_tx_address)[r2]
+0000039C                      434  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 610
+0000039C 40160000             435  	movhi HIGHW1(#_g_uart5_tx_count), r0, r2
+000003A0 222F0000             436  	ld.h LOWW(#_g_uart5_tx_count)[r2], r5
+000003A4 5F2A                 437  	add 0xFFFFFFFF, r5
+000003A6 622F0000             438  	st.h r5, LOWW(#_g_uart5_tx_count)[r2]
+000003AA                      439  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 612
+000003AA C0A7DBB1             440  	clr1 0x00000004, 0xFFFFB1DB[r0]
+000003AE                      441  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 613
+000003AE C0BFDAB1             442  	clr1 0x00000007, 0xFFFFB1DA[r0]
+000003B2 0052                 443  	mov 0x00000000, r10
+000003B4                      444  .BB.LABEL.10_5:	; if_break_bb24
+000003B4                      445  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 621
+000003B4 7F00                 446  	jmp [r31]
+000003B6                      447  _R_UART4_SendStatus:
+000003B6                      448  	.stack _R_UART4_SendStatus = 0
+000003B6                      449  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 624
+000003B6 4016CEFF             450  	movhi 0x0000FFCE, r0, r2
+000003BA                      451  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 629
+000003BA C2E71221             452  	tst1 0x00000004, 0x00002112[r2]
+000003BE 20168000             453  	movea 0x00000080, r0, r2
+000003C2                      454  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 635
+000003C2 E0170453             455  	cmov 0x00000002, 0x00000000, r2, r10
+000003C6                      456  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 639
+000003C6 7F00                 457  	jmp [r31]
+000003C8                      458  _R_UART5_SendStatus:
+000003C8                      459  	.stack _R_UART5_SendStatus = 0
+000003C8                      460  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 641
+000003C8 4016CEFF             461  	movhi 0x0000FFCE, r0, r2
+000003CC                      462  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 645
+000003CC C2E75221             463  	tst1 0x00000004, 0x00002152[r2]
+000003D0 20168000             464  	movea 0x00000080, r0, r2
+000003D4                      465  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 651
+000003D4 E0170453             466  	cmov 0x00000002, 0x00000000, r2, r10
+000003D8                      467  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Cpu/uart/r_cg_uart.c", 655
+000003D8 7F00                 468  	jmp [r31]
+00000000                      469  	.section .bss, bss
+00000000                      470  	.align 4
+00000000                      471  _g_cg_sync_read:
+00000000                      472  	.ds (4)
+00000004                      473  	.align 4
+00000004                      474  _gp_uart4_tx_address:
+00000004                      475  	.ds (4)
+00000008                      476  	.align 2
+00000008                      477  _g_uart4_tx_count:
+00000008                      478  	.ds (2)
+0000000A 0000                 479  	.align 4
+0000000C                      480  _gp_uart4_rx_address:
+0000000C                      481  	.ds (4)
+00000010                      482  	.align 2
+00000010                      483  _g_uart4_rx_count:
+00000010                      484  	.ds (2)
+00000012                      485  	.align 2
+00000012                      486  _g_uart4_rx_length:
+00000012                      487  	.ds (2)
+00000014                      488  	.align 4
+00000014                      489  _gp_uart5_tx_address:
+00000014                      490  	.ds (4)
+00000018                      491  	.align 2
+00000018                      492  _g_uart5_tx_count:
+00000018                      493  	.ds (2)
+0000001A 0000                 494  	.align 4
+0000001C                      495  _gp_uart5_rx_address:
+0000001C                      496  	.ds (4)
+00000020                      497  	.align 2
+00000020                      498  _g_uart5_rx_count:
+00000020                      499  	.ds (2)
+00000022                      500  	.align 2
+00000022                      501  _g_uart5_rx_length:
+00000022                      502  	.ds (2)
+
+Section List
+Attr     Size                Name
+
+TEXT          986 (000003DA) .text
+BSS            36 (00000024) .bss
+
+Command Line Parameter
+-Xcpu=g3kh -Xreg_mode=32 -Xep=callee -Xcharacter_set=none -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\diagnostic -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\parameter_store -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu\port -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu\uart -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu\iic -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\vehicle_data_to_mpu -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\power_manage -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\mcu_cpu_sync -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\remote_control -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\can_cycle_send -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\project_configure -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\sdk\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\commonLib\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\hal\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\icu\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Icu_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\vss -ID:\wk\sirun\project\dazhong\code\mcu_app\ASW\CDD_FVM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\EEIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanTSyn -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\StbM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CSM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\RSA -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\RandomGen\CTR_DRBG -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\MAC\CMAC -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\Hash\sha256 -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\dh -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\AES -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CryInterface -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\SecOC -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\NvM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\MemIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\Fee -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\WdgM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\WdgIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Wdg_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Gpt_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Fls_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\wdg\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\gpt\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\fls\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\IpduM -ID:\wk\sirun\project\dazhong\code\mcu_app\ASW\APP -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\BswM -ID:\wk\sirun\project\dazhong\code\mcu_app\ASW\BSW_Ext -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\Dcm -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanTp -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Dem -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Libraries\E2E -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Libraries\Crc -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\NmIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanNm -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config\RTE\Rte -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config\RTE\SchM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Libraries\IStd -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\EcuM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\ComM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanSM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\Com -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\PDUR -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\CommonInclude -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config\RH850F1K -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Extend\inc -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Kernel\inc -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Portable\Mcu -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Portable\Processor -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Adc_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Can_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Dio_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Mcu_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Port_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\adc\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\can\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\dio\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\general -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\mcu\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\port\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\CanGeneral\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\Det\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\MemIf\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\SchM\include -DRH850_F1KM_S1_2MB -Xprn_path=DefaultBuild -Xno_warning=50013 -oD:\wk\sirun\project\dazhong\code\mcu_app\Toolchain\CSPLUS_V81200\DefaultBuild\r_cg_uart.obj D:\wk\sirun\project\dazhong\code\mcu_app\Toolchain\CSPLUS_V81200\DefaultBuild\r_cg_uart.asm 
+

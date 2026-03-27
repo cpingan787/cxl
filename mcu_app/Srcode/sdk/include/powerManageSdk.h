@@ -6,6 +6,26 @@
 #define PM_SDK_STATUS_OK        0
 #define PM_SDK_STATUS_ERR        (-1)
 
+#define PM_HAL_WAKEUP_SOURCE_NONE	       0	 //无有效唤醒源	
+#define PM_HAL_WAKEUP_SOURCE_CAN1	       1	 //can 1 唤醒
+#define PM_HAL_WAKEUP_SOURCE_CAN2	       2	 //can 2 唤醒
+#define PM_HAL_WAKEUP_SOURCE_CAN3	       3	 //can 3 唤醒
+#define PM_HAL_WAKEUP_SOURCE_CAN4	       4 	 //can 4 唤醒
+#define PM_HAL_WAKEUP_SOURCE_CAN5	       5	 //can 5 唤醒
+#define PM_HAL_WAKEUP_SOURCE_CAN6	       6	 //can 6 唤醒
+#define PM_HAL_WAKEUP_SOURCE_CAN7	       7	 //can 7 唤醒
+#define PM_HAL_WAKEUP_SOURCE_CAN8	       8	 //can 8 唤醒
+#define PM_HAL_WAKEUP_SOURCE_MPU	       9	 //MPU 唤醒
+#define PM_HAL_WAKEUP_SOURCE_KL15	       10	 //KL15 上电唤醒
+#define PM_HAL_WAKEUP_SOURCE_KL30	       11    //KL30 上电唤醒
+#define PM_HAL_WAKEUP_SOURCE_BLE	       12	 //蓝牙唤醒
+#define PM_HAL_WAKEUP_SOURCE_RTC	       13    //CPU定时唤醒
+#define PM_HAL_WAKEUP_SOURCE_MCURTC	       14    //MCU timed wake-up
+#define PM_HAL_WAKEUP_SOURCE_GSENSOR	       15        //MCU timed wake-up
+#define PM_HAL_WAKEUP_SOURCE_CRASH	       16        //MCU timed wake-up
+#define PM_HAL_WAKEUP_SOURCE_ECALL	       17        //MCU timed wake-up
+
+#define PM_HAL_WAKEUP_SOURCE_MAX               17        //唤醒源最大值
 
 typedef void (* PmWakeCallFun_t)(uint8_t mcuWakecpuSource,uint8_t cpuWakeupSource,uint32_t *pWakeDelayTime);
 
@@ -56,8 +76,17 @@ void PowerManageSdkDeepSleep(uint8_t deepSleepFlag);
 void PowerManageSdkForceSleep(void);
 
 void PowerManageSdkGetPowerInfo(uint8_t* pPmState,uint8_t* pWakeupSource,uint32_t* pWakeCount);
-
 void PowerManageSdkForceWakeupMpu(uint16_t cycleTime);
+
+/* 运行期间计时器递减接口，供定时器中断调用 */
+void PowerManageSdkTimerDecrement(void);
+
+/* 清零listen唤醒计时器 */
+void ResetListenTimer(void);
+
+/* 获取存储的用户模式 */
+uint8_t GetStoredUserMode(void);
+
 
 
 

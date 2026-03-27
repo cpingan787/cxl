@@ -62,7 +62,7 @@ CONST(EcuM_ConfigType, ECUM_VAR_NO_INIT) EcuM_Config = /* PRQA S 3408,1533 */ /*
 {
     123,    /*EcuMConfigConsistencyHash*/
     OSDEFAULTAPPMODE,    /*EcuMDefaultAppMode*/
-    ECUM_SHUTDOWN_TARGET_OFF,
+    ECUM_SHUTDOWN_TARGET_SLEEP,
     0,
     &EcuM_GenMcalConfig
 };

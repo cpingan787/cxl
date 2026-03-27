@@ -404,7 +404,6 @@ static uint8 DataReadBlockProcess(uint8* buf)
             {
                 CommF_DataCopy(buf, TargetAddressPtr, DATALEN);
                 tem = E_OK;
-                break;
             }
             else
             {

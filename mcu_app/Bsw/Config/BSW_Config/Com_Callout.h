@@ -14,7 +14,7 @@
  *  @MCU                : R7F7015833
  *  @file               : Com_Callout.h
  *  @author             : iSoft
- *  @date               : 2026-01-22 11:44:18
+ *  @date               : 2026-03-10 09:17:03
  *  @vendor             : iSoft
  *  @description        : 
  *  @specification(S)   : AUTOSAR Classic Platform R19-11
@@ -58,9 +58,21 @@ boolean IAM_CONNCANFD_100ms_ConFrP41_CONTROLLER_0_IAM_Tx_Pdu41(PduIdType PduId, 
 
 boolean IAM_CONNCANFD_100ms_ConFrP41_CONTROLLER_0_IAM_Tx_Pdu57(PduIdType PduId, PduInfoType* PduInfoPtr);
 
+boolean SDM_SFCANFD_Event_FrS14_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
+boolean ICBAD_BKPCANFD_Event_FrS04_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
+boolean ICBAD_BKPCANFD_Event_FrS05_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
+boolean ICBVC_SecOC_ComKeyReq_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
 boolean ICBAD_ZONE_CHCANFD_20ms_FrP13_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
 
 boolean TC_ZONE_PTCANFD_10ms_FrP01_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
+boolean ICM_INFOCANFD_EvtInfo_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
+boolean AMP_INFOCAN_EvtInfo_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
 
 boolean ECM_ERCANFD_10ms_FrP00_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
 
@@ -70,6 +82,10 @@ boolean RZCU_PTCANFD_10ms_FrP01_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduIn
 
 boolean IBS_CHCANFD_10ms_FrP04_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
 
+boolean PEU_PTCANFD_10ms_FrP04_SigGWtoCO_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
+boolean DLP_BDCAN_EvtInfo_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
 boolean PEU_PTCANFD_5ms_FrP02_SigGwTOCON_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
 
 boolean TC_PTCANFD_10ms_FrP01_SigGWTORZC_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
@@ -78,7 +94,15 @@ boolean RZCU_RZCUCANFD_10ms_FrP22_NoSecOC_CONTROLLER_0_IAM_Rx(PduIdType PduId, c
 
 boolean ESS_PTCANFD_20ms_FrP01_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
 
+boolean ESS_PTCANFD_20ms_FrP02_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
+boolean ICBAD_CHCANFD_20ms_FrP08_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
+boolean PEU_ERCANFD_20ms_FrP33_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
 boolean SDM_CHCANFD_20ms_FrP01_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
+boolean ICBVC_RZCUCANFD_20ms_FrP00_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
 
 boolean PEU_PTCANFD_100ms_FrP03_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
 
@@ -94,9 +118,33 @@ boolean ICBAD_RZCUCANFD_20ms_FrP12_CONTROLLER_0_IAM_Rx(PduIdType PduId, const Pd
 
 boolean IBS_CHCANFD_20ms_FrP11_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
 
+boolean ESS_PTCANFD_20ms_FrP04_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
 boolean ICBVC_RZCUCANFD_20ms_FrP03_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
 
+boolean PEU_PTCANFD_50ms_FrP05_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
 boolean ESS_PTCANFD_50ms_FrP14_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
+boolean ESS_PTCANFD_100ms_FrP29_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
+boolean ESS_PTCANFD_100ms_FrP26_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
+boolean ESS_PTCANFD_50ms_FrP06_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
+boolean ESS_PTCANFD_50ms_FrP07_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
+boolean ESS_PTCANFD_50ms_FrP09_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
+boolean ESS_PTCANFD_50ms_FrP13_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
+boolean ESS_PTCANFD_50ms_FrP08_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
+boolean ESS_PTCANFD_100ms_FrP21_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
+boolean RZCU_LHBKBCANFD_50ms_FrP37_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
+boolean LHZCU_LHBKBCANFD_50ms_FrP04_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
 
 boolean LHZCU_BKBCANFD_50ms_FrP24_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
 
@@ -104,31 +152,147 @@ boolean LHZCU_LHBKBCANFD_50ms_FrP06_CONTROLLER_0_IAM_Rx(PduIdType PduId, const P
 
 boolean ESS_PTEXTDCAN_100ms_FrP33_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
 
+boolean PEU_ERCANFD_50ms_FrP10_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
+boolean LVBM_PTEXTDCAN_100ms_FrP01_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
+boolean ICBAD_BKPCANFD_100ms_FrP42_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
 boolean PEU_ERCANFD_100ms_FrP15_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
+boolean IPD_BKPCANFD_100ms_FrP50_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
+boolean ESS_PTCANFD_100ms_FrP28_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
+boolean ESS_ZONE_PTCANFD_100ms_FrP16_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
+boolean ESS_PTCANFD_100ms_FrP22_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
 
 boolean ESS_PTCANFD_100ms_FrP20_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
 
 boolean RZCU_PTCANFD_100ms_FrP10_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
 
+boolean ESS_PTCANFD_100ms_FrP35_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
+boolean LHZCU_LHBKBCANFD_100ms_FrP12_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
 boolean ESS_PTEXTDCAN_100ms_FrP23_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
+boolean ESS_PTCANFD_100ms_FrP36_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
+boolean ICBVC_FOTASts_100ms_FrP47_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
 
 boolean CCU_PTCANFD_100ms_FrP02_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
 
+boolean ICBVC_RZCUCANFD_100ms_FrP45_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
+boolean ESS_PTCANFD_100ms_FrP15_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
 boolean ESS_PTCANFD_100ms_FrP32_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
+boolean RHZCU_RHBKBCANFD_100ms_FrP12_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
+boolean RHZCU_RHBKBCANFD_100ms_FrP15_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
+boolean ICBVC_RZCUCANFD_100ms_FrP39_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
+boolean RZCU_LHBKBCANFD_100ms_FrP32_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
+boolean RHZCU_RHBKBCANFD_100ms_FrP14_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
 
 boolean ESS_PTEXTDCAN_100ms_FrP27_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
 
+boolean ICBAD_BKPCANFD_100ms_FrP36_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
+boolean PEU_ERCANFD_100ms_FrP11_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
+boolean ICB_BKBCANFD_100ms_FrP221_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
+boolean RHZCU_RHBKBCANFD_100ms_FrP13_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
 boolean ICBVC_RZCUCANFD_100ms_FrP80_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
+boolean ESS_PTEXTDCAN_100ms_FrP24_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
+boolean RZCU_RZCUCANFD_100ms_FrP82_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
+boolean RHZCU_RHBKBCANFD_100ms_FrP19_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
 
 boolean LVBM_PTEXTDCAN_100ms_FrP04_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
 
+boolean TC_PTCANFD_100ms_FrP05_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
 boolean RZCU_PTCANFD_100ms_FrP12_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
+boolean ICBVC_INFOCANFD_250ms_FrP52_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
+boolean ICB_RZCUCANFD_100ms_FrP144_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
+boolean SDM_CHCANFD_100ms_FrP03_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
 
 boolean RZCU_IMCU_SFCANFD_100ms_FrP26_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
 
+boolean ICBVC_CONNCANFD_200ms_FrP157_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
+boolean ESS_PTCANFD_200ms_FrP42_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
+boolean ESS_PTCANFD_200ms_FrP39_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
+boolean ICBAD_BKPCANFD_100ms_FrP38_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
+boolean CCU_PTEXTDCAN_100ms_FrP06_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
 boolean RZCU_PTEXTDCAN_100ms_FrP21_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
 
+boolean TC_PTCANFD_20ms_FrP08_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
+boolean LHZCU_LHBKBCANFDF_400ms_FrP18_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
 boolean ICBVC_RZCUCANFD_200ms_FrP79_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
+boolean ICBVC_CONNCANFD_Event_FrS145_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
+boolean LHZCU_LHBDCANFD_Event_FrS48_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
+boolean LHZCU_LHBDCANFD_Event_FrS49_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
+boolean ICBVC_RHBKBCANFD_500ms_FrP67_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
+boolean ZXD_CONNCANFD_Event_FrS220_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
+boolean ICBVC_RZCUCANFD_200ms_FrP50_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
+boolean ICB_CONNCANFD_Event_FrS67_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
+boolean synthesized_ICBVC_SecOC_SyncMsg__CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
+boolean RHZCU_BKBCANFD_Event_FrS37_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
+boolean ESS_PTCANFD_Event_FrS452_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
+boolean IPD_BKPCANFD_Event_FrS35_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
+boolean CCU_PTCANFD_500ms_FrP13_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
+boolean ESS_PTCANFD_500ms_FrP60_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
+boolean ICBVC_CONNCANFD_Event_FrS139_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
+boolean SDM_SFCANFD_Event_FrS13_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
+boolean SDM_SFCANFD_Event_FrS12_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
+boolean ICB_CONNCANFD_EvtInfo_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
+boolean ESS_PTCANFD_EvtInfo_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
+boolean DIAG_DTCInfo_ECM_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
+boolean DIAG_DTCInfo_PEU_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
+boolean DIAG_DTCInfo_ESS_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
+
+boolean DIAG_DTCInfo_TC_CONTROLLER_0_IAM_Rx(PduIdType PduId, const PduInfoType* PduInfoPtr);
 
 void Rte_COMCbkTAck_IDTCInfomationIAM_DIAG_DTCInfo_IAM_CONTROLLER_0_IAM_Tx(void);
 
@@ -1372,6 +1536,8 @@ void Rte_COMCbk_IIdentityChlg_ICB_CONNCANFD_Event_FrS67_CONTROLLER_0_IAM_Rx(void
 
 void Rte_COMCbk_SecuredIPdu_ICC_SecOC_SyncMsg_CO_synthesized_ICBVC_SecOC_SyncMsg__CONTROLLER_0_IAM_Rx(void);
 
+void Rte_COMCbkRxTOut_SecuredIPdu_ICC_SecOC_SyncMsg_CO_synthesized_ICBVC_SecOC_SyncMsg__CONTROLLER_0_IAM_Rx(void);
+
 void Rte_COMCbk_IRmtHtdRrWndResp_RHZCU_BKBCANFD_Event_FrS37_CONTROLLER_0_IAM_Rx(void);
 
 void Rte_COMCbk_IRmtDisChrgCtrlResp_ESS_PTCANFD_Event_FrS452_CONTROLLER_0_IAM_Rx(void);
@@ -1571,6 +1737,8 @@ void Rte_COMCbk_IICBAD_20ms_Group12_ICBAD_RZCUCANFD_20ms_FrP12_CONTROLLER_0_IAM_
 void Rte_COMCbk_IIBS_20ms_Group11_IBS_CHCANFD_20ms_FrP11_CONTROLLER_0_IAM_Rx(void);
 
 void Rte_COMCbk_IICBVC_20ms_Group03_ICBVC_RZCUCANFD_20ms_FrP03_CONTROLLER_0_IAM_Rx(void);
+
+void Rte_COMCbkRxTOut_IICBVC_20ms_Group03_ICBVC_RZCUCANFD_20ms_FrP03_CONTROLLER_0_IAM_Rx(void);
 
 void Rte_COMCbk_IESS_50ms_Group14_ESS_PTCANFD_50ms_FrP14_CONTROLLER_0_IAM_Rx(void);
 

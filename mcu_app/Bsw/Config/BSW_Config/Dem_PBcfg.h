@@ -35,7 +35,7 @@
 *                          DemDataElementClass Configuration
 *******************************************************************************/
 /*DemDataElementClass*/
-#define DEM_DATA_ELEMENT_CLASS_NUM  8
+#define DEM_DATA_ELEMENT_CLASS_NUM  10
 
 #define DEM_EXTERAL_DATA_ELEMENT_CLASS_NUM  6u
 
@@ -48,10 +48,15 @@
 #define DEMPOWER_ID 0u
 
 /* DemEnableCondition 0-255 */
-#define DEM_ENABLE_CONDITION_NUM 0u
+#define DEM_ENABLE_CONDITION_NUM 4u
+
+#define DemEnableCondition_U156217_ID 0u
+#define DemEnableCondition_U156316_ID 1u
+#define DemEnableCondition_U226200_ID 2u
+#define DemEnableCondition_PowerONDlyTimer_ID 3u
 
 /* DemEnableConditionGroup 0-255 */
-#define DEM_ENABLE_CONDITION_GROUP_NUM 0u
+#define DEM_ENABLE_CONDITION_GROUP_NUM 3u
 
 /* DemEnableCondition 0-255 */
 #define DEM_STORAGE_CONDITION_NUM 0u
@@ -75,42 +80,42 @@
 #define DEM_DID_CLASS_NUM 6u
 
 /* DemFreezeFrameClass 0-65535 */
-#define DEM_FREEZE_FRAME_CLASS_NUM 1u
+#define DEM_FREEZE_FRAME_CLASS_NUM 2u
 
 /* SUM COUNT DemFreezeFrameClass/DemDidClassRef */
 #define DEM_DID_CLASS_REF_TOTAL_NUM 6u
 
 /* DemFreezeFrameRecordClass 0-255 */
-#define DEM_FREEZE_FRAME_RECORD_CLASS_NUM 2u
+#define DEM_FREEZE_FRAME_RECORD_CLASS_NUM 1u
 
 #define DEM_FREEZE_FRAME_REC_NUM_CLASS_NUM 1u
 
 /* SUM(COUNT(DemGeneral/DemFreezeFrameRecNumClass/DemFreezeFrameRecordClassRef)) */
-#define DEM_FREEZE_FRAME_RECORD_CLASS_REF_TOTAL_NUM 2u
+#define DEM_FREEZE_FRAME_RECORD_CLASS_REF_TOTAL_NUM 1u
 
 /* MAX(COUNT((DemGeneral/DemFreezeFrameRecNumClass/DemFreezeFrameRecordClassRef)))  1-254 */
-#define DEM_MAX_NUMBER_FF_RECORDS 2u
+#define DEM_MAX_NUMBER_FF_RECORDS 1u
 
 /* DemPidClass 0-0xFFFF */
 #define DEM_PID_CLASS_NUM 0u
 #define DEM_PID_TOTAL_SIZE  0u /*total size of all pid*/
 
 /* max value of PID and all ref freezeframe size) */
-#define DEM_FREEZE_FRAME_MAX_LEN 20u
+#define DEM_FREEZE_FRAME_MAX_LEN 13u
 /*******************************************************************************
 *                          ExtendedData Configuration
 *******************************************************************************/
 /* DemExtendedDataRecordClass 0-253 */
-#define DEM_EXTENDED_DATA_RECORD_CLASS_NUM 2u
+#define DEM_EXTENDED_DATA_RECORD_CLASS_NUM 4u
 
 /* DemExtendedDataClass 0-* */
 #define DEM_EXTENDED_DATA_CLASS_NUM 1u
 
 /* SUM(COUNT(DemGeneral/DemExtendedDataClass/DemExtendedDataRecordClassRef)) */
-#define DEM_EXTENDED_DATA_RECORD_CLASS_REF_TOTAL_NUM  2u
+#define DEM_EXTENDED_DATA_RECORD_CLASS_REF_TOTAL_NUM  4u
 
 /* MAX(COUNT(DemGeneral/DemExtendedDataClass/DemExtendedDataRecordClassRef)) */
-#define DEM_EXTENDED_DATA_MAX_REF_NUM 2u
+#define DEM_EXTENDED_DATA_MAX_REF_NUM 4u
 
 /* MAX(SUM(DemGeneral/DemExtendedDataClass/DemExtendedDataRecordClassRef/DataSize)) */
 #define DEM_EXTENDED_DATA_MAX_LEN 0u
@@ -123,7 +128,7 @@
 #define DEM_DTC_REF_EMISSION_NUM  0u
 
 /* DemDTC 0-65535 */
-#define DEM_DTC_NUM 58u
+#define DEM_DTC_NUM 59u
 
 #define DEM_WWWOBD_NUM 0u
 
@@ -157,7 +162,7 @@
 #define DEM_AMBER_WARING_LAMP_INDICATOR DemIndicator_INVALID
 
 /* SUM(COUNT(DemConfigSet/DemEventParameter/DemIndicatorAttribute)) */
-#define DEM_INDICATOR_ATTRIBUTE_TOTAL_NUM 58u
+#define DEM_INDICATOR_ATTRIBUTE_TOTAL_NUM 59u
 
 /*******************************************************************************
 *                          Debounce Configuration
@@ -179,7 +184,7 @@
 
 /* COUNT(DemConfigSet/DemEventParameter)
  * WHERE (DemEventParameter/DemDebounceAlgorithmClass == DemDebounceCounterBased) */
-#define DEM_DEBOUNCE_COUNTER_BASED_EVENT_NUM 58u
+#define DEM_DEBOUNCE_COUNTER_BASED_EVENT_NUM 59u
 
 /* COUNT(DemConfigSet/DemEventParameter)
  * WHERE (DemEventParameter/DemDebounceAlgorithmClass == DemDebounceMonitorInternal) */
@@ -200,7 +205,7 @@
 #define DEM_CALLBACK_CLEAR_EVENT_ALLOWED_TOTAL_NUM 0u
 
 /* DemEventParameter 1-65535 */
-#define DEM_EVENT_PARAMETER_NUM 58u
+#define DEM_EVENT_PARAMETER_NUM 59u
 
 #define EventParameter_0x951171  1u
 #define EventParameter_0x951512  2u
@@ -260,6 +265,7 @@
 #define EventParameter_0xE2A287  56u
 #define EventParameter_0xE2A2F0  57u
 #define EventParameter_0xE2A2F1  58u
+#define EventParameter_0x951511  59u
 /*******************************************************************************
 *                          Memory Configuration
 *******************************************************************************/

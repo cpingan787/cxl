@@ -68,4 +68,6 @@ void Act_Bsw_Allow_GoDown_Function(void);
 
 void WakeupSource_Validated(void);
 
+extern void BswM_WakeupSourcePending(void);
+extern uint8 CAN_transceiver_OK;
 #endif /* BSW_SOURCE_COMMONINCLUDE_BSWM_EXT_H_ */

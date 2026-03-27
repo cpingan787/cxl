@@ -182,14 +182,14 @@ void R_RIIC0_Start(void)
 void R_RIIC0_Stop(void)
 {
     /* Disable RIIC0 interrupt operation and clear request */
-    INTC2.ICRIIC0TI.BIT.RFRIIC0TI = _INT_REQUEST_NOT_OCCUR;
-    INTC2.ICRIIC0TEI.BIT.RFRIIC0TEI = _INT_REQUEST_NOT_OCCUR;
-    INTC2.ICRIIC0RI.BIT.RFRIIC0RI = _INT_REQUEST_NOT_OCCUR;
-    INTC2.ICRIIC0EE.BIT.RFRIIC0EE = _INT_REQUEST_NOT_OCCUR;
-    INTC2.ICRIIC0TI.BIT.MKRIIC0TI = _INT_PROCESSING_DISABLED;
-    INTC2.ICRIIC0TEI.BIT.MKRIIC0TEI = _INT_PROCESSING_DISABLED;
-    INTC2.ICRIIC0RI.BIT.MKRIIC0RI = _INT_PROCESSING_DISABLED;
-    INTC2.ICRIIC0EE.BIT.MKRIIC0EE = _INT_PROCESSING_DISABLED;
+    // INTC2.ICRIIC0TI.BIT.RFRIIC0TI = _INT_REQUEST_NOT_OCCUR;
+    // INTC2.ICRIIC0TEI.BIT.RFRIIC0TEI = _INT_REQUEST_NOT_OCCUR;
+    // INTC2.ICRIIC0RI.BIT.RFRIIC0RI = _INT_REQUEST_NOT_OCCUR;
+    // INTC2.ICRIIC0EE.BIT.RFRIIC0EE = _INT_REQUEST_NOT_OCCUR;
+    // INTC2.ICRIIC0TI.BIT.MKRIIC0TI = _INT_PROCESSING_DISABLED;
+    // INTC2.ICRIIC0TEI.BIT.MKRIIC0TEI = _INT_PROCESSING_DISABLED;
+    // INTC2.ICRIIC0RI.BIT.MKRIIC0RI = _INT_PROCESSING_DISABLED;
+    // INTC2.ICRIIC0EE.BIT.MKRIIC0EE = _INT_PROCESSING_DISABLED;
     /* Synchronization processing */
     g_cg_sync_read = INTC2.ICRIIC0RI.UINT16;
     __syncp();
@@ -370,20 +370,17 @@ uint8_t I2cReadRegisterValue(uint16_t devAddr, uint8_t *regAddr, uint8_t *data, 
 uint8_t I2cWriteRegisterValue(uint16_t devAddr, uint8_t *regAddr, uint8_t *data, uint16_t len)
 {
     uint8_t waitTimeCount = 0;
-
-    // R_RIIC0_Master_Send(devAddr, regAddr, 1);
-    // waitTimeCount = 0;
-    // do
-    // {
-    //     delay_us(200);
-    //     waitTimeCount++;
-    // }while((g_i2cSendEndFlag == 0) && (waitTimeCount < 100));
-    // if(g_i2cSendEndFlag == 0)
-    // {
-    //     return 0xFF;
-    // }
-    // g_i2cSendEndFlag = 0;
-    R_RIIC0_Master_Send(devAddr, data, len);
+    uint8_t writeBuffer[20];  // 缓冲区，用于合并寄存器地址和数据
+    
+    // 将寄存器地址和数据合并到缓冲区
+    writeBuffer[0] = *regAddr;
+    for(uint16_t i = 0; i < len; i++)
+    {
+        writeBuffer[i + 1] = data[i];
+    }
+    
+    // 一次性发送寄存器地址和数据
+    R_RIIC0_Master_Send(devAddr, writeBuffer, len + 1);
     waitTimeCount = 0;
     do
     {

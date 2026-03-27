@@ -1,581 +1,246 @@
+/*************************************************
+ Copyright ¬© 2026 SiRun (Beijing) . All rights reserved.
+ File Name: ParameterStoreManageApp.c
+ Author:
+ Created Time:
+ Description:
+ Others:
+*************************************************/
+/****************************** include ***************************************/
 #include <string.h>
 #include "stdlib.h"
 #include "flashHal.h"
 #include "ParameterStoreManageApp.h"
+#include "logHal.h"
+#include "parameterSyncSdk.h"
 
-#define WORKFLASH_ECU_PART_NUM_LEN	                16+2	//≥µ¡æ–≈œ¢≤Œ ˝≥§∂»
-#define WORKFLASH_SYSTEM_SUPPLIER_ID_LEN	        16+2	//≥µ¡æ–≈œ¢≤Œ ˝≥§∂»
-#define WORKFLASH_ECU_HARDWARE_VER_LEN	            16+2	//≥µ¡æ–≈œ¢≤Œ ˝≥§∂»
-#define WORKFLASH_ECU_SOFTWARE_VER_LEN	            16+2	//≥µ¡æ–≈œ¢≤Œ ˝≥§∂»
-#define WORKFLASH_SAP_ECU_MASK_LEN	                16+2	//≥µ¡æ–≈œ¢≤Œ ˝≥§∂»
-#define WORKFLASH_ECU_MANUFACTURE_DATE_LEN	        16+2	//≥µ¡æ–≈œ¢≤Œ ˝≥§∂»
-#define WORKFLASH_PART_NAME_LEN	                    16+2	//≥µ¡æ–≈œ¢≤Œ ˝≥§∂»
-#define WORKFLASH_PUBLIC_ASE_KEY	                16+5	//≥µ¡æ–≈œ¢≤Œ ˝≥§∂»
-#define WORKFLASH_WORK_ADDR_LEN	                    32+2	//≥µ¡æ–≈œ¢≤Œ ˝≥§∂»
-#define WORKFLASH_WORK_PORT_LEN	                    16+2	//≥µ¡æ–≈œ¢≤Œ ˝≥§∂»
-#define WORKFLASH_WORK_PUBLIC_KEY_LEN	            16+2	//≥µ¡æ–≈œ¢≤Œ ˝≥§∂»
-#define WORKFLASH_TBOX_CALL_NUM_LEN	                20+2	//≥µ¡æ–≈œ¢≤Œ ˝≥§∂»
-#define WORKFLASH_VIN_LEN	                        32+2	//≥µ¡æ–≈œ¢≤Œ ˝≥§∂»
-#define WORKFLASH_BID_LEN	                        32+2	//≥µ¡æ–≈œ¢≤Œ ˝≥§∂»
-#define WORKFLASH_ECU_SERIAL_NUM_LEN	            32+2	//≥µ¡æ–≈œ¢≤Œ ˝≥§∂»
-#define WORKFLASH_ICCID_LEN	                        32+2	//≥µ¡æ–≈œ¢≤Œ ˝≥§∂»
-#define WORKFLASH_IMEI_LEN	                        16+2	//≥µ¡æ–≈œ¢≤Œ ˝≥§∂»
-#define WORKFLASH_IMSI_LEN	                        16+2	//≥µ¡æ–≈œ¢≤Œ ˝≥§∂»
-#define WORKFLASH_REGISTER_FLAG_LEN	                4+2	    //≥µ¡æ–≈œ¢≤Œ ˝≥§∂»
-#define WORKFLASH_REGISTER_KEY_TYPE_LEN	            4+2	    //≥µ¡æ–≈œ¢≤Œ ˝≥§∂»
-#define WORKFLASH_CAN_LOAD_CYCLE_LEN	            16+2	//≥µ¡æ–≈œ¢≤Œ ˝≥§∂»
-#define WORKFLASH_TBOX_MODEL_LEN	                12+2	//≥µ¡æ–≈œ¢≤Œ ˝≥§∂»
-#define WORKFLASH_CAR_MODE_TYPE_LEN	                16+2	//≥µ¡æ–≈œ¢≤Œ ˝≥§∂»
-#define WORKFLASH_SECURITY_VERSION_LEN	            16+2	//≥µ¡æ–≈œ¢≤Œ ˝≥§∂»
-#define WORKFLASH_HARDWARE_NUM_LEN	                16+5	//≥µ¡æ–≈œ¢≤Œ ˝≥§∂»
-#define WORKFLASH_SOFTWARE_NUM_LEN	                16+5	//≥µ¡æ–≈œ¢≤Œ ˝≥§∂»
-#define WORKFLASH_DIAG_SN_LEN	                    16+5	//≥µ¡æ–≈œ¢≤Œ ˝≥§∂»
-#define WORKFLASH_ECU_VARIANTCODE_LEN	            10+5	//≥µ¡æ–≈œ¢≤Œ ˝≥§∂»
-#define WORKFLASH_ECU_EOL_LEN	                    10+5	//≥µ¡æ–≈œ¢≤Œ ˝≥§∂»
-#define WORKFLASH_APP_SOFT_PRINT_LEN	            10+5	//≥µ¡æ–≈œ¢≤Œ ˝≥§∂»
-#define WORKFLASH_SUBNET_CONFIG_LIST_SPEED_CAN_LEN	5+5	    //≥µ¡æ–≈œ¢≤Œ ˝≥§∂»
-#define WORKFLASH_MCU_APP_SOFTWARE_VERSION_LEN	    8+5	    //≥µ¡æ–≈œ¢≤Œ ˝≥§∂»
+#include "NVM.h"
+#include "SchM_NVM.h"
+#include "Fls.h"
+#include "NvM_Cfg.h"
 
-#define WORKFLASH_VEHICLE_NETWORK_CONFIGURATION_F1A1_LEN                    (17+2)//’˚≥µÕ¯¬Á≈‰÷√
-#define WORKFLASH_VEHICLE_NETWORK_CONFIGURATION_F1B0_LEN                    (31+2)//’˚≥µÕ¯¬Á≈‰÷√
-#define WORKFLASH_ECU_LEVEL_NETWORK_CONFIGURATION_DATA_IDENTIFIER_F1B1_LEN  (31+2)//’˚≥µÕ¯¬Á≈‰÷√£®µ•ecu≈‰÷√◊÷£©HEX
-#define WORKFLASH_UIN_LEN                                                   (20+2)
-#define WORKFLASH_VEHICLE_MODEL_F112_LEN                                    (20+2)//≥µ¡æ
-#define WORKFLASH_FINGERPRINT_F1F0_LEN                                      (26+2)//÷∏Œ∆
-#define WORKFLASH_FINGERPRINT_ETHERNET_F0FF_LEN                             (48+2)//“‘Ã´Õ¯÷∏Œ∆
-#define WORKFLASH_VEHICLE_SOFEWARE_VERSION_F1AB_LEN                         (10+2)//’˚≥µ»Ìº˛∞Ê±æ
-#define WORKFLASH_WORKING_MODE_F1C2_LEN                                     (1 +2)//π§◊˜ƒ£ Ω
-#define WORKFLASH_SECOC_KEY_F1C7_LEN                                        (32+2)//secoc√‹‘ø
-#define WORKFLASH_SK_LEN                                                    (16+2)
-#define WORKFLASH_PIN_LEN                                                   (4 +2)
-#define WORKFLASH_CSR_HASH_F1CD_LEN                                         (20+1)
-//Œ¨–ﬁƒ£ Ω
-#define WORKFLASH_MAINTENANCE_MODE_FD00_LEN                                 (1 +2)//Œ¨–ﬁƒ£ Ω
+/****************************** Macro Definitions ******************************/
+/****************************** Type Definitions ******************************/
+typedef struct {
+    FlashParaId_e paramID;  /* FLASH ID */
+    uint32_t  paramLen;      /* Êï∞ÊçÆÈïøÂ∫¶ */
+    uint8_t  blockID;      /* NvM block ID */
+    uint8 * paramAddress;    /* Êï∞ÊçÆÂú∞ÂùÄ */
+} FlashParamMap_t;
 
-//≥µ¡æ÷ÿ“™–≈œ¢¥Ê¥¢Ω·ππÃÂ
-typedef struct 
+/****************************** Global Variables ******************************/
+const FlashParamMap_t FlashParamMap[E_PARAMETER_INFO_MAX_NUM] = {
+    {E_PARAMETER_INFO_ICCID,                20,     NvMBlock_DIDF130,   NULL},
+    {E_PARAMETER_INFO_IMEI,                 24,     NvMBlock_DIDF130,   NULL},
+    {E_PARAMETER_INFO_SN,                   16,     NvMBlock_DIDF18C,   NvMBlockRamBuffer6},
+    {E_PARAMETER_INFO_VIN,                  17,     NvMBlock_DIDF190,   NvMBlockRamBuffer7},
+    {E_PARAMETER_INFO_TSPAddr,              32,     NvMBlock_DIDC007,   NvMBlockRamBuffer17},
+    {E_PARAMETER_INFO_TSPPort,              6,      NvMBlock_DIDC009,   NvMBlockRamBuffer19},
+    {E_PARAMETER_INFO_ECallNumber,          15,     NvMBlock_DIDF130,   NULL},
+    {E_PARAMETER_INFO_ManufactureData,      3,      NvMBlock_DIDF18B,   NvMBlockRamBuffer5},
+    {E_PARAMETER_INFO_ParatNumber,          5,      NvMBlock_DIDF130,   NULL},
+    {E_PARAMETER_INFO_SupIdentifier,        5,      NvMBlock_DIDF130,    NULL},
+
+};
+
+/****************************** Function Declarations *************************/
+static int16_t VehicleInforGetDataOffsetAddressAndLength(FlashParaId_e parameterId, ParamInfo_t *paramInfo);
+
+
+/****************************** Public Function Implementations ******************************/
+/*************************************************
+  Function: VehicleInforGetDataAddressAndLength
+  Description: Get the address and length of the vehicle information parameter
+  Input: parameterId - The ID of the vehicle information parameter
+         pTypeFlag - Pointer to store the type flag of the parameter
+         length - Pointer to store the length of the parameter
+  Output: None
+  Return: 0 if successful, -1 if parameterId is out of range
+  Others: None
+*************************************************/
+static int16_t VehicleInforGetDataOffsetAddressAndLength(FlashParaId_e parameterId, ParamInfo_t *paramInfo)
 {
-    uint8_t u8SystemSupplierId[WORKFLASH_SYSTEM_SUPPLIER_ID_LEN]	                ;	//œµÕ≥π©”¶…Ã±Í ∂∫≈
-    uint8_t u8ECU_RepairShopCodeOrTestSN[WORKFLASH_DIAG_SN_LEN]	                    ;	//Œ¨–ﬁµ„¥˙¬ÎªÚ’Ô∂œ“«–Ú¡–∫≈
-    uint8_t u8ECU_InstallationDate[WORKFLASH_ECU_MANUFACTURE_DATE_LEN]	            ;	//ECU ∞≤◊∞»’∆⁄¥˙¬Î
-    uint8_t u8ECU_Variantcode[WORKFLASH_ECU_VARIANTCODE_LEN]	                    ;	//ECU±‡¬Î
-    uint8_t u8SAP_ECU_MASK[WORKFLASH_SAP_ECU_MASK_LEN]	                            ;	//∞≤»´∑√Œ —⁄¬Î
-    uint8_t u8ECU_ManuFactureDate[WORKFLASH_ECU_MANUFACTURE_DATE_LEN]	            ;	//ECU÷∆‘Ï»’∆⁄
-    uint8_t u8PartName[WORKFLASH_PART_NAME_LEN]	                                    ;	//¡„º˛√˚≥∆
-    uint8_t u8PublicAESKey[WORKFLASH_PUBLIC_ASE_KEY]	                            ;	//AESº”√‹À„∑®√‹‘ø
-    uint8_t u8WorkAddr[WORKFLASH_WORK_ADDR_LEN]	                                    ;	//∆ΩÃ®µÿ÷∑
-    uint8_t u8WorkPort[WORKFLASH_WORK_PORT_LEN]	                                    ;	//∆ΩÃ®port
-    uint8_t u8PublicKey[WORKFLASH_WORK_PUBLIC_KEY_LEN]	                            ;	//π´‘ø
-    uint8_t u8TboxECallNumber[WORKFLASH_TBOX_CALL_NUM_LEN]	                        ;	//Ecall∫≈¬Î
-    uint8_t u8TboxBCallNumber[WORKFLASH_TBOX_CALL_NUM_LEN]	                        ;	//Bcall∫≈¬Î
-    uint8_t u8TboxICallNumber[WORKFLASH_TBOX_CALL_NUM_LEN]	                        ;	//Icall∫≈¬Î
-    uint8_t u8TSPCallNumber1[WORKFLASH_TBOX_CALL_NUM_LEN]	                        ;	//TSPcall∫≈¬Î1
-    uint8_t u8TSPCallNumber2[WORKFLASH_TBOX_CALL_NUM_LEN]	                        ;	//TSPcall∫≈¬Î2
-    uint8_t u8TSPCallNumber3[WORKFLASH_TBOX_CALL_NUM_LEN]	                        ;	//TSPcall∫≈¬Î3
-    uint8_t u8VIN[WORKFLASH_VIN_LEN]	                                            ;	//VIN
-    uint8_t u8BID[WORKFLASH_BID_LEN]	                                            ;	//BID
-    uint8_t u8ECU_SerialNumber[WORKFLASH_ECU_SERIAL_NUM_LEN]	                    ;	//µÁøÿµ•‘™–Ú¡–∫≈(ECU)
-    uint8_t u8TboxPreKey[WORKFLASH_IMSI_LEN]	                                    ;	///
-    uint8_t u8TSPMsgNumber1[WORKFLASH_TBOX_CALL_NUM_LEN]	                        ;	//TSPœ˚œ¢∫≈1
-    uint8_t u8TSPMsgNumber2[WORKFLASH_TBOX_CALL_NUM_LEN]	                        ;	//TSPœ˚œ¢∫≈2
-    uint8_t u8CanLoadCycle[WORKFLASH_CAN_LOAD_CYCLE_LEN]	                        ;	//Canœ¬‘ÿ÷‹∆⁄
-    uint8_t u8TboxModel[WORKFLASH_TBOX_MODEL_LEN]	                                ;	//Tbox Model
-    uint8_t u8CarModeType[WORKFLASH_CAR_MODE_TYPE_LEN]	                            ;	//Car Mode Type
-    uint8_t u8SecurityVersion[WORKFLASH_SECURITY_VERSION_LEN]	                    ;	//∞≤»´∞Ê±æ
-    uint8_t u8NationWorkAddr[WORKFLASH_WORK_ADDR_LEN]	                            ;	//π˙º“∆ΩÃ®µÿ÷∑
-    uint8_t u8NationWorkPort[WORKFLASH_WORK_PORT_LEN]	                            ;	//π˙º“∆ΩÃ®port
-    uint8_t u8GovernmentWorkAddr[WORKFLASH_WORK_ADDR_LEN]	                        ;	//µÿ∑Ω∆ΩÃ®µÿ÷∑
-    uint8_t u8GovernmentWorkPort[WORKFLASH_WORK_PORT_LEN]	                        ;	//µÿ∑Ω∆ΩÃ®port
-    uint8_t u8EOLconfig[WORKFLASH_ECU_EOL_LEN]	                                    ;	//œ¬œﬂ≈‰÷√
-    uint8_t u8AppSoftFingerPrint[WORKFLASH_APP_SOFT_PRINT_LEN]	                    ;	//»Ìº˛÷∏Œ∆–≈œ¢
-    uint8_t u8SubnetConfigListSpeedCan[WORKFLASH_SUBNET_CONFIG_LIST_SPEED_CAN_LEN]	;	//∏ﬂÀŸcan…Ë÷√◊”Õ¯≈‰÷√¡–±Ì
-    uint8_t u8VIN_hex[WORKFLASH_VIN_LEN]	                                        ;	//VIN Hex¥Ê¥¢  
-}vehicleInforParamImportant_t;
-
-//≥µ¡æ“◊±‰–≈œ¢¥Ê¥¢Ω·ππÃÂ
-typedef struct 
-{
-    uint8_t u8ICCID[32]	                                                     ;   //ICCID
-    uint8_t u8IMEI[16]	                                                     ;   //IMEI
-    uint8_t u8IMSI[16]	                                                     ;   //IMSI
-    uint8_t u8RegisterFlag[8]	                                             ;   //ºƒ¥Ê∆˜±Íº«
-    uint8_t u8KeyType[8]	                                                 ;   //√‹‘ø¿‡–Õ
-    uint8_t u8McuResetCount[8]	                                             ;   //MCU∏¥Œª¥Œ ˝º∆ ˝
-    uint8_t u8ECU_HardwareNumber[WORKFLASH_HARDWARE_NUM_LEN]	             ;   //”≤º˛±‡∫≈
-    uint8_t u8ECU_SoftwareNumber[WORKFLASH_SOFTWARE_NUM_LEN]	             ;   //»Ìº˛±‡∫≈
-    uint8_t u8ECU_HardwareVersion[WORKFLASH_ECU_HARDWARE_VER_LEN]	         ;   //”≤º˛∞Ê±æ∫≈
-    uint8_t u8ECU_SoftwareVersion[WORKFLASH_ECU_SOFTWARE_VER_LEN]	         ;   //»Ìº˛∞Ê±æ∫≈
-    uint8_t u8ECUPartNumber[WORKFLASH_ECU_PART_NUM_LEN]	                     ;   //µÁøÿµ•‘™¡„º˛∫≈
-    uint8_t u8MCU_AppSoftWareVersion[WORKFLASH_MCU_APP_SOFTWARE_VERSION_LEN] ;   //app»Ìº˛∞Ê±æ∫≈
-    uint8_t u8TboxCallNumber[32]	                                         ;   //TBOXcall∫≈¬Î
-    uint8_t u8MCU_AppSoftWareVersionF1C1[32]	                             ;   //APP»Ìº˛∞Ê±æF1C1∫≈
-    uint8_t u8DiagCanReport[8]	                                             ;   //◊™∑¢ƒ≥¬∑can±®ŒƒµΩ’Ô∂œcan…Ë÷√±Íº«
-
-    uint8_t VehicleNetworkConfigurationF1A1[WORKFLASH_VEHICLE_NETWORK_CONFIGURATION_F1A1_LEN];
-    uint8_t VehicleNetworkConfigurationF1B0[WORKFLASH_VEHICLE_NETWORK_CONFIGURATION_F1B0_LEN];
-    uint8_t ECUlevelNetworkConfigurationDataIdentifierF1B1[WORKFLASH_ECU_LEVEL_NETWORK_CONFIGURATION_DATA_IDENTIFIER_F1B1_LEN];
-    uint8_t UIN[WORKFLASH_UIN_LEN];
-    uint8_t VehicleModelF112[WORKFLASH_VEHICLE_MODEL_F112_LEN];
-    uint8_t FingerprintF1F0[WORKFLASH_FINGERPRINT_F1F0_LEN];
-    uint8_t FingerprintEthernetF0FF[WORKFLASH_FINGERPRINT_ETHERNET_F0FF_LEN];
-    uint8_t VehicleSoftwareVersionF1AB[WORKFLASH_VEHICLE_SOFEWARE_VERSION_F1AB_LEN];
-    uint8_t WorkingModeF1C2[WORKFLASH_WORKING_MODE_F1C2_LEN];
-    uint8_t SecOCKeyF1C7[WORKFLASH_SECOC_KEY_F1C7_LEN];
-    uint8_t SK[WORKFLASH_SK_LEN];
-    uint8_t PIN[WORKFLASH_PIN_LEN];
-    uint8_t CSR_HASH[WORKFLASH_CSR_HASH_F1CD_LEN];
-    uint8_t Maintenance[WORKFLASH_MAINTENANCE_MODE_FD00_LEN];
-}vehicleInforParamVariable_t;
-
-
-typedef struct
-{
-    uint8_t securityInfo[3];
-    uint8_t workingMode[2];
-}SmallBlock1DataTable_t;
-
-typedef struct
-{
-    uint8_t secocTripCount[8];
-}SmallBlock2DataTable_t;
-
-
-/**********************************************************
-pTypeFlag:
-  0:Ecu_vehicleInforParameterVariable
-  1:Ecu_vehicleInforParameterImportant
-***********************************************************/
-
-#define TBOX_PARAMTER_MAP_BEGIN()         static int16_t VehicleInforGetDataOffsetAddressAndLength(FlashParaId_e parameterId ,uint8_t *pTypeFlag,uint32_t *offsetAddress,uint32_t *length)   \
-                                          {                                       \
-                                            vehicleInforParamVariable_t *pData0;              \
-                                            vehicleInforParamImportant_t *pData1;  \
-                                            uint8_t *pDataElement;                      \
-                                            int16_t ret;                                \
-                                            uint32_t size;                              \
-                                            ret = 0;                                    \
-                                            pData0 = NULL;                               \
-                                            pData1 = NULL;                               \
-                                            switch(parameterId)                        \
-                                            {                                           \
-
-#define TBOX_PARAMETER_MAP(item,parameter,Important)      case item:                                      \
-                                                {                                                \
-                                                  pDataElement = pData##Important->parameter;               \
-                                                    size = sizeof(pData##Important->parameter);   \
-                                                  *pTypeFlag = Important;                          \
-                                                }                                                \
-                                                break;                                          \
-                                              
-#define TBOX_PARAMTER_MAP_END()               default: ret = -1;                       \
-                                              break;	                                \
-                                            }                                           \
-                                            if(ret!=0)                                  \
-                                            {                                           \
-                                                return ret;                            \
-                                            }                                           \
-                                            *offsetAddress = (uint32_t)pDataElement;    \
-                                            *length = size;                             \
-                                            return ret;                                \
-                                          }     
-
-#define TBOX_SMALL_BLOCK_MAP_BEGIN()         static int16_t VehicleInforSmallBlockGetDataOffsetAddressAndLength(SmallBlockDataParamId_e parameterId ,uint8_t *pTypeFlag,uint32_t *offsetAddress,uint32_t *length)   \
-                                          {                                       \
-                                            SmallBlock1DataTable_t *pData1;              \
-                                            SmallBlock2DataTable_t *pData2;  \
-                                            uint8_t *pDataElement;                      \
-                                            int16_t ret;                                \
-                                            uint32_t size;                              \
-                                            ret = 0;                                    \
-                                            pData1 = NULL;                               \
-                                            pData2 = NULL;                               \
-                                            switch(parameterId)                        \
-                                            {                                           \
-
-#define TBOX_SMALL_BLOCK__MAP(item,parameter,blockNum)      case item:                                      \
-                                                {                                                \
-                                                  pDataElement = pData##blockNum->parameter;               \
-                                                    size = sizeof(pData##blockNum->parameter);   \
-                                                  *pTypeFlag = blockNum;                          \
-                                                }                                                \
-                                                break;                                          \
-                                              
-#define TBOX_SMALL_BLOCK__MAP_END()               default: ret = -1;                       \
-                                              break;	                                \
-                                            }                                           \
-                                            if(ret!=0)                                  \
-                                            {                                           \
-                                                return ret;                            \
-                                            }                                           \
-                                            *offsetAddress = (uint32_t)pDataElement;    \
-                                            *length = size;                             \
-                                            return ret;                                \
-                                          }  
-
-TBOX_PARAMTER_MAP_BEGIN()
-    TBOX_PARAMETER_MAP(E_PARAMETER_INFO_ECU_PART_NUMBER,u8ECUPartNumber,0)
-    TBOX_PARAMETER_MAP(E_PARAMETER_INFO_SYSTEM_SUPPLIER_ID,u8SystemSupplierId,1)
-    TBOX_PARAMETER_MAP(E_PARAMETER_INFO_ECU_HARDWARE_VERSION,u8ECU_HardwareVersion,0)
-    TBOX_PARAMETER_MAP(E_PARAMETER_INFO_ECU_SOFTWARE_VERSION,u8ECU_SoftwareVersion,0)
-//   BOX_PARAMETER_MAP(E_PARAMETER_INFO_SAP_ECU_MASK,u8SAP_ECU_MASK,1)
-    TBOX_PARAMETER_MAP(E_PARAMETER_INFO_ECU_MANUFACTURE_DATE,u8ECU_ManuFactureDate,1)
-    TBOX_PARAMETER_MAP(E_PARAMETER_INFO_PART_NAME,u8PartName,1)
-    TBOX_PARAMETER_MAP(E_PARAMETER_INFO_ESK_KEY,u8PublicAESKey,1)
-//  TBOX_PARAMETER_MAP(E_PARAMETER_INFO_WORK_ADDRESS,u8WorkAddr,1)
-//  TBOX_PARAMETER_MAP(E_PARAMETER_INFO_WORK_PORT,u8WorkPort,1)
-//  TBOX_PARAMETER_MAP(E_PARAMETER_INFO_PUBLIC_KEY,u8PublicKey,1)
-//  TBOX_PARAMETER_MAP(E_PARAMETER_INFO_TBOX_ECALL_NUMBER,u8TboxECallNumber,1)
-//  TBOX_PARAMETER_MAP(E_PARAMETER_INFO_TBOX_BCALL_NUMBER,u8TboxBCallNumber,1)
-//  TBOX_PARAMETER_MAP(E_PARAMETER_INFO_TBOX_ICALL_NUMBER,u8TboxICallNumber,1)
-//  TBOX_PARAMETER_MAP(E_PARAMETER_INFO_TSP_CALL_NUMBER1,u8TSPCallNumber1,1)
-//  TBOX_PARAMETER_MAP(E_PARAMETER_INFO_TSP_CALL_NUMBER2,u8TSPCallNumber2,1)
-//  TBOX_PARAMETER_MAP(E_PARAMETER_INFO_TSP_CALL_NUMBER3,u8TSPCallNumber3,1)
-    TBOX_PARAMETER_MAP(E_PARAMETER_INFO_VIN,u8VIN,1)
-    TBOX_PARAMETER_MAP(E_PARAMETER_INFO_VIN_hex,u8VIN_hex,1)
-//  TBOX_PARAMETER_MAP(E_PARAMETER_INFO_BID,u8BID,1)
-//  TBOX_PARAMETER_MAP(E_PARAMETER_INFO_PRE_KEY,u8TboxPreKey,1)
-    TBOX_PARAMETER_MAP(E_PARAMETER_INFO_ECU_SERIAL_NUMBER,u8ECU_SerialNumber,1)
-    TBOX_PARAMETER_MAP(E_PARAMETER_INFO_TBOX_CALL_NUMBER,u8TboxCallNumber,0)
-//  TBOX_PARAMETER_MAP(E_PARAMETER_INFO_TSP_MSG_NUMBER1,u8TSPMsgNumber1,1)
-//  TBOX_PARAMETER_MAP(E_PARAMETER_INFO_TSP_MSG_NUMBER2,u8TSPMsgNumber2,1)
-//  TBOX_PARAMETER_MAP(E_PARAMETER_INFO_CAN_LOAD_CYCLE,u8CanLoadCycle,1)
-//  TBOX_PARAMETER_MAP(E_PARAMETER_INFO_TBOX_MODEL,u8TboxModel,1)
-//  TBOX_PARAMETER_MAP(E_PARAMETER_INFO_CAR_MODE_TYPE,u8CarModeType,1)
-//  TBOX_PARAMETER_MAP(E_PARAMETER_INFO_SECURITY_VERSION,u8SecurityVersion,1)
-  // variable parameterE_PARAMETER_INFO
-    TBOX_PARAMETER_MAP(E_PARAMETER_INFO_ICCID,u8ICCID,0)
-    TBOX_PARAMETER_MAP(E_PARAMETER_INFO_IMEI,u8IMEI,0)
-    TBOX_PARAMETER_MAP(E_PARAMETER_INFO_IMSI,u8IMSI,0)
-    TBOX_PARAMETER_MAP(E_PARAMETER_INFO_TBOX_REGISTER_FLAG,u8RegisterFlag,0)
-    TBOX_PARAMETER_MAP(E_PARAMETER_INFO_MCU_RESET_COUNT,u8McuResetCount,0) 
-    //project parameterE_PARAMETER_INFO
-    TBOX_PARAMETER_MAP(E_PARAMETER_INFO_ECU_HARDWARE_NUM,u8ECU_HardwareNumber,0) 
-    TBOX_PARAMETER_MAP(E_PARAMETER_INFO_ECU_SOFTWARE_NUM,u8ECU_SoftwareNumber,0)
-    TBOX_PARAMETER_MAP(E_PARAMETER_INFO_ECU_DIAG_SN,u8ECU_RepairShopCodeOrTestSN,1) 
-    TBOX_PARAMETER_MAP(E_PARAMETER_INFO_ECU_INSTALL_DATE,u8ECU_InstallationDate,1)    
-    TBOX_PARAMETER_MAP(E_PARAMETER_INFO_ECU_CODE,u8ECU_Variantcode,1) 
-//  TBOX_PARAMETER_MAP(E_PARAMETER_INFO_NATION_WORK_ADDRESS,u8NationWorkAddr,1)
-//  TBOX_PARAMETER_MAP(E_PARAMETER_INFO_NATION_WORK_PORT,u8NationWorkPort,1) 
-//  TBOX_PARAMETER_MAP(E_PARAMETER_INFO_GOVERNMENT_WORK_ADDRESS,u8GovernmentWorkAddr,1)  
-//  TBOX_PARAMETER_MAP(E_PARAMETER_INFO_GOVERNMENT_WORK_PORT,u8GovernmentWorkPort,1) 
-    TBOX_PARAMETER_MAP(E_PARAMETER_INFO_ECU_EOL_CONFIG,u8EOLconfig,1)
-    TBOX_PARAMETER_MAP(E_PARAMETER_INFO_APP_SOFT_FINGER_PRINT,u8AppSoftFingerPrint,1) 
-    TBOX_PARAMETER_MAP(E_PARAMETER_INFO_SUBNET_CONFIG_LIST_SPEED_CAN,u8SubnetConfigListSpeedCan,1) 
-    TBOX_PARAMETER_MAP(E_PARAMETER_INFO_MCU_APP_SOFTWARE_VERSION,u8MCU_AppSoftWareVersion,0)
-    TBOX_PARAMETER_MAP(E_PARAMETER_INFO_MCU_APP_SOFTWARE_VERSION_F1C1,u8MCU_AppSoftWareVersionF1C1,0)   
-    TBOX_PARAMETER_MAP(E_PARAMETER_INFO_DIAG_CAN_REPORT,u8DiagCanReport,0)  
-    TBOX_PARAMETER_MAP(E_PARAMETER_INFO_E_CALL_NUMBER,u8TboxECallNumber,1)
-    TBOX_PARAMETER_MAP(E_PARAMETER_INFO_B_CALL_NUMBER,u8TboxBCallNumber,1)
-    TBOX_PARAMETER_MAP(E_PARAMETER_INFO_I_CALL_NUMBER,u8TboxICallNumber,1)
-    //TBOX_PARAMETER_MAP(E_PARAMETER_INFO_PROLINES_CHANNEL_KEY,u8ProlinesChannelKey,0)
-    //TBOX_PARAMETER_MAP(E_PARAMETER_INFO_PHONEKEY_OFFLINE_USETIMES,u8PhoneKeyOffLineUseTimes,0)
-    //TBOX_PARAMETER_MAP(E_PARAMETER_INFO_NFC_CARD_ID,u8NfcCardID,0)
-    //TBOX_PARAMETER_MAP(E_PARAMETER_INFO_SEID,u8SEID,0)
-    //TBOX_PARAMETER_MAP(E_PARAMETER_INFO_PROLINES_CHANNEL_KEY3,u8ProlinesChannelKey3,0)
-    //TBOX_PARAMETER_MAP(E_PARAMETER_INFO_BLE_MAC,u8BleMac,0)
-    TBOX_PARAMETER_MAP(E_PARAMETER_INFO_VEHICLE_NETWORK_CONFIGURATION_F1A1,VehicleNetworkConfigurationF1A1,0)
-    TBOX_PARAMETER_MAP(E_PARAMETER_INFO_VEHICLE_NETWORK_CONFIGURATION_F1B0,VehicleNetworkConfigurationF1B0,0)
-    TBOX_PARAMETER_MAP(E_PARAMETER_INFO_ECU_LEVEL_NETWORK_CONFIGURATION_DATA_IDENTIFIER_F1B1,ECUlevelNetworkConfigurationDataIdentifierF1B1,0)
-    TBOX_PARAMETER_MAP(E_PARAMETER_INFO_UIN,UIN,0)
-    TBOX_PARAMETER_MAP(E_PARAMETER_INFO_VEHICLE_MODEL_F112,VehicleModelF112,0);
-    TBOX_PARAMETER_MAP(E_PARAMETER_INFO_FINGERPRINT_F1F0,FingerprintF1F0,0);
-    TBOX_PARAMETER_MAP(E_PARAMETER_INFO_FINGERPRINT_ETHERNET_F0FF,FingerprintEthernetF0FF,0);
-    TBOX_PARAMETER_MAP(E_PARAMETER_INFO_VEHICLE_SOFEWARE_VERSION_F1AB,VehicleSoftwareVersionF1AB,0);
-    TBOX_PARAMETER_MAP(E_PARAMETER_INFO_WORKING_MODE_F1C2,WorkingModeF1C2,0);
-    TBOX_PARAMETER_MAP(E_PARAMETER_INFO_SECOC_KEY_F1C7,SecOCKeyF1C7,0);
-    TBOX_PARAMETER_MAP(E_PARAMETER_INFO_SK,SK,0);
-    TBOX_PARAMETER_MAP(E_PARAMETER_INFO_PIN,PIN,0);
-    TBOX_PARAMETER_MAP(E_PARAMETER_INFO_CSR_HASH_F1CD,CSR_HASH,0);
-    TBOX_PARAMETER_MAP(E_PARAMETER_INFO_MAINTENANCE_MODE_FD00,Maintenance,0)
-TBOX_PARAMTER_MAP_END()
-
-
-TBOX_SMALL_BLOCK_MAP_BEGIN()
-    TBOX_SMALL_BLOCK__MAP(E_SECURITY_INFO, securityInfo,   1 )
-    TBOX_SMALL_BLOCK__MAP(E_WORKING_MODE,  workingMode,    1 )
-    TBOX_SMALL_BLOCK__MAP(E_SECOC_TRIP_COUNT,secocTripCount,2)
-    //TBOX_SMALL_BLOCK__MAP()
-TBOX_SMALL_BLOCK__MAP_END()
-
-static int16_t ByteArrayCompare(uint8_t *pData1,uint8_t *pData2,uint16_t length)
-{
-  uint16_t i;
-  int16_t ret;
-  if(pData1 == NULL || pData2 == NULL)
-  {
-    return -1;
-  }
-  ret = 0;
-  for(i=0;i<length;i++)
-  {
-    if(pData1[i]!=pData2[i])
-    {
-      ret = 1;
-      break;
+    if (parameterId >= E_PARAMETER_INFO_MAX_NUM) {
+        // TBOX_PRINT("paramId = %d is over!\n", parameterId);
+        return -1;
     }
-  }
-  return ret;
-}
 
+    const FlashParamMap_t *pParam = &FlashParamMap[parameterId];
 
-static int16_t WorkFlashWriteVehicleInfo(uint8_t importantFlag,uint32_t address,const uint8_t *data,uint32_t dataLength)
-{
-  uint32_t workFlashAddress;
-  if(importantFlag==0)
-  {
-    workFlashAddress = WORKFLASH_ADDRESS_VEHICLE_INFO_VARIABLE;   
-  }
-  else
-  {
-    workFlashAddress = WORKFLASH_ADDRESS_VEHICLE_INFO_IMPORTANT;    
-  }
-
-  return FlashHalDataBlockWrite(workFlashAddress,address,data,dataLength);
-}
-
-static int16_t WorkFlashReadVehicleInfo(uint8_t importantFlag,uint32_t address,uint8_t *data,uint32_t dataLength)
-{
-  uint32_t baseAddress ;
-  
-  if(address+dataLength>4096)
-  {
-    return -1;
-  }
-  if(0==importantFlag)
-  {
-    baseAddress = WORKFLASH_ADDRESS_VEHICLE_INFO_VARIABLE;    
-  }
-  else
-  {
-    baseAddress = WORKFLASH_ADDRESS_VEHICLE_INFO_IMPORTANT;
-  }
- 
-  FlashHalDataBlockRead(baseAddress,address,data,dataLength); 
-
-  return 0;
-}
-
-int16_t WorkFlashVehicleInforStore(FlashParaId_e parameterId,uint8_t *data,uint32_t dataLength)
-{
-    int16_t ret;
-    uint32_t OffsetAddress;
-    uint32_t length;
-    uint8_t importantFlag;
-    uint8_t tem[32];
-    uint8_t i;
-    
-    if(data==NULL)
+    if(pParam->paramAddress == NULL)
     {
-      return -1;
+        // TBOX_PRINT("ID: %d paramAddressis NULL!\n", parameterId);
+        return -1;
     }
     
-    ret = VehicleInforGetDataOffsetAddressAndLength(parameterId,&importantFlag,&OffsetAddress,&length);
-    if(ret!=0)
-    {
-      return ret;
-    }
+    paramInfo->address = pParam->paramAddress;
+    paramInfo->length = pParam->paramLen;
+    paramInfo->blockID = pParam->blockID;
     
-    if(length<dataLength)
-    {
-      return -2;
-    }
-    if(length>(sizeof(tem)-1))//tem max is 32
-    {
-      length = (sizeof(tem)-1);
-    }
-    
-    //read from work flash
-    ret = WorkFlashReadVehicleInfo(importantFlag,OffsetAddress,tem,length);
-    if(ret!=0)
-    {
-      return ret;
-    }
-    if(tem[0]==dataLength)
-    {
-      if(ByteArrayCompare(&tem[1],data,dataLength)==0)//value is same and do not change
-      {
-        return 0;
-      }
-    }
-    //write work flash
-    tem[0] = dataLength;
-    for(i=0;i<dataLength;i++)
-    {
-      tem[i+1] = data[i];
-    }
-    ret = WorkFlashWriteVehicleInfo(importantFlag,OffsetAddress,tem,dataLength+1);
-    if(ret!=0)
-    {
-      return ret;
-    }
     return 0;
 }
 
-int16_t WorkFlashVehicleInforRead(FlashParaId_e parameterId,uint8_t *data,uint32_t *dataLength)
+/*************************************************
+  Function: WorkFlashVehicleInforStore
+  Description: Store vehicle information parameter in work flash
+  Input: parameterId - The ID of the vehicle information parameter
+         data - Pointer to the data to store
+         dataLength - Length of the data to store
+  Output: None
+  Return: 0 if successful, negative value if failed
+  Others: None
+*************************************************/
+int16_t WorkFlashVehicleInforStore(FlashParaId_e parameterId, uint8_t *data, uint32_t dataLength)
 {
-    int16_t ret;
-    uint32_t OffsetAddress;
-    uint32_t length;
-    uint8_t importantFlag; 
-    uint8_t flashData[64];
-    //uint16_t len;
-    if(data==NULL)
-    {
-      return -1;
-    }
-
-    ret = VehicleInforGetDataOffsetAddressAndLength(parameterId,&importantFlag,&OffsetAddress,&length);
-    if(ret!=0)
-    {
-      return ret;
-    }
-    
-    ret = WorkFlashReadVehicleInfo(importantFlag,OffsetAddress,flashData,length);
-    if(ret!=0)
-    {
-      return ret;
-    }
-    if(flashData[0]<length)
-    {
-      length = flashData[0];
-    }
-    else
-    {
-      length -= 1;
-    }
-    memcpy(data,&flashData[1],length);
-    *dataLength = length;
-    return 0;	
-}
-
-int16_t WorkFlashUserInfoStore(SmallBlockDataParamId_e parameterId,uint8_t *dataIn,uint32_t dataLenth)
-{
-    //uint8_t data[5] = {0};
-    int16_t ret = -1;
-    uint32_t OffsetAddress;
-    uint32_t length;
-    uint8_t importantFlag; 
-    
-    if((dataIn == NULL) || (dataLenth == 0))
-    {
-        return -1;
-    }
-        
-    ret = VehicleInforSmallBlockGetDataOffsetAddressAndLength(parameterId,&importantFlag,&OffsetAddress,&length);
-    if(ret != 0)
-    {
-        return -1;
-    }
-    if(length < dataLenth)
-    {
-        return -1;
-    }
-    
-    if(importantFlag == 1)
-    {
-        ret = FlashHalSmallDataBlockWrite(WORKFLASH_ADDRESS_SMALL_BLOCK_1,OffsetAddress,dataIn,dataLenth);
-    }
-    else if(importantFlag == 2)
-    {
-        ret = FlashHalSmallDataBlockWrite(WORKFLASH_ADDRESS_SMALL_BLOCK_2,OffsetAddress,dataIn,dataLenth);
-    }
-    else
-    {
-        return -1;
-    }
-    
-
-    return 0;
-}
-
-int16_t WorkFlashUserInfoRead(SmallBlockDataParamId_e parameterId,uint8_t* pDataOut,uint32_t *dataLenth)
-{
-    //uint8_t data[5] = {0};
-    int16_t ret = -1;
-    uint32_t OffsetAddress;
-    uint32_t length;
-    uint8_t importantFlag; 
-    
-    if((pDataOut == NULL) || (dataLenth == 0))
-    {
-        return -1;
-    }
-        
-    ret = VehicleInforSmallBlockGetDataOffsetAddressAndLength(parameterId,&importantFlag,&OffsetAddress,&length);
-    if(ret != 0)
-    {
-        return -1;
-    }
-    
-    if(importantFlag == 1)
-    {
-        ret = FlashHalSmallDataBlockRead(WORKFLASH_ADDRESS_SMALL_BLOCK_1,OffsetAddress,pDataOut,length);
-    }
-    else if(importantFlag == 2)
-    {
-        ret = FlashHalSmallDataBlockRead(WORKFLASH_ADDRESS_SMALL_BLOCK_2,OffsetAddress,pDataOut,length);
-    }
-    else
-    {
-        return -1;
-    }
-    
-    //*PDataOut = data[counterId];
-    *dataLenth = length;
-    return 0;
-}
-
-int16_t FlashDtcStore(const uint8_t *pDataIn,uint32_t lengthIn)
-{    
     int16_t ret = 0;
-    if((lengthIn > (4088 * 2)) || (pDataIn == NULL) || (lengthIn == 0))
+    ParamInfo_t paramInfo;
+    paramInfo.address = NULL;
+    paramInfo.length = 0u;
+    paramInfo.blockID = 0u;
+    uint32_t timeout = 0;
+    NvM_RequestResultType blockStatus = NVM_REQ_PENDING;
+    
+    if (data == NULL) 
     {
-        return -1;
+        ret = ERR_CODE_NULL_POINTER;
+        return ret;
     }
-    if(lengthIn>4088)
+
+    /* ÈÄöËøáÂèÇÊï∞IDËé∑ÂèñblockID„ÄÅÂú∞ÂùÄ„ÄÅÈïøÂ∫¶ */
+    ret = VehicleInforGetDataOffsetAddressAndLength(parameterId, &paramInfo);
+
+    if ((ret != 0) || (dataLength > paramInfo.length) || paramInfo.address == NULL) 
     {
-        //TBOX_PRINT("dtc1 flash wirite  %d\r\n",WORKFLASH_ADDRESS_VEHICLE_DTC1);
-        ret = FlashHalDataBlockWrite(WORKFLASH_ADDRESS_VEHICLE_DTC1,0,(uint8_t*)pDataIn,4088);
-        if(ret!=0)
-        {
-              return ret;
-        }
-        //TBOX_PRINT("dtc2 flash wirite  %d\r\n",WORKFLASH_ADDRESS_VEHICLE_DTC2);
-        ret = FlashHalDataBlockWrite(WORKFLASH_ADDRESS_VEHICLE_DTC2,0,((uint8_t*)pDataIn)+4088,lengthIn-4088);
+        ret = ERR_CODE_INVALID_PARAMETER;
+        return ret;
     }
-    else
-    {
-        ret = FlashHalDataBlockWrite(WORKFLASH_ADDRESS_VEHICLE_DTC1,0,(uint8_t*)pDataIn,lengthIn);
-    }
+
+    do{
+        timeout++;
+        NvM_MainFunction();
+        Fee_MainFunction();
+        Fls_MainFunction();
+        NvM_GetErrorStatus(paramInfo.blockID, &blockStatus);
+        if(timeout >= 5000)break;
+    }while(blockStatus == NVM_REQ_PENDING);
+
+    // TBOX_PRINT("W %d blockStatus = %d\n", parameterId, blockStatus);
+
+    memcpy(paramInfo.address, data, dataLength);
+    NvM_WriteBlock(paramInfo.blockID, paramInfo.address);
+
     return ret;
 }
 
-int16_t FlashDtcRead(uint8_t *pBufferIn,uint32_t readLength)
+/*************************************************
+  Function: WorkFlashVehicleInforRead
+  Description: Read vehicle information parameter from work flash
+  Input: parameterId - The ID of the vehicle information parameter
+         data - Pointer to store the read data
+         dataLength - Pointer to store the length of the read data
+  Output: None
+  Return: 0 if successful, negative value if failed
+  Others: None
+*************************************************/
+int16_t WorkFlashVehicleInforRead(FlashParaId_e parameterId, uint8_t *data, uint32_t *dataLength)
 {
-    
     int16_t ret = 0;
-    if((readLength > (4088 * 2)) || (pBufferIn == NULL))
+    ParamInfo_t paramInfo;
+    paramInfo.address = NULL;
+    paramInfo.length = 0u;
+    paramInfo.blockID = 0u;
+    uint32_t timeout = 0;
+    NvM_RequestResultType blockStatus = NVM_REQ_PENDING;
+
+    if (data == NULL) 
     {
-        return -1;
+        ret = ERR_CODE_NULL_POINTER;
+        return ret;
     }
-    if(readLength>4088)
+
+    /* ÈÄöËøáÂèÇÊï∞IDËé∑ÂèñblockID„ÄÅÂú∞ÂùÄ„ÄÅÈïøÂ∫¶ */
+    ret = VehicleInforGetDataOffsetAddressAndLength(parameterId, &paramInfo);
+    if (ret != 0 || paramInfo.length == 0 || paramInfo.address == NULL)
     {
-        ret = FlashHalDataBlockRead(WORKFLASH_ADDRESS_VEHICLE_DTC1,0,(uint8_t*)pBufferIn,4088);
-        if(ret!=0)
-        {
-              return ret;
-        }
-        ret = FlashHalDataBlockRead(WORKFLASH_ADDRESS_VEHICLE_DTC2,0,((uint8_t*)pBufferIn)+4088,readLength-4088);
+        ret = ERR_CODE_INVALID_PARAMETER;
+        return ret;
     }
-    else
-    {
-        ret = FlashHalDataBlockRead(WORKFLASH_ADDRESS_VEHICLE_DTC1,0,(uint8_t*)pBufferIn,readLength);
-    }
+
+    do{
+        timeout++;
+        NvM_MainFunction();
+        Fee_MainFunction();
+        Fls_MainFunction();
+        NvM_GetErrorStatus(paramInfo.blockID, &blockStatus);
+        if(timeout >= 5000)break;
+    }while(blockStatus == NVM_REQ_PENDING);
+
+    NvM_ReadBlock(paramInfo.blockID, paramInfo.address);
+    memcpy(data, paramInfo.address, paramInfo.length);
+    *dataLength = paramInfo.length;
+    // TBOX_PRINT("R %d blockStatus = %d\n", parameterId, blockStatus);
+
     return ret;
 }
 
-
-
-
-
+/*************************************************
+  Function: PrintHexArray
+  Description: Â∞ÜÂ≠óËäÇÊï∞ÁªÑÊ†ºÂºèÂåñ‰∏∫ÂçÅÂÖ≠ËøõÂà∂Â≠óÁ¨¶‰∏≤Âπ∂‰∏ÄÊ¨°ÊÄßÊâìÂç∞ÔºåÈÅøÂÖçÂæ™ÁéØÊâìÂç∞‰∏¢ÂåÖ
+  Input: data - Â≠óËäÇÊï∞ÁªÑÊåáÈíà
+         length - Êï∞ÁªÑÈïøÂ∫¶
+         prefix - ÂâçÁºÄÂ≠óÁ¨¶‰∏≤
+  Output: None
+  Return: None
+  Others: ‰ΩøÁî®ÈùôÊÄÅÁºìÂÜ≤Âå∫ÔºåÊúÄÂ§ßÊîØÊåÅ 256 Â≠óËäÇÊï∞ÊçÆÊâìÂç∞//Ë∞ÉËØï
+*************************************************/
+void PrintHexArray(const uint8_t *data, uint32_t length, const char *prefix)
+{
+    static char logBuffer[384];  /* ÈùôÊÄÅÁºìÂÜ≤Âå∫ÔºåÊúÄÂ§ßÊîØÊåÅ 128 Â≠óËäÇ */
+    uint32_t i = 0;
+    uint32_t offset = 0;
+    uint32_t printLen = (length > 128) ? 128 : length;  /* ÈôêÂà∂ÊúÄÂ§ßÊâìÂç∞ÈïøÂ∫¶ */
+    uint8_t highNibble, lowNibble;
+    
+    /* Ê∑ªÂä†ÂâçÁºÄÔºåÂ¶Ç "NvM[16]: " - ÊâãÂä®ÂÆûÁé∞ÔºåÈÅøÂÖç‰ΩøÁî® snprintf */
+    while (*prefix && offset < sizeof(logBuffer) - 10) {
+        logBuffer[offset++] = *prefix++;
+    }
+    logBuffer[offset++] = '[';
+    
+    /* Ê∑ªÂä†ÈïøÂ∫¶Êï∞Â≠ó */
+    if (printLen >= 100) {
+        logBuffer[offset++] = (char)('0' + (printLen / 100));
+        logBuffer[offset++] = (char)('0' + ((printLen % 100) / 10));
+        logBuffer[offset++] = (char)('0' + (printLen % 10));
+    } else if (printLen >= 10) {
+        logBuffer[offset++] = (char)('0' + (printLen / 10));
+        logBuffer[offset++] = (char)('0' + (printLen % 10));
+    } else {
+        logBuffer[offset++] = (char)('0' + printLen);
+    }
+    logBuffer[offset++] = ']';
+    logBuffer[offset++] = ':';
+    logBuffer[offset++] = ' ';
+    
+    /* Â∞ÜÂ≠óËäÇÊï∞ÁªÑÊ†ºÂºèÂåñ‰∏∫ÂçÅÂÖ≠ËøõÂà∂Â≠óÁ¨¶‰∏≤ÔºåÊâãÂä®ËΩ¨Êç¢ */
+    for (i = 0; i < printLen && offset < sizeof(logBuffer) - 3; i++) {
+        highNibble = (data[i] >> 4) & 0x0F;
+        lowNibble = data[i] & 0x0F;
+        
+        /* È´ò 4 ‰ΩçËΩ¨ÂçÅÂÖ≠ËøõÂà∂Â≠óÁ¨¶ */
+        logBuffer[offset++] = (highNibble < 10) ? (char)('0' + highNibble) : (char)('A' + (highNibble - 10));
+        /* ‰Ωé 4 ‰ΩçËΩ¨ÂçÅÂÖ≠ËøõÂà∂Â≠óÁ¨¶ */
+        logBuffer[offset++] = (lowNibble < 10) ? (char)('0' + lowNibble) : (char)('A' + (lowNibble - 10));
+        /* Ê∑ªÂä†Á©∫Ê†ºÂàÜÈöî */
+        logBuffer[offset++] = ' ';
+    }
+    
+    /* Ê∑ªÂä†Êç¢Ë°åÁ¨¶ */
+    logBuffer[offset++] = '\r';
+    logBuffer[offset++] = '\n';
+    logBuffer[offset] = '\0';
+    
+    /* ‰∏ÄÊ¨°ÊÄßÊâìÂç∞ÂÆåÊï¥Â≠óÁ¨¶‰∏≤ */
+    TBOX_PRINT("%s", logBuffer);
+}
 

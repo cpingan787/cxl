@@ -20,9 +20,9 @@
 /*******************************************************************************
 **                      Private Variable Definitions                          **
 *******************************************************************************/
-#define  COM_TESTMODE  FALSE
+#define  COM_TESTMODE  TRUE
 #define  COM_SECOC_TESTMODE  TRUE
-#define  CanTSyn_SlaveTestMODE       STD_ON
+#define  CanTSyn_SlaveTestMODE       STD_OFF
 /*******************************************************************************
 **                      Global Function Definitions                           **
 *******************************************************************************/
@@ -30,3 +30,4 @@
 extern void Com_Test(void);
 extern void Com_SecOC_Test(void);
 extern void CanTSyn_SlaveTest(void);
+extern void Dv_Test(void);

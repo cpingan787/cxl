@@ -1,15 +1,12 @@
-#include "FreeRTOS.h"
-#include "task.h"
 #include <string.h>
 #include "taskDtcProcess.h"
 
-#include "canHal.h"
 #include "logHal.h"
-#include "peripheralHal.h"
 #include "powerManageSdk.h"
 
-#include "parameterStoreManageApp.h"
+#include "Dem_PBcfg.h"
 
+#if (0)
 #define DTC_STATUS_BIT0_ENABLE           1//test failed
 #define DTC_STATUS_BIT1_ENABLE           1//test failed this monitoring cycle
 #define DTC_STATUS_BIT2_ENABLE           0//pending DTC
@@ -22,7 +19,23 @@
 
 #define DTC_AGING_LIMIT                  (40)
 
+#endif
 
+#define DTC_EVT_5G4G_MAIN_SHORT_GND  ((Dem_EventIdType)EventParameter_0x95A011) /*B15A0 FTB:11 */
+#define DTC_EVT_5G4G_MAIN_OPEN       ((Dem_EventIdType)EventParameter_0x95A013) /*B15A0 FTB:13 */
+#define DTC_EVT_5G_DIV2_SHORT_GND    ((Dem_EventIdType)EventParameter_0x95A111) /*B15A1 FTB:11 */
+#define DTC_EVT_5G_DIV2_OPEN         ((Dem_EventIdType)EventParameter_0x95A113) /*B15A1 FTB:13 */
+#define DTC_EVT_5G_DIV1_SHORT_GND    ((Dem_EventIdType)EventParameter_0x95A311) /*B15A3 FTB:11 */
+#define DTC_EVT_5G_DIV1_OPEN         ((Dem_EventIdType)EventParameter_0x95A313) /*B15A3 FTB:13 */
+#define DTC_EVT_5G_DIV3_SHORT_GND    ((Dem_EventIdType)EventParameter_0x95A411) /*B15A4 FTB:11 */
+#define DTC_EVT_5G_DIV3_OPEN         ((Dem_EventIdType)EventParameter_0x95A413) /*B15A4 FTB:13 */
+#define DTC_EVT_MICIN_SHORT_GND      ((Dem_EventIdType)EventParameter_0x953311) /*B1533 FTB:11 */
+#define DTC_EVT_MICIN_SHORT_BAT      ((Dem_EventIdType)EventParameter_0x953312) /*B1533 FTB:12 */
+#define DTC_EVT_MICIN_OPEN           ((Dem_EventIdType)EventParameter_0x953313) /*B1533 FTB:13 */
+#define DTC_EVT_GPS_SHORT_GND        ((Dem_EventIdType)EventParameter_0x95A711) /*B15A7 FTB:11 */
+#define DTC_EVT_GPS_OPEN             ((Dem_EventIdType)EventParameter_0x95A713) /*B15A7 FTB:13 */
+
+#if (0)
 
 typedef struct
 {  
@@ -1404,7 +1417,7 @@ int16_t DtcProcessGetReportSnapshotRecordByDtcNumber(uint32_t dtcCode,uint8_t sn
   {
       return ret;
   }
-  for(i=0;i<size;i++)//?��??��???DTC
+  for(i=0;i<size;i++)//?��??��???DTC
   {
       //if(g_dtcList[i].FaultDetectEnable)//DTC???
       {
@@ -1607,7 +1620,168 @@ static void ClearDTCExtendedData(DtcState_t *pDtcState)
     }
 }
 
+#endif
 
+static int16_t DtcGetEventFailedFlag(                             /*读取某个 Dem 事件当前是否故障 */
+    Dem_EventIdType eventId,                                      
+    uint8_t *pIsFailed)                                          
+{
+    Dem_UdsStatusByteType eventStatus = 0;                       
+    if (pIsFailed == NULL_PTR)                                    
+    {
+        return -1;                                                
+    }
+    *pIsFailed = 0;                                              
+    if (Dem_GetEventStatus(eventId, &eventStatus) != E_OK)       
+    {
+        return -2;                                                
+    }
+    *pIsFailed = ((eventStatus & DEM_UDS_STATUS_TF) != 0) ? 1 : 0; 
+    return 0;                                                     
+}
+
+DtcQueryState_e DtcGetObjState(DtcQueryObj_e obj)                 /* 统一查询接口*/
+{
+    uint8_t shortGndFlag = 0;                                   
+    uint8_t shortBatFlag = 0;                                    
+    uint8_t openFlag = 0;                                       
+
+    switch (obj)                                                  
+    {
+        case E_DTC_QUERY_5G_MAIN_ANT:                           
+        {
+            if (DtcGetEventFailedFlag(DTC_EVT_5G4G_MAIN_SHORT_GND, &shortGndFlag) != 0) 
+            {
+                return E_DTC_QUERY_STATE_UNKNOWN;                 
+            }
+            if (DtcGetEventFailedFlag(DTC_EVT_5G4G_MAIN_OPEN, &openFlag) != 0) 
+            {
+                return E_DTC_QUERY_STATE_UNKNOWN;                 
+            }
+            if (shortGndFlag != 0)                               
+            {
+                return E_DTC_QUERY_STATE_SHORT_GND;               
+            }
+            if (openFlag != 0)                                   
+            {
+                return E_DTC_QUERY_STATE_OPEN;                    
+            }
+            return E_DTC_QUERY_STATE_NORMAL;                      
+        }
+        case E_DTC_QUERY_5G_DIV2_ANT:                             
+        {
+            if (DtcGetEventFailedFlag(DTC_EVT_5G_DIV2_SHORT_GND, &shortGndFlag) != 0) 
+            {
+                return E_DTC_QUERY_STATE_UNKNOWN;                 
+            }
+            if (DtcGetEventFailedFlag(DTC_EVT_5G_DIV2_OPEN, &openFlag) != 0) 
+            {
+                return E_DTC_QUERY_STATE_UNKNOWN;                 
+            }
+            if (shortGndFlag != 0)                               
+            {
+                return E_DTC_QUERY_STATE_SHORT_GND;               
+            }
+            if (openFlag != 0)                                   
+            {
+                return E_DTC_QUERY_STATE_OPEN;                    
+            }
+            return E_DTC_QUERY_STATE_NORMAL;                      
+        }
+        case E_DTC_QUERY_5G_DIV1_ANT:                             
+        {
+            if (DtcGetEventFailedFlag(DTC_EVT_5G_DIV1_SHORT_GND, &shortGndFlag) != 0) 
+            {
+                return E_DTC_QUERY_STATE_UNKNOWN;                 
+            }
+            if (DtcGetEventFailedFlag(DTC_EVT_5G_DIV1_OPEN, &openFlag) != 0) 
+            {
+                return E_DTC_QUERY_STATE_UNKNOWN;                 
+            }
+            if (shortGndFlag != 0)                               
+            {
+                return E_DTC_QUERY_STATE_SHORT_GND;               
+            }
+            if (openFlag != 0)                                   
+            {
+                return E_DTC_QUERY_STATE_OPEN;                    
+            }
+            return E_DTC_QUERY_STATE_NORMAL;                      
+        }
+        case E_DTC_QUERY_5G_DIV3_ANT:                            
+        {
+            if (DtcGetEventFailedFlag(DTC_EVT_5G_DIV3_SHORT_GND, &shortGndFlag) != 0) 
+            {
+                return E_DTC_QUERY_STATE_UNKNOWN;                 
+            }
+            if (DtcGetEventFailedFlag(DTC_EVT_5G_DIV3_OPEN, &openFlag) != 0) 
+            {
+                return E_DTC_QUERY_STATE_UNKNOWN;                 
+            }
+            if (shortGndFlag != 0)                               
+            {
+                return E_DTC_QUERY_STATE_SHORT_GND;               
+            }
+            if (openFlag != 0)                                   
+            {
+                return E_DTC_QUERY_STATE_OPEN;                    
+            }
+            return E_DTC_QUERY_STATE_NORMAL;                      
+        }
+        case E_DTC_QUERY_MIC_IN:                                  
+        {
+            if (DtcGetEventFailedFlag(DTC_EVT_MICIN_SHORT_GND, &shortGndFlag) != 0) 
+            {
+                return E_DTC_QUERY_STATE_UNKNOWN;                 
+            }
+            if (DtcGetEventFailedFlag(DTC_EVT_MICIN_SHORT_BAT, &shortBatFlag) != 0) 
+            {
+                return E_DTC_QUERY_STATE_UNKNOWN;                 
+            }
+            if (DtcGetEventFailedFlag(DTC_EVT_MICIN_OPEN, &openFlag) != 0) 
+            {
+                return E_DTC_QUERY_STATE_UNKNOWN;                 
+            }
+            if (shortGndFlag != 0)                               
+            {
+                return E_DTC_QUERY_STATE_SHORT_GND;               
+            }
+            if (shortBatFlag != 0)                               
+            {
+                return E_DTC_QUERY_STATE_SHORT_BAT;               
+            }
+            if (openFlag != 0)                                   
+            {
+                return E_DTC_QUERY_STATE_OPEN;                    
+            }
+            return E_DTC_QUERY_STATE_NORMAL;                      
+        }
+        case E_DTC_QUERY_GPS_ANT:                                 
+        {
+            if (DtcGetEventFailedFlag(DTC_EVT_GPS_SHORT_GND, &shortGndFlag) != 0) 
+            {
+                return E_DTC_QUERY_STATE_UNKNOWN;                 
+            }
+            if (DtcGetEventFailedFlag(DTC_EVT_GPS_OPEN, &openFlag) != 0) 
+            {
+                return E_DTC_QUERY_STATE_UNKNOWN;                 
+            }
+            if (shortGndFlag != 0u)                               
+            {
+                return E_DTC_QUERY_STATE_SHORT_GND;               
+            }
+            if (openFlag != 0u)                                   
+            {
+                return E_DTC_QUERY_STATE_OPEN;                    
+            }
+            return E_DTC_QUERY_STATE_NORMAL;                      
+        }
+        default:                                                  
+        {
+            return E_DTC_QUERY_STATE_UNKNOWN;                     
+        }
+    }
+}
 
 
 

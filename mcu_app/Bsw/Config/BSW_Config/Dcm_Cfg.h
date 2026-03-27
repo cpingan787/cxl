@@ -93,5 +93,7 @@
 
 #define DCM_TIME_OVERFLOW 0xFFFFFFFFuL
 
+#define DCM_NRC22_SPECIFIC_CAUSE_CODE  (STD_ON) /**manually add */
+
 #endif /* DCMCFG_H_ */
 

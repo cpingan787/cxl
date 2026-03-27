@@ -12,6 +12,10 @@
 #include "NVM.h"
 
 /****************************** Macro Definitions ******************************/
+#define MPU_SYSN_VERSION "000000000"
+#define MCU_SYSN_VERSION "001" // mcu内部版本号
+#define MCU_MPU_ALL_VERSION MPU_SYSN_VERSION MCU_SYSN_VERSION
+#define SOFTWARE_NUMBERSIZE       4
 /****************************** Type Definitions ******************************/
 /* 配置项回调函数类型 */
 typedef int16_t (*ConfigGetFunc_t)(uint8_t *pData, uint32_t *pLength);
@@ -58,15 +62,15 @@ static const uint8_t g_modemSWVersion[] = "112200000000000000000000";//size:24  
 static const uint8_t g_mcuSWVersion[] = "11220000000000000000000";//size:24  did:B003  MCU软件版本号
 static const uint8_t g_NadIMEI[] = "869900000000000000000000";//size:24  did:B004  NAD IMEI
 static const uint8_t g_NadSWVersion[] = "112200";//size:128  did:B005  NAD软件版本号
-static const uint8_t g_NadHWVersion[] = "112200";//size:128  did:B006  NAD硬件版本号
-static const uint8_t g_UbloxF9KVersion[] = "98990000000000000000000000112200";//size:32  did:B00C  UbloxF9K版本号
+// static const uint8_t g_NadHWVersion[] = "112200";//size:128  did:B006  NAD硬件版本号
+// static const uint8_t g_UbloxF9KVersion[] = "98990000000000000000000000112200";//size:32  did:B00C  UbloxF9K版本号
 static const uint8_t g_SignaturePublicKey[] = "00";//size:64 did:B201  签名公钥
 static const uint8_t g_HSMID[] = "000012120000000";//size:16  did:B202  HSMID
 
-
-
-
-
+/* 参数同步参数配置 */
+static uint8_t g_softWareNumber[] = MCU_MPU_ALL_VERSION;//软件版本号 14
+static const uint8_t g_hardwareNumber[] = "87H6ADE060  H.000";//硬件版本号 15
+static const uint8_t g_customSWVersionD[] = "8786ADE060  S.002"; //客户版本号16
 
 
 
@@ -113,7 +117,9 @@ static const ConfigTableEntry_t configTable[CONFIG_ITEM_MAX] = {
     [CONFIG_ITEM_HSMID]                       = {CONFIG_ITEM_HSMID,                       GetHSMID                          },//B202
     [CONFIG_ITEM_ENCRYPTION_ALGORITHM_FLAG]   = {CONFIG_ITEM_ENCRYPTION_ALGORITHM_FLAG,   GetEncryptionAlgorithmFlag        },//B9E4
 
-
+    [CONFIG_ITEM_SOFTWARE_NUMBER]             = {CONFIG_ITEM_SOFTWARE_NUMBER,             GetSoftwareNumber},
+    [CONFIG_ITEM_HARDWARE_NUMBER]             = {CONFIG_ITEM_HARDWARE_NUMBER,             GetHardwareNumber},
+    [CONFIG_ITEM_SOFTWARE_VERSION]            = {CONFIG_ITEM_SOFTWARE_VERSION,            GetSoftwareVersion},
 
 
 
@@ -778,41 +784,41 @@ int16_t GetNadSWVersion(uint8_t *pVersion,uint32_t *pLength)
     return 0;
 }
 
-/*************************************************
-  Function:       GetNadHWVersion DID:B006
-  Description:    获取NAD硬件版本号
-  Input:          pVersion - 版本缓冲区
-                  pLength  - 数据长度指针
-  Return:         0-成功, 其他-失败
-*************************************************/
-int16_t GetNadHWVersion(uint8_t *pVersion,uint32_t *pLength)
-{
-    if(pVersion == NULL || pLength == NULL)
-    {
-        return -1;
-    }
-    memcpy(pVersion,g_NadHWVersion,sizeof(g_NadHWVersion));
-    *pLength = sizeof(g_NadHWVersion) - 1;
-    return 0;
-}
+// /*************************************************
+//   Function:       GetNadHWVersion DID:B006
+//   Description:    获取NAD硬件版本号
+//   Input:          pVersion - 版本缓冲区
+//                   pLength  - 数据长度指针
+//   Return:         0-成功, 其他-失败
+// *************************************************/
+// int16_t GetNadHWVersion(uint8_t *pVersion,uint32_t *pLength)
+// {
+//     if(pVersion == NULL || pLength == NULL)
+//     {
+//         return -1;
+//     }
+//     memcpy(pVersion,g_NadHWVersion,sizeof(g_NadHWVersion));
+//     *pLength = sizeof(g_NadHWVersion) - 1;
+//     return 0;
+// }
 
-/*************************************************
-  Function:       GetUbloxF9KVersion DID:B00C
-  Description:    获取UbloxF9K版本号
-  Input:          pVersion - 版本缓冲区
-                  pLength  - 数据长度指针
-  Return:         0-成功, 其他-失败
-*************************************************/
-int16_t GetUbloxF9KVersion(uint8_t *pVersion,uint32_t *pLength)
-{
-    if(pVersion == NULL || pLength == NULL)
-    {
-        return -1;
-    }
-    memcpy(pVersion,g_UbloxF9KVersion,sizeof(g_UbloxF9KVersion));
-    *pLength = sizeof(g_UbloxF9KVersion) - 1;
-    return 0;
-}
+// /*************************************************
+//   Function:       GetUbloxF9KVersion DID:B00C
+//   Description:    获取UbloxF9K版本号
+//   Input:          pVersion - 版本缓冲区
+//                   pLength  - 数据长度指针
+//   Return:         0-成功, 其他-失败
+// *************************************************/
+// int16_t GetUbloxF9KVersion(uint8_t *pVersion,uint32_t *pLength)
+// {
+//     if(pVersion == NULL || pLength == NULL)
+//     {
+//         return -1;
+//     }
+//     memcpy(pVersion,g_UbloxF9KVersion,sizeof(g_UbloxF9KVersion));
+//     *pLength = sizeof(g_UbloxF9KVersion) - 1;
+//     return 0;
+// }
 
 /*************************************************
   Function:       GetSignaturePublicKey DID:B201
@@ -871,14 +877,100 @@ int16_t GetEncryptionAlgorithmFlag(uint8_t *pVersion,uint32_t *pLength)
 
     if(NvMBlockRamBuffer10[31] == 0x00)
     {
-        pVersion[0] = 0;
+        pVersion[0] = 0x02;
     }
     else
     {
-        pVersion[0] = 1;
+        pVersion[0] = 0x01;
     }
     *pLength = 1;
     
     return 0;
 }
 
+/*************************************************
+  Function:       GetSoftwareNumber
+  Description:    获取软件编号
+  Input:          pData    - 数据缓冲区
+                  pLength  - 数据长度指针
+  Return:         0-成功, 其他-失败
+*************************************************/
+static int16_t GetSoftwareNumber(uint8_t *pData, uint32_t *pLength)
+{
+
+    /* 外层已做判空处理 */    
+    memcpy(pData, g_softWareNumber, sizeof(g_softWareNumber));
+    *pLength = sizeof(g_softWareNumber) - 1;
+    
+    return 0;
+}
+
+/*************************************************
+  Function:       GetHardwareNumber
+  Description:    获取硬件编号
+  Input:          pData    - 数据缓冲区
+                  pLength  - 数据长度指针
+  Return:         0-成功, 其他-失败
+*************************************************/
+static int16_t GetHardwareNumber(uint8_t *pData, uint32_t *pLength)
+{
+    if ((pData == NULL) || (pLength == NULL))
+    {
+        return -1;
+    }
+    
+    memcpy(pData, g_hardwareNumber, sizeof(g_hardwareNumber));
+    *pLength = sizeof(g_hardwareNumber) - 1;
+    
+    return 0;
+}
+
+/*************************************************
+  Function:       GetSoftwareVersion
+  Description:    获取软件版本号
+  Input:          pData    - 数据缓冲区
+                  pLength  - 数据长度指针
+  Return:         0-成功, 其他-失败
+*************************************************/
+static int16_t GetSoftwareVersion(uint8_t *pData, uint32_t *pLength)
+{
+    if ((pData == NULL) || (pLength == NULL))
+    {
+        return -1;
+    }
+    
+    memcpy(pData, g_customSWVersionD, sizeof(g_customSWVersionD));
+    *pLength = sizeof(g_customSWVersionD) - 1;
+    
+    return 0;
+}
+
+/**
+ * @brief Set the MPU system version
+ * @param pMpuVersion Pointer to the new MPU version string
+ * @param versionLen Length of the version string
+ * @return 0 on success, -1 if input is invalid
+ */
+int16_t ProjectConfigSetMpuVersion(const uint8_t *pMpuVersion, uint16_t versionLen)
+{
+    int16_t result = 0;
+    uint8_t mpuVersionLen = strlen((const char *)MPU_SYSN_VERSION);
+    uint8_t mcuVersionLen = strlen((const char *)MCU_SYSN_VERSION);
+    uint8_t totalVersionLen = mpuVersionLen + mcuVersionLen;
+
+    // Check if input is valid
+    if (pMpuVersion == NULL || versionLen != totalVersionLen)
+    {
+        result = -1;
+    }
+    else
+    {
+        // Update MPU version part
+        memcpy(g_softWareNumber, pMpuVersion, mpuVersionLen);
+
+        // Ensure MCU version part remains unchanged
+        memcpy(g_softWareNumber + mpuVersionLen, MCU_SYSN_VERSION, mcuVersionLen + 1); // +1 to include null terminator
+    }
+
+    return result;
+}

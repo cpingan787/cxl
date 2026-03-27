@@ -87,7 +87,7 @@
  * INPUT FILE:    E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\Config\ECUC\test_Adc_Adc0_ecuc.arxml
  *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\modules\adc\R422_ADC_F1x_BSWMDT.arxml
  *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\stubs\4.2.2\Dem\xml\Dem_Adc.arxml
- * GENERATED ON:  27 Jan 2026 - 17:47:30
+ * GENERATED ON:  11 Mar 2026 - 21:06:46
  */
 
 #ifndef ADC_CBK_H

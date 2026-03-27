@@ -1,0 +1,2369 @@
+RH850 Family Assembler V2.07.00.03 Assemble Source List
+
+OFFSET   CODE                  NO  SOURCE STATEMENT
+
+00000000                        1  #CC-RH Compiler RH850 Assembler Source
+00000000                        2  #@	CC-RH Version : V2.07.00  [06 Dec 2024]
+00000000                        3  #@	Command : ..\..\Bsw\Communication\CAN\CanNm\CanNm.c -oDefaultBuild\CanNm.obj -Xcpu=g3kh -Xno_warning=20188,20111 -g -g_line -I..\..\Srcode\app\diagnostic -I..\..\Srcode\app\parameter_store -I..\..\Cpu\port -I..\..\Cpu\uart -I..\..\Cpu\iic -I..\..\Srcode\app\vehicle_data_to_mpu -I..\..\Srcode\app\power_manage -I..\..\Srcode\app\mcu_cpu_sync -I..\..\Srcode\app\remote_control -I..\..\Srcode\app\can_cycle_send -I..\..\Srcode\app\project_configure -I..\..\Srcode\sdk\include -I..\..\Srcode\commonLib\include -I..\..\Srcode\hal\include -I..\..\Bsw\Mcal\icu\include -I..\..\Bsw\Config\MCAL_Config\Icu_OutPut\include -I..\..\Bsw\Crypto\CRYPTO\vss -I..\..\ASW\CDD_FVM -I..\..\Bsw\Memory\EEIf -I..\..\Bsw\Communication\CAN\CanTSyn -I..\..\Bsw\SystemServices\StbM -I..\..\Bsw\Crypto\CSM -I..\..\Bsw\Crypto\CRYPTO\RSA -I..\..\Bsw\Crypto\CRYPTO\RandomGen\CTR_DRBG -I..\..\Bsw\Crypto\CRYPTO\MAC\CMAC -I..\..\Bsw\Crypto\CRYPTO\Hash\sha256 -I..\..\Bsw\Crypto\CRYPTO\dh -I..\..\Bsw\Crypto\CRYPTO\AES -I..\..\Bsw\Crypto\CRYPTO -I..\..\Bsw\Crypto\CryInterface -I..\..\Bsw\Communication\Common\SecOC -I..\..\Bsw\Memory\NvM -I..\..\Bsw\Memory\MemIf -I..\..\Bsw\Memory\Fee -I..\..\Bsw\SystemServices\WdgM -I..\..\Bsw\SystemServices\WdgIf -I..\..\Bsw\Config\MCAL_Config\Wdg_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Gpt_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Fls_OutPut\include -I..\..\Bsw\Mcal\wdg\include -I..\..\Bsw\Mcal\gpt\include -I..\..\Bsw\Mcal\fls\include -I..\..\Bsw\Communication\Common\IpduM -I..\..\ASW\APP -I..\..\Bsw\SystemServices\BswM -I..\..\ASW\BSW_Ext -I..\..\Bsw\Communication\Common\Dcm -I..\..\Bsw\Communication\CAN\CanTp -I..\..\Bsw\SystemServices\Dem -I..\..\Bsw\Libraries\E2E -I..\..\Bsw\Libraries\Crc -I..\..\Bsw\Communication\Common\NmIf -I..\..\Bsw\Communication\CAN\CanNm -I..\..\Bsw\Config\BSW_Config\RTE\Rte -I..\..\Bsw\Config\BSW_Config\RTE\SchM -I..\..\Bsw\Libraries\IStd -I..\..\Bsw\SystemServices\EcuM -I..\..\Bsw\SystemServices\ComM -I..\..\Bsw\Communication\CAN\CanSM -I..\..\Bsw\Communication\CAN\CanIf -I..\..\Bsw\Communication\Common\Com -I..\..\Bsw\Communication\Common\PDUR -I..\..\Cpu -I..\..\Bsw\CommonInclude -I..\..\Bsw\Config\BSW_Config -I..\..\Bsw\Config\BSW_Config\RH850F1K -I..\..\Bsw\SystemServices\Os\Extend\inc -I..\..\Bsw\SystemServices\Os\Kernel\inc -I..\..\Bsw\SystemServices\Os\Portable\Mcu -I..\..\Bsw\SystemServices\Os\Portable\Processor -I..\..\Bsw\Config\MCAL_Config\Adc_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Can_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Dio_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Mcu_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Port_OutPut\include -I..\..\Bsw\Mcal\adc\include -I..\..\Bsw\Mcal\can\include -I..\..\Bsw\Mcal\dio\include -I..\..\Bsw\Mcal\general -I..\..\Bsw\Mcal\mcu\include -I..\..\Bsw\Mcal\port\include -I..\..\Bsw\Mcal\stubs\CanGeneral\include -I..\..\Bsw\Mcal\stubs\Det\include -I..\..\Bsw\Mcal\stubs\MemIf\include -I..\..\Bsw\Mcal\stubs\SchM\include -DRH850_F1KM_S1_2MB -lang=c99 -Xfloat=fpu -Xround=zero -Xdiv -Xasm_path=DefaultBuild -Xasm_option=-Xprn_path=DefaultBuild -c -MAKEUD=DefaultBuild -Xexec_time=C:\Users\xlchen\AppData\Local\Temp\CSPlusBuildTool_080d956afa9f49b2b5a687bc5417602ctf3u0xk3.xnz
+00000000                        4  #@	compiled at Fri Mar 27 09:50:15 2026
+00000000                        5  
+00000000                        6  	.file "..\..\Bsw\Communication\CAN\CanNm\CanNm.c"
+00000000                        7  
+00000000                        8  	$reg_mode 32
+00000000                        9  	.dbl_size 8
+00000000                       10  
+00000000                       11  	.public _validNmMsgFlag, 1
+00000000                       12  	.public _CanNm_Init
+00000000                       13  	.public _CanNm_DeInit
+00000000                       14  	.public _CanNm_PassiveStartUp
+00000000                       15  	.extern _SchM_Enter_CanNm_Context
+00000000                       16  	.extern _SchM_Exit_CanNm_Context
+00000000                       17  	.public _CanNm_NetworkRequest
+00000000                       18  	.public _CanNm_NetworkRelease
+00000000                       19  	.public _CanNm_DisableCommunication
+00000000                       20  	.public _CanNm_EnableCommunication
+00000000                       21  	.public _CanNm_GetUserData
+00000000                       22  	.extern _ILib_memcpy
+00000000                       23  	.public _CanNm_Transmit
+00000000                       24  	.public _CanNm_GetNodeIdentifier
+00000000                       25  	.public _CanNm_GetLocalNodeIdentifier
+00000000                       26  	.public _CanNm_RepeatMessageRequest
+00000000                       27  	.public _CanNm_GetPduData
+00000000                       28  	.public _CanNm_GetState
+00000000                       29  	.public _CanNm_TxConfirmation
+00000000                       30  	.public _CanNm_RxIndication
+00000000                       31  	.extern _Nm_PduRxIndication
+00000000                       32  	.public _CanNm_TriggerTransmit
+00000000                       33  	.extern _PduR_IfTriggerTransmit
+00000000                       34  	.public _CanNm_MainFunction
+00000000                       35  	.extern _Nm_StateChangeNotification
+00000000                       36  	.extern _Nm_NetworkMode
+00000000                       37  	.extern _Det_ReportRuntimeError
+00000000                       38  	.extern _CanIf_Transmit
+00000000                       39  	.extern _Nm_NetworkStartIndication
+00000000                       40  	.extern _Nm_BusSleepMode
+00000000                       41  	.extern _Nm_RepeatMessageIndication
+00000000                       42  	.extern _Nm_PrepareBusSleepMode
+00000000                       43  	.extern _PduR_IfTxConfirmation
+00000000                       44  
+00000000                       45  	.section .text, text
+00000000                       46  _CanNm_Init:
+00000000                       47  	.stack _CanNm_Init = 0
+00000000                       48  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 328
+00000000 40160000              49  	movhi HIGHW1(#_CanNm_CfgPtr.2), r0, r2
+00000004                       50  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 339
+00000004 62370100              51  	st.w r6, LOWW(#_CanNm_CfgPtr.2)[r2]
+00000008 0012                  52  	mov 0x00000000, r2
+0000000A 8505                  53  	br9 .BB.LABEL.1_9
+0000000C                       54  .BB.LABEL.1_1:	; bb
+0000000C                       55  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 345
+0000000C C22EFF00              56  	andi 0x000000FF, r2, r5
+00000010                       57  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 349
+00000010 0530                  58  	mov r5, r6
+00000012 F0374402              59  	mul 0x00000030, r6, r0
+00000016                       60  	mov #_CanNm_ChRunTime.3, r7
+00000016 270600000000            -- mov         0x0,r7
+0000001C C639                  61  	add r6, r7
+0000001E 0132                  62  	mov 0x00000001, r6
+00000020 67370100              63  	st.w r6, 0x00000000[r7]
+00000024                       64  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 352
+00000024 67070500              65  	st.w r0, 0x00000004[r7]
+00000028                       66  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 355
+00000028 67370900              67  	st.w r6, 0x00000008[r7]
+0000002C                       68  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 358
+0000002C 47070C00              69  	st.b r0, 0x0000000C[r7]
+00000030                       70  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 362
+00000030 47370D00              71  	st.b r6, 0x0000000D[r7]
+00000034                       72  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 376
+00000034 47070F00              73  	st.b r0, 0x0000000F[r7]
+00000038                       74  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 379
+00000038 67071000              75  	st.h r0, 0x00000010[r7]
+0000003C                       76  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 380
+0000003C 47071400              77  	st.b r0, 0x00000014[r7]
+00000040                       78  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 383
+00000040 67071200              79  	st.h r0, 0x00000012[r7]
+00000044                       80  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 388
+00000044 67071600              81  	st.h r0, 0x00000016[r7]
+00000048                       82  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 392
+00000048 67071800              83  	st.h r0, 0x00000018[r7]
+0000004C                       84  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 393
+0000004C 47071A00              85  	st.b r0, 0x0000001A[r7]
+00000050                       86  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 394
+00000050 47071B00              87  	st.b r0, 0x0000001B[r7]
+00000054                       88  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 395
+00000054 47071C00              89  	st.b r0, 0x0000001C[r7]
+00000058 0032                  90  	mov 0x00000000, r6
+0000005A 8505                  91  	br9 .BB.LABEL.1_3
+0000005C                       92  .BB.LABEL.1_2:	; bb37
+0000005C                       93  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 402
+0000005C E53E3000              94  	mulhi 0x00000030, r5, r7
+00000060                       95  	mov #_CanNm_ChRunTime.3, r8
+00000060 280600000000            -- mov         0x0,r8
+00000066 C741                  96  	add r7, r8
+00000068 C63EFF00              97  	andi 0x000000FF, r6, r7
+0000006C C741                  98  	add r7, r8
+0000006E 1F3A                  99  	mov 0xFFFFFFFF, r7
+00000070 483F2700             100  	st.b r7, 0x00000027[r8]
+00000074 4132                 101  	add 0x00000001, r6
+00000076                      102  .BB.LABEL.1_3:	; bb46
+00000076                      103  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 400
+00000076 C63EFF00             104  	andi 0x000000FF, r6, r7
+0000007A 683A                 105  	cmp 0x00000008, r7
+0000007C 8105                 106  	bl9 .BB.LABEL.1_2
+0000007E                      107  .BB.LABEL.1_4:	; bb51
+0000007E                      108  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 405
+0000007E 40360000             109  	movhi HIGHW1(#_CanNm_CfgPtr.2), r0, r6
+00000082 26370100             110  	ld.w LOWW(#_CanNm_CfgPtr.2)[r6], r6
+00000086 26370500             111  	ld.w 0x00000004[r6], r6
+0000008A C23EFF00             112  	andi 0x000000FF, r2, r7
+0000008E                      113  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 408
+0000008E 0740                 114  	mov r7, r8
+00000090 F8474402             115  	mul 0x00000038, r8, r0
+00000094 C641                 116  	add r6, r8
+00000096 28471500             117  	ld.w 0x00000014[r8], r8
+0000009A 080601FF             118  	addi 0xFFFFFF01, r8, r0
+0000009E 8205                 119  	bz9 .BB.LABEL.1_6
+000000A0                      120  .BB.LABEL.1_5:	; if_then_bb
+000000A0                      121  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 410
+000000A0 E74E3800             122  	mulhi 0x00000038, r7, r9
+000000A4 C649                 123  	add r6, r9
+000000A6 094F0E00             124  	ld.b 0x0000000E[r9], r9
+000000AA E5563000             125  	mulhi 0x00000030, r5, r10
+000000AE                      126  	mov #_CanNm_ChRunTime.3, r11
+000000AE 2B0600000000            -- mov         0x0,r11
+000000B4 CA59                 127  	add r10, r11
+000000B6 C859                 128  	add r8, r11
+000000B8 4B4F2700             129  	st.b r9, 0x00000027[r11]
+000000BC                      130  .BB.LABEL.1_6:	; if_break_bb
+000000BC                      131  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 415
+000000BC E73E3800             132  	mulhi 0x00000038, r7, r7
+000000C0 C731                 133  	add r7, r6
+000000C2 26371100             134  	ld.w 0x00000010[r6], r6
+000000C6 060601FF             135  	addi 0xFFFFFF01, r6, r0
+000000CA 8205                 136  	bz9 .BB.LABEL.1_8
+000000CC                      137  .BB.LABEL.1_7:	; if_then_bb81
+000000CC                      138  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 417
+000000CC E52E3000             139  	mulhi 0x00000030, r5, r5
+000000D0                      140  	mov #_CanNm_ChRunTime.3, r7
+000000D0 270600000000            -- mov         0x0,r7
+000000D6 C539                 141  	add r5, r7
+000000D8 8600                 142  	zxb r6
+000000DA C731                 143  	add r7, r6
+000000DC 46072700             144  	st.b r0, 0x00000027[r6]
+000000E0                      145  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 419
+000000E0 47071E00             146  	st.b r0, 0x0000001E[r7]
+000000E4                      147  .BB.LABEL.1_8:	; if_break_bb93
+000000E4                      148  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 0
+000000E4 4112                 149  	add 0x00000001, r2
+000000E6                      150  .BB.LABEL.1_9:	; bb96
+000000E6                      151  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 343
+000000E6 C206FF00             152  	andi 0x000000FF, r2, r0
+000000EA 8205                 153  	bz9 .BB.LABEL.1_1
+000000EC                      154  .BB.LABEL.1_10:	; bb102
+000000EC                      155  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 482
+000000EC 40160000             156  	movhi HIGHW1(#_CanNm_InitStatus.1), r0, r2
+000000F0 012A                 157  	mov 0x00000001, r5
+000000F2 622F0100             158  	st.w r5, LOWW(#_CanNm_InitStatus.1)[r2]
+000000F6 7F00                 159  	jmp [r31]
+000000F8                      160  _CanNm_DeInit:
+000000F8                      161  	.stack _CanNm_DeInit = 0
+000000F8                      162  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 504
+000000F8 40160000             163  	movhi HIGHW1(#_CanNm_InitStatus.1), r0, r2
+000000FC 62070100             164  	st.w r0, LOWW(#_CanNm_InitStatus.1)[r2]
+00000100 7F00                 165  	jmp [r31]
+00000102                      166  _CanNm_PassiveStartUp:
+00000102                      167  	.stack _CanNm_PassiveStartUp = 8
+00000102                      168  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 521
+00000102 80072108             169  	prepare 0x00000041, 0x00000000
+00000106                      170  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 528
+00000106 80FF0000             171  	jarl _CanNm_FindChannelIndex.1, r31
+0000010A                      172  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 535
+0000010A EA163000             173  	mulhi 0x00000030, r10, r2
+0000010E                      174  	mov #_CanNm_ChRunTime.3, r5
+0000010E 250600000000            -- mov         0x0,tp
+00000114 C229                 175  	add r2, r5
+00000116 25170500             176  	ld.w 0x00000004[r5], r2
+0000011A 6312                 177  	cmp 0x00000003, r2
+0000011C 0AA0                 178  	mov r10, r20
+0000011E 8205                 179  	bz9 .BB.LABEL.3_2
+00000120                      180  .BB.LABEL.3_1:	; if_then_bb
+00000120                      181  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 537
+00000120 80FF0000             182  	jarl _SchM_Enter_CanNm_Context, r31
+00000124                      183  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 538
+00000124 F4163000             184  	mulhi 0x00000030, r20, r2
+00000128                      185  	mov #_CanNm_ChRunTime.3, r5
+00000128 250600000000            -- mov         0x0,tp
+0000012E C229                 186  	add r2, r5
+00000130 0112                 187  	mov 0x00000001, r2
+00000132 45170C00             188  	st.b r2, 0x0000000C[r5]
+00000136                      189  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 539
+00000136 80FF0000             190  	jarl _SchM_Exit_CanNm_Context, r31
+0000013A 0052                 191  	mov 0x00000000, r10
+0000013C                      192  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 541
+0000013C 40063F08             193  	dispose 0x00000000, 0x00000041, [r31]
+00000140                      194  .BB.LABEL.3_2:	; if_break_bb
+00000140                      195  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 0
+00000140 0152                 196  	mov 0x00000001, r10
+00000142                      197  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 545
+00000142 40063F08             198  	dispose 0x00000000, 0x00000041, [r31]
+00000146                      199  _CanNm_NetworkRequest:
+00000146                      200  	.stack _CanNm_NetworkRequest = 8
+00000146                      201  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 564
+00000146 80072108             202  	prepare 0x00000041, 0x00000000
+0000014A                      203  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 572
+0000014A 80FF0000             204  	jarl _CanNm_FindChannelIndex.1, r31
+0000014E 0AA0                 205  	mov r10, r20
+00000150                      206  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 575
+00000150 80FF0000             207  	jarl _SchM_Enter_CanNm_Context, r31
+00000154                      208  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 579
+00000154 F4163000             209  	mulhi 0x00000030, r20, r2
+00000158                      210  	mov #_CanNm_ChRunTime.3, r5
+00000158 250600000000            -- mov         0x0,tp
+0000015E C229                 211  	add r2, r5
+00000160 65070900             212  	st.w r0, 0x00000008[r5]
+00000164 0112                 213  	mov 0x00000001, r2
+00000166                      214  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 580
+00000166 45171C00             215  	st.b r2, 0x0000001C[r5]
+0000016A                      216  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 584
+0000016A 80FF0000             217  	jarl _SchM_Exit_CanNm_Context, r31
+0000016E 0052                 218  	mov 0x00000000, r10
+00000170                      219  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 590
+00000170 40063F08             220  	dispose 0x00000000, 0x00000041, [r31]
+00000174                      221  _CanNm_NetworkRelease:
+00000174                      222  	.stack _CanNm_NetworkRelease = 8
+00000174                      223  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 608
+00000174 80072108             224  	prepare 0x00000041, 0x00000000
+00000178                      225  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 616
+00000178 80FF0000             226  	jarl _CanNm_FindChannelIndex.1, r31
+0000017C 0AA0                 227  	mov r10, r20
+0000017E                      228  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 619
+0000017E 80FF0000             229  	jarl _SchM_Enter_CanNm_Context, r31
+00000182                      230  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 623
+00000182 F4163000             231  	mulhi 0x00000030, r20, r2
+00000186                      232  	mov #_CanNm_ChRunTime.3, r5
+00000186 250600000000            -- mov         0x0,tp
+0000018C C229                 233  	add r2, r5
+0000018E 0112                 234  	mov 0x00000001, r2
+00000190 65170900             235  	st.w r2, 0x00000008[r5]
+00000194                      236  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 625
+00000194 80FF0000             237  	jarl _SchM_Exit_CanNm_Context, r31
+00000198 0052                 238  	mov 0x00000000, r10
+0000019A                      239  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 630
+0000019A 40063F08             240  	dispose 0x00000000, 0x00000041, [r31]
+0000019E                      241  _CanNm_DisableCommunication:
+0000019E                      242  	.stack _CanNm_DisableCommunication = 8
+0000019E                      243  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 650
+0000019E 80072108             244  	prepare 0x00000041, 0x00000000
+000001A2                      245  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 661
+000001A2 80FF0000             246  	jarl _CanNm_FindChannelIndex.1, r31
+000001A6 0AA0                 247  	mov r10, r20
+000001A8                      248  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 664
+000001A8 80FF0000             249  	jarl _SchM_Enter_CanNm_Context, r31
+000001AC                      250  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 666
+000001AC F4163000             251  	mulhi 0x00000030, r20, r2
+000001B0                      252  	mov #_CanNm_ChRunTime.3, r5
+000001B0 250600000000            -- mov         0x0,tp
+000001B6 C229                 253  	add r2, r5
+000001B8 25170500             254  	ld.w 0x00000004[r5], r2
+000001BC 6312                 255  	cmp 0x00000003, r2
+000001BE 8205                 256  	bz9 .BB.LABEL.6_2
+000001C0                      257  .BB.LABEL.6_1:	; entry.if_break_bb_crit_edge
+000001C0                      258  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 0
+000001C0 01A2                 259  	mov 0x00000001, r20
+000001C2 8505                 260  	br9 .BB.LABEL.6_3
+000001C4                      261  .BB.LABEL.6_2:	; if_then_bb
+000001C4                      262  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 670
+000001C4 F4A63000             263  	mulhi 0x00000030, r20, r20
+000001C8                      264  	mov #_CanNm_ChRunTime.3, r2
+000001C8 220600000000            -- mov         0x0,hp
+000001CE D411                 265  	add r20, r2
+000001D0 42070D00             266  	st.b r0, 0x0000000D[r2]
+000001D4                      267  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 677
+000001D4 62071600             268  	st.h r0, 0x00000016[r2]
+000001D8                      269  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 681
+000001D8 62071200             270  	st.h r0, 0x00000012[r2]
+000001DC 00A2                 271  	mov 0x00000000, r20
+000001DE                      272  .BB.LABEL.6_3:	; if_break_bb
+000001DE                      273  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 702
+000001DE 80FF0000             274  	jarl _SchM_Exit_CanNm_Context, r31
+000001E2                      275  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 708
+000001E2 1450                 276  	mov r20, r10
+000001E4 40063F08             277  	dispose 0x00000000, 0x00000041, [r31]
+000001E8                      278  _CanNm_EnableCommunication:
+000001E8                      279  	.stack _CanNm_EnableCommunication = 12
+000001E8                      280  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 727
+000001E8 8007210C             281  	prepare 0x00000061, 0x00000000
+000001EC                      282  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 738
+000001EC 80FF0000             283  	jarl _CanNm_FindChannelIndex.1, r31
+000001F0 0AA0                 284  	mov r10, r20
+000001F2                      285  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 739
+000001F2 40160000             286  	movhi HIGHW1(#_CanNm_CfgPtr.2), r0, r2
+000001F6 22170100             287  	ld.w LOWW(#_CanNm_CfgPtr.2)[r2], r2
+000001FA 22AF0500             288  	ld.w 0x00000004[r2], r21
+000001FE                      289  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 742
+000001FE 80FF0000             290  	jarl _SchM_Enter_CanNm_Context, r31
+00000202                      291  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 743
+00000202 F4163000             292  	mulhi 0x00000030, r20, r2
+00000206                      293  	mov #_CanNm_ChRunTime.3, r5
+00000206 250600000000            -- mov         0x0,tp
+0000020C C229                 294  	add r2, r5
+0000020E A5170D00             295  	ld.bu 0x0000000D[r5], r2
+00000212 4D2A                 296  	add 0x0000000D, r5
+00000214 6012                 297  	cmp 0x00000000, r2
+00000216 8205                 298  	bz9 .BB.LABEL.7_2
+00000218                      299  .BB.LABEL.7_1:	; entry.if_break_bb_crit_edge
+00000218                      300  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 0
+00000218 01A2                 301  	mov 0x00000001, r20
+0000021A 8505                 302  	br9 .BB.LABEL.7_4
+0000021C                      303  .BB.LABEL.7_2:	; bb
+0000021C F4163000             304  	mulhi 0x00000030, r20, r2
+00000220                      305  	mov #_CanNm_ChRunTime.3, r6
+00000220 260600000000            -- mov         0x0,r6
+00000226 C231                 306  	add r2, r6
+00000228 26170500             307  	ld.w 0x00000004[r6], r2
+0000022C 6312                 308  	cmp 0x00000003, r2
+0000022E 8A05                 309  	bnz9 .BB.LABEL.7_1
+00000230                      310  .BB.LABEL.7_3:	; if_then_bb
+00000230 0112                 311  	mov 0x00000001, r2
+00000232                      312  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 745
+00000232 45170000             313  	st.b r2, 0x00000000[r5]
+00000236                      314  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 749
+00000236 F42E3000             315  	mulhi 0x00000030, r20, r5
+0000023A                      316  	mov #_CanNm_ChRunTime.3, r6
+0000023A 260600000000            -- mov         0x0,r6
+00000240 C531                 317  	add r5, r6
+00000242 66171600             318  	st.h r2, 0x00000016[r6]
+00000246                      319  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 752
+00000246 F4A63800             320  	mulhi 0x00000038, r20, r20
+0000024A D4A9                 321  	add r20, r21
+0000024C 35A71C00             322  	ld.h 0x0000001C[r21], r20
+00000250 66A71200             323  	st.h r20, 0x00000012[r6]
+00000254 00A2                 324  	mov 0x00000000, r20
+00000256                      325  .BB.LABEL.7_4:	; if_break_bb
+00000256                      326  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 769
+00000256 80FF0000             327  	jarl _SchM_Exit_CanNm_Context, r31
+0000025A                      328  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 776
+0000025A 1450                 329  	mov r20, r10
+0000025C 40063F0C             330  	dispose 0x00000000, 0x00000061, [r31]
+00000260                      331  _CanNm_GetUserData:
+00000260                      332  	.stack _CanNm_GetUserData = 20
+00000260                      333  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 848
+00000260 8007210F             334  	prepare 0x00000079, 0x00000000
+00000264 07A0                 335  	mov r7, r20
+00000266                      336  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 856
+00000266 80FF0000             337  	jarl _CanNm_FindChannelIndex.1, r31
+0000026A 0AA8                 338  	mov r10, r21
+0000026C                      339  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 857
+0000026C 40160000             340  	movhi HIGHW1(#_CanNm_CfgPtr.2), r0, r2
+00000270 22170100             341  	ld.w LOWW(#_CanNm_CfgPtr.2)[r2], r2
+00000274 22170500             342  	ld.w 0x00000004[r2], r2
+00000278                      343  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 862
+00000278 F52E3800             344  	mulhi 0x00000038, r21, r5
+0000027C C511                 345  	add r5, r2
+0000027E                      346  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 864
+0000027E A2B73100             347  	ld.bu 0x00000031[r2], r22
+00000282                      348  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 867
+00000282 82BF3100             349  	ld.bu 0x00000030[r2], r23
+00000286                      350  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 866
+00000286 80FF0000             351  	jarl _SchM_Enter_CanNm_Context, r31
+0000028A                      352  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 864
+0000028A F5163000             353  	mulhi 0x00000030, r21, r2
+0000028E                      354  	mov #_CanNm_ChRunTime.3, r5
+0000028E 250600000000            -- mov         0x0,tp
+00000294 C229                 355  	add r2, r5
+00000296 D629                 356  	add r22, r5
+00000298 253E1F00             357  	movea 0x0000001F, r5, r7
+0000029C                      358  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 867
+0000029C 1430                 359  	mov r20, r6
+0000029E 1740                 360  	mov r23, r8
+000002A0 80FF0000             361  	jarl _ILib_memcpy, r31
+000002A4                      362  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 868
+000002A4 80FF0000             363  	jarl _SchM_Exit_CanNm_Context, r31
+000002A8 0052                 364  	mov 0x00000000, r10
+000002AA                      365  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 874
+000002AA 40063F0F             366  	dispose 0x00000000, 0x00000079, [r31]
+000002AE                      367  _CanNm_Transmit:
+000002AE                      368  	.stack _CanNm_Transmit = 0
+000002AE                      369  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 889
+000002AE 0012                 370  	mov 0x00000000, r2
+000002B0 8505                 371  	br9 .BB.LABEL.9_5
+000002B2                      372  .BB.LABEL.9_1:	; bb
+000002B2                      373  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 901
+000002B2 402E0000             374  	movhi HIGHW1(#_CanNm_CfgPtr.2), r0, r5
+000002B6 252F0100             375  	ld.w LOWW(#_CanNm_CfgPtr.2)[r5], r5
+000002BA 252F0500             376  	ld.w 0x00000004[r5], r5
+000002BE C23EFF00             377  	andi 0x000000FF, r2, r7
+000002C2 F83F4402             378  	mul 0x00000038, r7, r0
+000002C6 C729                 379  	add r7, r5
+000002C8 252F3500             380  	ld.w 0x00000034[r5], r5
+000002CC                      381  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 902
+000002CC 602A                 382  	cmp 0x00000000, r5
+000002CE 8205                 383  	bz9 .BB.LABEL.9_4
+000002D0                      384  .BB.LABEL.9_2:	; bb17
+000002D0                      385  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 0
+000002D0 E52F0100             386  	ld.hu 0x00000000[r5], r5
+000002D4 E531                 387  	cmp r5, r6
+000002D6 8A05                 388  	bnz9 .BB.LABEL.9_4
+000002D8                      389  .BB.LABEL.9_3:	; if_then_bb
+000002D8                      390  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 904
+000002D8 8200                 391  	zxb r2
+000002DA F0174402             392  	mul 0x00000030, r2, r0
+000002DE                      393  	mov #_CanNm_ChRunTime.3, r5
+000002DE 250600000000            -- mov         0x0,tp
+000002E4 C229                 394  	add r2, r5
+000002E6 8505                 395  	br9 .BB.LABEL.9_7
+000002E8                      396  .BB.LABEL.9_4:	; if_break_bb
+000002E8                      397  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 0
+000002E8 4112                 398  	add 0x00000001, r2
+000002EA                      399  .BB.LABEL.9_5:	; bb38
+000002EA                      400  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 899
+000002EA C206FF00             401  	andi 0x000000FF, r2, r0
+000002EE 8205                 402  	bz9 .BB.LABEL.9_1
+000002F0                      403  .BB.LABEL.9_6:	; bb38.bb45_crit_edge
+000002F0                      404  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 0
+000002F0 002A                 405  	mov 0x00000000, r5
+000002F2                      406  .BB.LABEL.9_7:	; bb45
+000002F2                      407  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 908
+000002F2 602A                 408  	cmp 0x00000000, r5
+000002F4 8205                 409  	bz9 .BB.LABEL.9_10
+000002F6                      410  .BB.LABEL.9_8:	; if_then_bb50
+000002F6                      411  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 911
+000002F6 25170100             412  	ld.w 0x00000000[r5], r2
+000002FA 5C12                 413  	add 0xFFFFFFFC, r2
+000002FC 6112                 414  	cmp 0x00000001, r2
+000002FE 8B05                 415  	bh9 .BB.LABEL.9_10
+00000300                      416  .BB.LABEL.9_9:	; if_then_bb70
+00000300                      417  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 0
+00000300 0112                 418  	mov 0x00000001, r2
+00000302                      419  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 917
+00000302 45171B00             420  	st.b r2, 0x0000001B[r5]
+00000306 0052                 421  	mov 0x00000000, r10
+00000308                      422  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 919
+00000308 7F00                 423  	jmp [r31]
+0000030A                      424  .BB.LABEL.9_10:	; if_break_bb74
+0000030A                      425  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 0
+0000030A 0152                 426  	mov 0x00000001, r10
+0000030C                      427  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 926
+0000030C 7F00                 428  	jmp [r31]
+0000030E                      429  _CanNm_GetNodeIdentifier:
+0000030E                      430  	.stack _CanNm_GetNodeIdentifier = 20
+0000030E                      431  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 941
+0000030E 8007210F             432  	prepare 0x00000079, 0x00000000
+00000312 07A0                 433  	mov r7, r20
+00000314                      434  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 950
+00000314 80FF0000             435  	jarl _CanNm_FindChannelIndex.1, r31
+00000318                      436  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 951
+00000318 40160000             437  	movhi HIGHW1(#_CanNm_CfgPtr.2), r0, r2
+0000031C 22170100             438  	ld.w LOWW(#_CanNm_CfgPtr.2)[r2], r2
+00000320 22AF0500             439  	ld.w 0x00000004[r2], r21
+00000324                      440  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 955
+00000324 EA163800             441  	mulhi 0x00000038, r10, r2
+00000328 D511                 442  	add r21, r2
+0000032A A2170D00             443  	ld.bu 0x0000000D[r2], r2
+0000032E 6012                 444  	cmp 0x00000000, r2
+00000330 0AB0                 445  	mov r10, r22
+00000332 0AB8                 446  	mov r10, r23
+00000334 8205                 447  	bz9 .BB.LABEL.10_2
+00000336                      448  .BB.LABEL.10_1:	; if_then_bb
+00000336                      449  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 957
+00000336 80FF0000             450  	jarl _SchM_Enter_CanNm_Context, r31
+0000033A                      451  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 958
+0000033A F7163000             452  	mulhi 0x00000030, r23, r2
+0000033E                      453  	mov #_CanNm_ChRunTime.3, r5
+0000033E 250600000000            -- mov         0x0,tp
+00000344 C229                 454  	add r2, r5
+00000346 F6163800             455  	mulhi 0x00000038, r22, r2
+0000034A C2A9                 456  	add r2, r21
+0000034C 95171500             457  	ld.bu 0x00000014[r21], r2
+00000350 C229                 458  	add r2, r5
+00000352 05171F00             459  	ld.b 0x0000001F[r5], r2
+00000356 54170000             460  	st.b r2, 0x00000000[r20]
+0000035A                      461  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 959
+0000035A 80FF0000             462  	jarl _SchM_Exit_CanNm_Context, r31
+0000035E 0052                 463  	mov 0x00000000, r10
+00000360                      464  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 960
+00000360 40063F0F             465  	dispose 0x00000000, 0x00000079, [r31]
+00000364                      466  .BB.LABEL.10_2:	; if_break_bb
+00000364                      467  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 0
+00000364 0152                 468  	mov 0x00000001, r10
+00000366                      469  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 968
+00000366 40063F0F             470  	dispose 0x00000000, 0x00000079, [r31]
+0000036A                      471  _CanNm_GetLocalNodeIdentifier:
+0000036A                      472  	.stack _CanNm_GetLocalNodeIdentifier = 8
+0000036A                      473  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 981
+0000036A 80072108             474  	prepare 0x00000041, 0x00000000
+0000036E 07A0                 475  	mov r7, r20
+00000370                      476  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 990
+00000370 80FF0000             477  	jarl _CanNm_FindChannelIndex.1, r31
+00000374                      478  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 991
+00000374 40160000             479  	movhi HIGHW1(#_CanNm_CfgPtr.2), r0, r2
+00000378 22170100             480  	ld.w LOWW(#_CanNm_CfgPtr.2)[r2], r2
+0000037C 22170500             481  	ld.w 0x00000004[r2], r2
+00000380                      482  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 993
+00000380 EA2E3800             483  	mulhi 0x00000038, r10, r5
+00000384 C229                 484  	add r2, r5
+00000386 A52F0D00             485  	ld.bu 0x0000000D[r5], r5
+0000038A 602A                 486  	cmp 0x00000000, r5
+0000038C 8205                 487  	bz9 .BB.LABEL.11_2
+0000038E                      488  .BB.LABEL.11_1:	; if_then_bb
+0000038E                      489  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 995
+0000038E EA2E3800             490  	mulhi 0x00000038, r10, r5
+00000392 C511                 491  	add r5, r2
+00000394 02170E00             492  	ld.b 0x0000000E[r2], r2
+00000398 54170000             493  	st.b r2, 0x00000000[r20]
+0000039C 0052                 494  	mov 0x00000000, r10
+0000039E                      495  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 997
+0000039E 40063F08             496  	dispose 0x00000000, 0x00000041, [r31]
+000003A2                      497  .BB.LABEL.11_2:	; if_break_bb
+000003A2                      498  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 0
+000003A2 0152                 499  	mov 0x00000001, r10
+000003A4                      500  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1005
+000003A4 40063F08             501  	dispose 0x00000000, 0x00000041, [r31]
+000003A8                      502  _CanNm_RepeatMessageRequest:
+000003A8                      503  	.stack _CanNm_RepeatMessageRequest = 8
+000003A8                      504  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1017
+000003A8 80072108             505  	prepare 0x00000041, 0x00000000
+000003AC                      506  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1026
+000003AC 80FF0000             507  	jarl _CanNm_FindChannelIndex.1, r31
+000003B0                      508  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1027
+000003B0 40160000             509  	movhi HIGHW1(#_CanNm_CfgPtr.2), r0, r2
+000003B4 22170100             510  	ld.w LOWW(#_CanNm_CfgPtr.2)[r2], r2
+000003B8 22170500             511  	ld.w 0x00000004[r2], r2
+000003BC EA2E3800             512  	mulhi 0x00000038, r10, r5
+000003C0 C511                 513  	add r5, r2
+000003C2 82170D00             514  	ld.bu 0x0000000C[r2], r2
+000003C6 6012                 515  	cmp 0x00000000, r2
+000003C8 0AA0                 516  	mov r10, r20
+000003CA 8205                 517  	bz9 .BB.LABEL.12_5
+000003CC                      518  .BB.LABEL.12_1:	; if_then_bb
+000003CC                      519  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1031
+000003CC 80FF0000             520  	jarl _SchM_Enter_CanNm_Context, r31
+000003D0                      521  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1037
+000003D0 F4163000             522  	mulhi 0x00000030, r20, r2
+000003D4                      523  	mov #_CanNm_ChRunTime.3, r5
+000003D4 250600000000            -- mov         0x0,tp
+000003DA C229                 524  	add r2, r5
+000003DC 25170100             525  	ld.w 0x00000000[r5], r2
+000003E0 5D12                 526  	add 0xFFFFFFFD, r2
+000003E2 6212                 527  	cmp 0x00000002, r2
+000003E4 8105                 528  	bl9 .BB.LABEL.12_3
+000003E6                      529  .BB.LABEL.12_2:	; if_then_bb.if_break_bb_crit_edge
+000003E6                      530  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 0
+000003E6 01A2                 531  	mov 0x00000001, r20
+000003E8 8505                 532  	br9 .BB.LABEL.12_4
+000003EA                      533  .BB.LABEL.12_3:	; if_then_bb37
+000003EA                      534  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1039
+000003EA F4A63000             535  	mulhi 0x00000030, r20, r20
+000003EE                      536  	mov #_CanNm_ChRunTime.3, r2
+000003EE 220600000000            -- mov         0x0,hp
+000003F4 D411                 537  	add r20, r2
+000003F6 01A2                 538  	mov 0x00000001, r20
+000003F8 42A71D00             539  	st.b r20, 0x0000001D[r2]
+000003FC 00A2                 540  	mov 0x00000000, r20
+000003FE                      541  .BB.LABEL.12_4:	; if_break_bb
+000003FE                      542  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1042
+000003FE 80FF0000             543  	jarl _SchM_Exit_CanNm_Context, r31
+00000402 1450                 544  	mov r20, r10
+00000404 40063F08             545  	dispose 0x00000000, 0x00000041, [r31]
+00000408                      546  .BB.LABEL.12_5:	; if_break_bb40
+00000408                      547  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 0
+00000408 0152                 548  	mov 0x00000001, r10
+0000040A                      549  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1049
+0000040A 40063F08             550  	dispose 0x00000000, 0x00000041, [r31]
+0000040E                      551  _CanNm_GetPduData:
+0000040E                      552  	.stack _CanNm_GetPduData = 12
+0000040E                      553  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1061
+0000040E 8007210C             554  	prepare 0x00000061, 0x00000000
+00000412 07A0                 555  	mov r7, r20
+00000414                      556  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1070
+00000414 80FF0000             557  	jarl _CanNm_FindChannelIndex.1, r31
+00000418 0AA8                 558  	mov r10, r21
+0000041A                      559  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1085
+0000041A 80FF0000             560  	jarl _SchM_Enter_CanNm_Context, r31
+0000041E                      561  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1086
+0000041E F5163000             562  	mulhi 0x00000030, r21, r2
+00000422                      563  	mov #_CanNm_ChRunTime.3, r5
+00000422 250600000000            -- mov         0x0,tp
+00000428 C229                 564  	add r2, r5
+0000042A 253E1F00             565  	movea 0x0000001F, r5, r7
+0000042E 0842                 566  	mov 0x00000008, r8
+00000430 1430                 567  	mov r20, r6
+00000432 80FF0000             568  	jarl _ILib_memcpy, r31
+00000436                      569  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1087
+00000436 80FF0000             570  	jarl _SchM_Exit_CanNm_Context, r31
+0000043A 0052                 571  	mov 0x00000000, r10
+0000043C                      572  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1097
+0000043C 40063F0C             573  	dispose 0x00000000, 0x00000061, [r31]
+00000440                      574  _CanNm_GetState:
+00000440                      575  	.stack _CanNm_GetState = 16
+00000440                      576  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1115
+00000440 8007210E             577  	prepare 0x00000071, 0x00000000
+00000444 07A0                 578  	mov r7, r20
+00000446 08A8                 579  	mov r8, r21
+00000448                      580  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1123
+00000448 80FF0000             581  	jarl _CanNm_FindChannelIndex.1, r31
+0000044C 0AB0                 582  	mov r10, r22
+0000044E                      583  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1125
+0000044E 80FF0000             584  	jarl _SchM_Enter_CanNm_Context, r31
+00000452                      585  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1126
+00000452 F6163000             586  	mulhi 0x00000030, r22, r2
+00000456                      587  	mov #_CanNm_ChRunTime.3, r5
+00000456 250600000000            -- mov         0x0,tp
+0000045C C229                 588  	add r2, r5
+0000045E 25170100             589  	ld.w 0x00000000[r5], r2
+00000462 74170100             590  	st.w r2, 0x00000000[r20]
+00000466                      591  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1127
+00000466 25170500             592  	ld.w 0x00000004[r5], r2
+0000046A 75170100             593  	st.w r2, 0x00000000[r21]
+0000046E                      594  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1128
+0000046E 80FF0000             595  	jarl _SchM_Exit_CanNm_Context, r31
+00000472 0052                 596  	mov 0x00000000, r10
+00000474                      597  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1133
+00000474 40063F0E             598  	dispose 0x00000000, 0x00000071, [r31]
+00000478                      599  _CanNm_TxConfirmation:
+00000478                      600  	.stack _CanNm_TxConfirmation = 4
+00000478                      601  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1341
+00000478 80072100             602  	prepare 0x00000001, 0x00000000
+0000047C 0012                 603  	mov 0x00000000, r2
+0000047E 8505                 604  	br9 .BB.LABEL.15_3
+00000480                      605  .BB.LABEL.15_1:	; bb
+00000480                      606  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1350
+00000480 402E0000             607  	movhi HIGHW1(#_CanNm_CfgPtr.2), r0, r5
+00000484 252F0100             608  	ld.w LOWW(#_CanNm_CfgPtr.2)[r5], r5
+00000488 252F0500             609  	ld.w 0x00000004[r5], r5
+0000048C C23EFF00             610  	andi 0x000000FF, r2, r7
+00000490 F83F4402             611  	mul 0x00000038, r7, r0
+00000494 C729                 612  	add r7, r5
+00000496 252F2D00             613  	ld.w 0x0000002C[r5], r5
+0000049A E52F0100             614  	ld.hu 0x00000000[r5], r5
+0000049E E531                 615  	cmp r5, r6
+000004A0 8205                 616  	bz9 .BB.LABEL.15_4
+000004A2                      617  .BB.LABEL.15_2:	; if_break_bb
+000004A2                      618  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 0
+000004A2 4112                 619  	add 0x00000001, r2
+000004A4                      620  .BB.LABEL.15_3:	; bb20
+000004A4                      621  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1348
+000004A4 C206FF00             622  	andi 0x000000FF, r2, r0
+000004A8 8205                 623  	bz9 .BB.LABEL.15_1
+000004AA                      624  .BB.LABEL.15_4:	; bb27
+000004AA                      625  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1355
+000004AA C236FF00             626  	andi 0x000000FF, r2, r6
+000004AE 80FF0000             627  	jarl _CanNm_InnerTxConfHandle.1, r31
+000004B2 40063F00             628  	dispose 0x00000000, 0x00000001, [r31]
+000004B6                      629  _CanNm_RxIndication:
+000004B6                      630  	.stack _CanNm_RxIndication = 20
+000004B6                      631  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1382
+000004B6 8007210F             632  	prepare 0x00000079, 0x00000000
+000004BA                      633  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1388
+000004BA E7170900             634  	ld.hu 0x00000008[r7], r2
+000004BE 6812                 635  	cmp 0x00000008, r2
+000004C0 07A0                 636  	mov r7, r20
+000004C2 8A05                 637  	bnz9 .BB.LABEL.16_13
+000004C4                      638  .BB.LABEL.16_1:	; entry.bb64_crit_edge
+000004C4                      639  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 0
+000004C4 00AA                 640  	mov 0x00000000, r21
+000004C6 8505                 641  	br9 .BB.LABEL.16_7
+000004C8                      642  .BB.LABEL.16_2:	; bb19
+000004C8                      643  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1400
+000004C8 E54E3800             644  	mulhi 0x00000038, r5, r9
+000004CC C249                 645  	add r2, r9
+000004CE 294F2500             646  	ld.w 0x00000024[r9], r9
+000004D2 C756FFFF             647  	andi 0x0000FFFF, r7, r10
+000004D6 CA51                 648  	add r10, r10
+000004D8 CA49                 649  	add r10, r9
+000004DA E94F0100             650  	ld.hu 0x00000000[r9], r9
+000004DE E931                 651  	cmp r9, r6
+000004E0 8205                 652  	bz9 .BB.LABEL.16_5
+000004E2                      653  .BB.LABEL.16_3:	; if_break_bb
+000004E2                      654  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 0
+000004E2 413A                 655  	add 0x00000001, r7
+000004E4                      656  .BB.LABEL.16_4:	; bb38
+000004E4                      657  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1398
+000004E4 E5463800             658  	mulhi 0x00000038, r5, r8
+000004E8 C241                 659  	add r2, r8
+000004EA 88472900             660  	ld.bu 0x00000028[r8], r8
+000004EE C74EFFFF             661  	andi 0x0000FFFF, r7, r9
+000004F2 E849                 662  	cmp r8, r9
+000004F4 8605                 663  	blt9 .BB.LABEL.16_2
+000004F6                      664  .BB.LABEL.16_5:	; bb49
+000004F6                      665  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1406
+000004F6 C700                 666  	zxh r7
+000004F8 E741                 667  	cmp r7, r8
+000004FA 8A05                 668  	bnz9 .BB.LABEL.16_9
+000004FC                      669  .BB.LABEL.16_6:	; if_break_bb61
+000004FC                      670  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 0
+000004FC 41AA                 671  	add 0x00000001, r21
+000004FE                      672  .BB.LABEL.16_7:	; bb64
+000004FE                      673  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1395
+000004FE D506FF00             674  	andi 0x000000FF, r21, r0
+00000502 8A05                 675  	bnz9 .BB.LABEL.16_9
+00000504                      676  .BB.LABEL.16_8:	; bb
+00000504                      677  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1397
+00000504 40B60000             678  	movhi HIGHW1(#_CanNm_CfgPtr.2), r0, r22
+00000508 36B70100             679  	ld.w LOWW(#_CanNm_CfgPtr.2)[r22], r22
+0000050C 36170500             680  	ld.w 0x00000004[r22], r2
+00000510 D52EFF00             681  	andi 0x000000FF, r21, r5
+00000514 05B0                 682  	mov r5, r22
+00000516 F8B74402             683  	mul 0x00000038, r22, r0
+0000051A C2B1                 684  	add r2, r22
+0000051C 003A                 685  	mov 0x00000000, r7
+0000051E 8505                 686  	br9 .BB.LABEL.16_4
+00000520                      687  .BB.LABEL.16_9:	; bb71
+00000520                      688  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1419
+00000520 80FF0000             689  	jarl _SchM_Enter_CanNm_Context, r31
+00000524                      690  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1421
+00000524 F4470900             691  	ld.hu 0x00000008[r20], r8
+00000528 343F0100             692  	ld.w 0x00000000[r20], r7
+0000052C                      693  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1412
+0000052C D5BEFF00             694  	andi 0x000000FF, r21, r23
+00000530                      695  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1421
+00000530 1710                 696  	mov r23, r2
+00000532 F0174402             697  	mul 0x00000030, r2, r0
+00000536                      698  	mov #_CanNm_ChRunTime.3, r5
+00000536 250600000000            -- mov         0x0,tp
+0000053C C229                 699  	add r2, r5
+0000053E 25361F00             700  	movea 0x0000001F, r5, r6
+00000542 80FF0000             701  	jarl _ILib_memcpy, r31
+00000546                      702  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1422
+00000546 80FF0000             703  	jarl _SchM_Exit_CanNm_Context, r31
+0000054A                      704  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1425
+0000054A 36171100             705  	ld.w 0x00000010[r22], r2
+0000054E 020601FF             706  	addi 0xFFFFFF01, r2, r0
+00000552 8205                 707  	bz9 .BB.LABEL.16_12
+00000554                      708  .BB.LABEL.16_10:	; if_then_bb92
+00000554                      709  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1427
+00000554 342F0100             710  	ld.w 0x00000000[r20], r5
+00000558 C229                 711  	add r2, r5
+0000055A                      712  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1428
+0000055A C5C70000             713  	tst1 0x00000000, 0x00000000[r5]
+0000055E 8205                 714  	bz9 .BB.LABEL.16_12
+00000560                      715  .BB.LABEL.16_11:	; if_then_bb107
+00000560                      716  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1430
+00000560 F7163000             717  	mulhi 0x00000030, r23, r2
+00000564                      718  	mov #_CanNm_ChRunTime.3, r5
+00000564 250600000000            -- mov         0x0,tp
+0000056A C229                 719  	add r2, r5
+0000056C 0112                 720  	mov 0x00000001, r2
+0000056E 45171E00             721  	st.b r2, 0x0000001E[r5]
+00000572                      722  .BB.LABEL.16_12:	; if_break_bb111
+00000572                      723  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1434
+00000572 F7163000             724  	mulhi 0x00000030, r23, r2
+00000576                      725  	mov #_CanNm_ChRunTime.3, r5
+00000576 250600000000            -- mov         0x0,tp
+0000057C C229                 726  	add r2, r5
+0000057E 0112                 727  	mov 0x00000001, r2
+00000580 45170E00             728  	st.b r2, 0x0000000E[r5]
+00000584                      729  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1438
+00000584 402E0000             730  	movhi HIGHW1(#_validNmMsgFlag), r0, r5
+00000588 45170000             731  	st.b r2, LOWW(#_validNmMsgFlag)[r5]
+0000058C                      732  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1442
+0000058C 9500                 733  	zxb r21
+0000058E F8AF4402             734  	mul 0x00000038, r21, r0
+00000592 40160000             735  	movhi HIGHW1(#_CanNm_CfgPtr.2), r0, r2
+00000596 22170100             736  	ld.w LOWW(#_CanNm_CfgPtr.2)[r2], r2
+0000059A 22170500             737  	ld.w 0x00000004[r2], r2
+0000059E D511                 738  	add r21, r2
+000005A0 82372100             739  	ld.bu 0x00000020[r2], r6
+000005A4 80FF0000             740  	jarl _Nm_PduRxIndication, r31
+000005A8                      741  .BB.LABEL.16_13:	; return
+000005A8                      742  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1447
+000005A8 40063F0F             743  	dispose 0x00000000, 0x00000079, [r31]
+000005AC                      744  _CanNm_TriggerTransmit:
+000005AC                      745  	.stack _CanNm_TriggerTransmit = 36
+000005AC                      746  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1514
+000005AC 8A07210E             747  	prepare 0x00000071, 0x00000014
+000005B0                      748  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1527
+000005B0 E7170900             749  	ld.hu 0x00000008[r7], r2
+000005B4 6812                 750  	cmp 0x00000008, r2
+000005B6 07A0                 751  	mov r7, r20
+000005B8 8105                 752  	bl9 .BB.LABEL.17_11
+000005BA                      753  .BB.LABEL.17_1:	; entry.bb39_crit_edge
+000005BA                      754  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 0
+000005BA 00AA                 755  	mov 0x00000000, r21
+000005BC 8505                 756  	br9 .BB.LABEL.17_5
+000005BE                      757  .BB.LABEL.17_2:	; bb
+000005BE                      758  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1531
+000005BE 40160000             759  	movhi HIGHW1(#_CanNm_CfgPtr.2), r0, r2
+000005C2 22170100             760  	ld.w LOWW(#_CanNm_CfgPtr.2)[r2], r2
+000005C6 222F0500             761  	ld.w 0x00000004[r2], r5
+000005CA D53EFF00             762  	andi 0x000000FF, r21, r7
+000005CE F83F4402             763  	mul 0x00000038, r7, r0
+000005D2 C729                 764  	add r7, r5
+000005D4 252F2D00             765  	ld.w 0x0000002C[r5], r5
+000005D8 E52F0100             766  	ld.hu 0x00000000[r5], r5
+000005DC E531                 767  	cmp r5, r6
+000005DE 8A05                 768  	bnz9 .BB.LABEL.17_4
+000005E0                      769  .BB.LABEL.17_3:	; if_then_bb29
+000005E0                      770  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1534
+000005E0 D52EFF00             771  	andi 0x000000FF, r21, r5
+000005E4 F82F4402             772  	mul 0x00000038, r5, r0
+000005E8 22B70500             773  	ld.w 0x00000004[r2], r22
+000005EC C5B1                 774  	add r5, r22
+000005EE 8505                 775  	br9 .BB.LABEL.17_6
+000005F0                      776  .BB.LABEL.17_4:	; if_break_bb
+000005F0                      777  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 0
+000005F0 41AA                 778  	add 0x00000001, r21
+000005F2                      779  .BB.LABEL.17_5:	; bb39
+000005F2                      780  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1529
+000005F2 D506FF00             781  	andi 0x000000FF, r21, r0
+000005F6 8205                 782  	bz9 .BB.LABEL.17_2
+000005F8                      783  .BB.LABEL.17_6:	; bb46
+000005F8                      784  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1539
+000005F8 D506FF00             785  	andi 0x000000FF, r21, r0
+000005FC 8A05                 786  	bnz9 .BB.LABEL.17_11
+000005FE                      787  .BB.LABEL.17_7:	; if_then_bb52
+000005FE                      788  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1544
+000005FE 36173500             789  	ld.w 0x00000034[r22], r2
+00000602 6012                 790  	cmp 0x00000000, r2
+00000604 8205                 791  	bz9 .BB.LABEL.17_10
+00000606                      792  .BB.LABEL.17_8:	; if_then_bb59
+00000606                      793  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1547
+00000606 43070700             794  	st.b r0, 0x00000007[r3]
+0000060A 43070600             795  	st.b r0, 0x00000006[r3]
+0000060E 43070500             796  	st.b r0, 0x00000005[r3]
+00000612 43070400             797  	st.b r0, 0x00000004[r3]
+00000616 43070300             798  	st.b r0, 0x00000003[r3]
+0000061A 43070200             799  	st.b r0, 0x00000002[r3]
+0000061E 43070100             800  	st.b r0, 0x00000001[r3]
+00000622 43070000             801  	st.b r0, 0x00000000[r3]
+00000626 43070000             802  	st.b r0, 0x00000000[r3]
+0000062A                      803  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1548
+0000062A 96173100             804  	ld.bu 0x00000030[r22], r2
+0000062E 63171000             805  	st.h r2, 0x00000010[r3]
+00000632 0310                 806  	mov r3, r2
+00000634                      807  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1549
+00000634 63170900             808  	st.w r2, 0x00000008[r3]
+00000638                      809  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1550
+00000638 63070D00             810  	st.w r0, 0x0000000C[r3]
+0000063C                      811  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1551
+0000063C 36173500             812  	ld.w 0x00000034[r22], r2
+00000640 E2370300             813  	ld.hu 0x00000002[r2], r6
+00000644 233E0800             814  	movea 0x00000008, r3, r7
+00000648 80FF0000             815  	jarl _PduR_IfTriggerTransmit, r31
+0000064C 6052                 816  	cmp 0x00000000, r10
+0000064E 8A05                 817  	bnz9 .BB.LABEL.17_10
+00000650                      818  .BB.LABEL.17_9:	; if_then_bb80
+00000650                      819  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1553
+00000650 80FF0000             820  	jarl _SchM_Enter_CanNm_Context, r31
+00000654                      821  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1554
+00000654 96473100             822  	ld.bu 0x00000030[r22], r8
+00000658 B6173100             823  	ld.bu 0x00000031[r22], r2
+0000065C D52EFF00             824  	andi 0x000000FF, r21, r5
+00000660 F02F4402             825  	mul 0x00000030, r5, r0
+00000664                      826  	mov #_CanNm_ChRunTime.3, r6
+00000664 260600000000            -- mov         0x0,r6
+0000066A C531                 827  	add r5, r6
+0000066C C231                 828  	add r2, r6
+0000066E 26362700             829  	movea 0x00000027, r6, r6
+00000672 0338                 830  	mov r3, r7
+00000674 80FF0000             831  	jarl _ILib_memcpy, r31
+00000678                      832  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1558
+00000678 80FF0000             833  	jarl _SchM_Exit_CanNm_Context, r31
+0000067C                      834  .BB.LABEL.17_10:	; if_break_bb98
+0000067C                      835  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 0
+0000067C 08B2                 836  	mov 0x00000008, r22
+0000067E                      837  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1562
+0000067E 74B70800             838  	st.h r22, 0x00000008[r20]
+00000682                      839  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1564
+00000682 80FF0000             840  	jarl _SchM_Enter_CanNm_Context, r31
+00000686                      841  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1565
+00000686 34370100             842  	ld.w 0x00000000[r20], r6
+0000068A 9500                 843  	zxb r21
+0000068C F0AF4402             844  	mul 0x00000030, r21, r0
+00000690                      845  	mov #_CanNm_ChRunTime.3, r2
+00000690 220600000000            -- mov         0x0,hp
+00000696 D511                 846  	add r21, r2
+00000698 223E2700             847  	movea 0x00000027, r2, r7
+0000069C 1640                 848  	mov r22, r8
+0000069E 80FF0000             849  	jarl _ILib_memcpy, r31
+000006A2                      850  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1566
+000006A2 80FF0000             851  	jarl _SchM_Exit_CanNm_Context, r31
+000006A6 0052                 852  	mov 0x00000000, r10
+000006A8                      853  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1568
+000006A8 4A063F0E             854  	dispose 0x00000014, 0x00000071, [r31]
+000006AC                      855  .BB.LABEL.17_11:	; if_break_bb111
+000006AC                      856  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 0
+000006AC 0152                 857  	mov 0x00000001, r10
+000006AE                      858  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1574
+000006AE 4A063F0E             859  	dispose 0x00000014, 0x00000071, [r31]
+000006B2                      860  _CanNm_MainFunction:
+000006B2                      861  	.stack _CanNm_MainFunction = 20
+000006B2                      862  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1594
+000006B2 8207210E             863  	prepare 0x00000071, 0x00000004
+000006B6                      864  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1596
+000006B6 40160000             865  	movhi HIGHW1(#_CanNm_InitStatus.1), r0, r2
+000006BA 22170100             866  	ld.w LOWW(#_CanNm_InitStatus.1)[r2], r2
+000006BE 6112                 867  	cmp 0x00000001, r2
+000006C0 8A05                 868  	bnz9 .BB.LABEL.18_6
+000006C2                      869  .BB.LABEL.18_1:	; entry.bb30_crit_edge
+000006C2                      870  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 0
+000006C2 00A2                 871  	mov 0x00000000, r20
+000006C4 8505                 872  	br9 .BB.LABEL.18_5
+000006C6                      873  .BB.LABEL.18_2:	; bb
+000006C6                      874  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1611
+000006C6 43070300             875  	st.b r0, 0x00000003[r3]
+000006CA 43070200             876  	st.b r0, 0x00000002[r3]
+000006CE 43070200             877  	st.b r0, 0x00000002[r3]
+000006D2                      878  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1610
+000006D2 D4AEFF00             879  	andi 0x000000FF, r20, r21
+000006D6                      880  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1612
+000006D6 1510                 881  	mov r21, r2
+000006D8 F0174402             882  	mul 0x00000030, r2, r0
+000006DC                      883  	mov #_CanNm_ChRunTime.3, r5
+000006DC 250600000000            -- mov         0x0,tp
+000006E2 C229                 884  	add r2, r5
+000006E4 85170F00             885  	ld.bu 0x0000000E[r5], r2
+000006E8 4E2A                 886  	add 0x0000000E, r5
+000006EA 6012                 887  	cmp 0x00000000, r2
+000006EC 8205                 888  	bz9 .BB.LABEL.18_4
+000006EE                      889  .BB.LABEL.18_3:	; if_then_bb18
+000006EE                      890  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1614
+000006EE 45070000             891  	st.b r0, 0x00000000[r5]
+000006F2                      892  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1615
+000006F2 D436FF00             893  	andi 0x000000FF, r20, r6
+000006F6 233E0200             894  	movea 0x00000002, r3, r7
+000006FA 80FF0000             895  	jarl _CanNm_RxDataMainHandle.1, r31
+000006FE                      896  .BB.LABEL.18_4:	; if_break_bb
+000006FE                      897  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1618
+000006FE D4B6FF00             898  	andi 0x000000FF, r20, r22
+00000702 1630                 899  	mov r22, r6
+00000704 80FF0000             900  	jarl _CanNm_TimerManagement.1, r31
+00000708 233E0200             901  	movea 0x00000002, r3, r7
+0000070C                      902  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1619
+0000070C 1630                 903  	mov r22, r6
+0000070E 80FF0000             904  	jarl _CanNm_StateManagement.1, r31
+00000712                      905  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1621
+00000712 1630                 906  	mov r22, r6
+00000714 80FF0000             907  	jarl _CanNm_MsgcycleTimerManage.1, r31
+00000718                      908  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1622
+00000718 1630                 909  	mov r22, r6
+0000071A 80FF0000             910  	jarl _CanNm_SendMsgMainHandle.1, r31
+0000071E                      911  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1625
+0000071E F5163000             912  	mulhi 0x00000030, r21, r2
+00000722                      913  	mov #_CanNm_ChRunTime.3, r5
+00000722 250600000000            -- mov         0x0,tp
+00000728 C229                 914  	add r2, r5
+0000072A 45071400             915  	st.b r0, 0x00000014[r5]
+0000072E 41A2                 916  	add 0x00000001, r20
+00000730                      917  .BB.LABEL.18_5:	; bb30
+00000730                      918  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1602
+00000730 D406FF00             919  	andi 0x000000FF, r20, r0
+00000734 8205                 920  	bz9 .BB.LABEL.18_2
+00000736                      921  .BB.LABEL.18_6:	; return
+00000736                      922  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1628
+00000736 42063F0E             923  	dispose 0x00000004, 0x00000071, [r31]
+0000073A                      924  _CanNm_TestAndClear.1:
+0000073A                      925  	.stack _CanNm_TestAndClear.1 = 0
+0000073A                      926  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1633
+0000073A 86570100             927  	ld.bu 0x00000000[r6], r10
+0000073E                      928  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1636
+0000073E 6052                 929  	cmp 0x00000000, r10
+00000740 8205                 930  	bz9 .BB.LABEL.19_2
+00000742                      931  .BB.LABEL.19_1:	; if_then_bb
+00000742                      932  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1638
+00000742 46070000             933  	st.b r0, 0x00000000[r6]
+00000746                      934  .BB.LABEL.19_2:	; if_break_bb
+00000746                      935  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1641
+00000746 7F00                 936  	jmp [r31]
+00000748                      937  _CanNm_FindChannelIndex.1:
+00000748                      938  	.stack _CanNm_FindChannelIndex.1 = 0
+00000748                      939  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1697
+00000748 0052                 940  	mov 0x00000000, r10
+0000074A 8505                 941  	br9 .BB.LABEL.20_3
+0000074C                      942  .BB.LABEL.20_1:	; bb
+0000074C                      943  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1702
+0000074C 40160000             944  	movhi HIGHW1(#_CanNm_CfgPtr.2), r0, r2
+00000750 22170100             945  	ld.w LOWW(#_CanNm_CfgPtr.2)[r2], r2
+00000754 22170500             946  	ld.w 0x00000004[r2], r2
+00000758 CA2EFF00             947  	andi 0x000000FF, r10, r5
+0000075C F82F4402             948  	mul 0x00000038, r5, r0
+00000760 C511                 949  	add r5, r2
+00000762 82172100             950  	ld.bu 0x00000020[r2], r2
+00000766 E231                 951  	cmp r2, r6
+00000768 8205                 952  	bz9 .BB.LABEL.20_4
+0000076A                      953  .BB.LABEL.20_2:	; if_break_bb
+0000076A                      954  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 0
+0000076A 4152                 955  	add 0x00000001, r10
+0000076C                      956  .BB.LABEL.20_3:	; bb18
+0000076C                      957  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1700
+0000076C CA06FF00             958  	andi 0x000000FF, r10, r0
+00000770 8205                 959  	bz9 .BB.LABEL.20_1
+00000772                      960  .BB.LABEL.20_4:	; bb25
+00000772                      961  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1708
+00000772 8A00                 962  	zxb r10
+00000774 7F00                 963  	jmp [r31]
+00000776                      964  _CanNm_StateChange.1:
+00000776                      965  	.stack _CanNm_StateChange.1 = 12
+00000776                      966  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1723
+00000776 8007210C             967  	prepare 0x00000061, 0x00000000
+0000077A 06A0                 968  	mov r6, r20
+0000077C 08A8                 969  	mov r8, r21
+0000077E                      970  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1728
+0000077E 40160000             971  	movhi HIGHW1(#_CanNm_CfgPtr.2), r0, r2
+00000782 22170100             972  	ld.w LOWW(#_CanNm_CfgPtr.2)[r2], r2
+00000786 22170500             973  	ld.w 0x00000004[r2], r2
+0000078A F42E3800             974  	mulhi 0x00000038, r20, r5
+0000078E C511                 975  	add r5, r2
+00000790 82372100             976  	ld.bu 0x00000020[r2], r6
+00000794 80FF0000             977  	jarl _Nm_StateChangeNotification, r31
+00000798                      978  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1733
+00000798 80FF0000             979  	jarl _SchM_Enter_CanNm_Context, r31
+0000079C                      980  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1734
+0000079C F4163000             981  	mulhi 0x00000030, r20, r2
+000007A0                      982  	mov #_CanNm_ChRunTime.3, r5
+000007A0 250600000000            -- mov         0x0,tp
+000007A6 C229                 983  	add r2, r5
+000007A8 65AF0100             984  	st.w r21, 0x00000000[r5]
+000007AC                      985  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1735
+000007AC 80FF0000             986  	jarl _SchM_Exit_CanNm_Context, r31
+000007B0 40063F0C             987  	dispose 0x00000000, 0x00000061, [r31]
+000007B4                      988  _CanNm_EntryRepeatMessageState.1:
+000007B4                      989  	.stack _CanNm_EntryRepeatMessageState.1 = 24
+000007B4                      990  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1752
+000007B4 8007218F             991  	prepare 0x00000479, 0x00000000
+000007B8                      992  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1758
+000007B8 E6163000             993  	mulhi 0x00000030, r6, r2
+000007BC                      994  	mov #_CanNm_ChRunTime.3, r5
+000007BC 250600000000            -- mov         0x0,tp
+000007C2 C229                 995  	add r2, r5
+000007C4                      996  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1754
+000007C4 40160000             997  	movhi HIGHW1(#_CanNm_CfgPtr.2), r0, r2
+000007C8 22170100             998  	ld.w LOWW(#_CanNm_CfgPtr.2)[r2], r2
+000007CC 22A70500             999  	ld.w 0x00000004[r2], r20
+000007D0                     1000  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1758
+000007D0 E6163800            1001  	mulhi 0x00000038, r6, r2
+000007D4 D411                1002  	add r20, r2
+000007D6 22171800            1003  	ld.h 0x00000018[r2], r2
+000007DA 65171000            1004  	st.h r2, 0x00000010[r5]
+000007DE                     1005  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1763
+000007DE 6142                1006  	cmp 0x00000001, r8
+000007E0 06A8                1007  	mov r6, r21
+000007E2 06B0                1008  	mov r6, r22
+000007E4 06B8                1009  	mov r6, r23
+000007E6 8A05                1010  	bnz9 .BB.LABEL.22_2
+000007E8                     1011  .BB.LABEL.22_1:	; bb
+000007E8                     1012  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 0
+000007E8 F6163800            1013  	mulhi 0x00000038, r22, r2
+000007EC D411                1014  	add r20, r2
+000007EE 82170500            1015  	ld.bu 0x00000004[r2], r2
+000007F2 6012                1016  	cmp 0x00000000, r2
+000007F4 8A05                1017  	bnz9 .BB.LABEL.22_4
+000007F6                     1018  .BB.LABEL.22_2:	; if_then_bb
+000007F6                     1019  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1772
+000007F6 F5163000            1020  	mulhi 0x00000030, r21, r2
+000007FA                     1021  	mov #_CanNm_ChRunTime.3, r5
+000007FA 250600000000            -- mov         0x0,tp
+00000800 C229                1022  	add r2, r5
+00000802 F6163800            1023  	mulhi 0x00000038, r22, r2
+00000806 D411                1024  	add r20, r2
+00000808 E2170700            1025  	ld.hu 0x00000006[r2], r2
+0000080C 65171600            1026  	st.h r2, 0x00000016[r5]
+00000810                     1027  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1774
+00000810 6012                1028  	cmp 0x00000000, r2
+00000812                     1029  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1772
+00000812 25161600            1030  	movea 0x00000016, r5, r2
+00000816                     1031  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1774
+00000816 8A05                1032  	bnz9 .BB.LABEL.22_6
+00000818                     1033  .BB.LABEL.22_3:	; if_then_bb47
+00000818                     1034  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 0
+00000818 012A                1035  	mov 0x00000001, r5
+0000081A                     1036  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1776
+0000081A 622F0000            1037  	st.h r5, 0x00000000[r2]
+0000081E 8505                1038  	br9 .BB.LABEL.22_6
+00000820                     1039  .BB.LABEL.22_4:	; if_else_bb
+00000820                     1040  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1797
+00000820 F5163000            1041  	mulhi 0x00000030, r21, r2
+00000824                     1042  	mov #_CanNm_ChRunTime.3, r5
+00000824 250600000000            -- mov         0x0,tp
+0000082A C229                1043  	add r2, r5
+0000082C 25170500            1044  	ld.w 0x00000004[r5], r2
+00000830 6112                1045  	cmp 0x00000001, r2
+00000832 8B05                1046  	bh9 .BB.LABEL.22_6
+00000834                     1047  .BB.LABEL.22_5:	; if_then_bb69
+00000834                     1048  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1804
+00000834 F5163000            1049  	mulhi 0x00000030, r21, r2
+00000838                     1050  	mov #_CanNm_ChRunTime.3, r5
+00000838 250600000000            -- mov         0x0,tp
+0000083E C229                1051  	add r2, r5
+00000840 0112                1052  	mov 0x00000001, r2
+00000842 45171B00            1053  	st.b r2, 0x0000001B[r5]
+00000846                     1054  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1806
+00000846 F6163800            1055  	mulhi 0x00000038, r22, r2
+0000084A D411                1056  	add r20, r2
+0000084C 22370200            1057  	ld.h 0x00000002[r2], r6
+00000850 65371600            1058  	st.h r6, 0x00000016[r5]
+00000854                     1059  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1807
+00000854 02170400            1060  	ld.b 0x00000004[r2], r2
+00000858 45170F00            1061  	st.b r2, 0x0000000F[r5]
+0000085C                     1062  .BB.LABEL.22_6:	; if_break_bb83
+0000085C                     1063  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1835
+0000085C F5163000            1064  	mulhi 0x00000030, r21, r2
+00000860                     1065  	mov #_CanNm_ChRunTime.3, r24
+00000860 380600000000            -- mov         0x0,r24
+00000866 C2C1                1066  	add r2, r24
+00000868 58071D00            1067  	st.b r0, 0x0000001D[r24]
+0000086C 0542                1068  	mov 0x00000005, r8
+0000086E                     1069  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1838
+0000086E 1730                1070  	mov r23, r6
+00000870 80FF0000            1071  	jarl _CanNm_StateChange.1, r31
+00000874                     1072  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1840
+00000874 38170500            1073  	ld.w 0x00000004[r24], r2
+00000878 44C2                1074  	add 0x00000004, r24
+0000087A 6312                1075  	cmp 0x00000003, r2
+0000087C 8205                1076  	bz9 .BB.LABEL.22_8
+0000087E                     1077  .BB.LABEL.22_7:	; if_then_bb95
+0000087E                     1078  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1850
+0000087E F5163000            1079  	mulhi 0x00000030, r21, r2
+00000882                     1080  	mov #_CanNm_ChRunTime.3, r5
+00000882 250600000000            -- mov         0x0,tp
+00000888 C229                1081  	add r2, r5
+0000088A F6163800            1082  	mulhi 0x00000038, r22, r2
+0000088E C2A1                1083  	add r2, r20
+00000890 34171C00            1084  	ld.h 0x0000001C[r20], r2
+00000894 65171200            1085  	st.h r2, 0x00000012[r5]
+00000898 0312                1086  	mov 0x00000003, r2
+0000089A                     1087  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1854
+0000089A 78170100            1088  	st.w r2, 0x00000000[r24]
+0000089E                     1089  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1855
+0000089E 40160000            1090  	movhi HIGHW1(#_CanNm_CfgPtr.2), r0, r2
+000008A2 22170100            1091  	ld.w LOWW(#_CanNm_CfgPtr.2)[r2], r2
+000008A6 22170500            1092  	ld.w 0x00000004[r2], r2
+000008AA F72E3800            1093  	mulhi 0x00000038, r23, r5
+000008AE C511                1094  	add r5, r2
+000008B0 82372100            1095  	ld.bu 0x00000020[r2], r6
+000008B4 80FF0000            1096  	jarl _Nm_NetworkMode, r31
+000008B8                     1097  .BB.LABEL.22_8:	; return
+000008B8                     1098  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1857
+000008B8 40063F8F            1099  	dispose 0x00000000, 0x00000479, [r31]
+000008BC                     1100  _CanNm_MsgcycleTimerManage.1:
+000008BC                     1101  	.stack _CanNm_MsgcycleTimerManage.1 = 0
+000008BC                     1102  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1871
+000008BC E6163000            1103  	mulhi 0x00000030, r6, r2
+000008C0                     1104  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1874
+000008C0                     1105  	mov #_CanNm_ChRunTime.3, r5
+000008C0 250600000000            -- mov         0x0,tp
+000008C6 C229                1106  	add r2, r5
+000008C8 E5171700            1107  	ld.hu 0x00000016[r5], r2
+000008CC 6012                1108  	cmp 0x00000000, r2
+000008CE 25161600            1109  	movea 0x00000016, r5, r2
+000008D2 8205                1110  	bz9 .BB.LABEL.23_6
+000008D4                     1111  .BB.LABEL.23_1:	; bb
+000008D4                     1112  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 0
+000008D4 E62E3000            1113  	mulhi 0x00000030, r6, r5
+000008D8                     1114  	mov #_CanNm_ChRunTime.3, r7
+000008D8 270600000000            -- mov         0x0,r7
+000008DE C539                1115  	add r5, r7
+000008E0 A72F0D00            1116  	ld.bu 0x0000000D[r7], r5
+000008E4 602A                1117  	cmp 0x00000000, r5
+000008E6 8205                1118  	bz9 .BB.LABEL.23_6
+000008E8                     1119  .BB.LABEL.23_2:	; if_then_bb
+000008E8                     1120  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1881
+000008E8 222F0000            1121  	ld.h 0x00000000[r2], r5
+000008EC 5F2A                1122  	add 0xFFFFFFFF, r5
+000008EE 622F0000            1123  	st.h r5, 0x00000000[r2]
+000008F2                     1124  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1882
+000008F2 C506FFFF            1125  	andi 0x0000FFFF, r5, r0
+000008F6 8A05                1126  	bnz9 .BB.LABEL.23_6
+000008F8                     1127  .BB.LABEL.23_3:	; bb33
+000008F8                     1128  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 0
+000008F8 E6163000            1129  	mulhi 0x00000030, r6, r2
+000008FC                     1130  	mov #_CanNm_ChRunTime.3, r5
+000008FC 250600000000            -- mov         0x0,tp
+00000902 C229                1131  	add r2, r5
+00000904 25170900            1132  	ld.w 0x00000008[r5], r2
+00000908 6012                1133  	cmp 0x00000000, r2
+0000090A 8205                1134  	bz9 .BB.LABEL.23_5
+0000090C                     1135  .BB.LABEL.23_4:	; bb39
+0000090C E6163000            1136  	mulhi 0x00000030, r6, r2
+00000910                     1137  	mov #_CanNm_ChRunTime.3, r5
+00000910 250600000000            -- mov         0x0,tp
+00000916 C229                1138  	add r2, r5
+00000918 25170100            1139  	ld.w 0x00000000[r5], r2
+0000091C 6512                1140  	cmp 0x00000005, r2
+0000091E 8A05                1141  	bnz9 .BB.LABEL.23_6
+00000920                     1142  .BB.LABEL.23_5:	; if_then_bb60
+00000920                     1143  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1888
+00000920 E6163000            1144  	mulhi 0x00000030, r6, r2
+00000924                     1145  	mov #_CanNm_ChRunTime.3, r5
+00000924 250600000000            -- mov         0x0,tp
+0000092A C229                1146  	add r2, r5
+0000092C 0112                1147  	mov 0x00000001, r2
+0000092E 45171B00            1148  	st.b r2, 0x0000001B[r5]
+00000932                     1149  .BB.LABEL.23_6:	; return
+00000932                     1150  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1891
+00000932 7F00                1151  	jmp [r31]
+00000934                     1152  _CanNm_TimerManagement.1:
+00000934                     1153  	.stack _CanNm_TimerManagement.1 = 8
+00000934                     1154  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1905
+00000934 80072108            1155  	prepare 0x00000041, 0x00000000
+00000938                     1156  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1912
+00000938 E6163000            1157  	mulhi 0x00000030, r6, r2
+0000093C                     1158  	mov #_CanNm_ChRunTime.3, r5
+0000093C 250600000000            -- mov         0x0,tp
+00000942 C229                1159  	add r2, r5
+00000944 E5171900            1160  	ld.hu 0x00000018[r5], r2
+00000948 6012                1161  	cmp 0x00000000, r2
+0000094A 252E1800            1162  	movea 0x00000018, r5, r5
+0000094E                     1163  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1907
+0000094E 403E0000            1164  	movhi HIGHW1(#_CanNm_CfgPtr.2), r0, r7
+00000952 273F0100            1165  	ld.w LOWW(#_CanNm_CfgPtr.2)[r7], r7
+00000956 273F0500            1166  	ld.w 0x00000004[r7], r7
+0000095A                     1167  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1912
+0000095A 06A0                1168  	mov r6, r20
+0000095C 8205                1169  	bz9 .BB.LABEL.24_3
+0000095E                     1170  .BB.LABEL.24_1:	; if_then_bb
+0000095E                     1171  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1914
+0000095E 5F12                1172  	add 0xFFFFFFFF, r2
+00000960 65170000            1173  	st.h r2, 0x00000000[r5]
+00000964                     1174  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1915
+00000964 C206FFFF            1175  	andi 0x0000FFFF, r2, r0
+00000968 8A05                1176  	bnz9 .BB.LABEL.24_3
+0000096A                     1177  .BB.LABEL.24_2:	; if_then_bb29
+0000096A                     1178  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1917
+0000096A F4163000            1179  	mulhi 0x00000030, r20, r2
+0000096E                     1180  	mov #_CanNm_ChRunTime.3, r5
+0000096E 250600000000            -- mov         0x0,tp
+00000974 C229                1181  	add r2, r5
+00000976 0112                1182  	mov 0x00000001, r2
+00000978 45171A00            1183  	st.b r2, 0x0000001A[r5]
+0000097C                     1184  .BB.LABEL.24_3:	; if_break_bb32
+0000097C                     1185  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1945
+0000097C F4163000            1186  	mulhi 0x00000030, r20, r2
+00000980                     1187  	mov #_CanNm_ChRunTime.3, r5
+00000980 250600000000            -- mov         0x0,tp
+00000986 C229                1188  	add r2, r5
+00000988 A5170D00            1189  	ld.bu 0x0000000D[r5], r2
+0000098C 6012                1190  	cmp 0x00000000, r2
+0000098E 8205                1191  	bz9 .BB.LABEL.24_8
+00000990                     1192  .BB.LABEL.24_4:	; if_then_bb40
+00000990                     1193  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1948
+00000990 F4163000            1194  	mulhi 0x00000030, r20, r2
+00000994                     1195  	mov #_CanNm_ChRunTime.3, r5
+00000994 250600000000            -- mov         0x0,tp
+0000099A C229                1196  	add r2, r5
+0000099C E5171300            1197  	ld.hu 0x00000012[r5], r2
+000009A0 6012                1198  	cmp 0x00000000, r2
+000009A2 252E1200            1199  	movea 0x00000012, r5, r5
+000009A6 8205                1200  	bz9 .BB.LABEL.24_8
+000009A8                     1201  .BB.LABEL.24_5:	; if_then_bb48
+000009A8                     1202  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1950
+000009A8 5F12                1203  	add 0xFFFFFFFF, r2
+000009AA 65170000            1204  	st.h r2, 0x00000000[r5]
+000009AE                     1205  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1951
+000009AE C206FFFF            1206  	andi 0x0000FFFF, r2, r0
+000009B2 8A05                1207  	bnz9 .BB.LABEL.24_8
+000009B4                     1208  .BB.LABEL.24_6:	; if_then_bb60
+000009B4                     1209  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1953
+000009B4 F4163000            1210  	mulhi 0x00000030, r20, r2
+000009B8                     1211  	mov #_CanNm_ChRunTime.3, r8
+000009B8 280600000000            -- mov         0x0,r8
+000009BE C241                1212  	add r2, r8
+000009C0 28170100            1213  	ld.w 0x00000000[r8], r2
+000009C4 5C12                1214  	add 0xFFFFFFFC, r2
+000009C6 6112                1215  	cmp 0x00000001, r2
+000009C8 8B05                1216  	bh9 .BB.LABEL.24_8
+000009CA                     1217  .BB.LABEL.24_7:	; if_then_bb79
+000009CA                     1218  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1962
+000009CA E6163800            1219  	mulhi 0x00000038, r6, r2
+000009CE C239                1220  	add r2, r7
+000009D0 27171C00            1221  	ld.h 0x0000001C[r7], r2
+000009D4 65170000            1222  	st.h r2, 0x00000000[r5]
+000009D8 204E1100            1223  	movea 0x00000011, r0, r9
+000009DC 20461300            1224  	movea 0x00000013, r0, r8
+000009E0 003A                1225  	mov 0x00000000, r7
+000009E2 20361F00            1226  	movea 0x0000001F, r0, r6
+000009E6                     1227  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1971
+000009E6 80FF0000            1228  	jarl _Det_ReportRuntimeError, r31
+000009EA                     1229  .BB.LABEL.24_8:	; if_break_bb89
+000009EA                     1230  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1982
+000009EA F4163000            1231  	mulhi 0x00000030, r20, r2
+000009EE                     1232  	mov #_CanNm_ChRunTime.3, r5
+000009EE 250600000000            -- mov         0x0,tp
+000009F4 C229                1233  	add r2, r5
+000009F6 E5171100            1234  	ld.hu 0x00000010[r5], r2
+000009FA 6012                1235  	cmp 0x00000000, r2
+000009FC 252E1000            1236  	movea 0x00000010, r5, r5
+00000A00 8205                1237  	bz9 .BB.LABEL.24_11
+00000A02                     1238  .BB.LABEL.24_9:	; if_then_bb97
+00000A02                     1239  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1984
+00000A02 5F12                1240  	add 0xFFFFFFFF, r2
+00000A04 65170000            1241  	st.h r2, 0x00000000[r5]
+00000A08                     1242  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1985
+00000A08 C206FFFF            1243  	andi 0x0000FFFF, r2, r0
+00000A0C 8A05                1244  	bnz9 .BB.LABEL.24_11
+00000A0E                     1245  .BB.LABEL.24_10:	; if_then_bb109
+00000A0E                     1246  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 1987
+00000A0E F4163000            1247  	mulhi 0x00000030, r20, r2
+00000A12                     1248  	mov #_CanNm_ChRunTime.3, r5
+00000A12 250600000000            -- mov         0x0,tp
+00000A18 C229                1249  	add r2, r5
+00000A1A 0112                1250  	mov 0x00000001, r2
+00000A1C 45171400            1251  	st.b r2, 0x00000014[r5]
+00000A20                     1252  .BB.LABEL.24_11:	; return
+00000A20                     1253  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2018
+00000A20 40063F08            1254  	dispose 0x00000000, 0x00000041, [r31]
+00000A24                     1255  _CanNm_SendNmPdu.1:
+00000A24                     1256  	.stack _CanNm_SendNmPdu.1 = 56
+00000A24                     1257  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2366
+00000A24 9007218F            1258  	prepare 0x00000479, 0x00000020
+00000A28                     1259  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2371
+00000A28 E6163000            1260  	mulhi 0x00000030, r6, r2
+00000A2C                     1261  	mov #_CanNm_ChRunTime.3, r5
+00000A2C 250600000000            -- mov         0x0,tp
+00000A32 C229                1262  	add r2, r5
+00000A34 A5170D00            1263  	ld.bu 0x0000000D[r5], r2
+00000A38 6012                1264  	cmp 0x00000000, r2
+00000A3A 06A0                1265  	mov r6, r20
+00000A3C 8A05                1266  	bnz9 .BB.LABEL.25_2
+00000A3E                     1267  .BB.LABEL.25_1:	; entry.if_break_bb115_crit_edge
+00000A3E                     1268  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 0
+00000A3E 0152                1269  	mov 0x00000001, r10
+00000A40 80070000            1270  	jr .BB.LABEL.25_8
+00000A44                     1271  .BB.LABEL.25_2:	; if_else_bb
+00000A44                     1272  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2378
+00000A44 40160000            1273  	movhi HIGHW1(#_CanNm_CfgPtr.2), r0, r2
+00000A48 22170100            1274  	ld.w LOWW(#_CanNm_CfgPtr.2)[r2], r2
+00000A4C 22AF0500            1275  	ld.w 0x00000004[r2], r21
+00000A50                     1276  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2390
+00000A50 E6163800            1277  	mulhi 0x00000038, r6, r2
+00000A54 D511                1278  	add r21, r2
+00000A56 222F2D00            1279  	ld.w 0x0000002C[r2], r5
+00000A5A 852F0500            1280  	ld.bu 0x00000004[r5], r5
+00000A5E 602A                1281  	cmp 0x00000000, r5
+00000A60 22B62C00            1282  	movea 0x0000002C, r2, r22
+00000A64 06B8                1283  	mov r6, r23
+00000A66 8A05                1284  	bnz9 .BB.LABEL.25_6
+00000A68                     1285  .BB.LABEL.25_3:	; bb37
+00000A68                     1286  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 0
+00000A68 F7163800            1287  	mulhi 0x00000038, r23, r2
+00000A6C D511                1288  	add r21, r2
+00000A6E 22173500            1289  	ld.w 0x00000034[r2], r2
+00000A72 6012                1290  	cmp 0x00000000, r2
+00000A74 8205                1291  	bz9 .BB.LABEL.25_6
+00000A76                     1292  .BB.LABEL.25_4:	; if_then_bb51
+00000A76                     1293  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2393
+00000A76 43070700            1294  	st.b r0, 0x00000007[r3]
+00000A7A 43070600            1295  	st.b r0, 0x00000006[r3]
+00000A7E 43070500            1296  	st.b r0, 0x00000005[r3]
+00000A82 43070400            1297  	st.b r0, 0x00000004[r3]
+00000A86 43070300            1298  	st.b r0, 0x00000003[r3]
+00000A8A 43070200            1299  	st.b r0, 0x00000002[r3]
+00000A8E 43070100            1300  	st.b r0, 0x00000001[r3]
+00000A92 43070000            1301  	st.b r0, 0x00000000[r3]
+00000A96 43070000            1302  	st.b r0, 0x00000000[r3]
+00000A9A                     1303  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2394
+00000A9A F7C63800            1304  	mulhi 0x00000038, r23, r24
+00000A9E D5C1                1305  	add r21, r24
+00000AA0 38173500            1306  	ld.w 0x00000034[r24], r2
+00000AA4                     1307  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2398
+00000AA4 E2370300            1308  	ld.hu 0x00000002[r2], r6
+00000AA8 0310                1309  	mov r3, r2
+00000AAA                     1310  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2395
+00000AAA 63170900            1311  	st.w r2, 0x00000008[r3]
+00000AAE                     1312  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2396
+00000AAE 98173100            1313  	ld.bu 0x00000030[r24], r2
+00000AB2 63171000            1314  	st.h r2, 0x00000010[r3]
+00000AB6                     1315  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2397
+00000AB6 63070D00            1316  	st.w r0, 0x0000000C[r3]
+00000ABA 233E0800            1317  	movea 0x00000008, r3, r7
+00000ABE                     1318  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2398
+00000ABE 80FF0000            1319  	jarl _PduR_IfTriggerTransmit, r31
+00000AC2 6052                1320  	cmp 0x00000000, r10
+00000AC4                     1321  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2396
+00000AC4 38C63000            1322  	movea 0x00000030, r24, r24
+00000AC8                     1323  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2398
+00000AC8 8A05                1324  	bnz9 .BB.LABEL.25_6
+00000ACA                     1325  .BB.LABEL.25_5:	; if_then_bb73
+00000ACA                     1326  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2400
+00000ACA 80FF0000            1327  	jarl _SchM_Enter_CanNm_Context, r31
+00000ACE                     1328  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2401
+00000ACE F7163800            1329  	mulhi 0x00000038, r23, r2
+00000AD2 D511                1330  	add r21, r2
+00000AD4 A2173100            1331  	ld.bu 0x00000031[r2], r2
+00000AD8 98470100            1332  	ld.bu 0x00000000[r24], r8
+00000ADC F42E3000            1333  	mulhi 0x00000030, r20, r5
+00000AE0                     1334  	mov #_CanNm_ChRunTime.3, r6
+00000AE0 260600000000            -- mov         0x0,r6
+00000AE6 C531                1335  	add r5, r6
+00000AE8 C231                1336  	add r2, r6
+00000AEA 26362700            1337  	movea 0x00000027, r6, r6
+00000AEE 0338                1338  	mov r3, r7
+00000AF0 80FF0000            1339  	jarl _ILib_memcpy, r31
+00000AF4                     1340  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2402
+00000AF4 80FF0000            1341  	jarl _SchM_Exit_CanNm_Context, r31
+00000AF8                     1342  .BB.LABEL.25_6:	; if_break_bb88
+00000AF8                     1343  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2411
+00000AF8 F4163000            1344  	mulhi 0x00000030, r20, r2
+00000AFC                     1345  	mov #_CanNm_ChRunTime.3, r5
+00000AFC 250600000000            -- mov         0x0,tp
+00000B02 C229                1346  	add r2, r5
+00000B04 25162700            1347  	movea 0x00000027, r5, r2
+00000B08                     1348  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2410
+00000B08 362F0100            1349  	ld.w 0x00000000[r22], r5
+00000B0C                     1350  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2415
+00000B0C E5370300            1351  	ld.hu 0x00000002[r5], r6
+00000B10                     1352  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2411
+00000B10 63171500            1353  	st.w r2, 0x00000014[r3]
+00000B14 0812                1354  	mov 0x00000008, r2
+00000B16                     1355  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2412
+00000B16 63171C00            1356  	st.h r2, 0x0000001C[r3]
+00000B1A 233E1400            1357  	movea 0x00000014, r3, r7
+00000B1E                     1358  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2415
+00000B1E 80FF0000            1359  	jarl _CanIf_Transmit, r31
+00000B22                     1360  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2417
+00000B22 6052                1361  	cmp 0x00000000, r10
+00000B24 8A05                1362  	bnz9 .BB.LABEL.25_8
+00000B26                     1363  .BB.LABEL.25_7:	; if_then_bb106
+00000B26                     1364  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2420
+00000B26 F4163000            1365  	mulhi 0x00000030, r20, r2
+00000B2A                     1366  	mov #_CanNm_ChRunTime.3, r5
+00000B2A 250600000000            -- mov         0x0,tp
+00000B30 C229                1367  	add r2, r5
+00000B32 F7163800            1368  	mulhi 0x00000038, r23, r2
+00000B36 C2A9                1369  	add r2, r21
+00000B38 35170A00            1370  	ld.h 0x0000000A[r21], r2
+00000B3C 65171800            1371  	st.h r2, 0x00000018[r5]
+00000B40                     1372  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2421
+00000B40 45071A00            1373  	st.b r0, 0x0000001A[r5]
+00000B44                     1374  .BB.LABEL.25_8:	; if_break_bb115
+00000B44                     1375  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2429
+00000B44 50063F8F            1376  	dispose 0x00000020, 0x00000479, [r31]
+00000B48                     1377  _CanNm_StateManagement.1:
+00000B48                     1378  	.stack _CanNm_StateManagement.1 = 4
+00000B48                     1379  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2505
+00000B48 80072100            1380  	prepare 0x00000001, 0x00000000
+00000B4C                     1381  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2508
+00000B4C E6163000            1382  	mulhi 0x00000030, r6, r2
+00000B50                     1383  	mov #_CanNm_ChRunTime.3, r5
+00000B50 250600000000            -- mov         0x0,tp
+00000B56 C229                1384  	add r2, r5
+00000B58 25170100            1385  	ld.w 0x00000000[r5], r2
+00000B5C 5F12                1386  	add 0xFFFFFFFF, r2
+00000B5E 6412                1387  	cmp 0x00000004, r2
+00000B60 8B05                1388  	bh9 .BB.LABEL.26_7
+00000B62                     1389  .BB.LABEL.26_1:	; entry
+00000B62                     1390  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 0
+00000B62 C112                1391  	shl 0x00000001, r2
+00000B64 E20600000000        1392  	jmp #.SWITCH.LABEL.26_8[r2]
+00000B6A                     1393  .SWITCH.LABEL.26_8:
+00000B6A 8505                1394  	br9 .BB.LABEL.26_2
+00000B6C 8505                1395  	br9 .BB.LABEL.26_3
+00000B6E 8505                1396  	br9 .BB.LABEL.26_6
+00000B70 8505                1397  	br9 .BB.LABEL.26_5
+00000B72 8505                1398  	br9 .BB.LABEL.26_4
+00000B74                     1399  .SWITCH.LABEL.26_8.END:
+00000B74                     1400  .BB.LABEL.26_2:	; switch_clause_bb
+00000B74                     1401  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2511
+00000B74 80FF0000            1402  	jarl _CanNm_BusSleepStateHandle.1, r31
+00000B78 40063F00            1403  	dispose 0x00000000, 0x00000001, [r31]
+00000B7C                     1404  .BB.LABEL.26_3:	; switch_clause_bb11
+00000B7C                     1405  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2515
+00000B7C 80FF0000            1406  	jarl _CanNm_PrepareBusSleepStateHandle.1, r31
+00000B80 40063F00            1407  	dispose 0x00000000, 0x00000001, [r31]
+00000B84                     1408  .BB.LABEL.26_4:	; switch_clause_bb14
+00000B84                     1409  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2519
+00000B84 80FF0000            1410  	jarl _CanNm_RepeatMessageStateHandle.1, r31
+00000B88 40063F00            1411  	dispose 0x00000000, 0x00000001, [r31]
+00000B8C                     1412  .BB.LABEL.26_5:	; switch_clause_bb16
+00000B8C                     1413  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2523
+00000B8C 80FF0000            1414  	jarl _CanNm_NormalOperationStateHandle.1, r31
+00000B90 40063F00            1415  	dispose 0x00000000, 0x00000001, [r31]
+00000B94                     1416  .BB.LABEL.26_6:	; switch_clause_bb19
+00000B94                     1417  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2527
+00000B94 80FF0000            1418  	jarl _CanNm_ReadySleepStateHandle.1, r31
+00000B98                     1419  .BB.LABEL.26_7:	; return
+00000B98                     1420  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2534
+00000B98 40063F00            1421  	dispose 0x00000000, 0x00000001, [r31]
+00000B9C                     1422  _CanNm_WakeUpSignalHandle.1:
+00000B9C                     1423  	.stack _CanNm_WakeUpSignalHandle.1 = 24
+00000B9C                     1424  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2545
+00000B9C 8007218F            1425  	prepare 0x00000479, 0x00000000
+00000BA0                     1426  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2552
+00000BA0 603A                1427  	cmp 0x00000000, r7
+00000BA2 06A0                1428  	mov r6, r20
+00000BA4 06A8                1429  	mov r6, r21
+00000BA6 8205                1430  	bz9 .BB.LABEL.27_3
+00000BA8                     1431  .BB.LABEL.27_1:	; bb
+00000BA8                     1432  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 0
+00000BA8 F4163000            1433  	mulhi 0x00000030, r20, r2
+00000BAC                     1434  	mov #_CanNm_ChRunTime.3, r5
+00000BAC 250600000000            -- mov         0x0,tp
+00000BB2 C229                1435  	add r2, r5
+00000BB4 25170100            1436  	ld.w 0x00000000[r5], r2
+00000BB8 6212                1437  	cmp 0x00000002, r2
+00000BBA 8A05                1438  	bnz9 .BB.LABEL.27_3
+00000BBC                     1439  .BB.LABEL.27_2:	; bb.bb27_crit_edge
+00000BBC 00B2                1440  	mov 0x00000000, r22
+00000BBE 8505                1441  	br9 .BB.LABEL.27_4
+00000BC0                     1442  .BB.LABEL.27_3:	; bb25
+00000BC0 01B2                1443  	mov 0x00000001, r22
+00000BC2                     1444  .BB.LABEL.27_4:	; bb27
+00000BC2                     1445  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2555
+00000BC2 F4163000            1446  	mulhi 0x00000030, r20, r2
+00000BC6                     1447  	mov #_CanNm_ChRunTime.3, r23
+00000BC6 370600000000            -- mov         0x0,r23
+00000BCC C2B9                1448  	add r2, r23
+00000BCE 17360C00            1449  	addi 0x0000000C, r23, r6
+00000BD2 80FF0000            1450  	jarl _CanNm_TestAndClear.1, r31
+00000BD6 0AC0                1451  	mov r10, r24
+00000BD8                     1452  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2557
+00000BD8 37361C00            1453  	movea 0x0000001C, r23, r6
+00000BDC 80FF0000            1454  	jarl _CanNm_TestAndClear.1, r31
+00000BE0                     1455  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2555
+00000BE0 60C2                1456  	cmp 0x00000000, r24
+00000BE2 E2BF0000            1457  	setf 0x00000002, r23
+00000BE6 56B9                1458  	and r22, r23
+00000BE8                     1459  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2565
+00000BE8 0AB60000            1460  	addi 0x00000000, r10, r22
+00000BEC 8A05                1461  	bnz9 .BB.LABEL.27_7
+00000BEE                     1462  .BB.LABEL.27_5:	; bb27
+00000BEE                     1463  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 0
+00000BEE B7160100            1464  	xori 0x00000001, r23, r2
+00000BF2 6012                1465  	cmp 0x00000000, r2
+00000BF4 8A05                1466  	bnz9 .BB.LABEL.27_7
+00000BF6                     1467  .BB.LABEL.27_6:	; bb27.if_break_bb153_crit_edge
+00000BF6 0052                1468  	mov 0x00000000, r10
+00000BF8 8505                1469  	br9 .BB.LABEL.27_11
+00000BFA                     1470  .BB.LABEL.27_7:	; if_then_bb
+00000BFA                     1471  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2567
+00000BFA F4163000            1472  	mulhi 0x00000030, r20, r2
+00000BFE                     1473  	mov #_CanNm_ChRunTime.3, r5
+00000BFE 250600000000            -- mov         0x0,tp
+00000C04 C229                1474  	add r2, r5
+00000C06 253F0100            1475  	ld.w 0x00000000[r5], r7
+00000C0A 1530                1476  	mov r21, r6
+00000C0C 1640                1477  	mov r22, r8
+00000C0E 80FF0000            1478  	jarl _CanNm_EntryRepeatMessageState.1, r31
+00000C12                     1479  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2573
+00000C12 40160000            1480  	movhi HIGHW1(#_CanNm_CfgPtr.2), r0, r2
+00000C16 22170100            1481  	ld.w LOWW(#_CanNm_CfgPtr.2)[r2], r2
+00000C1A 222F0500            1482  	ld.w 0x00000004[r2], r5
+00000C1E F5363800            1483  	mulhi 0x00000038, r21, r6
+00000C22 C629                1484  	add r6, r5
+00000C24 852F0100            1485  	ld.bu 0x00000000[r5], r5
+00000C28 B7360100            1486  	xori 0x00000001, r23, r6
+00000C2C 602A                1487  	cmp 0x00000000, r5
+00000C2E 8205                1488  	bz9 .BB.LABEL.27_10
+00000C30                     1489  .BB.LABEL.27_8:	; if_then_bb
+00000C30                     1490  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 0
+00000C30 60B2                1491  	cmp 0x00000000, r22
+00000C32 8205                1492  	bz9 .BB.LABEL.27_10
+00000C34                     1493  .BB.LABEL.27_9:	; if_then_bb
+00000C34 A62E0100            1494  	xori 0x00000001, r6, r5
+00000C38 602A                1495  	cmp 0x00000000, r5
+00000C3A 8A05                1496  	bnz9 .BB.LABEL.27_12
+00000C3C                     1497  .BB.LABEL.27_10:	; if_then_bb.if_break_bb153_crit_edge
+00000C3C 0152                1498  	mov 0x00000001, r10
+00000C3E                     1499  .BB.LABEL.27_11:	; if_break_bb153
+00000C3E                     1500  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2583
+00000C3E 40063F8F            1501  	dispose 0x00000000, 0x00000479, [r31]
+00000C42                     1502  .BB.LABEL.27_12:	; bb118
+00000C42                     1503  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2576
+00000C42 22170500            1504  	ld.w 0x00000004[r2], r2
+00000C46 F52E3800            1505  	mulhi 0x00000038, r21, r5
+00000C4A C511                1506  	add r5, r2
+00000C4C 22171100            1507  	ld.w 0x00000010[r2], r2
+00000C50 020601FF            1508  	addi 0xFFFFFF01, r2, r0
+00000C54 8205                1509  	bz9 .BB.LABEL.27_10
+00000C56                     1510  .BB.LABEL.27_13:	; if_then_bb130
+00000C56                     1511  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 0
+00000C56 80FF0000            1512  	jarl _SchM_Enter_CanNm_Context, r31
+00000C5A F5163000            1513  	mulhi 0x00000030, r21, r2
+00000C5E                     1514  	mov #_CanNm_ChRunTime.3, r5
+00000C5E 250600000000            -- mov         0x0,tp
+00000C64 C229                1515  	add r2, r5
+00000C66 40160000            1516  	movhi HIGHW1(#_CanNm_CfgPtr.2), r0, r2
+00000C6A 22170100            1517  	ld.w LOWW(#_CanNm_CfgPtr.2)[r2], r2
+00000C6E 22170500            1518  	ld.w 0x00000004[r2], r2
+00000C72 F5363800            1519  	mulhi 0x00000038, r21, r6
+00000C76 C611                1520  	add r6, r2
+00000C78 82171100            1521  	ld.bu 0x00000010[r2], r2
+00000C7C C229                1522  	add r2, r5
+00000C7E C5272700            1523  	set1 0x00000004, 0x00000027[r5]
+00000C82 80FF0000            1524  	jarl _SchM_Exit_CanNm_Context, r31
+00000C86 8505                1525  	br9 .BB.LABEL.27_10
+00000C88                     1526  _CanNm_BusSleepStateHandle.1:
+00000C88                     1527  	.stack _CanNm_BusSleepStateHandle.1 = 12
+00000C88                     1528  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2596
+00000C88 8007210C            1529  	prepare 0x00000061, 0x00000000
+00000C8C 06A0                1530  	mov r6, r20
+00000C8E 07A8                1531  	mov r7, r21
+00000C90                     1532  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2599
+00000C90 80FF0000            1533  	jarl _SchM_Enter_CanNm_Context, r31
+00000C94                     1534  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2602
+00000C94 F4163000            1535  	mulhi 0x00000030, r20, r2
+00000C98                     1536  	mov #_CanNm_ChRunTime.3, r5
+00000C98 250600000000            -- mov         0x0,tp
+00000C9E C229                1537  	add r2, r5
+00000CA0 85171D00            1538  	ld.bu 0x0000001C[r5], r2
+00000CA4 6012                1539  	cmp 0x00000000, r2
+00000CA6 8205                1540  	bz9 .BB.LABEL.28_2
+00000CA8                     1541  .BB.LABEL.28_1:	; bb15
+00000CA8                     1542  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 0
+00000CA8 F4163000            1543  	mulhi 0x00000030, r20, r2
+00000CAC                     1544  	mov #_CanNm_ChRunTime.3, r5
+00000CAC 250600000000            -- mov         0x0,tp
+00000CB2 C229                1545  	add r2, r5
+00000CB4 85170D00            1546  	ld.bu 0x0000000C[r5], r2
+00000CB8 6012                1547  	cmp 0x00000000, r2
+00000CBA 8A05                1548  	bnz9 .BB.LABEL.28_4
+00000CBC                     1549  .BB.LABEL.28_2:	; bb35
+00000CBC 95170100            1550  	ld.bu 0x00000000[r21], r2
+00000CC0 6012                1551  	cmp 0x00000000, r2
+00000CC2 8205                1552  	bz9 .BB.LABEL.28_4
+00000CC4                     1553  .BB.LABEL.28_3:	; if_then_bb
+00000CC4                     1554  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2606
+00000CC4 40160000            1555  	movhi HIGHW1(#_CanNm_CfgPtr.2), r0, r2
+00000CC8 22170100            1556  	ld.w LOWW(#_CanNm_CfgPtr.2)[r2], r2
+00000CCC 22170500            1557  	ld.w 0x00000004[r2], r2
+00000CD0 F42E3800            1558  	mulhi 0x00000038, r20, r5
+00000CD4 C511                1559  	add r5, r2
+00000CD6 82372100            1560  	ld.bu 0x00000020[r2], r6
+00000CDA 80FF0000            1561  	jarl _Nm_NetworkStartIndication, r31
+00000CDE 044A                1562  	mov 0x00000004, r9
+00000CE0 20464200            1563  	movea 0x00000042, r0, r8
+00000CE4 003A                1564  	mov 0x00000000, r7
+00000CE6 20361F00            1565  	movea 0x0000001F, r0, r6
+00000CEA                     1566  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2607
+00000CEA 80FF0000            1567  	jarl _Det_ReportRuntimeError, r31
+00000CEE                     1568  .BB.LABEL.28_4:	; if_break_bb
+00000CEE                     1569  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2613
+00000CEE 80FF0000            1570  	jarl _SchM_Exit_CanNm_Context, r31
+00000CF2                     1571  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2615
+00000CF2 953F0100            1572  	ld.bu 0x00000000[r21], r7
+00000CF6 1430                1573  	mov r20, r6
+00000CF8 80FF0000            1574  	jarl _CanNm_WakeUpSignalHandle.1, r31
+00000CFC 40063F0C            1575  	dispose 0x00000000, 0x00000061, [r31]
+00000D00                     1576  _CanNm_PrepareBusSleepStateHandle.1:
+00000D00                     1577  	.stack _CanNm_PrepareBusSleepStateHandle.1 = 12
+00000D00                     1578  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2629
+00000D00 8007210C            1579  	prepare 0x00000061, 0x00000000
+00000D04 06A0                1580  	mov r6, r20
+00000D06                     1581  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2631
+00000D06 873F0100            1582  	ld.bu 0x00000000[r7], r7
+00000D0A 80FF0000            1583  	jarl _CanNm_WakeUpSignalHandle.1, r31
+00000D0E                     1584  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2634
+00000D0E 6052                1585  	cmp 0x00000000, r10
+00000D10 8A05                1586  	bnz9 .BB.LABEL.29_3
+00000D12                     1587  .BB.LABEL.29_1:	; bb19
+00000D12                     1588  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 0
+00000D12 F4163000            1589  	mulhi 0x00000030, r20, r2
+00000D16                     1590  	mov #_CanNm_ChRunTime.3, r5
+00000D16 250600000000            -- mov         0x0,tp
+00000D1C C229                1591  	add r2, r5
+00000D1E 85171500            1592  	ld.bu 0x00000014[r5], r2
+00000D22 6012                1593  	cmp 0x00000000, r2
+00000D24 8205                1594  	bz9 .BB.LABEL.29_3
+00000D26                     1595  .BB.LABEL.29_2:	; if_then_bb
+00000D26                     1596  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2638
+00000D26 F4163000            1597  	mulhi 0x00000030, r20, r2
+00000D2A                     1598  	mov #_CanNm_ChRunTime.3, r21
+00000D2A 350600000000            -- mov         0x0,r21
+00000D30 C2A9                1599  	add r2, r21
+00000D32 353F0100            1600  	ld.w 0x00000000[r21], r7
+00000D36 0142                1601  	mov 0x00000001, r8
+00000D38 1430                1602  	mov r20, r6
+00000D3A 80FF0000            1603  	jarl _CanNm_StateChange.1, r31
+00000D3E                     1604  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2639
+00000D3E 75070500            1605  	st.w r0, 0x00000004[r21]
+00000D42                     1606  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2642
+00000D42 40160000            1607  	movhi HIGHW1(#_CanNm_CfgPtr.2), r0, r2
+00000D46 22170100            1608  	ld.w LOWW(#_CanNm_CfgPtr.2)[r2], r2
+00000D4A 22170500            1609  	ld.w 0x00000004[r2], r2
+00000D4E F42E3800            1610  	mulhi 0x00000038, r20, r5
+00000D52 C511                1611  	add r5, r2
+00000D54 82372100            1612  	ld.bu 0x00000020[r2], r6
+00000D58 80FF0000            1613  	jarl _Nm_BusSleepMode, r31
+00000D5C                     1614  .BB.LABEL.29_3:	; return
+00000D5C                     1615  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2644
+00000D5C 40063F0C            1616  	dispose 0x00000000, 0x00000061, [r31]
+00000D60                     1617  _CanNm_RepeatMessageStateHandle.1:
+00000D60                     1618  	.stack _CanNm_RepeatMessageStateHandle.1 = 16
+00000D60                     1619  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2657
+00000D60 8007210E            1620  	prepare 0x00000071, 0x00000000
+00000D64 06A0                1621  	mov r6, r20
+00000D66                     1622  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2662
+00000D66 40160000            1623  	movhi HIGHW1(#_CanNm_CfgPtr.2), r0, r2
+00000D6A 22170100            1624  	ld.w LOWW(#_CanNm_CfgPtr.2)[r2], r2
+00000D6E 22AF0500            1625  	ld.w 0x00000004[r2], r21
+00000D72                     1626  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2667
+00000D72 F4163000            1627  	mulhi 0x00000030, r20, r2
+00000D76                     1628  	mov #_CanNm_ChRunTime.3, r22
+00000D76 360600000000            -- mov         0x0,r22
+00000D7C C2B1                1629  	add r2, r22
+00000D7E 36361C00            1630  	movea 0x0000001C, r22, r6
+00000D82 80FF0000            1631  	jarl _CanNm_TestAndClear.1, r31
+00000D86                     1632  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2680
+00000D86 96171500            1633  	ld.bu 0x00000014[r22], r2
+00000D8A 6012                1634  	cmp 0x00000000, r2
+00000D8C 8205                1635  	bz9 .BB.LABEL.30_7
+00000D8E                     1636  .BB.LABEL.30_1:	; if_then_bb25
+00000D8E                     1637  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2683
+00000D8E F4163000            1638  	mulhi 0x00000030, r20, r2
+00000D92                     1639  	mov #_CanNm_ChRunTime.3, r5
+00000D92 250600000000            -- mov         0x0,tp
+00000D98 C229                1640  	add r2, r5
+00000D9A 45070F00            1641  	st.b r0, 0x0000000F[r5]
+00000D9E                     1642  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2685
+00000D9E 25170900            1643  	ld.w 0x00000008[r5], r2
+00000DA2 1430                1644  	mov r20, r6
+00000DA4 6012                1645  	cmp 0x00000000, r2
+00000DA6 253F0100            1646  	ld.w 0x00000000[r5], r7
+00000DAA 8A05                1647  	bnz9 .BB.LABEL.30_3
+00000DAC                     1648  .BB.LABEL.30_2:	; if_then_bb34
+00000DAC                     1649  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 0
+00000DAC 0442                1650  	mov 0x00000004, r8
+00000DAE                     1651  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2692
+00000DAE 80FF0000            1652  	jarl _CanNm_StateChange.1, r31
+00000DB2 8505                1653  	br9 .BB.LABEL.30_4
+00000DB4                     1654  .BB.LABEL.30_3:	; if_else_bb
+00000DB4                     1655  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 0
+00000DB4 0342                1656  	mov 0x00000003, r8
+00000DB6                     1657  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2707
+00000DB6 80FF0000            1658  	jarl _CanNm_StateChange.1, r31
+00000DBA                     1659  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2715
+00000DBA F4163000            1660  	mulhi 0x00000030, r20, r2
+00000DBE                     1661  	mov #_CanNm_ChRunTime.3, r5
+00000DBE 250600000000            -- mov         0x0,tp
+00000DC4 C229                1662  	add r2, r5
+00000DC6 65071600            1663  	st.h r0, 0x00000016[r5]
+00000DCA                     1664  .BB.LABEL.30_4:	; if_break_bb45
+00000DCA                     1665  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2728
+00000DCA F4163800            1666  	mulhi 0x00000038, r20, r2
+00000DCE C2A9                1667  	add r2, r21
+00000DD0 95170D00            1668  	ld.bu 0x0000000C[r21], r2
+00000DD4 6012                1669  	cmp 0x00000000, r2
+00000DD6 8205                1670  	bz9 .BB.LABEL.30_7
+00000DD8                     1671  .BB.LABEL.30_5:	; bb
+00000DD8                     1672  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2730
+00000DD8 40160000            1673  	movhi HIGHW1(#_CanNm_CfgPtr.2), r0, r2
+00000DDC 22170100            1674  	ld.w LOWW(#_CanNm_CfgPtr.2)[r2], r2
+00000DE0 22170500            1675  	ld.w 0x00000004[r2], r2
+00000DE4 F42E3800            1676  	mulhi 0x00000038, r20, r5
+00000DE8 C511                1677  	add r5, r2
+00000DEA 22171100            1678  	ld.w 0x00000010[r2], r2
+00000DEE 020601FF            1679  	addi 0xFFFFFF01, r2, r0
+00000DF2 8205                1680  	bz9 .BB.LABEL.30_7
+00000DF4                     1681  .BB.LABEL.30_6:	; if_then_bb65
+00000DF4                     1682  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 0
+00000DF4 80FF0000            1683  	jarl _SchM_Enter_CanNm_Context, r31
+00000DF8 F4163000            1684  	mulhi 0x00000030, r20, r2
+00000DFC                     1685  	mov #_CanNm_ChRunTime.3, r5
+00000DFC 250600000000            -- mov         0x0,tp
+00000E02 C229                1686  	add r2, r5
+00000E04 40160000            1687  	movhi HIGHW1(#_CanNm_CfgPtr.2), r0, r2
+00000E08 22170100            1688  	ld.w LOWW(#_CanNm_CfgPtr.2)[r2], r2
+00000E0C 22170500            1689  	ld.w 0x00000004[r2], r2
+00000E10 F4363800            1690  	mulhi 0x00000038, r20, r6
+00000E14 C611                1691  	add r6, r2
+00000E16 82171100            1692  	ld.bu 0x00000010[r2], r2
+00000E1A C229                1693  	add r2, r5
+00000E1C C5872700            1694  	clr1 0x00000000, 0x00000027[r5]
+00000E20 80FF0000            1695  	jarl _SchM_Exit_CanNm_Context, r31
+00000E24                     1696  .BB.LABEL.30_7:	; return
+00000E24                     1697  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2738
+00000E24 40063F0E            1698  	dispose 0x00000000, 0x00000071, [r31]
+00000E28                     1699  _CanNm_NodeDetectStateHandle.1:
+00000E28                     1700  	.stack _CanNm_NodeDetectStateHandle.1 = 12
+00000E28                     1701  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2753
+00000E28 8007210C            1702  	prepare 0x00000061, 0x00000000
+00000E2C 06A0                1703  	mov r6, r20
+00000E2E 07A8                1704  	mov r7, r21
+00000E30                     1705  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2757
+00000E30 F4163000            1706  	mulhi 0x00000030, r20, r2
+00000E34                     1707  	mov #_CanNm_ChRunTime.3, r5
+00000E34 250600000000            -- mov         0x0,tp
+00000E3A C229                1708  	add r2, r5
+00000E3C 25361D00            1709  	movea 0x0000001D, r5, r6
+00000E40 80FF0000            1710  	jarl _CanNm_TestAndClear.1, r31
+00000E44                     1711  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2759
+00000E44 6052                1712  	cmp 0x00000000, r10
+00000E46 8A05                1713  	bnz9 .BB.LABEL.31_3
+00000E48                     1714  .BB.LABEL.31_1:	; entry
+00000E48                     1715  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 0
+00000E48 60AA                1716  	cmp 0x00000000, r21
+00000E4A 8A05                1717  	bnz9 .BB.LABEL.31_3
+00000E4C                     1718  .BB.LABEL.31_2:	; entry.if_break_bb66_crit_edge
+00000E4C 0052                1719  	mov 0x00000000, r10
+00000E4E 8505                1720  	br9 .BB.LABEL.31_5
+00000E50                     1721  .BB.LABEL.31_3:	; if_then_bb
+00000E50                     1722  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2761
+00000E50 6052                1723  	cmp 0x00000000, r10
+00000E52 8A05                1724  	bnz9 .BB.LABEL.31_6
+00000E54                     1725  .BB.LABEL.31_4:	; if_then_bb.if_break_bb66_crit_edge
+00000E54                     1726  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 0
+00000E54 0152                1727  	mov 0x00000001, r10
+00000E56                     1728  .BB.LABEL.31_5:	; if_break_bb66
+00000E56                     1729  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2771
+00000E56 40063F0C            1730  	dispose 0x00000000, 0x00000061, [r31]
+00000E5A                     1731  .BB.LABEL.31_6:	; bb31
+00000E5A                     1732  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2764
+00000E5A 40160000            1733  	movhi HIGHW1(#_CanNm_CfgPtr.2), r0, r2
+00000E5E 22170100            1734  	ld.w LOWW(#_CanNm_CfgPtr.2)[r2], r2
+00000E62 22170500            1735  	ld.w 0x00000004[r2], r2
+00000E66 F42E3800            1736  	mulhi 0x00000038, r20, r5
+00000E6A C511                1737  	add r5, r2
+00000E6C 22171100            1738  	ld.w 0x00000010[r2], r2
+00000E70 020601FF            1739  	addi 0xFFFFFF01, r2, r0
+00000E74 8205                1740  	bz9 .BB.LABEL.31_4
+00000E76                     1741  .BB.LABEL.31_7:	; if_then_bb43
+00000E76                     1742  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 0
+00000E76 80FF0000            1743  	jarl _SchM_Enter_CanNm_Context, r31
+00000E7A F4163000            1744  	mulhi 0x00000030, r20, r2
+00000E7E                     1745  	mov #_CanNm_ChRunTime.3, r5
+00000E7E 250600000000            -- mov         0x0,tp
+00000E84 C229                1746  	add r2, r5
+00000E86 40160000            1747  	movhi HIGHW1(#_CanNm_CfgPtr.2), r0, r2
+00000E8A 22170100            1748  	ld.w LOWW(#_CanNm_CfgPtr.2)[r2], r2
+00000E8E 22170500            1749  	ld.w 0x00000004[r2], r2
+00000E92 F4363800            1750  	mulhi 0x00000038, r20, r6
+00000E96 C611                1751  	add r6, r2
+00000E98 82171100            1752  	ld.bu 0x00000010[r2], r2
+00000E9C C229                1753  	add r2, r5
+00000E9E C5072700            1754  	set1 0x00000000, 0x00000027[r5]
+00000EA2 80FF0000            1755  	jarl _SchM_Exit_CanNm_Context, r31
+00000EA6 8505                1756  	br9 .BB.LABEL.31_4
+00000EA8                     1757  _CanNm_NormalOperationStateHandle.1:
+00000EA8                     1758  	.stack _CanNm_NormalOperationStateHandle.1 = 20
+00000EA8                     1759  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2785
+00000EA8 8007210F            1760  	prepare 0x00000079, 0x00000000
+00000EAC 06A0                1761  	mov r6, r20
+00000EAE 07A8                1762  	mov r7, r21
+00000EB0                     1763  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2789
+00000EB0 40160000            1764  	movhi HIGHW1(#_CanNm_CfgPtr.2), r0, r2
+00000EB4 22170100            1765  	ld.w LOWW(#_CanNm_CfgPtr.2)[r2], r2
+00000EB8 22B70500            1766  	ld.w 0x00000004[r2], r22
+00000EBC                     1767  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2793
+00000EBC F4163000            1768  	mulhi 0x00000030, r20, r2
+00000EC0                     1769  	mov #_CanNm_ChRunTime.3, r23
+00000EC0 370600000000            -- mov         0x0,r23
+00000EC6 C2B9                1770  	add r2, r23
+00000EC8 37361C00            1771  	movea 0x0000001C, r23, r6
+00000ECC 80FF0000            1772  	jarl _CanNm_TestAndClear.1, r31
+00000ED0                     1773  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2807
+00000ED0 37170900            1774  	ld.w 0x00000008[r23], r2
+00000ED4 6112                1775  	cmp 0x00000001, r2
+00000ED6 8A05                1776  	bnz9 .BB.LABEL.32_2
+00000ED8                     1777  .BB.LABEL.32_1:	; if_then_bb25
+00000ED8                     1778  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2809
+00000ED8 F4AE3000            1779  	mulhi 0x00000030, r20, r21
+00000EDC                     1780  	mov #_CanNm_ChRunTime.3, r22
+00000EDC 360600000000            -- mov         0x0,r22
+00000EE2 D5B1                1781  	add r21, r22
+00000EE4 363F0100            1782  	ld.w 0x00000000[r22], r7
+00000EE8 0342                1783  	mov 0x00000003, r8
+00000EEA 1430                1784  	mov r20, r6
+00000EEC 80FF0000            1785  	jarl _CanNm_StateChange.1, r31
+00000EF0                     1786  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2816
+00000EF0 76071600            1787  	st.h r0, 0x00000016[r22]
+00000EF4                     1788  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2820
+00000EF4 40063F0F            1789  	dispose 0x00000000, 0x00000079, [r31]
+00000EF8                     1790  .BB.LABEL.32_2:	; if_break_bb32
+00000EF8                     1791  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2824
+00000EF8 F4163800            1792  	mulhi 0x00000038, r20, r2
+00000EFC C2B1                1793  	add r2, r22
+00000EFE 96170D00            1794  	ld.bu 0x0000000C[r22], r2
+00000F02 6012                1795  	cmp 0x00000000, r2
+00000F04 8205                1796  	bz9 .BB.LABEL.32_5
+00000F06                     1797  .BB.LABEL.32_3:	; if_then_bb40
+00000F06                     1798  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2827
+00000F06 B53F0100            1799  	ld.bu 0x00000001[r21], r7
+00000F0A 1430                1800  	mov r20, r6
+00000F0C 80FF0000            1801  	jarl _CanNm_NodeDetectStateHandle.1, r31
+00000F10 6052                1802  	cmp 0x00000000, r10
+00000F12 8205                1803  	bz9 .BB.LABEL.32_5
+00000F14                     1804  .BB.LABEL.32_4:	; if_then_bb50
+00000F14                     1805  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2829
+00000F14 F4163000            1806  	mulhi 0x00000030, r20, r2
+00000F18                     1807  	mov #_CanNm_ChRunTime.3, r5
+00000F18 250600000000            -- mov         0x0,tp
+00000F1E C229                1808  	add r2, r5
+00000F20 253F0100            1809  	ld.w 0x00000000[r5], r7
+00000F24 0042                1810  	mov 0x00000000, r8
+00000F26 1430                1811  	mov r20, r6
+00000F28 80FF0000            1812  	jarl _CanNm_EntryRepeatMessageState.1, r31
+00000F2C                     1813  .BB.LABEL.32_5:	; return
+00000F2C                     1814  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2854
+00000F2C 40063F0F            1815  	dispose 0x00000000, 0x00000079, [r31]
+00000F30                     1816  _CanNm_ReadySleepStateHandle.1:
+00000F30                     1817  	.stack _CanNm_ReadySleepStateHandle.1 = 16
+00000F30                     1818  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2867
+00000F30 8007210E            1819  	prepare 0x00000071, 0x00000000
+00000F34 06A0                1820  	mov r6, r20
+00000F36 07A8                1821  	mov r7, r21
+00000F38                     1822  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2869
+00000F38 40160000            1823  	movhi HIGHW1(#_CanNm_CfgPtr.2), r0, r2
+00000F3C 22170100            1824  	ld.w LOWW(#_CanNm_CfgPtr.2)[r2], r2
+00000F40 22B70500            1825  	ld.w 0x00000004[r2], r22
+00000F44                     1826  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2878
+00000F44 80FF0000            1827  	jarl _SchM_Enter_CanNm_Context, r31
+00000F48                     1828  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2880
+00000F48 F4163000            1829  	mulhi 0x00000030, r20, r2
+00000F4C                     1830  	mov #_CanNm_ChRunTime.3, r5
+00000F4C 250600000000            -- mov         0x0,tp
+00000F52 C229                1831  	add r2, r5
+00000F54 25361C00            1832  	movea 0x0000001C, r5, r6
+00000F58 80FF0000            1833  	jarl _CanNm_TestAndClear.1, r31
+00000F5C 6052                1834  	cmp 0x00000000, r10
+00000F5E 8205                1835  	bz9 .BB.LABEL.33_3
+00000F60                     1836  .BB.LABEL.33_1:	; if_then_bb
+00000F60                     1837  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2894
+00000F60 F4163000            1838  	mulhi 0x00000030, r20, r2
+00000F64                     1839  	mov #_CanNm_ChRunTime.3, r5
+00000F64 250600000000            -- mov         0x0,tp
+00000F6A C229                1840  	add r2, r5
+00000F6C 0412                1841  	mov 0x00000004, r2
+00000F6E 65170100            1842  	st.w r2, 0x00000000[r5]
+00000F72                     1843  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2904
+00000F72 A5170D00            1844  	ld.bu 0x0000000D[r5], r2
+00000F76 6012                1845  	cmp 0x00000000, r2
+00000F78 8205                1846  	bz9 .BB.LABEL.33_3
+00000F7A                     1847  .BB.LABEL.33_2:	; if_then_bb29
+00000F7A                     1848  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2907
+00000F7A F4163000            1849  	mulhi 0x00000030, r20, r2
+00000F7E                     1850  	mov #_CanNm_ChRunTime.3, r5
+00000F7E 250600000000            -- mov         0x0,tp
+00000F84 C229                1851  	add r2, r5
+00000F86 F4163800            1852  	mulhi 0x00000038, r20, r2
+00000F8A D611                1853  	add r22, r2
+00000F8C 22170800            1854  	ld.h 0x00000008[r2], r2
+00000F90 65171600            1855  	st.h r2, 0x00000016[r5]
+00000F94 0112                1856  	mov 0x00000001, r2
+00000F96                     1857  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2908
+00000F96 45171B00            1858  	st.b r2, 0x0000001B[r5]
+00000F9A                     1859  .BB.LABEL.33_3:	; if_break_bb37
+00000F9A                     1860  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2920
+00000F9A F4163800            1861  	mulhi 0x00000038, r20, r2
+00000F9E C2B1                1862  	add r2, r22
+00000FA0 96170D00            1863  	ld.bu 0x0000000C[r22], r2
+00000FA4 6012                1864  	cmp 0x00000000, r2
+00000FA6 8205                1865  	bz9 .BB.LABEL.33_7
+00000FA8                     1866  .BB.LABEL.33_4:	; bb
+00000FA8                     1867  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 0
+00000FA8 F4163000            1868  	mulhi 0x00000030, r20, r2
+00000FAC                     1869  	mov #_CanNm_ChRunTime.3, r5
+00000FAC 250600000000            -- mov         0x0,tp
+00000FB2 C229                1870  	add r2, r5
+00000FB4 25170100            1871  	ld.w 0x00000000[r5], r2
+00000FB8 6312                1872  	cmp 0x00000003, r2
+00000FBA 8A05                1873  	bnz9 .BB.LABEL.33_7
+00000FBC                     1874  .BB.LABEL.33_5:	; if_then_bb56
+00000FBC                     1875  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2923
+00000FBC B53F0100            1876  	ld.bu 0x00000001[r21], r7
+00000FC0 1430                1877  	mov r20, r6
+00000FC2 80FF0000            1878  	jarl _CanNm_NodeDetectStateHandle.1, r31
+00000FC6 6052                1879  	cmp 0x00000000, r10
+00000FC8 8205                1880  	bz9 .BB.LABEL.33_7
+00000FCA                     1881  .BB.LABEL.33_6:	; if_then_bb66
+00000FCA                     1882  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2925
+00000FCA F4163000            1883  	mulhi 0x00000030, r20, r2
+00000FCE                     1884  	mov #_CanNm_ChRunTime.3, r5
+00000FCE 250600000000            -- mov         0x0,tp
+00000FD4 C229                1885  	add r2, r5
+00000FD6 0512                1886  	mov 0x00000005, r2
+00000FD8 65170100            1887  	st.w r2, 0x00000000[r5]
+00000FDC                     1888  .BB.LABEL.33_7:	; if_break_bb70
+00000FDC                     1889  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2931
+00000FDC F4163000            1890  	mulhi 0x00000030, r20, r2
+00000FE0                     1891  	mov #_CanNm_ChRunTime.3, r21
+00000FE0 350600000000            -- mov         0x0,r21
+00000FE6 C2A9                1892  	add r2, r21
+00000FE8 35170100            1893  	ld.w 0x00000000[r21], r2
+00000FEC 6312                1894  	cmp 0x00000003, r2
+00000FEE 8A05                1895  	bnz9 .BB.LABEL.33_12
+00000FF0                     1896  .BB.LABEL.33_8:	; bb76
+00000FF0                     1897  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 0
+00000FF0 F4163000            1898  	mulhi 0x00000030, r20, r2
+00000FF4                     1899  	mov #_CanNm_ChRunTime.3, r5
+00000FF4 250600000000            -- mov         0x0,tp
+00000FFA C229                1900  	add r2, r5
+00000FFC E5171300            1901  	ld.hu 0x00000012[r5], r2
+00001000 6012                1902  	cmp 0x00000000, r2
+00001002 8205                1903  	bz9 .BB.LABEL.33_11
+00001004                     1904  .BB.LABEL.33_9:	; bb83
+00001004 F4163000            1905  	mulhi 0x00000030, r20, r2
+00001008                     1906  	mov #_CanNm_ChRunTime.3, r5
+00001008 250600000000            -- mov         0x0,tp
+0000100E C229                1907  	add r2, r5
+00001010 A5170D00            1908  	ld.bu 0x0000000D[r5], r2
+00001014 6012                1909  	cmp 0x00000000, r2
+00001016 8A05                1910  	bnz9 .BB.LABEL.33_12
+00001018                     1911  .BB.LABEL.33_10:	; bb91
+00001018 F4163000            1912  	mulhi 0x00000030, r20, r2
+0000101C                     1913  	mov #_CanNm_ChRunTime.3, r5
+0000101C 250600000000            -- mov         0x0,tp
+00001022 C229                1914  	add r2, r5
+00001024 25170900            1915  	ld.w 0x00000008[r5], r2
+00001028 6112                1916  	cmp 0x00000001, r2
+0000102A 8A05                1917  	bnz9 .BB.LABEL.33_12
+0000102C                     1918  .BB.LABEL.33_11:	; if_then_bb119
+0000102C 0212                1919  	mov 0x00000002, r2
+0000102E                     1920  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2942
+0000102E 75170100            1921  	st.w r2, 0x00000000[r21]
+00001032                     1922  .BB.LABEL.33_12:	; if_break_bb122
+00001032                     1923  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2944
+00001032 80FF0000            1924  	jarl _SchM_Exit_CanNm_Context, r31
+00001036                     1925  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2946
+00001036 35470100            1926  	ld.w 0x00000000[r21], r8
+0000103A 6242                1927  	cmp 0x00000002, r8
+0000103C 8205                1928  	bz9 .BB.LABEL.33_17
+0000103E                     1929  .BB.LABEL.33_13:	; if_break_bb122
+0000103E                     1930  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 0
+0000103E 6442                1931  	cmp 0x00000004, r8
+00001040 8205                1932  	bz9 .BB.LABEL.33_16
+00001042                     1933  .BB.LABEL.33_14:	; if_break_bb122
+00001042 6542                1934  	cmp 0x00000005, r8
+00001044 8A05                1935  	bnz9 .BB.LABEL.33_18
+00001046                     1936  .BB.LABEL.33_15:	; switch_clause_bb
+00001046 0042                1937  	mov 0x00000000, r8
+00001048 033A                1938  	mov 0x00000003, r7
+0000104A                     1939  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2949
+0000104A 1430                1940  	mov r20, r6
+0000104C 80FF0000            1941  	jarl _CanNm_EntryRepeatMessageState.1, r31
+00001050 40063F0E            1942  	dispose 0x00000000, 0x00000071, [r31]
+00001054                     1943  .BB.LABEL.33_16:	; switch_clause_bb128
+00001054                     1944  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 0
+00001054 033A                1945  	mov 0x00000003, r7
+00001056                     1946  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2953
+00001056 1430                1947  	mov r20, r6
+00001058 80FF0000            1948  	jarl _CanNm_StateChange.1, r31
+0000105C 40063F0E            1949  	dispose 0x00000000, 0x00000071, [r31]
+00001060                     1950  .BB.LABEL.33_17:	; switch_clause_bb133
+00001060                     1951  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2957
+00001060 1430                1952  	mov r20, r6
+00001062 80FF0000            1953  	jarl _CanNm_EnterPrepareBusSleepModeHandle.1, r31
+00001066                     1954  .BB.LABEL.33_18:	; return
+00001066                     1955  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2967
+00001066 40063F0E            1956  	dispose 0x00000000, 0x00000071, [r31]
+0000106A                     1957  _CanNm_RxDataMainHandle.1:
+0000106A                     1958  	.stack _CanNm_RxDataMainHandle.1 = 4
+0000106A                     1959  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2980
+0000106A 80072100            1960  	prepare 0x00000001, 0x00000000
+0000106E                     1961  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2982
+0000106E 40160000            1962  	movhi HIGHW1(#_CanNm_CfgPtr.2), r0, r2
+00001072 22170100            1963  	ld.w LOWW(#_CanNm_CfgPtr.2)[r2], r2
+00001076 22170500            1964  	ld.w 0x00000004[r2], r2
+0000107A 012A                1965  	mov 0x00000001, r5
+0000107C                     1966  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 2985
+0000107C 472F0000            1967  	st.b r5, 0x00000000[r7]
+00001080                     1968  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 3011
+00001080 E62E3000            1969  	mulhi 0x00000030, r6, r5
+00001084                     1970  	mov #_CanNm_ChRunTime.3, r8
+00001084 280600000000            -- mov         0x0,r8
+0000108A C541                1971  	add r5, r8
+0000108C 282F0500            1972  	ld.w 0x00000004[r8], r5
+00001090 632A                1973  	cmp 0x00000003, r5
+00001092 8A05                1974  	bnz9 .BB.LABEL.34_2
+00001094                     1975  .BB.LABEL.34_1:	; if_then_bb
+00001094                     1976  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 3013
+00001094 E62E3000            1977  	mulhi 0x00000030, r6, r5
+00001098                     1978  	mov #_CanNm_ChRunTime.3, r8
+00001098 280600000000            -- mov         0x0,r8
+0000109E C541                1979  	add r5, r8
+000010A0 E62E3800            1980  	mulhi 0x00000038, r6, r5
+000010A4 C229                1981  	add r2, r5
+000010A6 252F1C00            1982  	ld.h 0x0000001C[r5], r5
+000010AA 682F1200            1983  	st.h r5, 0x00000012[r8]
+000010AE                     1984  .BB.LABEL.34_2:	; if_break_bb
+000010AE                     1985  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 3023
+000010AE E62E3800            1986  	mulhi 0x00000038, r6, r5
+000010B2 C229                1987  	add r2, r5
+000010B4 852F0D00            1988  	ld.bu 0x0000000C[r5], r5
+000010B8 602A                1989  	cmp 0x00000000, r5
+000010BA 8205                1990  	bz9 .BB.LABEL.34_8
+000010BC                     1991  .BB.LABEL.34_3:	; bb
+000010BC                     1992  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 0
+000010BC E62E3000            1993  	mulhi 0x00000030, r6, r5
+000010C0                     1994  	mov #_CanNm_ChRunTime.3, r8
+000010C0 280600000000            -- mov         0x0,r8
+000010C6 C541                1995  	add r5, r8
+000010C8 882F1F00            1996  	ld.bu 0x0000001E[r8], r5
+000010CC 602A                1997  	cmp 0x00000000, r5
+000010CE 8205                1998  	bz9 .BB.LABEL.34_8
+000010D0                     1999  .BB.LABEL.34_4:	; if_then_bb44
+000010D0                     2000  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 3025
+000010D0 E62E3000            2001  	mulhi 0x00000030, r6, r5
+000010D4                     2002  	mov #_CanNm_ChRunTime.3, r8
+000010D4 280600000000            -- mov         0x0,r8
+000010DA C541                2003  	add r5, r8
+000010DC 48071E00            2004  	st.b r0, 0x0000001E[r8]
+000010E0                     2005  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 3026
+000010E0 282F0100            2006  	ld.w 0x00000000[r8], r5
+000010E4 5D2A                2007  	add 0xFFFFFFFD, r5
+000010E6 612A                2008  	cmp 0x00000001, r5
+000010E8 8B05                2009  	bh9 .BB.LABEL.34_6
+000010EA                     2010  .BB.LABEL.34_5:	; if_then_bb66
+000010EA                     2011  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 0
+000010EA 012A                2012  	mov 0x00000001, r5
+000010EC                     2013  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 3028
+000010EC 472F0100            2014  	st.b r5, 0x00000001[r7]
+000010F0                     2015  .BB.LABEL.34_6:	; if_break_bb69
+000010F0                     2016  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 3032
+000010F0 E62E3800            2017  	mulhi 0x00000038, r6, r5
+000010F4 C229                2018  	add r2, r5
+000010F6 852F1B00            2019  	ld.bu 0x0000001A[r5], r5
+000010FA 602A                2020  	cmp 0x00000000, r5
+000010FC 8205                2021  	bz9 .BB.LABEL.34_8
+000010FE                     2022  .BB.LABEL.34_7:	; if_then_bb77
+000010FE                     2023  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 3034
+000010FE E62E3800            2024  	mulhi 0x00000038, r6, r5
+00001102 C511                2025  	add r5, r2
+00001104 82372100            2026  	ld.bu 0x00000020[r2], r6
+00001108 80FF0000            2027  	jarl _Nm_RepeatMessageIndication, r31
+0000110C                     2028  .BB.LABEL.34_8:	; return
+0000110C                     2029  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 3063
+0000110C 40063F00            2030  	dispose 0x00000000, 0x00000001, [r31]
+00001110                     2031  _CanNm_SendMsgMainHandle.1:
+00001110                     2032  	.stack _CanNm_SendMsgMainHandle.1 = 16
+00001110                     2033  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 3080
+00001110 8007210E            2034  	prepare 0x00000071, 0x00000000
+00001114                     2035  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 3085
+00001114 E6163000            2036  	mulhi 0x00000030, r6, r2
+00001118                     2037  	mov #_CanNm_ChRunTime.3, r5
+00001118 250600000000            -- mov         0x0,tp
+0000111E C229                2038  	add r2, r5
+00001120 A5171B00            2039  	ld.bu 0x0000001B[r5], r2
+00001124 6012                2040  	cmp 0x00000000, r2
+00001126 25161B00            2041  	movea 0x0000001B, r5, r2
+0000112A                     2042  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 3083
+0000112A 402E0000            2043  	movhi HIGHW1(#_CanNm_CfgPtr.2), r0, r5
+0000112E 252F0100            2044  	ld.w LOWW(#_CanNm_CfgPtr.2)[r5], r5
+00001132 25A70500            2045  	ld.w 0x00000004[r5], r20
+00001136                     2046  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 3085
+00001136 06A8                2047  	mov r6, r21
+00001138 06B0                2048  	mov r6, r22
+0000113A 8205                2049  	bz9 .BB.LABEL.35_10
+0000113C                     2050  .BB.LABEL.35_1:	; if_then_bb
+0000113C                     2051  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 3087
+0000113C 42070000            2052  	st.b r0, 0x00000000[r2]
+00001140                     2053  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 3088
+00001140 80FF0000            2054  	jarl _CanNm_SendNmPdu.1, r31
+00001144 F6163000            2055  	mulhi 0x00000030, r22, r2
+00001148                     2056  	mov #_CanNm_ChRunTime.3, r5
+00001148 250600000000            -- mov         0x0,tp
+0000114E C229                2057  	add r2, r5
+00001150 A5170F00            2058  	ld.bu 0x0000000F[r5], r2
+00001154 4F2A                2059  	add 0x0000000F, r5
+00001156 6052                2060  	cmp 0x00000000, r10
+00001158 8A05                2061  	bnz9 .BB.LABEL.35_7
+0000115A                     2062  .BB.LABEL.35_2:	; if_then_bb26
+0000115A                     2063  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 3094
+0000115A 6012                2064  	cmp 0x00000000, r2
+0000115C 8205                2065  	bz9 .BB.LABEL.35_6
+0000115E                     2066  .BB.LABEL.35_3:	; if_then_bb34
+0000115E                     2067  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 3096
+0000115E 5F12                2068  	add 0xFFFFFFFF, r2
+00001160 45170000            2069  	st.b r2, 0x00000000[r5]
+00001164                     2070  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 3097
+00001164 F6B63000            2071  	mulhi 0x00000030, r22, r22
+00001168                     2072  	mov #_CanNm_ChRunTime.3, r5
+00001168 250600000000            -- mov         0x0,tp
+0000116E D629                2073  	add r22, r5
+00001170 25B61600            2074  	movea 0x00000016, r5, r22
+00001174 C206FF00            2075  	andi 0x000000FF, r2, r0
+00001178 F5163800            2076  	mulhi 0x00000038, r21, r2
+0000117C 8A05                2077  	bnz9 .BB.LABEL.35_5
+0000117E                     2078  .BB.LABEL.35_4:	; if_then_bb46
+0000117E                     2079  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 3099
+0000117E C2A1                2080  	add r2, r20
+00001180 34170800            2081  	ld.h 0x00000008[r20], r2
+00001184 76170000            2082  	st.h r2, 0x00000000[r22]
+00001188 40063F0E            2083  	dispose 0x00000000, 0x00000071, [r31]
+0000118C                     2084  .BB.LABEL.35_5:	; if_else_bb
+0000118C                     2085  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 3103
+0000118C C2A1                2086  	add r2, r20
+0000118E 34170200            2087  	ld.h 0x00000002[r20], r2
+00001192 76170000            2088  	st.h r2, 0x00000000[r22]
+00001196 40063F0E            2089  	dispose 0x00000000, 0x00000071, [r31]
+0000119A                     2090  .BB.LABEL.35_6:	; if_else_bb57
+0000119A                     2091  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 3109
+0000119A F6163000            2092  	mulhi 0x00000030, r22, r2
+0000119E                     2093  	mov #_CanNm_ChRunTime.3, r22
+0000119E 360600000000            -- mov         0x0,r22
+000011A4 C2B1                2094  	add r2, r22
+000011A6 F5163800            2095  	mulhi 0x00000038, r21, r2
+000011AA C2A1                2096  	add r2, r20
+000011AC 34170800            2097  	ld.h 0x00000008[r20], r2
+000011B0 76171600            2098  	st.h r2, 0x00000016[r22]
+000011B4 40063F0E            2099  	dispose 0x00000000, 0x00000071, [r31]
+000011B8                     2100  .BB.LABEL.35_7:	; if_else_bb64
+000011B8                     2101  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 3115
+000011B8 6012                2102  	cmp 0x00000000, r2
+000011BA 8205                2103  	bz9 .BB.LABEL.35_9
+000011BC                     2104  .BB.LABEL.35_8:	; if_then_bb72
+000011BC                     2105  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 3117
+000011BC F6A63000            2106  	mulhi 0x00000030, r22, r20
+000011C0                     2107  	mov #_CanNm_ChRunTime.3, r21
+000011C0 350600000000            -- mov         0x0,r21
+000011C6 D4A9                2108  	add r20, r21
+000011C8 01A2                2109  	mov 0x00000001, r20
+000011CA 75A71600            2110  	st.h r20, 0x00000016[r21]
+000011CE 40063F0E            2111  	dispose 0x00000000, 0x00000071, [r31]
+000011D2                     2112  .BB.LABEL.35_9:	; if_else_bb75
+000011D2                     2113  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 3130
+000011D2 F6163000            2114  	mulhi 0x00000030, r22, r2
+000011D6                     2115  	mov #_CanNm_ChRunTime.3, r5
+000011D6 250600000000            -- mov         0x0,tp
+000011DC C229                2116  	add r2, r5
+000011DE F5163800            2117  	mulhi 0x00000038, r21, r2
+000011E2 C2A1                2118  	add r2, r20
+000011E4 34170800            2119  	ld.h 0x00000008[r20], r2
+000011E8 65171600            2120  	st.h r2, 0x00000016[r5]
+000011EC                     2121  .BB.LABEL.35_10:	; return
+000011EC                     2122  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 3135
+000011EC 40063F0E            2123  	dispose 0x00000000, 0x00000071, [r31]
+000011F0                     2124  _CanNm_EnterPrepareBusSleepModeHandle.1:
+000011F0                     2125  	.stack _CanNm_EnterPrepareBusSleepModeHandle.1 = 20
+000011F0                     2126  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 3197
+000011F0 8007210F            2127  	prepare 0x00000079, 0x00000000
+000011F4 06A0                2128  	mov r6, r20
+000011F6                     2129  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 3199
+000011F6 40AE0000            2130  	movhi HIGHW1(#_CanNm_CfgPtr.2), r0, r21
+000011FA 35170100            2131  	ld.w LOWW(#_CanNm_CfgPtr.2)[r21], r2
+000011FE 22B70500            2132  	ld.w 0x00000004[r2], r22
+00001202 0242                2133  	mov 0x00000002, r8
+00001204 033A                2134  	mov 0x00000003, r7
+00001206                     2135  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 3204
+00001206 80FF0000            2136  	jarl _CanNm_StateChange.1, r31
+0000120A                     2137  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 3205
+0000120A F4163000            2138  	mulhi 0x00000030, r20, r2
+0000120E                     2139  	mov #_CanNm_ChRunTime.3, r5
+0000120E 250600000000            -- mov         0x0,tp
+00001214 C229                2140  	add r2, r5
+00001216 0112                2141  	mov 0x00000001, r2
+00001218 65170500            2142  	st.w r2, 0x00000004[r5]
+0000121C                     2143  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 3208
+0000121C F4BE3800            2144  	mulhi 0x00000038, r20, r23
+00001220 35170100            2145  	ld.w LOWW(#_CanNm_CfgPtr.2)[r21], r2
+00001224 22170500            2146  	ld.w 0x00000004[r2], r2
+00001228 D711                2147  	add r23, r2
+0000122A 82372100            2148  	ld.bu 0x00000020[r2], r6
+0000122E 80FF0000            2149  	jarl _Nm_PrepareBusSleepMode, r31
+00001232                     2150  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 3216
+00001232 D6B9                2151  	add r22, r23
+00001234 B7171B00            2152  	ld.bu 0x0000001B[r23], r2
+00001238 6012                2153  	cmp 0x00000000, r2
+0000123A 8A05                2154  	bnz9 .BB.LABEL.36_2
+0000123C                     2155  .BB.LABEL.36_1:	; if_then_bb
+0000123C                     2156  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 3218
+0000123C F4163000            2157  	mulhi 0x00000030, r20, r2
+00001240                     2158  	mov #_CanNm_ChRunTime.3, r5
+00001240 250600000000            -- mov         0x0,tp
+00001246 C229                2159  	add r2, r5
+00001248 F4163800            2160  	mulhi 0x00000038, r20, r2
+0000124C D611                2161  	add r22, r2
+0000124E 22171E00            2162  	ld.h 0x0000001E[r2], r2
+00001252 65171000            2163  	st.h r2, 0x00000010[r5]
+00001256                     2164  .BB.LABEL.36_2:	; if_break_bb
+00001256                     2165  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 3224
+00001256 F4163800            2166  	mulhi 0x00000038, r20, r2
+0000125A C2B1                2167  	add r2, r22
+0000125C 96170100            2168  	ld.bu 0x00000000[r22], r2
+00001260 6012                2169  	cmp 0x00000000, r2
+00001262 8205                2170  	bz9 .BB.LABEL.36_5
+00001264                     2171  .BB.LABEL.36_3:	; bb
+00001264                     2172  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 3226
+00001264 40160000            2173  	movhi HIGHW1(#_CanNm_CfgPtr.2), r0, r2
+00001268 22170100            2174  	ld.w LOWW(#_CanNm_CfgPtr.2)[r2], r2
+0000126C 22170500            2175  	ld.w 0x00000004[r2], r2
+00001270 F42E3800            2176  	mulhi 0x00000038, r20, r5
+00001274 C511                2177  	add r5, r2
+00001276 22171100            2178  	ld.w 0x00000010[r2], r2
+0000127A 020601FF            2179  	addi 0xFFFFFF01, r2, r0
+0000127E 8205                2180  	bz9 .BB.LABEL.36_5
+00001280                     2181  .BB.LABEL.36_4:	; if_then_bb53
+00001280                     2182  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 0
+00001280 80FF0000            2183  	jarl _SchM_Enter_CanNm_Context, r31
+00001284 F4163000            2184  	mulhi 0x00000030, r20, r2
+00001288                     2185  	mov #_CanNm_ChRunTime.3, r5
+00001288 250600000000            -- mov         0x0,tp
+0000128E C229                2186  	add r2, r5
+00001290 40160000            2187  	movhi HIGHW1(#_CanNm_CfgPtr.2), r0, r2
+00001294 22170100            2188  	ld.w LOWW(#_CanNm_CfgPtr.2)[r2], r2
+00001298 22170500            2189  	ld.w 0x00000004[r2], r2
+0000129C F4363800            2190  	mulhi 0x00000038, r20, r6
+000012A0 C611                2191  	add r6, r2
+000012A2 82171100            2192  	ld.bu 0x00000010[r2], r2
+000012A6 C229                2193  	add r2, r5
+000012A8 C5A72700            2194  	clr1 0x00000004, 0x00000027[r5]
+000012AC 80FF0000            2195  	jarl _SchM_Exit_CanNm_Context, r31
+000012B0                     2196  .BB.LABEL.36_5:	; return
+000012B0                     2197  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 3229
+000012B0 40063F0F            2198  	dispose 0x00000000, 0x00000079, [r31]
+000012B4                     2199  _CanNm_InnerTxConfHandle.1:
+000012B4                     2200  	.stack _CanNm_InnerTxConfHandle.1 = 12
+000012B4                     2201  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 3244
+000012B4 8007210C            2202  	prepare 0x00000061, 0x00000000
+000012B8 06A0                2203  	mov r6, r20
+000012BA                     2204  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 3246
+000012BA 40160000            2205  	movhi HIGHW1(#_CanNm_CfgPtr.2), r0, r2
+000012BE 22170100            2206  	ld.w LOWW(#_CanNm_CfgPtr.2)[r2], r2
+000012C2 22AF0500            2207  	ld.w 0x00000004[r2], r21
+000012C6                     2208  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 3248
+000012C6 80FF0000            2209  	jarl _SchM_Enter_CanNm_Context, r31
+000012CA                     2210  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 3251
+000012CA F4163000            2211  	mulhi 0x00000030, r20, r2
+000012CE                     2212  	mov #_CanNm_ChRunTime.3, r5
+000012CE 250600000000            -- mov         0x0,tp
+000012D4 C229                2213  	add r2, r5
+000012D6 25170500            2214  	ld.w 0x00000004[r5], r2
+000012DA 6312                2215  	cmp 0x00000003, r2
+000012DC 8A05                2216  	bnz9 .BB.LABEL.37_2
+000012DE                     2217  .BB.LABEL.37_1:	; if_then_bb
+000012DE                     2218  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 3253
+000012DE F4163000            2219  	mulhi 0x00000030, r20, r2
+000012E2                     2220  	mov #_CanNm_ChRunTime.3, r5
+000012E2 250600000000            -- mov         0x0,tp
+000012E8 C229                2221  	add r2, r5
+000012EA F4163800            2222  	mulhi 0x00000038, r20, r2
+000012EE D511                2223  	add r21, r2
+000012F0 22171C00            2224  	ld.h 0x0000001C[r2], r2
+000012F4 65171200            2225  	st.h r2, 0x00000012[r5]
+000012F8                     2226  .BB.LABEL.37_2:	; if_break_bb
+000012F8                     2227  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 3257
+000012F8 F4163000            2228  	mulhi 0x00000030, r20, r2
+000012FC                     2229  	mov #_CanNm_ChRunTime.3, r5
+000012FC 250600000000            -- mov         0x0,tp
+00001302 C229                2230  	add r2, r5
+00001304 65071800            2231  	st.h r0, 0x00000018[r5]
+00001308                     2232  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 3258
+00001308 45071A00            2233  	st.b r0, 0x0000001A[r5]
+0000130C                     2234  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 3259
+0000130C 80FF0000            2235  	jarl _SchM_Exit_CanNm_Context, r31
+00001310                     2236  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 3263
+00001310 F4163800            2237  	mulhi 0x00000038, r20, r2
+00001314 C2A9                2238  	add r2, r21
+00001316 35173500            2239  	ld.w 0x00000034[r21], r2
+0000131A 6012                2240  	cmp 0x00000000, r2
+0000131C 8205                2241  	bz9 .BB.LABEL.37_4
+0000131E                     2242  .BB.LABEL.37_3:	; if_then_bb32
+0000131E                     2243  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 3267
+0000131E E2370300            2244  	ld.hu 0x00000002[r2], r6
+00001322 80FF0000            2245  	jarl _PduR_IfTxConfirmation, r31
+00001326                     2246  .BB.LABEL.37_4:	; return
+00001326                     2247  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/CAN/CanNm/CanNm.c", 3271
+00001326 40063F0C            2248  	dispose 0x00000000, 0x00000061, [r31]
+00000000                     2249  	.section .data, data
+00000000                     2250  	.align 4
+00000000                     2251  _CanNm_InitStatus.1:
+00000000 00000000            2252  	.ds (4)
+00000004                     2253  	.align 4
+00000004                     2254  _CanNm_CfgPtr.2:
+00000004 00000000            2255  	.ds (4)
+00000008                     2256  _validNmMsgFlag:
+00000008 00                  2257  	.ds (1)
+00000000                     2258  	.section .bss, bss
+00000000                     2259  	.align 4
+00000000                     2260  _CanNm_ChRunTime.3:
+00000000                     2261  	.ds (48)
+
+Section List
+Attr     Size                Name
+
+TEXT         4906 (0000132A) .text
+DATA            9 (00000009) .data
+BSS            48 (00000030) .bss
+
+Command Line Parameter
+-Xcpu=g3kh -Xreg_mode=32 -Xep=callee -Xcharacter_set=none -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\diagnostic -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\parameter_store -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu\port -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu\uart -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu\iic -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\vehicle_data_to_mpu -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\power_manage -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\mcu_cpu_sync -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\remote_control -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\can_cycle_send -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\project_configure -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\sdk\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\commonLib\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\hal\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\icu\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Icu_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\vss -ID:\wk\sirun\project\dazhong\code\mcu_app\ASW\CDD_FVM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\EEIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanTSyn -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\StbM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CSM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\RSA -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\RandomGen\CTR_DRBG -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\MAC\CMAC -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\Hash\sha256 -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\dh -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\AES -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CryInterface -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\SecOC -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\NvM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\MemIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\Fee -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\WdgM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\WdgIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Wdg_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Gpt_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Fls_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\wdg\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\gpt\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\fls\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\IpduM -ID:\wk\sirun\project\dazhong\code\mcu_app\ASW\APP -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\BswM -ID:\wk\sirun\project\dazhong\code\mcu_app\ASW\BSW_Ext -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\Dcm -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanTp -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Dem -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Libraries\E2E -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Libraries\Crc -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\NmIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanNm -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config\RTE\Rte -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config\RTE\SchM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Libraries\IStd -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\EcuM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\ComM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanSM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\Com -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\PDUR -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\CommonInclude -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config\RH850F1K -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Extend\inc -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Kernel\inc -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Portable\Mcu -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Portable\Processor -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Adc_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Can_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Dio_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Mcu_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Port_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\adc\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\can\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\dio\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\general -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\mcu\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\port\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\CanGeneral\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\Det\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\MemIf\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\SchM\include -DRH850_F1KM_S1_2MB -Xprn_path=DefaultBuild -Xno_warning=50013 -oD:\wk\sirun\project\dazhong\code\mcu_app\Toolchain\CSPLUS_V81200\DefaultBuild\CanNm.obj D:\wk\sirun\project\dazhong\code\mcu_app\Toolchain\CSPLUS_V81200\DefaultBuild\CanNm.asm 
+

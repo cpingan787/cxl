@@ -1,0 +1,202 @@
+RH850 Family Assembler V2.07.00.03 Assemble Source List
+
+OFFSET   CODE                  NO  SOURCE STATEMENT
+
+00000000                        1  #CC-RH Compiler RH850 Assembler Source
+00000000                        2  #@	CC-RH Version : V2.07.00  [06 Dec 2024]
+00000000                        3  #@	Command : ..\..\ASW\APP\Com_Test.c -oDefaultBuild\Com_Test.obj -Xcpu=g3kh -Xno_warning=20188,20111 -g -g_line -I..\..\Srcode\app\diagnostic -I..\..\Srcode\app\parameter_store -I..\..\Cpu\port -I..\..\Cpu\uart -I..\..\Cpu\iic -I..\..\Srcode\app\vehicle_data_to_mpu -I..\..\Srcode\app\power_manage -I..\..\Srcode\app\mcu_cpu_sync -I..\..\Srcode\app\remote_control -I..\..\Srcode\app\can_cycle_send -I..\..\Srcode\app\project_configure -I..\..\Srcode\sdk\include -I..\..\Srcode\commonLib\include -I..\..\Srcode\hal\include -I..\..\Bsw\Mcal\icu\include -I..\..\Bsw\Config\MCAL_Config\Icu_OutPut\include -I..\..\Bsw\Crypto\CRYPTO\vss -I..\..\ASW\CDD_FVM -I..\..\Bsw\Memory\EEIf -I..\..\Bsw\Communication\CAN\CanTSyn -I..\..\Bsw\SystemServices\StbM -I..\..\Bsw\Crypto\CSM -I..\..\Bsw\Crypto\CRYPTO\RSA -I..\..\Bsw\Crypto\CRYPTO\RandomGen\CTR_DRBG -I..\..\Bsw\Crypto\CRYPTO\MAC\CMAC -I..\..\Bsw\Crypto\CRYPTO\Hash\sha256 -I..\..\Bsw\Crypto\CRYPTO\dh -I..\..\Bsw\Crypto\CRYPTO\AES -I..\..\Bsw\Crypto\CRYPTO -I..\..\Bsw\Crypto\CryInterface -I..\..\Bsw\Communication\Common\SecOC -I..\..\Bsw\Memory\NvM -I..\..\Bsw\Memory\MemIf -I..\..\Bsw\Memory\Fee -I..\..\Bsw\SystemServices\WdgM -I..\..\Bsw\SystemServices\WdgIf -I..\..\Bsw\Config\MCAL_Config\Wdg_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Gpt_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Fls_OutPut\include -I..\..\Bsw\Mcal\wdg\include -I..\..\Bsw\Mcal\gpt\include -I..\..\Bsw\Mcal\fls\include -I..\..\Bsw\Communication\Common\IpduM -I..\..\ASW\APP -I..\..\Bsw\SystemServices\BswM -I..\..\ASW\BSW_Ext -I..\..\Bsw\Communication\Common\Dcm -I..\..\Bsw\Communication\CAN\CanTp -I..\..\Bsw\SystemServices\Dem -I..\..\Bsw\Libraries\E2E -I..\..\Bsw\Libraries\Crc -I..\..\Bsw\Communication\Common\NmIf -I..\..\Bsw\Communication\CAN\CanNm -I..\..\Bsw\Config\BSW_Config\RTE\Rte -I..\..\Bsw\Config\BSW_Config\RTE\SchM -I..\..\Bsw\Libraries\IStd -I..\..\Bsw\SystemServices\EcuM -I..\..\Bsw\SystemServices\ComM -I..\..\Bsw\Communication\CAN\CanSM -I..\..\Bsw\Communication\CAN\CanIf -I..\..\Bsw\Communication\Common\Com -I..\..\Bsw\Communication\Common\PDUR -I..\..\Cpu -I..\..\Bsw\CommonInclude -I..\..\Bsw\Config\BSW_Config -I..\..\Bsw\Config\BSW_Config\RH850F1K -I..\..\Bsw\SystemServices\Os\Extend\inc -I..\..\Bsw\SystemServices\Os\Kernel\inc -I..\..\Bsw\SystemServices\Os\Portable\Mcu -I..\..\Bsw\SystemServices\Os\Portable\Processor -I..\..\Bsw\Config\MCAL_Config\Adc_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Can_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Dio_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Mcu_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Port_OutPut\include -I..\..\Bsw\Mcal\adc\include -I..\..\Bsw\Mcal\can\include -I..\..\Bsw\Mcal\dio\include -I..\..\Bsw\Mcal\general -I..\..\Bsw\Mcal\mcu\include -I..\..\Bsw\Mcal\port\include -I..\..\Bsw\Mcal\stubs\CanGeneral\include -I..\..\Bsw\Mcal\stubs\Det\include -I..\..\Bsw\Mcal\stubs\MemIf\include -I..\..\Bsw\Mcal\stubs\SchM\include -DRH850_F1KM_S1_2MB -lang=c99 -Xfloat=fpu -Xround=zero -Xdiv -Xasm_path=DefaultBuild -Xasm_option=-Xprn_path=DefaultBuild -c -MAKEUD=DefaultBuild -Xexec_time=C:\Users\xlchen\AppData\Local\Temp\CSPlusBuildTool_a6c7c2aeea624eaf8faf963d7bbcc5bdlel5v5pj.ore
+00000000                        4  #@	compiled at Fri Mar 27 09:50:00 2026
+00000000                        5  
+00000000                        6  	.file "..\..\ASW\APP\Com_Test.c"
+00000000                        7  
+00000000                        8  	$reg_mode 32
+00000000                        9  	.dbl_size 8
+00000000                       10  
+00000000                       11  	.public _Event_Test, 1
+00000000                       12  	.public _Event_TestSig0, 8
+00000000                       13  	.public _Event_TestSig1, 1
+00000000                       14  	.public _Test_ComTxSig0, 1
+00000000                       15  	.public _Test_ComRxSig0, 1
+00000000                       16  	.public _testcom, 8
+00000000                       17  	.public _timestamp, 16
+00000000                       18  	.public _userData, 4
+00000000                       19  	.public _Data, 8
+00000000                       20  	.public _PduInfo, 12
+00000000                       21  	.public _E2E_R_TEST, 4
+00000000                       22  	.public _Com_Test
+00000000                       23  	.extern _Com_ReceiveSignalGroup
+00000000                       24  	.extern _Com_ReceiveSignal
+00000000                       25  	.extern _Com_SendSignal
+00000000                       26  	.public _Com_SecOC_Test
+00000000                       27  	.public _CanTSyn_SlaveTest
+00000000                       28  	.extern _StbM_GetCurrentTime
+00000000                       29  	.extern _Can_Write
+00000000                       30  
+00000000                       31  	.section .text, text
+00000000                       32  _Com_Test:
+00000000                       33  	.stack _Com_Test = 8
+00000000                       34  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Com_Test.c", 75
+00000000 80072108              35  	prepare 0x00000041, 0x00000000
+00000004 20361A00              36  	movea 0x0000001A, r0, r6
+00000008                       37  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Com_Test.c", 82
+00000008 80FF0000              38  	jarl _Com_ReceiveSignalGroup, r31
+0000000C                       39  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Com_Test.c", 83
+0000000C                       40  	mov #_E2E_R_TEST, r20
+0000000C 340600000000            -- mov         0x0,r20
+00000012 2036B403              41  	movea 0x000003B4, r0, r6
+00000016 1438                  42  	mov r20, r7
+00000018 80FF0000              43  	jarl _Com_ReceiveSignal, r31
+0000001C                       44  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Com_Test.c", 84
+0000001C 143E0200              45  	addi 0x00000002, r20, r7
+00000020 2036B503              46  	movea 0x000003B5, r0, r6
+00000024 80FF0000              47  	jarl _Com_ReceiveSignal, r31
+00000028                       48  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Com_Test.c", 86
+00000028 40160000              49  	movhi HIGHW1(#_Event_Test), r0, r2
+0000002C 82170100              50  	ld.bu LOWW(#_Event_Test)[r2], r2
+00000030 6112                  51  	cmp 0x00000001, r2
+00000032 8A05                  52  	bnz9 .BB.LABEL.1_2
+00000034                       53  .BB.LABEL.1_1:	; if_then_bb
+00000034                       54  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Com_Test.c", 89
+00000034                       55  	mov #_Event_TestSig0, r7
+00000034 270600000000            -- mov         0x0,r7
+0000003A 20364200              56  	movea 0x00000042, r0, r6
+0000003E 80FF0000              57  	jarl _Com_SendSignal, r31
+00000042                       58  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Com_Test.c", 90
+00000042 40160000              59  	movhi HIGHW1(#_Event_Test), r0, r2
+00000046 42070000              60  	st.b r0, LOWW(#_Event_Test)[r2]
+0000004A                       61  .BB.LABEL.1_2:	; return
+0000004A                       62  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Com_Test.c", 104
+0000004A 40063F08              63  	dispose 0x00000000, 0x00000041, [r31]
+0000004E                       64  _Com_SecOC_Test:
+0000004E                       65  	.stack _Com_SecOC_Test = 8
+0000004E                       66  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Com_Test.c", 106
+0000004E 80072108              67  	prepare 0x00000041, 0x00000000
+00000052                       68  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Com_Test.c", 110
+00000052 40160000              69  	movhi HIGHW1(#_Event_Test), r0, r2
+00000056 82170100              70  	ld.bu LOWW(#_Event_Test)[r2], r2
+0000005A 6112                  71  	cmp 0x00000001, r2
+0000005C 8A05                  72  	bnz9 .BB.LABEL.2_2
+0000005E                       73  .BB.LABEL.2_1:	; if_then_bb
+0000005E                       74  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Com_Test.c", 112
+0000005E                       75  	mov #_Event_TestSig0, r20
+0000005E 340600000000            -- mov         0x0,r20
+00000064 20368700              76  	movea 0x00000087, r0, r6
+00000068 1438                  77  	mov r20, r7
+0000006A 80FF0000              78  	jarl _Com_SendSignal, r31
+0000006E 2036C700              79  	movea 0x000000C7, r0, r6
+00000072                       80  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Com_Test.c", 113
+00000072 1438                  81  	mov r20, r7
+00000074 80FF0000              82  	jarl _Com_SendSignal, r31
+00000078 2036B400              83  	movea 0x000000B4, r0, r6
+0000007C                       84  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Com_Test.c", 114
+0000007C 1438                  85  	mov r20, r7
+0000007E 80FF0000              86  	jarl _Com_SendSignal, r31
+00000082 2036B200              87  	movea 0x000000B2, r0, r6
+00000086                       88  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Com_Test.c", 115
+00000086 1438                  89  	mov r20, r7
+00000088 80FF0000              90  	jarl _Com_SendSignal, r31
+0000008C                       91  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Com_Test.c", 116
+0000008C 40160000              92  	movhi HIGHW1(#_Event_Test), r0, r2
+00000090 42070000              93  	st.b r0, LOWW(#_Event_Test)[r2]
+00000094                       94  .BB.LABEL.2_2:	; return
+00000094                       95  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Com_Test.c", 119
+00000094 40063F08              96  	dispose 0x00000000, 0x00000041, [r31]
+00000098                       97  _CanTSyn_SlaveTest:
+00000098                       98  	.stack _CanTSyn_SlaveTest = 8
+00000098                       99  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Com_Test.c", 121
+00000098 80072108             100  	prepare 0x00000041, 0x00000000
+0000009C                      101  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Com_Test.c", 123
+0000009C                      102  	mov #_timestamp, r20
+0000009C 340600000000            -- mov         0x0,r20
+000000A2                      103  	mov #_userData, r8
+000000A2 280600000000            -- mov         0x0,r8
+000000A8 0032                 104  	mov 0x00000000, r6
+000000AA 1438                 105  	mov r20, r7
+000000AC 80FF0000             106  	jarl _StbM_GetCurrentTime, r31
+000000B0                      107  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Com_Test.c", 125
+000000B0 34170900             108  	ld.w 0x00000008[r20], r2
+000000B4 9812                 109  	shr 0x00000018, r2
+000000B6                      110  	mov #_PduInfo, r7
+000000B6 270600000000            -- mov         0x0,r7
+000000BC 272F0100             111  	ld.w 0x00000000[r7], r5
+000000C0 45170000             112  	st.b r2, 0x00000000[r5]
+000000C4                      113  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Com_Test.c", 126
+000000C4 34170900             114  	ld.w 0x00000008[r20], r2
+000000C8 9012                 115  	shr 0x00000010, r2
+000000CA 272F0100             116  	ld.w 0x00000000[r7], r5
+000000CE 45170100             117  	st.b r2, 0x00000001[r5]
+000000D2                      118  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Com_Test.c", 127
+000000D2 34170900             119  	ld.w 0x00000008[r20], r2
+000000D6 8812                 120  	shr 0x00000008, r2
+000000D8 272F0100             121  	ld.w 0x00000000[r7], r5
+000000DC 45170200             122  	st.b r2, 0x00000002[r5]
+000000E0                      123  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Com_Test.c", 128
+000000E0 34170900             124  	ld.w 0x00000008[r20], r2
+000000E4 272F0100             125  	ld.w 0x00000000[r7], r5
+000000E8 45170300             126  	st.b r2, 0x00000003[r5]
+000000EC                      127  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Com_Test.c", 129
+000000EC 34170500             128  	ld.w 0x00000004[r20], r2
+000000F0 9812                 129  	shr 0x00000018, r2
+000000F2 272F0100             130  	ld.w 0x00000000[r7], r5
+000000F6 45170400             131  	st.b r2, 0x00000004[r5]
+000000FA                      132  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Com_Test.c", 130
+000000FA 34170500             133  	ld.w 0x00000004[r20], r2
+000000FE 9012                 134  	shr 0x00000010, r2
+00000100 272F0100             135  	ld.w 0x00000000[r7], r5
+00000104 45170500             136  	st.b r2, 0x00000005[r5]
+00000108                      137  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Com_Test.c", 131
+00000108 34170500             138  	ld.w 0x00000004[r20], r2
+0000010C 8812                 139  	shr 0x00000008, r2
+0000010E 272F0100             140  	ld.w 0x00000000[r7], r5
+00000112 45170600             141  	st.b r2, 0x00000006[r5]
+00000116                      142  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Com_Test.c", 132
+00000116 34170500             143  	ld.w 0x00000004[r20], r2
+0000011A 272F0100             144  	ld.w 0x00000000[r7], r5
+0000011E 45170700             145  	st.b r2, 0x00000007[r5]
+00000122 0232                 146  	mov 0x00000002, r6
+00000124                      147  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Com_Test.c", 134
+00000124 80FF0000             148  	jarl _Can_Write, r31
+00000128 40063F08             149  	dispose 0x00000000, 0x00000041, [r31]
+00000000                      150  	.section .data, data
+00000000                      151  _Event_Test:
+00000000 00                   152  	.ds (1)
+00000001 000000               153  	.align 4
+00000004                      154  _Event_TestSig0:
+00000004 0000000000000000     155  	.ds (8)
+0000000C                      156  _Event_TestSig1:
+0000000C 00                   157  	.ds (1)
+0000000D                      158  _Test_ComTxSig0:
+0000000D 00                   159  	.ds (1)
+0000000E                      160  _Test_ComRxSig0:
+0000000E 00                   161  	.ds (1)
+0000000F                      162  _testcom:
+0000000F 0000000000000000     163  	.ds (8)
+00000017                      164  _Data:
+00000017 0000000000000000     165  	.ds (8)
+0000001F 00                   166  	.align 4
+00000020                      167  _PduInfo:
+00000020 00000000             168  	.dw #_Data
+00000024 66060000             169  	.dw 0x00000666
+00000028 0000                 170  	.ds (2)
+0000002A 08                   171  	.db 0x08
+0000002B 00                   172  	.ds (1)
+0000002C                      173  	.align 2
+0000002C                      174  _E2E_R_TEST:
+0000002C 00000000             175  	.ds (4)
+00000000                      176  	.section .bss, bss
+00000000                      177  	.align 4
+00000000                      178  _timestamp:
+00000000                      179  	.ds (16)
+00000010                      180  _userData:
+00000010                      181  	.ds (4)
+
+Section List
+Attr     Size                Name
+
+TEXT          300 (0000012C) .text
+DATA           48 (00000030) .data
+BSS            20 (00000014) .bss
+
+Command Line Parameter
+-Xcpu=g3kh -Xreg_mode=32 -Xep=callee -Xcharacter_set=none -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\diagnostic -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\parameter_store -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu\port -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu\uart -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu\iic -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\vehicle_data_to_mpu -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\power_manage -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\mcu_cpu_sync -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\remote_control -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\can_cycle_send -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\project_configure -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\sdk\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\commonLib\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\hal\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\icu\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Icu_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\vss -ID:\wk\sirun\project\dazhong\code\mcu_app\ASW\CDD_FVM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\EEIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanTSyn -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\StbM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CSM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\RSA -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\RandomGen\CTR_DRBG -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\MAC\CMAC -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\Hash\sha256 -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\dh -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\AES -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CryInterface -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\SecOC -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\NvM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\MemIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\Fee -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\WdgM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\WdgIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Wdg_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Gpt_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Fls_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\wdg\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\gpt\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\fls\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\IpduM -ID:\wk\sirun\project\dazhong\code\mcu_app\ASW\APP -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\BswM -ID:\wk\sirun\project\dazhong\code\mcu_app\ASW\BSW_Ext -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\Dcm -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanTp -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Dem -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Libraries\E2E -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Libraries\Crc -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\NmIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanNm -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config\RTE\Rte -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config\RTE\SchM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Libraries\IStd -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\EcuM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\ComM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanSM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\Com -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\PDUR -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\CommonInclude -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config\RH850F1K -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Extend\inc -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Kernel\inc -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Portable\Mcu -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Portable\Processor -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Adc_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Can_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Dio_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Mcu_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Port_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\adc\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\can\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\dio\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\general -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\mcu\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\port\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\CanGeneral\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\Det\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\MemIf\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\SchM\include -DRH850_F1KM_S1_2MB -Xprn_path=DefaultBuild -Xno_warning=50013 -oD:\wk\sirun\project\dazhong\code\mcu_app\Toolchain\CSPLUS_V81200\DefaultBuild\Com_Test.obj D:\wk\sirun\project\dazhong\code\mcu_app\Toolchain\CSPLUS_V81200\DefaultBuild\Com_Test.asm 
+

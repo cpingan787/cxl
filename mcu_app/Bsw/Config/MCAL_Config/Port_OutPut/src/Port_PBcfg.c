@@ -141,7 +141,7 @@
  *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\Config\ECUC\test_Port_Port0_ecuc.arxml
  *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\modules\port\R422_PORT_F1x_BSWMDT.arxml
  *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\stubs\4.2.2\Dem\xml\Dem_Port.arxml
- * GENERATED ON:  27 Feb 2026 - 10:55:49
+ * GENERATED ON:  19 Mar 2026 - 17:19:40
  */
 
 /*******************************************************************************
@@ -223,6 +223,9 @@ CONST(Port_ConfigType, PORT_CONST)
     /* pPortPinChangeableDetailsList */
     &Port_GstPinChangeableDetailsList[0],
 
+    /* pPortDNFARegs */
+    &Port_GstDNFARegs[0],
+
     /* ucNoOfPortNumRegs */
     0x09U,
 
@@ -236,7 +239,10 @@ CONST(Port_ConfigType, PORT_CONST)
     0x01U,
 
     /* ucNoOfPinChangeableDetails */
-    0x07U
+    0x07U,
+
+    /* ucNoOfDNFARegs */
+    0x01U
   }
 };
 
@@ -257,13 +263,13 @@ CONST(Port_NumRegs, PORT_CONST)
     0x00000020UL,
 
     /* ulInitModePMSRRegVal */
-    0x000082D6UL,
+    0x00008AD6UL,
 
     /* ulMaskConfigPMSRRegVal */
-    0xFFDF82D6UL,
+    0xFFDF8AD6UL,
 
     /* ulInitModePMCSRRegVal */
-    0x0000018FUL,
+    0x000009CFUL,
 
     /* ulInitModePODCRegVal */
     0x00000000UL,
@@ -293,13 +299,13 @@ CONST(Port_NumRegs, PORT_CONST)
     0x0000U,
 
     /* usInitModePFCERegVal */
-    0x0084U,
+    0x0880U,
 
     /* usInitModePFCRegVal */
-    0x000BU,
+    0x000FU,
 
     /* usInitModePFCAERegVal */
-    0x0184U,
+    0x0180U,
 
     /* ucPortIndex */
     0x00U,
@@ -356,7 +362,7 @@ CONST(Port_NumRegs, PORT_CONST)
     0x0010U,
 
     /* usInitModePFCRegVal */
-    0x0000U,
+    0x0100U,
 
     /* usInitModePFCAERegVal */
     0x0010U,
@@ -374,7 +380,7 @@ CONST(Port_NumRegs, PORT_CONST)
     0x001EC3D3UL,
 
     /* ulInitModePSRRegVal */
-    0x00000000UL,
+    0x00000004UL,
 
     /* ulInitModePMSRRegVal */
     0x0000EF3EUL,
@@ -383,7 +389,7 @@ CONST(Port_NumRegs, PORT_CONST)
     0xFFFFEF3EUL,
 
     /* ulInitModePMCSRRegVal */
-    0x00000080UL,
+    0x000000AEUL,
 
     /* ulInitModePODCRegVal */
     0x00000000UL,
@@ -404,7 +410,7 @@ CONST(Port_NumRegs, PORT_CONST)
     0x0000U,
 
     /* usInitModePURegVal */
-    0x0021U,
+    0x0025U,
 
     /* usInitModePDRegVal */
     0x0002U,
@@ -413,7 +419,7 @@ CONST(Port_NumRegs, PORT_CONST)
     0x0000U,
 
     /* usInitModePFCERegVal */
-    0x0000U,
+    0x002EU,
 
     /* usInitModePFCRegVal */
     0x0000U,
@@ -1062,7 +1068,25 @@ CONST(Port_PinChangeableDetails, PORT_CONST)
 
 
 /* Array of structures for Digital Filter registers and Delay */
-/* CONST(Port_DNFARegs, PORT_CONST) Port_GstDNFARegs[PORT_NUM_OF_DNFA]; */
+CONST(Port_DNFARegs, PORT_CONST) Port_GstDNFARegs[PORT_NUM_OF_DNFA] =
+{
+  /* Index: 0 - PortConfigSet_1_FilterGroup_DNFATAUB0ICTL */
+  {
+    /* usDNFARegAddrIndex */
+    0x0000U,
+
+    /* usDNFAEN */
+    0x0300U,
+
+    /* usDELAY */
+    0x0001U,
+
+    /* ucDNFACTL */
+    0x00U
+  }
+};
+
+
 
 /* Array for Analog and/or Digital Filter registers */
 /* CONST(Port_FCLARegs, PORT_CONST) Port_GstFCLARegs[PORT_NUM_OF_FCLA]; */

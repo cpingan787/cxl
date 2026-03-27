@@ -38,6 +38,19 @@ VAR(Dem_EventMemEntryType,AUTOMATIC) DemPrimaryMemory[DEM_MAX_NUMBER_EVENT_ENTRY
 #define DEM_STOP_SEC_VAR_NO_INIT_UNSPECIFIED
 #include "Dem_MemMap.h"
 
+#define DEM_START_SEC_CONST_UNSPECIFIED
+#include "Dem_MemMap.h"
+/* DemGeneral/DemEventMemorySet/DemGlobalFreezeFrame */
+CONST(Dem_GlobalFreezeFrameType,AUTOMATIC) DemGlobalFreezeFrame =
+{
+        0u,                         /* GlobalDemFreezeFrameClassRef  */
+        1u,                         /* GlobalDemFreezeFrameRecordNumber */
+        DEM_TRIGGER_ON_TEST_FAILED, /* GlobalDemFreezeFrameRecordTrigger */
+        DEM_UPDATE_RECORD_NO        /* GlobalDemFreezeFrameRecordUpdate */
+};
+#define DEM_STOP_SEC_CONST_UNSPECIFIED
+#include "Dem_MemMap.h"
+
 /* Dem_EventMemEntryType DemUserDefinedMemory<Mem/Name>[Mem/DemMaxNumberEventEntryUserDefined]; */
 #define DEM_START_SEC_CONST_UNSPECIFIED
 #include "Dem_MemMap.h"

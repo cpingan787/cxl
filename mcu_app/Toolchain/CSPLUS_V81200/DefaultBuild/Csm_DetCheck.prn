@@ -1,0 +1,1124 @@
+RH850 Family Assembler V2.07.00.03 Assemble Source List
+
+OFFSET   CODE                  NO  SOURCE STATEMENT
+
+00000000                        1  #CC-RH Compiler RH850 Assembler Source
+00000000                        2  #@	CC-RH Version : V2.07.00  [06 Dec 2024]
+00000000                        3  #@	Command : ..\..\Bsw\Crypto\CSM\Csm_DetCheck.c -oDefaultBuild\Csm_DetCheck.obj -Xcpu=g3kh -Xno_warning=20188,20111 -g -g_line -I..\..\Srcode\app\diagnostic -I..\..\Srcode\app\parameter_store -I..\..\Cpu\port -I..\..\Cpu\uart -I..\..\Cpu\iic -I..\..\Srcode\app\vehicle_data_to_mpu -I..\..\Srcode\app\power_manage -I..\..\Srcode\app\mcu_cpu_sync -I..\..\Srcode\app\remote_control -I..\..\Srcode\app\can_cycle_send -I..\..\Srcode\app\project_configure -I..\..\Srcode\sdk\include -I..\..\Srcode\commonLib\include -I..\..\Srcode\hal\include -I..\..\Bsw\Mcal\icu\include -I..\..\Bsw\Config\MCAL_Config\Icu_OutPut\include -I..\..\Bsw\Crypto\CRYPTO\vss -I..\..\ASW\CDD_FVM -I..\..\Bsw\Memory\EEIf -I..\..\Bsw\Communication\CAN\CanTSyn -I..\..\Bsw\SystemServices\StbM -I..\..\Bsw\Crypto\CSM -I..\..\Bsw\Crypto\CRYPTO\RSA -I..\..\Bsw\Crypto\CRYPTO\RandomGen\CTR_DRBG -I..\..\Bsw\Crypto\CRYPTO\MAC\CMAC -I..\..\Bsw\Crypto\CRYPTO\Hash\sha256 -I..\..\Bsw\Crypto\CRYPTO\dh -I..\..\Bsw\Crypto\CRYPTO\AES -I..\..\Bsw\Crypto\CRYPTO -I..\..\Bsw\Crypto\CryInterface -I..\..\Bsw\Communication\Common\SecOC -I..\..\Bsw\Memory\NvM -I..\..\Bsw\Memory\MemIf -I..\..\Bsw\Memory\Fee -I..\..\Bsw\SystemServices\WdgM -I..\..\Bsw\SystemServices\WdgIf -I..\..\Bsw\Config\MCAL_Config\Wdg_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Gpt_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Fls_OutPut\include -I..\..\Bsw\Mcal\wdg\include -I..\..\Bsw\Mcal\gpt\include -I..\..\Bsw\Mcal\fls\include -I..\..\Bsw\Communication\Common\IpduM -I..\..\ASW\APP -I..\..\Bsw\SystemServices\BswM -I..\..\ASW\BSW_Ext -I..\..\Bsw\Communication\Common\Dcm -I..\..\Bsw\Communication\CAN\CanTp -I..\..\Bsw\SystemServices\Dem -I..\..\Bsw\Libraries\E2E -I..\..\Bsw\Libraries\Crc -I..\..\Bsw\Communication\Common\NmIf -I..\..\Bsw\Communication\CAN\CanNm -I..\..\Bsw\Config\BSW_Config\RTE\Rte -I..\..\Bsw\Config\BSW_Config\RTE\SchM -I..\..\Bsw\Libraries\IStd -I..\..\Bsw\SystemServices\EcuM -I..\..\Bsw\SystemServices\ComM -I..\..\Bsw\Communication\CAN\CanSM -I..\..\Bsw\Communication\CAN\CanIf -I..\..\Bsw\Communication\Common\Com -I..\..\Bsw\Communication\Common\PDUR -I..\..\Cpu -I..\..\Bsw\CommonInclude -I..\..\Bsw\Config\BSW_Config -I..\..\Bsw\Config\BSW_Config\RH850F1K -I..\..\Bsw\SystemServices\Os\Extend\inc -I..\..\Bsw\SystemServices\Os\Kernel\inc -I..\..\Bsw\SystemServices\Os\Portable\Mcu -I..\..\Bsw\SystemServices\Os\Portable\Processor -I..\..\Bsw\Config\MCAL_Config\Adc_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Can_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Dio_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Mcu_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Port_OutPut\include -I..\..\Bsw\Mcal\adc\include -I..\..\Bsw\Mcal\can\include -I..\..\Bsw\Mcal\dio\include -I..\..\Bsw\Mcal\general -I..\..\Bsw\Mcal\mcu\include -I..\..\Bsw\Mcal\port\include -I..\..\Bsw\Mcal\stubs\CanGeneral\include -I..\..\Bsw\Mcal\stubs\Det\include -I..\..\Bsw\Mcal\stubs\MemIf\include -I..\..\Bsw\Mcal\stubs\SchM\include -DRH850_F1KM_S1_2MB -lang=c99 -Xfloat=fpu -Xround=zero -Xdiv -Xasm_path=DefaultBuild -Xasm_option=-Xprn_path=DefaultBuild -c -MAKEUD=DefaultBuild -Xexec_time=C:\Users\xlchen\AppData\Local\Temp\CSPlusBuildTool_b72197a118954fb7865c345e11ed21desufno2qp.nsl
+00000000                        4  #@	compiled at Fri Mar 27 09:50:09 2026
+00000000                        5  
+00000000                        6  	.file "..\..\Bsw\Crypto\CSM\Csm_DetCheck.c"
+00000000                        7  
+00000000                        8  	$reg_mode 32
+00000000                        9  	.dbl_size 8
+00000000                       10  
+00000000                       11  	.extern _Csm_JobCfg
+00000000                       12  	.extern _Csm_InitStatus
+00000000                       13  	.extern _Det_ReportError
+00000000                       14  	.public _Csm_ChkInitParam
+00000000                       15  	.public _Csm_ChkGetVersionInfo
+00000000                       16  	.public _Csm_ChkServiceParam
+00000000                       17  	.public _Csm_ChkKeyEleSetParam
+00000000                       18  	.public _Csm_ChkKeySetValid
+00000000                       19  	.public _Csm_ChkKeyEleGet
+00000000                       20  	.public _Csm_ChkKeyEleCopy
+00000000                       21  	.public _Csm_ChkKeyCopy
+00000000                       22  	.public _Csm_ChkKeyEleCopyPart
+00000000                       23  	.public _Csm_ChkRandomSeed
+00000000                       24  	.public _Csm_ChkKeyGenerate
+00000000                       25  	.public _Csm_ChkKeyDerive
+00000000                       26  	.public _Csm_ChkExCalcPubVal
+00000000                       27  	.public _Csm_ChkExCalcSecVal
+00000000                       28  	.public _Csm_ChkJobKeySetValid
+00000000                       29  	.public _Csm_ChkJobRandomSeed
+00000000                       30  	.public _Csm_ChkJobKeyGenerate
+00000000                       31  	.public _Csm_ChkJobKeyDerive
+00000000                       32  	.public _Csm_ChkJobExCalcPubVal
+00000000                       33  	.public _Csm_ChkJobExCalcSec
+00000000                       34  	.public _Csm_ChkCancelJob
+00000000                       35  	.public _Csm_ChkCbkNotify
+00000000                       36  
+00000000                       37  	.section .text, text
+00000000                       38  _Csm_ReportDetErr.1:
+00000000                       39  	.stack _Csm_ReportDetErr.1 = 4
+00000000                       40  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 46
+00000000 80072100              41  	prepare 0x00000001, 0x00000000
+00000004 0640                  42  	mov r6, r8
+00000006 0748                  43  	mov r7, r9
+00000008 003A                  44  	mov 0x00000000, r7
+0000000A 20366E00              45  	movea 0x0000006E, r0, r6
+0000000E                       46  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 48
+0000000E 80FF0000              47  	jarl _Det_ReportError, r31
+00000012 40063F00              48  	dispose 0x00000000, 0x00000001, [r31]
+00000016                       49  _Csm_ChkInitParam:
+00000016                       50  	.stack _Csm_ChkInitParam = 8
+00000016                       51  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 73
+00000016 80072108              52  	prepare 0x00000041, 0x00000000
+0000001A                       53  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 77
+0000001A 6032                  54  	cmp 0x00000000, r6
+0000001C 8205                  55  	bz9 .BB.LABEL.2_2
+0000001E                       56  .BB.LABEL.2_1:	; if_then_bb
+0000001E                       57  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 0
+0000001E 00A2                  58  	mov 0x00000000, r20
+00000020 073A                  59  	mov 0x00000007, r7
+00000022                       60  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 80
+00000022 1430                  61  	mov r20, r6
+00000024 80FF0000              62  	jarl _Csm_ReportDetErr.1, r31
+00000028 1450                  63  	mov r20, r10
+0000002A 40063F08              64  	dispose 0x00000000, 0x00000041, [r31]
+0000002E                       65  .BB.LABEL.2_2:	; if_break_bb
+0000002E                       66  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 0
+0000002E 0152                  67  	mov 0x00000001, r10
+00000030                       68  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 83
+00000030 40063F08              69  	dispose 0x00000000, 0x00000041, [r31]
+00000034                       70  _Csm_ChkGetVersionInfo:
+00000034                       71  	.stack _Csm_ChkGetVersionInfo = 8
+00000034                       72  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 87
+00000034 80072108              73  	prepare 0x00000041, 0x00000000
+00000038                       74  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 91
+00000038 6032                  75  	cmp 0x00000000, r6
+0000003A 8A05                  76  	bnz9 .BB.LABEL.3_2
+0000003C                       77  .BB.LABEL.3_1:	; if_then_bb
+0000003C                       78  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 0
+0000003C 01A2                  79  	mov 0x00000001, r20
+0000003E                       80  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 94
+0000003E 0730                  81  	mov r7, r6
+00000040 1438                  82  	mov r20, r7
+00000042 80FF0000              83  	jarl _Csm_ReportDetErr.1, r31
+00000046 1450                  84  	mov r20, r10
+00000048 40063F08              85  	dispose 0x00000000, 0x00000041, [r31]
+0000004C                       86  .BB.LABEL.3_2:	; if_break_bb
+0000004C                       87  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 0
+0000004C 0052                  88  	mov 0x00000000, r10
+0000004E                       89  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 97
+0000004E 40063F08              90  	dispose 0x00000000, 0x00000041, [r31]
+00000052                       91  _Csm_ChkServiceParam:
+00000052                       92  	.stack _Csm_ChkServiceParam = 12
+00000052                       93  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 101
+00000052 8007210C              94  	prepare 0x00000061, 0x00000000
+00000056 06A0                  95  	mov r6, r20
+00000058 07A8                  96  	mov r7, r21
+0000005A                       97  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 105
+0000005A 1530                  98  	mov r21, r6
+0000005C 80FF0000              99  	jarl _Csm_ChkInitStatus.1, r31
+00000060                      100  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 106
+00000060 6052                 101  	cmp 0x00000000, r10
+00000062 EA070100             102  	bnz17 .BB.LABEL.4_17
+00000066                      103  .BB.LABEL.4_1:	; if_then_bb
+00000066                      104  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 108
+00000066 62A2                 105  	cmp 0x00000002, r20
+00000068 8305                 106  	bnh9 .BB.LABEL.4_3
+0000006A                      107  .BB.LABEL.4_2:	; if_then_bb13
+0000006A                      108  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 0
+0000006A 043A                 109  	mov 0x00000004, r7
+0000006C                      110  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 111
+0000006C 1530                 111  	mov r21, r6
+0000006E 80FF0000             112  	jarl _Csm_ReportDetErr.1, r31
+00000072 0152                 113  	mov 0x00000001, r10
+00000074                      114  .BB.LABEL.4_3:	; if_break_bb
+00000074                      115  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 113
+00000074 3516A3FF             116  	movea 0xFFFFFFA3, r21, r2
+00000078 202E1900             117  	movea 0x00000019, r0, r5
+0000007C E511                 118  	cmp r5, r2
+0000007E EB070100             119  	bh17 .BB.LABEL.4_15
+00000082                      120  .BB.LABEL.4_4:	; if_break_bb
+00000082                      121  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 0
+00000082 C212                 122  	shl 0x00000002, r2
+00000084 E20600000000         123  	jmp #.SWITCH.LABEL.4_18[r2]
+0000008A                      124  .SWITCH.LABEL.4_18:
+0000008A 80070000             125  	jr .BB.LABEL.4_5
+0000008E 80070000             126  	jr .BB.LABEL.4_8
+00000092 80070000             127  	jr .BB.LABEL.4_9
+00000096 80070000             128  	jr .BB.LABEL.4_6
+0000009A 80070000             129  	jr .BB.LABEL.4_7
+0000009E 80070000             130  	jr .BB.LABEL.4_10
+000000A2 80070000             131  	jr .BB.LABEL.4_11
+000000A6 80070000             132  	jr .BB.LABEL.4_13
+000000AA 80070000             133  	jr .BB.LABEL.4_15
+000000AE 80070000             134  	jr .BB.LABEL.4_15
+000000B2 80070000             135  	jr .BB.LABEL.4_15
+000000B6 80070000             136  	jr .BB.LABEL.4_15
+000000BA 80070000             137  	jr .BB.LABEL.4_15
+000000BE 80070000             138  	jr .BB.LABEL.4_15
+000000C2 80070000             139  	jr .BB.LABEL.4_15
+000000C6 80070000             140  	jr .BB.LABEL.4_15
+000000CA 80070000             141  	jr .BB.LABEL.4_15
+000000CE 80070000             142  	jr .BB.LABEL.4_15
+000000D2 80070000             143  	jr .BB.LABEL.4_15
+000000D6 80070000             144  	jr .BB.LABEL.4_15
+000000DA 80070000             145  	jr .BB.LABEL.4_15
+000000DE 80070000             146  	jr .BB.LABEL.4_14
+000000E2 80070000             147  	jr .BB.LABEL.4_15
+000000E6 80070000             148  	jr .BB.LABEL.4_15
+000000EA 80070000             149  	jr .BB.LABEL.4_15
+000000EE 80070000             150  	jr .BB.LABEL.4_12
+000000F2                      151  .SWITCH.LABEL.4_18.END:
+000000F2                      152  .BB.LABEL.4_5:	; switch_clause_bb
+000000F2                      153  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 116
+000000F2 F4A74002             154  	mul 0x00000014, r20, r0
+000000F6                      155  	mov #_Csm_JobCfg, r2
+000000F6 220600000000            -- mov         0x0,hp
+000000FC D411                 156  	add r20, r2
+000000FE 22A70100             157  	ld.w 0x00000000[r2], r20
+00000102 34A70500             158  	ld.w 0x00000004[r20], r20
+00000106 34A70500             159  	ld.w 0x00000004[r20], r20
+0000010A 60A2                 160  	cmp 0x00000000, r20
+0000010C EA070100             161  	bnz17 .BB.LABEL.4_16
+00000110 80070000             162  	jr .BB.LABEL.4_17
+00000114                      163  .BB.LABEL.4_6:	; switch_clause_bb31
+00000114                      164  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 123
+00000114 F4A74002             165  	mul 0x00000014, r20, r0
+00000118                      166  	mov #_Csm_JobCfg, r2
+00000118 220600000000            -- mov         0x0,hp
+0000011E D411                 167  	add r20, r2
+00000120 22A70100             168  	ld.w 0x00000000[r2], r20
+00000124 34A70500             169  	ld.w 0x00000004[r20], r20
+00000128 34A70500             170  	ld.w 0x00000004[r20], r20
+0000012C 61A2                 171  	cmp 0x00000001, r20
+0000012E EA070100             172  	bnz17 .BB.LABEL.4_16
+00000132 80070000             173  	jr .BB.LABEL.4_17
+00000136                      174  .BB.LABEL.4_7:	; switch_clause_bb46
+00000136                      175  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 130
+00000136 F4A74002             176  	mul 0x00000014, r20, r0
+0000013A                      177  	mov #_Csm_JobCfg, r2
+0000013A 220600000000            -- mov         0x0,hp
+00000140 D411                 178  	add r20, r2
+00000142 22A70100             179  	ld.w 0x00000000[r2], r20
+00000146 34A70500             180  	ld.w 0x00000004[r20], r20
+0000014A 34A70500             181  	ld.w 0x00000004[r20], r20
+0000014E 62A2                 182  	cmp 0x00000002, r20
+00000150 8A05                 183  	bnz9 .BB.LABEL.4_16
+00000152 8505                 184  	br9 .BB.LABEL.4_17
+00000154                      185  .BB.LABEL.4_8:	; switch_clause_bb62
+00000154                      186  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 137
+00000154 F4A74002             187  	mul 0x00000014, r20, r0
+00000158                      188  	mov #_Csm_JobCfg, r2
+00000158 220600000000            -- mov         0x0,hp
+0000015E D411                 189  	add r20, r2
+00000160 22A70100             190  	ld.w 0x00000000[r2], r20
+00000164 34A70500             191  	ld.w 0x00000004[r20], r20
+00000168 34A70500             192  	ld.w 0x00000004[r20], r20
+0000016C 63A2                 193  	cmp 0x00000003, r20
+0000016E 8A05                 194  	bnz9 .BB.LABEL.4_16
+00000170 8505                 195  	br9 .BB.LABEL.4_17
+00000172                      196  .BB.LABEL.4_9:	; switch_clause_bb77
+00000172                      197  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 144
+00000172 F4A74002             198  	mul 0x00000014, r20, r0
+00000176                      199  	mov #_Csm_JobCfg, r2
+00000176 220600000000            -- mov         0x0,hp
+0000017C D411                 200  	add r20, r2
+0000017E 22A70100             201  	ld.w 0x00000000[r2], r20
+00000182 34A70500             202  	ld.w 0x00000004[r20], r20
+00000186 34A70500             203  	ld.w 0x00000004[r20], r20
+0000018A 64A2                 204  	cmp 0x00000004, r20
+0000018C 8A05                 205  	bnz9 .BB.LABEL.4_16
+0000018E 8505                 206  	br9 .BB.LABEL.4_17
+00000190                      207  .BB.LABEL.4_10:	; switch_clause_bb92
+00000190                      208  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 151
+00000190 F4A74002             209  	mul 0x00000014, r20, r0
+00000194                      210  	mov #_Csm_JobCfg, r2
+00000194 220600000000            -- mov         0x0,hp
+0000019A D411                 211  	add r20, r2
+0000019C 22A70100             212  	ld.w 0x00000000[r2], r20
+000001A0 34A70500             213  	ld.w 0x00000004[r20], r20
+000001A4 34A70500             214  	ld.w 0x00000004[r20], r20
+000001A8 65A2                 215  	cmp 0x00000005, r20
+000001AA 8A05                 216  	bnz9 .BB.LABEL.4_16
+000001AC 8505                 217  	br9 .BB.LABEL.4_17
+000001AE                      218  .BB.LABEL.4_11:	; switch_clause_bb107
+000001AE                      219  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 158
+000001AE F4A74002             220  	mul 0x00000014, r20, r0
+000001B2                      221  	mov #_Csm_JobCfg, r2
+000001B2 220600000000            -- mov         0x0,hp
+000001B8 D411                 222  	add r20, r2
+000001BA 22A70100             223  	ld.w 0x00000000[r2], r20
+000001BE 34A70500             224  	ld.w 0x00000004[r20], r20
+000001C2 34A70500             225  	ld.w 0x00000004[r20], r20
+000001C6 66A2                 226  	cmp 0x00000006, r20
+000001C8 8A05                 227  	bnz9 .BB.LABEL.4_16
+000001CA 8505                 228  	br9 .BB.LABEL.4_17
+000001CC                      229  .BB.LABEL.4_12:	; switch_clause_bb122
+000001CC                      230  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 165
+000001CC F4A74002             231  	mul 0x00000014, r20, r0
+000001D0                      232  	mov #_Csm_JobCfg, r2
+000001D0 220600000000            -- mov         0x0,hp
+000001D6 D411                 233  	add r20, r2
+000001D8 22A70100             234  	ld.w 0x00000000[r2], r20
+000001DC 34A70500             235  	ld.w 0x00000004[r20], r20
+000001E0 34A70500             236  	ld.w 0x00000004[r20], r20
+000001E4 67A2                 237  	cmp 0x00000007, r20
+000001E6 8A05                 238  	bnz9 .BB.LABEL.4_16
+000001E8 8505                 239  	br9 .BB.LABEL.4_17
+000001EA                      240  .BB.LABEL.4_13:	; switch_clause_bb137
+000001EA                      241  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 172
+000001EA F4A74002             242  	mul 0x00000014, r20, r0
+000001EE                      243  	mov #_Csm_JobCfg, r2
+000001EE 220600000000            -- mov         0x0,hp
+000001F4 D411                 244  	add r20, r2
+000001F6 22A70100             245  	ld.w 0x00000000[r2], r20
+000001FA 34A70500             246  	ld.w 0x00000004[r20], r20
+000001FE 34A70500             247  	ld.w 0x00000004[r20], r20
+00000202 68A2                 248  	cmp 0x00000008, r20
+00000204 8A05                 249  	bnz9 .BB.LABEL.4_16
+00000206 8505                 250  	br9 .BB.LABEL.4_17
+00000208                      251  .BB.LABEL.4_14:	; switch_clause_bb152
+00000208                      252  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 179
+00000208 F4A74002             253  	mul 0x00000014, r20, r0
+0000020C                      254  	mov #_Csm_JobCfg, r2
+0000020C 220600000000            -- mov         0x0,hp
+00000212 D411                 255  	add r20, r2
+00000214 22A70100             256  	ld.w 0x00000000[r2], r20
+00000218 34A70500             257  	ld.w 0x00000004[r20], r20
+0000021C 34A70500             258  	ld.w 0x00000004[r20], r20
+00000220 6BA2                 259  	cmp 0x0000000B, r20
+00000222 8A05                 260  	bnz9 .BB.LABEL.4_16
+00000224 8505                 261  	br9 .BB.LABEL.4_17
+00000226                      262  .BB.LABEL.4_15:	; switch_clause_bb167
+00000226                      263  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 186
+00000226 F4A74002             264  	mul 0x00000014, r20, r0
+0000022A                      265  	mov #_Csm_JobCfg, r2
+0000022A 220600000000            -- mov         0x0,hp
+00000230 D411                 266  	add r20, r2
+00000232 22170100             267  	ld.w 0x00000000[r2], r2
+00000236 22170500             268  	ld.w 0x00000004[r2], r2
+0000023A 22170500             269  	ld.w 0x00000004[r2], r2
+0000023E 6812                 270  	cmp 0x00000008, r2
+00000240 8205                 271  	bz9 .BB.LABEL.4_17
+00000242                      272  .BB.LABEL.4_16:	; if_then_bb179
+00000242                      273  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 0
+00000242 093A                 274  	mov 0x00000009, r7
+00000244 1530                 275  	mov r21, r6
+00000246 80FF0000             276  	jarl _Csm_ReportDetErr.1, r31
+0000024A 0152                 277  	mov 0x00000001, r10
+0000024C                      278  .BB.LABEL.4_17:	; if_break_bb182
+0000024C                      279  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 195
+0000024C 40063F0C             280  	dispose 0x00000000, 0x00000061, [r31]
+00000250                      281  _Csm_ChkKeyEleSetParam:
+00000250                      282  	.stack _Csm_ChkKeyEleSetParam = 20
+00000250                      283  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 199
+00000250 8007210F             284  	prepare 0x00000079, 0x00000000
+00000254 06A0                 285  	mov r6, r20
+00000256 07A8                 286  	mov r7, r21
+00000258 08B0                 287  	mov r8, r22
+0000025A 09B8                 288  	mov r9, r23
+0000025C                      289  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 207
+0000025C 1730                 290  	mov r23, r6
+0000025E 80FF0000             291  	jarl _Csm_ChkInitStatus.1, r31
+00000262                      292  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 208
+00000262 6052                 293  	cmp 0x00000000, r10
+00000264 8A05                 294  	bnz9 .BB.LABEL.5_6
+00000266                      295  .BB.LABEL.5_1:	; if_then_bb
+00000266                      296  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 210
+00000266 62A2                 297  	cmp 0x00000002, r20
+00000268 8905                 298  	bnc9 .BB.LABEL.5_5
+0000026A                      299  .BB.LABEL.5_2:	; if_else_bb
+0000026A                      300  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 215
+0000026A 60AA                 301  	cmp 0x00000000, r21
+0000026C 8A05                 302  	bnz9 .BB.LABEL.5_4
+0000026E                      303  .BB.LABEL.5_3:	; if_then_bb21
+0000026E                      304  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 0
+0000026E 01B2                 305  	mov 0x00000001, r22
+00000270                      306  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 218
+00000270 1730                 307  	mov r23, r6
+00000272 1638                 308  	mov r22, r7
+00000274 80FF0000             309  	jarl _Csm_ReportDetErr.1, r31
+00000278 1650                 310  	mov r22, r10
+0000027A 40063F0F             311  	dispose 0x00000000, 0x00000079, [r31]
+0000027E                      312  .BB.LABEL.5_4:	; if_else_bb23
+0000027E                      313  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 220
+0000027E 60B2                 314  	cmp 0x00000000, r22
+00000280 8A05                 315  	bnz9 .BB.LABEL.5_6
+00000282                      316  .BB.LABEL.5_5:	; if_then_bb28
+00000282                      317  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 0
+00000282 043A                 318  	mov 0x00000004, r7
+00000284 1730                 319  	mov r23, r6
+00000286 80FF0000             320  	jarl _Csm_ReportDetErr.1, r31
+0000028A 0152                 321  	mov 0x00000001, r10
+0000028C                      322  .BB.LABEL.5_6:	; if_break_bb33
+0000028C                      323  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 231
+0000028C 40063F0F             324  	dispose 0x00000000, 0x00000079, [r31]
+00000290                      325  _Csm_ChkKeySetValid:
+00000290                      326  	.stack _Csm_ChkKeySetValid = 12
+00000290                      327  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 235
+00000290 8007210C             328  	prepare 0x00000061, 0x00000000
+00000294 06A0                 329  	mov r6, r20
+00000296 07A8                 330  	mov r7, r21
+00000298                      331  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 239
+00000298 1530                 332  	mov r21, r6
+0000029A 80FF0000             333  	jarl _Csm_ChkInitStatus.1, r31
+0000029E                      334  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 240
+0000029E 6052                 335  	cmp 0x00000000, r10
+000002A0 8A05                 336  	bnz9 .BB.LABEL.6_3
+000002A2                      337  .BB.LABEL.6_1:	; entry
+000002A2                      338  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 0
+000002A2 62A2                 339  	cmp 0x00000002, r20
+000002A4 8105                 340  	bl9 .BB.LABEL.6_3
+000002A6                      341  .BB.LABEL.6_2:	; if_then_bb13
+000002A6 043A                 342  	mov 0x00000004, r7
+000002A8                      343  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 245
+000002A8 1530                 344  	mov r21, r6
+000002AA 80FF0000             345  	jarl _Csm_ReportDetErr.1, r31
+000002AE 0152                 346  	mov 0x00000001, r10
+000002B0                      347  .BB.LABEL.6_3:	; if_break_bb15
+000002B0                      348  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 249
+000002B0 40063F0C             349  	dispose 0x00000000, 0x00000061, [r31]
+000002B4                      350  _Csm_ChkKeyEleGet:
+000002B4                      351  	.stack _Csm_ChkKeyEleGet = 20
+000002B4                      352  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 253
+000002B4 8007210F             353  	prepare 0x00000079, 0x00000000
+000002B8 06A0                 354  	mov r6, r20
+000002BA 07A8                 355  	mov r7, r21
+000002BC 08B0                 356  	mov r8, r22
+000002BE 09B8                 357  	mov r9, r23
+000002C0                      358  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 261
+000002C0 1730                 359  	mov r23, r6
+000002C2 80FF0000             360  	jarl _Csm_ChkInitStatus.1, r31
+000002C6                      361  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 262
+000002C6 6052                 362  	cmp 0x00000000, r10
+000002C8 8A05                 363  	bnz9 .BB.LABEL.7_7
+000002CA                      364  .BB.LABEL.7_1:	; if_then_bb
+000002CA                      365  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 264
+000002CA 62A2                 366  	cmp 0x00000002, r20
+000002CC 8905                 367  	bnc9 .BB.LABEL.7_6
+000002CE                      368  .BB.LABEL.7_2:	; if_else_bb
+000002CE                      369  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 269
+000002CE 60AA                 370  	cmp 0x00000000, r21
+000002D0 8205                 371  	bz9 .BB.LABEL.7_4
+000002D2                      372  .BB.LABEL.7_3:	; if_else_bb
+000002D2                      373  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 0
+000002D2 60B2                 374  	cmp 0x00000000, r22
+000002D4 8A05                 375  	bnz9 .BB.LABEL.7_5
+000002D6                      376  .BB.LABEL.7_4:	; if_then_bb30
+000002D6 01B2                 377  	mov 0x00000001, r22
+000002D8                      378  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 272
+000002D8 1730                 379  	mov r23, r6
+000002DA 1638                 380  	mov r22, r7
+000002DC 80FF0000             381  	jarl _Csm_ReportDetErr.1, r31
+000002E0 1650                 382  	mov r22, r10
+000002E2 40063F0F             383  	dispose 0x00000000, 0x00000079, [r31]
+000002E6                      384  .BB.LABEL.7_5:	; if_else_bb32
+000002E6                      385  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 274
+000002E6 36170100             386  	ld.w 0x00000000[r22], r2
+000002EA 6012                 387  	cmp 0x00000000, r2
+000002EC 8A05                 388  	bnz9 .BB.LABEL.7_7
+000002EE                      389  .BB.LABEL.7_6:	; if_then_bb38
+000002EE                      390  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 0
+000002EE 043A                 391  	mov 0x00000004, r7
+000002F0 1730                 392  	mov r23, r6
+000002F2 80FF0000             393  	jarl _Csm_ReportDetErr.1, r31
+000002F6 0152                 394  	mov 0x00000001, r10
+000002F8                      395  .BB.LABEL.7_7:	; if_break_bb43
+000002F8                      396  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 285
+000002F8 40063F0F             397  	dispose 0x00000000, 0x00000079, [r31]
+000002FC                      398  _Csm_ChkKeyEleCopy:
+000002FC                      399  	.stack _Csm_ChkKeyEleCopy = 16
+000002FC                      400  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 289
+000002FC 8007210E             401  	prepare 0x00000071, 0x00000000
+00000300 06A0                 402  	mov r6, r20
+00000302 07A8                 403  	mov r7, r21
+00000304 08B0                 404  	mov r8, r22
+00000306                      405  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 296
+00000306 1630                 406  	mov r22, r6
+00000308 80FF0000             407  	jarl _Csm_ChkInitStatus.1, r31
+0000030C                      408  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 297
+0000030C 6052                 409  	cmp 0x00000000, r10
+0000030E 8A05                 410  	bnz9 .BB.LABEL.8_4
+00000310                      411  .BB.LABEL.8_1:	; if_then_bb
+00000310                      412  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 299
+00000310 61A2                 413  	cmp 0x00000001, r20
+00000312 8B05                 414  	bh9 .BB.LABEL.8_3
+00000314                      415  .BB.LABEL.8_2:	; if_then_bb
+00000314                      416  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 0
+00000314 62AA                 417  	cmp 0x00000002, r21
+00000316 8105                 418  	bl9 .BB.LABEL.8_4
+00000318                      419  .BB.LABEL.8_3:	; if_then_bb23
+00000318 043A                 420  	mov 0x00000004, r7
+0000031A                      421  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 302
+0000031A 1630                 422  	mov r22, r6
+0000031C 80FF0000             423  	jarl _Csm_ReportDetErr.1, r31
+00000320 0152                 424  	mov 0x00000001, r10
+00000322                      425  .BB.LABEL.8_4:	; if_break_bb25
+00000322                      426  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 306
+00000322 40063F0E             427  	dispose 0x00000000, 0x00000071, [r31]
+00000326                      428  _Csm_ChkKeyCopy:
+00000326                      429  	.stack _Csm_ChkKeyCopy = 16
+00000326                      430  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 310
+00000326 8007210E             431  	prepare 0x00000071, 0x00000000
+0000032A 06A0                 432  	mov r6, r20
+0000032C 07A8                 433  	mov r7, r21
+0000032E 08B0                 434  	mov r8, r22
+00000330                      435  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 314
+00000330 1630                 436  	mov r22, r6
+00000332 80FF0000             437  	jarl _Csm_ChkInitStatus.1, r31
+00000336                      438  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 315
+00000336 6052                 439  	cmp 0x00000000, r10
+00000338 8A05                 440  	bnz9 .BB.LABEL.9_4
+0000033A                      441  .BB.LABEL.9_1:	; if_then_bb
+0000033A                      442  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 317
+0000033A 61A2                 443  	cmp 0x00000001, r20
+0000033C 8B05                 444  	bh9 .BB.LABEL.9_3
+0000033E                      445  .BB.LABEL.9_2:	; if_then_bb
+0000033E                      446  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 0
+0000033E 62AA                 447  	cmp 0x00000002, r21
+00000340 8105                 448  	bl9 .BB.LABEL.9_4
+00000342                      449  .BB.LABEL.9_3:	; if_then_bb23
+00000342 043A                 450  	mov 0x00000004, r7
+00000344                      451  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 320
+00000344 1630                 452  	mov r22, r6
+00000346 80FF0000             453  	jarl _Csm_ReportDetErr.1, r31
+0000034A 0152                 454  	mov 0x00000001, r10
+0000034C                      455  .BB.LABEL.9_4:	; if_break_bb25
+0000034C                      456  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 324
+0000034C 40063F0E             457  	dispose 0x00000000, 0x00000071, [r31]
+00000350                      458  _Csm_ChkKeyEleCopyPart:
+00000350                      459  	.stack _Csm_ChkKeyEleCopyPart = 16
+00000350                      460  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 328
+00000350 8007210E             461  	prepare 0x00000071, 0x00000000
+00000354 06A0                 462  	mov r6, r20
+00000356 07A8                 463  	mov r7, r21
+00000358 08B0                 464  	mov r8, r22
+0000035A                      465  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 332
+0000035A 1630                 466  	mov r22, r6
+0000035C 80FF0000             467  	jarl _Csm_ChkInitStatus.1, r31
+00000360                      468  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 333
+00000360 6052                 469  	cmp 0x00000000, r10
+00000362 8A05                 470  	bnz9 .BB.LABEL.10_4
+00000364                      471  .BB.LABEL.10_1:	; if_then_bb
+00000364                      472  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 335
+00000364 61A2                 473  	cmp 0x00000001, r20
+00000366 8B05                 474  	bh9 .BB.LABEL.10_3
+00000368                      475  .BB.LABEL.10_2:	; if_then_bb
+00000368                      476  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 0
+00000368 62AA                 477  	cmp 0x00000002, r21
+0000036A 8105                 478  	bl9 .BB.LABEL.10_4
+0000036C                      479  .BB.LABEL.10_3:	; if_then_bb23
+0000036C 043A                 480  	mov 0x00000004, r7
+0000036E                      481  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 338
+0000036E 1630                 482  	mov r22, r6
+00000370 80FF0000             483  	jarl _Csm_ReportDetErr.1, r31
+00000374 0152                 484  	mov 0x00000001, r10
+00000376                      485  .BB.LABEL.10_4:	; if_break_bb25
+00000376                      486  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 342
+00000376 40063F0E             487  	dispose 0x00000000, 0x00000071, [r31]
+0000037A                      488  _Csm_ChkRandomSeed:
+0000037A                      489  	.stack _Csm_ChkRandomSeed = 20
+0000037A                      490  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 346
+0000037A 8007210F             491  	prepare 0x00000079, 0x00000000
+0000037E 06A0                 492  	mov r6, r20
+00000380 07A8                 493  	mov r7, r21
+00000382 08B0                 494  	mov r8, r22
+00000384 09B8                 495  	mov r9, r23
+00000386                      496  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 354
+00000386 1730                 497  	mov r23, r6
+00000388 80FF0000             498  	jarl _Csm_ChkInitStatus.1, r31
+0000038C                      499  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 355
+0000038C 6052                 500  	cmp 0x00000000, r10
+0000038E 8A05                 501  	bnz9 .BB.LABEL.11_6
+00000390                      502  .BB.LABEL.11_1:	; if_then_bb
+00000390                      503  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 357
+00000390 62A2                 504  	cmp 0x00000002, r20
+00000392 8905                 505  	bnc9 .BB.LABEL.11_5
+00000394                      506  .BB.LABEL.11_2:	; if_else_bb
+00000394                      507  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 362
+00000394 60AA                 508  	cmp 0x00000000, r21
+00000396 8A05                 509  	bnz9 .BB.LABEL.11_4
+00000398                      510  .BB.LABEL.11_3:	; if_then_bb21
+00000398                      511  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 0
+00000398 01B2                 512  	mov 0x00000001, r22
+0000039A                      513  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 365
+0000039A 1730                 514  	mov r23, r6
+0000039C 1638                 515  	mov r22, r7
+0000039E 80FF0000             516  	jarl _Csm_ReportDetErr.1, r31
+000003A2 1650                 517  	mov r22, r10
+000003A4 40063F0F             518  	dispose 0x00000000, 0x00000079, [r31]
+000003A8                      519  .BB.LABEL.11_4:	; if_else_bb23
+000003A8                      520  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 367
+000003A8 60B2                 521  	cmp 0x00000000, r22
+000003AA 8A05                 522  	bnz9 .BB.LABEL.11_6
+000003AC                      523  .BB.LABEL.11_5:	; if_then_bb28
+000003AC                      524  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 0
+000003AC 043A                 525  	mov 0x00000004, r7
+000003AE 1730                 526  	mov r23, r6
+000003B0 80FF0000             527  	jarl _Csm_ReportDetErr.1, r31
+000003B4 0152                 528  	mov 0x00000001, r10
+000003B6                      529  .BB.LABEL.11_6:	; if_break_bb33
+000003B6                      530  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 378
+000003B6 40063F0F             531  	dispose 0x00000000, 0x00000079, [r31]
+000003BA                      532  _Csm_ChkKeyGenerate:
+000003BA                      533  	.stack _Csm_ChkKeyGenerate = 12
+000003BA                      534  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 382
+000003BA 8007210C             535  	prepare 0x00000061, 0x00000000
+000003BE 06A0                 536  	mov r6, r20
+000003C0 07A8                 537  	mov r7, r21
+000003C2                      538  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 386
+000003C2 1530                 539  	mov r21, r6
+000003C4 80FF0000             540  	jarl _Csm_ChkInitStatus.1, r31
+000003C8                      541  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 387
+000003C8 6052                 542  	cmp 0x00000000, r10
+000003CA 8A05                 543  	bnz9 .BB.LABEL.12_3
+000003CC                      544  .BB.LABEL.12_1:	; entry
+000003CC                      545  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 0
+000003CC 62A2                 546  	cmp 0x00000002, r20
+000003CE 8105                 547  	bl9 .BB.LABEL.12_3
+000003D0                      548  .BB.LABEL.12_2:	; if_then_bb13
+000003D0 043A                 549  	mov 0x00000004, r7
+000003D2                      550  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 392
+000003D2 1530                 551  	mov r21, r6
+000003D4 80FF0000             552  	jarl _Csm_ReportDetErr.1, r31
+000003D8 0152                 553  	mov 0x00000001, r10
+000003DA                      554  .BB.LABEL.12_3:	; if_break_bb15
+000003DA                      555  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 396
+000003DA 40063F0C             556  	dispose 0x00000000, 0x00000061, [r31]
+000003DE                      557  _Csm_ChkKeyDerive:
+000003DE                      558  	.stack _Csm_ChkKeyDerive = 16
+000003DE                      559  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 400
+000003DE 8007210E             560  	prepare 0x00000071, 0x00000000
+000003E2 06A0                 561  	mov r6, r20
+000003E4 07A8                 562  	mov r7, r21
+000003E6 08B0                 563  	mov r8, r22
+000003E8                      564  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 404
+000003E8 1630                 565  	mov r22, r6
+000003EA 80FF0000             566  	jarl _Csm_ChkInitStatus.1, r31
+000003EE                      567  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 405
+000003EE 6052                 568  	cmp 0x00000000, r10
+000003F0 8A05                 569  	bnz9 .BB.LABEL.13_4
+000003F2                      570  .BB.LABEL.13_1:	; if_then_bb
+000003F2                      571  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 407
+000003F2 61A2                 572  	cmp 0x00000001, r20
+000003F4 8B05                 573  	bh9 .BB.LABEL.13_3
+000003F6                      574  .BB.LABEL.13_2:	; if_then_bb
+000003F6                      575  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 0
+000003F6 62AA                 576  	cmp 0x00000002, r21
+000003F8 8105                 577  	bl9 .BB.LABEL.13_4
+000003FA                      578  .BB.LABEL.13_3:	; if_then_bb23
+000003FA 043A                 579  	mov 0x00000004, r7
+000003FC                      580  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 410
+000003FC 1630                 581  	mov r22, r6
+000003FE 80FF0000             582  	jarl _Csm_ReportDetErr.1, r31
+00000402 0152                 583  	mov 0x00000001, r10
+00000404                      584  .BB.LABEL.13_4:	; if_break_bb25
+00000404                      585  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 414
+00000404 40063F0E             586  	dispose 0x00000000, 0x00000071, [r31]
+00000408                      587  _Csm_ChkExCalcPubVal:
+00000408                      588  	.stack _Csm_ChkExCalcPubVal = 20
+00000408                      589  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 418
+00000408 8007210F             590  	prepare 0x00000079, 0x00000000
+0000040C 06A0                 591  	mov r6, r20
+0000040E 07A8                 592  	mov r7, r21
+00000410 08B0                 593  	mov r8, r22
+00000412 09B8                 594  	mov r9, r23
+00000414                      595  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 426
+00000414 1730                 596  	mov r23, r6
+00000416 80FF0000             597  	jarl _Csm_ChkInitStatus.1, r31
+0000041A                      598  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 427
+0000041A 6052                 599  	cmp 0x00000000, r10
+0000041C 8A05                 600  	bnz9 .BB.LABEL.14_6
+0000041E                      601  .BB.LABEL.14_1:	; if_then_bb
+0000041E                      602  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 429
+0000041E 62A2                 603  	cmp 0x00000002, r20
+00000420 8105                 604  	bl9 .BB.LABEL.14_3
+00000422                      605  .BB.LABEL.14_2:	; if_then_bb15
+00000422                      606  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 0
+00000422 043A                 607  	mov 0x00000004, r7
+00000424                      608  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 432
+00000424 1730                 609  	mov r23, r6
+00000426 80FF0000             610  	jarl _Csm_ReportDetErr.1, r31
+0000042A 0152                 611  	mov 0x00000001, r10
+0000042C 40063F0F             612  	dispose 0x00000000, 0x00000079, [r31]
+00000430                      613  .BB.LABEL.14_3:	; if_else_bb
+00000430                      614  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 434
+00000430 60AA                 615  	cmp 0x00000000, r21
+00000432 8205                 616  	bz9 .BB.LABEL.14_5
+00000434                      617  .BB.LABEL.14_4:	; if_else_bb
+00000434                      618  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 0
+00000434 60B2                 619  	cmp 0x00000000, r22
+00000436 8A05                 620  	bnz9 .BB.LABEL.14_6
+00000438                      621  .BB.LABEL.14_5:	; if_then_bb30
+00000438 01A2                 622  	mov 0x00000001, r20
+0000043A                      623  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 437
+0000043A 1730                 624  	mov r23, r6
+0000043C 1438                 625  	mov r20, r7
+0000043E 80FF0000             626  	jarl _Csm_ReportDetErr.1, r31
+00000442 1450                 627  	mov r20, r10
+00000444                      628  .BB.LABEL.14_6:	; if_break_bb34
+00000444                      629  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 445
+00000444 40063F0F             630  	dispose 0x00000000, 0x00000079, [r31]
+00000448                      631  _Csm_ChkExCalcSecVal:
+00000448                      632  	.stack _Csm_ChkExCalcSecVal = 20
+00000448                      633  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 449
+00000448 8007210F             634  	prepare 0x00000079, 0x00000000
+0000044C 06A0                 635  	mov r6, r20
+0000044E 07A8                 636  	mov r7, r21
+00000450 08B0                 637  	mov r8, r22
+00000452 09B8                 638  	mov r9, r23
+00000454                      639  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 457
+00000454 1730                 640  	mov r23, r6
+00000456 80FF0000             641  	jarl _Csm_ChkInitStatus.1, r31
+0000045A                      642  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 458
+0000045A 6052                 643  	cmp 0x00000000, r10
+0000045C 8A05                 644  	bnz9 .BB.LABEL.15_6
+0000045E                      645  .BB.LABEL.15_1:	; if_then_bb
+0000045E                      646  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 460
+0000045E 61A2                 647  	cmp 0x00000001, r20
+00000460 8B05                 648  	bh9 .BB.LABEL.15_3
+00000462                      649  .BB.LABEL.15_2:	; if_then_bb
+00000462                      650  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 0
+00000462 60B2                 651  	cmp 0x00000000, r22
+00000464 8A05                 652  	bnz9 .BB.LABEL.15_4
+00000466                      653  .BB.LABEL.15_3:	; if_then_bb24
+00000466 043A                 654  	mov 0x00000004, r7
+00000468                      655  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 463
+00000468 1730                 656  	mov r23, r6
+0000046A 80FF0000             657  	jarl _Csm_ReportDetErr.1, r31
+0000046E 0152                 658  	mov 0x00000001, r10
+00000470 40063F0F             659  	dispose 0x00000000, 0x00000079, [r31]
+00000474                      660  .BB.LABEL.15_4:	; if_else_bb
+00000474                      661  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 465
+00000474 60AA                 662  	cmp 0x00000000, r21
+00000476 8A05                 663  	bnz9 .BB.LABEL.15_6
+00000478                      664  .BB.LABEL.15_5:	; if_then_bb30
+00000478                      665  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 0
+00000478 01A2                 666  	mov 0x00000001, r20
+0000047A                      667  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 468
+0000047A 1730                 668  	mov r23, r6
+0000047C 1438                 669  	mov r20, r7
+0000047E 80FF0000             670  	jarl _Csm_ReportDetErr.1, r31
+00000482 1450                 671  	mov r20, r10
+00000484                      672  .BB.LABEL.15_6:	; if_break_bb34
+00000484                      673  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 476
+00000484 40063F0F             674  	dispose 0x00000000, 0x00000079, [r31]
+00000488                      675  _Csm_ChkJobKeySetValid:
+00000488                      676  	.stack _Csm_ChkJobKeySetValid = 16
+00000488                      677  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 480
+00000488 8007210E             678  	prepare 0x00000071, 0x00000000
+0000048C 06A0                 679  	mov r6, r20
+0000048E 07A8                 680  	mov r7, r21
+00000490 08B0                 681  	mov r8, r22
+00000492                      682  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 484
+00000492 1630                 683  	mov r22, r6
+00000494 80FF0000             684  	jarl _Csm_ChkInitStatus.1, r31
+00000498                      685  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 485
+00000498 6052                 686  	cmp 0x00000000, r10
+0000049A 8A05                 687  	bnz9 .BB.LABEL.16_6
+0000049C                      688  .BB.LABEL.16_1:	; if_then_bb
+0000049C                      689  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 487
+0000049C 61AA                 690  	cmp 0x00000001, r21
+0000049E 8B05                 691  	bh9 .BB.LABEL.16_3
+000004A0                      692  .BB.LABEL.16_2:	; if_then_bb
+000004A0                      693  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 0
+000004A0 62A2                 694  	cmp 0x00000002, r20
+000004A2 8305                 695  	bnh9 .BB.LABEL.16_4
+000004A4                      696  .BB.LABEL.16_3:	; if_then_bb23
+000004A4 043A                 697  	mov 0x00000004, r7
+000004A6                      698  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 490
+000004A6 1630                 699  	mov r22, r6
+000004A8 80FF0000             700  	jarl _Csm_ReportDetErr.1, r31
+000004AC 0152                 701  	mov 0x00000001, r10
+000004AE                      702  .BB.LABEL.16_4:	; if_break_bb
+000004AE                      703  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 492
+000004AE F4A74002             704  	mul 0x00000014, r20, r0
+000004B2                      705  	mov #_Csm_JobCfg, r2
+000004B2 220600000000            -- mov         0x0,hp
+000004B8 D411                 706  	add r20, r2
+000004BA 22170100             707  	ld.w 0x00000000[r2], r2
+000004BE 22170500             708  	ld.w 0x00000004[r2], r2
+000004C2 22170500             709  	ld.w 0x00000004[r2], r2
+000004C6 0206EDFF             710  	addi 0xFFFFFFED, r2, r0
+000004CA 8205                 711  	bz9 .BB.LABEL.16_6
+000004CC                      712  .BB.LABEL.16_5:	; if_then_bb36
+000004CC                      713  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 0
+000004CC 093A                 714  	mov 0x00000009, r7
+000004CE                      715  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 495
+000004CE 1630                 716  	mov r22, r6
+000004D0 80FF0000             717  	jarl _Csm_ReportDetErr.1, r31
+000004D4 0152                 718  	mov 0x00000001, r10
+000004D6                      719  .BB.LABEL.16_6:	; if_break_bb39
+000004D6                      720  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 499
+000004D6 40063F0E             721  	dispose 0x00000000, 0x00000071, [r31]
+000004DA                      722  _Csm_ChkJobRandomSeed:
+000004DA                      723  	.stack _Csm_ChkJobRandomSeed = 24
+000004DA                      724  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 503
+000004DA 8007218F             725  	prepare 0x00000479, 0x00000000
+000004DE 06A0                 726  	mov r6, r20
+000004E0 07A8                 727  	mov r7, r21
+000004E2 08B0                 728  	mov r8, r22
+000004E4 09B8                 729  	mov r9, r23
+000004E6 23C71900             730  	ld.w 0x00000018[r3], r24
+000004EA                      731  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 512
+000004EA 1830                 732  	mov r24, r6
+000004EC 80FF0000             733  	jarl _Csm_ChkInitStatus.1, r31
+000004F0                      734  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 513
+000004F0 6052                 735  	cmp 0x00000000, r10
+000004F2 8A05                 736  	bnz9 .BB.LABEL.17_7
+000004F4                      737  .BB.LABEL.17_1:	; if_then_bb
+000004F4                      738  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 515
+000004F4 62A2                 739  	cmp 0x00000002, r20
+000004F6 8305                 740  	bnh9 .BB.LABEL.17_3
+000004F8                      741  .BB.LABEL.17_2:	; if_then_bb16
+000004F8                      742  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 0
+000004F8 043A                 743  	mov 0x00000004, r7
+000004FA                      744  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 518
+000004FA 1830                 745  	mov r24, r6
+000004FC 80FF0000             746  	jarl _Csm_ReportDetErr.1, r31
+00000500 0152                 747  	mov 0x00000001, r10
+00000502                      748  .BB.LABEL.17_3:	; if_break_bb
+00000502                      749  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 520
+00000502 F4A74002             750  	mul 0x00000014, r20, r0
+00000506                      751  	mov #_Csm_JobCfg, r2
+00000506 220600000000            -- mov         0x0,hp
+0000050C D411                 752  	add r20, r2
+0000050E 22170100             753  	ld.w 0x00000000[r2], r2
+00000512 22170500             754  	ld.w 0x00000004[r2], r2
+00000516 22170500             755  	ld.w 0x00000004[r2], r2
+0000051A 6C12                 756  	cmp 0x0000000C, r2
+0000051C 8205                 757  	bz9 .BB.LABEL.17_5
+0000051E                      758  .BB.LABEL.17_4:	; if_then_bb29
+0000051E                      759  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 0
+0000051E 093A                 760  	mov 0x00000009, r7
+00000520                      761  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 523
+00000520 1830                 762  	mov r24, r6
+00000522 80FF0000             763  	jarl _Csm_ReportDetErr.1, r31
+00000526 0152                 764  	mov 0x00000001, r10
+00000528                      765  .BB.LABEL.17_5:	; if_break_bb31
+00000528                      766  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 525
+00000528 6052                 767  	cmp 0x00000000, r10
+0000052A 8A05                 768  	bnz9 .BB.LABEL.17_7
+0000052C                      769  .BB.LABEL.17_6:	; if_then_bb37
+0000052C                      770  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 527
+0000052C 1530                 771  	mov r21, r6
+0000052E 1638                 772  	mov r22, r7
+00000530 1740                 773  	mov r23, r8
+00000532 1848                 774  	mov r24, r9
+00000534 80FF0000             775  	jarl _Csm_ChkRandomSeed, r31
+00000538                      776  .BB.LABEL.17_7:	; if_break_bb44
+00000538                      777  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 531
+00000538 40063F8F             778  	dispose 0x00000000, 0x00000479, [r31]
+0000053C                      779  _Csm_ChkJobKeyGenerate:
+0000053C                      780  	.stack _Csm_ChkJobKeyGenerate = 16
+0000053C                      781  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 535
+0000053C 8007210E             782  	prepare 0x00000071, 0x00000000
+00000540 06A0                 783  	mov r6, r20
+00000542 07A8                 784  	mov r7, r21
+00000544 08B0                 785  	mov r8, r22
+00000546                      786  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 539
+00000546 1630                 787  	mov r22, r6
+00000548 80FF0000             788  	jarl _Csm_ChkInitStatus.1, r31
+0000054C                      789  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 540
+0000054C 6052                 790  	cmp 0x00000000, r10
+0000054E 8A05                 791  	bnz9 .BB.LABEL.18_6
+00000550                      792  .BB.LABEL.18_1:	; if_then_bb
+00000550                      793  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 542
+00000550 61AA                 794  	cmp 0x00000001, r21
+00000552 8B05                 795  	bh9 .BB.LABEL.18_3
+00000554                      796  .BB.LABEL.18_2:	; if_then_bb
+00000554                      797  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 0
+00000554 62A2                 798  	cmp 0x00000002, r20
+00000556 8305                 799  	bnh9 .BB.LABEL.18_4
+00000558                      800  .BB.LABEL.18_3:	; if_then_bb23
+00000558 043A                 801  	mov 0x00000004, r7
+0000055A                      802  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 545
+0000055A 1630                 803  	mov r22, r6
+0000055C 80FF0000             804  	jarl _Csm_ReportDetErr.1, r31
+00000560 0152                 805  	mov 0x00000001, r10
+00000562                      806  .BB.LABEL.18_4:	; if_break_bb
+00000562                      807  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 547
+00000562 F4A74002             808  	mul 0x00000014, r20, r0
+00000566                      809  	mov #_Csm_JobCfg, r2
+00000566 220600000000            -- mov         0x0,hp
+0000056C D411                 810  	add r20, r2
+0000056E 22170100             811  	ld.w 0x00000000[r2], r2
+00000572 22170500             812  	ld.w 0x00000004[r2], r2
+00000576 22170500             813  	ld.w 0x00000004[r2], r2
+0000057A 6D12                 814  	cmp 0x0000000D, r2
+0000057C 8205                 815  	bz9 .BB.LABEL.18_6
+0000057E                      816  .BB.LABEL.18_5:	; if_then_bb36
+0000057E                      817  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 0
+0000057E 093A                 818  	mov 0x00000009, r7
+00000580                      819  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 550
+00000580 1630                 820  	mov r22, r6
+00000582 80FF0000             821  	jarl _Csm_ReportDetErr.1, r31
+00000586 0152                 822  	mov 0x00000001, r10
+00000588                      823  .BB.LABEL.18_6:	; if_break_bb39
+00000588                      824  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 554
+00000588 40063F0E             825  	dispose 0x00000000, 0x00000071, [r31]
+0000058C                      826  _Csm_ChkJobKeyDerive:
+0000058C                      827  	.stack _Csm_ChkJobKeyDerive = 20
+0000058C                      828  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 558
+0000058C 8007210F             829  	prepare 0x00000079, 0x00000000
+00000590 06A0                 830  	mov r6, r20
+00000592 07A8                 831  	mov r7, r21
+00000594 08B0                 832  	mov r8, r22
+00000596 09B8                 833  	mov r9, r23
+00000598                      834  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 566
+00000598 1730                 835  	mov r23, r6
+0000059A 80FF0000             836  	jarl _Csm_ChkInitStatus.1, r31
+0000059E                      837  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 567
+0000059E 6052                 838  	cmp 0x00000000, r10
+000005A0 8A05                 839  	bnz9 .BB.LABEL.19_7
+000005A2                      840  .BB.LABEL.19_1:	; if_then_bb
+000005A2                      841  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 569
+000005A2 61AA                 842  	cmp 0x00000001, r21
+000005A4 8B05                 843  	bh9 .BB.LABEL.19_4
+000005A6                      844  .BB.LABEL.19_2:	; if_then_bb
+000005A6                      845  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 0
+000005A6 61B2                 846  	cmp 0x00000001, r22
+000005A8 8B05                 847  	bh9 .BB.LABEL.19_4
+000005AA                      848  .BB.LABEL.19_3:	; if_then_bb
+000005AA 62A2                 849  	cmp 0x00000002, r20
+000005AC 8305                 850  	bnh9 .BB.LABEL.19_5
+000005AE                      851  .BB.LABEL.19_4:	; if_then_bb35
+000005AE 043A                 852  	mov 0x00000004, r7
+000005B0                      853  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 572
+000005B0 1730                 854  	mov r23, r6
+000005B2 80FF0000             855  	jarl _Csm_ReportDetErr.1, r31
+000005B6 0152                 856  	mov 0x00000001, r10
+000005B8                      857  .BB.LABEL.19_5:	; if_break_bb
+000005B8                      858  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 574
+000005B8 F4A74002             859  	mul 0x00000014, r20, r0
+000005BC                      860  	mov #_Csm_JobCfg, r2
+000005BC 220600000000            -- mov         0x0,hp
+000005C2 D411                 861  	add r20, r2
+000005C4 22170100             862  	ld.w 0x00000000[r2], r2
+000005C8 22170500             863  	ld.w 0x00000004[r2], r2
+000005CC 22170500             864  	ld.w 0x00000004[r2], r2
+000005D0 6E12                 865  	cmp 0x0000000E, r2
+000005D2 8205                 866  	bz9 .BB.LABEL.19_7
+000005D4                      867  .BB.LABEL.19_6:	; if_then_bb48
+000005D4                      868  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 0
+000005D4 093A                 869  	mov 0x00000009, r7
+000005D6                      870  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 577
+000005D6 1730                 871  	mov r23, r6
+000005D8 80FF0000             872  	jarl _Csm_ReportDetErr.1, r31
+000005DC 0152                 873  	mov 0x00000001, r10
+000005DE                      874  .BB.LABEL.19_7:	; if_break_bb51
+000005DE                      875  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 581
+000005DE 40063F0F             876  	dispose 0x00000000, 0x00000079, [r31]
+000005E2                      877  _Csm_ChkJobExCalcPubVal:
+000005E2                      878  	.stack _Csm_ChkJobExCalcPubVal = 24
+000005E2                      879  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 585
+000005E2 8007218F             880  	prepare 0x00000479, 0x00000000
+000005E6                      881  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 595
+000005E6 6232                 882  	cmp 0x00000002, r6
+000005E8 23A71900             883  	ld.w 0x00000018[r3], r20
+000005EC 09A8                 884  	mov r9, r21
+000005EE 08B0                 885  	mov r8, r22
+000005F0 07B8                 886  	mov r7, r23
+000005F2 06C0                 887  	mov r6, r24
+000005F4 8B05                 888  	bh9 .BB.LABEL.20_2
+000005F6                      889  .BB.LABEL.20_1:	; entry.if_break_bb_crit_edge
+000005F6                      890  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 0
+000005F6 0052                 891  	mov 0x00000000, r10
+000005F8 8505                 892  	br9 .BB.LABEL.20_3
+000005FA                      893  .BB.LABEL.20_2:	; if_then_bb14
+000005FA 043A                 894  	mov 0x00000004, r7
+000005FC                      895  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 598
+000005FC 1430                 896  	mov r20, r6
+000005FE 80FF0000             897  	jarl _Csm_ReportDetErr.1, r31
+00000602 0152                 898  	mov 0x00000001, r10
+00000604                      899  .BB.LABEL.20_3:	; if_break_bb
+00000604                      900  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 600
+00000604 F4C74002             901  	mul 0x00000014, r24, r0
+00000608                      902  	mov #_Csm_JobCfg, r2
+00000608 220600000000            -- mov         0x0,hp
+0000060E D811                 903  	add r24, r2
+00000610 22170100             904  	ld.w 0x00000000[r2], r2
+00000614 22170500             905  	ld.w 0x00000004[r2], r2
+00000618 22170500             906  	ld.w 0x00000004[r2], r2
+0000061C 6F12                 907  	cmp 0x0000000F, r2
+0000061E 8205                 908  	bz9 .BB.LABEL.20_5
+00000620                      909  .BB.LABEL.20_4:	; if_then_bb27
+00000620                      910  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 0
+00000620 093A                 911  	mov 0x00000009, r7
+00000622                      912  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 603
+00000622 1430                 913  	mov r20, r6
+00000624 80FF0000             914  	jarl _Csm_ReportDetErr.1, r31
+00000628 0152                 915  	mov 0x00000001, r10
+0000062A                      916  .BB.LABEL.20_5:	; if_break_bb29
+0000062A                      917  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 605
+0000062A 6052                 918  	cmp 0x00000000, r10
+0000062C 8A05                 919  	bnz9 .BB.LABEL.20_7
+0000062E                      920  .BB.LABEL.20_6:	; if_then_bb35
+0000062E                      921  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 607
+0000062E 1730                 922  	mov r23, r6
+00000630 1638                 923  	mov r22, r7
+00000632 1540                 924  	mov r21, r8
+00000634 1448                 925  	mov r20, r9
+00000636 80FF0000             926  	jarl _Csm_ChkExCalcPubVal, r31
+0000063A                      927  .BB.LABEL.20_7:	; if_break_bb42
+0000063A                      928  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 611
+0000063A 40063F8F             929  	dispose 0x00000000, 0x00000479, [r31]
+0000063E                      930  _Csm_ChkJobExCalcSec:
+0000063E                      931  	.stack _Csm_ChkJobExCalcSec = 24
+0000063E                      932  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 615
+0000063E 8007218F             933  	prepare 0x00000479, 0x00000000
+00000642 06A0                 934  	mov r6, r20
+00000644 07A8                 935  	mov r7, r21
+00000646 08B0                 936  	mov r8, r22
+00000648 09B8                 937  	mov r9, r23
+0000064A 23C71900             938  	ld.w 0x00000018[r3], r24
+0000064E                      939  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 624
+0000064E 1830                 940  	mov r24, r6
+00000650 80FF0000             941  	jarl _Csm_ChkInitStatus.1, r31
+00000654                      942  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 625
+00000654 6052                 943  	cmp 0x00000000, r10
+00000656 8A05                 944  	bnz9 .BB.LABEL.21_7
+00000658                      945  .BB.LABEL.21_1:	; if_then_bb
+00000658                      946  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 627
+00000658 62A2                 947  	cmp 0x00000002, r20
+0000065A 8305                 948  	bnh9 .BB.LABEL.21_3
+0000065C                      949  .BB.LABEL.21_2:	; if_then_bb16
+0000065C                      950  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 0
+0000065C 043A                 951  	mov 0x00000004, r7
+0000065E                      952  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 630
+0000065E 1830                 953  	mov r24, r6
+00000660 80FF0000             954  	jarl _Csm_ReportDetErr.1, r31
+00000664 0152                 955  	mov 0x00000001, r10
+00000666                      956  .BB.LABEL.21_3:	; if_break_bb
+00000666                      957  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 632
+00000666 F4A74002             958  	mul 0x00000014, r20, r0
+0000066A                      959  	mov #_Csm_JobCfg, r2
+0000066A 220600000000            -- mov         0x0,hp
+00000670 D411                 960  	add r20, r2
+00000672 22170100             961  	ld.w 0x00000000[r2], r2
+00000676 22170500             962  	ld.w 0x00000004[r2], r2
+0000067A 22170500             963  	ld.w 0x00000004[r2], r2
+0000067E 5012                 964  	add 0xFFFFFFF0, r2
+00000680 8205                 965  	bz9 .BB.LABEL.21_5
+00000682                      966  .BB.LABEL.21_4:	; if_then_bb29
+00000682                      967  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 0
+00000682 093A                 968  	mov 0x00000009, r7
+00000684                      969  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 635
+00000684 1830                 970  	mov r24, r6
+00000686 80FF0000             971  	jarl _Csm_ReportDetErr.1, r31
+0000068A 0152                 972  	mov 0x00000001, r10
+0000068C                      973  .BB.LABEL.21_5:	; if_break_bb31
+0000068C                      974  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 637
+0000068C 6052                 975  	cmp 0x00000000, r10
+0000068E 8A05                 976  	bnz9 .BB.LABEL.21_7
+00000690                      977  .BB.LABEL.21_6:	; if_then_bb37
+00000690                      978  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 639
+00000690 1530                 979  	mov r21, r6
+00000692 1638                 980  	mov r22, r7
+00000694 1740                 981  	mov r23, r8
+00000696 1848                 982  	mov r24, r9
+00000698 80FF0000             983  	jarl _Csm_ChkExCalcSecVal, r31
+0000069C                      984  .BB.LABEL.21_7:	; if_break_bb44
+0000069C                      985  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 643
+0000069C 40063F8F             986  	dispose 0x00000000, 0x00000479, [r31]
+000006A0                      987  _Csm_ChkCancelJob:
+000006A0                      988  	.stack _Csm_ChkCancelJob = 12
+000006A0                      989  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 647
+000006A0 8007210C             990  	prepare 0x00000061, 0x00000000
+000006A4 06A0                 991  	mov r6, r20
+000006A6 07A8                 992  	mov r7, r21
+000006A8                      993  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 652
+000006A8 1530                 994  	mov r21, r6
+000006AA 80FF0000             995  	jarl _Csm_ChkInitStatus.1, r31
+000006AE                      996  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 653
+000006AE 6052                 997  	cmp 0x00000000, r10
+000006B0 8A05                 998  	bnz9 .BB.LABEL.22_6
+000006B2                      999  .BB.LABEL.22_1:	; if_then_bb
+000006B2                     1000  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 655
+000006B2 63A2                1001  	cmp 0x00000003, r20
+000006B4 8105                1002  	bl9 .BB.LABEL.22_4
+000006B6                     1003  .BB.LABEL.22_2:	; if_then_bb14
+000006B6                     1004  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 0
+000006B6 043A                1005  	mov 0x00000004, r7
+000006B8                     1006  .BB.LABEL.22_3:	; if_then_bb14
+000006B8 1530                1007  	mov r21, r6
+000006BA 80FF0000            1008  	jarl _Csm_ReportDetErr.1, r31
+000006BE 0152                1009  	mov 0x00000001, r10
+000006C0                     1010  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 672
+000006C0 40063F0C            1011  	dispose 0x00000000, 0x00000061, [r31]
+000006C4                     1012  .BB.LABEL.22_4:	; if_else_bb
+000006C4                     1013  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 664
+000006C4 F4A74002            1014  	mul 0x00000014, r20, r0
+000006C8                     1015  	mov #_Csm_JobCfg, r2
+000006C8 220600000000            -- mov         0x0,hp
+000006CE D411                1016  	add r20, r2
+000006D0 22170100            1017  	ld.w 0x00000000[r2], r2
+000006D4 22170D00            1018  	ld.w 0x0000000C[r2], r2
+000006D8 6112                1019  	cmp 0x00000001, r2
+000006DA 8A05                1020  	bnz9 .BB.LABEL.22_6
+000006DC                     1021  .BB.LABEL.22_5:	; if_then_bb26
+000006DC                     1022  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 0
+000006DC 083A                1023  	mov 0x00000008, r7
+000006DE 8505                1024  	br9 .BB.LABEL.22_3
+000006E0                     1025  .BB.LABEL.22_6:	; if_break_bb29
+000006E0                     1026  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 672
+000006E0 40063F0C            1027  	dispose 0x00000000, 0x00000061, [r31]
+000006E4                     1028  _Csm_ChkCbkNotify:
+000006E4                     1029  	.stack _Csm_ChkCbkNotify = 12
+000006E4                     1030  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 676
+000006E4 8007210C            1031  	prepare 0x00000061, 0x00000000
+000006E8 06A0                1032  	mov r6, r20
+000006EA 07A8                1033  	mov r7, r21
+000006EC                     1034  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 680
+000006EC 1530                1035  	mov r21, r6
+000006EE 80FF0000            1036  	jarl _Csm_ChkInitStatus.1, r31
+000006F2                     1037  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 681
+000006F2 6052                1038  	cmp 0x00000000, r10
+000006F4 8A05                1039  	bnz9 .BB.LABEL.23_6
+000006F6                     1040  .BB.LABEL.23_1:	; if_then_bb
+000006F6                     1041  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 683
+000006F6 34170100            1042  	ld.w 0x00000000[r20], r2
+000006FA 6312                1043  	cmp 0x00000003, r2
+000006FC 8105                1044  	bl9 .BB.LABEL.23_3
+000006FE                     1045  .BB.LABEL.23_2:	; if_then_bb15
+000006FE                     1046  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 0
+000006FE 043A                1047  	mov 0x00000004, r7
+00000700                     1048  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 686
+00000700 1530                1049  	mov r21, r6
+00000702 80FF0000            1050  	jarl _Csm_ReportDetErr.1, r31
+00000706 0152                1051  	mov 0x00000001, r10
+00000708 40063F0C            1052  	dispose 0x00000000, 0x00000061, [r31]
+0000070C                     1053  .BB.LABEL.23_3:	; if_else_bb
+0000070C                     1054  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 688
+0000070C 34175100            1055  	ld.w 0x00000050[r20], r2
+00000710 6012                1056  	cmp 0x00000000, r2
+00000712 8205                1057  	bz9 .BB.LABEL.23_5
+00000714                     1058  .BB.LABEL.23_4:	; bb
+00000714                     1059  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 0
+00000714 34174D00            1060  	ld.w 0x0000004C[r20], r2
+00000718 6012                1061  	cmp 0x00000000, r2
+0000071A 8A05                1062  	bnz9 .BB.LABEL.23_6
+0000071C                     1063  .BB.LABEL.23_5:	; if_then_bb34
+0000071C 01A2                1064  	mov 0x00000001, r20
+0000071E                     1065  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 691
+0000071E 1530                1066  	mov r21, r6
+00000720 1438                1067  	mov r20, r7
+00000722 80FF0000            1068  	jarl _Csm_ReportDetErr.1, r31
+00000726 1450                1069  	mov r20, r10
+00000728                     1070  .BB.LABEL.23_6:	; if_break_bb38
+00000728                     1071  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 699
+00000728 40063F0C            1072  	dispose 0x00000000, 0x00000061, [r31]
+0000072C                     1073  _Csm_ChkInitStatus.1:
+0000072C                     1074  	.stack _Csm_ChkInitStatus.1 = 4
+0000072C                     1075  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 707
+0000072C 80072100            1076  	prepare 0x00000001, 0x00000000
+00000730                     1077  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 711
+00000730 40160000            1078  	movhi HIGHW1(#_Csm_InitStatus), r0, r2
+00000734 82170100            1079  	ld.bu LOWW(#_Csm_InitStatus)[r2], r2
+00000738 6012                1080  	cmp 0x00000000, r2
+0000073A 8A05                1081  	bnz9 .BB.LABEL.24_2
+0000073C                     1082  .BB.LABEL.24_1:	; if_then_bb
+0000073C                     1083  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 0
+0000073C 053A                1084  	mov 0x00000005, r7
+0000073E                     1085  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 714
+0000073E 80FF0000            1086  	jarl _Csm_ReportDetErr.1, r31
+00000742 0152                1087  	mov 0x00000001, r10
+00000744 40063F00            1088  	dispose 0x00000000, 0x00000001, [r31]
+00000748                     1089  .BB.LABEL.24_2:	; if_break_bb
+00000748                     1090  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 0
+00000748 0052                1091  	mov 0x00000000, r10
+0000074A                     1092  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Crypto/CSM/Csm_DetCheck.c", 717
+0000074A 40063F00            1093  	dispose 0x00000000, 0x00000001, [r31]
+
+Section List
+Attr     Size                Name
+
+TEXT         1870 (0000074E) .text
+
+Command Line Parameter
+-Xcpu=g3kh -Xreg_mode=32 -Xep=callee -Xcharacter_set=none -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\diagnostic -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\parameter_store -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu\port -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu\uart -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu\iic -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\vehicle_data_to_mpu -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\power_manage -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\mcu_cpu_sync -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\remote_control -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\can_cycle_send -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\project_configure -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\sdk\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\commonLib\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\hal\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\icu\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Icu_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\vss -ID:\wk\sirun\project\dazhong\code\mcu_app\ASW\CDD_FVM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\EEIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanTSyn -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\StbM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CSM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\RSA -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\RandomGen\CTR_DRBG -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\MAC\CMAC -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\Hash\sha256 -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\dh -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\AES -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CryInterface -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\SecOC -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\NvM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\MemIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\Fee -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\WdgM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\WdgIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Wdg_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Gpt_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Fls_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\wdg\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\gpt\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\fls\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\IpduM -ID:\wk\sirun\project\dazhong\code\mcu_app\ASW\APP -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\BswM -ID:\wk\sirun\project\dazhong\code\mcu_app\ASW\BSW_Ext -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\Dcm -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanTp -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Dem -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Libraries\E2E -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Libraries\Crc -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\NmIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanNm -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config\RTE\Rte -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config\RTE\SchM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Libraries\IStd -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\EcuM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\ComM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanSM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\Com -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\PDUR -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\CommonInclude -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config\RH850F1K -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Extend\inc -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Kernel\inc -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Portable\Mcu -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Portable\Processor -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Adc_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Can_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Dio_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Mcu_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Port_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\adc\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\can\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\dio\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\general -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\mcu\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\port\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\CanGeneral\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\Det\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\MemIf\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\SchM\include -DRH850_F1KM_S1_2MB -Xprn_path=DefaultBuild -Xno_warning=50013 -oD:\wk\sirun\project\dazhong\code\mcu_app\Toolchain\CSPLUS_V81200\DefaultBuild\Csm_DetCheck.obj D:\wk\sirun\project\dazhong\code\mcu_app\Toolchain\CSPLUS_V81200\DefaultBuild\Csm_DetCheck.asm 
+

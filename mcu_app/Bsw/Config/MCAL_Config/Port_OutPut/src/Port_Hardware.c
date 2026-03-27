@@ -102,7 +102,7 @@
  *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\Config\ECUC\test_Port_Port0_ecuc.arxml
  *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\modules\port\R422_PORT_F1x_BSWMDT.arxml
  *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\stubs\4.2.2\Dem\xml\Dem_Port.arxml
- * GENERATED ON:  27 Jan 2026 - 17:47:35
+ * GENERATED ON:  19 Mar 2026 - 17:19:40
  */
 
 /*******************************************************************************
@@ -210,8 +210,14 @@ volatile APortReg* const
 /* volatile FCLAReg* const Port_GpFclaReg_BaseAddress */
 
 /*Digital filters registers*/
-/* volatile DNFAReg* const 
-                        Port_GaaDnfaReg_BaseAddress[PORT_NUM_OF_DNFA_REG]; */
+volatile DNFAReg* const 
+                        Port_GaaDnfaReg_BaseAddress[PORT_NUM_OF_DNFA_REG] =
+{
+  /* Index: 0 - 0 */
+  (volatile DNFAReg *) &TAUB0DNFAREG
+};
+
+
 
 /* END Msg(4:0303)-1 */
 

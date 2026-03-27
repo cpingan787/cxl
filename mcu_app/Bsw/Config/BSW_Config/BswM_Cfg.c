@@ -14,7 +14,7 @@
  *  @MCU                : R7F7015833
  *  @file               : BswM_Cfg.c
  *  @author             : iSoft
- *  @date               : 2026-02-25 15:03:01
+ *  @date               : 2026-03-13 18:02:50
  *  @vendor             : iSoft
  *  @description        : 
  *  @specification(S)   : AUTOSAR Classic Platform R19-11
@@ -82,7 +82,7 @@ static CONST(BswM_ModeRqstPortPCCfgType, BSWM_CONST) BswM_ModeRqstSrc_Core0_Par0
     NULL_PTR,
     1u,    /*numOfDcmComModeReq*/
     &BswM_DcmInitMode_Core0_Par0,    /*dcmInitMode*/
-    1u,    /*numOfEcuMWakeupSource*/
+    2u,    /*numOfEcuMWakeupSource*/
     &BswM_EcumWkInitstate_Core0_Par0,    /*ecumWkInitstate*/
     0u,    /*numOfEcuMRUNRequestIndications*/
     NULL_PTR,
@@ -113,7 +113,7 @@ static VAR(Dcm_CommunicationModeType, BSWM_VAR_CLEARED) BswM_DcmComModeRequestSt
 
 #define BSWM_START_SEC_VAR_CLEARED_UNSPECIFIED
 #include "BswM_MemMap.h"
-static VAR(EcuM_WakeupStatusType, BSWM_VAR_CLEARED) BswM_EcuMWakeupSourceStatus_Core0_Par0[1u];
+static VAR(EcuM_WakeupStatusType, BSWM_VAR_CLEARED) BswM_EcuMWakeupSourceStatus_Core0_Par0[2u];
 #define BSWM_STOP_SEC_VAR_CLEARED_UNSPECIFIED
 #include "BswM_MemMap.h"
 

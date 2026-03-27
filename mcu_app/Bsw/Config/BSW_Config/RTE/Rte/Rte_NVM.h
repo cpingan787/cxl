@@ -98,6 +98,7 @@ uint8 NvMBlock_Reserved_block2_RomAddress[254]={0};
 uint8 NvMBlock_27Key_error_count_RomAddress[1]={0};
 uint8 NvMBlock_SecOc_count_RomAddress[4]={0};
 uint8 NvMBlock_SecOc_Key_RomAddress[16]={0};
+uint8 NvMBlock_DID0100_RomAddress[16]={0};
 #include "Dem_Types.h"  // 包含Dem类型定义
 //VAR(Dem_EventIdType, AUTOMATIC) DemPermanentMemory[1];
 #endif /* RTE_NVM_H */

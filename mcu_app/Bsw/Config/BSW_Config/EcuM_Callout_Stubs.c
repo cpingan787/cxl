@@ -40,7 +40,7 @@
 #include "Dcm.h"
 #include "Dem.h"
 #include "Mcu.h"
-#include "Fls.h"
+#include "BswM.h"
 #include "NVM.h"
 #include "Dem.h"
 #include "Wdg_59_DriverA.h"
@@ -140,7 +140,8 @@ FUNC(void, ECUM_MCUSETMODE_CODE) EcuM_McuSetMode(Mcu_ModeType mode)
     /** DO NOT CHANGE THIS COMMENT!
      * </USERBLOCK>
      */
-    Mcu_SetMode(mode);
+	Mcu_WakeUpFactor_Preparation(0);
+    Mcu_SetMode(0);
 }
 
 #if (ECUM_SET_PROGRAMMABLE_INTERRUPTS == STD_ON)
@@ -284,6 +285,7 @@ EcuM_AL_DriverInitBswM
     {
         Dcm_Init(pbCfg->dcmPbCfg);
         Dem_Init(pbCfg->demPbCfg);
+	//Dem_SetOperationCycleState(0,0);
         /** DO NOT CHANGE THIS COMMENT!
          * <USERBLOCK EcuM_AL_DriverInitBswM EcuMDriverInitListBswM_1>
          */
@@ -360,7 +362,7 @@ FUNC(void, ECUM_ONGOOFFONE_CODE) EcuM_OnGoOffOne
     /* custom code.... */
     uint32 init_expired_time = 0;
     NvM_RequestResultType InitNvMWriteAllStatus = NVM_REQ_PENDING;
-     	Dem_Shutdown();
+    Dem_Shutdown();
 	NvM_WriteAll();
 	do
     	  {
@@ -405,7 +407,7 @@ FUNC(void, ECUM_ONGOOFFTWO_CODE) EcuM_OnGoOffTwo
      */
     uint32 init_expired_time = 0;
     NvM_RequestResultType InitNvMWriteAllStatus = NVM_REQ_PENDING;
-     	Dem_Shutdown();
+    Dem_Shutdown();
 	NvM_WriteAll();
 	do
     	  {
@@ -441,8 +443,8 @@ FUNC(void, ECUM_AL_SWITCHOFF_CODE) EcuM_AL_SwitchOff
      * <USERBLOCK EcuM_AL_SwitchOff>
      */
     /* custom code.... */
+    Mcu_WakeUpFactor_Preparation(0);
     Mcu_SetMode(McuConf_McuModeSettingConf_McuModeSettingConf0);
-    Mcu_SequencerInit(McuConf_McuLowPowerSequencer_McuLowPowerSequencer0);
     /** DO NOT CHANGE THIS COMMENT!
      * </USERBLOCK>
      */
@@ -785,7 +787,8 @@ FUNC(void, ECUM_CHECKVALIDATION_CODE) EcuM_CheckValidation
             /* custom code.... */
             if(TRUE == validNmMsgFlag)
 	 		{
-				EcuM_ValidateWakeupEvent(wakeupSource);//manually add
+				EcuM_ValidateWakeupEvent(wakeupSource);//manually add               
+                validNmMsgFlag = FALSE;
 	 		}
             /** DO NOT CHANGE THIS COMMENT!
              * </USERBLOCK>
@@ -796,7 +799,7 @@ FUNC(void, ECUM_CHECKVALIDATION_CODE) EcuM_CheckValidation
              * <USERBLOCK EcuM_CheckValidation EcuMWakeupSource_Local>
              */ 
             /* custom code.... */
-            EcuM_ValidateWakeupEvent(wakeupSource);//manually add
+			 EcuM_ValidateWakeupEvent(wakeupSource);
             /** DO NOT CHANGE THIS COMMENT!
              * </USERBLOCK>
              */
@@ -944,12 +947,9 @@ FUNC(void, ECUM_CHECKWAKEUP_CODE) EcuM_CheckWakeup
              * <USERBLOCK EcuM_CheckWakeup EcuMWakeupSource_Local>
              */
             /* custom code.... */
-            EcuMWksPending = EcuMWakeupSource_Local;
             /** DO NOT CHANGE THIS COMMENT!
              * </USERBLOCK>
              */
-            EcuMWksPending = EcuMWakeupSource_Local;
-
             break;
         default:
             (void)wakeupSource;

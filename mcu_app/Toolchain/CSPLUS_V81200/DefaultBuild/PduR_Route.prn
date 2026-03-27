@@ -1,0 +1,885 @@
+RH850 Family Assembler V2.07.00.03 Assemble Source List
+
+OFFSET   CODE                  NO  SOURCE STATEMENT
+
+00000000                        1  #CC-RH Compiler RH850 Assembler Source
+00000000                        2  #@	CC-RH Version : V2.07.00  [06 Dec 2024]
+00000000                        3  #@	Command : ..\..\Bsw\Communication\Common\PDUR\PduR_Route.c -oDefaultBuild\PduR_Route.obj -Xcpu=g3kh -Xno_warning=20188,20111 -g -g_line -I..\..\Srcode\app\diagnostic -I..\..\Srcode\app\parameter_store -I..\..\Cpu\port -I..\..\Cpu\uart -I..\..\Cpu\iic -I..\..\Srcode\app\vehicle_data_to_mpu -I..\..\Srcode\app\power_manage -I..\..\Srcode\app\mcu_cpu_sync -I..\..\Srcode\app\remote_control -I..\..\Srcode\app\can_cycle_send -I..\..\Srcode\app\project_configure -I..\..\Srcode\sdk\include -I..\..\Srcode\commonLib\include -I..\..\Srcode\hal\include -I..\..\Bsw\Mcal\icu\include -I..\..\Bsw\Config\MCAL_Config\Icu_OutPut\include -I..\..\Bsw\Crypto\CRYPTO\vss -I..\..\ASW\CDD_FVM -I..\..\Bsw\Memory\EEIf -I..\..\Bsw\Communication\CAN\CanTSyn -I..\..\Bsw\SystemServices\StbM -I..\..\Bsw\Crypto\CSM -I..\..\Bsw\Crypto\CRYPTO\RSA -I..\..\Bsw\Crypto\CRYPTO\RandomGen\CTR_DRBG -I..\..\Bsw\Crypto\CRYPTO\MAC\CMAC -I..\..\Bsw\Crypto\CRYPTO\Hash\sha256 -I..\..\Bsw\Crypto\CRYPTO\dh -I..\..\Bsw\Crypto\CRYPTO\AES -I..\..\Bsw\Crypto\CRYPTO -I..\..\Bsw\Crypto\CryInterface -I..\..\Bsw\Communication\Common\SecOC -I..\..\Bsw\Memory\NvM -I..\..\Bsw\Memory\MemIf -I..\..\Bsw\Memory\Fee -I..\..\Bsw\SystemServices\WdgM -I..\..\Bsw\SystemServices\WdgIf -I..\..\Bsw\Config\MCAL_Config\Wdg_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Gpt_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Fls_OutPut\include -I..\..\Bsw\Mcal\wdg\include -I..\..\Bsw\Mcal\gpt\include -I..\..\Bsw\Mcal\fls\include -I..\..\Bsw\Communication\Common\IpduM -I..\..\ASW\APP -I..\..\Bsw\SystemServices\BswM -I..\..\ASW\BSW_Ext -I..\..\Bsw\Communication\Common\Dcm -I..\..\Bsw\Communication\CAN\CanTp -I..\..\Bsw\SystemServices\Dem -I..\..\Bsw\Libraries\E2E -I..\..\Bsw\Libraries\Crc -I..\..\Bsw\Communication\Common\NmIf -I..\..\Bsw\Communication\CAN\CanNm -I..\..\Bsw\Config\BSW_Config\RTE\Rte -I..\..\Bsw\Config\BSW_Config\RTE\SchM -I..\..\Bsw\Libraries\IStd -I..\..\Bsw\SystemServices\EcuM -I..\..\Bsw\SystemServices\ComM -I..\..\Bsw\Communication\CAN\CanSM -I..\..\Bsw\Communication\CAN\CanIf -I..\..\Bsw\Communication\Common\Com -I..\..\Bsw\Communication\Common\PDUR -I..\..\Cpu -I..\..\Bsw\CommonInclude -I..\..\Bsw\Config\BSW_Config -I..\..\Bsw\Config\BSW_Config\RH850F1K -I..\..\Bsw\SystemServices\Os\Extend\inc -I..\..\Bsw\SystemServices\Os\Kernel\inc -I..\..\Bsw\SystemServices\Os\Portable\Mcu -I..\..\Bsw\SystemServices\Os\Portable\Processor -I..\..\Bsw\Config\MCAL_Config\Adc_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Can_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Dio_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Mcu_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Port_OutPut\include -I..\..\Bsw\Mcal\adc\include -I..\..\Bsw\Mcal\can\include -I..\..\Bsw\Mcal\dio\include -I..\..\Bsw\Mcal\general -I..\..\Bsw\Mcal\mcu\include -I..\..\Bsw\Mcal\port\include -I..\..\Bsw\Mcal\stubs\CanGeneral\include -I..\..\Bsw\Mcal\stubs\Det\include -I..\..\Bsw\Mcal\stubs\MemIf\include -I..\..\Bsw\Mcal\stubs\SchM\include -DRH850_F1KM_S1_2MB -lang=c99 -Xfloat=fpu -Xround=zero -Xdiv -Xasm_path=DefaultBuild -Xasm_option=-Xprn_path=DefaultBuild -c -MAKEUD=DefaultBuild -Xexec_time=C:\Users\xlchen\AppData\Local\Temp\CSPlusBuildTool_6646b99c43f343978a8c43ebde2d74dba4df5p3c.1c2
+00000000                        4  #@	compiled at Fri Mar 27 09:50:22 2026
+00000000                        5  
+00000000                        6  	.file "..\..\Bsw\Communication\Common\PDUR\PduR_Route.c"
+00000000                        7  
+00000000                        8  	$reg_mode 32
+00000000                        9  	.dbl_size 8
+00000000                       10  
+00000000                       11  	.extern _PduR_ConfigStd
+00000000                       12  	.extern _PduR_BswModuleConfigData
+00000000                       13  	.extern _PduR_DestinationRouteStatus
+00000000                       14  	.extern _PduR_SourceRouteStatus
+00000000                       15  	.public _PduR_PduRIfTransmit
+00000000                       16  	.public _PduR_PduRTpTransmit
+00000000                       17  	.public _PduR_PduRCanceTransmit
+00000000                       18  	.public _PduR_PduRCancelReceive
+00000000                       19  	.public _PduR_PduRIfRxIndication
+00000000                       20  	.extern _Det_ReportRuntimeError
+00000000                       21  	.public _PduR_PduRIfTxConfirmation
+00000000                       22  	.public _PduR_PduRTriggerTransmit
+00000000                       23  	.public _PduR_PduRCopyTxData
+00000000                       24  	.public _PduR_PduRTpTxConfirmation
+00000000                       25  	.public _PduR_StartOfReceptionForward
+00000000                       26  	.public _PduR_CopyRxDataForward
+00000000                       27  	.public _PduR_TpRxIndicationForward
+00000000                       28  	.public _PduR_RouteInit
+00000000                       29  
+00000000                       30  	.section .text, text
+00000000                       31  _PduR_PduRIfTransmit:
+00000000                       32  	.stack _PduR_PduRIfTransmit = 8
+00000000                       33  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 76
+00000000 80072108              34  	prepare 0x00000041, 0x00000000
+00000004 07A0                  35  	mov r7, r20
+00000006                       36  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 81
+00000006 1430                  37  	mov r20, r6
+00000008 0838                  38  	mov r8, r7
+0000000A 80FF0000              39  	jarl _PduR_IfTransmitForward.1, r31
+0000000E                       40  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 82
+0000000E 6152                  41  	cmp 0x00000001, r10
+00000010 8205                  42  	bz9 .BB.LABEL.1_3
+00000012                       43  .BB.LABEL.1_1:	; bb
+00000012                       44  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 0
+00000012 40160000              45  	movhi HIGHW1(#_PduR_ConfigStd), r0, r2
+00000016 22170100              46  	ld.w LOWW(#_PduR_ConfigStd)[r2], r2
+0000001A 22171500              47  	ld.w 0x00000014[r2], r2
+0000001E 1428                  48  	mov r20, r5
+00000020 F42F4002              49  	mul 0x00000014, r5, r0
+00000024 C511                  50  	add r5, r2
+00000026 A2170100              51  	ld.bu 0x00000001[r2], r2
+0000002A 6012                  52  	cmp 0x00000000, r2
+0000002C 8205                  53  	bz9 .BB.LABEL.1_3
+0000002E                       54  .BB.LABEL.1_2:	; if_then_bb
+0000002E                       55  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 84
+0000002E C2A2                  56  	shl 0x00000002, r20
+00000030                       57  	mov #_PduR_DestinationRouteStatus, r2
+00000030 220600000000            -- mov         0x0,hp
+00000036 D411                  58  	add r20, r2
+00000038 012A                  59  	mov 0x00000001, r5
+0000003A 622F0100              60  	st.w r5, 0x00000000[r2]
+0000003E                       61  .BB.LABEL.1_3:	; if_break_bb
+0000003E                       62  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 88
+0000003E 40063F08              63  	dispose 0x00000000, 0x00000041, [r31]
+00000042                       64  _PduR_PduRTpTransmit:
+00000042                       65  	.stack _PduR_PduRTpTransmit = 4
+00000042                       66  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 95
+00000042 80072100              67  	prepare 0x00000001, 0x00000000
+00000046                       68  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 101
+00000046 0730                  69  	mov r7, r6
+00000048 0838                  70  	mov r8, r7
+0000004A 80FF0000              71  	jarl _PduR_TpTransmitForward.1, r31
+0000004E                       72  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 104
+0000004E 40063F00              73  	dispose 0x00000000, 0x00000001, [r31]
+00000052                       74  _PduR_PduRCanceTransmit:
+00000052                       75  	.stack _PduR_PduRCanceTransmit = 4
+00000052                       76  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 111
+00000052 80072100              77  	prepare 0x00000001, 0x00000000
+00000056                       78  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 114
+00000056 40160000              79  	movhi HIGHW1(#_PduR_ConfigStd), r0, r2
+0000005A 22170100              80  	ld.w LOWW(#_PduR_ConfigStd)[r2], r2
+0000005E 22171500              81  	ld.w 0x00000014[r2], r2
+00000062 F43F4002              82  	mul 0x00000014, r7, r0
+00000066 C711                  83  	add r7, r2
+00000068 222F0D00              84  	ld.w 0x0000000C[r2], r5
+0000006C                       85  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 126
+0000006C 652A                  86  	cmp 0x00000005, r5
+0000006E E2370900              87  	ld.hu 0x00000008[r2], r6
+00000072                       88  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 115
+00000072 82170100              89  	ld.bu 0x00000000[r2], r2
+00000076                       90  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 126
+00000076 8205                  91  	bz9 .BB.LABEL.3_4
+00000078                       92  .BB.LABEL.3_1:	; entry
+00000078                       93  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 0
+00000078 602A                  94  	cmp 0x00000000, r5
+0000007A 8A05                  95  	bnz9 .BB.LABEL.3_6
+0000007C                       96  .BB.LABEL.3_2:	; switch_clause_bb
+0000007C                       97  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 133
+0000007C E2163800              98  	mulhi 0x00000038, r2, r2
+00000080                       99  	mov #_PduR_BswModuleConfigData, r5
+00000080 250600000000            -- mov         0x0,tp
+00000086 C229                 100  	add r2, r5
+00000088 25170900             101  	ld.w 0x00000008[r5], r2
+0000008C                      102  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 135
+0000008C 6012                 103  	cmp 0x00000000, r2
+0000008E 8205                 104  	bz9 .BB.LABEL.3_6
+00000090                      105  .BB.LABEL.3_3:	; if_then_bb
+00000090                      106  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 137
+00000090 E2C760F9             107  	jarl [r2], r31
+00000094 40063F00             108  	dispose 0x00000000, 0x00000001, [r31]
+00000098                      109  .BB.LABEL.3_4:	; switch_clause_bb44
+00000098                      110  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 146
+00000098 E2163800             111  	mulhi 0x00000038, r2, r2
+0000009C                      112  	mov #_PduR_BswModuleConfigData, r5
+0000009C 250600000000            -- mov         0x0,tp
+000000A2 C229                 113  	add r2, r5
+000000A4 25170D00             114  	ld.w 0x0000000C[r5], r2
+000000A8                      115  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 148
+000000A8 6012                 116  	cmp 0x00000000, r2
+000000AA 8205                 117  	bz9 .BB.LABEL.3_6
+000000AC                      118  .BB.LABEL.3_5:	; if_then_bb52
+000000AC                      119  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 150
+000000AC E2C760F9             120  	jarl [r2], r31
+000000B0 40063F00             121  	dispose 0x00000000, 0x00000001, [r31]
+000000B4                      122  .BB.LABEL.3_6:	; switch_break_bb
+000000B4                      123  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 0
+000000B4 0152                 124  	mov 0x00000001, r10
+000000B6                      125  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 160
+000000B6 40063F00             126  	dispose 0x00000000, 0x00000001, [r31]
+000000BA                      127  _PduR_PduRCancelReceive:
+000000BA                      128  	.stack _PduR_PduRCancelReceive = 4
+000000BA                      129  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 167
+000000BA 80072100             130  	prepare 0x00000001, 0x00000000
+000000BE                      131  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 171
+000000BE 40160000             132  	movhi HIGHW1(#_PduR_ConfigStd), r0, r2
+000000C2 22170100             133  	ld.w LOWW(#_PduR_ConfigStd)[r2], r2
+000000C6 222F1500             134  	ld.w 0x00000014[r2], r5
+000000CA F43F4002             135  	mul 0x00000014, r7, r0
+000000CE C729                 136  	add r7, r5
+000000D0                      137  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 172
+000000D0 223F1100             138  	ld.w 0x00000010[r2], r7
+000000D4 0640                 139  	mov r6, r8
+000000D6 C242                 140  	shl 0x00000002, r8
+000000D8 C839                 141  	add r8, r7
+000000DA A73F0100             142  	ld.bu 0x00000001[r7], r7
+000000DE                      143  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 183
+000000DE E73E3800             144  	mulhi 0x00000038, r7, r7
+000000E2                      145  	mov #_PduR_BswModuleConfigData, r8
+000000E2 280600000000            -- mov         0x0,r8
+000000E8 C741                 146  	add r7, r8
+000000EA 283F0500             147  	ld.w 0x00000004[r8], r7
+000000EE                      148  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 185
+000000EE 603A                 149  	cmp 0x00000000, r7
+000000F0                      150  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 171
+000000F0 252F0D00             151  	ld.w 0x0000000C[r5], r5
+000000F4                      152  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 185
+000000F4 8205                 153  	bz9 .BB.LABEL.4_3
+000000F6                      154  .BB.LABEL.4_1:	; entry
+000000F6                      155  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 0
+000000F6 662A                 156  	cmp 0x00000006, r5
+000000F8 8A05                 157  	bnz9 .BB.LABEL.4_3
+000000FA                      158  .BB.LABEL.4_2:	; if_then_bb
+000000FA                      159  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 173
+000000FA 22171100             160  	ld.w 0x00000010[r2], r2
+000000FE C232                 161  	shl 0x00000002, r6
+00000100 C611                 162  	add r6, r2
+00000102                      163  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 187
+00000102 E2370300             164  	ld.hu 0x00000002[r2], r6
+00000106 E7C760F9             165  	jarl [r7], r31
+0000010A 40063F00             166  	dispose 0x00000000, 0x00000001, [r31]
+0000010E                      167  .BB.LABEL.4_3:	; if_break_bb
+0000010E                      168  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 0
+0000010E 0152                 169  	mov 0x00000001, r10
+00000110                      170  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 191
+00000110 40063F00             171  	dispose 0x00000000, 0x00000001, [r31]
+00000114                      172  _PduR_PduRIfRxIndication:
+00000114                      173  	.stack _PduR_PduRIfRxIndication = 8
+00000114                      174  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 199
+00000114 80072108             175  	prepare 0x00000041, 0x00000000
+00000118                      176  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 202
+00000118 40160000             177  	movhi HIGHW1(#_PduR_ConfigStd), r0, r2
+0000011C 22170100             178  	ld.w LOWW(#_PduR_ConfigStd)[r2], r2
+00000120 22171500             179  	ld.w 0x00000014[r2], r2
+00000124 0728                 180  	mov r7, r5
+00000126 F42F4002             181  	mul 0x00000014, r5, r0
+0000012A C511                 182  	add r5, r2
+0000012C 22170D00             183  	ld.w 0x0000000C[r2], r2
+00000130                      184  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 208
+00000130 6112                 185  	cmp 0x00000001, r2
+00000132 8A05                 186  	bnz9 .BB.LABEL.5_4
+00000134                      187  .BB.LABEL.5_1:	; switch_clause_bb
+00000134                      188  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 212
+00000134 07A0                 189  	mov r7, r20
+00000136 C2A2                 190  	shl 0x00000002, r20
+00000138                      191  	mov #_PduR_DestinationRouteStatus, r2
+00000138 220600000000            -- mov         0x0,hp
+0000013E C2A1                 192  	add r2, r20
+00000140 34170100             193  	ld.w 0x00000000[r20], r2
+00000144 6012                 194  	cmp 0x00000000, r2
+00000146 8A05                 195  	bnz9 .BB.LABEL.5_3
+00000148                      196  .BB.LABEL.5_2:	; if_then_bb
+00000148                      197  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 0
+00000148 0112                 198  	mov 0x00000001, r2
+0000014A                      199  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 214
+0000014A 74170100             200  	st.w r2, 0x00000000[r20]
+0000014E                      201  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 215
+0000014E 0730                 202  	mov r7, r6
+00000150 0838                 203  	mov r8, r7
+00000152 80FF0000             204  	jarl _PduR_IfRxIndicationForward.1, r31
+00000156                      205  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 216
+00000156 74070100             206  	st.w r0, 0x00000000[r20]
+0000015A 40063F08             207  	dispose 0x00000000, 0x00000041, [r31]
+0000015E                      208  .BB.LABEL.5_3:	; if_else_bb
+0000015E                      209  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 0
+0000015E 0A4A                 210  	mov 0x0000000A, r9
+00000160 20464200             211  	movea 0x00000042, r0, r8
+00000164 003A                 212  	mov 0x00000000, r7
+00000166 20363300             213  	movea 0x00000033, r0, r6
+0000016A                      214  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 222
+0000016A 80FF0000             215  	jarl _Det_ReportRuntimeError, r31
+0000016E                      216  .BB.LABEL.5_4:	; return
+0000016E                      217  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 360
+0000016E 40063F08             218  	dispose 0x00000000, 0x00000041, [r31]
+00000172                      219  _PduR_PduRIfTxConfirmation:
+00000172                      220  	.stack _PduR_PduRIfTxConfirmation = 12
+00000172                      221  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 368
+00000172 8007210C             222  	prepare 0x00000061, 0x00000000
+00000176                      223  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 372
+00000176 07A0                 224  	mov r7, r20
+00000178 C2A2                 225  	shl 0x00000002, r20
+0000017A                      226  	mov #_PduR_DestinationRouteStatus, r2
+0000017A 220600000000            -- mov         0x0,hp
+00000180 C2A1                 227  	add r2, r20
+00000182 34170100             228  	ld.w 0x00000000[r20], r2
+00000186 6112                 229  	cmp 0x00000001, r2
+00000188 06A8                 230  	mov r6, r21
+0000018A 8A05                 231  	bnz9 .BB.LABEL.6_7
+0000018C                      232  .BB.LABEL.6_1:	; if_then_bb
+0000018C                      233  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 0
+0000018C 0212                 234  	mov 0x00000002, r2
+0000018E                      235  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 374
+0000018E 74170100             236  	st.w r2, 0x00000000[r20]
+00000192                      237  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 376
+00000192 40160000             238  	movhi HIGHW1(#_PduR_ConfigStd), r0, r2
+00000196 22170100             239  	ld.w LOWW(#_PduR_ConfigStd)[r2], r2
+0000019A 22171500             240  	ld.w 0x00000014[r2], r2
+0000019E F43F4002             241  	mul 0x00000014, r7, r0
+000001A2 C711                 242  	add r7, r2
+000001A4 22170D00             243  	ld.w 0x0000000C[r2], r2
+000001A8                      244  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 377
+000001A8 6012                 245  	cmp 0x00000000, r2
+000001AA 8A05                 246  	bnz9 .BB.LABEL.6_5
+000001AC                      247  .BB.LABEL.6_2:	; switch_clause_bb
+000001AC                      248  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 381
+000001AC 1530                 249  	mov r21, r6
+000001AE 80FF0000             250  	jarl _PduR_EvaluateUpLayerConfirmationStatus.1, r31
+000001B2                      251  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 382
+000001B2 1510                 252  	mov r21, r2
+000001B4 C212                 253  	shl 0x00000002, r2
+000001B6                      254  	mov #_PduR_SourceRouteStatus, r5
+000001B6 250600000000            -- mov         0x0,tp
+000001BC C511                 255  	add r5, r2
+000001BE 222F0100             256  	ld.w 0x00000000[r2], r5
+000001C2 622A                 257  	cmp 0x00000002, r5
+000001C4 8A05                 258  	bnz9 .BB.LABEL.6_5
+000001C6                      259  .BB.LABEL.6_3:	; if_then_bb31
+000001C6                      260  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 384
+000001C6 62070100             261  	st.w r0, 0x00000000[r2]
+000001CA                      262  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 385
+000001CA 40160000             263  	movhi HIGHW1(#_PduR_ConfigStd), r0, r2
+000001CE 22170100             264  	ld.w LOWW(#_PduR_ConfigStd)[r2], r2
+000001D2 22171100             265  	ld.w 0x00000010[r2], r2
+000001D6 1528                 266  	mov r21, r5
+000001D8 C22A                 267  	shl 0x00000002, r5
+000001DA C511                 268  	add r5, r2
+000001DC 82170100             269  	ld.bu 0x00000000[r2], r2
+000001E0 6012                 270  	cmp 0x00000000, r2
+000001E2 8205                 271  	bz9 .BB.LABEL.6_5
+000001E4                      272  .BB.LABEL.6_4:	; if_then_bb47
+000001E4                      273  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 387
+000001E4 1530                 274  	mov r21, r6
+000001E6 80FF0000             275  	jarl _PduR_IfTxConfirmationForward.1, r31
+000001EA                      276  .BB.LABEL.6_5:	; switch_break_bb
+000001EA                      277  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 445
+000001EA 34170100             278  	ld.w 0x00000000[r20], r2
+000001EE 6112                 279  	cmp 0x00000001, r2
+000001F0 8205                 280  	bz9 .BB.LABEL.6_7
+000001F2                      281  .BB.LABEL.6_6:	; if_then_bb59
+000001F2                      282  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 447
+000001F2 74070100             283  	st.w r0, 0x00000000[r20]
+000001F6                      284  .BB.LABEL.6_7:	; return
+000001F6                      285  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 450
+000001F6 40063F0C             286  	dispose 0x00000000, 0x00000061, [r31]
+000001FA                      287  _PduR_PduRTriggerTransmit:
+000001FA                      288  	.stack _PduR_PduRTriggerTransmit = 12
+000001FA                      289  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 457
+000001FA 8007210C             290  	prepare 0x00000061, 0x00000000
+000001FE                      291  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 460
+000001FE 40160000             292  	movhi HIGHW1(#_PduR_ConfigStd), r0, r2
+00000202 22170100             293  	ld.w LOWW(#_PduR_ConfigStd)[r2], r2
+00000206 22171500             294  	ld.w 0x00000014[r2], r2
+0000020A 0728                 295  	mov r7, r5
+0000020C F42F4002             296  	mul 0x00000014, r5, r0
+00000210 C511                 297  	add r5, r2
+00000212 22170D00             298  	ld.w 0x0000000C[r2], r2
+00000216                      299  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 462
+00000216 6012                 300  	cmp 0x00000000, r2
+00000218 07A0                 301  	mov r7, r20
+0000021A 06A8                 302  	mov r6, r21
+0000021C 8205                 303  	bz9 .BB.LABEL.7_2
+0000021E                      304  .BB.LABEL.7_1:	; entry.switch_break_bb_crit_edge
+0000021E                      305  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 0
+0000021E 0152                 306  	mov 0x00000001, r10
+00000220 8505                 307  	br9 .BB.LABEL.7_5
+00000222                      308  .BB.LABEL.7_2:	; switch_clause_bb
+00000222                      309  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 466
+00000222 1530                 310  	mov r21, r6
+00000224 0838                 311  	mov r8, r7
+00000226 80FF0000             312  	jarl _PduR_TriggerTransmitForward.1, r31
+0000022A                      313  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 467
+0000022A 6152                 314  	cmp 0x00000001, r10
+0000022C 8205                 315  	bz9 .BB.LABEL.7_5
+0000022E                      316  .BB.LABEL.7_3:	; bb
+0000022E                      317  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 0
+0000022E 40160000             318  	movhi HIGHW1(#_PduR_ConfigStd), r0, r2
+00000232 22170100             319  	ld.w LOWW(#_PduR_ConfigStd)[r2], r2
+00000236 22171500             320  	ld.w 0x00000014[r2], r2
+0000023A 1428                 321  	mov r20, r5
+0000023C F42F4002             322  	mul 0x00000014, r5, r0
+00000240 C511                 323  	add r5, r2
+00000242 A2170100             324  	ld.bu 0x00000001[r2], r2
+00000246 6012                 325  	cmp 0x00000000, r2
+00000248 8205                 326  	bz9 .BB.LABEL.7_5
+0000024A                      327  .BB.LABEL.7_4:	; if_then_bb
+0000024A                      328  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 469
+0000024A C2AA                 329  	shl 0x00000002, r21
+0000024C                      330  	mov #_PduR_SourceRouteStatus, r2
+0000024C 220600000000            -- mov         0x0,hp
+00000252 D511                 331  	add r21, r2
+00000254 012A                 332  	mov 0x00000001, r5
+00000256 622F0100             333  	st.w r5, 0x00000000[r2]
+0000025A                      334  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 470
+0000025A C2A2                 335  	shl 0x00000002, r20
+0000025C                      336  	mov #_PduR_DestinationRouteStatus, r2
+0000025C 220600000000            -- mov         0x0,hp
+00000262 D411                 337  	add r20, r2
+00000264 622F0100             338  	st.w r5, 0x00000000[r2]
+00000268                      339  .BB.LABEL.7_5:	; switch_break_bb
+00000268                      340  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 538
+00000268 40063F0C             341  	dispose 0x00000000, 0x00000061, [r31]
+0000026C                      342  _PduR_PduRCopyTxData:
+0000026C                      343  	.stack _PduR_PduRCopyTxData = 4
+0000026C                      344  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 678
+0000026C 80072100             345  	prepare 0x00000001, 0x00000000
+00000270                      346  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 685
+00000270 40160000             347  	movhi HIGHW1(#_PduR_ConfigStd), r0, r2
+00000274 22170100             348  	ld.w LOWW(#_PduR_ConfigStd)[r2], r2
+00000278 222F1500             349  	ld.w 0x00000014[r2], r5
+0000027C 0650                 350  	mov r6, r10
+0000027E F4574002             351  	mul 0x00000014, r10, r0
+00000282 CA29                 352  	add r10, r5
+00000284 252F0D00             353  	ld.w 0x0000000C[r5], r5
+00000288                      354  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 688
+00000288 652A                 355  	cmp 0x00000005, r5
+0000028A 8A05                 356  	bnz9 .BB.LABEL.8_2
+0000028C                      357  .BB.LABEL.8_1:	; switch_clause_bb
+0000028C                      358  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 692
+0000028C 22171500             359  	ld.w 0x00000014[r2], r2
+00000290 F4374002             360  	mul 0x00000014, r6, r0
+00000294 C611                 361  	add r6, r2
+00000296 22170500             362  	ld.w 0x00000004[r2], r2
+0000029A                      363  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 693
+0000029A E2370100             364  	ld.hu 0x00000000[r2], r6
+0000029E 80FF0000             365  	jarl _PduR_CopyTxDataForward.1, r31
+000002A2 40063F00             366  	dispose 0x00000000, 0x00000001, [r31]
+000002A6                      367  .BB.LABEL.8_2:	; switch_break_bb
+000002A6                      368  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 0
+000002A6 0152                 369  	mov 0x00000001, r10
+000002A8                      370  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 766
+000002A8 40063F00             371  	dispose 0x00000000, 0x00000001, [r31]
+000002AC                      372  _PduR_PduRTpTxConfirmation:
+000002AC                      373  	.stack _PduR_PduRTpTxConfirmation = 4
+000002AC                      374  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 773
+000002AC 80072100             375  	prepare 0x00000001, 0x00000000
+000002B0                      376  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 775
+000002B0 40160000             377  	movhi HIGHW1(#_PduR_ConfigStd), r0, r2
+000002B4 22170100             378  	ld.w LOWW(#_PduR_ConfigStd)[r2], r2
+000002B8 22171500             379  	ld.w 0x00000014[r2], r2
+000002BC F43F4002             380  	mul 0x00000014, r7, r0
+000002C0 C711                 381  	add r7, r2
+000002C2 22170D00             382  	ld.w 0x0000000C[r2], r2
+000002C6                      383  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 776
+000002C6 6512                 384  	cmp 0x00000005, r2
+000002C8 8A05                 385  	bnz9 .BB.LABEL.9_2
+000002CA                      386  .BB.LABEL.9_1:	; switch_clause_bb
+000002CA                      387  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 780
+000002CA 0838                 388  	mov r8, r7
+000002CC 80FF0000             389  	jarl _PduR_TpTxConfirmationForward.1, r31
+000002D0                      390  .BB.LABEL.9_2:	; return
+000002D0                      391  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 809
+000002D0 40063F00             392  	dispose 0x00000000, 0x00000001, [r31]
+000002D4                      393  _PduR_EvaluateUpLayerConfirmationStatus.1:
+000002D4                      394  	.stack _PduR_EvaluateUpLayerConfirmationStatus.1 = 0
+000002D4                      395  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 897
+000002D4 0610                 396  	mov r6, r2
+000002D6                      397  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 899
+000002D6 C212                 398  	shl 0x00000002, r2
+000002D8                      399  	mov #_PduR_SourceRouteStatus, r5
+000002D8 250600000000            -- mov         0x0,tp
+000002DE C511                 400  	add r5, r2
+000002E0 222F0100             401  	ld.w 0x00000000[r2], r5
+000002E4                      402  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 901
+000002E4 612A                 403  	cmp 0x00000001, r5
+000002E6 8A05                 404  	bnz9 .BB.LABEL.10_10
+000002E8                      405  .BB.LABEL.10_1:	; if_then_bb
+000002E8                      406  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 903
+000002E8 403E0000             407  	movhi HIGHW1(#_PduR_ConfigStd), r0, r7
+000002EC 273F0100             408  	ld.w LOWW(#_PduR_ConfigStd)[r7], r7
+000002F0 27470D00             409  	ld.w 0x0000000C[r7], r8
+000002F4 E73F0100             410  	ld.hu 0x00000000[r7], r7
+000002F8 C23A                 411  	shl 0x00000002, r7
+000002FA C741                 412  	add r7, r8
+000002FC 283F0100             413  	ld.w 0x00000000[r8], r7
+00000300 0640                 414  	mov r6, r8
+00000302 C342                 415  	shl 0x00000003, r8
+00000304 C839                 416  	add r8, r7
+00000306                      417  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 904
+00000306 873F0100             418  	ld.bu 0x00000000[r7], r7
+0000030A 0042                 419  	mov 0x00000000, r8
+0000030C 0848                 420  	mov r8, r9
+0000030E 8505                 421  	br9 .BB.LABEL.10_8
+00000310                      422  .BB.LABEL.10_2:	; bb
+00000310                      423  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 906
+00000310 40560000             424  	movhi HIGHW1(#_PduR_ConfigStd), r0, r10
+00000314 2A570100             425  	ld.w LOWW(#_PduR_ConfigStd)[r10], r10
+00000318 2A5F0D00             426  	ld.w 0x0000000C[r10], r11
+0000031C EA570100             427  	ld.hu 0x00000000[r10], r10
+00000320 C252                 428  	shl 0x00000002, r10
+00000322 CA59                 429  	add r10, r11
+00000324 2B570100             430  	ld.w 0x00000000[r11], r10
+00000328 0658                 431  	mov r6, r11
+0000032A C35A                 432  	shl 0x00000003, r11
+0000032C CB51                 433  	add r11, r10
+0000032E 2A570500             434  	ld.w 0x00000004[r10], r10
+00000332 C95EFF00             435  	andi 0x000000FF, r9, r11
+00000336 CB59                 436  	add r11, r11
+00000338 CB51                 437  	add r11, r10
+0000033A                      438  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 907
+0000033A EA570100             439  	ld.hu 0x00000000[r10], r10
+0000033E C252                 440  	shl 0x00000002, r10
+00000340                      441  	mov #_PduR_DestinationRouteStatus, r11
+00000340 2B0600000000            -- mov         0x0,r11
+00000346 CB51                 442  	add r11, r10
+00000348 2A5F0100             443  	ld.w 0x00000000[r10], r11
+0000034C 635A                 444  	cmp 0x00000003, r11
+0000034E 8A05                 445  	bnz9 .BB.LABEL.10_4
+00000350                      446  .BB.LABEL.10_3:	; if_then_bb54
+00000350                      447  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 0
+00000350 032A                 448  	mov 0x00000003, r5
+00000352 0142                 449  	mov 0x00000001, r8
+00000354                      450  .BB.LABEL.10_4:	; if_break_bb
+00000354                      451  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 912
+00000354 2A5F0100             452  	ld.w 0x00000000[r10], r11
+00000358 615A                 453  	cmp 0x00000001, r11
+0000035A 8A05                 454  	bnz9 .BB.LABEL.10_6
+0000035C                      455  .BB.LABEL.10_5:	; if_then_bb62
+0000035C                      456  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 0
+0000035C 0142                 457  	mov 0x00000001, r8
+0000035E 0828                 458  	mov r8, r5
+00000360                      459  .BB.LABEL.10_6:	; if_break_bb63
+00000360                      460  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 917
+00000360 2A570100             461  	ld.w 0x00000000[r10], r10
+00000364 6252                 462  	cmp 0x00000002, r10
+00000366                      463  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 919
+00000366 E22F042B             464  	cmov 0x00000002, 0x00000002, r5, r5
+0000036A                      465  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 921
+0000036A C806FF00             466  	andi 0x000000FF, r8, r0
+0000036E 8A05                 467  	bnz9 .BB.LABEL.10_9
+00000370                      468  .BB.LABEL.10_7:	; if_break_bb80
+00000370                      469  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 0
+00000370 414A                 470  	add 0x00000001, r9
+00000372                      471  .BB.LABEL.10_8:	; bb83
+00000372                      472  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 904
+00000372 C956FF00             473  	andi 0x000000FF, r9, r10
+00000376 E751                 474  	cmp r7, r10
+00000378 8105                 475  	bl9 .BB.LABEL.10_2
+0000037A                      476  .BB.LABEL.10_9:	; bb92
+0000037A                      477  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 927
+0000037A 622F0100             478  	st.w r5, 0x00000000[r2]
+0000037E                      479  .BB.LABEL.10_10:	; return
+0000037E                      480  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 929
+0000037E 7F00                 481  	jmp [r31]
+00000380                      482  _PduR_IfTransmitForward.1:
+00000380                      483  	.stack _PduR_IfTransmitForward.1 = 4
+00000380                      484  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 937
+00000380 80072100             485  	prepare 0x00000001, 0x00000000
+00000384                      486  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 940
+00000384 40160000             487  	movhi HIGHW1(#_PduR_ConfigStd), r0, r2
+00000388 22170100             488  	ld.w LOWW(#_PduR_ConfigStd)[r2], r2
+0000038C 222F1500             489  	ld.w 0x00000014[r2], r5
+00000390 0640                 490  	mov r6, r8
+00000392 F4474002             491  	mul 0x00000014, r8, r0
+00000396 C829                 492  	add r8, r5
+00000398 852F0100             493  	ld.bu 0x00000000[r5], r5
+0000039C                      494  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 952
+0000039C E52E3800             495  	mulhi 0x00000038, r5, r5
+000003A0                      496  	mov #_PduR_BswModuleConfigData, r8
+000003A0 280600000000            -- mov         0x0,r8
+000003A6 C541                 497  	add r5, r8
+000003A8 282F1500             498  	ld.w 0x00000014[r8], r5
+000003AC                      499  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 954
+000003AC 602A                 500  	cmp 0x00000000, r5
+000003AE 8205                 501  	bz9 .BB.LABEL.11_2
+000003B0                      502  .BB.LABEL.11_1:	; if_then_bb
+000003B0                      503  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 941
+000003B0 22171500             504  	ld.w 0x00000014[r2], r2
+000003B4 F4374002             505  	mul 0x00000014, r6, r0
+000003B8 C611                 506  	add r6, r2
+000003BA                      507  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 956
+000003BA E2370900             508  	ld.hu 0x00000008[r2], r6
+000003BE E5C760F9             509  	jarl [r5], r31
+000003C2 40063F00             510  	dispose 0x00000000, 0x00000001, [r31]
+000003C6                      511  .BB.LABEL.11_2:	; if_break_bb
+000003C6                      512  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 0
+000003C6 0152                 513  	mov 0x00000001, r10
+000003C8                      514  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 959
+000003C8 40063F00             515  	dispose 0x00000000, 0x00000001, [r31]
+000003CC                      516  _PduR_TriggerTransmitForward.1:
+000003CC                      517  	.stack _PduR_TriggerTransmitForward.1 = 4
+000003CC                      518  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 966
+000003CC 80072100             519  	prepare 0x00000001, 0x00000000
+000003D0                      520  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 969
+000003D0 40160000             521  	movhi HIGHW1(#_PduR_ConfigStd), r0, r2
+000003D4 22170100             522  	ld.w LOWW(#_PduR_ConfigStd)[r2], r2
+000003D8 222F1100             523  	ld.w 0x00000010[r2], r5
+000003DC 0640                 524  	mov r6, r8
+000003DE C242                 525  	shl 0x00000002, r8
+000003E0 C829                 526  	add r8, r5
+000003E2 A52F0100             527  	ld.bu 0x00000001[r5], r5
+000003E6                      528  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 980
+000003E6 E52E3800             529  	mulhi 0x00000038, r5, r5
+000003EA                      530  	mov #_PduR_BswModuleConfigData, r8
+000003EA 280600000000            -- mov         0x0,r8
+000003F0 C541                 531  	add r5, r8
+000003F2 282F1100             532  	ld.w 0x00000010[r8], r5
+000003F6                      533  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 982
+000003F6 602A                 534  	cmp 0x00000000, r5
+000003F8 8205                 535  	bz9 .BB.LABEL.12_2
+000003FA                      536  .BB.LABEL.12_1:	; if_then_bb
+000003FA                      537  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 970
+000003FA 22171100             538  	ld.w 0x00000010[r2], r2
+000003FE C232                 539  	shl 0x00000002, r6
+00000400 C611                 540  	add r6, r2
+00000402                      541  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 984
+00000402 E2370300             542  	ld.hu 0x00000002[r2], r6
+00000406 E5C760F9             543  	jarl [r5], r31
+0000040A 40063F00             544  	dispose 0x00000000, 0x00000001, [r31]
+0000040E                      545  .BB.LABEL.12_2:	; if_break_bb
+0000040E                      546  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 0
+0000040E 0152                 547  	mov 0x00000001, r10
+00000410                      548  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 987
+00000410 40063F00             549  	dispose 0x00000000, 0x00000001, [r31]
+00000414                      550  _PduR_IfTxConfirmationForward.1:
+00000414                      551  	.stack _PduR_IfTxConfirmationForward.1 = 4
+00000414                      552  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 992
+00000414 80072100             553  	prepare 0x00000001, 0x00000000
+00000418                      554  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 994
+00000418 40160000             555  	movhi HIGHW1(#_PduR_ConfigStd), r0, r2
+0000041C 22170100             556  	ld.w LOWW(#_PduR_ConfigStd)[r2], r2
+00000420 222F1100             557  	ld.w 0x00000010[r2], r5
+00000424 0638                 558  	mov r6, r7
+00000426 C23A                 559  	shl 0x00000002, r7
+00000428 C729                 560  	add r7, r5
+0000042A A52F0100             561  	ld.bu 0x00000001[r5], r5
+0000042E                      562  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 1005
+0000042E E52E3800             563  	mulhi 0x00000038, r5, r5
+00000432                      564  	mov #_PduR_BswModuleConfigData, r7
+00000432 270600000000            -- mov         0x0,r7
+00000438 C539                 565  	add r5, r7
+0000043A 272F1900             566  	ld.w 0x00000018[r7], r5
+0000043E                      567  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 1007
+0000043E 602A                 568  	cmp 0x00000000, r5
+00000440 8205                 569  	bz9 .BB.LABEL.13_2
+00000442                      570  .BB.LABEL.13_1:	; if_then_bb
+00000442                      571  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 995
+00000442 22171100             572  	ld.w 0x00000010[r2], r2
+00000446 C232                 573  	shl 0x00000002, r6
+00000448 C611                 574  	add r6, r2
+0000044A                      575  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 1009
+0000044A E2370300             576  	ld.hu 0x00000002[r2], r6
+0000044E E5C760F9             577  	jarl [r5], r31
+00000452                      578  .BB.LABEL.13_2:	; return
+00000452                      579  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 1011
+00000452 40063F00             580  	dispose 0x00000000, 0x00000001, [r31]
+00000456                      581  _PduR_IfRxIndicationForward.1:
+00000456                      582  	.stack _PduR_IfRxIndicationForward.1 = 4
+00000456                      583  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 1016
+00000456 80072100             584  	prepare 0x00000001, 0x00000000
+0000045A                      585  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 1018
+0000045A 40160000             586  	movhi HIGHW1(#_PduR_ConfigStd), r0, r2
+0000045E 22170100             587  	ld.w LOWW(#_PduR_ConfigStd)[r2], r2
+00000462 222F1500             588  	ld.w 0x00000014[r2], r5
+00000466 0640                 589  	mov r6, r8
+00000468 F4474002             590  	mul 0x00000014, r8, r0
+0000046C C829                 591  	add r8, r5
+0000046E 852F0100             592  	ld.bu 0x00000000[r5], r5
+00000472                      593  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 1029
+00000472 E52E3800             594  	mulhi 0x00000038, r5, r5
+00000476                      595  	mov #_PduR_BswModuleConfigData, r8
+00000476 280600000000            -- mov         0x0,r8
+0000047C C541                 596  	add r5, r8
+0000047E 282F1D00             597  	ld.w 0x0000001C[r8], r5
+00000482                      598  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 1031
+00000482 602A                 599  	cmp 0x00000000, r5
+00000484 8205                 600  	bz9 .BB.LABEL.14_2
+00000486                      601  .BB.LABEL.14_1:	; if_then_bb
+00000486                      602  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 1019
+00000486 22171500             603  	ld.w 0x00000014[r2], r2
+0000048A F4374002             604  	mul 0x00000014, r6, r0
+0000048E C611                 605  	add r6, r2
+00000490                      606  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 1033
+00000490 E2370900             607  	ld.hu 0x00000008[r2], r6
+00000494 E5C760F9             608  	jarl [r5], r31
+00000498                      609  .BB.LABEL.14_2:	; return
+00000498                      610  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 1035
+00000498 40063F00             611  	dispose 0x00000000, 0x00000001, [r31]
+0000049C                      612  _PduR_TpTransmitForward.1:
+0000049C                      613  	.stack _PduR_TpTransmitForward.1 = 4
+0000049C                      614  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 1043
+0000049C 80072100             615  	prepare 0x00000001, 0x00000000
+000004A0                      616  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 1045
+000004A0 40160000             617  	movhi HIGHW1(#_PduR_ConfigStd), r0, r2
+000004A4 22170100             618  	ld.w LOWW(#_PduR_ConfigStd)[r2], r2
+000004A8 222F1500             619  	ld.w 0x00000014[r2], r5
+000004AC 0640                 620  	mov r6, r8
+000004AE F4474002             621  	mul 0x00000014, r8, r0
+000004B2 C829                 622  	add r8, r5
+000004B4 852F0100             623  	ld.bu 0x00000000[r5], r5
+000004B8                      624  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 1057
+000004B8 E52E3800             625  	mulhi 0x00000038, r5, r5
+000004BC                      626  	mov #_PduR_BswModuleConfigData, r8
+000004BC 280600000000            -- mov         0x0,r8
+000004C2 C541                 627  	add r5, r8
+000004C4 282F2100             628  	ld.w 0x00000020[r8], r5
+000004C8                      629  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 1059
+000004C8 602A                 630  	cmp 0x00000000, r5
+000004CA 8205                 631  	bz9 .BB.LABEL.15_2
+000004CC                      632  .BB.LABEL.15_1:	; if_then_bb
+000004CC                      633  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 1046
+000004CC 22171500             634  	ld.w 0x00000014[r2], r2
+000004D0 F4374002             635  	mul 0x00000014, r6, r0
+000004D4 C611                 636  	add r6, r2
+000004D6                      637  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 1061
+000004D6 E2370900             638  	ld.hu 0x00000008[r2], r6
+000004DA E5C760F9             639  	jarl [r5], r31
+000004DE 40063F00             640  	dispose 0x00000000, 0x00000001, [r31]
+000004E2                      641  .BB.LABEL.15_2:	; if_break_bb
+000004E2                      642  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 0
+000004E2 0152                 643  	mov 0x00000001, r10
+000004E4                      644  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 1064
+000004E4 40063F00             645  	dispose 0x00000000, 0x00000001, [r31]
+000004E8                      646  _PduR_CopyTxDataForward.1:
+000004E8                      647  	.stack _PduR_CopyTxDataForward.1 = 4
+000004E8                      648  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 1072
+000004E8 80072100             649  	prepare 0x00000001, 0x00000000
+000004EC                      650  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 1078
+000004EC 40160000             651  	movhi HIGHW1(#_PduR_ConfigStd), r0, r2
+000004F0 22170100             652  	ld.w LOWW(#_PduR_ConfigStd)[r2], r2
+000004F4 222F1100             653  	ld.w 0x00000010[r2], r5
+000004F8 0650                 654  	mov r6, r10
+000004FA C252                 655  	shl 0x00000002, r10
+000004FC CA29                 656  	add r10, r5
+000004FE A52F0100             657  	ld.bu 0x00000001[r5], r5
+00000502                      658  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 1090
+00000502 E52E3800             659  	mulhi 0x00000038, r5, r5
+00000506                      660  	mov #_PduR_BswModuleConfigData, r10
+00000506 2A0600000000            -- mov         0x0,r10
+0000050C C551                 661  	add r5, r10
+0000050E 2A2F2500             662  	ld.w 0x00000024[r10], r5
+00000512                      663  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 1092
+00000512 602A                 664  	cmp 0x00000000, r5
+00000514 8205                 665  	bz9 .BB.LABEL.16_2
+00000516                      666  .BB.LABEL.16_1:	; if_then_bb
+00000516                      667  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 1079
+00000516 22171100             668  	ld.w 0x00000010[r2], r2
+0000051A C232                 669  	shl 0x00000002, r6
+0000051C C611                 670  	add r6, r2
+0000051E                      671  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 1094
+0000051E E2370300             672  	ld.hu 0x00000002[r2], r6
+00000522 E5C760F9             673  	jarl [r5], r31
+00000526 40063F00             674  	dispose 0x00000000, 0x00000001, [r31]
+0000052A                      675  .BB.LABEL.16_2:	; if_break_bb
+0000052A                      676  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 0
+0000052A 0152                 677  	mov 0x00000001, r10
+0000052C                      678  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 1097
+0000052C 40063F00             679  	dispose 0x00000000, 0x00000001, [r31]
+00000530                      680  _PduR_TpTxConfirmationForward.1:
+00000530                      681  	.stack _PduR_TpTxConfirmationForward.1 = 4
+00000530                      682  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 1102
+00000530 80072100             683  	prepare 0x00000001, 0x00000000
+00000534                      684  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 1104
+00000534 40160000             685  	movhi HIGHW1(#_PduR_ConfigStd), r0, r2
+00000538 22170100             686  	ld.w LOWW(#_PduR_ConfigStd)[r2], r2
+0000053C 222F1100             687  	ld.w 0x00000010[r2], r5
+00000540 0640                 688  	mov r6, r8
+00000542 C242                 689  	shl 0x00000002, r8
+00000544 C829                 690  	add r8, r5
+00000546 A52F0100             691  	ld.bu 0x00000001[r5], r5
+0000054A                      692  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 1115
+0000054A E52E3800             693  	mulhi 0x00000038, r5, r5
+0000054E                      694  	mov #_PduR_BswModuleConfigData, r8
+0000054E 280600000000            -- mov         0x0,r8
+00000554 C541                 695  	add r5, r8
+00000556 282F2900             696  	ld.w 0x00000028[r8], r5
+0000055A                      697  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 1117
+0000055A 602A                 698  	cmp 0x00000000, r5
+0000055C 8205                 699  	bz9 .BB.LABEL.17_2
+0000055E                      700  .BB.LABEL.17_1:	; if_then_bb
+0000055E                      701  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 1105
+0000055E 22171100             702  	ld.w 0x00000010[r2], r2
+00000562 C232                 703  	shl 0x00000002, r6
+00000564 C611                 704  	add r6, r2
+00000566                      705  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 1119
+00000566 E2370300             706  	ld.hu 0x00000002[r2], r6
+0000056A E5C760F9             707  	jarl [r5], r31
+0000056E                      708  .BB.LABEL.17_2:	; return
+0000056E                      709  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 1121
+0000056E 40063F00             710  	dispose 0x00000000, 0x00000001, [r31]
+00000572                      711  _PduR_StartOfReceptionForward:
+00000572                      712  	.stack _PduR_StartOfReceptionForward = 4
+00000572                      713  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 1129
+00000572 80072100             714  	prepare 0x00000001, 0x00000000
+00000576                      715  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 1135
+00000576 40160000             716  	movhi HIGHW1(#_PduR_ConfigStd), r0, r2
+0000057A 22170100             717  	ld.w LOWW(#_PduR_ConfigStd)[r2], r2
+0000057E 222F1500             718  	ld.w 0x00000014[r2], r5
+00000582 0650                 719  	mov r6, r10
+00000584 F4574002             720  	mul 0x00000014, r10, r0
+00000588 CA29                 721  	add r10, r5
+0000058A 852F0100             722  	ld.bu 0x00000000[r5], r5
+0000058E                      723  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 1147
+0000058E E52E3800             724  	mulhi 0x00000038, r5, r5
+00000592                      725  	mov #_PduR_BswModuleConfigData, r10
+00000592 2A0600000000            -- mov         0x0,r10
+00000598 C551                 726  	add r5, r10
+0000059A 2A2F2D00             727  	ld.w 0x0000002C[r10], r5
+0000059E                      728  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 1149
+0000059E 602A                 729  	cmp 0x00000000, r5
+000005A0 8205                 730  	bz9 .BB.LABEL.18_2
+000005A2                      731  .BB.LABEL.18_1:	; if_then_bb
+000005A2                      732  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 1136
+000005A2 22171500             733  	ld.w 0x00000014[r2], r2
+000005A6 F4374002             734  	mul 0x00000014, r6, r0
+000005AA C611                 735  	add r6, r2
+000005AC                      736  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 1151
+000005AC E2370900             737  	ld.hu 0x00000008[r2], r6
+000005B0 E5C760F9             738  	jarl [r5], r31
+000005B4 40063F00             739  	dispose 0x00000000, 0x00000001, [r31]
+000005B8                      740  .BB.LABEL.18_2:	; if_break_bb
+000005B8                      741  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 0
+000005B8 0152                 742  	mov 0x00000001, r10
+000005BA                      743  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 1154
+000005BA 40063F00             744  	dispose 0x00000000, 0x00000001, [r31]
+000005BE                      745  _PduR_CopyRxDataForward:
+000005BE                      746  	.stack _PduR_CopyRxDataForward = 4
+000005BE                      747  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 1162
+000005BE 80072100             748  	prepare 0x00000001, 0x00000000
+000005C2                      749  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 1167
+000005C2 40160000             750  	movhi HIGHW1(#_PduR_ConfigStd), r0, r2
+000005C6 22170100             751  	ld.w LOWW(#_PduR_ConfigStd)[r2], r2
+000005CA 222F1500             752  	ld.w 0x00000014[r2], r5
+000005CE 0648                 753  	mov r6, r9
+000005D0 F44F4002             754  	mul 0x00000014, r9, r0
+000005D4 C929                 755  	add r9, r5
+000005D6 852F0100             756  	ld.bu 0x00000000[r5], r5
+000005DA                      757  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 1180
+000005DA E52E3800             758  	mulhi 0x00000038, r5, r5
+000005DE                      759  	mov #_PduR_BswModuleConfigData, r9
+000005DE 290600000000            -- mov         0x0,r9
+000005E4 C549                 760  	add r5, r9
+000005E6 292F3100             761  	ld.w 0x00000030[r9], r5
+000005EA                      762  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 1182
+000005EA 602A                 763  	cmp 0x00000000, r5
+000005EC 8205                 764  	bz9 .BB.LABEL.19_2
+000005EE                      765  .BB.LABEL.19_1:	; if_then_bb
+000005EE                      766  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 1168
+000005EE 22171500             767  	ld.w 0x00000014[r2], r2
+000005F2 F4374002             768  	mul 0x00000014, r6, r0
+000005F6 C611                 769  	add r6, r2
+000005F8                      770  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 1185
+000005F8 E2370900             771  	ld.hu 0x00000008[r2], r6
+000005FC E5C760F9             772  	jarl [r5], r31
+00000600 40063F00             773  	dispose 0x00000000, 0x00000001, [r31]
+00000604                      774  .BB.LABEL.19_2:	; if_break_bb
+00000604                      775  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 0
+00000604 0152                 776  	mov 0x00000001, r10
+00000606                      777  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 1188
+00000606 40063F00             778  	dispose 0x00000000, 0x00000001, [r31]
+0000060A                      779  _PduR_TpRxIndicationForward:
+0000060A                      780  	.stack _PduR_TpRxIndicationForward = 4
+0000060A                      781  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 1196
+0000060A 80072100             782  	prepare 0x00000001, 0x00000000
+0000060E                      783  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 1198
+0000060E 40160000             784  	movhi HIGHW1(#_PduR_ConfigStd), r0, r2
+00000612 22170100             785  	ld.w LOWW(#_PduR_ConfigStd)[r2], r2
+00000616 222F1500             786  	ld.w 0x00000014[r2], r5
+0000061A 0640                 787  	mov r6, r8
+0000061C F4474002             788  	mul 0x00000014, r8, r0
+00000620 C829                 789  	add r8, r5
+00000622 852F0100             790  	ld.bu 0x00000000[r5], r5
+00000626                      791  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 1210
+00000626 E52E3800             792  	mulhi 0x00000038, r5, r5
+0000062A                      793  	mov #_PduR_BswModuleConfigData, r8
+0000062A 280600000000            -- mov         0x0,r8
+00000630 C541                 794  	add r5, r8
+00000632 282F3500             795  	ld.w 0x00000034[r8], r5
+00000636                      796  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 1212
+00000636 602A                 797  	cmp 0x00000000, r5
+00000638 8205                 798  	bz9 .BB.LABEL.20_2
+0000063A                      799  .BB.LABEL.20_1:	; if_then_bb
+0000063A                      800  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 1199
+0000063A 22171500             801  	ld.w 0x00000014[r2], r2
+0000063E F4374002             802  	mul 0x00000014, r6, r0
+00000642 C611                 803  	add r6, r2
+00000644                      804  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 1215
+00000644 E2370900             805  	ld.hu 0x00000008[r2], r6
+00000648 E5C760F9             806  	jarl [r5], r31
+0000064C                      807  .BB.LABEL.20_2:	; return
+0000064C                      808  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 1217
+0000064C 40063F00             809  	dispose 0x00000000, 0x00000001, [r31]
+00000650                      810  _PduR_RouteInit:
+00000650                      811  	.stack _PduR_RouteInit = 0
+00000650                      812  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 1223
+00000650 0012                 813  	mov 0x00000000, r2
+00000652 8505                 814  	br9 .BB.LABEL.21_2
+00000654                      815  .BB.LABEL.21_1:	; bb
+00000654                      816  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 1229
+00000654 C22EFFFF             817  	andi 0x0000FFFF, r2, r5
+00000658 C22A                 818  	shl 0x00000002, r5
+0000065A                      819  	mov #_PduR_DestinationRouteStatus, r6
+0000065A 260600000000            -- mov         0x0,r6
+00000660 C531                 820  	add r5, r6
+00000662 66070100             821  	st.w r0, 0x00000000[r6]
+00000666 4112                 822  	add 0x00000001, r2
+00000668                      823  .BB.LABEL.21_2:	; bb8
+00000668                      824  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 1227
+00000668 C22EFFFF             825  	andi 0x0000FFFF, r2, r5
+0000066C 2036AD00             826  	movea 0x000000AD, r0, r6
+00000670 E629                 827  	cmp r6, r5
+00000672 8105                 828  	bl9 .BB.LABEL.21_1
+00000674                      829  .BB.LABEL.21_3:	; bb8.bb20_crit_edge
+00000674                      830  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 0
+00000674 0012                 831  	mov 0x00000000, r2
+00000676 8505                 832  	br9 .BB.LABEL.21_5
+00000678                      833  .BB.LABEL.21_4:	; bb14
+00000678                      834  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 1234
+00000678 C22EFFFF             835  	andi 0x0000FFFF, r2, r5
+0000067C C22A                 836  	shl 0x00000002, r5
+0000067E                      837  	mov #_PduR_SourceRouteStatus, r6
+0000067E 260600000000            -- mov         0x0,r6
+00000684 C531                 838  	add r5, r6
+00000686 66070100             839  	st.w r0, 0x00000000[r6]
+0000068A 4112                 840  	add 0x00000001, r2
+0000068C                      841  .BB.LABEL.21_5:	; bb20
+0000068C                      842  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 1232
+0000068C C22EFFFF             843  	andi 0x0000FFFF, r2, r5
+00000690 2036AD00             844  	movea 0x000000AD, r0, r6
+00000694 E629                 845  	cmp r6, r5
+00000696 8105                 846  	bl9 .BB.LABEL.21_4
+00000698                      847  .BB.LABEL.21_6:	; return
+00000698                      848  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/PDUR/PduR_Route.c", 1237
+00000698 7F00                 849  	jmp [r31]
+
+Section List
+Attr     Size                Name
+
+TEXT         1690 (0000069A) .text
+
+Command Line Parameter
+-Xcpu=g3kh -Xreg_mode=32 -Xep=callee -Xcharacter_set=none -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\diagnostic -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\parameter_store -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu\port -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu\uart -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu\iic -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\vehicle_data_to_mpu -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\power_manage -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\mcu_cpu_sync -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\remote_control -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\can_cycle_send -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\project_configure -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\sdk\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\commonLib\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\hal\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\icu\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Icu_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\vss -ID:\wk\sirun\project\dazhong\code\mcu_app\ASW\CDD_FVM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\EEIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanTSyn -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\StbM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CSM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\RSA -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\RandomGen\CTR_DRBG -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\MAC\CMAC -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\Hash\sha256 -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\dh -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\AES -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CryInterface -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\SecOC -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\NvM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\MemIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\Fee -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\WdgM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\WdgIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Wdg_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Gpt_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Fls_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\wdg\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\gpt\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\fls\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\IpduM -ID:\wk\sirun\project\dazhong\code\mcu_app\ASW\APP -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\BswM -ID:\wk\sirun\project\dazhong\code\mcu_app\ASW\BSW_Ext -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\Dcm -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanTp -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Dem -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Libraries\E2E -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Libraries\Crc -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\NmIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanNm -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config\RTE\Rte -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config\RTE\SchM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Libraries\IStd -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\EcuM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\ComM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanSM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\Com -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\PDUR -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\CommonInclude -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config\RH850F1K -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Extend\inc -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Kernel\inc -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Portable\Mcu -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Portable\Processor -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Adc_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Can_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Dio_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Mcu_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Port_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\adc\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\can\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\dio\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\general -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\mcu\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\port\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\CanGeneral\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\Det\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\MemIf\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\SchM\include -DRH850_F1KM_S1_2MB -Xprn_path=DefaultBuild -Xno_warning=50013 -oD:\wk\sirun\project\dazhong\code\mcu_app\Toolchain\CSPLUS_V81200\DefaultBuild\PduR_Route.obj D:\wk\sirun\project\dazhong\code\mcu_app\Toolchain\CSPLUS_V81200\DefaultBuild\PduR_Route.asm 
+

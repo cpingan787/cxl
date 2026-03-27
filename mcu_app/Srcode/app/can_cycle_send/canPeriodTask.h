@@ -147,6 +147,16 @@ void canPeriodTaskMain(void *pvParameters);
 
 #endif
 
+typedef struct
+{
+  uint8_t year;
+  uint8_t month;
+  uint8_t day;
+  uint8_t hour;
+  uint8_t min;
+  uint8_t sec;
+}VehicleTime_t;
+
 /*************************************************
   Function:       CanPeriodCycleProcess
   Description:    Aes ecb 计算初始化
@@ -157,6 +167,17 @@ void canPeriodTaskMain(void *pvParameters);
   Others:
 *************************************************/
 int16_t CanPeriodCycleProcess(void);
+
+/*************************************************
+  Function:       CanPeriodGetVehTime
+  Description:    获取整车时间
+  Input:          
+  Output:         无
+  Return:         0：成功
+                  -1：失败
+  Others:
+*************************************************/
+uint8_t CanPeriodGetVehTime(uint8_t *year,uint8_t *month,uint8_t *day,uint8_t *hour,uint8_t *min,uint8_t *sec);
 
 #endif
 

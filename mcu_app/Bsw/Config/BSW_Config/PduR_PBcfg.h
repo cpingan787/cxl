@@ -394,7 +394,9 @@
 #define PDUR_DESTPDU_SecOC_synthesized_IAM_ZONE_CONNCA_0000_CONTROLLER_0_IAM_TxAuthentic          171u
 #define PDUR_DESTPDU_SecOC_synthesized_IAM_ZONE_CONNCANFD_E_CONTROLLER_0_IAM_TxAuthentic          172u
 
-#define PDUR_ROUTING_PATH_GROUP_SUM        0u
+#define PDUR_ROUTING_PATH_GROUP_SUM        1u
+
+#define PduRRoutingPathGroup_Diag          0u
 
 #define PDUR_DEFAULT_VALUE_LENGTH           0u
 #define PDUR_DEFAULT_VALUE_PDU                  0u

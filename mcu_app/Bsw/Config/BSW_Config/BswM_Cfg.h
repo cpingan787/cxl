@@ -14,7 +14,7 @@
  *  @MCU                : R7F7015833
  *  @file               : BswM_Cfg.h
  *  @author             : iSoft
- *  @date               : 2026-02-25 15:25:45
+ *  @date               : 2026-03-13 14:19:54
  *  @vendor             : iSoft
  *  @description        : 
  *  @specification(S)   : AUTOSAR Classic Platform R19-11
@@ -40,6 +40,7 @@
 #include "Dcm.h"
 #include "EcuM.h"
 #include "Com.h"
+#include "PduR.h"
 #include "BswM_Ext.h"
 
 /*******************************************************************************
@@ -109,7 +110,7 @@
 #define BSWM_NM_ENABLED                        STD_ON
 
 /*BswMPduREnabled, calculated according to the action existence*/
-#define BSWM_PDUR_ENABLED                   STD_OFF          /* create Pdur */
+#define BSWM_PDUR_ENABLED                   STD_ON          /* create Pdur */
 
 /*BswMNvMEnabled*/
 #define BSWM_NVM_ENABLED                    STD_OFF
@@ -169,7 +170,7 @@
 
 #define BSWM_ACTION_PDUGROUPSWITCH_ENABLED    STD_ON    /* BswMPduGroupSwitch */
 
-#define BSWM_ACTION_PDUROUTERCONTROL_ENABLED    STD_OFF    /* BswMPduRouterControl */
+#define BSWM_ACTION_PDUROUTERCONTROL_ENABLED    STD_ON    /* BswMPduRouterControl */
 
 #define BSWM_ACTION_RTEMODEREQUEST_ENABLED    STD_OFF    /* BswMRteModeRequest */
 

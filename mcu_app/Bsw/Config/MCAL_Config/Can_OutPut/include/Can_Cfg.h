@@ -76,8 +76,9 @@
  *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\stubs\4.2.2\Dem\xml\Dem_Can.arxml
  *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\stubs\4.2.2\EcuM\xml\EcuM_can.arxml
  *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\stubs\4.2.2\Os\xml\Os_Can.arxml
+ *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\Config\ECUC\test_EcuM_EcuM_ecuc.arxml
  *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\common_family\generator\Sample_Application_F1x.trxml
- * GENERATED ON:  27 Jan 2026 - 05:47:31
+ * GENERATED ON:  20 Mar 2026 - 04:11:27
  */
 
 #ifndef CAN_CFG_H
@@ -150,7 +151,7 @@
 #define CAN_SET_BAUDRATE_API                            STD_ON
 
 /* Pre-compile option for Can_CheckWakeup API */
-#define CAN_CHECK_WAKEUP_API                            STD_OFF
+#define CAN_CHECK_WAKEUP_API                            STD_ON
 
 /* Pre-compile option for Version Info API */
 #define CAN_VERSION_INFO_API                            STD_ON
@@ -174,10 +175,10 @@
 #define CAN_CRITICAL_SECTION_PROTECTION                 STD_ON
 
 /* Pre-compile option for Can Wakeup Support */
-#define CAN_WAKEUP_SUPPORT                              STD_OFF
+#define CAN_WAKEUP_SUPPORT                              STD_ON
 
 /* Pre-compile option for External Module Version Check */
-#define CAN_VERSION_CHECK_EXT_MODULES                   STD_ON
+#define CAN_VERSION_CHECK_EXT_MODULES                   STD_OFF
 
 /* Pre-compile option for Wakeup Interrupt */
 #define CAN_WAKEUP_POLLING                              STD_OFF

@@ -121,14 +121,15 @@
 #define NvMBlock_27Key_error_count               50U
 #define NvMBlock_SecOc_count               51U
 #define NvMBlock_SecOc_Key               52U
+#define NvMBlock_DID0100               53U
 
 /*The total number of user configured*/
-#define NVM_BLOCK_NUM_ALL                                 52U
+#define NVM_BLOCK_NUM_ALL                                 53U
 #define NVM_REDUNDANT_ALL                                  1U
 
 #define NVM_MAX_LENGTH_CONFIGED_RAM_MIRROR                0U
 
-#define NVM_MAX_LENGTH_NV_BLOCK                            3132U
+#define NVM_MAX_LENGTH_NV_BLOCK                            2478U
 #define NVM_MAX_LENGTH_REDUNDANT_BLOCK                    2U
 
 #if (STD_ON==NVM_JOB_PRIORITIZATION)
@@ -188,6 +189,7 @@ extern VAR(uint8, NVM_VAR_NOINIT) NvMBlockRamBuffer49[254];
 extern VAR(uint8, NVM_VAR_NOINIT) NvMBlockRamBuffer50[1];
 extern VAR(uint8, NVM_VAR_NOINIT) NvMBlockRamBuffer51[4];
 extern VAR(uint8, NVM_VAR_NOINIT) NvMBlockRamBuffer52[16];
+extern VAR(uint8, NVM_VAR_NOINIT) NvMBlockRamBuffer53[16];
 
 extern VAR(uint32, NVM_VAR_NOINIT) NvMCrcBuf_NvMBlock_ConfigID[1];
 extern VAR(uint32, NVM_VAR_NOINIT) NvMCrcBuf_NvMBlock_DIDF1A9[1];
@@ -241,6 +243,7 @@ extern VAR(uint32, NVM_VAR_NOINIT) NvMCrcBuf_NvMBlock_Reserved_block2[1];
 extern VAR(uint32, NVM_VAR_NOINIT) NvMCrcBuf_NvMBlock_27Key_error_count[1];
 extern VAR(uint32, NVM_VAR_NOINIT) NvMCrcBuf_NvMBlock_SecOc_count[1];
 extern VAR(uint32, NVM_VAR_NOINIT) NvMCrcBuf_NvMBlock_SecOc_Key[1];
+extern VAR(uint32, NVM_VAR_NOINIT) NvMCrcBuf_NvMBlock_DID0100[1];
 
 #endif /* End of NVM_CFG_H*/
 /*******************************************************************************

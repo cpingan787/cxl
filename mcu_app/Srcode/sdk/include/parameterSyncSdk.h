@@ -13,6 +13,33 @@ Copyright ? 2024 SiRun (Beijing) . All rights reserved.
 #include "stdint.h"
 #include "mpuHal.h"
 
+typedef enum
+{
+    E_PARAMID_ICCID                                   =     0	 ,
+    E_PARAMID_IMEI                                    =     1	 ,
+    E_PARAMID_IMSI                                    =     2	 ,
+    E_PARAMID_SN                                      =     3	 ,
+    E_PARAMID_VIN                                     =     4	 ,
+    E_PARAMID_TSPAddr                                 =     5	 ,
+    E_PARAMID_TSPPort                                 =     6	 ,
+    E_PARAMID_GB32960Addr                             =     7	 ,
+    E_PARAMID_GB329060Port                            =     8	 ,
+    E_PARAMID_HJ1239Addr                              =     9	 ,
+    E_PARAMID_HJ1239Port                              =     10	 ,
+    E_PARAMID_ECallNumber                             =     11	 ,
+    E_PARAMID_BCallNumber                             =     12	 ,
+    E_PARAMID_ICallNumber                             =     13	 ,
+    E_PARAMID_SW_Version                              =     14	 ,
+    E_PARAMID_HW_Version                              =     15	 ,
+    E_PARAMID_CustomSW_Version                        =     16	 ,
+    E_PARAMID_CarVersion                              =     17	 ,
+    E_PARAMID_ManufactureData                         =     18	 ,
+    E_PARAMID_ParatNumber                             =     19	 ,
+    E_PARAMID_SupIdentifier                           =     20	 ,
+
+    E_PARAMETER_ITEM_NUM_MAX,
+}ParameterItemId_e;
+
 /*************************************************
   Function:       pMcuParametFun_t
   Description:    参数读写回调函数定义
@@ -92,8 +119,7 @@ int16_t ParameterSyncSdkGetFromCpuIsFinished(void);
 
 
 
-
-
-
-
+int16_t McuParameterWrite(uint8_t parameterItem, uint8_t *parameterData, uint16_t pDataLength);
+int16_t McuParameterRead(uint8_t parameterItem, uint8_t *parameterData, uint16_t *pDataLength);
+uint8_t IsFlashDataValid(uint8_t *data, uint16_t len);
 #endif

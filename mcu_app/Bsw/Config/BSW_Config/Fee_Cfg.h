@@ -14,7 +14,7 @@
  *  @MCU                : R7F7015833
  *  @file               : Fee_Cfg.h
  *  @author             : iSoft
- *  @date               : 2026-02-02 10:10:34
+ *  @date               : 2026-03-16 09:26:39
  *  @vendor             : iSoft
  *  @description        : 
  *  @specification(S)   : AUTOSAR Classic Platform R19-11
@@ -64,15 +64,15 @@
 
 #define FEE_CANCEL_API                               STD_OFF
 
-#define FEE_BLOCK_MAX                                53u
+#define FEE_BLOCK_MAX                                54u
 
 #define FEE_CLUSTER_GROUP_NUM                        1u
 
 #define CLUSTER_NUMBER_OF_FEECLUSTERGRP                     2u
 
-#define FEE_ERASED_VALUE                             0xffu
+#define FEE_ERASED_VALUE                             0xffu /**manually add */
 
-#define FEE_BUFFER_SIZE                              3136u
+#define FEE_BUFFER_SIZE                              3280u
 
 #define FEE_INITERROR_NOTIFICATION
 

@@ -1,0 +1,718 @@
+RH850 Family Assembler V2.07.00.03 Assemble Source List
+
+OFFSET   CODE                  NO  SOURCE STATEMENT
+
+00000000                        1  #CC-RH Compiler RH850 Assembler Source
+00000000                        2  #@	CC-RH Version : V2.07.00  [06 Dec 2024]
+00000000                        3  #@	Command : ..\..\ASW\APP\Queue_Fifo.c -oDefaultBuild\Queue_Fifo.obj -Xcpu=g3kh -Xno_warning=20188,20111 -g -g_line -I..\..\Srcode\app\diagnostic -I..\..\Srcode\app\parameter_store -I..\..\Cpu\port -I..\..\Cpu\uart -I..\..\Cpu\iic -I..\..\Srcode\app\vehicle_data_to_mpu -I..\..\Srcode\app\power_manage -I..\..\Srcode\app\mcu_cpu_sync -I..\..\Srcode\app\remote_control -I..\..\Srcode\app\can_cycle_send -I..\..\Srcode\app\project_configure -I..\..\Srcode\sdk\include -I..\..\Srcode\commonLib\include -I..\..\Srcode\hal\include -I..\..\Bsw\Mcal\icu\include -I..\..\Bsw\Config\MCAL_Config\Icu_OutPut\include -I..\..\Bsw\Crypto\CRYPTO\vss -I..\..\ASW\CDD_FVM -I..\..\Bsw\Memory\EEIf -I..\..\Bsw\Communication\CAN\CanTSyn -I..\..\Bsw\SystemServices\StbM -I..\..\Bsw\Crypto\CSM -I..\..\Bsw\Crypto\CRYPTO\RSA -I..\..\Bsw\Crypto\CRYPTO\RandomGen\CTR_DRBG -I..\..\Bsw\Crypto\CRYPTO\MAC\CMAC -I..\..\Bsw\Crypto\CRYPTO\Hash\sha256 -I..\..\Bsw\Crypto\CRYPTO\dh -I..\..\Bsw\Crypto\CRYPTO\AES -I..\..\Bsw\Crypto\CRYPTO -I..\..\Bsw\Crypto\CryInterface -I..\..\Bsw\Communication\Common\SecOC -I..\..\Bsw\Memory\NvM -I..\..\Bsw\Memory\MemIf -I..\..\Bsw\Memory\Fee -I..\..\Bsw\SystemServices\WdgM -I..\..\Bsw\SystemServices\WdgIf -I..\..\Bsw\Config\MCAL_Config\Wdg_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Gpt_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Fls_OutPut\include -I..\..\Bsw\Mcal\wdg\include -I..\..\Bsw\Mcal\gpt\include -I..\..\Bsw\Mcal\fls\include -I..\..\Bsw\Communication\Common\IpduM -I..\..\ASW\APP -I..\..\Bsw\SystemServices\BswM -I..\..\ASW\BSW_Ext -I..\..\Bsw\Communication\Common\Dcm -I..\..\Bsw\Communication\CAN\CanTp -I..\..\Bsw\SystemServices\Dem -I..\..\Bsw\Libraries\E2E -I..\..\Bsw\Libraries\Crc -I..\..\Bsw\Communication\Common\NmIf -I..\..\Bsw\Communication\CAN\CanNm -I..\..\Bsw\Config\BSW_Config\RTE\Rte -I..\..\Bsw\Config\BSW_Config\RTE\SchM -I..\..\Bsw\Libraries\IStd -I..\..\Bsw\SystemServices\EcuM -I..\..\Bsw\SystemServices\ComM -I..\..\Bsw\Communication\CAN\CanSM -I..\..\Bsw\Communication\CAN\CanIf -I..\..\Bsw\Communication\Common\Com -I..\..\Bsw\Communication\Common\PDUR -I..\..\Cpu -I..\..\Bsw\CommonInclude -I..\..\Bsw\Config\BSW_Config -I..\..\Bsw\Config\BSW_Config\RH850F1K -I..\..\Bsw\SystemServices\Os\Extend\inc -I..\..\Bsw\SystemServices\Os\Kernel\inc -I..\..\Bsw\SystemServices\Os\Portable\Mcu -I..\..\Bsw\SystemServices\Os\Portable\Processor -I..\..\Bsw\Config\MCAL_Config\Adc_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Can_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Dio_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Mcu_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Port_OutPut\include -I..\..\Bsw\Mcal\adc\include -I..\..\Bsw\Mcal\can\include -I..\..\Bsw\Mcal\dio\include -I..\..\Bsw\Mcal\general -I..\..\Bsw\Mcal\mcu\include -I..\..\Bsw\Mcal\port\include -I..\..\Bsw\Mcal\stubs\CanGeneral\include -I..\..\Bsw\Mcal\stubs\Det\include -I..\..\Bsw\Mcal\stubs\MemIf\include -I..\..\Bsw\Mcal\stubs\SchM\include -DRH850_F1KM_S1_2MB -lang=c99 -Xfloat=fpu -Xround=zero -Xdiv -Xasm_path=DefaultBuild -Xasm_option=-Xprn_path=DefaultBuild -c -MAKEUD=DefaultBuild -Xexec_time=C:\Users\xlchen\AppData\Local\Temp\CSPlusBuildTool_17ef281b621b4a6b9a28a0b6033d10a2dgnlxkge.50y
+00000000                        4  #@	compiled at Fri Mar 27 09:50:02 2026
+00000000                        5  
+00000000                        6  	.file "..\..\ASW\APP\Queue_Fifo.c"
+00000000                        7  
+00000000                        8  	$reg_mode 32
+00000000                        9  	.dbl_size 8
+00000000                       10  
+00000000                       11  	.public _my_memcpy
+00000000                       12  	.public _queue_init
+00000000                       13  	.public _queue_write
+00000000                       14  	.public _queue_peek
+00000000                       15  	.public _queue_read
+00000000                       16  	.public _queue_process
+00000000                       17  	.public _queue_is_empty
+00000000                       18  	.public _queue_is_full
+00000000                       19  	.public _queue_is_overflow
+00000000                       20  	.public _queue_get_count
+00000000                       21  	.public _queue_get_overflow_count
+00000000                       22  	.public _queue_get_free_space
+00000000                       23  	.public _queue_clear
+00000000                       24  	.public _queue_reset_stats
+00000000                       25  	.public _queue_get_name
+00000000                       26  	.public _queue_is_initialized
+00000000                       27  	.public _queue_set_lock
+00000000                       28  	.public _queue_get_max_size
+00000000                       29  	.public _queue_get_max_data_size
+00000000                       30  
+00000000                       31  	.section .text, text
+00000000                       32  _queue_lock.1:
+00000000                       33  	.stack _queue_lock.1 = 0
+00000000                       34  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 7
+00000000 7F00                  35  	jmp [r31]
+00000002                       36  _queue_unlock.1:
+00000002                       37  	.stack _queue_unlock.1 = 0
+00000002                       38  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 17
+00000002 7F00                  39  	jmp [r31]
+00000004                       40  _my_memcpy:
+00000004                       41  	.stack _my_memcpy = 0
+00000004                       42  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 24
+00000004 6032                  43  	cmp 0x00000000, r6
+00000006                       44  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 27
+00000006 8205                  45  	bz9 .BB.LABEL.3_6
+00000008                       46  .BB.LABEL.3_1:	; entry
+00000008                       47  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 0
+00000008 603A                  48  	cmp 0x00000000, r7
+0000000A 8205                  49  	bz9 .BB.LABEL.3_6
+0000000C                       50  .BB.LABEL.3_2:	; entry
+0000000C 6042                  51  	cmp 0x00000000, r8
+0000000E 8205                  52  	bz9 .BB.LABEL.3_6
+00000010                       53  .BB.LABEL.3_3:	; entry.bb41_crit_edge
+00000010 0012                  54  	mov 0x00000000, r2
+00000012 8505                  55  	br9 .BB.LABEL.3_5
+00000014                       56  .BB.LABEL.3_4:	; bb31
+00000014                       57  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 38
+00000014 0728                  58  	mov r7, r5
+00000016 C229                  59  	add r2, r5
+00000018 052F0000              60  	ld.b 0x00000000[r5], r5
+0000001C 0648                  61  	mov r6, r9
+0000001E C249                  62  	add r2, r9
+00000020 492F0000              63  	st.b r5, 0x00000000[r9]
+00000024 4112                  64  	add 0x00000001, r2
+00000026                       65  .BB.LABEL.3_5:	; bb41
+00000026                       66  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 36
+00000026 E811                  67  	cmp r8, r2
+00000028 8105                  68  	bl9 .BB.LABEL.3_4
+0000002A                       69  .BB.LABEL.3_6:	; return
+0000002A                       70  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 42
+0000002A 7F00                  71  	jmp [r31]
+0000002C                       72  _queue_init:
+0000002C                       73  	.stack _queue_init = 16
+0000002C                       74  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 47
+0000002C 8007210E              75  	prepare 0x00000071, 0x00000000
+00000030 08A0                  76  	mov r8, r20
+00000032 06AE0000              77  	addi 0x00000000, r6, r21
+00000036                       78  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 49
+00000036 8205                  79  	bz9 .BB.LABEL.4_2
+00000038                       80  .BB.LABEL.4_1:	; if_break_bb
+00000038                       81  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 0
+00000038 00B2                  82  	mov 0x00000000, r22
+0000003A 20466402              83  	movea 0x00000264, r0, r8
+0000003E                       84  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 54
+0000003E 1530                  85  	mov r21, r6
+00000040 1638                  86  	mov r22, r7
+00000042 80FF0000              87  	jarl _my_memcpy, r31
+00000046                       88  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 57
+00000046 75074002              89  	st.h r0, 0x00000240[r21]
+0000004A                       90  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 58
+0000004A 75074202              91  	st.h r0, 0x00000242[r21]
+0000004E                       92  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 59
+0000004E 75074402              93  	st.h r0, 0x00000244[r21]
+00000052                       94  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 60
+00000052 75074602              95  	st.h r0, 0x00000246[r21]
+00000056                       96  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 61
+00000056 55074802              97  	st.b r0, 0x00000248[r21]
+0000005A 0112                  98  	mov 0x00000001, r2
+0000005C                       99  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 62
+0000005C 55174902             100  	st.b r2, 0x00000249[r21]
+00000060                      101  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 63
+00000060 75A75D02             102  	st.w r20, 0x0000025C[r21]
+00000064                      103  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 64
+00000064 75076102             104  	st.w r0, 0x00000260[r21]
+00000068                      105  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 75
+00000068 1650                 106  	mov r22, r10
+0000006A 40063F0E             107  	dispose 0x00000000, 0x00000071, [r31]
+0000006E                      108  .BB.LABEL.4_2:	; bb27
+0000006E                      109  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 0
+0000006E 0352                 110  	mov 0x00000003, r10
+00000070                      111  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 76
+00000070 40063F0E             112  	dispose 0x00000000, 0x00000071, [r31]
+00000074                      113  _queue_write:
+00000074                      114  	.stack _queue_write = 20
+00000074                      115  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 81
+00000074 8007210F             116  	prepare 0x00000079, 0x00000000
+00000078 08A0                 117  	mov r8, r20
+0000007A 07A8                 118  	mov r7, r21
+0000007C 06B60000             119  	addi 0x00000000, r6, r22
+00000080                      120  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 82
+00000080 8A05                 121  	bnz9 .BB.LABEL.5_2
+00000082                      122  .BB.LABEL.5_1:	; entry.bb122_crit_edge
+00000082                      123  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 0
+00000082 0452                 124  	mov 0x00000004, r10
+00000084 8505                 125  	br9 .BB.LABEL.5_12
+00000086                      126  .BB.LABEL.5_2:	; bb
+00000086 B6174902             127  	ld.bu 0x00000249[r22], r2
+0000008A 6012                 128  	cmp 0x00000000, r2
+0000008C 8205                 129  	bz9 .BB.LABEL.5_1
+0000008E                      130  .BB.LABEL.5_3:	; if_break_bb
+0000008E                      131  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 86
+0000008E 60AA                 132  	cmp 0x00000000, r21
+00000090 8205                 133  	bz9 .BB.LABEL.5_5
+00000092                      134  .BB.LABEL.5_4:	; if_break_bb
+00000092                      135  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 0
+00000092 60A2                 136  	cmp 0x00000000, r20
+00000094 8A05                 137  	bnz9 .BB.LABEL.5_6
+00000096                      138  .BB.LABEL.5_5:	; if_break_bb.bb122_crit_edge
+00000096 0352                 139  	mov 0x00000003, r10
+00000098 8505                 140  	br9 .BB.LABEL.5_12
+0000009A                      141  .BB.LABEL.5_6:	; bb42
+0000009A 1406F0FF             142  	addi 0xFFFFFFF0, r20, r0
+0000009E 8F05                 143  	bgt9 .BB.LABEL.5_5
+000000A0                      144  .BB.LABEL.5_7:	; if_break_bb57
+000000A0                      145  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 90
+000000A0 1630                 146  	mov r22, r6
+000000A2 80FF0000             147  	jarl _queue_lock.1, r31
+000000A6                      148  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 93
+000000A6 F6174502             149  	ld.hu 0x00000244[r22], r2
+000000AA 0206E0FF             150  	addi 0xFFFFFFE0, r2, r0
+000000AE 8605                 151  	blt9 .BB.LABEL.5_11
+000000B0                      152  .BB.LABEL.5_8:	; if_then_bb66
+000000B0                      153  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 0
+000000B0 01A2                 154  	mov 0x00000001, r20
+000000B2                      155  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 94
+000000B2 56A74802             156  	st.b r20, 0x00000248[r22]
+000000B6                      157  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 95
+000000B6 36A74602             158  	ld.h 0x00000246[r22], r20
+000000BA 41A2                 159  	add 0x00000001, r20
+000000BC 76A74602             160  	st.h r20, 0x00000246[r22]
+000000C0                      161  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 98
+000000C0 36A75D02             162  	ld.w 0x0000025C[r22], r20
+000000C4 60A2                 163  	cmp 0x00000000, r20
+000000C6 8205                 164  	bz9 .BB.LABEL.5_10
+000000C8                      165  .BB.LABEL.5_9:	; if_then_bb79
+000000C8                      166  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 99
+000000C8 1630                 167  	mov r22, r6
+000000CA F4C760F9             168  	jarl [r20], r31
+000000CE                      169  .BB.LABEL.5_10:	; if_break_bb84
+000000CE                      170  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 102
+000000CE 1630                 171  	mov r22, r6
+000000D0 80FF0000             172  	jarl _queue_unlock.1, r31
+000000D4 0152                 173  	mov 0x00000001, r10
+000000D6                      174  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 103
+000000D6 40063F0F             175  	dispose 0x00000000, 0x00000079, [r31]
+000000DA                      176  .BB.LABEL.5_11:	; if_break_bb87
+000000DA                      177  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 107
+000000DA F6BF4302             178  	ld.hu 0x00000242[r22], r23
+000000DE                      179  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 108
+000000DE F2BF4002             180  	mul 0x00000012, r23, r0
+000000E2 D6B9                 181  	add r22, r23
+000000E4 1730                 182  	mov r23, r6
+000000E6 1538                 183  	mov r21, r7
+000000E8 1440                 184  	mov r20, r8
+000000EA 80FF0000             185  	jarl _my_memcpy, r31
+000000EE                      186  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 109
+000000EE 77A71000             187  	st.h r20, 0x00000010[r23]
+000000F2                      188  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 112
+000000F2 F6174302             189  	ld.hu 0x00000242[r22], r2
+000000F6 4112                 190  	add 0x00000001, r2
+000000F8 C2161F00             191  	andi 0x0000001F, r2, r2
+000000FC 76174202             192  	st.h r2, 0x00000242[r22]
+00000100                      193  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 113
+00000100 36174402             194  	ld.h 0x00000244[r22], r2
+00000104 4112                 195  	add 0x00000001, r2
+00000106 76174402             196  	st.h r2, 0x00000244[r22]
+0000010A                      197  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 114
+0000010A 56074802             198  	st.b r0, 0x00000248[r22]
+0000010E                      199  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 116
+0000010E 1630                 200  	mov r22, r6
+00000110 80FF0000             201  	jarl _queue_unlock.1, r31
+00000114 0052                 202  	mov 0x00000000, r10
+00000116                      203  .BB.LABEL.5_12:	; bb122
+00000116                      204  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 118
+00000116 40063F0F             205  	dispose 0x00000000, 0x00000079, [r31]
+0000011A                      206  _queue_peek:
+0000011A                      207  	.stack _queue_peek = 20
+0000011A                      208  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 123
+0000011A 8007210F             209  	prepare 0x00000079, 0x00000000
+0000011E 08A0                 210  	mov r8, r20
+00000120 07A8                 211  	mov r7, r21
+00000122 06B60000             212  	addi 0x00000000, r6, r22
+00000126                      213  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 124
+00000126 8205                 214  	bz9 .BB.LABEL.6_7
+00000128                      215  .BB.LABEL.6_1:	; bb
+00000128                      216  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 0
+00000128 B6174902             217  	ld.bu 0x00000249[r22], r2
+0000012C 6012                 218  	cmp 0x00000000, r2
+0000012E 8205                 219  	bz9 .BB.LABEL.6_7
+00000130                      220  .BB.LABEL.6_2:	; bb
+00000130 60AA                 221  	cmp 0x00000000, r21
+00000132 8205                 222  	bz9 .BB.LABEL.6_7
+00000134                      223  .BB.LABEL.6_3:	; bb
+00000134 60A2                 224  	cmp 0x00000000, r20
+00000136 8205                 225  	bz9 .BB.LABEL.6_7
+00000138                      226  .BB.LABEL.6_4:	; if_break_bb
+00000138                      227  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 128
+00000138 1630                 228  	mov r22, r6
+0000013A 80FF0000             229  	jarl _queue_lock.1, r31
+0000013E                      230  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 130
+0000013E F6174502             231  	ld.hu 0x00000244[r22], r2
+00000142 6012                 232  	cmp 0x00000000, r2
+00000144 8A05                 233  	bnz9 .BB.LABEL.6_6
+00000146                      234  .BB.LABEL.6_5:	; if_then_bb57
+00000146                      235  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 131
+00000146 1630                 236  	mov r22, r6
+00000148 80FF0000             237  	jarl _queue_unlock.1, r31
+0000014C 0252                 238  	mov 0x00000002, r10
+0000014E                      239  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 132
+0000014E 40063F0F             240  	dispose 0x00000000, 0x00000079, [r31]
+00000152                      241  .BB.LABEL.6_6:	; if_break_bb60
+00000152                      242  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 135
+00000152 F6BF4102             243  	ld.hu 0x00000240[r22], r23
+00000156                      244  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 136
+00000156 F2BF4002             245  	mul 0x00000012, r23, r0
+0000015A D6B9                 246  	add r22, r23
+0000015C F7471100             247  	ld.hu 0x00000010[r23], r8
+00000160 1530                 248  	mov r21, r6
+00000162 1738                 249  	mov r23, r7
+00000164 80FF0000             250  	jarl _my_memcpy, r31
+00000168                      251  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 137
+00000168 37171000             252  	ld.h 0x00000010[r23], r2
+0000016C 74170000             253  	st.h r2, 0x00000000[r20]
+00000170                      254  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 139
+00000170 1630                 255  	mov r22, r6
+00000172 80FF0000             256  	jarl _queue_unlock.1, r31
+00000176 0052                 257  	mov 0x00000000, r10
+00000178                      258  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 140
+00000178 40063F0F             259  	dispose 0x00000000, 0x00000079, [r31]
+0000017C                      260  .BB.LABEL.6_7:	; bb83
+0000017C                      261  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 0
+0000017C 0352                 262  	mov 0x00000003, r10
+0000017E                      263  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 141
+0000017E 40063F0F             264  	dispose 0x00000000, 0x00000079, [r31]
+00000182                      265  _queue_read:
+00000182                      266  	.stack _queue_read = 20
+00000182                      267  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 146
+00000182 8007210F             268  	prepare 0x00000079, 0x00000000
+00000186 08A0                 269  	mov r8, r20
+00000188 07A8                 270  	mov r7, r21
+0000018A 06B60000             271  	addi 0x00000000, r6, r22
+0000018E                      272  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 147
+0000018E 8205                 273  	bz9 .BB.LABEL.7_8
+00000190                      274  .BB.LABEL.7_1:	; bb
+00000190                      275  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 0
+00000190 B6174902             276  	ld.bu 0x00000249[r22], r2
+00000194 6012                 277  	cmp 0x00000000, r2
+00000196 8205                 278  	bz9 .BB.LABEL.7_8
+00000198                      279  .BB.LABEL.7_2:	; if_break_bb
+00000198                      280  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 151
+00000198 1630                 281  	mov r22, r6
+0000019A 80FF0000             282  	jarl _queue_lock.1, r31
+0000019E                      283  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 153
+0000019E F6174502             284  	ld.hu 0x00000244[r22], r2
+000001A2 6012                 285  	cmp 0x00000000, r2
+000001A4 8A05                 286  	bnz9 .BB.LABEL.7_4
+000001A6                      287  .BB.LABEL.7_3:	; if_then_bb35
+000001A6                      288  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 154
+000001A6 1630                 289  	mov r22, r6
+000001A8 80FF0000             290  	jarl _queue_unlock.1, r31
+000001AC 0252                 291  	mov 0x00000002, r10
+000001AE                      292  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 155
+000001AE 40063F0F             293  	dispose 0x00000000, 0x00000079, [r31]
+000001B2                      294  .BB.LABEL.7_4:	; if_break_bb38
+000001B2                      295  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 161
+000001B2 60AA                 296  	cmp 0x00000000, r21
+000001B4                      297  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 158
+000001B4 F6BF4102             298  	ld.hu 0x00000240[r22], r23
+000001B8                      299  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 161
+000001B8 8205                 300  	bz9 .BB.LABEL.7_7
+000001BA                      301  .BB.LABEL.7_5:	; if_break_bb38
+000001BA                      302  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 0
+000001BA 60A2                 303  	cmp 0x00000000, r20
+000001BC 8205                 304  	bz9 .BB.LABEL.7_7
+000001BE                      305  .BB.LABEL.7_6:	; if_then_bb62
+000001BE                      306  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 162
+000001BE F2BF4002             307  	mul 0x00000012, r23, r0
+000001C2 D6B9                 308  	add r22, r23
+000001C4 F7471100             309  	ld.hu 0x00000010[r23], r8
+000001C8 1530                 310  	mov r21, r6
+000001CA 1738                 311  	mov r23, r7
+000001CC 80FF0000             312  	jarl _my_memcpy, r31
+000001D0                      313  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 163
+000001D0 37171000             314  	ld.h 0x00000010[r23], r2
+000001D4 74170000             315  	st.h r2, 0x00000000[r20]
+000001D8                      316  .BB.LABEL.7_7:	; if_break_bb75
+000001D8                      317  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 167
+000001D8 F6174102             318  	ld.hu 0x00000240[r22], r2
+000001DC 4112                 319  	add 0x00000001, r2
+000001DE C2161F00             320  	andi 0x0000001F, r2, r2
+000001E2 76174002             321  	st.h r2, 0x00000240[r22]
+000001E6                      322  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 168
+000001E6 36174402             323  	ld.h 0x00000244[r22], r2
+000001EA 5F12                 324  	add 0xFFFFFFFF, r2
+000001EC 76174402             325  	st.h r2, 0x00000244[r22]
+000001F0                      326  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 170
+000001F0 1630                 327  	mov r22, r6
+000001F2 80FF0000             328  	jarl _queue_unlock.1, r31
+000001F6 0052                 329  	mov 0x00000000, r10
+000001F8                      330  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 171
+000001F8 40063F0F             331  	dispose 0x00000000, 0x00000079, [r31]
+000001FC                      332  .BB.LABEL.7_8:	; bb91
+000001FC                      333  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 0
+000001FC 0352                 334  	mov 0x00000003, r10
+000001FE                      335  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 172
+000001FE 40063F0F             336  	dispose 0x00000000, 0x00000079, [r31]
+00000202                      337  _queue_process:
+00000202                      338  	.stack _queue_process = 16
+00000202                      339  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 177
+00000202 8007210E             340  	prepare 0x00000071, 0x00000000
+00000206 07A0                 341  	mov r7, r20
+00000208 06AE0000             342  	addi 0x00000000, r6, r21
+0000020C                      343  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 180
+0000020C 8205                 344  	bz9 .BB.LABEL.8_8
+0000020E                      345  .BB.LABEL.8_1:	; bb
+0000020E                      346  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 0
+0000020E B5174902             347  	ld.bu 0x00000249[r21], r2
+00000212 6012                 348  	cmp 0x00000000, r2
+00000214 8205                 349  	bz9 .BB.LABEL.8_8
+00000216                      350  .BB.LABEL.8_2:	; if_break_bb
+00000216                      351  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 184
+00000216 1530                 352  	mov r21, r6
+00000218 80FF0000             353  	jarl _queue_lock.1, r31
+0000021C 00B2                 354  	mov 0x00000000, r22
+0000021E 8505                 355  	br9 .BB.LABEL.8_6
+00000220                      356  .BB.LABEL.8_3:	; bb28
+00000220                      357  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 191
+00000220 60A2                 358  	cmp 0x00000000, r20
+00000222                      359  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 188
+00000222 F5374102             360  	ld.hu 0x00000240[r21], r6
+00000226                      361  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 191
+00000226 8205                 362  	bz9 .BB.LABEL.8_5
+00000228                      363  .BB.LABEL.8_4:	; if_then_bb41
+00000228                      364  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 192
+00000228 F2374002             365  	mul 0x00000012, r6, r0
+0000022C D531                 366  	add r21, r6
+0000022E E63F1100             367  	ld.hu 0x00000010[r6], r7
+00000232 F4C760F9             368  	jarl [r20], r31
+00000236                      369  .BB.LABEL.8_5:	; if_break_bb49
+00000236                      370  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 199
+00000236 F5174102             371  	ld.hu 0x00000240[r21], r2
+0000023A 4112                 372  	add 0x00000001, r2
+0000023C C2161F00             373  	andi 0x0000001F, r2, r2
+00000240 75174002             374  	st.h r2, 0x00000240[r21]
+00000244                      375  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 200
+00000244 35174402             376  	ld.h 0x00000244[r21], r2
+00000248 5F12                 377  	add 0xFFFFFFFF, r2
+0000024A 75174402             378  	st.h r2, 0x00000244[r21]
+0000024E                      379  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 201
+0000024E 41B2                 380  	add 0x00000001, r22
+00000250                      381  .BB.LABEL.8_6:	; bb65
+00000250                      382  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 187
+00000250 F5174502             383  	ld.hu 0x00000244[r21], r2
+00000254 6012                 384  	cmp 0x00000000, r2
+00000256 8A05                 385  	bnz9 .BB.LABEL.8_3
+00000258                      386  .BB.LABEL.8_7:	; bb73
+00000258                      387  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 204
+00000258 1530                 388  	mov r21, r6
+0000025A 80FF0000             389  	jarl _queue_unlock.1, r31
+0000025E                      390  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 205
+0000025E D656FFFF             391  	andi 0x0000FFFF, r22, r10
+00000262 40063F0E             392  	dispose 0x00000000, 0x00000071, [r31]
+00000266                      393  .BB.LABEL.8_8:	; bb77
+00000266                      394  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 0
+00000266 0052                 395  	mov 0x00000000, r10
+00000268                      396  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 206
+00000268 40063F0E             397  	dispose 0x00000000, 0x00000071, [r31]
+0000026C                      398  _queue_is_empty:
+0000026C                      399  	.stack _queue_is_empty = 12
+0000026C                      400  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 211
+0000026C 8007210C             401  	prepare 0x00000061, 0x00000000
+00000270 06A60000             402  	addi 0x00000000, r6, r20
+00000274                      403  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 212
+00000274 8205                 404  	bz9 .BB.LABEL.9_3
+00000276                      405  .BB.LABEL.9_1:	; bb
+00000276                      406  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 0
+00000276 B4174902             407  	ld.bu 0x00000249[r20], r2
+0000027A 6012                 408  	cmp 0x00000000, r2
+0000027C 8205                 409  	bz9 .BB.LABEL.9_3
+0000027E                      410  .BB.LABEL.9_2:	; if_break_bb
+0000027E                      411  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 217
+0000027E 1430                 412  	mov r20, r6
+00000280 80FF0000             413  	jarl _queue_lock.1, r31
+00000284                      414  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 218
+00000284 F4AF4502             415  	ld.hu 0x00000244[r20], r21
+00000288                      416  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 219
+00000288 1430                 417  	mov r20, r6
+0000028A 80FF0000             418  	jarl _queue_unlock.1, r31
+0000028E                      419  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 218
+0000028E 60AA                 420  	cmp 0x00000000, r21
+00000290 E2570000             421  	setf 0x00000002, r10
+00000294                      422  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 221
+00000294 40063F0C             423  	dispose 0x00000000, 0x00000061, [r31]
+00000298                      424  .BB.LABEL.9_3:	; bb36
+00000298                      425  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 0
+00000298 0152                 426  	mov 0x00000001, r10
+0000029A                      427  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 222
+0000029A 40063F0C             428  	dispose 0x00000000, 0x00000061, [r31]
+0000029E                      429  _queue_is_full:
+0000029E                      430  	.stack _queue_is_full = 12
+0000029E                      431  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 227
+0000029E 8007210C             432  	prepare 0x00000061, 0x00000000
+000002A2 06A60000             433  	addi 0x00000000, r6, r20
+000002A6                      434  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 228
+000002A6 8205                 435  	bz9 .BB.LABEL.10_3
+000002A8                      436  .BB.LABEL.10_1:	; bb
+000002A8                      437  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 0
+000002A8 B4174902             438  	ld.bu 0x00000249[r20], r2
+000002AC 6012                 439  	cmp 0x00000000, r2
+000002AE 8205                 440  	bz9 .BB.LABEL.10_3
+000002B0                      441  .BB.LABEL.10_2:	; if_break_bb
+000002B0                      442  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 233
+000002B0 1430                 443  	mov r20, r6
+000002B2 80FF0000             444  	jarl _queue_lock.1, r31
+000002B6                      445  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 234
+000002B6 F4AF4502             446  	ld.hu 0x00000244[r20], r21
+000002BA                      447  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 235
+000002BA 1430                 448  	mov r20, r6
+000002BC 80FF0000             449  	jarl _queue_unlock.1, r31
+000002C0                      450  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 234
+000002C0 1506E1FF             451  	addi 0xFFFFFFE1, r21, r0
+000002C4 EF570000             452  	setf 0x0000000F, r10
+000002C8                      453  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 237
+000002C8 40063F0C             454  	dispose 0x00000000, 0x00000061, [r31]
+000002CC                      455  .BB.LABEL.10_3:	; bb36
+000002CC                      456  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 0
+000002CC 0052                 457  	mov 0x00000000, r10
+000002CE                      458  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 238
+000002CE 40063F0C             459  	dispose 0x00000000, 0x00000061, [r31]
+000002D2                      460  _queue_is_overflow:
+000002D2                      461  	.stack _queue_is_overflow = 12
+000002D2                      462  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 243
+000002D2 8007210C             463  	prepare 0x00000061, 0x00000000
+000002D6 06A60000             464  	addi 0x00000000, r6, r20
+000002DA                      465  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 244
+000002DA 8205                 466  	bz9 .BB.LABEL.11_3
+000002DC                      467  .BB.LABEL.11_1:	; bb
+000002DC                      468  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 0
+000002DC B4174902             469  	ld.bu 0x00000249[r20], r2
+000002E0 6012                 470  	cmp 0x00000000, r2
+000002E2 8205                 471  	bz9 .BB.LABEL.11_3
+000002E4                      472  .BB.LABEL.11_2:	; if_break_bb
+000002E4                      473  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 249
+000002E4 1430                 474  	mov r20, r6
+000002E6 80FF0000             475  	jarl _queue_lock.1, r31
+000002EA                      476  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 253
+000002EA 94AF4902             477  	ld.bu 0x00000248[r20], r21
+000002EE                      478  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 251
+000002EE 1430                 479  	mov r20, r6
+000002F0 80FF0000             480  	jarl _queue_unlock.1, r31
+000002F4                      481  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 253
+000002F4 1550                 482  	mov r21, r10
+000002F6 40063F0C             483  	dispose 0x00000000, 0x00000061, [r31]
+000002FA                      484  .BB.LABEL.11_3:	; bb32
+000002FA                      485  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 0
+000002FA 0052                 486  	mov 0x00000000, r10
+000002FC                      487  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 254
+000002FC 40063F0C             488  	dispose 0x00000000, 0x00000061, [r31]
+00000300                      489  _queue_get_count:
+00000300                      490  	.stack _queue_get_count = 12
+00000300                      491  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 259
+00000300 8007210C             492  	prepare 0x00000061, 0x00000000
+00000304 06A60000             493  	addi 0x00000000, r6, r20
+00000308                      494  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 260
+00000308 8205                 495  	bz9 .BB.LABEL.12_3
+0000030A                      496  .BB.LABEL.12_1:	; bb
+0000030A                      497  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 0
+0000030A B4174902             498  	ld.bu 0x00000249[r20], r2
+0000030E 6012                 499  	cmp 0x00000000, r2
+00000310 8205                 500  	bz9 .BB.LABEL.12_3
+00000312                      501  .BB.LABEL.12_2:	; if_break_bb
+00000312                      502  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 265
+00000312 1430                 503  	mov r20, r6
+00000314 80FF0000             504  	jarl _queue_lock.1, r31
+00000318                      505  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 269
+00000318 F4AF4502             506  	ld.hu 0x00000244[r20], r21
+0000031C                      507  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 267
+0000031C 1430                 508  	mov r20, r6
+0000031E 80FF0000             509  	jarl _queue_unlock.1, r31
+00000322                      510  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 269
+00000322 1550                 511  	mov r21, r10
+00000324 40063F0C             512  	dispose 0x00000000, 0x00000061, [r31]
+00000328                      513  .BB.LABEL.12_3:	; bb32
+00000328                      514  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 0
+00000328 0052                 515  	mov 0x00000000, r10
+0000032A                      516  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 270
+0000032A 40063F0C             517  	dispose 0x00000000, 0x00000061, [r31]
+0000032E                      518  _queue_get_overflow_count:
+0000032E                      519  	.stack _queue_get_overflow_count = 12
+0000032E                      520  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 275
+0000032E 8007210C             521  	prepare 0x00000061, 0x00000000
+00000332 06A60000             522  	addi 0x00000000, r6, r20
+00000336                      523  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 276
+00000336 8205                 524  	bz9 .BB.LABEL.13_3
+00000338                      525  .BB.LABEL.13_1:	; bb
+00000338                      526  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 0
+00000338 B4174902             527  	ld.bu 0x00000249[r20], r2
+0000033C 6012                 528  	cmp 0x00000000, r2
+0000033E 8205                 529  	bz9 .BB.LABEL.13_3
+00000340                      530  .BB.LABEL.13_2:	; if_break_bb
+00000340                      531  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 281
+00000340 1430                 532  	mov r20, r6
+00000342 80FF0000             533  	jarl _queue_lock.1, r31
+00000346                      534  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 285
+00000346 F4AF4702             535  	ld.hu 0x00000246[r20], r21
+0000034A                      536  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 283
+0000034A 1430                 537  	mov r20, r6
+0000034C 80FF0000             538  	jarl _queue_unlock.1, r31
+00000350                      539  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 285
+00000350 1550                 540  	mov r21, r10
+00000352 40063F0C             541  	dispose 0x00000000, 0x00000061, [r31]
+00000356                      542  .BB.LABEL.13_3:	; bb32
+00000356                      543  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 0
+00000356 0052                 544  	mov 0x00000000, r10
+00000358                      545  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 286
+00000358 40063F0C             546  	dispose 0x00000000, 0x00000061, [r31]
+0000035C                      547  _queue_get_free_space:
+0000035C                      548  	.stack _queue_get_free_space = 12
+0000035C                      549  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 291
+0000035C 8007210C             550  	prepare 0x00000061, 0x00000000
+00000360 06A60000             551  	addi 0x00000000, r6, r20
+00000364                      552  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 292
+00000364 8205                 553  	bz9 .BB.LABEL.14_3
+00000366                      554  .BB.LABEL.14_1:	; bb
+00000366                      555  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 0
+00000366 B4174902             556  	ld.bu 0x00000249[r20], r2
+0000036A 6012                 557  	cmp 0x00000000, r2
+0000036C 8205                 558  	bz9 .BB.LABEL.14_3
+0000036E                      559  .BB.LABEL.14_2:	; if_break_bb
+0000036E                      560  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 297
+0000036E 1430                 561  	mov r20, r6
+00000370 80FF0000             562  	jarl _queue_lock.1, r31
+00000374                      563  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 298
+00000374 34AF4402             564  	ld.h 0x00000244[r20], r21
+00000378                      565  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 299
+00000378 1430                 566  	mov r20, r6
+0000037A 80FF0000             567  	jarl _queue_unlock.1, r31
+0000037E 20562000             568  	movea 0x00000020, r0, r10
+00000382                      569  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 298
+00000382 B551                 570  	sub r21, r10
+00000384                      571  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 301
+00000384 CA00                 572  	zxh r10
+00000386 40063F0C             573  	dispose 0x00000000, 0x00000061, [r31]
+0000038A                      574  .BB.LABEL.14_3:	; bb35
+0000038A                      575  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 0
+0000038A 0052                 576  	mov 0x00000000, r10
+0000038C                      577  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 302
+0000038C 40063F0C             578  	dispose 0x00000000, 0x00000061, [r31]
+00000390                      579  _queue_clear:
+00000390                      580  	.stack _queue_clear = 8
+00000390                      581  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 307
+00000390 80072108             582  	prepare 0x00000041, 0x00000000
+00000394 06A60000             583  	addi 0x00000000, r6, r20
+00000398                      584  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 308
+00000398 8205                 585  	bz9 .BB.LABEL.15_3
+0000039A                      586  .BB.LABEL.15_1:	; bb
+0000039A                      587  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 0
+0000039A B4174902             588  	ld.bu 0x00000249[r20], r2
+0000039E 6012                 589  	cmp 0x00000000, r2
+000003A0 8205                 590  	bz9 .BB.LABEL.15_3
+000003A2                      591  .BB.LABEL.15_2:	; if_break_bb
+000003A2                      592  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 312
+000003A2 1430                 593  	mov r20, r6
+000003A4 80FF0000             594  	jarl _queue_lock.1, r31
+000003A8                      595  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 314
+000003A8 74074002             596  	st.h r0, 0x00000240[r20]
+000003AC                      597  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 315
+000003AC 74074202             598  	st.h r0, 0x00000242[r20]
+000003B0                      599  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 316
+000003B0 74074402             600  	st.h r0, 0x00000244[r20]
+000003B4                      601  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 317
+000003B4 54074802             602  	st.b r0, 0x00000248[r20]
+000003B8                      603  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 319
+000003B8 1430                 604  	mov r20, r6
+000003BA 80FF0000             605  	jarl _queue_unlock.1, r31
+000003BE                      606  .BB.LABEL.15_3:	; return
+000003BE                      607  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 320
+000003BE 40063F08             608  	dispose 0x00000000, 0x00000041, [r31]
+000003C2                      609  _queue_reset_stats:
+000003C2                      610  	.stack _queue_reset_stats = 8
+000003C2                      611  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 325
+000003C2 80072108             612  	prepare 0x00000041, 0x00000000
+000003C6 06A60000             613  	addi 0x00000000, r6, r20
+000003CA                      614  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 326
+000003CA 8205                 615  	bz9 .BB.LABEL.16_3
+000003CC                      616  .BB.LABEL.16_1:	; bb
+000003CC                      617  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 0
+000003CC B4174902             618  	ld.bu 0x00000249[r20], r2
+000003D0 6012                 619  	cmp 0x00000000, r2
+000003D2 8205                 620  	bz9 .BB.LABEL.16_3
+000003D4                      621  .BB.LABEL.16_2:	; if_break_bb
+000003D4                      622  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 330
+000003D4 1430                 623  	mov r20, r6
+000003D6 80FF0000             624  	jarl _queue_lock.1, r31
+000003DA                      625  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 332
+000003DA 74074602             626  	st.h r0, 0x00000246[r20]
+000003DE                      627  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 333
+000003DE 54074802             628  	st.b r0, 0x00000248[r20]
+000003E2                      629  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 335
+000003E2 1430                 630  	mov r20, r6
+000003E4 80FF0000             631  	jarl _queue_unlock.1, r31
+000003E8                      632  .BB.LABEL.16_3:	; return
+000003E8                      633  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 336
+000003E8 40063F08             634  	dispose 0x00000000, 0x00000041, [r31]
+000003EC                      635  _queue_get_name:
+000003EC                      636  	.stack _queue_get_name = 0
+000003EC                      637  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 341
+000003EC 6032                 638  	cmp 0x00000000, r6
+000003EE                      639  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 342
+000003EE 8205                 640  	bz9 .BB.LABEL.17_2
+000003F0                      641  .BB.LABEL.17_1:	; bb
+000003F0                      642  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 0
+000003F0 26564A02             643  	movea 0x0000024A, r6, r10
+000003F4                      644  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 343
+000003F4 7F00                 645  	jmp [r31]
+000003F6                      646  .BB.LABEL.17_2:	; bb8
+000003F6                      647  	mov #.STR.1, r10
+000003F6 2A0600000000            -- mov         0x0,r10
+000003FC 7F00                 648  	jmp [r31]
+000003FE                      649  _queue_is_initialized:
+000003FE                      650  	.stack _queue_is_initialized = 0
+000003FE                      651  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 348
+000003FE 6032                 652  	cmp 0x00000000, r6
+00000400                      653  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 349
+00000400 8205                 654  	bz9 .BB.LABEL.18_2
+00000402                      655  .BB.LABEL.18_1:	; bb
+00000402                      656  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 0
+00000402 A6174902             657  	ld.bu 0x00000249[r6], r2
+00000406 6012                 658  	cmp 0x00000000, r2
+00000408 8A05                 659  	bnz9 .BB.LABEL.18_3
+0000040A                      660  .BB.LABEL.18_2:	; bb11
+0000040A 0052                 661  	mov 0x00000000, r10
+0000040C                      662  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 350
+0000040C 7F00                 663  	jmp [r31]
+0000040E                      664  .BB.LABEL.18_3:	; bb12
+0000040E                      665  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 0
+0000040E 0152                 666  	mov 0x00000001, r10
+00000410                      667  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 350
+00000410 7F00                 668  	jmp [r31]
+00000412                      669  _queue_set_lock:
+00000412                      670  	.stack _queue_set_lock = 0
+00000412                      671  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 355
+00000412 6032                 672  	cmp 0x00000000, r6
+00000414                      673  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 356
+00000414 8205                 674  	bz9 .BB.LABEL.19_2
+00000416                      675  .BB.LABEL.19_1:	; if_then_bb
+00000416                      676  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 357
+00000416 663F6102             677  	st.w r7, 0x00000260[r6]
+0000041A                      678  .BB.LABEL.19_2:	; return
+0000041A                      679  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 359
+0000041A 7F00                 680  	jmp [r31]
+0000041C                      681  _queue_get_max_size:
+0000041C                      682  	.stack _queue_get_max_size = 0
+0000041C                      683  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 364
+0000041C 20562000             684  	movea 0x00000020, r0, r10
+00000420                      685  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 366
+00000420 7F00                 686  	jmp [r31]
+00000422                      687  _queue_get_max_data_size:
+00000422                      688  	.stack _queue_get_max_data_size = 0
+00000422                      689  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 371
+00000422 20561000             690  	movea 0x00000010, r0, r10
+00000426                      691  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/ASW/APP/Queue_Fifo.c", 373
+00000426 7F00                 692  	jmp [r31]
+00000000                      693  	.section .const, const
+00000000                      694  .STR.1:
+00000000 4E                   695  	.db 0x4E,0x55,0x4C,0x4C,0x5F,0x50,0x54,0x52
+00000001 55              
+00000002 4C              
+00000003 4C              
+00000004 5F              
+00000005 50              
+00000006 54              
+00000007 52              
+00000008 00                   696  	.ds (1)
+
+Section List
+Attr     Size                Name
+
+TEXT         1064 (00000428) .text
+CONST           9 (00000009) .const
+
+Command Line Parameter
+-Xcpu=g3kh -Xreg_mode=32 -Xep=callee -Xcharacter_set=none -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\diagnostic -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\parameter_store -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu\port -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu\uart -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu\iic -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\vehicle_data_to_mpu -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\power_manage -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\mcu_cpu_sync -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\remote_control -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\can_cycle_send -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\project_configure -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\sdk\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\commonLib\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\hal\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\icu\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Icu_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\vss -ID:\wk\sirun\project\dazhong\code\mcu_app\ASW\CDD_FVM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\EEIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanTSyn -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\StbM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CSM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\RSA -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\RandomGen\CTR_DRBG -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\MAC\CMAC -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\Hash\sha256 -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\dh -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\AES -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CryInterface -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\SecOC -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\NvM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\MemIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\Fee -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\WdgM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\WdgIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Wdg_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Gpt_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Fls_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\wdg\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\gpt\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\fls\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\IpduM -ID:\wk\sirun\project\dazhong\code\mcu_app\ASW\APP -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\BswM -ID:\wk\sirun\project\dazhong\code\mcu_app\ASW\BSW_Ext -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\Dcm -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanTp -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Dem -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Libraries\E2E -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Libraries\Crc -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\NmIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanNm -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config\RTE\Rte -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config\RTE\SchM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Libraries\IStd -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\EcuM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\ComM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanSM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\Com -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\PDUR -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\CommonInclude -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config\RH850F1K -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Extend\inc -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Kernel\inc -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Portable\Mcu -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Portable\Processor -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Adc_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Can_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Dio_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Mcu_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Port_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\adc\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\can\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\dio\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\general -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\mcu\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\port\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\CanGeneral\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\Det\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\MemIf\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\SchM\include -DRH850_F1KM_S1_2MB -Xprn_path=DefaultBuild -Xno_warning=50013 -oD:\wk\sirun\project\dazhong\code\mcu_app\Toolchain\CSPLUS_V81200\DefaultBuild\Queue_Fifo.obj D:\wk\sirun\project\dazhong\code\mcu_app\Toolchain\CSPLUS_V81200\DefaultBuild\Queue_Fifo.asm 
+

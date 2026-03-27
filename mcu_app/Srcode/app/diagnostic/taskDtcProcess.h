@@ -2,7 +2,30 @@
 #define _TASK_APP_DTC_PROCESS_H
 
 #include <stdint.h>
+#include "Dem.h"
+#include "Rte_Dem_Type.h"
 
+typedef enum                                          /*对外可查询的对象*/
+{
+    E_DTC_QUERY_5G_MAIN_ANT = 0,                                
+    E_DTC_QUERY_5G_DIV2_ANT,                                      
+    E_DTC_QUERY_5G_DIV1_ANT,                                      
+    E_DTC_QUERY_5G_DIV3_ANT,                                      
+    E_DTC_QUERY_MIC_IN,
+    E_DTC_QUERY_GPS_ANT,                                          
+    E_DTC_QUERY_MAX                                              
+} DtcQueryObj_e;
+
+typedef enum                                                      /*定义统一返回状态*/
+{
+    E_DTC_QUERY_STATE_NORMAL = 0,                                 
+    E_DTC_QUERY_STATE_OPEN,                                       
+    E_DTC_QUERY_STATE_SHORT_GND,                                  
+    E_DTC_QUERY_STATE_SHORT_BAT,                                  
+    E_DTC_QUERY_STATE_UNKNOWN = 0xFF                             /*非法状态/查询失败*/
+} DtcQueryState_e; 
+
+#if (0)
 
 typedef enum
 {
@@ -138,6 +161,10 @@ void SetVolFault(void);
 
 int16_t TaskAppDtcProcessInit(void);
 void TaskDtcProcess( void *pvParameters );
+
+#endif
+
+DtcQueryState_e DtcGetObjState(DtcQueryObj_e obj);   //对外的查询对象状态接口
 
 
 

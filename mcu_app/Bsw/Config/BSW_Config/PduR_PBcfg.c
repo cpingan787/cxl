@@ -5818,15 +5818,42 @@ PduR_RoutingTableConfigData[1] =
 #define PDUR_STOP_SEC_PBCONFIG_DATA_UNSPECIFIED
 #include "PduR_MemMap.h"
 
+#define PDUR_START_SEC_PBCONFIG_DATA_16
+#include "PduR_MemMap.h"
+static CONST(PduIdType,PDUR_CONST)
+PduR_DestPduPathGroup0[3] =
+{
+    PDUR_DESTPDU_CanTp_phy_tx_0x719,
+    PDUR_DESTPDU_Dcm_phy_rx_0x711,
+    PDUR_DESTPDU_Dcm_fun_rx_0x7df,
+};
+#define PDUR_STOP_SEC_PBCONFIG_DATA_16
+#include "PduR_MemMap.h"
+
+#define PDUR_START_SEC_PBCONFIG_DATA_UNSPECIFIED
+#include "PduR_MemMap.h"
+static CONST(PduRRoutingPathGroupType,PDUR_CONST)
+PduR_RoutingPathGroupConfigData[PDUR_ROUTING_PATH_GROUP_SUM] =
+{
+    {
+        TRUE,
+        PduRRoutingPathGroup_Diag,
+        3u,
+        PduR_DestPduPathGroup0
+    },
+};
+#define PDUR_STOP_SEC_PBCONFIG_DATA_UNSPECIFIED
+#include "PduR_MemMap.h"
+
 #define PDUR_START_SEC_PBCONFIG_DATA_UNSPECIFIED
 #include "PduR_MemMap.h"
 CONST(PduR_PBConfigType, PDUR_CONST_PBCFG) PduR_PBConfigData =
 {
     0u,
-    0u,
+    1u,
     173u,
     173u,
-    NULL_PTR,
+    PduR_RoutingPathGroupConfigData,
     PduR_RoutingTableConfigData,
     PduR_SrcPduConfigData,
     PduR_DestPduConfigData,

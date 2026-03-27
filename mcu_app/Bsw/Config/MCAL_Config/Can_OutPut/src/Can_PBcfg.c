@@ -76,8 +76,9 @@
  *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\stubs\4.2.2\Dem\xml\Dem_Can.arxml
  *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\stubs\4.2.2\EcuM\xml\EcuM_can.arxml
  *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\stubs\4.2.2\Os\xml\Os_Can.arxml
+ *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\Config\ECUC\test_EcuM_EcuM_ecuc.arxml
  *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\common_family\generator\Sample_Application_F1x.trxml
- * GENERATED ON:  27 Jan 2026 - 05:47:31
+ * GENERATED ON:  20 Mar 2026 - 04:11:27
  */
 
 /*******************************************************************************
@@ -235,11 +236,11 @@ static CONST(Can_ControllerBaudrateConfigType, CAN_RSCAN_CONFIG_DATA)
     /* usBaudrateConfig */
     0x01F4U,
     /* ulCFG */
-    CAN_RSCAN_NSJW(1) | CAN_RSCAN_NTSEG1(23) | CAN_RSCAN_NTSEG2(8) | CAN_RSCAN_NBRP(0),
+    CAN_RSCAN_NSJW(8) | CAN_RSCAN_NTSEG1(23) | CAN_RSCAN_NTSEG2(8) | CAN_RSCAN_NBRP(0),
     /* ulDCFG */
-    CAN_RSCAN_SJW(1) | CAN_RSCAN_TSEG1(5) | CAN_RSCAN_TSEG2(2) | CAN_RSCAN_BRP(0),
+    CAN_RSCAN_SJW(2) | CAN_RSCAN_TSEG1(5) | CAN_RSCAN_TSEG2(2) | CAN_RSCAN_BRP(0),
     /* ulFDCFG */
-    0UL,
+    CAN_RSCAN_TDCE | CAN_RSCAN_TDCO(0),
     /* blBRS */
     CAN_TRUE,
     /* blFdConfigured */

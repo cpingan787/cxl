@@ -11,6 +11,7 @@ Copyright ? 2024 SiRun (Beijing) . All rights reserved.
 
 #include "mpuHal.h"
 #include "stdint.h"
+#include "Rte_Dem_Type.h"
 
 typedef enum
 {
@@ -20,14 +21,6 @@ typedef enum
     E_STATE_SYNC_HAL_STATE_MID             = 0x16,
     E_STATE_SYNC_TSP_CONNECT_STATE_MID     = 0x17
 }StateSyncMid_e;
-
-typedef enum
-{
-    E_STATE_SYNC_GNSS_ANT_STATE_INIT = 0,
-    E_STATE_SYNC_GNSS_ANT_STATE_NORMAL = 1,
-    E_STATE_SYNC_GNSS_ANT_STATE_SHORT_CIRCUIT = 2,
-    E_STATE_SYNC_GNSS_ANT_STATE_OPEN_CIRCUIT = 3,
-}StateSyncGnssAntState_e;
 
 
 typedef struct
@@ -120,6 +113,47 @@ typedef struct
     uint8_t      tspStatus;      //tsp采集平台连接状态 0：未登录，1：登录
 }TspStateSync_t;
 
+typedef enum
+{
+    E_STATE_SYNC_DTC_BIT_LTE_ANT_TO_GROUND_SHORT = 0,
+    E_STATE_SYNC_DTC_BIT_LTE_ANT_OPEN = 1,
+    E_STATE_SYNC_DTC_BIT_SPEAKER_TO_GROUND_SHORT = 2,
+    E_STATE_SYNC_DTC_BIT_SPEAKER_OPEN_OR_SHORT = 3,
+    E_STATE_SYNC_DTC_BIT_SPEAKER_TO_POWER_SHORT = 4,
+    E_STATE_SYNC_DTC_BIT_SIM_OFFLINE = 5,
+    E_STATE_SYNC_DTC_BIT_SIM_INVALID = 6,
+    E_STATE_SYNC_DTC_BIT_LOST_ETH_WITH_ICC = 7,
+    E_STATE_SYNC_DTC_BIT_LOST_SOMEIP_WITH_S32G_LINUX = 8,
+    E_STATE_SYNC_DTC_BIT_S32G_LINUX_SOMEIP_RESPONSE_TIMEOUT = 9,
+    E_STATE_SYNC_DTC_BIT_SOC_SOMEIP_RESPONSE_TIMEOUT = 10,
+    E_STATE_SYNC_DTC_BIT_S32G_LINUX_SOMEIP_SERVICE_LOST = 11,
+    E_STATE_SYNC_DTC_BIT_SOC_SOMEIP_SERVICE_LOST = 12,
+    E_STATE_SYNC_DTC_BIT_LOST_SOMEIP_WITH_SOC = 13,
+    E_STATE_SYNC_DTC_BIT_LOST_SYNC_AND_FOLLOWUP_WITH_ICB = 14,
+    E_STATE_SYNC_DTC_BIT_LOST_PDELAY_RESP_WITH_ICB = 15,
+    E_STATE_SYNC_DTC_BIT_LOST_SOMEIP_WITH_8155_QNX = 16,
+    E_STATE_SYNC_DTC_BIT_8155_QNX_SOMEIP_RESPONSE_TIMEOUT = 17,
+    E_STATE_SYNC_DTC_BIT_8155_QNX_SOMEIP_SERVICE_LOST = 18,
+    E_STATE_SYNC_DTC_BIT_UNDEFINED_19 = 19,
+    E_STATE_SYNC_DTC_BIT_UNDEFINED_20 = 20,
+    E_STATE_SYNC_DTC_BIT_UNDEFINED_21 = 21,
+    E_STATE_SYNC_DTC_BIT_UNDEFINED_22 = 22,
+    E_STATE_SYNC_DTC_BIT_UNDEFINED_23 = 23,
+    E_STATE_SYNC_DTC_BIT_UNDEFINED_24 = 24,
+    E_STATE_SYNC_DTC_BIT_UNDEFINED_25 = 25,
+    E_STATE_SYNC_DTC_BIT_UNDEFINED_26 = 26,
+    E_STATE_SYNC_DTC_BIT_UNDEFINED_27 = 27,
+    E_STATE_SYNC_DTC_BIT_UNDEFINED_28 = 28,
+    E_STATE_SYNC_DTC_BIT_UNDEFINED_29 = 29,
+    E_STATE_SYNC_DTC_BIT_UNDEFINED_30 = 30,
+    E_STATE_SYNC_DTC_BIT_UNDEFINED_31 = 31
+}StateSyncDtcBit_e;
+
+typedef struct
+{
+    uint32_t dtcBitmap;          // 5G模组同步过来的故障位图，每个bit表示一种故障，1：故障 0：正常
+}DtcStateSync_t;
+
 typedef struct
 {
     LocationInfoSync_t locationInfo;    
@@ -167,6 +201,40 @@ typedef struct
     uint16_t failureTime;        //失效时间 单位ms
     uint8_t validity;            //数据是否有效 1：有效 0：无效
 }GsensorStateSync_t;
+
+typedef struct
+{
+    DtcStateSync_t dtcState;
+    uint16_t timeCount;         //更新时长计数，用来确认
+    uint16_t failureTime;        //失效时间 单位ms
+    uint8_t validity;            //数据是否有效 1：有效 0：无效
+}CpuDtcSync_t;
+
+typedef struct
+{
+    uint8_t mobileNetState;                 // 移动网络状态，0:未联网成功 1:已联网成功
+    uint8_t networkType;                    // 网络类型，0:2G 1:3G 2:4G 3:5G
+    uint8_t signalStrength;                 // 信号强度，0~31 有效，99 表示无效
+    uint8_t emmcState;                      // EMMC状态，0:未挂载 1:已挂载
+    uint8_t phyState;                       // PHY状态，0:link up 1:link down
+    uint8_t hsmState;                       // HSM状态，0:就绪 1:未就绪
+    uint8_t nadState;                       // NAD状态，1:正常 2:休眠 其它:异常
+    uint8_t gpsLocationState;               // GPS定位状态，0:工作正常 1:工作异常
+} MpuFaultExtStatus_t;  
+
+typedef struct
+{
+    MpuFaultExtStatus_t extStatus;          
+    uint16_t timeCount;                     
+    uint16_t failureTime;                   
+    uint8_t validity;                       
+} MpuFaultExtStatusSync_t; 
+
+typedef struct
+{
+    uint8_t bitIndex;                               
+    Dem_EventIdType eventId;                        
+} McuSendCpuFaultMap_t; 
 
 /*************************************************
   Function:       StateSyncSdkInit
@@ -269,5 +337,52 @@ int16_t StateSyncGetGsensorState(uint8_t *state);
   Others:         
 *************************************************/
 uint8_t StateSyncGetGnssAntState(uint8_t *state);
+
+/*************************************************
+  Function:       StateSyncGetSatCanState
+  Description:    获取卫星CAN发送状态( 0:未发送 1:正在发送 )
+  Input:          无
+  Output:         无
+  Return:         0：can未发送sat数据
+                  1:can正在发送sat数据
+  Others:
+*************************************************/
+uint8_t StateSyncgGetSatCanState(void);
+
+/*************************************************
+  Function:       MpuDtcSyncSdkCycleProcess
+  Description:    MPU故障码同步处理函数
+  Input:          msgData：MPU数据消息包
+  Output:         无
+  Return:         无
+  Others:         处理AID=0x30, MID=0x01的MPU故障码数据
+*************************************************/
+void MpuDtcSyncSdkCycleProcess(MpuHalDataPack_t *msgData);
+
+/*************************************************
+  Function:       StateSyncGetDtcstate
+  Description:    获取5G模组同步过来的故障信息
+  Input:          无
+  Output:         dtcInfo：故障信息
+  Return:         0：成功
+                  -1：失败
+  Others:
+*************************************************/
+int16_t StateSyncGetDtcstate(CpuDtcSync_t *dtcInfo);
+
+/*************************************************
+  Function:       MpuDtcSyncSdkCycleProcess
+  Description:    MPU故障码同步处理函数
+  Input:          msgData：MPU数据消息包
+  Output:         无
+  Return:         无
+  Others:         处理AID=0x30, MID=0x01的MPU故障码数据
+*************************************************/
+void MpuDtcSyncSdkCycleProcess(MpuHalDataPack_t *msgData);
+
+int16_t StateSyncGetMpuFaultExtStatus(MpuFaultExtStatus_t *extStatus); // 获取协议中MPU故障同步新增的8个状态字段
+
+int16_t McuSendCpuFaultSyncInit(int16_t mpuHandle, uint16_t cycleTime);   /* 初始化MCU->CPU故障同步模块 */
+void McuSendCpuFaultSyncCycleProcess(void);                                /* 1Hz 周期发送MCU故障状态给CPU */
 
 #endif

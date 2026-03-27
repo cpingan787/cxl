@@ -1,0 +1,1002 @@
+RH850 Family Assembler V2.07.00.03 Assemble Source List
+
+OFFSET   CODE                  NO  SOURCE STATEMENT
+
+00000000                        1  #CC-RH Compiler RH850 Assembler Source
+00000000                        2  #@	CC-RH Version : V2.07.00  [06 Dec 2024]
+00000000                        3  #@	Command : ..\..\Bsw\SystemServices\Os\Kernel\src\Os_Alarm.c -oDefaultBuild\Os_Alarm.obj -Xcpu=g3kh -Xno_warning=20188,20111 -g -g_line -I..\..\Srcode\app\diagnostic -I..\..\Srcode\app\parameter_store -I..\..\Cpu\port -I..\..\Cpu\uart -I..\..\Cpu\iic -I..\..\Srcode\app\vehicle_data_to_mpu -I..\..\Srcode\app\power_manage -I..\..\Srcode\app\mcu_cpu_sync -I..\..\Srcode\app\remote_control -I..\..\Srcode\app\can_cycle_send -I..\..\Srcode\app\project_configure -I..\..\Srcode\sdk\include -I..\..\Srcode\commonLib\include -I..\..\Srcode\hal\include -I..\..\Bsw\Mcal\icu\include -I..\..\Bsw\Config\MCAL_Config\Icu_OutPut\include -I..\..\Bsw\Crypto\CRYPTO\vss -I..\..\ASW\CDD_FVM -I..\..\Bsw\Memory\EEIf -I..\..\Bsw\Communication\CAN\CanTSyn -I..\..\Bsw\SystemServices\StbM -I..\..\Bsw\Crypto\CSM -I..\..\Bsw\Crypto\CRYPTO\RSA -I..\..\Bsw\Crypto\CRYPTO\RandomGen\CTR_DRBG -I..\..\Bsw\Crypto\CRYPTO\MAC\CMAC -I..\..\Bsw\Crypto\CRYPTO\Hash\sha256 -I..\..\Bsw\Crypto\CRYPTO\dh -I..\..\Bsw\Crypto\CRYPTO\AES -I..\..\Bsw\Crypto\CRYPTO -I..\..\Bsw\Crypto\CryInterface -I..\..\Bsw\Communication\Common\SecOC -I..\..\Bsw\Memory\NvM -I..\..\Bsw\Memory\MemIf -I..\..\Bsw\Memory\Fee -I..\..\Bsw\SystemServices\WdgM -I..\..\Bsw\SystemServices\WdgIf -I..\..\Bsw\Config\MCAL_Config\Wdg_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Gpt_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Fls_OutPut\include -I..\..\Bsw\Mcal\wdg\include -I..\..\Bsw\Mcal\gpt\include -I..\..\Bsw\Mcal\fls\include -I..\..\Bsw\Communication\Common\IpduM -I..\..\ASW\APP -I..\..\Bsw\SystemServices\BswM -I..\..\ASW\BSW_Ext -I..\..\Bsw\Communication\Common\Dcm -I..\..\Bsw\Communication\CAN\CanTp -I..\..\Bsw\SystemServices\Dem -I..\..\Bsw\Libraries\E2E -I..\..\Bsw\Libraries\Crc -I..\..\Bsw\Communication\Common\NmIf -I..\..\Bsw\Communication\CAN\CanNm -I..\..\Bsw\Config\BSW_Config\RTE\Rte -I..\..\Bsw\Config\BSW_Config\RTE\SchM -I..\..\Bsw\Libraries\IStd -I..\..\Bsw\SystemServices\EcuM -I..\..\Bsw\SystemServices\ComM -I..\..\Bsw\Communication\CAN\CanSM -I..\..\Bsw\Communication\CAN\CanIf -I..\..\Bsw\Communication\Common\Com -I..\..\Bsw\Communication\Common\PDUR -I..\..\Cpu -I..\..\Bsw\CommonInclude -I..\..\Bsw\Config\BSW_Config -I..\..\Bsw\Config\BSW_Config\RH850F1K -I..\..\Bsw\SystemServices\Os\Extend\inc -I..\..\Bsw\SystemServices\Os\Kernel\inc -I..\..\Bsw\SystemServices\Os\Portable\Mcu -I..\..\Bsw\SystemServices\Os\Portable\Processor -I..\..\Bsw\Config\MCAL_Config\Adc_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Can_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Dio_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Mcu_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Port_OutPut\include -I..\..\Bsw\Mcal\adc\include -I..\..\Bsw\Mcal\can\include -I..\..\Bsw\Mcal\dio\include -I..\..\Bsw\Mcal\general -I..\..\Bsw\Mcal\mcu\include -I..\..\Bsw\Mcal\port\include -I..\..\Bsw\Mcal\stubs\CanGeneral\include -I..\..\Bsw\Mcal\stubs\Det\include -I..\..\Bsw\Mcal\stubs\MemIf\include -I..\..\Bsw\Mcal\stubs\SchM\include -DRH850_F1KM_S1_2MB -lang=c99 -Xfloat=fpu -Xround=zero -Xdiv -Xasm_path=DefaultBuild -Xasm_option=-Xprn_path=DefaultBuild -c -MAKEUD=DefaultBuild -Xexec_time=C:\Users\xlchen\AppData\Local\Temp\CSPlusBuildTool_b17825513b78447692f8e6369e31aaa63rt4ia2r.rqo
+00000000                        4  #@	compiled at Fri Mar 27 09:50:55 2026
+00000000                        5  
+00000000                        6  	.file "..\..\Bsw\SystemServices\Os\Kernel\src\Os_Alarm.c"
+00000000                        7  
+00000000                        8  	$reg_mode 32
+00000000                        9  	.dbl_size 8
+00000000                       10  
+00000000                       11  	.extern _Os_SCB_FA_Inf
+00000000                       12  	.extern _Os_ObjectIDMaxTable
+00000000                       13  	.extern _Os_AlarmCfg
+00000000                       14  	.extern _Os_ACB
+00000000                       15  	.extern _Os_AlarmIdRange
+00000000                       16  	.extern _Os_CounterCfg
+00000000                       17  	.extern _Os_CCB
+00000000                       18  	.public _Os_InitAlarm
+00000000                       19  	.extern _Os_Panic
+00000000                       20  	.extern _Os_Hal_SuspendInt
+00000000                       21  	.extern _Os_GetDistance
+00000000                       22  	.extern _Os_Hal_RestoreInt
+00000000                       23  	.extern _Os_CalcAbsTicks
+00000000                       24  	.public _Os_WorkAlarm
+00000000                       25  	.public _Os_CancelAlarm
+00000000                       26  	.public _GetAlarm
+00000000                       27  	.public _GetAlarmBase
+00000000                       28  	.public _CancelAlarm
+00000000                       29  	.public _SetRelAlarm
+00000000                       30  	.public _SetAbsAlarm
+00000000                       31  
+00000000                       32  	.section .text, text
+00000000                       33  _Os_GetCoreIdLocal.1:
+00000000                       34  	.stack _Os_GetCoreIdLocal.1 = 0
+00000000                       35  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/inc/Os_Kernel.h", 89
+00000000 40160000              36  	movhi HIGHW1(#_Os_SCB_FA_Inf+0x00000026), r0, r2
+00000004                       37  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/inc/Os_Kernel.h", 91
+00000004 E2570100              38  	ld.hu LOWW(#_Os_SCB_FA_Inf+0x00000026)[r2], r10
+00000008 7F00                  39  	jmp [r31]
+0000000A                       40  _Os_GetCurrentContext.1:
+0000000A                       41  	.stack _Os_GetCurrentContext.1 = 0
+0000000A                       42  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/inc/Os_Kernel.h", 135
+0000000A                       43  	mov #_Os_SCB_FA_Inf, r10
+0000000A 2A0600000000            -- mov         0x0,r10
+00000010 7F00                  44  	jmp [r31]
+00000012                       45  _Os_ObjectIDCheck.1:
+00000012                       46  	.stack _Os_ObjectIDCheck.1 = 0
+00000012                       47  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/inc/Os_Kernel.h", 146
+00000012 C739                  48  	add r7, r7
+00000014                       49  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/inc/Os_Kernel.h", 149
+00000014                       50  	mov #_Os_ObjectIDMaxTable, r2
+00000014 220600000000            -- mov         0x0,hp
+0000001A C711                  51  	add r7, r2
+0000001C E2170100              52  	ld.hu 0x00000000[r2], r2
+00000020 E231                  53  	cmp r2, r6
+00000022 E1570000              54  	setf 0x00000001, r10
+00000026                       55  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/inc/Os_Kernel.h", 155
+00000026 7F00                  56  	jmp [r31]
+00000028                       57  _Os_InitAlarm:
+00000028                       58  	.stack _Os_InitAlarm = 12
+00000028                       59  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 284
+00000028 8007210C              60  	prepare 0x00000061, 0x00000000
+0000002C                       61  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 288
+0000002C 80FF0000              62  	jarl _Os_GetCoreIdLocal.1, r31
+00000030                       63  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 301
+00000030 C352                  64  	shl 0x00000003, r10
+00000032                       65  	mov #_Os_AlarmIdRange, r2
+00000032 220600000000            -- mov         0x0,hp
+00000038 CA11                  66  	add r10, r2
+0000003A 22A70100              67  	ld.w 0x00000000[r2], r20
+0000003E                       68  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 302
+0000003E 22AF0500              69  	ld.w 0x00000004[r2], r21
+00000042                       70  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 304
+00000042 F5A1                  71  	cmp r21, r20
+00000044 8705                  72  	ble9 .BB.LABEL.4_3
+00000046                       73  .BB.LABEL.4_1:	; if_then_bb
+00000046                       74  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 306
+00000046 80FF0000              75  	jarl _Os_Panic, r31
+0000004A 8505                  76  	br9 .BB.LABEL.4_3
+0000004C                       77  .BB.LABEL.4_2:	; bb
+0000004C                       78  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 311
+0000004C D416FFFF              79  	andi 0x0000FFFF, r20, r2
+00000050 0228                  80  	mov r2, r5
+00000052 C22A                  81  	shl 0x00000002, r5
+00000054                       82  	mov #_Os_ACB, r6
+00000054 260600000000            -- mov         0x0,r6
+0000005A C531                  83  	add r5, r6
+0000005C 262F0100              84  	ld.w 0x00000000[r6], r5
+00000060                       85  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 312
+00000060 65070100              86  	st.w r0, 0x00000000[r5]
+00000064                       87  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 313
+00000064 65070500              88  	st.w r0, 0x00000004[r5]
+00000068                       89  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 315
+00000068 65170900              90  	st.w r2, 0x00000008[r5]
+0000006C 41A2                  91  	add 0x00000001, r20
+0000006E                       92  .BB.LABEL.4_3:	; bb36
+0000006E                       93  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 309
+0000006E D416FFFF              94  	andi 0x0000FFFF, r20, r2
+00000072 D52EFFFF              95  	andi 0x0000FFFF, r21, r5
+00000076 E511                  96  	cmp r5, r2
+00000078 8105                  97  	bl9 .BB.LABEL.4_2
+0000007A                       98  .BB.LABEL.4_4:	; return
+0000007A                       99  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 340
+0000007A 40063F0C             100  	dispose 0x00000000, 0x00000061, [r31]
+0000007E                      101  _Os_GetAlarm.1:
+0000007E                      102  	.stack _Os_GetAlarm.1 = 16
+0000007E                      103  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 350
+0000007E 8007210E             104  	prepare 0x00000071, 0x00000000
+00000082 06A0                 105  	mov r6, r20
+00000084 07A8                 106  	mov r7, r21
+00000086                      107  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 356
+00000086 80FF0000             108  	jarl _Os_Hal_SuspendInt, r31
+0000008A                      109  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 357
+0000008A 1410                 110  	mov r20, r2
+0000008C C212                 111  	shl 0x00000002, r2
+0000008E                      112  	mov #_Os_ACB, r5
+0000008E 250600000000            -- mov         0x0,tp
+00000094 C229                 113  	add r2, r5
+00000096 25170100             114  	ld.w 0x00000000[r5], r2
+0000009A 222F0900             115  	ld.w 0x00000008[r2], r5
+0000009E E5A1                 116  	cmp r5, r20
+000000A0 0AB0                 117  	mov r10, r22
+000000A2 8A05                 118  	bnz9 .BB.LABEL.5_2
+000000A4                      119  .BB.LABEL.5_1:	; entry.if_break_bb_crit_edge
+000000A4                      120  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 0
+000000A4 05A2                 121  	mov 0x00000005, r20
+000000A6 8505                 122  	br9 .BB.LABEL.5_3
+000000A8                      123  .BB.LABEL.5_2:	; if_else_bb
+000000A8                      124  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 363
+000000A8 C4A2                 125  	shl 0x00000004, r20
+000000AA                      126  	mov #_Os_AlarmCfg, r5
+000000AA 250600000000            -- mov         0x0,tp
+000000B0 D429                 127  	add r20, r5
+000000B2 25470D00             128  	ld.w 0x0000000C[r5], r8
+000000B6                      129  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 366
+000000B6 08A0                 130  	mov r8, r20
+000000B8 C2A2                 131  	shl 0x00000002, r20
+000000BA                      132  	mov #_Os_CCB, r5
+000000BA 250600000000            -- mov         0x0,tp
+000000C0 D429                 133  	add r20, r5
+000000C2 25A70100             134  	ld.w 0x00000000[r5], r20
+000000C6 34370100             135  	ld.w 0x00000000[r20], r6
+000000CA 223F0100             136  	ld.w 0x00000000[r2], r7
+000000CE 80FF0000             137  	jarl _Os_GetDistance, r31
+000000D2 75570100             138  	st.w r10, 0x00000000[r21]
+000000D6 00A2                 139  	mov 0x00000000, r20
+000000D8                      140  .BB.LABEL.5_3:	; if_break_bb
+000000D8                      141  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 370
+000000D8 1630                 142  	mov r22, r6
+000000DA 80FF0000             143  	jarl _Os_Hal_RestoreInt, r31
+000000DE                      144  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 373
+000000DE D456FF00             145  	andi 0x000000FF, r20, r10
+000000E2 40063F0E             146  	dispose 0x00000000, 0x00000071, [r31]
+000000E6                      147  _Os_ProcessAlarm.1:
+000000E6                      148  	.stack _Os_ProcessAlarm.1 = 32
+000000E6                      149  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 383
+000000E6 820721CF             150  	prepare 0x00000679, 0x00000004
+000000EA                      151  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 391
+000000EA 27A70100             152  	ld.w 0x00000000[r7], r20
+000000EE                      153  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 392
+000000EE 14A8                 154  	mov r20, r21
+000000F0 C2AA                 155  	shl 0x00000002, r21
+000000F2                      156  	mov #_Os_ACB, r2
+000000F2 220600000000            -- mov         0x0,hp
+000000F8 C2A9                 157  	add r2, r21
+000000FA 35170100             158  	ld.w 0x00000000[r21], r2
+000000FE 22170900             159  	ld.w 0x00000008[r2], r2
+00000102 67170100             160  	st.w r2, 0x00000000[r7]
+00000106                      161  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 398
+00000106 69170900             162  	st.w r2, 0x00000008[r9]
+0000010A                      163  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 399
+0000010A 35170100             164  	ld.w 0x00000000[r21], r2
+0000010E 62A70900             165  	st.w r20, 0x00000008[r2]
+00000112                      166  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 401
+00000112 1410                 167  	mov r20, r2
+00000114 C412                 168  	shl 0x00000004, r2
+00000116                      169  	mov #_Os_AlarmCfg, r22
+00000116 360600000000            -- mov         0x0,r22
+0000011C C2B1                 170  	add r2, r22
+0000011E 36170500             171  	ld.w 0x00000004[r22], r2
+00000122 44B2                 172  	add 0x00000004, r22
+00000124 6012                 173  	cmp 0x00000000, r2
+00000126 23BF2100             174  	ld.w 0x00000020[r3], r23
+0000012A 09C0                 175  	mov r9, r24
+0000012C 06C8                 176  	mov r6, r25
+0000012E 8205                 177  	bz9 .BB.LABEL.6_2
+00000130                      178  .BB.LABEL.6_1:	; if_then_bb
+00000130                      179  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 418
+00000130 37370100             180  	ld.w 0x00000000[r23], r6
+00000134 80FF0000             181  	jarl _Os_Hal_RestoreInt, r31
+00000138                      182  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 419
+00000138 36170100             183  	ld.w 0x00000000[r22], r2
+0000013C E2C760F9             184  	jarl [r2], r31
+00000140                      185  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 420
+00000140 80FF0000             186  	jarl _Os_Hal_SuspendInt, r31
+00000144 77570100             187  	st.w r10, 0x00000000[r23]
+00000148                      188  .BB.LABEL.6_2:	; if_break_bb
+00000148                      189  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 438
+00000148 35AF0100             190  	ld.w 0x00000000[r21], r21
+0000014C 353F0500             191  	ld.w 0x00000004[r21], r7
+00000150 603A                 192  	cmp 0x00000000, r7
+00000152 8205                 193  	bz9 .BB.LABEL.6_4
+00000154                      194  .BB.LABEL.6_3:	; if_then_bb47
+00000154                      195  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 440
+00000154 35370100             196  	ld.w 0x00000000[r21], r6
+00000158 1940                 197  	mov r25, r8
+0000015A 80FF0000             198  	jarl _Os_CalcAbsTicks, r31
+0000015E 75570100             199  	st.w r10, 0x00000000[r21]
+00000162                      200  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 444
+00000162 38170900             201  	ld.w 0x00000008[r24], r2
+00000166 63170100             202  	st.w r2, 0x00000000[r3]
+0000016A                      203  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 445
+0000016A 38470500             204  	ld.w 0x00000004[r24], r8
+0000016E 0338                 205  	mov r3, r7
+00000170 1430                 206  	mov r20, r6
+00000172 80FF0000             207  	jarl _Os_InsertAlarm.1, r31
+00000176                      208  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 446
+00000176 23170100             209  	ld.w 0x00000000[r3], r2
+0000017A 78170900             210  	st.w r2, 0x00000008[r24]
+0000017E                      211  .BB.LABEL.6_4:	; if_break_bb74
+0000017E                      212  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 450
+0000017E 42063FCF             213  	dispose 0x00000004, 0x00000679, [r31]
+00000182                      214  _Os_WorkAlarm:
+00000182                      215  	.stack _Os_WorkAlarm = 36
+00000182                      216  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 460
+00000182 840721CF             217  	prepare 0x00000679, 0x00000008
+00000186 06A0                 218  	mov r6, r20
+00000188                      219  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 471
+00000188 1410                 220  	mov r20, r2
+0000018A F8174002             221  	mul 0x00000018, r2, r0
+0000018E                      222  	mov #_Os_CounterCfg, r5
+0000018E 250600000000            -- mov         0x0,tp
+00000194 C229                 223  	add r2, r5
+00000196 25AF0100             224  	ld.w 0x00000000[r5], r21
+0000019A                      225  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 473
+0000019A 80FF0000             226  	jarl _Os_Hal_SuspendInt, r31
+0000019E 63570500             227  	st.w r10, 0x00000004[r3]
+000001A2                      228  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 474
+000001A2 1410                 229  	mov r20, r2
+000001A4 C212                 230  	shl 0x00000002, r2
+000001A6                      231  	mov #_Os_CCB, r5
+000001A6 250600000000            -- mov         0x0,tp
+000001AC C229                 232  	add r2, r5
+000001AE 25B70100             233  	ld.w 0x00000000[r5], r22
+000001B2                      234  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 475
+000001B2 36BF0100             235  	ld.w 0x00000000[r22], r23
+000001B6                      236  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 476
+000001B6 16C60800             237  	addi 0x00000008, r22, r24
+000001BA 00CA                 238  	mov 0x00000000, r25
+000001BC 8505                 239  	br9 .BB.LABEL.7_5
+000001BE                      240  .BB.LABEL.7_1:	; bb
+000001BE                      241  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 480
+000001BE 36170900             242  	ld.w 0x00000008[r22], r2
+000001C2 802EFFFF             243  	ori 0x0000FFFF, r0, r5
+000001C6 E511                 244  	cmp r5, r2
+000001C8 8A05                 245  	bnz9 .BB.LABEL.7_3
+000001CA                      246  .BB.LABEL.7_2:	; bb.bb45_crit_edge
+000001CA                      247  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 0
+000001CA 01CA                 248  	mov 0x00000001, r25
+000001CC 8505                 249  	br9 .BB.LABEL.7_5
+000001CE                      250  .BB.LABEL.7_3:	; if_else_bb
+000001CE                      251  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 484
+000001CE C212                 252  	shl 0x00000002, r2
+000001D0                      253  	mov #_Os_ACB, r5
+000001D0 250600000000            -- mov         0x0,tp
+000001D6 C229                 254  	add r2, r5
+000001D8 25170100             255  	ld.w 0x00000000[r5], r2
+000001DC 22370100             256  	ld.w 0x00000000[r2], r6
+000001E0 1738                 257  	mov r23, r7
+000001E2 1440                 258  	mov r20, r8
+000001E4 80FF0000             259  	jarl _Os_GetDistance, r31
+000001E8 F551                 260  	cmp r21, r10
+000001EA 8B05                 261  	bh9 .BB.LABEL.7_2
+000001EC                      262  .BB.LABEL.7_4:	; if_then_bb38
+000001EC                      263  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 0
+000001EC 23160400             264  	movea 0x00000004, r3, r2
+000001F0                      265  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 488
+000001F0 63170100             266  	st.w r2, 0x00000000[r3]
+000001F4                      267  	mov #_Os_SCB_FA_Inf, r8
+000001F4 280600000000            -- mov         0x0,r8
+000001FA 1430                 268  	mov r20, r6
+000001FC 1838                 269  	mov r24, r7
+000001FE 1648                 270  	mov r22, r9
+00000200 80FF0000             271  	jarl _Os_ProcessAlarm.1, r31
+00000204                      272  .BB.LABEL.7_5:	; bb45
+00000204                      273  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 478
+00000204 D906FF00             274  	andi 0x000000FF, r25, r0
+00000208 8205                 275  	bz9 .BB.LABEL.7_1
+0000020A                      276  .BB.LABEL.7_6:	; bb51
+0000020A                      277  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 495
+0000020A 23370500             278  	ld.w 0x00000004[r3], r6
+0000020E 80FF0000             279  	jarl _Os_Hal_RestoreInt, r31
+00000212 44063FCF             280  	dispose 0x00000008, 0x00000679, [r31]
+00000216                      281  _Os_InsertAlarm.1:
+00000216                      282  	.stack _Os_InsertAlarm.1 = 16
+00000216                      283  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 510
+00000216 8007210E             284  	prepare 0x00000071, 0x00000000
+0000021A 06A0                 285  	mov r6, r20
+0000021C 07A8                 286  	mov r7, r21
+0000021E 08B0                 287  	mov r8, r22
+00000220                      288  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 513
+00000220 D436FFFF             289  	andi 0x0000FFFF, r20, r6
+00000224 023A                 290  	mov 0x00000002, r7
+00000226 80FF0000             291  	jarl _Os_ObjectIDCheck.1, r31
+0000022A 6152                 292  	cmp 0x00000001, r10
+0000022C 8A05                 293  	bnz9 .BB.LABEL.8_17
+0000022E                      294  .BB.LABEL.8_1:	; if_then_bb
+0000022E                      295  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 515
+0000022E 1410                 296  	mov r20, r2
+00000230 C212                 297  	shl 0x00000002, r2
+00000232                      298  	mov #_Os_ACB, r5
+00000232 250600000000            -- mov         0x0,tp
+00000238 C229                 299  	add r2, r5
+0000023A 25170100             300  	ld.w 0x00000000[r5], r2
+0000023E 22170100             301  	ld.w 0x00000000[r2], r2
+00000242 003A                 302  	mov 0x00000000, r7
+00000244 8046FFFF             303  	ori 0x0000FFFF, r0, r8
+00000248                      304  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 520
+00000248 F611                 305  	cmp r22, r2
+0000024A                      306  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 517
+0000024A 35370100             307  	ld.w 0x00000000[r21], r6
+0000024E 8B05                 308  	bh9 .BB.LABEL.8_7
+00000250 8505                 309  	br9 .BB.LABEL.8_13
+00000252                      310  .BB.LABEL.8_2:	; bb
+00000252                      311  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 0
+00000252 804EFFFF             312  	ori 0x0000FFFF, r0, r9
+00000256                      313  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 524
+00000256 E931                 314  	cmp r9, r6
+00000258 8A05                 315  	bnz9 .BB.LABEL.8_4
+0000025A                      316  .BB.LABEL.8_3:	; bb.bb64_crit_edge
+0000025A                      317  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 0
+0000025A 013A                 318  	mov 0x00000001, r7
+0000025C 8505                 319  	br9 .BB.LABEL.8_7
+0000025E                      320  .BB.LABEL.8_4:	; if_else_bb
+0000025E                      321  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 528
+0000025E 0648                 322  	mov r6, r9
+00000260 C24A                 323  	shl 0x00000002, r9
+00000262                      324  	mov #_Os_ACB, r10
+00000262 2A0600000000            -- mov         0x0,r10
+00000268 C951                 325  	add r9, r10
+0000026A 2A4F0100             326  	ld.w 0x00000000[r10], r9
+0000026E 29570100             327  	ld.w 0x00000000[r9], r10
+00000272 F651                 328  	cmp r22, r10
+00000274 8105                 329  	bl9 .BB.LABEL.8_3
+00000276                      330  .BB.LABEL.8_5:	; if_else_bb
+00000276                      331  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 0
+00000276 E251                 332  	cmp r2, r10
+00000278 8B05                 333  	bh9 .BB.LABEL.8_3
+0000027A                      334  .BB.LABEL.8_6:	; if_then_bb55
+0000027A                      335  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 531
+0000027A 294F0900             336  	ld.w 0x00000008[r9], r9
+0000027E 0640                 337  	mov r6, r8
+00000280 0930                 338  	mov r9, r6
+00000282                      339  .BB.LABEL.8_7:	; bb64
+00000282                      340  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 522
+00000282 C74EFF00             341  	andi 0x000000FF, r7, r9
+00000286 614A                 342  	cmp 0x00000001, r9
+00000288 8A05                 343  	bnz9 .BB.LABEL.8_2
+0000028A 8505                 344  	br9 .BB.LABEL.8_14
+0000028C                      345  .BB.LABEL.8_8:	; bb72
+0000028C                      346  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 0
+0000028C 804EFFFF             347  	ori 0x0000FFFF, r0, r9
+00000290                      348  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 543
+00000290 E931                 349  	cmp r9, r6
+00000292 8A05                 350  	bnz9 .BB.LABEL.8_10
+00000294                      351  .BB.LABEL.8_9:	; bb72.bb114_crit_edge
+00000294                      352  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 0
+00000294 013A                 353  	mov 0x00000001, r7
+00000296 8505                 354  	br9 .BB.LABEL.8_13
+00000298                      355  .BB.LABEL.8_10:	; if_else_bb78
+00000298                      356  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 547
+00000298 0648                 357  	mov r6, r9
+0000029A C24A                 358  	shl 0x00000002, r9
+0000029C                      359  	mov #_Os_ACB, r10
+0000029C 2A0600000000            -- mov         0x0,r10
+000002A2 C951                 360  	add r9, r10
+000002A4 2A4F0100             361  	ld.w 0x00000000[r10], r9
+000002A8 29570100             362  	ld.w 0x00000000[r9], r10
+000002AC F651                 363  	cmp r22, r10
+000002AE 8905                 364  	bnc9 .BB.LABEL.8_12
+000002B0                      365  .BB.LABEL.8_11:	; if_else_bb78
+000002B0                      366  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 0
+000002B0 E251                 367  	cmp r2, r10
+000002B2 8B05                 368  	bh9 .BB.LABEL.8_9
+000002B4                      369  .BB.LABEL.8_12:	; if_then_bb104
+000002B4                      370  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 550
+000002B4 294F0900             371  	ld.w 0x00000008[r9], r9
+000002B8 0640                 372  	mov r6, r8
+000002BA 0930                 373  	mov r9, r6
+000002BC                      374  .BB.LABEL.8_13:	; bb114
+000002BC                      375  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 541
+000002BC C74EFF00             376  	andi 0x000000FF, r7, r9
+000002C0 614A                 377  	cmp 0x00000001, r9
+000002C2 8A05                 378  	bnz9 .BB.LABEL.8_8
+000002C4                      379  .BB.LABEL.8_14:	; if_break_bb121
+000002C4                      380  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 559
+000002C4 25170100             381  	ld.w 0x00000000[r5], r2
+000002C8 62370900             382  	st.w r6, 0x00000008[r2]
+000002CC 8016FFFF             383  	ori 0x0000FFFF, r0, r2
+000002D0                      384  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 561
+000002D0 E241                 385  	cmp r2, r8
+000002D2 8205                 386  	bz9 .BB.LABEL.8_16
+000002D4                      387  .BB.LABEL.8_15:	; if_then_bb131
+000002D4                      388  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 563
+000002D4 C242                 389  	shl 0x00000002, r8
+000002D6                      390  	mov #_Os_ACB, r21
+000002D6 350600000000            -- mov         0x0,r21
+000002DC C8A9                 391  	add r8, r21
+000002DE 35AF0100             392  	ld.w 0x00000000[r21], r21
+000002E2 75A70900             393  	st.w r20, 0x00000008[r21]
+000002E6 40063F0E             394  	dispose 0x00000000, 0x00000071, [r31]
+000002EA                      395  .BB.LABEL.8_16:	; if_else_bb137
+000002EA                      396  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 567
+000002EA 75A70100             397  	st.w r20, 0x00000000[r21]
+000002EE                      398  .BB.LABEL.8_17:	; return
+000002EE                      399  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 572
+000002EE 40063F0E             400  	dispose 0x00000000, 0x00000071, [r31]
+000002F2                      401  _Os_DeleteAlarm.1:
+000002F2                      402  	.stack _Os_DeleteAlarm.1 = 12
+000002F2                      403  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 581
+000002F2 8007210C             404  	prepare 0x00000061, 0x00000000
+000002F6 06A0                 405  	mov r6, r20
+000002F8 07A8                 406  	mov r7, r21
+000002FA                      407  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 583
+000002FA D436FFFF             408  	andi 0x0000FFFF, r20, r6
+000002FE 023A                 409  	mov 0x00000002, r7
+00000300 80FF0000             410  	jarl _Os_ObjectIDCheck.1, r31
+00000304 6152                 411  	cmp 0x00000001, r10
+00000306 8A05                 412  	bnz9 .BB.LABEL.9_9
+00000308                      413  .BB.LABEL.9_1:	; entry.bb53_crit_edge
+00000308                      414  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 0
+00000308 8016FFFF             415  	ori 0x0000FFFF, r0, r2
+0000030C 1528                 416  	mov r21, r5
+0000030E 8505                 417  	br9 .BB.LABEL.9_8
+00000310                      418  .BB.LABEL.9_2:	; bb
+00000310                      419  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 594
+00000310 F411                 420  	cmp r20, r2
+00000312 8A05                 421  	bnz9 .BB.LABEL.9_7
+00000314                      422  .BB.LABEL.9_3:	; if_then_bb17
+00000314                      423  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 0
+00000314 802EFFFF             424  	ori 0x0000FFFF, r0, r5
+00000318                      425  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 596
+00000318 E531                 426  	cmp r5, r6
+0000031A 0228                 427  	mov r2, r5
+0000031C 8A05                 428  	bnz9 .BB.LABEL.9_5
+0000031E                      429  .BB.LABEL.9_4:	; if_then_bb22
+0000031E                      430  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 598
+0000031E C22A                 431  	shl 0x00000002, r5
+00000320                      432  	mov #_Os_ACB, r6
+00000320 260600000000            -- mov         0x0,r6
+00000326 C629                 433  	add r6, r5
+00000328 252F0100             434  	ld.w 0x00000000[r5], r5
+0000032C 252F0900             435  	ld.w 0x00000008[r5], r5
+00000330 752F0100             436  	st.w r5, 0x00000000[r21]
+00000334 8505                 437  	br9 .BB.LABEL.9_6
+00000336                      438  .BB.LABEL.9_5:	; if_else_bb29
+00000336                      439  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 602
+00000336 C22A                 440  	shl 0x00000002, r5
+00000338                      441  	mov #_Os_ACB, r20
+00000338 340600000000            -- mov         0x0,r20
+0000033E D429                 442  	add r20, r5
+00000340 C232                 443  	shl 0x00000002, r6
+00000342 C6A1                 444  	add r6, r20
+00000344 34370100             445  	ld.w 0x00000000[r20], r6
+00000348 252F0100             446  	ld.w 0x00000000[r5], r5
+0000034C 252F0900             447  	ld.w 0x00000008[r5], r5
+00000350 662F0900             448  	st.w r5, 0x00000008[r6]
+00000354                      449  .BB.LABEL.9_6:	; if_break_bb
+00000354                      450  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 604
+00000354 0228                 451  	mov r2, r5
+00000356 C22A                 452  	shl 0x00000002, r5
+00000358                      453  	mov #_Os_ACB, r6
+00000358 260600000000            -- mov         0x0,r6
+0000035E C629                 454  	add r6, r5
+00000360 252F0100             455  	ld.w 0x00000000[r5], r5
+00000364 65170900             456  	st.w r2, 0x00000008[r5]
+00000368                      457  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 605
+00000368 40063F0C             458  	dispose 0x00000000, 0x00000061, [r31]
+0000036C                      459  .BB.LABEL.9_7:	; if_else_bb45
+0000036C                      460  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 610
+0000036C 0228                 461  	mov r2, r5
+0000036E C22A                 462  	shl 0x00000002, r5
+00000370                      463  	mov #_Os_ACB, r6
+00000370 260600000000            -- mov         0x0,r6
+00000376 C629                 464  	add r6, r5
+00000378 252F0100             465  	ld.w 0x00000000[r5], r5
+0000037C 482A                 466  	add 0x00000008, r5
+0000037E                      467  .BB.LABEL.9_8:	; bb53
+0000037E                      468  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 0
+0000037E 0230                 469  	mov r2, r6
+00000380 25170100             470  	ld.w 0x00000000[r5], r2
+00000384 802EFFFF             471  	ori 0x0000FFFF, r0, r5
+00000388                      472  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 592
+00000388 E511                 473  	cmp r5, r2
+0000038A 8A05                 474  	bnz9 .BB.LABEL.9_2
+0000038C                      475  .BB.LABEL.9_9:	; return
+0000038C                      476  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 616
+0000038C 40063F0C             477  	dispose 0x00000000, 0x00000061, [r31]
+00000390                      478  _Os_CancelAlarm:
+00000390                      479  	.stack _Os_CancelAlarm = 20
+00000390                      480  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 626
+00000390 8207210E             481  	prepare 0x00000071, 0x00000004
+00000394 06A0                 482  	mov r6, r20
+00000396                      483  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 634
+00000396 80FF0000             484  	jarl _Os_Hal_SuspendInt, r31
+0000039A                      485  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 635
+0000039A 1410                 486  	mov r20, r2
+0000039C C212                 487  	shl 0x00000002, r2
+0000039E                      488  	mov #_Os_ACB, r5
+0000039E 250600000000            -- mov         0x0,tp
+000003A4 C229                 489  	add r2, r5
+000003A6 25170100             490  	ld.w 0x00000000[r5], r2
+000003AA 22170900             491  	ld.w 0x00000008[r2], r2
+000003AE E2A1                 492  	cmp r2, r20
+000003B0 0AA8                 493  	mov r10, r21
+000003B2 8A05                 494  	bnz9 .BB.LABEL.10_2
+000003B4                      495  .BB.LABEL.10_1:	; entry.if_break_bb_crit_edge
+000003B4                      496  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 0
+000003B4 05A2                 497  	mov 0x00000005, r20
+000003B6 8505                 498  	br9 .BB.LABEL.10_3
+000003B8                      499  .BB.LABEL.10_2:	; if_else_bb
+000003B8                      500  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 641
+000003B8 1410                 501  	mov r20, r2
+000003BA C412                 502  	shl 0x00000004, r2
+000003BC                      503  	mov #_Os_AlarmCfg, r5
+000003BC 250600000000            -- mov         0x0,tp
+000003C2 C229                 504  	add r2, r5
+000003C4 25170D00             505  	ld.w 0x0000000C[r5], r2
+000003C8                      506  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 642
+000003C8 C212                 507  	shl 0x00000002, r2
+000003CA                      508  	mov #_Os_CCB, r5
+000003CA 250600000000            -- mov         0x0,tp
+000003D0 C229                 509  	add r2, r5
+000003D2 25B70100             510  	ld.w 0x00000000[r5], r22
+000003D6                      511  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 643
+000003D6 36170900             512  	ld.w 0x00000008[r22], r2
+000003DA 63170100             513  	st.w r2, 0x00000000[r3]
+000003DE 0338                 514  	mov r3, r7
+000003E0                      515  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 644
+000003E0 1430                 516  	mov r20, r6
+000003E2 80FF0000             517  	jarl _Os_DeleteAlarm.1, r31
+000003E6                      518  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 645
+000003E6 23A70100             519  	ld.w 0x00000000[r3], r20
+000003EA 76A70900             520  	st.w r20, 0x00000008[r22]
+000003EE 00A2                 521  	mov 0x00000000, r20
+000003F0                      522  .BB.LABEL.10_3:	; if_break_bb
+000003F0                      523  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 647
+000003F0 1530                 524  	mov r21, r6
+000003F2 80FF0000             525  	jarl _Os_Hal_RestoreInt, r31
+000003F6                      526  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 650
+000003F6 D456FF00             527  	andi 0x000000FF, r20, r10
+000003FA 42063F0E             528  	dispose 0x00000004, 0x00000071, [r31]
+000003FE                      529  _Os_AbsAlarmCheckStatus.1:
+000003FE                      530  	.stack _Os_AbsAlarmCheckStatus.1 = 0
+000003FE                      531  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 659
+000003FE C432                 532  	shl 0x00000004, r6
+00000400                      533  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 667
+00000400                      534  	mov #_Os_AlarmCfg, r2
+00000400 220600000000            -- mov         0x0,hp
+00000406 C611                 535  	add r6, r2
+00000408 22170D00             536  	ld.w 0x0000000C[r2], r2
+0000040C                      537  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 669
+0000040C F8174002             538  	mul 0x00000018, r2, r0
+00000410                      539  	mov #_Os_CounterCfg, r5
+00000410 250600000000            -- mov         0x0,tp
+00000416 C229                 540  	add r2, r5
+00000418 25170100             541  	ld.w 0x00000000[r5], r2
+0000041C                      542  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 671
+0000041C E711                 543  	cmp r7, r2
+0000041E                      544  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 670
+0000041E 252F0500             545  	ld.w 0x00000004[r5], r5
+00000422                      546  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 671
+00000422 8905                 547  	bnc9 .BB.LABEL.11_2
+00000424                      548  .BB.LABEL.11_1:	; entry.if_break_bb52_crit_edge
+00000424                      549  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 0
+00000424 0852                 550  	mov 0x00000008, r10
+00000426 8505                 551  	br9 .BB.LABEL.11_4
+00000428                      552  .BB.LABEL.11_2:	; if_else_bb
+00000428                      553  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 675
+00000428 6042                 554  	cmp 0x00000000, r8
+0000042A 8A05                 555  	bnz9 .BB.LABEL.11_5
+0000042C                      556  .BB.LABEL.11_3:	; if_else_bb.if_break_bb52_crit_edge
+0000042C                      557  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 0
+0000042C 0052                 558  	mov 0x00000000, r10
+0000042E                      559  .BB.LABEL.11_4:	; if_break_bb52
+0000042E                      560  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 689
+0000042E 8A00                 561  	zxb r10
+00000430 7F00                 562  	jmp [r31]
+00000432                      563  .BB.LABEL.11_5:	; bb
+00000432                      564  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 0
+00000432 E811                 565  	cmp r8, r2
+00000434 8105                 566  	bl9 .BB.LABEL.11_7
+00000436                      567  .BB.LABEL.11_6:	; bb
+00000436 E829                 568  	cmp r8, r5
+00000438 8305                 569  	bnh9 .BB.LABEL.11_3
+0000043A                      570  .BB.LABEL.11_7:	; if_then_bb50
+0000043A 0852                 571  	mov 0x00000008, r10
+0000043C                      572  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 677
+0000043C 7F00                 573  	jmp [r31]
+0000043E                      574  _Os_SetAbsAlarm.1:
+0000043E                      575  	.stack _Os_SetAbsAlarm.1 = 40
+0000043E                      576  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 699
+0000043E 820721FF             577  	prepare 0x000007F9, 0x00000004
+00000442 06A0                 578  	mov r6, r20
+00000444 07A8                 579  	mov r7, r21
+00000446 08B0                 580  	mov r8, r22
+00000448                      581  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 702
+00000448 80FF0000             582  	jarl _Os_AbsAlarmCheckStatus.1, r31
+0000044C                      583  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 704
+0000044C 0ABE0000             584  	addi 0x00000000, r10, r23
+00000450 8A05                 585  	bnz9 .BB.LABEL.12_6
+00000452                      586  .BB.LABEL.12_1:	; if_then_bb
+00000452                      587  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 707
+00000452 80FF0000             588  	jarl _Os_Hal_SuspendInt, r31
+00000456                      589  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 708
+00000456 1410                 590  	mov r20, r2
+00000458 C212                 591  	shl 0x00000002, r2
+0000045A                      592  	mov #_Os_ACB, r24
+0000045A 380600000000            -- mov         0x0,r24
+00000460 C2C1                 593  	add r2, r24
+00000462 38170100             594  	ld.w 0x00000000[r24], r2
+00000466 22170900             595  	ld.w 0x00000008[r2], r2
+0000046A E2A1                 596  	cmp r2, r20
+0000046C 0AC8                 597  	mov r10, r25
+0000046E 8205                 598  	bz9 .BB.LABEL.12_3
+00000470                      599  .BB.LABEL.12_2:	; if_then_bb27
+00000470                      600  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 710
+00000470 1930                 601  	mov r25, r6
+00000472 80FF0000             602  	jarl _Os_Hal_RestoreInt, r31
+00000476 0752                 603  	mov 0x00000007, r10
+00000478                      604  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 711
+00000478 42063FFF             605  	dispose 0x00000004, 0x000007F9, [r31]
+0000047C                      606  .BB.LABEL.12_3:	; if_else_bb
+0000047C                      607  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 715
+0000047C 1410                 608  	mov r20, r2
+0000047E C412                 609  	shl 0x00000004, r2
+00000480                      610  	mov #_Os_AlarmCfg, r5
+00000480 250600000000            -- mov         0x0,tp
+00000486 C229                 611  	add r2, r5
+00000488 25470D00             612  	ld.w 0x0000000C[r5], r8
+0000048C                      613  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 716
+0000048C 0810                 614  	mov r8, r2
+0000048E F8174002             615  	mul 0x00000018, r2, r0
+00000492                      616  	mov #_Os_CounterCfg, r5
+00000492 250600000000            -- mov         0x0,tp
+00000498 C229                 617  	add r2, r5
+0000049A 25D70100             618  	ld.w 0x00000000[r5], r26
+0000049E                      619  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 717
+0000049E 0810                 620  	mov r8, r2
+000004A0 C212                 621  	shl 0x00000002, r2
+000004A2                      622  	mov #_Os_CCB, r5
+000004A2 250600000000            -- mov         0x0,tp
+000004A8 C229                 623  	add r2, r5
+000004AA 25DF0100             624  	ld.w 0x00000000[r5], r27
+000004AE                      625  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 719
+000004AE 3B370100             626  	ld.w 0x00000000[r27], r6
+000004B2 1538                 627  	mov r21, r7
+000004B4 80FF0000             628  	jarl _Os_GetDistance, r31
+000004B8 FA51                 629  	cmp r26, r10
+000004BA 38170100             630  	ld.w 0x00000000[r24], r2
+000004BE 8305                 631  	bnh9 .BB.LABEL.12_5
+000004C0                      632  .BB.LABEL.12_4:	; if_else_bb56
+000004C0                      633  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 725
+000004C0 D5D1                 634  	add r21, r26
+000004C2 41D2                 635  	add 0x00000001, r26
+000004C4 1AA8                 636  	mov r26, r21
+000004C6                      637  .BB.LABEL.12_5:	; if_break_bb
+000004C6                      638  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 0
+000004C6 62AF0100             639  	st.w r21, 0x00000000[r2]
+000004CA                      640  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 728
+000004CA 38170100             641  	ld.w 0x00000000[r24], r2
+000004CE 62B70500             642  	st.w r22, 0x00000004[r2]
+000004D2                      643  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 729
+000004D2 3B170900             644  	ld.w 0x00000008[r27], r2
+000004D6 63170100             645  	st.w r2, 0x00000000[r3]
+000004DA                      646  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 730
+000004DA 3B470100             647  	ld.w 0x00000000[r27], r8
+000004DE 0338                 648  	mov r3, r7
+000004E0 1430                 649  	mov r20, r6
+000004E2 80FF0000             650  	jarl _Os_InsertAlarm.1, r31
+000004E6                      651  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 731
+000004E6 23170100             652  	ld.w 0x00000000[r3], r2
+000004EA 7B170900             653  	st.w r2, 0x00000008[r27]
+000004EE                      654  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 732
+000004EE 1930                 655  	mov r25, r6
+000004F0 80FF0000             656  	jarl _Os_Hal_RestoreInt, r31
+000004F4                      657  .BB.LABEL.12_6:	; if_break_bb82
+000004F4                      658  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 0
+000004F4 1750                 659  	mov r23, r10
+000004F6                      660  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 737
+000004F6 42063FFF             661  	dispose 0x00000004, 0x000007F9, [r31]
+000004FA                      662  _Os_GetAlarmBase.1:
+000004FA                      663  	.stack _Os_GetAlarmBase.1 = 0
+000004FA                      664  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 747
+000004FA C432                 665  	shl 0x00000004, r6
+000004FC                      666  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 749
+000004FC                      667  	mov #_Os_AlarmCfg, r2
+000004FC 220600000000            -- mov         0x0,hp
+00000502 C611                 668  	add r6, r2
+00000504 22170D00             669  	ld.w 0x0000000C[r2], r2
+00000508                      670  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 752
+00000508 F8174002             671  	mul 0x00000018, r2, r0
+0000050C                      672  	mov #_Os_CounterCfg, r5
+0000050C 250600000000            -- mov         0x0,tp
+00000512 C229                 673  	add r2, r5
+00000514 25170100             674  	ld.w 0x00000000[r5], r2
+00000518 67170100             675  	st.w r2, 0x00000000[r7]
+0000051C                      676  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 753
+0000051C 25170500             677  	ld.w 0x00000004[r5], r2
+00000520 67170900             678  	st.w r2, 0x00000008[r7]
+00000524                      679  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 754
+00000524 25170900             680  	ld.w 0x00000008[r5], r2
+00000528 67170500             681  	st.w r2, 0x00000004[r7]
+0000052C 7F00                 682  	jmp [r31]
+0000052E                      683  _Os_RelAlarmCheckStatus.1:
+0000052E                      684  	.stack _Os_RelAlarmCheckStatus.1 = 0
+0000052E                      685  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 764
+0000052E 603A                 686  	cmp 0x00000000, r7
+00000530                      687  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 778
+00000530 8A05                 688  	bnz9 .BB.LABEL.14_2
+00000532                      689  .BB.LABEL.14_1:	; entry.if_break_bb59_crit_edge
+00000532                      690  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 0
+00000532 0852                 691  	mov 0x00000008, r10
+00000534 8505                 692  	br9 .BB.LABEL.14_5
+00000536                      693  .BB.LABEL.14_2:	; if_else_bb
+00000536                      694  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 785
+00000536 C432                 695  	shl 0x00000004, r6
+00000538                      696  	mov #_Os_AlarmCfg, r2
+00000538 220600000000            -- mov         0x0,hp
+0000053E C611                 697  	add r6, r2
+00000540 22170D00             698  	ld.w 0x0000000C[r2], r2
+00000544                      699  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 787
+00000544 F8174002             700  	mul 0x00000018, r2, r0
+00000548                      701  	mov #_Os_CounterCfg, r5
+00000548 250600000000            -- mov         0x0,tp
+0000054E C229                 702  	add r2, r5
+00000550                      703  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 788
+00000550 25170100             704  	ld.w 0x00000000[r5], r2
+00000554                      705  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 790
+00000554 E711                 706  	cmp r7, r2
+00000556                      707  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 787
+00000556 252F0500             708  	ld.w 0x00000004[r5], r5
+0000055A                      709  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 790
+0000055A 8105                 710  	bl9 .BB.LABEL.14_1
+0000055C                      711  .BB.LABEL.14_3:	; if_else_bb29
+0000055C                      712  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 794
+0000055C 6042                 713  	cmp 0x00000000, r8
+0000055E 8A05                 714  	bnz9 .BB.LABEL.14_6
+00000560                      715  .BB.LABEL.14_4:	; if_else_bb29.if_break_bb59_crit_edge
+00000560                      716  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 0
+00000560 0052                 717  	mov 0x00000000, r10
+00000562                      718  .BB.LABEL.14_5:	; if_break_bb59
+00000562                      719  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 808
+00000562 8A00                 720  	zxb r10
+00000564 7F00                 721  	jmp [r31]
+00000566                      722  .BB.LABEL.14_6:	; bb
+00000566                      723  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 0
+00000566 E811                 724  	cmp r8, r2
+00000568 8105                 725  	bl9 .BB.LABEL.14_8
+0000056A                      726  .BB.LABEL.14_7:	; bb
+0000056A E829                 727  	cmp r8, r5
+0000056C 8305                 728  	bnh9 .BB.LABEL.14_4
+0000056E                      729  .BB.LABEL.14_8:	; if_then_bb56
+0000056E 0852                 730  	mov 0x00000008, r10
+00000570                      731  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 796
+00000570 7F00                 732  	jmp [r31]
+00000572                      733  _Os_SetRelAlarm.1:
+00000572                      734  	.stack _Os_SetRelAlarm.1 = 40
+00000572                      735  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 817
+00000572 820721FF             736  	prepare 0x000007F9, 0x00000004
+00000576 06A0                 737  	mov r6, r20
+00000578 07A8                 738  	mov r7, r21
+0000057A 08B0                 739  	mov r8, r22
+0000057C                      740  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 822
+0000057C 80FF0000             741  	jarl _Os_RelAlarmCheckStatus.1, r31
+00000580                      742  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 824
+00000580 0ABE0000             743  	addi 0x00000000, r10, r23
+00000584 8A05                 744  	bnz9 .BB.LABEL.15_4
+00000586                      745  .BB.LABEL.15_1:	; if_then_bb
+00000586                      746  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 827
+00000586 80FF0000             747  	jarl _Os_Hal_SuspendInt, r31
+0000058A                      748  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 828
+0000058A 1410                 749  	mov r20, r2
+0000058C C212                 750  	shl 0x00000002, r2
+0000058E                      751  	mov #_Os_ACB, r24
+0000058E 380600000000            -- mov         0x0,r24
+00000594 C2C1                 752  	add r2, r24
+00000596 38CF0100             753  	ld.w 0x00000000[r24], r25
+0000059A 39170900             754  	ld.w 0x00000008[r25], r2
+0000059E E2A1                 755  	cmp r2, r20
+000005A0 0AD0                 756  	mov r10, r26
+000005A2 8205                 757  	bz9 .BB.LABEL.15_3
+000005A4                      758  .BB.LABEL.15_2:	; if_then_bb26
+000005A4                      759  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 830
+000005A4 1A30                 760  	mov r26, r6
+000005A6 80FF0000             761  	jarl _Os_Hal_RestoreInt, r31
+000005AA 0752                 762  	mov 0x00000007, r10
+000005AC                      763  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 831
+000005AC 42063FFF             764  	dispose 0x00000004, 0x000007F9, [r31]
+000005B0                      765  .BB.LABEL.15_3:	; if_else_bb
+000005B0                      766  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 835
+000005B0 1410                 767  	mov r20, r2
+000005B2 C412                 768  	shl 0x00000004, r2
+000005B4                      769  	mov #_Os_AlarmCfg, r5
+000005B4 250600000000            -- mov         0x0,tp
+000005BA C229                 770  	add r2, r5
+000005BC 25470D00             771  	ld.w 0x0000000C[r5], r8
+000005C0                      772  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 836
+000005C0 0810                 773  	mov r8, r2
+000005C2 C212                 774  	shl 0x00000002, r2
+000005C4                      775  	mov #_Os_CCB, r5
+000005C4 250600000000            -- mov         0x0,tp
+000005CA C229                 776  	add r2, r5
+000005CC 25DF0100             777  	ld.w 0x00000000[r5], r27
+000005D0                      778  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 838
+000005D0 3B370100             779  	ld.w 0x00000000[r27], r6
+000005D4 1538                 780  	mov r21, r7
+000005D6 80FF0000             781  	jarl _Os_CalcAbsTicks, r31
+000005DA 79570100             782  	st.w r10, 0x00000000[r25]
+000005DE                      783  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 840
+000005DE 38170100             784  	ld.w 0x00000000[r24], r2
+000005E2 62B70500             785  	st.w r22, 0x00000004[r2]
+000005E6                      786  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 841
+000005E6 3B170900             787  	ld.w 0x00000008[r27], r2
+000005EA 63170100             788  	st.w r2, 0x00000000[r3]
+000005EE                      789  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 842
+000005EE 3B470100             790  	ld.w 0x00000000[r27], r8
+000005F2 0338                 791  	mov r3, r7
+000005F4 1430                 792  	mov r20, r6
+000005F6 80FF0000             793  	jarl _Os_InsertAlarm.1, r31
+000005FA                      794  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 843
+000005FA 23170100             795  	ld.w 0x00000000[r3], r2
+000005FE 7B170900             796  	st.w r2, 0x00000008[r27]
+00000602                      797  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 844
+00000602 1A30                 798  	mov r26, r6
+00000604 80FF0000             799  	jarl _Os_Hal_RestoreInt, r31
+00000608                      800  .BB.LABEL.15_4:	; if_break_bb61
+00000608                      801  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 0
+00000608 1750                 802  	mov r23, r10
+0000060A                      803  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 849
+0000060A 42063FFF             804  	dispose 0x00000004, 0x000007F9, [r31]
+0000060E                      805  _GetAlarm:
+0000060E                      806  	.stack _GetAlarm = 12
+0000060E                      807  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 895
+0000060E 8007210C             808  	prepare 0x00000061, 0x00000000
+00000612 06A0                 809  	mov r6, r20
+00000614 07A8                 810  	mov r7, r21
+00000616                      811  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 905
+00000616 80FF0000             812  	jarl _Os_GetCurrentContext.1, r31
+0000061A                      813  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 915
+0000061A 60AA                 814  	cmp 0x00000000, r21
+0000061C 8A05                 815  	bnz9 .BB.LABEL.16_2
+0000061E                      816  .BB.LABEL.16_1:	; entry.if_break_bb20_crit_edge
+0000061E                      817  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 0
+0000061E 0B52                 818  	mov 0x0000000B, r10
+00000620 8505                 819  	br9 .BB.LABEL.16_4
+00000622                      820  .BB.LABEL.16_2:	; if_else_bb
+00000622                      821  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 919
+00000622 D436FFFF             822  	andi 0x0000FFFF, r20, r6
+00000626 023A                 823  	mov 0x00000002, r7
+00000628 80FF0000             824  	jarl _Os_ObjectIDCheck.1, r31
+0000062C 6152                 825  	cmp 0x00000001, r10
+0000062E 8205                 826  	bz9 .BB.LABEL.16_5
+00000630                      827  .BB.LABEL.16_3:	; if_else_bb.if_break_bb20_crit_edge
+00000630                      828  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 0
+00000630 0352                 829  	mov 0x00000003, r10
+00000632                      830  .BB.LABEL.16_4:	; if_break_bb20
+00000632                      831  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 974
+00000632 8A00                 832  	zxb r10
+00000634 40063F0C             833  	dispose 0x00000000, 0x00000061, [r31]
+00000638                      834  .BB.LABEL.16_5:	; if_else_bb16
+00000638                      835  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 950
+00000638 1430                 836  	mov r20, r6
+0000063A 1538                 837  	mov r21, r7
+0000063C 80FF0000             838  	jarl _Os_GetAlarm.1, r31
+00000640 40063F0C             839  	dispose 0x00000000, 0x00000061, [r31]
+00000644                      840  _GetAlarmBase:
+00000644                      841  	.stack _GetAlarmBase = 12
+00000644                      842  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 985
+00000644 8007210C             843  	prepare 0x00000061, 0x00000000
+00000648 06A0                 844  	mov r6, r20
+0000064A 07A8                 845  	mov r7, r21
+0000064C                      846  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 995
+0000064C 80FF0000             847  	jarl _Os_GetCurrentContext.1, r31
+00000650                      848  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 1005
+00000650 60AA                 849  	cmp 0x00000000, r21
+00000652 8A05                 850  	bnz9 .BB.LABEL.17_2
+00000654                      851  .BB.LABEL.17_1:	; entry.if_break_bb19_crit_edge
+00000654                      852  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 0
+00000654 0B52                 853  	mov 0x0000000B, r10
+00000656 8505                 854  	br9 .BB.LABEL.17_4
+00000658                      855  .BB.LABEL.17_2:	; if_else_bb
+00000658                      856  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 1009
+00000658 D436FFFF             857  	andi 0x0000FFFF, r20, r6
+0000065C 023A                 858  	mov 0x00000002, r7
+0000065E 80FF0000             859  	jarl _Os_ObjectIDCheck.1, r31
+00000662 6152                 860  	cmp 0x00000001, r10
+00000664 8205                 861  	bz9 .BB.LABEL.17_5
+00000666                      862  .BB.LABEL.17_3:	; if_else_bb.if_break_bb19_crit_edge
+00000666                      863  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 0
+00000666 0352                 864  	mov 0x00000003, r10
+00000668                      865  .BB.LABEL.17_4:	; if_break_bb19
+00000668                      866  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 1053
+00000668 8A00                 867  	zxb r10
+0000066A 40063F0C             868  	dispose 0x00000000, 0x00000061, [r31]
+0000066E                      869  .BB.LABEL.17_5:	; if_else_bb16
+0000066E                      870  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 1031
+0000066E 1430                 871  	mov r20, r6
+00000670 1538                 872  	mov r21, r7
+00000672 80FF0000             873  	jarl _Os_GetAlarmBase.1, r31
+00000676 0052                 874  	mov 0x00000000, r10
+00000678 40063F0C             875  	dispose 0x00000000, 0x00000061, [r31]
+0000067C                      876  _CancelAlarm:
+0000067C                      877  	.stack _CancelAlarm = 8
+0000067C                      878  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 1092
+0000067C 80072108             879  	prepare 0x00000041, 0x00000000
+00000680 06A0                 880  	mov r6, r20
+00000682                      881  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 1102
+00000682 80FF0000             882  	jarl _Os_GetCurrentContext.1, r31
+00000686                      883  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 1112
+00000686 D436FFFF             884  	andi 0x0000FFFF, r20, r6
+0000068A 023A                 885  	mov 0x00000002, r7
+0000068C 80FF0000             886  	jarl _Os_ObjectIDCheck.1, r31
+00000690 6152                 887  	cmp 0x00000001, r10
+00000692 8A05                 888  	bnz9 .BB.LABEL.18_2
+00000694                      889  .BB.LABEL.18_1:	; if_else_bb
+00000694                      890  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 1143
+00000694 1430                 891  	mov r20, r6
+00000696 80FF0000             892  	jarl _Os_CancelAlarm, r31
+0000069A 40063F08             893  	dispose 0x00000000, 0x00000041, [r31]
+0000069E                      894  .BB.LABEL.18_2:	; if_break_bb
+0000069E                      895  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 0
+0000069E 0352                 896  	mov 0x00000003, r10
+000006A0                      897  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 1166
+000006A0 40063F08             898  	dispose 0x00000000, 0x00000041, [r31]
+000006A4                      899  _SetRelAlarm:
+000006A4                      900  	.stack _SetRelAlarm = 16
+000006A4                      901  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 1209
+000006A4 8007210E             902  	prepare 0x00000071, 0x00000000
+000006A8 06A0                 903  	mov r6, r20
+000006AA 07A8                 904  	mov r7, r21
+000006AC 08B0                 905  	mov r8, r22
+000006AE                      906  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 1219
+000006AE 80FF0000             907  	jarl _Os_GetCurrentContext.1, r31
+000006B2                      908  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 1229
+000006B2 D436FFFF             909  	andi 0x0000FFFF, r20, r6
+000006B6 023A                 910  	mov 0x00000002, r7
+000006B8 80FF0000             911  	jarl _Os_ObjectIDCheck.1, r31
+000006BC 6152                 912  	cmp 0x00000001, r10
+000006BE 8A05                 913  	bnz9 .BB.LABEL.19_2
+000006C0                      914  .BB.LABEL.19_1:	; if_else_bb
+000006C0                      915  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 1260
+000006C0 1430                 916  	mov r20, r6
+000006C2 1538                 917  	mov r21, r7
+000006C4 1640                 918  	mov r22, r8
+000006C6 80FF0000             919  	jarl _Os_SetRelAlarm.1, r31
+000006CA 40063F0E             920  	dispose 0x00000000, 0x00000071, [r31]
+000006CE                      921  .BB.LABEL.19_2:	; if_break_bb
+000006CE                      922  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 0
+000006CE 0352                 923  	mov 0x00000003, r10
+000006D0                      924  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 1283
+000006D0 40063F0E             925  	dispose 0x00000000, 0x00000071, [r31]
+000006D4                      926  _SetAbsAlarm:
+000006D4                      927  	.stack _SetAbsAlarm = 16
+000006D4                      928  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 1326
+000006D4 8007210E             929  	prepare 0x00000071, 0x00000000
+000006D8 06A0                 930  	mov r6, r20
+000006DA 07A8                 931  	mov r7, r21
+000006DC 08B0                 932  	mov r8, r22
+000006DE                      933  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 1336
+000006DE 80FF0000             934  	jarl _Os_GetCurrentContext.1, r31
+000006E2                      935  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 1346
+000006E2 D436FFFF             936  	andi 0x0000FFFF, r20, r6
+000006E6 023A                 937  	mov 0x00000002, r7
+000006E8 80FF0000             938  	jarl _Os_ObjectIDCheck.1, r31
+000006EC 6152                 939  	cmp 0x00000001, r10
+000006EE 8A05                 940  	bnz9 .BB.LABEL.20_2
+000006F0                      941  .BB.LABEL.20_1:	; if_else_bb
+000006F0                      942  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 1377
+000006F0 1430                 943  	mov r20, r6
+000006F2 1538                 944  	mov r21, r7
+000006F4 1640                 945  	mov r22, r8
+000006F6 80FF0000             946  	jarl _Os_SetAbsAlarm.1, r31
+000006FA 40063F0E             947  	dispose 0x00000000, 0x00000071, [r31]
+000006FE                      948  .BB.LABEL.20_2:	; if_break_bb
+000006FE                      949  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 0
+000006FE 0352                 950  	mov 0x00000003, r10
+00000700                      951  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/SystemServices/Os/Kernel/src/Os_Alarm.c", 1400
+00000700 40063F0E             952  	dispose 0x00000000, 0x00000071, [r31]
+
+Section List
+Attr     Size                Name
+
+TEXT         1796 (00000704) .text
+
+Command Line Parameter
+-Xcpu=g3kh -Xreg_mode=32 -Xep=callee -Xcharacter_set=none -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\diagnostic -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\parameter_store -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu\port -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu\uart -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu\iic -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\vehicle_data_to_mpu -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\power_manage -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\mcu_cpu_sync -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\remote_control -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\can_cycle_send -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\project_configure -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\sdk\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\commonLib\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\hal\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\icu\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Icu_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\vss -ID:\wk\sirun\project\dazhong\code\mcu_app\ASW\CDD_FVM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\EEIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanTSyn -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\StbM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CSM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\RSA -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\RandomGen\CTR_DRBG -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\MAC\CMAC -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\Hash\sha256 -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\dh -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\AES -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CryInterface -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\SecOC -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\NvM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\MemIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\Fee -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\WdgM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\WdgIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Wdg_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Gpt_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Fls_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\wdg\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\gpt\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\fls\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\IpduM -ID:\wk\sirun\project\dazhong\code\mcu_app\ASW\APP -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\BswM -ID:\wk\sirun\project\dazhong\code\mcu_app\ASW\BSW_Ext -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\Dcm -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanTp -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Dem -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Libraries\E2E -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Libraries\Crc -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\NmIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanNm -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config\RTE\Rte -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config\RTE\SchM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Libraries\IStd -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\EcuM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\ComM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanSM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\Com -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\PDUR -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\CommonInclude -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config\RH850F1K -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Extend\inc -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Kernel\inc -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Portable\Mcu -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Portable\Processor -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Adc_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Can_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Dio_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Mcu_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Port_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\adc\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\can\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\dio\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\general -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\mcu\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\port\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\CanGeneral\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\Det\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\MemIf\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\SchM\include -DRH850_F1KM_S1_2MB -Xprn_path=DefaultBuild -Xno_warning=50013 -oD:\wk\sirun\project\dazhong\code\mcu_app\Toolchain\CSPLUS_V81200\DefaultBuild\Os_Alarm.obj D:\wk\sirun\project\dazhong\code\mcu_app\Toolchain\CSPLUS_V81200\DefaultBuild\Os_Alarm.asm 
+

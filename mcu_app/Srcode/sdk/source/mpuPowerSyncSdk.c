@@ -21,10 +21,15 @@ static MpuHalDataPack_t g_powerSyncPack;         //mpu通信数据包
 
 static uint8_t g_reqIndex = 0;                   //请求cpu休眠计数
 static uint8_t g_mpuSleepAckFlag = 0;            //MPU休眠响应标记  0：未响应 1：响应
+static uint8_t g_mcuReqCpuSleepFlag = 0;         // mcu请求cpu进入休眠标记
+static uint32_t g_mcuReqCpuSleepTimeCount = 0;   // mcu请求cpu进入休眠超时时间计数
+static uint32_t g_mcuReqCpuSleepCount = 0;       // mcu请求cpu进入休眠请求次数计数
 
 
 static SemaphoreHandle_t g_mutexHandle = NULL;   //互斥锁句柄
 static uint8_t g_sleepDisableEvent = 0;          //0 :无阻止休眠事件 其它：休眠事件
+static uint8_t g_lastSleepDisableEvent = 0;      //上一次的阻止休眠事件状态
+static uint32_t g_sleepDisableDelayCount = 0;    //切换到允许休眠后的2分钟延时计数
 
 static uint8_t g_mpuKeepAliveLoseFlag = 1;       //mpu 心跳丢失标记 0：未丢失，1：丢失
 
@@ -131,7 +136,7 @@ static int16_t MpuPowerSyncSdkSendPowerHalState(void)
     
     return 0;
 }
-#if(0)
+
 static int16_t MpuPowerSyncSdkSendBatteryState(void)
 {
     uint32_t voltage = 0;
@@ -183,7 +188,7 @@ static int16_t MpuPowerSyncSdkSendBatteryState(void)
     
     return 0;
 }
-#endif
+
 static int16_t MpuPowerSyncSdkSendPowerState(void)
 {
     if(g_mpuHandle < 0)
@@ -339,6 +344,17 @@ void MpuPowerSyncSdkCycleProcess(MpuHalDataPack_t *msgData)
             else if((msgData->subcommand&0x7F) == 0x06) //mpu同步阻止休眠事件到MCU
             {
                 xSemaphoreTake(g_mutexHandle, portMAX_DELAY);
+                /* 检测到从阻止休眠切换到允许休眠，启动2分钟延时 */
+                if(g_lastSleepDisableEvent != 0 && msgData->pDataBuffer[0] == 0)
+                {
+                    g_sleepDisableDelayCount = 120;  // 启动2分钟（120秒）延时
+                }
+                /* 如果收到新的阻止休眠，清除2分钟延时 */
+                if(msgData->pDataBuffer[0] != 0)
+                {
+                    g_sleepDisableDelayCount = 0;
+                }
+                g_lastSleepDisableEvent = msgData->pDataBuffer[0];
                 g_sleepDisableEvent = msgData->pDataBuffer[0];
                 xSemaphoreGive(g_mutexHandle);
                 mpuKeepAliveTimeCount = 0;
@@ -361,17 +377,37 @@ void MpuPowerSyncSdkCycleProcess(MpuHalDataPack_t *msgData)
         cycleTimeCount = 0;
         //同步车辆硬线状态
         MpuPowerSyncSdkSendPowerHalState();
-        // //同步备用电池状态
-        // MpuPowerSyncSdkSendBatteryState();  // TODO guanyuan
-        //设置电源模式
-        // MpuPowerSyncSdkSendPowerState();
+        //同步备用电池状态
+        MpuPowerSyncSdkSendBatteryState();
+        // 设置电源模式
+        MpuPowerSyncSdkSendPowerState();
         // //G-sensor状态同步
         // MpuPowerSyncSdkSendGsensorState();
     }
     
+    if(g_mcuReqCpuSleepFlag == 1)
+    {
+        g_mcuReqCpuSleepTimeCount++;
+        // 请求CPU休眠超过10无响应，重发一次请求
+        if(g_mcuReqCpuSleepTimeCount >= 10000/g_processCycleTime)
+        {
+            g_mcuReqCpuSleepTimeCount = 0;
+            MpuPowerSyncSdkRequstSleep(0);
+            g_mcuReqCpuSleepCount++;
+        }
+        // 请求CPU休眠超过1分钟无响应，认为MPU休眠成功，设置相应标记
+        if(g_mcuReqCpuSleepCount >= 1*60/10)
+        {
+            g_mpuSleepAckFlag = 1;
+            g_mcuReqCpuSleepFlag = 0;
+            g_mcuReqCpuSleepCount = 0;
+            g_wakeUpSource.setFlag = 0;
+        }
+    }
+
     if(g_wakeUpSource.setFlag == 1)
     {
-        if(wakeSourceSyncTimeCount++ >= (200/g_processCycleTime))
+        if(wakeSourceSyncTimeCount++ >= (200/10))   // TODO guanyuan
         {
             MpuPowerSyncSdkSendWakeSource(g_wakeUpSource.setData);
             wakeSourceSyncTimeCount = 0;
@@ -381,11 +417,16 @@ void MpuPowerSyncSdkCycleProcess(MpuHalDataPack_t *msgData)
     //CPU心跳是否丢失
     if(mpuKeepAliveTimeCount >= ((5 * 60 * 1000)/g_processCycleTime))
     {
+        TBOX_PRINT("mpu keep alive time out!\r\n");
+        TBOX_PRINT("mpu keep alive time out!\r\n");
+        TBOX_PRINT("mpu keep alive time out!\r\n");
         g_sleepDisableEvent = 0;  //清除阻止休眠标记
+        g_sleepDisableDelayCount = 0;  //清除2分钟延时计数
+        g_lastSleepDisableEvent = 0;
         g_mpuKeepAliveLoseFlag = 1;
         if(g_mpuErrorResetCount < 3)
         {
-            // MpuHalReset();   // TODO guanyuan
+            MpuHalReset();
             g_mpuErrorResetCount += 1;
         }
         if(g_mpuErrorCallBackFunc != NULL)
@@ -393,6 +434,15 @@ void MpuPowerSyncSdkCycleProcess(MpuHalDataPack_t *msgData)
             g_mpuErrorCallBackFunc();
         }
         mpuKeepAliveTimeCount = 0;
+    }
+
+    /* 2分钟延时递减逻辑（每秒递减1） */
+    if(g_sleepDisableDelayCount > 0 && g_sleepDisableEvent == 0)
+    {
+        if(cycleTimeCount == 0)  /* 每秒递减一次 */
+        {
+            g_sleepDisableDelayCount--;
+        }
     }
 }
 
@@ -509,12 +559,22 @@ int16_t MpuPowerSyncSdkGetWakeStatus(uint8_t *pWakeSource)
 int16_t MpuPowerSyncSdkGetSleepDisableState(void)
 {
     uint8_t sleepDisableEvent = 0;
+    uint8_t effectiveSleepDisable = 0;
 
     xSemaphoreTake(g_mutexHandle, portMAX_DELAY);
     sleepDisableEvent = g_sleepDisableEvent;
+    /* 当前允许休眠，但2分钟延时未结束，则返回阻止休眠 */
+    if(sleepDisableEvent == 0 && g_sleepDisableDelayCount > 0)
+    {
+        effectiveSleepDisable = 1;  /* 2分钟延时期内，阻止休眠 */
+    }
+    else
+    {
+        effectiveSleepDisable = sleepDisableEvent;
+    }
     xSemaphoreGive(g_mutexHandle);
 
-    return sleepDisableEvent;
+    return effectiveSleepDisable;
 }
 
 /*************************************************

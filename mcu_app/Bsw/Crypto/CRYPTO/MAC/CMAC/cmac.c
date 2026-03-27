@@ -195,9 +195,9 @@ Crypto_GernerateMAC(uint8 MAC[16], uint8 Key[16], uint8 IVKey[16], uint8* add, u
     uint8 k2[16] = {0X00};
     Crypto_AESData aes;
 
-    ret = LoadMacKey(&aes, Key, IVKey, k1, k2);
-    internal_GenerateMAC(&aes, inputlength, add, MAC, Key, IVKey, k1, k2);
-
+    // ret = LoadMacKey(&aes, Key, IVKey, k1, k2);
+    // internal_GenerateMAC(&aes, inputlength, add, MAC, Key, IVKey, k1, k2);
+    ret = VssSecocCmacGen(add, inputlength,MAC);
     return ret;
 }
 

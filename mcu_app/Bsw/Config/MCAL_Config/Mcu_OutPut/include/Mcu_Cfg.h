@@ -89,11 +89,10 @@
 **                          Input File                                        **
 *******************************************************************************/
 /*
- * INPUT FILE:    1
- *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\Config\ECUC\test_Mcu_Mcu0_ecuc.arxml
+ * INPUT FILE:    E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\Config\ECUC\test_Mcu_Mcu0_ecuc.arxml
  *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\modules\mcu\R422_MCU_F1x_BSWMDT.arxml
  *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\stubs\4.2.2\Dem\xml\Dem_Mcu.arxml
- * GENERATED ON:  10 Feb 2026 - 10:23:31
+ * GENERATED ON:  10 Mar 2026 - 20:09:18
  */
 
 
@@ -161,7 +160,7 @@
 #define MCU_PORTGROUP_STATUS_BACKUP         STD_ON
 
 /* Pre-compile option for the low power sequencer */
-#define MCU_LOW_POWER_SEQUENCER             STD_ON
+#define MCU_LOW_POWER_SEQUENCER             STD_OFF
 
 /* Pre-compile option for the Digital Input mode selection */
 #define MCU_DIGITAL_INPUT_MODE              STD_ON
@@ -227,13 +226,13 @@
 #define MCU_LOOPCOUNT                       (uint8)5
 
 /* Pre-Compile option for enabling INTCWEND */
-#define MCU_INTCWEND_ISR_ENABLE             STD_ON
+#define MCU_INTCWEND_ISR_ENABLE             STD_OFF
 
 /* Pre-Compile option for centralised clearing of all wake-up event  */
 #define MCU_WUF_CENTRALISED_CLEARING        STD_ON
 
 /* Pre-Compile option for Wakeup Factor */
-#define MCU_WUF_CLEARISR                    STD_ON
+#define MCU_WUF_CLEARISR                    STD_OFF
 
 /* Address for the McuRetentionRamSourceAddress */
 #define MCU_RETENTION_RAM_SOURCE_ADDRESS    (uint32)65536
@@ -322,11 +321,7 @@
   DemConf_DemEventParameter_DemEventParameter1
 
 
-/* Macro to Generate Configurable digital input pins */ 
-#define MCU_SEQUENCER_DPIN_ID      (uint8)80
 
-/* Channel available in DPDSR0 */ 
-#define MCU_DATA_SET_REGISTER      (uint8)24
 
 /* Macro for wakeup factor */
 #define MCU_ICCWEND_WAKEUP_FACTOR_CLR    (uint32)0x80000
@@ -378,11 +373,7 @@
 #define McuConf_McuRstRsnConfMultipleResets_McuRstRsnConfMultipleResets0 (Mcu_ResetType)0x11
 #define McuConf_McuRstRsnConfUnknown_McuRstRsnConfUnknown0 (Mcu_ResetType)0x12
 
-/* Low Power Sequencer Handles */
-#define McuConf_McuLowPowerSequencer_McuLowPowerSequencer0 (Mcu_SeqType)0x00
 
-/* Digital Input Mode Handles */
-#define McuConf_McuDigitalInputMode_McuDigitalInputMode0 (Mcu_SeqOperationType)0x01
 
 
 

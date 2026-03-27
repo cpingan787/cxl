@@ -58,7 +58,8 @@ typedef enum
     FVM_E_NOT_INITIALIZED = 0x02U,
     FVM_E_BUFFER_OVERFLOW = 0x03U,
     FVM_E_NVM_ERROR       = 0x04U,
-    FVM_E_VERIFICATION_FAILED = 0x05U
+    FVM_E_COUNTER_DECREASED = 0x05U,
+    FVM_E_VERIFICATION_FAILED = 0x06U
 } Fvm_ErrorType;
 
 typedef struct

@@ -9,6 +9,9 @@
 /****************************** include ***************************************/
 #include "fvmCfg.h"
 #include "NvM.h"
+#include "Dem.h"
+#include "taskPowerManage.h"
+#include "logHal.h"
 /****************************** Macro Definitions ******************************/
 /****************************** Type Definitions ******************************/
 /****************************** Global Variables ******************************/
@@ -73,7 +76,23 @@ static void SecocSaveTripCount(uint32_t value)
                 .NvmRamBlockDataAddress,
                 &value,
             FVM_TRIP_COUNTER_VALUE_NVMBLOCK_LEN);
-    NvM_WriteBlock(NvMBlock_SecOc_count,NULL_PTR);
+    Std_ReturnType ret = NvM_WriteBlock(NvMBlock_SecOc_count,NULL_PTR);
+    uint8 isEnable=GetTripCounterDetectEnable();
+    if(isEnable)
+    {
+        if(ret != E_OK)
+        {
+            //写入失败
+            Dem_SetEventStatus(EventParameter_0xE00444,DEM_EVENT_STATUS_FAILED);
+            TBOX_PRINT("Fvm_SaveTripCount failed, ret = %d", ret);
+        }
+        else
+        {
+            //写入成功
+            Dem_SetEventStatus(EventParameter_0xE00444,DEM_EVENT_STATUS_PASSED);
+            TBOX_PRINT("Fvm_SaveTripCount success, value = %d", value);
+        }
+    }   
     
 }
 

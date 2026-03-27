@@ -1,8 +1,11 @@
 #include "canPeriodTask.h"
 #include "Com.h"
 #include "stateSyncSdk.h"
-#include "timeSyncSdk.h"
 #include "logHal.h"
+
+static VehicleTime_t g_vehicleTime;
+
+static volatile uint8_t g_isCanSending=0;//标记can上是否正在发送卫星数据,0:未发送,1:正在发送
 
 // 定义卫星ID数组
 static uint8 satelliteID[20] =
@@ -190,6 +193,8 @@ static void SendLocationInfo(void)
 static SatelliteInfoSync_t satelliteInfo = {0};
 static void SendSatInfo(void)
 {
+    // 标记can上正在发送卫星数据
+    g_isCanSending = 1;
     /*
     判断卫星的ID是否符合要求
     a) SatID 和 SatNum 均未超过 127 时, 不需要改变
@@ -227,6 +232,7 @@ static void SendSatInfo(void)
                 {
                     satelliteInfo.svList[sentCount + i].svId = 127;
                 }
+                satelliteInfo.svList[sentCount + i].svId=satelliteInfo.svList[sentCount + i].svId>127?127:satelliteInfo.svList[sentCount + i].svId;
                 Com_SendSignal(satelliteID[i], &satelliteInfo.svList[sentCount + i].svId);       // 卫星ID
                 Com_SendSignal(satelliteAz[i], &satelliteInfo.svList[sentCount + i].azimuth);    // 卫星方位角
                 Com_SendSignal(satelliteElv[i], &satelliteInfo.svList[sentCount + i].elevation); // 卫星仰角
@@ -240,6 +246,7 @@ static void SendSatInfo(void)
             Com_SendSignal(ISvGroup_IAM_BKPCANFD_1000ms_FrP65_CONTROLLER_0_IAM_Tx, &svGroupCount); // GSV语句数据发送批
             for (uint8 i = 0; i < totalSatNum - sentCount; i++)
             {
+                satelliteInfo.svList[sentCount + i].svId=satelliteInfo.svList[sentCount + i].svId>127?127:satelliteInfo.svList[sentCount + i].svId;
                 Com_SendSignal(satelliteID[i], &satelliteInfo.svList[sentCount + i].svId);       // 卫星ID
                 Com_SendSignal(satelliteAz[i], &satelliteInfo.svList[sentCount + i].azimuth);    // 卫星方位角
                 Com_SendSignal(satelliteElv[i], &satelliteInfo.svList[sentCount + i].elevation); // 卫星仰角
@@ -250,39 +257,67 @@ static void SendSatInfo(void)
             break;
         }
     }
+    // 标记can上发送卫星数据完成
+    g_isCanSending = 0;
 }
 
-static void SendTimeInfo(void)
+// 接收ZXD整车时间
+static uint8 year = 19;
+static uint8 month = 1, day = 1, hour = 0, min = 0, sec = 0;
+static void RecvZXDTimeInfo(void)
 {
-    uint32 year32 = 0;
-    uint8 src = 0, month = 0, day = 0, hour = 0, min = 0, sec = 0;
-    uint8 status;
-    status = TimeSyncSdkGetRealTime(&src, &year32, &month, &day, &hour, &min, &sec) == -1 ? 0 : 1;
-    uint8 year8 = year32 - 2000;
-    if (src == 2)
-    {
-        Com_SendSignal(IGPSTiYear_IAM_CONNCAN_200ms_FrP01_CONTROLLER_0_IAM_Tx, &year8);
-        Com_SendSignal(IGPSTiMth_IAM_CONNCAN_200ms_FrP01_CONTROLLER_0_IAM_Tx, &month);
-        Com_SendSignal(IGPSTiDay_IAM_CONNCAN_200ms_FrP01_CONTROLLER_0_IAM_Tx, &day);
-        Com_SendSignal(IGPSTiHr_IAM_CONNCAN_200ms_FrP01_CONTROLLER_0_IAM_Tx, &hour);
-        Com_SendSignal(IGPSTiMins_IAM_CONNCAN_200ms_FrP01_CONTROLLER_0_IAM_Tx, &min);
-        Com_SendSignal(IGPSTiSec_IAM_CONNCAN_200ms_FrP01_CONTROLLER_0_IAM_Tx, &sec);
-        Com_SendSignal(IGPSTiSts_IAM_CONNCAN_200ms_FrP01_CONTROLLER_0_IAM_Tx, &status);
-    }
-    else if (src == 1)
-    {
-        Com_SendSignal(INTPTiYear_IAM_CONNCAN_200ms_FrP02_CONTROLLER_0_IAM_Tx, &year8);
-        Com_SendSignal(INTPTiMth_IAM_CONNCAN_200ms_FrP02_CONTROLLER_0_IAM_Tx, &month);
-        Com_SendSignal(INTPTiDay_IAM_CONNCAN_200ms_FrP02_CONTROLLER_0_IAM_Tx, &day);
-        Com_SendSignal(INTPTiHr_IAM_CONNCAN_200ms_FrP02_CONTROLLER_0_IAM_Tx, &hour);
-        Com_SendSignal(INTPTiMins_IAM_CONNCAN_200ms_FrP02_CONTROLLER_0_IAM_Tx, &min);
-        Com_SendSignal(INTPTiSec_IAM_CONNCAN_200ms_FrP02_CONTROLLER_0_IAM_Tx, &sec);
-    }
-    else
-    {
-        Com_SendSignal(INTPTiSts_IAM_CONNCAN_200ms_FrP02_CONTROLLER_0_IAM_Tx, &status);
-    }
+    Com_ReceiveSignal(IVehTiPblshYear_ICBVC_RZCUCANFD_200ms_FrP50_CONTROLLER_0_IAM_Rx, &year);
+    Com_ReceiveSignal(IVehTiPblshMth_ICBVC_RZCUCANFD_200ms_FrP50_CONTROLLER_0_IAM_Rx, &month);
+    Com_ReceiveSignal(IVehTiPblshDay_ICBVC_RZCUCANFD_200ms_FrP50_CONTROLLER_0_IAM_Rx, &day);
+    Com_ReceiveSignal(IVehTiPblshHr_ICBVC_RZCUCANFD_200ms_FrP50_CONTROLLER_0_IAM_Rx, &hour);
+    Com_ReceiveSignal(IVehTiPblshMins_ICBVC_RZCUCANFD_200ms_FrP50_CONTROLLER_0_IAM_Rx, &min);
+    Com_ReceiveSignal(IVehTiPblshSec_ICBVC_RZCUCANFD_200ms_FrP50_CONTROLLER_0_IAM_Rx, &sec);
+    g_vehicleTime.year = year;
+    g_vehicleTime.month = month;
+    g_vehicleTime.day = day;
+    g_vehicleTime.hour = hour;
+    g_vehicleTime.min = min;
+    g_vehicleTime.sec = sec;
 }
+
+/*************************************************
+  Function:       CanPeriodGetVehTime
+  Description:    获取整车时间
+  Input:
+  Output:         无
+  Return:         0：成功
+                  -1：失败
+  Others:
+*************************************************/
+uint8_t CanPeriodGetVehTime(uint8_t *year, uint8_t *month, uint8_t *day, uint8_t *hour, uint8_t *min, uint8_t *sec)
+{
+    if (year == NULL || month == NULL || day == NULL || hour == NULL || min == NULL || sec == NULL)
+    {
+        return -1;
+    }
+    *year = g_vehicleTime.year;
+    *month = g_vehicleTime.month;
+    *day = g_vehicleTime.day;
+    *hour = g_vehicleTime.hour;
+    *min = g_vehicleTime.min;
+    *sec = g_vehicleTime.sec;
+    return 0;
+}
+
+/*************************************************
+  Function:       StateSyncGetSatCanState
+  Description:    获取卫星CAN发送状态( 0:未发送 1:正在发送 )
+  Input:          无
+  Output:         无
+  Return:         0：can未发送sat数据
+                  1:can正在发送sat数据
+  Others:
+*************************************************/
+uint8_t StateSyncgGetSatCanState(void)
+{
+    return g_isCanSending;
+}
+
 /*************************************************
   Function:       CanPeriodCycleProcess
   Description:    Aes ecb 计算初始化
@@ -296,7 +331,7 @@ int16_t CanPeriodCycleProcess(void)
 {
     SendLocationInfo();
     SendSatInfo();
-    SendTimeInfo();
+    RecvZXDTimeInfo();
 #if (0)
     // 获取KL30电压
     uint32_t u16BAT_VOL = 0;

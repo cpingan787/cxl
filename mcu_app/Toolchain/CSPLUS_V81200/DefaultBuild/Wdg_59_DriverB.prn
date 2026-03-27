@@ -1,0 +1,226 @@
+RH850 Family Assembler V2.07.00.03 Assemble Source List
+
+OFFSET   CODE                  NO  SOURCE STATEMENT
+
+00000000                        1  #CC-RH Compiler RH850 Assembler Source
+00000000                        2  #@	CC-RH Version : V2.07.00  [06 Dec 2024]
+00000000                        3  #@	Command : ..\..\Bsw\Mcal\wdg\src\Wdg_59_DriverB.c -oDefaultBuild\Wdg_59_DriverB.obj -Xcpu=g3kh -Xno_warning=20188,20111 -g -g_line -I..\..\Srcode\app\diagnostic -I..\..\Srcode\app\parameter_store -I..\..\Cpu\port -I..\..\Cpu\uart -I..\..\Cpu\iic -I..\..\Srcode\app\vehicle_data_to_mpu -I..\..\Srcode\app\power_manage -I..\..\Srcode\app\mcu_cpu_sync -I..\..\Srcode\app\remote_control -I..\..\Srcode\app\can_cycle_send -I..\..\Srcode\app\project_configure -I..\..\Srcode\sdk\include -I..\..\Srcode\commonLib\include -I..\..\Srcode\hal\include -I..\..\Bsw\Mcal\icu\include -I..\..\Bsw\Config\MCAL_Config\Icu_OutPut\include -I..\..\Bsw\Crypto\CRYPTO\vss -I..\..\ASW\CDD_FVM -I..\..\Bsw\Memory\EEIf -I..\..\Bsw\Communication\CAN\CanTSyn -I..\..\Bsw\SystemServices\StbM -I..\..\Bsw\Crypto\CSM -I..\..\Bsw\Crypto\CRYPTO\RSA -I..\..\Bsw\Crypto\CRYPTO\RandomGen\CTR_DRBG -I..\..\Bsw\Crypto\CRYPTO\MAC\CMAC -I..\..\Bsw\Crypto\CRYPTO\Hash\sha256 -I..\..\Bsw\Crypto\CRYPTO\dh -I..\..\Bsw\Crypto\CRYPTO\AES -I..\..\Bsw\Crypto\CRYPTO -I..\..\Bsw\Crypto\CryInterface -I..\..\Bsw\Communication\Common\SecOC -I..\..\Bsw\Memory\NvM -I..\..\Bsw\Memory\MemIf -I..\..\Bsw\Memory\Fee -I..\..\Bsw\SystemServices\WdgM -I..\..\Bsw\SystemServices\WdgIf -I..\..\Bsw\Config\MCAL_Config\Wdg_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Gpt_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Fls_OutPut\include -I..\..\Bsw\Mcal\wdg\include -I..\..\Bsw\Mcal\gpt\include -I..\..\Bsw\Mcal\fls\include -I..\..\Bsw\Communication\Common\IpduM -I..\..\ASW\APP -I..\..\Bsw\SystemServices\BswM -I..\..\ASW\BSW_Ext -I..\..\Bsw\Communication\Common\Dcm -I..\..\Bsw\Communication\CAN\CanTp -I..\..\Bsw\SystemServices\Dem -I..\..\Bsw\Libraries\E2E -I..\..\Bsw\Libraries\Crc -I..\..\Bsw\Communication\Common\NmIf -I..\..\Bsw\Communication\CAN\CanNm -I..\..\Bsw\Config\BSW_Config\RTE\Rte -I..\..\Bsw\Config\BSW_Config\RTE\SchM -I..\..\Bsw\Libraries\IStd -I..\..\Bsw\SystemServices\EcuM -I..\..\Bsw\SystemServices\ComM -I..\..\Bsw\Communication\CAN\CanSM -I..\..\Bsw\Communication\CAN\CanIf -I..\..\Bsw\Communication\Common\Com -I..\..\Bsw\Communication\Common\PDUR -I..\..\Cpu -I..\..\Bsw\CommonInclude -I..\..\Bsw\Config\BSW_Config -I..\..\Bsw\Config\BSW_Config\RH850F1K -I..\..\Bsw\SystemServices\Os\Extend\inc -I..\..\Bsw\SystemServices\Os\Kernel\inc -I..\..\Bsw\SystemServices\Os\Portable\Mcu -I..\..\Bsw\SystemServices\Os\Portable\Processor -I..\..\Bsw\Config\MCAL_Config\Adc_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Can_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Dio_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Mcu_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Port_OutPut\include -I..\..\Bsw\Mcal\adc\include -I..\..\Bsw\Mcal\can\include -I..\..\Bsw\Mcal\dio\include -I..\..\Bsw\Mcal\general -I..\..\Bsw\Mcal\mcu\include -I..\..\Bsw\Mcal\port\include -I..\..\Bsw\Mcal\stubs\CanGeneral\include -I..\..\Bsw\Mcal\stubs\Det\include -I..\..\Bsw\Mcal\stubs\MemIf\include -I..\..\Bsw\Mcal\stubs\SchM\include -DRH850_F1KM_S1_2MB -lang=c99 -Xfloat=fpu -Xround=zero -Xdiv -Xasm_path=DefaultBuild -Xasm_option=-Xprn_path=DefaultBuild -c -MAKEUD=DefaultBuild -Xexec_time=C:\Users\xlchen\AppData\Local\Temp\CSPlusBuildTool_b472ff95990b4d4d80e71162695fdfaanvbw5b4o.afg
+00000000                        4  #@	compiled at Fri Mar 27 09:50:22 2026
+00000000                        5  
+00000000                        6  	.file "..\..\Bsw\Mcal\wdg\src\Wdg_59_DriverB.c"
+00000000                        7  
+00000000                        8  	$reg_mode 32
+00000000                        9  	.dbl_size 8
+00000000                       10  
+00000000                       11  	.extern _WDG_59_DriverB_GpWDTAReg_BaseAddr
+00000000                       12  	.extern _WDG_59_DriverB_GpICR_BaseAddr
+00000000                       13  	.extern _Wdg_59_DriverB_GpConfigPtr
+00000000                       14  	.extern _Wdg_59_DriverB_GddCurrentMode
+00000000                       15  	.extern _Wdg_59_DriverB_GusTriggerCounter
+00000000                       16  	.public _Wdg_59_DriverB_Init
+00000000                       17  	.extern _Wdg_59_DriverB_TriggerFunc
+00000000                       18  	.public _Wdg_59_DriverB_SetMode
+00000000                       19  	.extern _SchM_Enter_Wdg_59_DriverB_WDG_59_DRIVERB_MODE_SWITCH_PROTECTION
+00000000                       20  	.extern _SchM_Exit_Wdg_59_DriverB_WDG_59_DRIVERB_MODE_SWITCH_PROTECTION
+00000000                       21  	.extern _SchM_Enter_Wdg_59_DriverB_WDG_59_DRIVERB_TRIGG_PROTECTION
+00000000                       22  	.extern _SchM_Exit_Wdg_59_DriverB_WDG_59_DRIVERB_TRIGG_PROTECTION
+00000000                       23  	.public _Wdg_59_DriverB_SetTriggerCondition
+00000000                       24  
+00000000                       25  	.section .text, text
+00000000                       26  _Wdg_59_DriverB_Init:
+00000000                       27  	.stack _Wdg_59_DriverB_Init = 4
+00000000                       28  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/wdg/src/Wdg_59_DriverB.c", 485
+00000000 80072100              29  	prepare 0x00000001, 0x00000000
+00000004                       30  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/wdg/src/Wdg_59_DriverB.c", 531
+00000004 26170100              31  	ld.w 0x00000000[r6], r2
+00000008                       32  	mov 0x0ED98100, r5
+00000008 25060081D90E            -- mov         0xed98100,tp
+0000000E E511                  33  	cmp r5, r2
+00000010 8A05                  34  	bnz9 .BB.LABEL.1_4
+00000012                       35  .BB.LABEL.1_1:	; if_then_bb
+00000012                       36  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/wdg/src/Wdg_59_DriverB.c", 545
+00000012 40160000              37  	movhi HIGHW1(#_Wdg_59_DriverB_GpConfigPtr), r0, r2
+00000016 62370100              38  	st.w r6, LOWW(#_Wdg_59_DriverB_GpConfigPtr)[r2]
+0000001A                       39  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/wdg/src/Wdg_59_DriverB.c", 556
+0000001A 402E0000              40  	movhi HIGHW1(#_WDG_59_DriverB_GpICR_BaseAddr), r0, r5
+0000001E 252F0100              41  	ld.w LOWW(#_WDG_59_DriverB_GpICR_BaseAddr)[r5], r5
+00000022 85370100              42  	ld.bu 0x00000000[r5], r6
+00000026 C6367F00              43  	andi 0x0000007F, r6, r6
+0000002A 45370000              44  	st.b r6, 0x00000000[r5]
+0000002E                       45  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/wdg/src/Wdg_59_DriverB.c", 564
+0000002E 22170100              46  	ld.w LOWW(#_Wdg_59_DriverB_GpConfigPtr)[r2], r2
+00000032 222F1100              47  	ld.w 0x00000010[r2], r5
+00000036 602A                  48  	cmp 0x00000000, r5
+00000038 8205                  49  	bz9 .BB.LABEL.1_3
+0000003A                       50  .BB.LABEL.1_2:	; if_then_bb22
+0000003A                       51  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/wdg/src/Wdg_59_DriverB.c", 581
+0000003A 402E0000              52  	movhi HIGHW1(#_WDG_59_DriverB_GpWDTAReg_BaseAddr), r0, r5
+0000003E 25370100              53  	ld.w LOWW(#_WDG_59_DriverB_GpWDTAReg_BaseAddr)[r5], r6
+00000042 02170C00              54  	ld.b 0x0000000C[r2], r2
+00000046 86370D00              55  	ld.bu 0x0000000C[r6], r6
+0000004A C6360800              56  	andi 0x00000008, r6, r6
+0000004E 0611                  57  	or r6, r2
+00000050                       58  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/wdg/src/Wdg_59_DriverB.c", 585
+00000050 252F0100              59  	ld.w LOWW(#_WDG_59_DriverB_GpWDTAReg_BaseAddr)[r5], r5
+00000054 45170C00              60  	st.b r2, 0x0000000C[r5]
+00000058                       61  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/wdg/src/Wdg_59_DriverB.c", 596
+00000058 40160000              62  	movhi HIGHW1(#_Wdg_59_DriverB_GpConfigPtr), r0, r2
+0000005C 22170100              63  	ld.w LOWW(#_Wdg_59_DriverB_GpConfigPtr)[r2], r2
+00000060 22170400              64  	ld.h 0x00000004[r2], r2
+00000064 402E0000              65  	movhi HIGHW1(#_Wdg_59_DriverB_GusTriggerCounter), r0, r5
+00000068 65170000              66  	st.h r2, LOWW(#_Wdg_59_DriverB_GusTriggerCounter)[r5]
+0000006C 0032                  67  	mov 0x00000000, r6
+0000006E                       68  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/wdg/src/Wdg_59_DriverB.c", 602
+0000006E 80FF0000              69  	jarl _Wdg_59_DriverB_TriggerFunc, r31
+00000072                       70  .BB.LABEL.1_3:	; if_break_bb
+00000072                       71  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/wdg/src/Wdg_59_DriverB.c", 611
+00000072 40160000              72  	movhi HIGHW1(#_Wdg_59_DriverB_GpConfigPtr), r0, r2
+00000076 22170100              73  	ld.w LOWW(#_Wdg_59_DriverB_GpConfigPtr)[r2], r2
+0000007A 22171100              74  	ld.w 0x00000010[r2], r2
+0000007E 402E0000              75  	movhi HIGHW1(#_Wdg_59_DriverB_GddCurrentMode), r0, r5
+00000082 65170100              76  	st.w r2, LOWW(#_Wdg_59_DriverB_GddCurrentMode)[r5]
+00000086                       77  .BB.LABEL.1_4:	; return
+00000086                       78  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/wdg/src/Wdg_59_DriverB.c", 651
+00000086 40063F00              79  	dispose 0x00000000, 0x00000001, [r31]
+0000008A                       80  _Wdg_59_DriverB_SetMode:
+0000008A                       81  	.stack _Wdg_59_DriverB_SetMode = 12
+0000008A                       82  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/wdg/src/Wdg_59_DriverB.c", 704
+0000008A 8007210C              83  	prepare 0x00000061, 0x00000000
+0000008E 06A60000              84  	addi 0x00000000, r6, r20
+00000092 8205                  85  	bz9 .BB.LABEL.2_8
+00000094                       86  .BB.LABEL.2_1:	; if_else_bb
+00000094                       87  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/wdg/src/Wdg_59_DriverB.c", 806
+00000094 40160000              88  	movhi HIGHW1(#_Wdg_59_DriverB_GddCurrentMode), r0, r2
+00000098 22170100              89  	ld.w LOWW(#_Wdg_59_DriverB_GddCurrentMode)[r2], r2
+0000009C 6012                  90  	cmp 0x00000000, r2
+0000009E 8A05                  91  	bnz9 .BB.LABEL.2_6
+000000A0                       92  .BB.LABEL.2_2:	; if_then_bb10
+000000A0                       93  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/wdg/src/Wdg_59_DriverB.c", 810
+000000A0 61A2                  94  	cmp 0x00000001, r20
+000000A2 8A05                  95  	bnz9 .BB.LABEL.2_4
+000000A4                       96  .BB.LABEL.2_3:	; if_then_bb15
+000000A4                       97  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/wdg/src/Wdg_59_DriverB.c", 818
+000000A4 80FF0000              98  	jarl _SchM_Enter_Wdg_59_DriverB_WDG_59_DRIVERB_MODE_SWITCH_PROTECTION, r31
+000000A8                       99  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/wdg/src/Wdg_59_DriverB.c", 823
+000000A8 40160000             100  	movhi HIGHW1(#_WDG_59_DriverB_GpWDTAReg_BaseAddr), r0, r2
+000000AC 222F0100             101  	ld.w LOWW(#_WDG_59_DriverB_GpWDTAReg_BaseAddr)[r2], r5
+000000B0 40AE0000             102  	movhi HIGHW1(#_Wdg_59_DriverB_GpConfigPtr), r0, r21
+000000B4 35370100             103  	ld.w LOWW(#_Wdg_59_DriverB_GpConfigPtr)[r21], r6
+000000B8 852F0D00             104  	ld.bu 0x0000000C[r5], r5
+000000BC C52E0800             105  	andi 0x00000008, r5, r5
+000000C0                      106  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/wdg/src/Wdg_59_DriverB.c", 827
+000000C0 22170100             107  	ld.w LOWW(#_WDG_59_DriverB_GpWDTAReg_BaseAddr)[r2], r2
+000000C4                      108  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/wdg/src/Wdg_59_DriverB.c", 823
+000000C4 06370A00             109  	ld.b 0x0000000A[r6], r6
+000000C8 0531                 110  	or r5, r6
+000000CA                      111  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/wdg/src/Wdg_59_DriverB.c", 827
+000000CA 42370C00             112  	st.b r6, 0x0000000C[r2]
+000000CE                      113  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/wdg/src/Wdg_59_DriverB.c", 843
+000000CE 80FF0000             114  	jarl _SchM_Exit_Wdg_59_DriverB_WDG_59_DRIVERB_MODE_SWITCH_PROTECTION, r31
+000000D2                      115  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/wdg/src/Wdg_59_DriverB.c", 854
+000000D2 80FF0000             116  	jarl _SchM_Enter_Wdg_59_DriverB_WDG_59_DRIVERB_TRIGG_PROTECTION, r31
+000000D6                      117  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/wdg/src/Wdg_59_DriverB.c", 859
+000000D6 35170100             118  	ld.w LOWW(#_Wdg_59_DriverB_GpConfigPtr)[r21], r2
+000000DA E2170700             119  	ld.hu 0x00000006[r2], r2
+000000DE 8505                 120  	br9 .BB.LABEL.2_5
+000000E0                      121  .BB.LABEL.2_4:	; if_else_bb36
+000000E0                      122  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/wdg/src/Wdg_59_DriverB.c", 881
+000000E0 80FF0000             123  	jarl _SchM_Enter_Wdg_59_DriverB_WDG_59_DRIVERB_MODE_SWITCH_PROTECTION, r31
+000000E4                      124  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/wdg/src/Wdg_59_DriverB.c", 886
+000000E4 40160000             125  	movhi HIGHW1(#_WDG_59_DriverB_GpWDTAReg_BaseAddr), r0, r2
+000000E8 222F0100             126  	ld.w LOWW(#_WDG_59_DriverB_GpWDTAReg_BaseAddr)[r2], r5
+000000EC 40AE0000             127  	movhi HIGHW1(#_Wdg_59_DriverB_GpConfigPtr), r0, r21
+000000F0 35370100             128  	ld.w LOWW(#_Wdg_59_DriverB_GpConfigPtr)[r21], r6
+000000F4 852F0D00             129  	ld.bu 0x0000000C[r5], r5
+000000F8 C52E0800             130  	andi 0x00000008, r5, r5
+000000FC                      131  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/wdg/src/Wdg_59_DriverB.c", 890
+000000FC 22170100             132  	ld.w LOWW(#_WDG_59_DriverB_GpWDTAReg_BaseAddr)[r2], r2
+00000100                      133  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/wdg/src/Wdg_59_DriverB.c", 886
+00000100 06370B00             134  	ld.b 0x0000000B[r6], r6
+00000104 0531                 135  	or r5, r6
+00000106                      136  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/wdg/src/Wdg_59_DriverB.c", 890
+00000106 42370C00             137  	st.b r6, 0x0000000C[r2]
+0000010A                      138  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/wdg/src/Wdg_59_DriverB.c", 906
+0000010A 80FF0000             139  	jarl _SchM_Exit_Wdg_59_DriverB_WDG_59_DRIVERB_MODE_SWITCH_PROTECTION, r31
+0000010E                      140  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/wdg/src/Wdg_59_DriverB.c", 916
+0000010E 80FF0000             141  	jarl _SchM_Enter_Wdg_59_DriverB_WDG_59_DRIVERB_TRIGG_PROTECTION, r31
+00000112                      142  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/wdg/src/Wdg_59_DriverB.c", 920
+00000112 35170100             143  	ld.w LOWW(#_Wdg_59_DriverB_GpConfigPtr)[r21], r2
+00000116 E2170900             144  	ld.hu 0x00000008[r2], r2
+0000011A                      145  .BB.LABEL.2_5:	; if_else_bb36
+0000011A                      146  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/wdg/src/Wdg_59_DriverB.c", 0
+0000011A 202EE803             147  	movea 0x000003E8, r0, r5
+0000011E E22F8202             148  	divhu r2, r5, r0
+00000122 40160000             149  	movhi HIGHW1(#_Wdg_59_DriverB_GusTriggerCounter), r0, r2
+00000126 622F0000             150  	st.h r5, LOWW(#_Wdg_59_DriverB_GusTriggerCounter)[r2]
+0000012A 80FF0000             151  	jarl _SchM_Exit_Wdg_59_DriverB_WDG_59_DRIVERB_TRIGG_PROTECTION, r31
+0000012E                      152  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/wdg/src/Wdg_59_DriverB.c", 933
+0000012E 80FF0000             153  	jarl _SchM_Enter_Wdg_59_DriverB_WDG_59_DRIVERB_MODE_SWITCH_PROTECTION, r31
+00000132                      154  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/wdg/src/Wdg_59_DriverB.c", 938
+00000132 40160000             155  	movhi HIGHW1(#_Wdg_59_DriverB_GddCurrentMode), r0, r2
+00000136 62A70100             156  	st.w r20, LOWW(#_Wdg_59_DriverB_GddCurrentMode)[r2]
+0000013A                      157  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/wdg/src/Wdg_59_DriverB.c", 942
+0000013A 80FF0000             158  	jarl _SchM_Exit_Wdg_59_DriverB_WDG_59_DRIVERB_MODE_SWITCH_PROTECTION, r31
+0000013E 0132                 159  	mov 0x00000001, r6
+00000140                      160  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/wdg/src/Wdg_59_DriverB.c", 947
+00000140 80FF0000             161  	jarl _Wdg_59_DriverB_TriggerFunc, r31
+00000144                      162  .BB.LABEL.2_6:	; if_break_bb59
+00000144                      163  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/wdg/src/Wdg_59_DriverB.c", 955
+00000144 40160000             164  	movhi HIGHW1(#_Wdg_59_DriverB_GddCurrentMode), r0, r2
+00000148 22170100             165  	ld.w LOWW(#_Wdg_59_DriverB_GddCurrentMode)[r2], r2
+0000014C E2A1                 166  	cmp r2, r20
+0000014E 8A05                 167  	bnz9 .BB.LABEL.2_8
+00000150                      168  .BB.LABEL.2_7:	; if_break_bb59.if_break_bb68_crit_edge
+00000150                      169  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/wdg/src/Wdg_59_DriverB.c", 0
+00000150 0052                 170  	mov 0x00000000, r10
+00000152 8505                 171  	br9 .BB.LABEL.2_9
+00000154                      172  .BB.LABEL.2_8:	; if_then_bb65
+00000154 0152                 173  	mov 0x00000001, r10
+00000156                      174  .BB.LABEL.2_9:	; if_break_bb68
+00000156                      175  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/wdg/src/Wdg_59_DriverB.c", 998
+00000156 40063F0C             176  	dispose 0x00000000, 0x00000061, [r31]
+0000015A                      177  _Wdg_59_DriverB_SetTriggerCondition:
+0000015A                      178  	.stack _Wdg_59_DriverB_SetTriggerCondition = 8
+0000015A                      179  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/wdg/src/Wdg_59_DriverB.c", 1044
+0000015A 80072108             180  	prepare 0x00000041, 0x00000000
+0000015E 06A0                 181  	mov r6, r20
+00000160                      182  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/wdg/src/Wdg_59_DriverB.c", 1101
+00000160 80FF0000             183  	jarl _SchM_Enter_Wdg_59_DriverB_WDG_59_DRIVERB_TRIGG_PROTECTION, r31
+00000164                      184  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/wdg/src/Wdg_59_DriverB.c", 1109
+00000164 40160000             185  	movhi HIGHW1(#_Wdg_59_DriverB_GddCurrentMode), r0, r2
+00000168 22170100             186  	ld.w LOWW(#_Wdg_59_DriverB_GddCurrentMode)[r2], r2
+0000016C 6112                 187  	cmp 0x00000001, r2
+0000016E 8A05                 188  	bnz9 .BB.LABEL.3_2
+00000170                      189  .BB.LABEL.3_1:	; if_then_bb
+00000170                      190  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/wdg/src/Wdg_59_DriverB.c", 1112
+00000170 40160000             191  	movhi HIGHW1(#_Wdg_59_DriverB_GpConfigPtr), r0, r2
+00000174 22170100             192  	ld.w LOWW(#_Wdg_59_DriverB_GpConfigPtr)[r2], r2
+00000178 E2170700             193  	ld.hu 0x00000006[r2], r2
+0000017C 8505                 194  	br9 .BB.LABEL.3_4
+0000017E                      195  .BB.LABEL.3_2:	; if_else_bb
+0000017E                      196  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/wdg/src/Wdg_59_DriverB.c", 1115
+0000017E 6212                 197  	cmp 0x00000002, r2
+00000180 8A05                 198  	bnz9 .BB.LABEL.3_5
+00000182                      199  .BB.LABEL.3_3:	; if_then_bb16
+00000182                      200  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/wdg/src/Wdg_59_DriverB.c", 1118
+00000182 40160000             201  	movhi HIGHW1(#_Wdg_59_DriverB_GpConfigPtr), r0, r2
+00000186 22170100             202  	ld.w LOWW(#_Wdg_59_DriverB_GpConfigPtr)[r2], r2
+0000018A E2170900             203  	ld.hu 0x00000008[r2], r2
+0000018E                      204  .BB.LABEL.3_4:	; if_then_bb16
+0000018E                      205  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/wdg/src/Wdg_59_DriverB.c", 0
+0000018E E2A78202             206  	divhu r2, r20, r0
+00000192 40160000             207  	movhi HIGHW1(#_Wdg_59_DriverB_GusTriggerCounter), r0, r2
+00000196 62A70000             208  	st.h r20, LOWW(#_Wdg_59_DriverB_GusTriggerCounter)[r2]
+0000019A                      209  .BB.LABEL.3_5:	; if_break_bb26
+0000019A                      210  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/wdg/src/Wdg_59_DriverB.c", 1132
+0000019A 80FF0000             211  	jarl _SchM_Exit_Wdg_59_DriverB_WDG_59_DRIVERB_TRIGG_PROTECTION, r31
+0000019E 40063F08             212  	dispose 0x00000000, 0x00000041, [r31]
+
+Section List
+Attr     Size                Name
+
+TEXT          418 (000001A2) .text
+
+Command Line Parameter
+-Xcpu=g3kh -Xreg_mode=32 -Xep=callee -Xcharacter_set=none -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\diagnostic -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\parameter_store -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu\port -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu\uart -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu\iic -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\vehicle_data_to_mpu -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\power_manage -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\mcu_cpu_sync -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\remote_control -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\can_cycle_send -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\project_configure -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\sdk\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\commonLib\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\hal\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\icu\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Icu_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\vss -ID:\wk\sirun\project\dazhong\code\mcu_app\ASW\CDD_FVM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\EEIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanTSyn -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\StbM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CSM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\RSA -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\RandomGen\CTR_DRBG -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\MAC\CMAC -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\Hash\sha256 -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\dh -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\AES -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CryInterface -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\SecOC -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\NvM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\MemIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\Fee -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\WdgM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\WdgIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Wdg_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Gpt_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Fls_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\wdg\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\gpt\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\fls\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\IpduM -ID:\wk\sirun\project\dazhong\code\mcu_app\ASW\APP -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\BswM -ID:\wk\sirun\project\dazhong\code\mcu_app\ASW\BSW_Ext -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\Dcm -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanTp -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Dem -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Libraries\E2E -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Libraries\Crc -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\NmIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanNm -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config\RTE\Rte -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config\RTE\SchM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Libraries\IStd -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\EcuM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\ComM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanSM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\Com -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\PDUR -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\CommonInclude -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config\RH850F1K -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Extend\inc -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Kernel\inc -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Portable\Mcu -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Portable\Processor -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Adc_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Can_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Dio_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Mcu_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Port_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\adc\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\can\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\dio\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\general -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\mcu\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\port\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\CanGeneral\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\Det\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\MemIf\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\SchM\include -DRH850_F1KM_S1_2MB -Xprn_path=DefaultBuild -Xno_warning=50013 -oD:\wk\sirun\project\dazhong\code\mcu_app\Toolchain\CSPLUS_V81200\DefaultBuild\Wdg_59_DriverB.obj D:\wk\sirun\project\dazhong\code\mcu_app\Toolchain\CSPLUS_V81200\DefaultBuild\Wdg_59_DriverB.asm 
+

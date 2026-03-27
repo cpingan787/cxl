@@ -1,0 +1,560 @@
+RH850 Family Assembler V2.07.00.03 Assemble Source List
+
+OFFSET   CODE                  NO  SOURCE STATEMENT
+
+00000000                        1  #CC-RH Compiler RH850 Assembler Source
+00000000                        2  #@	CC-RH Version : V2.07.00  [06 Dec 2024]
+00000000                        3  #@	Command : ..\..\Srcode\sdk\source\canPassthroughSdk.c -oDefaultBuild\canPassthroughSdk.obj -Xcpu=g3kh -Xno_warning=20188,20111 -g -g_line -I..\..\Srcode\app\diagnostic -I..\..\Srcode\app\parameter_store -I..\..\Cpu\port -I..\..\Cpu\uart -I..\..\Cpu\iic -I..\..\Srcode\app\vehicle_data_to_mpu -I..\..\Srcode\app\power_manage -I..\..\Srcode\app\mcu_cpu_sync -I..\..\Srcode\app\remote_control -I..\..\Srcode\app\can_cycle_send -I..\..\Srcode\app\project_configure -I..\..\Srcode\sdk\include -I..\..\Srcode\commonLib\include -I..\..\Srcode\hal\include -I..\..\Bsw\Mcal\icu\include -I..\..\Bsw\Config\MCAL_Config\Icu_OutPut\include -I..\..\Bsw\Crypto\CRYPTO\vss -I..\..\ASW\CDD_FVM -I..\..\Bsw\Memory\EEIf -I..\..\Bsw\Communication\CAN\CanTSyn -I..\..\Bsw\SystemServices\StbM -I..\..\Bsw\Crypto\CSM -I..\..\Bsw\Crypto\CRYPTO\RSA -I..\..\Bsw\Crypto\CRYPTO\RandomGen\CTR_DRBG -I..\..\Bsw\Crypto\CRYPTO\MAC\CMAC -I..\..\Bsw\Crypto\CRYPTO\Hash\sha256 -I..\..\Bsw\Crypto\CRYPTO\dh -I..\..\Bsw\Crypto\CRYPTO\AES -I..\..\Bsw\Crypto\CRYPTO -I..\..\Bsw\Crypto\CryInterface -I..\..\Bsw\Communication\Common\SecOC -I..\..\Bsw\Memory\NvM -I..\..\Bsw\Memory\MemIf -I..\..\Bsw\Memory\Fee -I..\..\Bsw\SystemServices\WdgM -I..\..\Bsw\SystemServices\WdgIf -I..\..\Bsw\Config\MCAL_Config\Wdg_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Gpt_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Fls_OutPut\include -I..\..\Bsw\Mcal\wdg\include -I..\..\Bsw\Mcal\gpt\include -I..\..\Bsw\Mcal\fls\include -I..\..\Bsw\Communication\Common\IpduM -I..\..\ASW\APP -I..\..\Bsw\SystemServices\BswM -I..\..\ASW\BSW_Ext -I..\..\Bsw\Communication\Common\Dcm -I..\..\Bsw\Communication\CAN\CanTp -I..\..\Bsw\SystemServices\Dem -I..\..\Bsw\Libraries\E2E -I..\..\Bsw\Libraries\Crc -I..\..\Bsw\Communication\Common\NmIf -I..\..\Bsw\Communication\CAN\CanNm -I..\..\Bsw\Config\BSW_Config\RTE\Rte -I..\..\Bsw\Config\BSW_Config\RTE\SchM -I..\..\Bsw\Libraries\IStd -I..\..\Bsw\SystemServices\EcuM -I..\..\Bsw\SystemServices\ComM -I..\..\Bsw\Communication\CAN\CanSM -I..\..\Bsw\Communication\CAN\CanIf -I..\..\Bsw\Communication\Common\Com -I..\..\Bsw\Communication\Common\PDUR -I..\..\Cpu -I..\..\Bsw\CommonInclude -I..\..\Bsw\Config\BSW_Config -I..\..\Bsw\Config\BSW_Config\RH850F1K -I..\..\Bsw\SystemServices\Os\Extend\inc -I..\..\Bsw\SystemServices\Os\Kernel\inc -I..\..\Bsw\SystemServices\Os\Portable\Mcu -I..\..\Bsw\SystemServices\Os\Portable\Processor -I..\..\Bsw\Config\MCAL_Config\Adc_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Can_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Dio_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Mcu_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Port_OutPut\include -I..\..\Bsw\Mcal\adc\include -I..\..\Bsw\Mcal\can\include -I..\..\Bsw\Mcal\dio\include -I..\..\Bsw\Mcal\general -I..\..\Bsw\Mcal\mcu\include -I..\..\Bsw\Mcal\port\include -I..\..\Bsw\Mcal\stubs\CanGeneral\include -I..\..\Bsw\Mcal\stubs\Det\include -I..\..\Bsw\Mcal\stubs\MemIf\include -I..\..\Bsw\Mcal\stubs\SchM\include -DRH850_F1KM_S1_2MB -lang=c99 -Xfloat=fpu -Xround=zero -Xdiv -Xasm_path=DefaultBuild -Xasm_option=-Xprn_path=DefaultBuild -c -MAKEUD=DefaultBuild -Xexec_time=C:\Users\xlchen\AppData\Local\Temp\CSPlusBuildTool_be86689f7334446c96db794fb4b78bafy32r2n0i.ze2
+00000000                        4  #@	compiled at Fri Mar 27 09:50:44 2026
+00000000                        5  
+00000000                        6  	.file "..\..\Srcode\sdk\source\canPassthroughSdk.c"
+00000000                        7  
+00000000                        8  	$reg_mode 32
+00000000                        9  	.dbl_size 8
+00000000                       10  
+00000000                       11  	.public _CanPassthroughWithMpuInit
+00000000                       12  	.extern _MpuHalOpen
+00000000                       13  	.extern _MpuHalSetRxFilter
+00000000                       14  	.extern _MpuHalSetRxBuffer
+00000000                       15  	.public _CanPassthrough_SendRequest
+00000000                       16  	.extern _MpuHalReceive
+00000000                       17  	.extern _memcpy
+00000000                       18  	.extern _LogHalPrint
+00000000                       19  	.extern _MpuHalTransmit
+00000000                       20  	.public _CanPassthrough_ReceiveResponse
+00000000                       21  	.public _CanPassthroughRead_PENDING
+00000000                       22  	.extern _memmove
+00000000                       23  	.public _CanPassthroughWrite_PENDING
+00000000                       24  	.public _CanPassthroughRoutine_PENDING
+00000000                       25  
+00000000                       26  	.section .text, text
+00000000                       27  _CanPassthroughWithMpuInit:
+00000000                       28  	.stack _CanPassthroughWithMpuInit = 12
+00000000                       29  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 35
+00000000 82072108              30  	prepare 0x00000041, 0x00000004
+00000004                       31  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 38
+00000004 80FF0000              32  	jarl _MpuHalOpen, r31
+00000008 40A60000              33  	movhi HIGHW1(#_g_mpuHandle.1), r0, r20
+0000000C 74570000              34  	st.h r10, LOWW(#_g_mpuHandle.1)[r20]
+00000010 0512                  35  	mov 0x00000005, r2
+00000012                       36  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 40
+00000012 43170100              37  	st.b r2, 0x00000001[r3]
+00000016 20161000              38  	movea 0x00000010, r0, r2
+0000001A                       39  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 41
+0000001A 43170200              40  	st.b r2, 0x00000002[r3]
+0000001E                       41  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 42
+0000001E 43170300              42  	st.b r2, 0x00000003[r3]
+00000022                       43  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 44
+00000022 34370000              44  	ld.h LOWW(#_g_mpuHandle.1)[r20], r6
+00000026 233E0100              45  	movea 0x00000001, r3, r7
+0000002A 80FF0000              46  	jarl _MpuHalSetRxFilter, r31
+0000002E                       47  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 45
+0000002E 34370000              48  	ld.h LOWW(#_g_mpuHandle.1)[r20], r6
+00000032 2046C800              49  	movea 0x000000C8, r0, r8
+00000036                       50  	mov #_g_recvDataBuffer.2, r7
+00000036 270600000000            -- mov         0x0,r7
+0000003C 80FF0000              51  	jarl _MpuHalSetRxBuffer, r31
+00000040                       52  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 47
+00000040 42063F08              53  	dispose 0x00000004, 0x00000041, [r31]
+00000044                       54  _CanPassthrough_SendRequest:
+00000044                       55  	.stack _CanPassthrough_SendRequest = 20
+00000044                       56  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 51
+00000044 8007210F              57  	prepare 0x00000079, 0x00000000
+00000048 07A0                  58  	mov r7, r20
+0000004A 06AE0000              59  	addi 0x00000000, r6, r21
+0000004E                       60  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 53
+0000004E 8205                  61  	bz9 .BB.LABEL.2_4
+00000050                       62  .BB.LABEL.2_1:	; entry
+00000050                       63  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 0
+00000050 60A2                  64  	cmp 0x00000000, r20
+00000052 8205                  65  	bz9 .BB.LABEL.2_4
+00000054                       66  .BB.LABEL.2_2:	; bb18
+00000054                       67  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 59
+00000054 40160000              68  	movhi HIGHW1(#_g_mpuHandle.1), r0, r2
+00000058 22370000              69  	ld.h LOWW(#_g_mpuHandle.1)[r2], r6
+0000005C 0042                  70  	mov 0x00000000, r8
+0000005E                       71  	mov #_g_respPack.4, r7
+0000005E 270600000000            -- mov         0x0,r7
+00000064 80FF0000              72  	jarl _MpuHalReceive, r31
+00000068 6052                  73  	cmp 0x00000000, r10
+0000006A 8205                  74  	bz9 .BB.LABEL.2_2
+0000006C                       75  .BB.LABEL.2_3:	; bb25
+0000006C                       76  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 64
+0000006C                       77  	mov #_g_reqPack.6, r22
+0000006C 360600000000            -- mov         0x0,r22
+00000072 0512                  78  	mov 0x00000005, r2
+00000074 56170000              79  	st.b r2, 0x00000000[r22]
+00000078 20161000              80  	movea 0x00000010, r0, r2
+0000007C                       81  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 65
+0000007C 56170100              82  	st.b r2, 0x00000001[r22]
+00000080 20162200              83  	movea 0x00000022, r0, r2
+00000084                       84  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 66
+00000084 56170200              85  	st.b r2, 0x00000002[r22]
+00000088                       86  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 67
+00000088                       87  	mov #_g_reqDataBuffer.5, r23
+00000088 370600000000            -- mov         0x0,r23
+0000008E 1730                  88  	mov r23, r6
+00000090 1538                  89  	mov r21, r7
+00000092 1440                  90  	mov r20, r8
+00000094 80FF0000              91  	jarl _memcpy, r31
+00000098                       92  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 68
+00000098 76BF0900              93  	st.w r23, 0x00000008[r22]
+0000009C                       94  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 69
+0000009C 76A70600              95  	st.h r20, 0x00000006[r22]
+000000A0                       96  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 71
+000000A0 974F0300              97  	ld.bu 0x00000002[r23], r9
+000000A4 B7470100              98  	ld.bu 0x00000001[r23], r8
+000000A8 973F0100              99  	ld.bu 0x00000000[r23], r7
+000000AC                      100  	mov #.STR.1, r6
+000000AC 260600000000            -- mov         0x0,r6
+000000B2 80FF0000             101  	jarl _LogHalPrint, r31
+000000B6                      102  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 73
+000000B6 40160000             103  	movhi HIGHW1(#_g_mpuHandle.1), r0, r2
+000000BA 22370000             104  	ld.h LOWW(#_g_mpuHandle.1)[r2], r6
+000000BE 1638                 105  	mov r22, r7
+000000C0 80FF0000             106  	jarl _MpuHalTransmit, r31
+000000C4 0052                 107  	mov 0x00000000, r10
+000000C6                      108  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 75
+000000C6 40063F0F             109  	dispose 0x00000000, 0x00000079, [r31]
+000000CA                      110  .BB.LABEL.2_4:	; bb40
+000000CA                      111  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 0
+000000CA 1F52                 112  	mov 0xFFFFFFFF, r10
+000000CC                      113  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 76
+000000CC 40063F0F             114  	dispose 0x00000000, 0x00000079, [r31]
+000000D0                      115  _CanPassthrough_ReceiveResponse:
+000000D0                      116  	.stack _CanPassthrough_ReceiveResponse = 16
+000000D0                      117  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 79
+000000D0 8007210E             118  	prepare 0x00000071, 0x00000000
+000000D4 07A0                 119  	mov r7, r20
+000000D6 06AE0000             120  	addi 0x00000000, r6, r21
+000000DA                      121  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 83
+000000DA 8205                 122  	bz9 .BB.LABEL.3_11
+000000DC                      123  .BB.LABEL.3_1:	; entry
+000000DC                      124  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 0
+000000DC 60A2                 125  	cmp 0x00000000, r20
+000000DE 8205                 126  	bz9 .BB.LABEL.3_11
+000000E0                      127  .BB.LABEL.3_2:	; if_break_bb
+000000E0                      128  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 88
+000000E0                      129  	mov #_g_respPack.4, r7
+000000E0 270600000000            -- mov         0x0,r7
+000000E6                      130  	mov #_g_respDataBuffer.3, r2
+000000E6 220600000000            -- mov         0x0,hp
+000000EC 67170900             131  	st.w r2, 0x00000008[r7]
+000000F0 2016C800             132  	movea 0x000000C8, r0, r2
+000000F4                      133  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 89
+000000F4 67170400             134  	st.h r2, 0x00000004[r7]
+000000F8                      135  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 90
+000000F8 67070600             136  	st.h r0, 0x00000006[r7]
+000000FC                      137  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 93
+000000FC 40160000             138  	movhi HIGHW1(#_g_mpuHandle.1), r0, r2
+00000100 22370000             139  	ld.h LOWW(#_g_mpuHandle.1)[r2], r6
+00000104 0042                 140  	mov 0x00000000, r8
+00000106 80FF0000             141  	jarl _MpuHalReceive, r31
+0000010A                      142  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 95
+0000010A 6052                 143  	cmp 0x00000000, r10
+0000010C 8A05                 144  	bnz9 .BB.LABEL.3_11
+0000010E                      145  .BB.LABEL.3_3:	; bb24
+0000010E                      146  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 0
+0000010E 40160000             147  	movhi HIGHW1(#_g_respPack.4+0x00000006), r0, r2
+00000112 E2170100             148  	ld.hu LOWW(#_g_respPack.4+0x00000006)[r2], r2
+00000116 6012                 149  	cmp 0x00000000, r2
+00000118 8205                 150  	bz9 .BB.LABEL.3_11
+0000011A                      151  .BB.LABEL.3_4:	; if_then_bb37
+0000011A                      152  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 98
+0000011A 40160000             153  	movhi HIGHW1(#_g_respPack.4), r0, r2
+0000011E 82170100             154  	ld.bu LOWW(#_g_respPack.4)[r2], r2
+00000122 6512                 155  	cmp 0x00000005, r2
+00000124 8A05                 156  	bnz9 .BB.LABEL.3_11
+00000126                      157  .BB.LABEL.3_5:	; bb46
+00000126                      158  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 97
+00000126                      159  	mov #_g_respPack.4, r2
+00000126 220600000000            -- mov         0x0,hp
+0000012C 822F0300             160  	ld.bu 0x00000002[r2], r5
+00000130 C52E7F00             161  	andi 0x0000007F, r5, r5
+00000134 A2170100             162  	ld.bu 0x00000001[r2], r2
+00000138 5012                 163  	add 0xFFFFFFF0, r2
+0000013A 8A05                 164  	bnz9 .BB.LABEL.3_11
+0000013C                      165  .BB.LABEL.3_6:	; bb46
+0000013C                      166  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 0
+0000013C 0506DDFF             167  	addi 0xFFFFFFDD, r5, r0
+00000140 8A05                 168  	bnz9 .BB.LABEL.3_11
+00000142                      169  .BB.LABEL.3_7:	; bb70
+00000142 40160000             170  	movhi HIGHW1(#_g_reqDataBuffer.5), r0, r2
+00000146 82170100             171  	ld.bu LOWW(#_g_reqDataBuffer.5)[r2], r2
+0000014A 402E0000             172  	movhi HIGHW1(#_g_respDataBuffer.3), r0, r5
+0000014E 852F0100             173  	ld.bu LOWW(#_g_respDataBuffer.3)[r5], r5
+00000152 E511                 174  	cmp r5, r2
+00000154 8A05                 175  	bnz9 .BB.LABEL.3_11
+00000156                      176  .BB.LABEL.3_8:	; bb84
+00000156 40160000             177  	movhi HIGHW1(#_g_reqDataBuffer.5+0x00000001), r0, r2
+0000015A 82170100             178  	ld.bu LOWW(#_g_reqDataBuffer.5+0x00000001)[r2], r2
+0000015E 402E0000             179  	movhi HIGHW1(#_g_respDataBuffer.3+0x00000001), r0, r5
+00000162 852F0100             180  	ld.bu LOWW(#_g_respDataBuffer.3+0x00000001)[r5], r5
+00000166 E511                 181  	cmp r5, r2
+00000168 8A05                 182  	bnz9 .BB.LABEL.3_11
+0000016A                      183  .BB.LABEL.3_9:	; bb98
+0000016A 40160000             184  	movhi HIGHW1(#_g_reqDataBuffer.5+0x00000002), r0, r2
+0000016E 82170100             185  	ld.bu LOWW(#_g_reqDataBuffer.5+0x00000002)[r2], r2
+00000172 402E0000             186  	movhi HIGHW1(#_g_respDataBuffer.3+0x00000002), r0, r5
+00000176 852F0100             187  	ld.bu LOWW(#_g_respDataBuffer.3+0x00000002)[r5], r5
+0000017A E511                 188  	cmp r5, r2
+0000017C 8A05                 189  	bnz9 .BB.LABEL.3_11
+0000017E                      190  .BB.LABEL.3_10:	; if_then_bb113
+0000017E                      191  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 105
+0000017E                      192  	mov #_g_respPack.4, r22
+0000017E 360600000000            -- mov         0x0,r22
+00000184 F6470700             193  	ld.hu 0x00000006[r22], r8
+00000188 363F0900             194  	ld.w 0x00000008[r22], r7
+0000018C 1530                 195  	mov r21, r6
+0000018E 80FF0000             196  	jarl _memcpy, r31
+00000192                      197  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 106
+00000192 36170600             198  	ld.h 0x00000006[r22], r2
+00000196 74170000             199  	st.h r2, 0x00000000[r20]
+0000019A 0052                 200  	mov 0x00000000, r10
+0000019C                      201  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 107
+0000019C 40063F0E             202  	dispose 0x00000000, 0x00000071, [r31]
+000001A0                      203  .BB.LABEL.3_11:	; bb125
+000001A0                      204  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 0
+000001A0 1F52                 205  	mov 0xFFFFFFFF, r10
+000001A2                      206  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 112
+000001A2 40063F0E             207  	dispose 0x00000000, 0x00000071, [r31]
+000001A6                      208  _CanPassthroughRead_PENDING:
+000001A6                      209  	.stack _CanPassthroughRead_PENDING = 20
+000001A6                      210  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 115
+000001A6 8207210E             211  	prepare 0x00000071, 0x00000004
+000001AA 06A0                 212  	mov r6, r20
+000001AC 07A8                 213  	mov r7, r21
+000001AE 08B0                 214  	mov r8, r22
+000001B0                      215  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 120
+000001B0 63070200             216  	st.h r0, 0x00000002[r3]
+000001B4 233E0200             217  	movea 0x00000002, r3, r7
+000001B8                      218  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 122
+000001B8 1630                 219  	mov r22, r6
+000001BA 80FF0000             220  	jarl _CanPassthrough_ReceiveResponse, r31
+000001BE                      221  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 123
+000001BE 40160000             222  	movhi HIGHW1(#_cnt.7.CanPassthroughRead_PENDING), r0, r2
+000001C2 022F0000             223  	ld.b LOWW(#_cnt.7.CanPassthroughRead_PENDING)[r2], r5
+000001C6 412A                 224  	add 0x00000001, r5
+000001C8 422F0000             225  	st.b r5, LOWW(#_cnt.7.CanPassthroughRead_PENDING)[r2]
+000001CC                      226  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 125
+000001CC 6052                 227  	cmp 0x00000000, r10
+000001CE 8A05                 228  	bnz9 .BB.LABEL.4_7
+000001D0                      229  .BB.LABEL.4_1:	; bb
+000001D0                      230  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 0
+000001D0 E3170300             231  	ld.hu 0x00000002[r3], r2
+000001D4 6012                 232  	cmp 0x00000000, r2
+000001D6 8205                 233  	bz9 .BB.LABEL.4_7
+000001D8                      234  .BB.LABEL.4_2:	; if_then_bb
+000001D8                      235  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 127
+000001D8 96A70100             236  	ld.bu 0x00000000[r22], r20
+000001DC 140681FF             237  	addi 0xFFFFFF81, r20, r0
+000001E0 8205                 238  	bz9 .BB.LABEL.4_6
+000001E2                      239  .BB.LABEL.4_3:	; if_then_bb31
+000001E2                      240  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 129
+000001E2 E3470300             241  	ld.hu 0x00000002[r3], r8
+000001E6 F541                 242  	cmp r21, r8
+000001E8 8105                 243  	bl9 .BB.LABEL.4_5
+000001EA                      244  .BB.LABEL.4_4:	; if_then_bb39
+000001EA                      245  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 131
+000001EA B541                 246  	sub r21, r8
+000001EC 1538                 247  	mov r21, r7
+000001EE D639                 248  	add r22, r7
+000001F0 1630                 249  	mov r22, r6
+000001F2 80FF0000             250  	jarl _memmove, r31
+000001F6                      251  .BB.LABEL.4_5:	; if_break_bb
+000001F6                      252  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 134
+000001F6 40A60000             253  	movhi HIGHW1(#_cnt.7.CanPassthroughRead_PENDING), r0, r20
+000001FA 54070000             254  	st.b r0, LOWW(#_cnt.7.CanPassthroughRead_PENDING)[r20]
+000001FE 0052                 255  	mov 0x00000000, r10
+00000200 42063F0E             256  	dispose 0x00000004, 0x00000071, [r31]
+00000204                      257  .BB.LABEL.4_6:	; if_else_bb
+00000204                      258  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 139
+00000204 96570300             259  	ld.bu 0x00000002[r22], r10
+00000208                      260  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 140
+00000208 40A60000             261  	movhi HIGHW1(#_cnt.7.CanPassthroughRead_PENDING), r0, r20
+0000020C 54070000             262  	st.b r0, LOWW(#_cnt.7.CanPassthroughRead_PENDING)[r20]
+00000210 42063F0E             263  	dispose 0x00000004, 0x00000071, [r31]
+00000214                      264  .BB.LABEL.4_7:	; if_else_bb56
+00000214                      265  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 146
+00000214 40160000             266  	movhi HIGHW1(#_cnt.7.CanPassthroughRead_PENDING), r0, r2
+00000218 82170100             267  	ld.bu LOWW(#_cnt.7.CanPassthroughRead_PENDING)[r2], r2
+0000021C 202E4B00             268  	movea 0x0000004B, r0, r5
+00000220 E5178212             269  	divhu r5, r2, r2
+00000224 6012                 270  	cmp 0x00000000, r2
+00000226 8A05                 271  	bnz9 .BB.LABEL.4_9
+00000228                      272  .BB.LABEL.4_8:	; if_then_bb63
+00000228                      273  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 148
+00000228 1430                 274  	mov r20, r6
+0000022A 1538                 275  	mov r21, r7
+0000022C 80FF0000             276  	jarl _CanPassthrough_SendRequest, r31
+00000230                      277  .BB.LABEL.4_9:	; if_break_bb67
+00000230                      278  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 151
+00000230 40160000             279  	movhi HIGHW1(#_cnt.7.CanPassthroughRead_PENDING), r0, r2
+00000234 82170100             280  	ld.bu LOWW(#_cnt.7.CanPassthroughRead_PENDING)[r2], r2
+00000238 020642FF             281  	addi 0xFFFFFF42, r2, r0
+0000023C 8605                 282  	blt9 .BB.LABEL.4_11
+0000023E                      283  .BB.LABEL.4_10:	; if_then_bb73
+0000023E                      284  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 153
+0000023E 40160000             285  	movhi HIGHW1(#_cnt.7.CanPassthroughRead_PENDING), r0, r2
+00000242 42070000             286  	st.b r0, LOWW(#_cnt.7.CanPassthroughRead_PENDING)[r2]
+00000246 1F52                 287  	mov 0xFFFFFFFF, r10
+00000248                      288  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 154
+00000248 42063F0E             289  	dispose 0x00000004, 0x00000071, [r31]
+0000024C                      290  .BB.LABEL.4_11:	; if_break_bb75
+0000024C                      291  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 0
+0000024C 0152                 292  	mov 0x00000001, r10
+0000024E                      293  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 159
+0000024E 42063F0E             294  	dispose 0x00000004, 0x00000071, [r31]
+00000252                      295  _CanPassthroughWrite_PENDING:
+00000252                      296  	.stack _CanPassthroughWrite_PENDING = 20
+00000252                      297  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 162
+00000252 8407210C             298  	prepare 0x00000061, 0x00000008
+00000256 06A0                 299  	mov r6, r20
+00000258 07A8                 300  	mov r7, r21
+0000025A                      301  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 167
+0000025A 63070600             302  	st.h r0, 0x00000006[r3]
+0000025E                      303  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 168
+0000025E 43070500             304  	st.b r0, 0x00000005[r3]
+00000262 43070400             305  	st.b r0, 0x00000004[r3]
+00000266 43070300             306  	st.b r0, 0x00000003[r3]
+0000026A 43070300             307  	st.b r0, 0x00000003[r3]
+0000026E 233E0600             308  	movea 0x00000006, r3, r7
+00000272 23360300             309  	movea 0x00000003, r3, r6
+00000276                      310  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 170
+00000276 80FF0000             311  	jarl _CanPassthrough_ReceiveResponse, r31
+0000027A                      312  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 171
+0000027A 40160000             313  	movhi HIGHW1(#_cnt.8.CanPassthroughWrite_PENDING), r0, r2
+0000027E 022F0000             314  	ld.b LOWW(#_cnt.8.CanPassthroughWrite_PENDING)[r2], r5
+00000282 412A                 315  	add 0x00000001, r5
+00000284 422F0000             316  	st.b r5, LOWW(#_cnt.8.CanPassthroughWrite_PENDING)[r2]
+00000288                      317  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 173
+00000288 6052                 318  	cmp 0x00000000, r10
+0000028A 8A05                 319  	bnz9 .BB.LABEL.5_5
+0000028C                      320  .BB.LABEL.5_1:	; bb
+0000028C                      321  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 0
+0000028C E3170700             322  	ld.hu 0x00000006[r3], r2
+00000290 6012                 323  	cmp 0x00000000, r2
+00000292 8205                 324  	bz9 .BB.LABEL.5_5
+00000294                      325  .BB.LABEL.5_2:	; if_then_bb
+00000294                      326  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 175
+00000294 A3A70300             327  	ld.bu 0x00000003[r3], r20
+00000298 140681FF             328  	addi 0xFFFFFF81, r20, r0
+0000029C 40A60000             329  	movhi HIGHW1(#_cnt.8.CanPassthroughWrite_PENDING), r0, r20
+000002A0 8205                 330  	bz9 .BB.LABEL.5_4
+000002A2                      331  .BB.LABEL.5_3:	; if_then_bb33
+000002A2                      332  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 179
+000002A2 54070000             333  	st.b r0, LOWW(#_cnt.8.CanPassthroughWrite_PENDING)[r20]
+000002A6 0052                 334  	mov 0x00000000, r10
+000002A8 44063F0C             335  	dispose 0x00000008, 0x00000061, [r31]
+000002AC                      336  .BB.LABEL.5_4:	; if_else_bb
+000002AC                      337  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 184
+000002AC A3570500             338  	ld.bu 0x00000005[r3], r10
+000002B0                      339  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 185
+000002B0 54070000             340  	st.b r0, LOWW(#_cnt.8.CanPassthroughWrite_PENDING)[r20]
+000002B4 44063F0C             341  	dispose 0x00000008, 0x00000061, [r31]
+000002B8                      342  .BB.LABEL.5_5:	; if_else_bb38
+000002B8                      343  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 191
+000002B8 40160000             344  	movhi HIGHW1(#_cnt.8.CanPassthroughWrite_PENDING), r0, r2
+000002BC 82170100             345  	ld.bu LOWW(#_cnt.8.CanPassthroughWrite_PENDING)[r2], r2
+000002C0 202E4B00             346  	movea 0x0000004B, r0, r5
+000002C4 E5178212             347  	divhu r5, r2, r2
+000002C8 6012                 348  	cmp 0x00000000, r2
+000002CA 8A05                 349  	bnz9 .BB.LABEL.5_7
+000002CC                      350  .BB.LABEL.5_6:	; if_then_bb45
+000002CC                      351  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 193
+000002CC 1430                 352  	mov r20, r6
+000002CE 1538                 353  	mov r21, r7
+000002D0 80FF0000             354  	jarl _CanPassthrough_SendRequest, r31
+000002D4                      355  .BB.LABEL.5_7:	; if_break_bb49
+000002D4                      356  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 196
+000002D4 40160000             357  	movhi HIGHW1(#_cnt.8.CanPassthroughWrite_PENDING), r0, r2
+000002D8 82170100             358  	ld.bu LOWW(#_cnt.8.CanPassthroughWrite_PENDING)[r2], r2
+000002DC 020642FF             359  	addi 0xFFFFFF42, r2, r0
+000002E0 8605                 360  	blt9 .BB.LABEL.5_9
+000002E2                      361  .BB.LABEL.5_8:	; if_then_bb55
+000002E2                      362  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 198
+000002E2 40160000             363  	movhi HIGHW1(#_cnt.8.CanPassthroughWrite_PENDING), r0, r2
+000002E6 42070000             364  	st.b r0, LOWW(#_cnt.8.CanPassthroughWrite_PENDING)[r2]
+000002EA 1F52                 365  	mov 0xFFFFFFFF, r10
+000002EC                      366  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 199
+000002EC 44063F0C             367  	dispose 0x00000008, 0x00000061, [r31]
+000002F0                      368  .BB.LABEL.5_9:	; if_break_bb57
+000002F0                      369  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 0
+000002F0 0152                 370  	mov 0x00000001, r10
+000002F2                      371  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 203
+000002F2 44063F0C             372  	dispose 0x00000008, 0x00000061, [r31]
+000002F6                      373  _CanPassthroughRoutine_PENDING:
+000002F6                      374  	.stack _CanPassthroughRoutine_PENDING = 20
+000002F6                      375  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 206
+000002F6 8007210F             376  	prepare 0x00000079, 0x00000000
+000002FA 06A0                 377  	mov r6, r20
+000002FC 07A8                 378  	mov r7, r21
+000002FE 08B0                 379  	mov r8, r22
+00000300 09B8                 380  	mov r9, r23
+00000302                      381  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 212
+00000302 1630                 382  	mov r22, r6
+00000304 1738                 383  	mov r23, r7
+00000306 80FF0000             384  	jarl _CanPassthrough_ReceiveResponse, r31
+0000030A                      385  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 213
+0000030A 40160000             386  	movhi HIGHW1(#_cnt.9.CanPassthroughRoutine_PENDING), r0, r2
+0000030E 022F0000             387  	ld.b LOWW(#_cnt.9.CanPassthroughRoutine_PENDING)[r2], r5
+00000312 412A                 388  	add 0x00000001, r5
+00000314 422F0000             389  	st.b r5, LOWW(#_cnt.9.CanPassthroughRoutine_PENDING)[r2]
+00000318                      390  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 215
+00000318 6052                 391  	cmp 0x00000000, r10
+0000031A 8A05                 392  	bnz9 .BB.LABEL.6_7
+0000031C                      393  .BB.LABEL.6_1:	; bb
+0000031C                      394  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 0
+0000031C F7170100             395  	ld.hu 0x00000000[r23], r2
+00000320 6012                 396  	cmp 0x00000000, r2
+00000322 8205                 397  	bz9 .BB.LABEL.6_7
+00000324                      398  .BB.LABEL.6_2:	; if_then_bb
+00000324                      399  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 217
+00000324 96A70100             400  	ld.bu 0x00000000[r22], r20
+00000328 140681FF             401  	addi 0xFFFFFF81, r20, r0
+0000032C 8205                 402  	bz9 .BB.LABEL.6_6
+0000032E                      403  .BB.LABEL.6_3:	; if_then_bb33
+0000032E                      404  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 220
+0000032E F7470100             405  	ld.hu 0x00000000[r23], r8
+00000332 6442                 406  	cmp 0x00000004, r8
+00000334 8605                 407  	blt9 .BB.LABEL.6_5
+00000336                      408  .BB.LABEL.6_4:	; if_then_bb40
+00000336                      409  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 222
+00000336 5C42                 410  	add 0xFFFFFFFC, r8
+00000338 163E0400             411  	addi 0x00000004, r22, r7
+0000033C 1630                 412  	mov r22, r6
+0000033E 80FF0000             413  	jarl _memmove, r31
+00000342                      414  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 223
+00000342 37A70000             415  	ld.h 0x00000000[r23], r20
+00000346 5CA2                 416  	add 0xFFFFFFFC, r20
+00000348 77A70000             417  	st.h r20, 0x00000000[r23]
+0000034C                      418  .BB.LABEL.6_5:	; if_break_bb
+0000034C                      419  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 226
+0000034C 40A60000             420  	movhi HIGHW1(#_cnt.9.CanPassthroughRoutine_PENDING), r0, r20
+00000350 54070000             421  	st.b r0, LOWW(#_cnt.9.CanPassthroughRoutine_PENDING)[r20]
+00000354 0052                 422  	mov 0x00000000, r10
+00000356 40063F0F             423  	dispose 0x00000000, 0x00000079, [r31]
+0000035A                      424  .BB.LABEL.6_6:	; if_else_bb
+0000035A                      425  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 231
+0000035A 96570300             426  	ld.bu 0x00000002[r22], r10
+0000035E                      427  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 232
+0000035E 40A60000             428  	movhi HIGHW1(#_cnt.9.CanPassthroughRoutine_PENDING), r0, r20
+00000362 54070000             429  	st.b r0, LOWW(#_cnt.9.CanPassthroughRoutine_PENDING)[r20]
+00000366 40063F0F             430  	dispose 0x00000000, 0x00000079, [r31]
+0000036A                      431  .BB.LABEL.6_7:	; if_else_bb59
+0000036A                      432  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 238
+0000036A 40160000             433  	movhi HIGHW1(#_cnt.9.CanPassthroughRoutine_PENDING), r0, r2
+0000036E 82170100             434  	ld.bu LOWW(#_cnt.9.CanPassthroughRoutine_PENDING)[r2], r2
+00000372 202E4B00             435  	movea 0x0000004B, r0, r5
+00000376 E5178212             436  	divhu r5, r2, r2
+0000037A 6012                 437  	cmp 0x00000000, r2
+0000037C 8A05                 438  	bnz9 .BB.LABEL.6_9
+0000037E                      439  .BB.LABEL.6_8:	; if_then_bb66
+0000037E                      440  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 240
+0000037E 1430                 441  	mov r20, r6
+00000380 1538                 442  	mov r21, r7
+00000382 80FF0000             443  	jarl _CanPassthrough_SendRequest, r31
+00000386                      444  .BB.LABEL.6_9:	; if_break_bb70
+00000386                      445  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 243
+00000386 40160000             446  	movhi HIGHW1(#_cnt.9.CanPassthroughRoutine_PENDING), r0, r2
+0000038A 82170100             447  	ld.bu LOWW(#_cnt.9.CanPassthroughRoutine_PENDING)[r2], r2
+0000038E 020642FF             448  	addi 0xFFFFFF42, r2, r0
+00000392 8605                 449  	blt9 .BB.LABEL.6_11
+00000394                      450  .BB.LABEL.6_10:	; if_then_bb76
+00000394                      451  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 245
+00000394 40160000             452  	movhi HIGHW1(#_cnt.9.CanPassthroughRoutine_PENDING), r0, r2
+00000398 42070000             453  	st.b r0, LOWW(#_cnt.9.CanPassthroughRoutine_PENDING)[r2]
+0000039C 1F52                 454  	mov 0xFFFFFFFF, r10
+0000039E                      455  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 246
+0000039E 40063F0F             456  	dispose 0x00000000, 0x00000079, [r31]
+000003A2                      457  .BB.LABEL.6_11:	; if_break_bb78
+000003A2                      458  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 0
+000003A2 0152                 459  	mov 0x00000001, r10
+000003A4                      460  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/canPassthroughSdk.c", 251
+000003A4 40063F0F             461  	dispose 0x00000000, 0x00000079, [r31]
+00000000                      462  	.section .data, data
+00000000                      463  	.align 2
+00000000                      464  _g_mpuHandle.1:
+00000000 FFFF                 465  	.dhw 0xFFFF
+00000002                      466  _g_recvDataBuffer.2:
+00000002 0000000000000000     467  	.ds (200)
+                 ...
+000000C2 0000000000000000
+000000CA                      468  _g_respDataBuffer.3:
+000000CA 0000000000000000     469  	.ds (200)
+                 ...
+0000018A 0000000000000000
+00000192                      470  _g_reqDataBuffer.5:
+00000192 0000000000000000     471  	.ds (100)
+                 ...
+000001F2 00000000
+000001F6                      472  _cnt.7.CanPassthroughRead_PENDING:
+000001F6 00                   473  	.ds (1)
+000001F7                      474  _cnt.8.CanPassthroughWrite_PENDING:
+000001F7 00                   475  	.ds (1)
+000001F8                      476  _cnt.9.CanPassthroughRoutine_PENDING:
+000001F8 00                   477  	.ds (1)
+00000000                      478  	.section .bss, bss
+00000000                      479  	.align 4
+00000000                      480  _g_respPack.4:
+00000000                      481  	.ds (12)
+0000000C                      482  	.align 4
+0000000C                      483  _g_reqPack.6:
+0000000C                      484  	.ds (12)
+00000000                      485  	.section .const, const
+00000000                      486  .STR.1:
+00000000 53                   487  	.db 0x53,0x65,0x6E,0x64,0x20,0x50,0x61,0x73,0x73,0x74,0x68,0x72,0x6F,0x75,0x67,0x68
+00000001 65              
+00000002 6E              
+00000003 64              
+00000004 20              
+00000005 50              
+00000006 61              
+00000007 73              
+00000008 73              
+00000009 74              
+0000000A 68              
+0000000B 72              
+0000000C 6F              
+0000000D 75              
+0000000E 67              
+0000000F 68              
+00000010 20                   488  	.db 0x20,0x52,0x65,0x71,0x75,0x65,0x73,0x74,0x3A,0x20,0x25,0x30,0x32,0x58,0x20,0x25
+00000011 52              
+00000012 65              
+00000013 71              
+00000014 75              
+00000015 65              
+00000016 73              
+00000017 74              
+00000018 3A              
+00000019 20              
+0000001A 25              
+0000001B 30              
+0000001C 32              
+0000001D 58              
+0000001E 20              
+0000001F 25              
+00000020 30                   489  	.db 0x30,0x32,0x58,0x20,0x25,0x30,0x32,0x58,0x0D,0x0A
+00000021 32              
+00000022 58              
+00000023 20              
+00000024 25              
+00000025 30              
+00000026 32              
+00000027 58              
+00000028 0D              
+00000029 0A              
+0000002A 00                   490  	.ds (1)
+
+Section List
+Attr     Size                Name
+
+TEXT          936 (000003A8) .text
+DATA          505 (000001F9) .data
+BSS            24 (00000018) .bss
+CONST          43 (0000002B) .const
+
+Command Line Parameter
+-Xcpu=g3kh -Xreg_mode=32 -Xep=callee -Xcharacter_set=none -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\diagnostic -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\parameter_store -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu\port -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu\uart -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu\iic -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\vehicle_data_to_mpu -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\power_manage -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\mcu_cpu_sync -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\remote_control -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\can_cycle_send -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\project_configure -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\sdk\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\commonLib\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\hal\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\icu\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Icu_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\vss -ID:\wk\sirun\project\dazhong\code\mcu_app\ASW\CDD_FVM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\EEIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanTSyn -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\StbM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CSM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\RSA -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\RandomGen\CTR_DRBG -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\MAC\CMAC -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\Hash\sha256 -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\dh -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\AES -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CryInterface -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\SecOC -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\NvM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\MemIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\Fee -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\WdgM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\WdgIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Wdg_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Gpt_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Fls_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\wdg\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\gpt\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\fls\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\IpduM -ID:\wk\sirun\project\dazhong\code\mcu_app\ASW\APP -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\BswM -ID:\wk\sirun\project\dazhong\code\mcu_app\ASW\BSW_Ext -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\Dcm -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanTp -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Dem -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Libraries\E2E -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Libraries\Crc -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\NmIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanNm -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config\RTE\Rte -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config\RTE\SchM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Libraries\IStd -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\EcuM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\ComM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanSM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\Com -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\PDUR -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\CommonInclude -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config\RH850F1K -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Extend\inc -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Kernel\inc -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Portable\Mcu -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Portable\Processor -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Adc_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Can_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Dio_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Mcu_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Port_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\adc\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\can\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\dio\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\general -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\mcu\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\port\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\CanGeneral\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\Det\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\MemIf\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\SchM\include -DRH850_F1KM_S1_2MB -Xprn_path=DefaultBuild -Xno_warning=50013 -oD:\wk\sirun\project\dazhong\code\mcu_app\Toolchain\CSPLUS_V81200\DefaultBuild\canPassthroughSdk.obj D:\wk\sirun\project\dazhong\code\mcu_app\Toolchain\CSPLUS_V81200\DefaultBuild\canPassthroughSdk.asm 
+

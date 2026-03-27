@@ -1,6 +1,6 @@
 /*************************************************
  Copyright © 2026 SiRun (Beijing) . All rights reserved.
- File Name: firmwareUpdateSdk.h
+ File Name: firmwareUpdateSdk.c
  Author:
  Created Time:
  Description:
@@ -17,15 +17,32 @@
 #include "EEIf.h"
 
 /****************************** Macro Definitions ******************************/
-#define FLASH_APP_BANKA_VALID_FLAG_ADDR          0x00050000  // 大小 0x200
+#define FLASH_APP_BANKA_VALID_FLAG_ADDR          0x00050000
+#define FIRMWARE_OTA_RX_BUFFER_SIZE              200
+#define FIRMWARE_OTA_AID                         0x03
+#define FIRMWARE_OTA_MID_MIN                     0x01
+#define FIRMWARE_OTA_MID_MAX                     0xFF
+#define FIRMWARE_OTA_TX_BUFFER_SIZE              20
 
 /****************************** Type Definitions ******************************/
-/****************************** Global Variables ******************************/
-static uint8_t g_versionNumber[20] = {'v','0','0','1','.','0','0','2',};                              //软件版本号长度
-static int16_t g_otaMpuHandle;
-static uint8_t g_recvDataBuffer[1024] = {0};
+typedef enum
+{
+    E_FirmwareUpdateSdkCmd_Default                = 0u,  
+    E_FirmwareUpdateSdkCmd_GetMcuVersion          = 1u,
+    E_FirmwareUpdateSdkCmd_GetMcuSeed             = 2u,
+    E_FirmwareUpdateSdkCmd_UnlockMcuFlash         = 3u,
+    E_FirmwareUpdateSdkCmd_EnterDownloadMode      = 4u,
+    E_FirmwareUpdateSdkCmd_EraseMcuMemory         = 5u,
+    E_FirmwareUpdateSdkCmd_DownloadMcuMemory      = 6u,
+    E_FirmwareUpdateSdkCmd_VirifyMcuMemory        = 7u,
+    E_FirmwareUpdateSdkCmd_SoftwareResetMcu       = 8u,
+    E_FirmwareUpdateSdkCmd_GetMcuBankId           = 9u,
+}FirmwareUpdateSdkCmd_e;
 
-/****************************** Function Declarations *************************/
+/****************************** Global Variables ******************************/
+static uint8_t g_versionNumber[20] = {'v','0','0','1','.','0','0','2',};
+static int16_t g_otaMpuHandle;
+static uint8_t g_recvDataBuffer[FIRMWARE_OTA_RX_BUFFER_SIZE] = {0};
 
 /****************************** Public Function Implementations ******************************/
 /*************************************************
@@ -40,9 +57,9 @@ void FirmwareUpdateSdkInit(void)
 {
     MpuHalFilter_t filter;
 
-    filter.aid = 0x03;
-    filter.midMin = 0x01;
-    filter.midMax = 0xFF;
+    filter.aid = FIRMWARE_OTA_AID;
+    filter.midMin = FIRMWARE_OTA_MID_MIN;
+    filter.midMax = FIRMWARE_OTA_MID_MAX;
 
     g_otaMpuHandle = MpuHalOpen();
     if (g_otaMpuHandle < 0)
@@ -68,7 +85,7 @@ void FirmwareUpdateSdkCycleProcess(MpuHalDataPack_t *pRxMsg)
     uint8_t i = 0U;
     uint8_t curAid = 0U;
     uint8_t dataTxLen = 0U;
-    uint8_t dataTxAraay[20] = {0};
+    static uint8_t dataTxAraay[FIRMWARE_OTA_TX_BUFFER_SIZE] = {0};
     FirmwareUpdateSdkCmd_e s_UpdateMid = E_FirmwareUpdateSdkCmd_Default;
 
     if ((pRxMsg == NULL) || (pRxMsg->pDataBuffer == NULL)) 
@@ -77,14 +94,13 @@ void FirmwareUpdateSdkCycleProcess(MpuHalDataPack_t *pRxMsg)
     }
 
     int16_t ret = MpuHalReceive(g_otaMpuHandle, pRxMsg, 0);
-        
-    if (ret != MPU_HAL_STATUS_OK)    //接收到数据？
+    if (ret != MPU_HAL_STATUS_OK)
     {
         return;
     }
 
     curAid = pRxMsg->aid;   
-    if(curAid == PROTOCOL_AID_FWUPD)
+    if (curAid == FIRMWARE_OTA_AID)
     {
         s_UpdateMid = (FirmwareUpdateSdkCmd_e)pRxMsg->mid;
         memset(dataTxAraay, 0, sizeof(dataTxAraay));
@@ -92,7 +108,7 @@ void FirmwareUpdateSdkCycleProcess(MpuHalDataPack_t *pRxMsg)
         dataTxAraay[0] = pRxMsg->pDataBuffer[0];
         dataTxAraay[1] = pRxMsg->pDataBuffer[1];
 
-        switch(s_UpdateMid)
+        switch (s_UpdateMid)
         {
             case E_FirmwareUpdateSdkCmd_GetMcuVersion:
                 TBOX_PRINT("---01 Read Version---\r\n");
@@ -132,9 +148,9 @@ void FirmwareUpdateSdkCycleProcess(MpuHalDataPack_t *pRxMsg)
                 retValue = EEIf_Write(2, 4, (uint8*)&WriteData);
                 
                 EEIf_Read(2, 4, (uint8*)&dataRead);
-                if((retValue != E_OK) || (dataRead != WriteData))
+                if(dataRead != WriteData)
                 {
-                    TBOX_PRINT("VALID ADDR ERROR\r\n");
+                    TBOX_PRINT("SET EEIF ERROR: 0x%08X, 0x%08X\r\n", WriteData, dataRead);
                     dataTxAraay[2] = 0x01; 
                 }
                 dataTxLen = 3U;
@@ -148,33 +164,27 @@ void FirmwareUpdateSdkCycleProcess(MpuHalDataPack_t *pRxMsg)
                 TBOX_PRINT("---09 Get Bank ID---\r\n");
                 dataTxAraay[2] = 0x00;
                 /* 1字节Bank ID */
-                dataTxAraay[3] = 0x01; 
+                dataTxAraay[3] = 0x01; // 当前仅支持一个Bank ID
                 dataTxLen = 4U;
                 break;
             default:
-                TBOX_PRINT("Invalid MID\r\n");
-            
+                TBOX_PRINT("OTA Invalid MID: 0x%02X\r\n", s_UpdateMid);
+                break;
         }
-
 
         MpuHalDataPack_t TxPack;
         TxPack.aid = curAid;
         TxPack.mid =(uint8_t)s_UpdateMid;
         TxPack.subcommand = pRxMsg->subcommand;
         TxPack.pDataBuffer = dataTxAraay;
-        TxPack.dataBufferSize = sizeof(dataTxAraay);
+        TxPack.dataBufferSize = FIRMWARE_OTA_TX_BUFFER_SIZE;
         TxPack.dataLength = dataTxLen;
         MpuHalTransmit(g_otaMpuHandle, &TxPack);
-        //打印发送数据 aid mid 数据
-        TBOX_PRINT("aid: 0x%02X, mid: 0x%02X, sub: 0x%02X, d0: 0x%02X, d1: 0x%02X, d2: 0x%02X, d3: 0x%02X\r\n", 
-        TxPack.aid, TxPack.mid, TxPack.subcommand, TxPack.pDataBuffer[0], TxPack.pDataBuffer[1], TxPack.pDataBuffer[2], TxPack.pDataBuffer[3]); 
-
 
         if (s_UpdateMid == E_FirmwareUpdateSdkCmd_UnlockMcuFlash)
         {
             delay_us(1000);
             Mcu_PerformReset();
         }
-
     }
 }

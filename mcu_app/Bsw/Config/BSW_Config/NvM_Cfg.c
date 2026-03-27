@@ -14,7 +14,7 @@
  *  @MCU                : R7F7015833
  *  @file               : NvM_Cfg.c
  *  @author             : iSoft
- *  @date               : 2026-02-02 11:06:42
+ *  @date               : 2026-03-16 09:26:36
  *  @vendor             : iSoft
  *  @description        : 
  *  @specification(S)   : AUTOSAR Classic Platform R19-11
@@ -88,6 +88,7 @@ VAR(uint8, NVM_VAR_NOINIT) NvMBlockRamBuffer49[254];
 VAR(uint8, NVM_VAR_NOINIT) NvMBlockRamBuffer50[1];
 VAR(uint8, NVM_VAR_NOINIT) NvMBlockRamBuffer51[4];
 VAR(uint8, NVM_VAR_NOINIT) NvMBlockRamBuffer52[16];
+VAR(uint8, NVM_VAR_NOINIT) NvMBlockRamBuffer53[16];
 
 #define NVM_START_SEC_VAR_CLEARED_32
 #include "NvM_MemMap.h"
@@ -143,6 +144,7 @@ VAR(uint8, NVM_VAR_NOINIT) NvMBlockRamBuffer52[16];
         VAR(uint32, NVM_VAR_NOINIT) NvMCrcBuf_NvMBlock_27Key_error_count[1];
         VAR(uint32, NVM_VAR_NOINIT) NvMCrcBuf_NvMBlock_SecOc_count[1];
         VAR(uint32, NVM_VAR_NOINIT) NvMCrcBuf_NvMBlock_SecOc_Key[1];
+        VAR(uint32, NVM_VAR_NOINIT) NvMCrcBuf_NvMBlock_DID0100[1];
 #define NVM_STOP_SEC_VAR_CLEARED_32
 #include "NvM_MemMap.h"
 
@@ -260,7 +262,7 @@ CONST(NvM_BlockDescriptorType, NVM_CONST) NvM_BlockDescriptor[NVM_BLOCK_NUM_ALL]
          */    
         NVM_CRC16,    /*NvmBlockCRCType*/
         3,    /*NvmNvBlockBaseNumber*/
-        3132,    /*NvmNvBlockLength*/
+        2478,    /*NvmNvBlockLength*/
         1,    /*NvmNvBlockNum*/
         0,    /*NvmRomBlockNum*/
         3,    /*NvMMaxNumOfReadRetries*/
@@ -300,7 +302,7 @@ CONST(NvM_BlockDescriptorType, NVM_CONST) NvM_BlockDescriptor[NVM_BLOCK_NUM_ALL]
          */    
         NVM_CRC16,    /*NvmBlockCRCType*/
         4,    /*NvmNvBlockBaseNumber*/
-        182,    /*NvmNvBlockLength*/
+        244,    /*NvmNvBlockLength*/
         1,    /*NvmNvBlockNum*/
         0,    /*NvmRomBlockNum*/
         3,    /*NvMMaxNumOfReadRetries*/
@@ -2229,6 +2231,46 @@ CONST(NvM_BlockDescriptorType, NVM_CONST) NvM_BlockDescriptor[NVM_BLOCK_NUM_ALL]
         NvMCrcBuf_NvMBlock_SecOc_Key,   /*NvmBlockCrcBuffAddress*/
         (P2VAR(uint8, AUTOMATIC, NVM_APPL_CODE))(NvMBlockRamBuffer52),    /*NvMRamBlockDataAddress*/
         (P2VAR(uint8, AUTOMATIC, NVM_APPL_CODE))(NvMBlock_SecOc_Key_RomAddress),    /*NvMRomBlockDataAddress*/
+        NULL_PTR,   /*NvMInitBlockCallback*/
+        NULL_PTR,    /*NvmSingleBlockCallback*/
+        NULL_PTR,    /*NvM_ReadRamBlockFromNvmCallbackType*/
+        NULL_PTR,       /*NvM_WriteRamBlockToNvmCallbackType*/
+    },
+    /*NvMBlock_DID0100*/
+    {
+        0,    /*NvMNvramDeviceId*/
+        NVM_BLOCK_NATIVE,    /*NvmBlockManagementType*/
+        0u, /*RepaireIndex*/
+        #if ((NVM_API_CONFIG_CLASS_1!=NVM_API_CONFIG_CLASS)&&(STD_ON==NVM_JOB_PRIORITIZATION))
+        1,      /*NvmBlockJobPriority*/
+        #endif
+        0x23c,
+        /*
+         * Bit 0:NvmWriteBlockOnce
+         * Bit 1:NvmBlockWriteProt 
+         * Bit 2:NvmCalcRamBlockCrc
+         * Bit 3:NvmResistantToChangedSw 
+         * Bit 4:NvmSelectBlockForReadall 
+         * Bit 5:NvmSelectBlockForWriteall 
+         * Bit 6:NvMStaticBlockIDCheck
+         * Bit 7:NvMWriteVerification
+         * Bit 8:NvMBlockUseAutoValidation
+         * Bit 9:NvMBlockUseCRCCompMechanism
+         * Bit 10:NvMBlockUseSetRamBlockStatus
+         * Bit 11:NvMBlockUseSyncMechanism
+         * Bit 12:NvMBswMBlockStatusInformation
+         */    
+        NVM_CRC16,    /*NvmBlockCRCType*/
+        53,    /*NvmNvBlockBaseNumber*/
+        16,    /*NvmNvBlockLength*/
+        1,    /*NvmNvBlockNum*/
+        1,    /*NvmRomBlockNum*/
+        3,    /*NvMMaxNumOfReadRetries*/
+        3,    /*NvMMaxNumOfWriteRetries*/
+        0,    /*NvMWriteVerificationDataSize*/
+        NvMCrcBuf_NvMBlock_DID0100,   /*NvmBlockCrcBuffAddress*/
+        (P2VAR(uint8, AUTOMATIC, NVM_APPL_CODE))(NvMBlockRamBuffer53),    /*NvMRamBlockDataAddress*/
+        (P2VAR(uint8, AUTOMATIC, NVM_APPL_CODE))(NvMBlock_DID0100_RomAddress),    /*NvMRomBlockDataAddress*/
         NULL_PTR,   /*NvMInitBlockCallback*/
         NULL_PTR,    /*NvmSingleBlockCallback*/
         NULL_PTR,    /*NvM_ReadRamBlockFromNvmCallbackType*/

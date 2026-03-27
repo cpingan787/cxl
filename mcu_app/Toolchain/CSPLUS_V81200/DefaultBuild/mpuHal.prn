@@ -1,0 +1,1643 @@
+RH850 Family Assembler V2.07.00.03 Assemble Source List
+
+OFFSET   CODE                  NO  SOURCE STATEMENT
+
+00000000                        1  #CC-RH Compiler RH850 Assembler Source
+00000000                        2  #@	CC-RH Version : V2.07.00  [06 Dec 2024]
+00000000                        3  #@	Command : ..\..\Srcode\hal\source\mpuHal.c -oDefaultBuild\mpuHal.obj -Xcpu=g3kh -Xno_warning=20188,20111 -g -g_line -I..\..\Srcode\app\diagnostic -I..\..\Srcode\app\parameter_store -I..\..\Cpu\port -I..\..\Cpu\uart -I..\..\Cpu\iic -I..\..\Srcode\app\vehicle_data_to_mpu -I..\..\Srcode\app\power_manage -I..\..\Srcode\app\mcu_cpu_sync -I..\..\Srcode\app\remote_control -I..\..\Srcode\app\can_cycle_send -I..\..\Srcode\app\project_configure -I..\..\Srcode\sdk\include -I..\..\Srcode\commonLib\include -I..\..\Srcode\hal\include -I..\..\Bsw\Mcal\icu\include -I..\..\Bsw\Config\MCAL_Config\Icu_OutPut\include -I..\..\Bsw\Crypto\CRYPTO\vss -I..\..\ASW\CDD_FVM -I..\..\Bsw\Memory\EEIf -I..\..\Bsw\Communication\CAN\CanTSyn -I..\..\Bsw\SystemServices\StbM -I..\..\Bsw\Crypto\CSM -I..\..\Bsw\Crypto\CRYPTO\RSA -I..\..\Bsw\Crypto\CRYPTO\RandomGen\CTR_DRBG -I..\..\Bsw\Crypto\CRYPTO\MAC\CMAC -I..\..\Bsw\Crypto\CRYPTO\Hash\sha256 -I..\..\Bsw\Crypto\CRYPTO\dh -I..\..\Bsw\Crypto\CRYPTO\AES -I..\..\Bsw\Crypto\CRYPTO -I..\..\Bsw\Crypto\CryInterface -I..\..\Bsw\Communication\Common\SecOC -I..\..\Bsw\Memory\NvM -I..\..\Bsw\Memory\MemIf -I..\..\Bsw\Memory\Fee -I..\..\Bsw\SystemServices\WdgM -I..\..\Bsw\SystemServices\WdgIf -I..\..\Bsw\Config\MCAL_Config\Wdg_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Gpt_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Fls_OutPut\include -I..\..\Bsw\Mcal\wdg\include -I..\..\Bsw\Mcal\gpt\include -I..\..\Bsw\Mcal\fls\include -I..\..\Bsw\Communication\Common\IpduM -I..\..\ASW\APP -I..\..\Bsw\SystemServices\BswM -I..\..\ASW\BSW_Ext -I..\..\Bsw\Communication\Common\Dcm -I..\..\Bsw\Communication\CAN\CanTp -I..\..\Bsw\SystemServices\Dem -I..\..\Bsw\Libraries\E2E -I..\..\Bsw\Libraries\Crc -I..\..\Bsw\Communication\Common\NmIf -I..\..\Bsw\Communication\CAN\CanNm -I..\..\Bsw\Config\BSW_Config\RTE\Rte -I..\..\Bsw\Config\BSW_Config\RTE\SchM -I..\..\Bsw\Libraries\IStd -I..\..\Bsw\SystemServices\EcuM -I..\..\Bsw\SystemServices\ComM -I..\..\Bsw\Communication\CAN\CanSM -I..\..\Bsw\Communication\CAN\CanIf -I..\..\Bsw\Communication\Common\Com -I..\..\Bsw\Communication\Common\PDUR -I..\..\Cpu -I..\..\Bsw\CommonInclude -I..\..\Bsw\Config\BSW_Config -I..\..\Bsw\Config\BSW_Config\RH850F1K -I..\..\Bsw\SystemServices\Os\Extend\inc -I..\..\Bsw\SystemServices\Os\Kernel\inc -I..\..\Bsw\SystemServices\Os\Portable\Mcu -I..\..\Bsw\SystemServices\Os\Portable\Processor -I..\..\Bsw\Config\MCAL_Config\Adc_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Can_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Dio_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Mcu_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Port_OutPut\include -I..\..\Bsw\Mcal\adc\include -I..\..\Bsw\Mcal\can\include -I..\..\Bsw\Mcal\dio\include -I..\..\Bsw\Mcal\general -I..\..\Bsw\Mcal\mcu\include -I..\..\Bsw\Mcal\port\include -I..\..\Bsw\Mcal\stubs\CanGeneral\include -I..\..\Bsw\Mcal\stubs\Det\include -I..\..\Bsw\Mcal\stubs\MemIf\include -I..\..\Bsw\Mcal\stubs\SchM\include -DRH850_F1KM_S1_2MB -lang=c99 -Xfloat=fpu -Xround=zero -Xdiv -Xasm_path=DefaultBuild -Xasm_option=-Xprn_path=DefaultBuild -c -MAKEUD=DefaultBuild -Xexec_time=C:\Users\xlchen\AppData\Local\Temp\CSPlusBuildTool_50f4114b790045ff948979fa5984fb7150skxyuu.yju
+00000000                        4  #@	compiled at Fri Mar 27 09:51:04 2026
+00000000                        5  
+00000000                        6  	.file "..\..\Srcode\hal\source\mpuHal.c"
+00000000                        7  
+00000000                        8  	$reg_mode 32
+00000000                        9  	.dbl_size 8
+00000000                       10  
+00000000                       11  	.public _g_mpuUartReciveCount, 2
+00000000                       12  	.public _g_mpuUartErrorType, 1
+00000000                       13  	.public _g_mpuUartErrorFlag, 1
+00000000                       14  	.public _g_mpuSetRecvErrorFlag, 1
+00000000                       15  	.public _g_uartReceiveData0, 200
+00000000                       16  	.public _g_uartReceiveData1, 200
+00000000                       17  	.public _g_mpuUartRxBufId, 1
+00000000                       18  	.public _g_mpuUartRxBufCount0, 2
+00000000                       19  	.public _g_mpuUartRxBufCount1, 2
+00000000                       20  	.public _g_mpuUartRxBufDealFlag, 1
+00000000                       21  	.extern _Dio_WriteChannel
+00000000                       22  	.extern _xQueueSendFromISR
+00000000                       23  	.extern _xQueueSend
+00000000                       24  	.extern _CcittCrc16
+00000000                       25  	.extern _memcpy
+00000000                       26  	.public _MpuHalCycleProcess
+00000000                       27  	.public _MpuHalOpen
+00000000                       28  	.public _MpuHalSetRxFilter
+00000000                       29  	.public _MpuHalSetRxBuffer
+00000000                       30  	.extern _xQueueCreate
+00000000                       31  	.public _MpuHalTransmit
+00000000                       32  	.public _MpuHalReceive
+00000000                       33  	.extern _xQueueReceive
+00000000                       34  	.public _MpuHalStart
+00000000                       35  	.public _MpuHalStartIsFinished
+00000000                       36  	.public _MpuHalReset
+00000000                       37  	.public _MpuHalResetIsFinished
+00000000                       38  	.public _MpuHalPowerOff
+00000000                       39  	.public _MpuHalSetMode
+00000000                       40  	.public _UartProtocalProcess
+00000000                       41  	.public _MpuHalUartInterruptCallback
+00000000                       42  	.public _MpuHalUartTimerCallback
+00000000                       43  	.extern _memset
+00000000                       44  	.public _MpuHalMainUartInit
+00000000                       45  	.extern _R_UART5_Create
+00000000                       46  	.extern _R_UART5_Start
+00000000                       47  	.public _MpuHalInit
+00000000                       48  	.public _MpuHalTxTaskInit
+00000000                       49  	.public _MpuHalTxTask
+00000000                       50  	.extern _R_UART5_SendStatus
+00000000                       51  	.extern _R_UART5_Send
+00000000                       52  	.public _MpuHalUartPrintErrState
+00000000                       53  	.extern _LogHalPrint
+00000000                       54  
+00000000                       55  	.section .text, text
+00000000                       56  _MpuHalGpioInit.1:
+00000000                       57  	.stack _MpuHalGpioInit.1 = 12
+00000000                       58  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 114
+00000000 8007210C              59  	prepare 0x00000061, 0x00000000
+00000004 01A2                  60  	mov 0x00000001, r20
+00000006 20361300              61  	movea 0x00000013, r0, r6
+0000000A                       62  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 116
+0000000A 1438                  63  	mov r20, r7
+0000000C 80FF0000              64  	jarl _Dio_WriteChannel, r31
+00000010 20361500              65  	movea 0x00000015, r0, r6
+00000014                       66  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 117
+00000014 1438                  67  	mov r20, r7
+00000016 80FF0000              68  	jarl _Dio_WriteChannel, r31
+0000001A 00AA                  69  	mov 0x00000000, r21
+0000001C 20361600              70  	movea 0x00000016, r0, r6
+00000020                       71  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 118
+00000020 1538                  72  	mov r21, r7
+00000022 80FF0000              73  	jarl _Dio_WriteChannel, r31
+00000026 20361A00              74  	movea 0x0000001A, r0, r6
+0000002A                       75  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 119
+0000002A 1538                  76  	mov r21, r7
+0000002C 80FF0000              77  	jarl _Dio_WriteChannel, r31
+00000030 20361700              78  	movea 0x00000017, r0, r6
+00000034                       79  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 146
+00000034 1538                  80  	mov r21, r7
+00000036 80FF0000              81  	jarl _Dio_WriteChannel, r31
+0000003A 0532                  82  	mov 0x00000005, r6
+0000003C                       83  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 147
+0000003C 1438                  84  	mov r20, r7
+0000003E 80FF0000              85  	jarl _Dio_WriteChannel, r31
+00000042 40063F0C              86  	dispose 0x00000000, 0x00000061, [r31]
+00000046                       87  _MpuHalSetPower.1:
+00000046                       88  	.stack _MpuHalSetPower.1 = 8
+00000046                       89  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 150
+00000046 80072108              90  	prepare 0x00000041, 0x00000000
+0000004A                       91  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 152
+0000004A 6032                  92  	cmp 0x00000000, r6
+0000004C 8A05                  93  	bnz9 .BB.LABEL.2_3
+0000004E                       94  .BB.LABEL.2_1:	; if_then_bb
+0000004E                       95  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 0
+0000004E 00A2                  96  	mov 0x00000000, r20
+00000050                       97  .BB.LABEL.2_2:	; if_then_bb
+00000050 20361300              98  	movea 0x00000013, r0, r6
+00000054 1438                  99  	mov r20, r7
+00000056 80FF0000             100  	jarl _Dio_WriteChannel, r31
+0000005A 20361500             101  	movea 0x00000015, r0, r6
+0000005E 1438                 102  	mov r20, r7
+00000060 80FF0000             103  	jarl _Dio_WriteChannel, r31
+00000064                      104  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 162
+00000064 40063F08             105  	dispose 0x00000000, 0x00000041, [r31]
+00000068                      106  .BB.LABEL.2_3:	; if_else_bb
+00000068                      107  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 0
+00000068 01A2                 108  	mov 0x00000001, r20
+0000006A 8505                 109  	br9 .BB.LABEL.2_2
+0000006C                      110  _MpuHalSetPowerkey.1:
+0000006C                      111  	.stack _MpuHalSetPowerkey.1 = 4
+0000006C                      112  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 164
+0000006C 80072100             113  	prepare 0x00000001, 0x00000000
+00000070                      114  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 166
+00000070 6032                 115  	cmp 0x00000000, r6
+00000072 8A05                 116  	bnz9 .BB.LABEL.3_3
+00000074                      117  .BB.LABEL.3_1:	; if_then_bb
+00000074                      118  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 0
+00000074 003A                 119  	mov 0x00000000, r7
+00000076                      120  .BB.LABEL.3_2:	; if_then_bb
+00000076 20361600             121  	movea 0x00000016, r0, r6
+0000007A 80FF0000             122  	jarl _Dio_WriteChannel, r31
+0000007E                      123  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 174
+0000007E 40063F00             124  	dispose 0x00000000, 0x00000001, [r31]
+00000082                      125  .BB.LABEL.3_3:	; if_else_bb
+00000082                      126  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 0
+00000082 013A                 127  	mov 0x00000001, r7
+00000084 8505                 128  	br9 .BB.LABEL.3_2
+00000086                      129  _MpuHalSetWakeOut.1:
+00000086                      130  	.stack _MpuHalSetWakeOut.1 = 4
+00000086                      131  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 176
+00000086 80072100             132  	prepare 0x00000001, 0x00000000
+0000008A                      133  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 178
+0000008A 6032                 134  	cmp 0x00000000, r6
+0000008C 8A05                 135  	bnz9 .BB.LABEL.4_3
+0000008E                      136  .BB.LABEL.4_1:	; if_then_bb
+0000008E                      137  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 0
+0000008E 003A                 138  	mov 0x00000000, r7
+00000090                      139  .BB.LABEL.4_2:	; if_then_bb
+00000090 20361A00             140  	movea 0x0000001A, r0, r6
+00000094 80FF0000             141  	jarl _Dio_WriteChannel, r31
+00000098                      142  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 186
+00000098 40063F00             143  	dispose 0x00000000, 0x00000001, [r31]
+0000009C                      144  .BB.LABEL.4_3:	; if_else_bb
+0000009C                      145  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 0
+0000009C 013A                 146  	mov 0x00000001, r7
+0000009E 8505                 147  	br9 .BB.LABEL.4_2
+000000A0                      148  _MpuDataDispatch.1:
+000000A0                      149  	.stack _MpuDataDispatch.1 = 28
+000000A0                      150  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 234
+000000A0 8407210F             151  	prepare 0x00000079, 0x00000008
+000000A4                      152  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 238
+000000A4 63070100             153  	st.w r0, 0x00000000[r3]
+000000A8 00A2                 154  	mov 0x00000000, r20
+000000AA 08A8                 155  	mov r8, r21
+000000AC 07B0                 156  	mov r7, r22
+000000AE 06B8                 157  	mov r6, r23
+000000B0 80070000             158  	jr .BB.LABEL.5_16
+000000B4                      159  .BB.LABEL.5_1:	; bb
+000000B4                      160  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 244
+000000B4 D416FFFF             161  	andi 0x0000FFFF, r20, r2
+000000B8                      162  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 245
+000000B8 0228                 163  	mov r2, r5
+000000BA C42A                 164  	shl 0x00000004, r5
+000000BC                      165  	mov #_g_mpuManage.3, r6
+000000BC 260600000000            -- mov         0x0,r6
+000000C2 C531                 166  	add r5, r6
+000000C4 862F0900             167  	ld.bu 0x00000008[r6], r5
+000000C8 612A                 168  	cmp 0x00000001, r5
+000000CA EA070100             169  	bnz17 .BB.LABEL.5_15
+000000CE                      170  .BB.LABEL.5_2:	; bb18
+000000CE                      171  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 0
+000000CE 0228                 172  	mov r2, r5
+000000D0 C42A                 173  	shl 0x00000004, r5
+000000D2                      174  	mov #_g_mpuManage.3, r6
+000000D2 260600000000            -- mov         0x0,r6
+000000D8 C531                 175  	add r5, r6
+000000DA 262F0D00             176  	ld.w 0x0000000C[r6], r5
+000000DE 602A                 177  	cmp 0x00000000, r5
+000000E0 8205                 178  	bz9 .BB.LABEL.5_15
+000000E2                      179  .BB.LABEL.5_3:	; if_then_bb
+000000E2                      180  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 247
+000000E2 0228                 181  	mov r2, r5
+000000E4 C42A                 182  	shl 0x00000004, r5
+000000E6                      183  	mov #_g_mpuManage.3, r6
+000000E6 260600000000            -- mov         0x0,r6
+000000EC C531                 184  	add r5, r6
+000000EE A62F0900             185  	ld.bu 0x00000009[r6], r5
+000000F2 612A                 186  	cmp 0x00000001, r5
+000000F4 8A05                 187  	bnz9 .BB.LABEL.5_15
+000000F6                      188  .BB.LABEL.5_4:	; bb36
+000000F6                      189  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 0
+000000F6 0228                 190  	mov r2, r5
+000000F8 C42A                 191  	shl 0x00000004, r5
+000000FA                      192  	mov #_g_mpuManage.3, r6
+000000FA 260600000000            -- mov         0x0,r6
+00000100 C531                 193  	add r5, r6
+00000102 A62F1500             194  	ld.bu 0x00000015[r6], r5
+00000106 97370300             195  	ld.bu 0x00000002[r23], r6
+0000010A E531                 196  	cmp r5, r6
+0000010C 8A05                 197  	bnz9 .BB.LABEL.5_15
+0000010E                      198  .BB.LABEL.5_5:	; if_then_bb56
+0000010E                      199  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 249
+0000010E 0228                 200  	mov r2, r5
+00000110 C42A                 201  	shl 0x00000004, r5
+00000112                      202  	mov #_g_mpuManage.3, r6
+00000112 260600000000            -- mov         0x0,r6
+00000118 C531                 203  	add r5, r6
+0000011A 862F1700             204  	ld.bu 0x00000016[r6], r5
+0000011E B7370300             205  	ld.bu 0x00000003[r23], r6
+00000122 E531                 206  	cmp r5, r6
+00000124 8105                 207  	bl9 .BB.LABEL.5_15
+00000126                      208  .BB.LABEL.5_6:	; bb68
+00000126                      209  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 0
+00000126 0228                 210  	mov r2, r5
+00000128 C42A                 211  	shl 0x00000004, r5
+0000012A                      212  	mov #_g_mpuManage.3, r7
+0000012A 270600000000            -- mov         0x0,r7
+00000130 C539                 213  	add r5, r7
+00000132 A72F1700             214  	ld.bu 0x00000017[r7], r5
+00000136 E531                 215  	cmp r5, r6
+00000138 8B05                 216  	bh9 .BB.LABEL.5_15
+0000013A                      217  .BB.LABEL.5_7:	; if_then_bb88
+0000013A                      218  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 252
+0000013A 0228                 219  	mov r2, r5
+0000013C C42A                 220  	shl 0x00000004, r5
+0000013E                      221  	mov #_g_mpuManage.3, r6
+0000013E 260600000000            -- mov         0x0,r6
+00000144 C531                 222  	add r5, r6
+00000146 E62F1300             223  	ld.hu 0x00000012[r6], r5
+0000014A 0538                 224  	mov r5, r7
+0000014C D03A                 225  	shl 0x00000010, r7
+0000014E 633F0500             226  	st.w r7, 0x00000004[r3]
+00000152 26361200             227  	movea 0x00000012, r6, r6
+00000156 003A                 228  	mov 0x00000000, r7
+00000158 8505                 229  	br9 .BB.LABEL.5_11
+0000015A                      230  .BB.LABEL.5_8:	; bb94
+0000015A                      231  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 255
+0000015A 0240                 232  	mov r2, r8
+0000015C C442                 233  	shl 0x00000004, r8
+0000015E                      234  	mov #_g_mpuManage.3, r9
+0000015E 290600000000            -- mov         0x0,r9
+00000164 C849                 235  	add r8, r9
+00000166 29470D00             236  	ld.w 0x0000000C[r9], r8
+0000016A C500                 237  	zxh r5
+0000016C C541                 238  	add r5, r8
+0000016E C72EFFFF             239  	andi 0x0000FFFF, r7, r5
+00000172 D729                 240  	add r23, r5
+00000174 052F0000             241  	ld.b 0x00000000[r5], r5
+00000178 482F0000             242  	st.b r5, 0x00000000[r8]
+0000017C                      243  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 256
+0000017C 262F0000             244  	ld.h 0x00000000[r6], r5
+00000180 412A                 245  	add 0x00000001, r5
+00000182 662F0000             246  	st.h r5, 0x00000000[r6]
+00000186                      247  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 257
+00000186 E9471100             248  	ld.hu 0x00000010[r9], r8
+0000018A C54EFFFF             249  	andi 0x0000FFFF, r5, r9
+0000018E E849                 250  	cmp r8, r9
+00000190 8105                 251  	bl9 .BB.LABEL.5_10
+00000192                      252  .BB.LABEL.5_9:	; if_then_bb123
+00000192                      253  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 259
+00000192 66070000             254  	st.h r0, 0x00000000[r6]
+00000196 002A                 255  	mov 0x00000000, r5
+00000198                      256  .BB.LABEL.5_10:	; if_break_bb
+00000198                      257  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 0
+00000198 413A                 258  	add 0x00000001, r7
+0000019A                      259  .BB.LABEL.5_11:	; bb128
+0000019A                      260  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 253
+0000019A C746FFFF             261  	andi 0x0000FFFF, r7, r8
+0000019E F641                 262  	cmp r22, r8
+000001A0 8105                 263  	bl9 .BB.LABEL.5_8
+000001A2                      264  .BB.LABEL.5_12:	; bb136
+000001A2                      265  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 263
+000001A2 232F0500             266  	ld.w 0x00000004[r3], r5
+000001A6 D629                 267  	add r22, r5
+000001A8 632F0500             268  	st.w r5, 0x00000004[r3]
+000001AC                      269  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 264
+000001AC C412                 270  	shl 0x00000004, r2
+000001AE                      271  	mov #_g_mpuManage.3, r5
+000001AE 250600000000            -- mov         0x0,tp
+000001B4 C229                 272  	add r2, r5
+000001B6 85371500             273  	ld.bu 0x00000014[r5], r6
+000001BA 233E0400             274  	movea 0x00000004, r3, r7
+000001BE 60AA                 275  	cmp 0x00000000, r21
+000001C0 8205                 276  	bz9 .BB.LABEL.5_14
+000001C2                      277  .BB.LABEL.5_13:	; if_then_bb146
+000001C2                      278  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 0
+000001C2 0340                 279  	mov r3, r8
+000001C4                      280  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 266
+000001C4 80FF0000             281  	jarl _xQueueSendFromISR, r31
+000001C8 8505                 282  	br9 .BB.LABEL.5_15
+000001CA                      283  .BB.LABEL.5_14:	; if_else_bb
+000001CA                      284  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 0
+000001CA 0042                 285  	mov 0x00000000, r8
+000001CC                      286  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 270
+000001CC 80FF0000             287  	jarl _xQueueSend, r31
+000001D0                      288  .BB.LABEL.5_15:	; if_break_bb161
+000001D0                      289  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 0
+000001D0 41A2                 290  	add 0x00000001, r20
+000001D2                      291  .BB.LABEL.5_16:	; bb164
+000001D2                      292  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 242
+000001D2 D416FFFF             293  	andi 0x0000FFFF, r20, r2
+000001D6 6F12                 294  	cmp 0x0000000F, r2
+000001D8 E6070100             295  	blt17 .BB.LABEL.5_1
+000001DC                      296  .BB.LABEL.5_17:	; return
+000001DC                      297  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 276
+000001DC 44063F0F             298  	dispose 0x00000008, 0x00000079, [r31]
+000001E0                      299  _MpuPackHeader.1:
+000001E0                      300  	.stack _MpuPackHeader.1 = 0
+000001E0                      301  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 360
+000001E0 20165500             302  	movea 0x00000055, r0, r2
+000001E4                      303  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 362
+000001E4 46170000             304  	st.b r2, 0x00000000[r6]
+000001E8 2016AAFF             305  	movea 0xFFFFFFAA, r0, r2
+000001EC                      306  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 363
+000001EC 46170100             307  	st.b r2, 0x00000001[r6]
+000001F0                      308  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 364
+000001F0 07170000             309  	ld.b 0x00000000[r7], r2
+000001F4 46170200             310  	st.b r2, 0x00000002[r6]
+000001F8                      311  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 365
+000001F8 07170100             312  	ld.b 0x00000001[r7], r2
+000001FC 46170300             313  	st.b r2, 0x00000003[r6]
+00000200                      314  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 366
+00000200 07170200             315  	ld.b 0x00000002[r7], r2
+00000204 46170400             316  	st.b r2, 0x00000004[r6]
+00000208                      317  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 367
+00000208 E7170700             318  	ld.hu 0x00000006[r7], r2
+0000020C 8812                 319  	shr 0x00000008, r2
+0000020E 46170500             320  	st.b r2, 0x00000005[r6]
+00000212                      321  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 368
+00000212 07170600             322  	ld.b 0x00000006[r7], r2
+00000216 46170600             323  	st.b r2, 0x00000006[r6]
+0000021A                      324  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 369
+0000021A 46070700             325  	st.b r0, 0x00000007[r6]
+0000021E                      326  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 370
+0000021E 46070800             327  	st.b r0, 0x00000008[r6]
+00000222 0852                 328  	mov 0x00000008, r10
+00000224                      329  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 372
+00000224 7F00                 330  	jmp [r31]
+00000226                      331  _MpuPackGetCrc.1:
+00000226                      332  	.stack _MpuPackGetCrc.1 = 8
+00000226                      333  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 374
+00000226 80072108             334  	prepare 0x00000041, 0x00000000
+0000022A 0610                 335  	mov r6, r2
+0000022C 07A0                 336  	mov r7, r20
+0000022E 0842                 337  	mov 0x00000008, r8
+00000230 0032                 338  	mov 0x00000000, r6
+00000232                      339  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 379
+00000232 0238                 340  	mov r2, r7
+00000234 80FF0000             341  	jarl _CcittCrc16, r31
+00000238                      342  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 380
+00000238 F4470700             343  	ld.hu 0x00000006[r20], r8
+0000023C 343F0900             344  	ld.w 0x00000008[r20], r7
+00000240 0A30                 345  	mov r10, r6
+00000242 80FF0000             346  	jarl _CcittCrc16, r31
+00000246                      347  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 382
+00000246 40063F08             348  	dispose 0x00000000, 0x00000041, [r31]
+0000024A                      349  _MpuUartRingCopyOut.1:
+0000024A                      350  	.stack _MpuUartRingCopyOut.1 = 16
+0000024A                      351  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 384
+0000024A 8007210E             352  	prepare 0x00000071, 0x00000000
+0000024E 08A0                 353  	mov r8, r20
+00000250 06AE0000             354  	addi 0x00000000, r6, r21
+00000254                      355  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 388
+00000254 8205                 356  	bz9 .BB.LABEL.8_5
+00000256                      357  .BB.LABEL.8_1:	; entry
+00000256                      358  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 0
+00000256 60A2                 359  	cmp 0x00000000, r20
+00000258 8205                 360  	bz9 .BB.LABEL.8_5
+0000025A                      361  .BB.LABEL.8_2:	; if_break_bb
+0000025A                      362  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 394
+0000025A                      363  	mov #_g_mpuUartTxBuffer.2, r2
+0000025A 220600000000            -- mov         0x0,hp
+00000260 C711                 364  	add r7, r2
+00000262 4112                 365  	add 0x00000001, r2
+00000264 20B60008             366  	movea 0x00000800, r0, r22
+00000268                      367  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 393
+00000268 A7B1                 368  	sub r7, r22
+0000026A                      369  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 394
+0000026A D62EFFFF             370  	andi 0x0000FFFF, r22, r5
+0000026E 1530                 371  	mov r21, r6
+00000270 0238                 372  	mov r2, r7
+00000272 F429                 373  	cmp r20, r5
+00000274 8105                 374  	bl9 .BB.LABEL.8_4
+00000276                      375  .BB.LABEL.8_3:	; if_then_bb29
+00000276                      376  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 396
+00000276 1440                 377  	mov r20, r8
+00000278 80FF0000             378  	jarl _memcpy, r31
+0000027C 40063F0E             379  	dispose 0x00000000, 0x00000071, [r31]
+00000280                      380  .BB.LABEL.8_4:	; if_else_bb
+00000280                      381  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 400
+00000280 D600                 382  	zxh r22
+00000282 1640                 383  	mov r22, r8
+00000284 80FF0000             384  	jarl _memcpy, r31
+00000288                      385  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 401
+00000288 1440                 386  	mov r20, r8
+0000028A B641                 387  	sub r22, r8
+0000028C 1530                 388  	mov r21, r6
+0000028E D631                 389  	add r22, r6
+00000290                      390  	mov #_g_mpuUartTxBuffer.2, r7
+00000290 270600000000            -- mov         0x0,r7
+00000296 413A                 391  	add 0x00000001, r7
+00000298 80FF0000             392  	jarl _memcpy, r31
+0000029C                      393  .BB.LABEL.8_5:	; return
+0000029C                      394  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 403
+0000029C 40063F0E             395  	dispose 0x00000000, 0x00000071, [r31]
+000002A0                      396  _MpuHalCycleProcess:
+000002A0                      397  	.stack _MpuHalCycleProcess = 4
+000002A0                      398  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 405
+000002A0 80072100             399  	prepare 0x00000001, 0x00000000
+000002A4                      400  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 409
+000002A4 40160000             401  	movhi HIGHW1(#_g_mpuManage.3+0x00000004), r0, r2
+000002A8 22170100             402  	ld.w LOWW(#_g_mpuManage.3+0x00000004)[r2], r2
+000002AC 6012                 403  	cmp 0x00000000, r2
+000002AE 8205                 404  	bz9 .BB.LABEL.9_19
+000002B0                      405  .BB.LABEL.9_1:	; if_else_bb
+000002B0                      406  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 412
+000002B0 6112                 407  	cmp 0x00000001, r2
+000002B2 8A05                 408  	bnz9 .BB.LABEL.9_3
+000002B4                      409  .BB.LABEL.9_2:	; if_then_bb8
+000002B4                      410  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 414
+000002B4 40160000             411  	movhi HIGHW1(#_timeCount.4.MpuHalCycleProcess), r0, r2
+000002B8 62070100             412  	st.w r0, LOWW(#_timeCount.4.MpuHalCycleProcess)[r2]
+000002BC 022A                 413  	mov 0x00000002, r5
+000002BE 8505                 414  	br9 .BB.LABEL.9_18
+000002C0                      415  .BB.LABEL.9_3:	; if_else_bb9
+000002C0                      416  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 417
+000002C0 6212                 417  	cmp 0x00000002, r2
+000002C2 8A05                 418  	bnz9 .BB.LABEL.9_6
+000002C4                      419  .BB.LABEL.9_4:	; if_then_bb14
+000002C4                      420  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 419
+000002C4 40160000             421  	movhi HIGHW1(#_timeCount.4.MpuHalCycleProcess), r0, r2
+000002C8 222F0100             422  	ld.w LOWW(#_timeCount.4.MpuHalCycleProcess)[r2], r5
+000002CC C629                 423  	add r6, r5
+000002CE 622F0100             424  	st.w r5, LOWW(#_timeCount.4.MpuHalCycleProcess)[r2]
+000002D2 2016F401             425  	movea 0x000001F4, r0, r2
+000002D6                      426  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 420
+000002D6 E229                 427  	cmp r2, r5
+000002D8 8105                 428  	bl9 .BB.LABEL.9_19
+000002DA                      429  .BB.LABEL.9_5:	; if_then_bb22
+000002DA                      430  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 422
+000002DA 40160000             431  	movhi HIGHW1(#_g_mpuManage.3+0x00000004), r0, r2
+000002DE 032A                 432  	mov 0x00000003, r5
+000002E0 622F0100             433  	st.w r5, LOWW(#_g_mpuManage.3+0x00000004)[r2]
+000002E4 0132                 434  	mov 0x00000001, r6
+000002E6                      435  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 423
+000002E6 80FF0000             436  	jarl _MpuHalSetPower.1, r31
+000002EA 8505                 437  	br9 .BB.LABEL.9_19
+000002EC                      438  .BB.LABEL.9_6:	; if_else_bb23
+000002EC                      439  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 426
+000002EC 6312                 440  	cmp 0x00000003, r2
+000002EE 8A05                 441  	bnz9 .BB.LABEL.9_8
+000002F0                      442  .BB.LABEL.9_7:	; if_then_bb28
+000002F0                      443  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 428
+000002F0 40160000             444  	movhi HIGHW1(#_timeCount.4.MpuHalCycleProcess), r0, r2
+000002F4 62070100             445  	st.w r0, LOWW(#_timeCount.4.MpuHalCycleProcess)[r2]
+000002F8 042A                 446  	mov 0x00000004, r5
+000002FA 8505                 447  	br9 .BB.LABEL.9_18
+000002FC                      448  .BB.LABEL.9_8:	; if_else_bb29
+000002FC                      449  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 431
+000002FC 6412                 450  	cmp 0x00000004, r2
+000002FE 8A05                 451  	bnz9 .BB.LABEL.9_11
+00000300                      452  .BB.LABEL.9_9:	; if_then_bb34
+00000300                      453  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 433
+00000300 40160000             454  	movhi HIGHW1(#_timeCount.4.MpuHalCycleProcess), r0, r2
+00000304 222F0100             455  	ld.w LOWW(#_timeCount.4.MpuHalCycleProcess)[r2], r5
+00000308 C629                 456  	add r6, r5
+0000030A 622F0100             457  	st.w r5, LOWW(#_timeCount.4.MpuHalCycleProcess)[r2]
+0000030E 20169001             458  	movea 0x00000190, r0, r2
+00000312                      459  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 434
+00000312 A611                 460  	sub r6, r2
+00000314 E229                 461  	cmp r2, r5
+00000316 8105                 462  	bl9 .BB.LABEL.9_19
+00000318                      463  .BB.LABEL.9_10:	; if_then_bb44
+00000318                      464  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 0
+00000318 052A                 465  	mov 0x00000005, r5
+0000031A 8505                 466  	br9 .BB.LABEL.9_18
+0000031C                      467  .BB.LABEL.9_11:	; if_else_bb46
+0000031C                      468  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 439
+0000031C 6512                 469  	cmp 0x00000005, r2
+0000031E 8A05                 470  	bnz9 .BB.LABEL.9_13
+00000320                      471  .BB.LABEL.9_12:	; if_then_bb51
+00000320                      472  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 441
+00000320 40160000             473  	movhi HIGHW1(#_g_mpuManage.3+0x00000004), r0, r2
+00000324 062A                 474  	mov 0x00000006, r5
+00000326 622F0100             475  	st.w r5, LOWW(#_g_mpuManage.3+0x00000004)[r2]
+0000032A 0132                 476  	mov 0x00000001, r6
+0000032C                      477  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 442
+0000032C 80FF0000             478  	jarl _MpuHalSetPowerkey.1, r31
+00000330                      479  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 443
+00000330 40160000             480  	movhi HIGHW1(#_timeCount.4.MpuHalCycleProcess), r0, r2
+00000334 62070100             481  	st.w r0, LOWW(#_timeCount.4.MpuHalCycleProcess)[r2]
+00000338 8505                 482  	br9 .BB.LABEL.9_19
+0000033A                      483  .BB.LABEL.9_13:	; if_else_bb52
+0000033A                      484  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 445
+0000033A 6612                 485  	cmp 0x00000006, r2
+0000033C 8A05                 486  	bnz9 .BB.LABEL.9_16
+0000033E                      487  .BB.LABEL.9_14:	; if_then_bb57
+0000033E                      488  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 447
+0000033E 40160000             489  	movhi HIGHW1(#_timeCount.4.MpuHalCycleProcess), r0, r2
+00000342 222F0100             490  	ld.w LOWW(#_timeCount.4.MpuHalCycleProcess)[r2], r5
+00000346 C629                 491  	add r6, r5
+00000348 622F0100             492  	st.w r5, LOWW(#_timeCount.4.MpuHalCycleProcess)[r2]
+0000034C 2016F401             493  	movea 0x000001F4, r0, r2
+00000350                      494  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 448
+00000350 A611                 495  	sub r6, r2
+00000352 E229                 496  	cmp r2, r5
+00000354 8305                 497  	bnh9 .BB.LABEL.9_19
+00000356                      498  .BB.LABEL.9_15:	; if_then_bb67
+00000356                      499  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 450
+00000356 40160000             500  	movhi HIGHW1(#_g_mpuManage.3+0x00000004), r0, r2
+0000035A 072A                 501  	mov 0x00000007, r5
+0000035C 622F0100             502  	st.w r5, LOWW(#_g_mpuManage.3+0x00000004)[r2]
+00000360 0032                 503  	mov 0x00000000, r6
+00000362                      504  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 451
+00000362 80FF0000             505  	jarl _MpuHalSetPowerkey.1, r31
+00000366 8505                 506  	br9 .BB.LABEL.9_19
+00000368                      507  .BB.LABEL.9_16:	; if_else_bb69
+00000368                      508  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 454
+00000368 6712                 509  	cmp 0x00000007, r2
+0000036A 8A05                 510  	bnz9 .BB.LABEL.9_19
+0000036C                      511  .BB.LABEL.9_17:	; if_then_bb74
+0000036C                      512  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 0
+0000036C 082A                 513  	mov 0x00000008, r5
+0000036E                      514  .BB.LABEL.9_18:	; if_then_bb74
+0000036E 40160000             515  	movhi HIGHW1(#_g_mpuManage.3+0x00000004), r0, r2
+00000372 622F0100             516  	st.w r5, LOWW(#_g_mpuManage.3+0x00000004)[r2]
+00000376                      517  .BB.LABEL.9_19:	; if_break_bb82
+00000376                      518  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 458
+00000376 40160000             519  	movhi HIGHW1(#_g_mpuManage.3+0x00000001), r0, r2
+0000037A 82170100             520  	ld.bu LOWW(#_g_mpuManage.3+0x00000001)[r2], r2
+0000037E 6112                 521  	cmp 0x00000001, r2
+00000380 8F05                 522  	bgt9 .BB.LABEL.9_22
+00000382                      523  .BB.LABEL.9_20:	; if_then_bb88
+00000382                      524  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 460
+00000382 4112                 525  	add 0x00000001, r2
+00000384 402E0000             526  	movhi HIGHW1(#_g_mpuManage.3+0x00000001), r0, r5
+00000388 45170000             527  	st.b r2, LOWW(#_g_mpuManage.3+0x00000001)[r5]
+0000038C                      528  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 461
+0000038C 8200                 529  	zxb r2
+0000038E 6212                 530  	cmp 0x00000002, r2
+00000390 8A05                 531  	bnz9 .BB.LABEL.9_22
+00000392                      532  .BB.LABEL.9_21:	; if_then_bb96
+00000392                      533  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 0
+00000392 0032                 534  	mov 0x00000000, r6
+00000394                      535  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 463
+00000394 80FF0000             536  	jarl _MpuHalSetWakeOut.1, r31
+00000398                      537  .BB.LABEL.9_22:	; return
+00000398                      538  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 466
+00000398 40063F00             539  	dispose 0x00000000, 0x00000001, [r31]
+0000039C                      540  _MpuHalOpen:
+0000039C                      541  	.stack _MpuHalOpen = 0
+0000039C                      542  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 475
+0000039C E0076001             543  	di
+000003A0 0052                 544  	mov 0x00000000, r10
+000003A2 8505                 545  	br9 .BB.LABEL.10_4
+000003A4                      546  .BB.LABEL.10_1:	; bb
+000003A4                      547  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 478
+000003A4 0A10                 548  	mov r10, r2
+000003A6 E200                 549  	sxh r2
+000003A8 C412                 550  	shl 0x00000004, r2
+000003AA                      551  	mov #_g_mpuManage.3, r5
+000003AA 250600000000            -- mov         0x0,tp
+000003B0 C229                 552  	add r2, r5
+000003B2 85170900             553  	ld.bu 0x00000008[r5], r2
+000003B6 6012                 554  	cmp 0x00000000, r2
+000003B8 8A05                 555  	bnz9 .BB.LABEL.10_3
+000003BA                      556  .BB.LABEL.10_2:	; if_then_bb
+000003BA                      557  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 480
+000003BA 0A10                 558  	mov r10, r2
+000003BC E200                 559  	sxh r2
+000003BE C412                 560  	shl 0x00000004, r2
+000003C0                      561  	mov #_g_mpuManage.3, r5
+000003C0 250600000000            -- mov         0x0,tp
+000003C6 C229                 562  	add r2, r5
+000003C8 0112                 563  	mov 0x00000001, r2
+000003CA 45170800             564  	st.b r2, 0x00000008[r5]
+000003CE 8505                 565  	br9 .BB.LABEL.10_6
+000003D0                      566  .BB.LABEL.10_3:	; if_break_bb
+000003D0                      567  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 0
+000003D0 4152                 568  	add 0x00000001, r10
+000003D2                      569  .BB.LABEL.10_4:	; bb18
+000003D2                      570  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 476
+000003D2 0A10                 571  	mov r10, r2
+000003D4 E200                 572  	sxh r2
+000003D6 6F12                 573  	cmp 0x0000000F, r2
+000003D8 8605                 574  	blt9 .BB.LABEL.10_1
+000003DA                      575  .BB.LABEL.10_5:	; bb18.bb25_crit_edge
+000003DA                      576  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 0
+000003DA 8056FFFF             577  	ori 0x0000FFFF, r0, r10
+000003DE                      578  .BB.LABEL.10_6:	; bb25
+000003DE                      579  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 485
+000003DE E0876001             580  	ei
+000003E2                      581  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 487
+000003E2 EA00                 582  	sxh r10
+000003E4 7F00                 583  	jmp [r31]
+000003E6                      584  _MpuHalSetRxFilter:
+000003E6                      585  	.stack _MpuHalSetRxFilter = 4
+000003E6                      586  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 489
+000003E6 80072100             587  	prepare 0x00000001, 0x00000000
+000003EA                      588  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 491
+000003EA C616FFFF             589  	andi 0x0000FFFF, r6, r2
+000003EE 6E12                 590  	cmp 0x0000000E, r2
+000003F0 8B05                 591  	bh9 .BB.LABEL.11_4
+000003F2                      592  .BB.LABEL.11_1:	; if_then_bb
+000003F2                      593  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 493
+000003F2 0610                 594  	mov r6, r2
+000003F4 C412                 595  	shl 0x00000004, r2
+000003F6                      596  	mov #_g_mpuManage.3, r5
+000003F6 250600000000            -- mov         0x0,tp
+000003FC C229                 597  	add r2, r5
+000003FE 492A                 598  	add 0x00000009, r5
+00000400 603A                 599  	cmp 0x00000000, r7
+00000402 8205                 600  	bz9 .BB.LABEL.11_3
+00000404                      601  .BB.LABEL.11_2:	; if_then_bb21
+00000404                      602  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 0
+00000404 0112                 603  	mov 0x00000001, r2
+00000406                      604  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 495
+00000406 45170000             605  	st.b r2, 0x00000000[r5]
+0000040A                      606  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 496
+0000040A C432                 607  	shl 0x00000004, r6
+0000040C                      608  	mov #_g_mpuManage.3, r5
+0000040C 250600000000            -- mov         0x0,tp
+00000412 C629                 609  	add r6, r5
+00000414 25361500             610  	movea 0x00000015, r5, r6
+00000418 0342                 611  	mov 0x00000003, r8
+0000041A 80FF0000             612  	jarl _memcpy, r31
+0000041E 0052                 613  	mov 0x00000000, r10
+00000420 40063F00             614  	dispose 0x00000000, 0x00000001, [r31]
+00000424                      615  .BB.LABEL.11_3:	; if_else_bb
+00000424                      616  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 500
+00000424 45070000             617  	st.b r0, 0x00000000[r5]
+00000428 0052                 618  	mov 0x00000000, r10
+0000042A 40063F00             619  	dispose 0x00000000, 0x00000001, [r31]
+0000042E                      620  .BB.LABEL.11_4:	; bb43
+0000042E                      621  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 0
+0000042E 1F52                 622  	mov 0xFFFFFFFF, r10
+00000430                      623  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 508
+00000430 40063F00             624  	dispose 0x00000000, 0x00000001, [r31]
+00000434                      625  _MpuHalSetRxBuffer:
+00000434                      626  	.stack _MpuHalSetRxBuffer = 16
+00000434                      627  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 510
+00000434 8007210E             628  	prepare 0x00000071, 0x00000000
+00000438 08A0                 629  	mov r8, r20
+0000043A 07AE0000             630  	addi 0x00000000, r7, r21
+0000043E 06B0                 631  	mov r6, r22
+00000440                      632  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 512
+00000440 8205                 633  	bz9 .BB.LABEL.12_3
+00000442                      634  .BB.LABEL.12_1:	; entry
+00000442                      635  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 0
+00000442 D616FFFF             636  	andi 0x0000FFFF, r22, r2
+00000446 6E12                 637  	cmp 0x0000000E, r2
+00000448 8B05                 638  	bh9 .BB.LABEL.12_3
+0000044A                      639  .BB.LABEL.12_2:	; if_then_bb22
+0000044A 043A                 640  	mov 0x00000004, r7
+0000044C 0A32                 641  	mov 0x0000000A, r6
+0000044E                      642  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 516
+0000044E 80FF0000             643  	jarl _xQueueCreate, r31
+00000452 C4B2                 644  	shl 0x00000004, r22
+00000454                      645  	mov #_g_mpuManage.3, r2
+00000454 220600000000            -- mov         0x0,hp
+0000045A D611                 646  	add r22, r2
+0000045C 42571400             647  	st.b r10, 0x00000014[r2]
+00000460                      648  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 517
+00000460 62071200             649  	st.h r0, 0x00000012[r2]
+00000464                      650  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 518
+00000464 62AF0D00             651  	st.w r21, 0x0000000C[r2]
+00000468                      652  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 519
+00000468 62A71000             653  	st.h r20, 0x00000010[r2]
+0000046C 0052                 654  	mov 0x00000000, r10
+0000046E                      655  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 520
+0000046E 40063F0E             656  	dispose 0x00000000, 0x00000071, [r31]
+00000472                      657  .BB.LABEL.12_3:	; bb48
+00000472                      658  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 0
+00000472 1F52                 659  	mov 0xFFFFFFFF, r10
+00000474                      660  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 531
+00000474 40063F0E             661  	dispose 0x00000000, 0x00000071, [r31]
+00000478                      662  _MpuHalTransmit:
+00000478                      663  	.stack _MpuHalTransmit = 40
+00000478                      664  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 585
+00000478 8A07210F             665  	prepare 0x00000079, 0x00000014
+0000047C 07A60000             666  	addi 0x00000000, r7, r20
+00000480                      667  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 592
+00000480 8205                 668  	bz9 .BB.LABEL.13_4
+00000482                      669  .BB.LABEL.13_1:	; entry
+00000482                      670  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 0
+00000482 C600                 671  	zxh r6
+00000484 6E32                 672  	cmp 0x0000000E, r6
+00000486 8B05                 673  	bh9 .BB.LABEL.13_4
+00000488                      674  .BB.LABEL.13_2:	; if_then_bb24
+00000488                      675  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 596
+00000488 F4170700             676  	ld.hu 0x00000006[r20], r2
+0000048C 020661F0             677  	addi 0xFFFFF061, r2, r0
+00000490 8F05                 678  	bgt9 .BB.LABEL.13_4
+00000492                      679  .BB.LABEL.13_3:	; if_then_bb32
+00000492                      680  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 599
+00000492 E0076001             681  	di
+00000496 03A8                 682  	mov r3, r21
+00000498                      683  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 600
+00000498 1530                 684  	mov r21, r6
+0000049A 1438                 685  	mov r20, r7
+0000049C 80FF0000             686  	jarl _MpuPackHeader.1, r31
+000004A0                      687  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 601
+000004A0 1530                 688  	mov r21, r6
+000004A2 1438                 689  	mov r20, r7
+000004A4 80FF0000             690  	jarl _MpuPackGetCrc.1, r31
+000004A8 0AB0                 691  	mov r10, r22
+000004AA                      692  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 604
+000004AA                      693  	mov #_sTxBuffer.5.MpuHalTransmit, r23
+000004AA 370600000000            -- mov         0x0,r23
+000004B0 0842                 694  	mov 0x00000008, r8
+000004B2 1730                 695  	mov r23, r6
+000004B4 1538                 696  	mov r21, r7
+000004B6 80FF0000             697  	jarl _memcpy, r31
+000004BA                      698  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 606
+000004BA F4470700             699  	ld.hu 0x00000006[r20], r8
+000004BE 343F0900             700  	ld.w 0x00000008[r20], r7
+000004C2 17360800             701  	addi 0x00000008, r23, r6
+000004C6 80FF0000             702  	jarl _memcpy, r31
+000004CA                      703  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 607
+000004CA F43F0700             704  	ld.hu 0x00000006[r20], r7
+000004CE 07160800             705  	addi 0x00000008, r7, r2
+000004D2                      706  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 608
+000004D2 C200                 707  	zxh r2
+000004D4 D711                 708  	add r23, r2
+000004D6 1628                 709  	mov r22, r5
+000004D8 882A                 710  	shr 0x00000008, r5
+000004DA 422F0000             711  	st.b r5, 0x00000000[r2]
+000004DE                      712  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 609
+000004DE 07160900             713  	addi 0x00000009, r7, r2
+000004E2                      714  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 610
+000004E2 C200                 715  	zxh r2
+000004E4 D711                 716  	add r23, r2
+000004E6 42B70000             717  	st.b r22, 0x00000000[r2]
+000004EA                      718  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 611
+000004EA 4A3A                 719  	add 0x0000000A, r7
+000004EC                      720  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 612
+000004EC C700                 721  	zxh r7
+000004EE 1730                 722  	mov r23, r6
+000004F0 80FF0000             723  	jarl _MpuUartTransmit.1, r31
+000004F4                      724  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 617
+000004F4 E0876001             725  	ei
+000004F8                      726  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 612
+000004F8 6052                 727  	cmp 0x00000000, r10
+000004FA 1F12                 728  	mov 0xFFFFFFFF, r2
+000004FC                      729  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 614
+000004FC E0170453             730  	cmov 0x00000002, 0x00000000, r2, r10
+00000500                      731  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 617
+00000500 4A063F0F             732  	dispose 0x00000014, 0x00000079, [r31]
+00000504                      733  .BB.LABEL.13_4:	; if_break_bb97
+00000504                      734  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 0
+00000504 1F52                 735  	mov 0xFFFFFFFF, r10
+00000506                      736  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 634
+00000506 4A063F0F             737  	dispose 0x00000014, 0x00000079, [r31]
+0000050A                      738  _MpuHalReceive:
+0000050A                      739  	.stack _MpuHalReceive = 36
+0000050A                      740  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 637
+0000050A 8807210F             741  	prepare 0x00000079, 0x00000010
+0000050E 07A60000             742  	addi 0x00000000, r7, r20
+00000512 06A8                 743  	mov r6, r21
+00000514                      744  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 645
+00000514 E2070100             745  	bz17 .BB.LABEL.14_12
+00000518                      746  .BB.LABEL.14_1:	; entry
+00000518                      747  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 0
+00000518 D516FFFF             748  	andi 0x0000FFFF, r21, r2
+0000051C 6E12                 749  	cmp 0x0000000E, r2
+0000051E EB070100             750  	bh17 .BB.LABEL.14_12
+00000522                      751  .BB.LABEL.14_2:	; if_then_bb34
+00000522                      752  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 650
+00000522 D516FF00             753  	andi 0x000000FF, r21, r2
+00000526 C412                 754  	shl 0x00000004, r2
+00000528                      755  	mov #_g_mpuManage.3, r5
+00000528 250600000000            -- mov         0x0,tp
+0000052E C229                 756  	add r2, r5
+00000530                      757  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 651
+00000530 85371500             758  	ld.bu 0x00000014[r5], r6
+00000534 233E0C00             759  	movea 0x0000000C, r3, r7
+00000538 80FF0000             760  	jarl _xQueueReceive, r31
+0000053C 6152                 761  	cmp 0x00000001, r10
+0000053E EA070100             762  	bnz17 .BB.LABEL.14_12
+00000542                      763  .BB.LABEL.14_3:	; if_then_bb47
+00000542                      764  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 653
+00000542 23B70D00             765  	ld.w 0x0000000C[r3], r22
+00000546                      766  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 655
+00000546 D616FFFF             767  	andi 0x0000FFFF, r22, r2
+0000054A                      768  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 653
+0000054A 1628                 769  	mov r22, r5
+0000054C 902A                 770  	shr 0x00000010, r5
+0000054E                      771  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 655
+0000054E F4370500             772  	ld.hu 0x00000004[r20], r6
+00000552 4A32                 773  	add 0x0000000A, r6
+00000554 E231                 774  	cmp r2, r6
+00000556 E6070100             775  	blt17 .BB.LABEL.14_12
+0000055A                      776  .BB.LABEL.14_4:	; if_then_bb47.bb97_crit_edge
+0000055A                      777  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 0
+0000055A 0012                 778  	mov 0x00000000, r2
+0000055C 8505                 779  	br9 .BB.LABEL.14_6
+0000055E                      780  .BB.LABEL.14_5:	; bb67
+0000055E                      781  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 660
+0000055E C236FFFF             782  	andi 0x0000FFFF, r2, r6
+00000562 233E0200             783  	movea 0x00000002, r3, r7
+00000566 C639                 784  	add r6, r7
+00000568 1530                 785  	mov r21, r6
+0000056A C432                 786  	shl 0x00000004, r6
+0000056C                      787  	mov #_g_mpuManage.3, r8
+0000056C 280600000000            -- mov         0x0,r8
+00000572 C641                 788  	add r6, r8
+00000574 28370D00             789  	ld.w 0x0000000C[r8], r6
+00000578 C54EFFFF             790  	andi 0x0000FFFF, r5, r9
+0000057C C931                 791  	add r9, r6
+0000057E 06370000             792  	ld.b 0x00000000[r6], r6
+00000582 47370000             793  	st.b r6, 0x00000000[r7]
+00000586                      794  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 662
+00000586 E8371100             795  	ld.hu 0x00000010[r8], r6
+0000058A                      796  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 661
+0000058A 412A                 797  	add 0x00000001, r5
+0000058C                      798  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 662
+0000058C C53EFFFF             799  	andi 0x0000FFFF, r5, r7
+00000590 E639                 800  	cmp r6, r7
+00000592                      801  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 664
+00000592 E02F122B             802  	cmov 0x00000009, 0x00000000, r5, r5
+00000596 4112                 803  	add 0x00000001, r2
+00000598                      804  .BB.LABEL.14_6:	; bb97
+00000598                      805  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 658
+00000598 C236FFFF             806  	andi 0x0000FFFF, r2, r6
+0000059C 6832                 807  	cmp 0x00000008, r6
+0000059E 8605                 808  	blt9 .BB.LABEL.14_5
+000005A0                      809  .BB.LABEL.14_7:	; bb97.bb137_crit_edge
+000005A0                      810  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 0
+000005A0 0012                 811  	mov 0x00000000, r2
+000005A2 8505                 812  	br9 .BB.LABEL.14_9
+000005A4                      813  .BB.LABEL.14_8:	; bb104
+000005A4                      814  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 670
+000005A4 34370900             815  	ld.w 0x00000008[r20], r6
+000005A8 C23EFFFF             816  	andi 0x0000FFFF, r2, r7
+000005AC C731                 817  	add r7, r6
+000005AE 1538                 818  	mov r21, r7
+000005B0 C43A                 819  	shl 0x00000004, r7
+000005B2                      820  	mov #_g_mpuManage.3, r8
+000005B2 280600000000            -- mov         0x0,r8
+000005B8 C741                 821  	add r7, r8
+000005BA 283F0D00             822  	ld.w 0x0000000C[r8], r7
+000005BE C54EFFFF             823  	andi 0x0000FFFF, r5, r9
+000005C2 C749                 824  	add r7, r9
+000005C4 093F0000             825  	ld.b 0x00000000[r9], r7
+000005C8 463F0000             826  	st.b r7, 0x00000000[r6]
+000005CC                      827  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 672
+000005CC E8371100             828  	ld.hu 0x00000010[r8], r6
+000005D0                      829  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 671
+000005D0 412A                 830  	add 0x00000001, r5
+000005D2                      831  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 672
+000005D2 C53EFFFF             832  	andi 0x0000FFFF, r5, r7
+000005D6 E639                 833  	cmp r6, r7
+000005D8                      834  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 674
+000005D8 E02F122B             835  	cmov 0x00000009, 0x00000000, r5, r5
+000005DC 4112                 836  	add 0x00000001, r2
+000005DE                      837  .BB.LABEL.14_9:	; bb137
+000005DE                      838  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 668
+000005DE D636FFFF             839  	andi 0x0000FFFF, r22, r6
+000005E2 5632                 840  	add 0xFFFFFFF6, r6
+000005E4 C23EFFFF             841  	andi 0x0000FFFF, r2, r7
+000005E8 E639                 842  	cmp r6, r7
+000005EA 8605                 843  	blt9 .BB.LABEL.14_8
+000005EC                      844  .BB.LABEL.14_10:	; bb147
+000005EC                      845  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 677
+000005EC 1616F6FF             846  	addi 0xFFFFFFF6, r22, r2
+000005F0 74170600             847  	st.h r2, 0x00000006[r20]
+000005F4                      848  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 678
+000005F4 C4AA                 849  	shl 0x00000004, r21
+000005F6                      850  	mov #_g_mpuManage.3, r2
+000005F6 220600000000            -- mov         0x0,hp
+000005FC D511                 851  	add r21, r2
+000005FE 22370D00             852  	ld.w 0x0000000C[r2], r6
+00000602 C53EFFFF             853  	andi 0x0000FFFF, r5, r7
+00000606 C639                 854  	add r6, r7
+00000608                      855  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 680
+00000608 E2171100             856  	ld.hu 0x00000010[r2], r2
+0000060C                      857  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 679
+0000060C 412A                 858  	add 0x00000001, r5
+0000060E                      859  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 680
+0000060E C546FFFF             860  	andi 0x0000FFFF, r5, r8
+00000612 E241                 861  	cmp r2, r8
+00000614                      862  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 682
+00000614 E02F1213             863  	cmov 0x00000009, 0x00000000, r5, r2
+00000618                      864  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 684
+00000618 C200                 865  	zxh r2
+0000061A C231                 866  	add r2, r6
+0000061C 86AF0100             867  	ld.bu 0x00000000[r6], r21
+00000620                      868  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 678
+00000620 07BF0000             869  	ld.b 0x00000000[r7], r23
+00000624 23360200             870  	movea 0x00000002, r3, r6
+00000628                      871  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 685
+00000628 1438                 872  	mov r20, r7
+0000062A 80FF0000             873  	jarl _MpuPackGetCrc.1, r31
+0000062E                      874  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 684
+0000062E C8BA                 875  	shl 0x00000008, r23
+00000630 15B9                 876  	or r21, r23
+00000632                      877  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 686
+00000632 D700                 878  	zxh r23
+00000634 EAB9                 879  	cmp r10, r23
+00000636 8A05                 880  	bnz9 .BB.LABEL.14_12
+00000638                      881  .BB.LABEL.14_11:	; if_then_bb206
+00000638                      882  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 0
+00000638 23160200             883  	movea 0x00000002, r3, r2
+0000063C                      884  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 688
+0000063C 022F0200             885  	ld.b 0x00000002[r2], r5
+00000640 542F0000             886  	st.b r5, 0x00000000[r20]
+00000644                      887  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 689
+00000644 022F0300             888  	ld.b 0x00000003[r2], r5
+00000648 542F0100             889  	st.b r5, 0x00000001[r20]
+0000064C                      890  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 690
+0000064C 02170400             891  	ld.b 0x00000004[r2], r2
+00000650 54170200             892  	st.b r2, 0x00000002[r20]
+00000654                      893  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 691
+00000654 56B2                 894  	add 0xFFFFFFF6, r22
+00000656 74B70600             895  	st.h r22, 0x00000006[r20]
+0000065A 0052                 896  	mov 0x00000000, r10
+0000065C 48063F0F             897  	dispose 0x00000010, 0x00000079, [r31]
+00000660                      898  .BB.LABEL.14_12:	; if_break_bb236
+00000660                      899  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 0
+00000660 1F52                 900  	mov 0xFFFFFFFF, r10
+00000662                      901  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 719
+00000662 48063F0F             902  	dispose 0x00000010, 0x00000079, [r31]
+00000666                      903  _MpuHalStart:
+00000666                      904  	.stack _MpuHalStart = 8
+00000666                      905  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 721
+00000666 80072108             906  	prepare 0x00000041, 0x00000000
+0000066A                      907  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 723
+0000066A                      908  	mov #_g_mpuManage.3, r20
+0000066A 340600000000            -- mov         0x0,r20
+00000670 0A12                 909  	mov 0x0000000A, r2
+00000672 54170100             910  	st.b r2, 0x00000001[r20]
+00000676 0032                 911  	mov 0x00000000, r6
+00000678                      912  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 724
+00000678 80FF0000             913  	jarl _MpuHalSetWakeOut.1, r31
+0000067C 0132                 914  	mov 0x00000001, r6
+0000067E                      915  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 725
+0000067E 80FF0000             916  	jarl _MpuHalSetPower.1, r31
+00000682 0312                 917  	mov 0x00000003, r2
+00000684                      918  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 726
+00000684 74170500             919  	st.w r2, 0x00000004[r20]
+00000688 40063F08             920  	dispose 0x00000000, 0x00000041, [r31]
+0000068C                      921  _MpuHalStartIsFinished:
+0000068C                      922  	.stack _MpuHalStartIsFinished = 0
+0000068C                      923  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 732
+0000068C 40160000             924  	movhi HIGHW1(#_g_mpuManage.3+0x00000004), r0, r2
+00000690 22170100             925  	ld.w LOWW(#_g_mpuManage.3+0x00000004)[r2], r2
+00000694 6812                 926  	cmp 0x00000008, r2
+00000696 1F12                 927  	mov 0xFFFFFFFF, r2
+00000698                      928  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 738
+00000698 E0170453             929  	cmov 0x00000002, 0x00000000, r2, r10
+0000069C                      930  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 741
+0000069C 7F00                 931  	jmp [r31]
+0000069E                      932  _MpuHalReset:
+0000069E                      933  	.stack _MpuHalReset = 4
+0000069E                      934  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 743
+0000069E 80072100             935  	prepare 0x00000001, 0x00000000
+000006A2 0032                 936  	mov 0x00000000, r6
+000006A4                      937  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 745
+000006A4 80FF0000             938  	jarl _MpuHalSetPower.1, r31
+000006A8                      939  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 746
+000006A8 40160000             940  	movhi HIGHW1(#_g_mpuManage.3+0x00000004), r0, r2
+000006AC 012A                 941  	mov 0x00000001, r5
+000006AE 622F0100             942  	st.w r5, LOWW(#_g_mpuManage.3+0x00000004)[r2]
+000006B2 40063F00             943  	dispose 0x00000000, 0x00000001, [r31]
+000006B6                      944  _MpuHalResetIsFinished:
+000006B6                      945  	.stack _MpuHalResetIsFinished = 0
+000006B6                      946  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 752
+000006B6 40160000             947  	movhi HIGHW1(#_g_mpuManage.3+0x00000004), r0, r2
+000006BA 22170100             948  	ld.w LOWW(#_g_mpuManage.3+0x00000004)[r2], r2
+000006BE 6812                 949  	cmp 0x00000008, r2
+000006C0 1F12                 950  	mov 0xFFFFFFFF, r2
+000006C2                      951  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 758
+000006C2 E0170453             952  	cmov 0x00000002, 0x00000000, r2, r10
+000006C6                      953  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 761
+000006C6 7F00                 954  	jmp [r31]
+000006C8                      955  _MpuHalPowerOff:
+000006C8                      956  	.stack _MpuHalPowerOff = 4
+000006C8                      957  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 763
+000006C8 80072100             958  	prepare 0x00000001, 0x00000000
+000006CC 0032                 959  	mov 0x00000000, r6
+000006CE                      960  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 765
+000006CE 80FF0000             961  	jarl _MpuHalSetPower.1, r31
+000006D2                      962  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 766
+000006D2 40160000             963  	movhi HIGHW1(#_g_mpuManage.3+0x00000004), r0, r2
+000006D6 62070100             964  	st.w r0, LOWW(#_g_mpuManage.3+0x00000004)[r2]
+000006DA 40063F00             965  	dispose 0x00000000, 0x00000001, [r31]
+000006DE                      966  _MpuHalSetMode:
+000006DE                      967  	.stack _MpuHalSetMode = 16
+000006DE                      968  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 769
+000006DE 8007210E             969  	prepare 0x00000071, 0x00000000
+000006E2 06A60000             970  	addi 0x00000000, r6, r20
+000006E6                      971  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 771
+000006E6 8A05                 972  	bnz9 .BB.LABEL.20_2
+000006E8                      973  .BB.LABEL.20_1:	; if_then_bb
+000006E8                      974  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 774
+000006E8 40160000             975  	movhi HIGHW1(#_g_mpuManage.3), r0, r2
+000006EC 42A70000             976  	st.b r20, LOWW(#_g_mpuManage.3)[r2]
+000006F0 003A                 977  	mov 0x00000000, r7
+000006F2 20361300             978  	movea 0x00000013, r0, r6
+000006F6                      979  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 775
+000006F6 80FF0000             980  	jarl _Dio_WriteChannel, r31
+000006FA 40063F0E             981  	dispose 0x00000000, 0x00000071, [r31]
+000006FE                      982  .BB.LABEL.20_2:	; if_else_bb
+000006FE                      983  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 777
+000006FE 61A2                 984  	cmp 0x00000001, r20
+00000700 8A05                 985  	bnz9 .BB.LABEL.20_4
+00000702                      986  .BB.LABEL.20_3:	; if_then_bb11
+00000702                      987  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 781
+00000702                      988  	mov #_g_mpuManage.3, r21
+00000702 350600000000            -- mov         0x0,r21
+00000708 55070100             989  	st.b r0, 0x00000001[r21]
+0000070C 01B2                 990  	mov 0x00000001, r22
+0000070E                      991  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 782
+0000070E 1630                 992  	mov r22, r6
+00000710 80FF0000             993  	jarl _MpuHalSetWakeOut.1, r31
+00000714                      994  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 783
+00000714 55A70000             995  	st.b r20, 0x00000000[r21]
+00000718 20361300             996  	movea 0x00000013, r0, r6
+0000071C                      997  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 784
+0000071C 1638                 998  	mov r22, r7
+0000071E 80FF0000             999  	jarl _Dio_WriteChannel, r31
+00000722                     1000  .BB.LABEL.20_4:	; return
+00000722                     1001  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 786
+00000722 40063F0E            1002  	dispose 0x00000000, 0x00000071, [r31]
+00000726                     1003  _UartProtocalProcess:
+00000726                     1004  	.stack _UartProtocalProcess = 24
+00000726                     1005  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 824
+00000726 8007218F            1006  	prepare 0x00000479, 0x00000000
+0000072A 00A2                1007  	mov 0x00000000, r20
+0000072C 08A8                1008  	mov r8, r21
+0000072E 07B0                1009  	mov r7, r22
+00000730 06B8                1010  	mov r6, r23
+00000732 8505                1011  	br9 .BB.LABEL.21_15
+00000734                     1012  .BB.LABEL.21_1:	; bb
+00000734                     1013  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 833
+00000734 40160000            1014  	movhi HIGHW1(#_g_mpuUartProtocalBuffer.1+0x000004B0), r0, r2
+00000738 E2170100            1015  	ld.hu LOWW(#_g_mpuUartProtocalBuffer.1+0x000004B0)[r2], r2
+0000073C 6012                1016  	cmp 0x00000000, r2
+0000073E 8A05                1017  	bnz9 .BB.LABEL.21_3
+00000740                     1018  .BB.LABEL.21_2:	; if_then_bb
+00000740                     1019  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 835
+00000740 D42EFFFF            1020  	andi 0x0000FFFF, r20, r5
+00000744 D729                1021  	add r23, r5
+00000746 85370100            1022  	ld.bu 0x00000000[r5], r6
+0000074A 0606ABFF            1023  	addi 0xFFFFFFAB, r6, r0
+0000074E 8205                1024  	bz9 .BB.LABEL.21_5
+00000750 8505                1025  	br9 .BB.LABEL.21_14
+00000752                     1026  .BB.LABEL.21_3:	; if_else_bb
+00000752                     1027  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 841
+00000752 6112                1028  	cmp 0x00000001, r2
+00000754 8A05                1029  	bnz9 .BB.LABEL.21_8
+00000756                     1030  .BB.LABEL.21_4:	; if_then_bb45
+00000756                     1031  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 843
+00000756 D42EFFFF            1032  	andi 0x0000FFFF, r20, r5
+0000075A D729                1033  	add r23, r5
+0000075C 85370100            1034  	ld.bu 0x00000000[r5], r6
+00000760 060656FF            1035  	addi 0xFFFFFF56, r6, r0
+00000764 8A05                1036  	bnz9 .BB.LABEL.21_6
+00000766                     1037  .BB.LABEL.21_5:	; if_then_bb55
+00000766                     1038  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 0
+00000766                     1039  	mov #_g_mpuUartProtocalBuffer.1, r6
+00000766 260600000000            -- mov         0x0,r6
+0000076C C611                1040  	add r6, r2
+0000076E 052F0000            1041  	ld.b 0x00000000[r5], r5
+00000772 422F0000            1042  	st.b r5, 0x00000000[r2]
+00000776 2617B004            1043  	ld.h 0x000004B0[r6], r2
+0000077A 4112                1044  	add 0x00000001, r2
+0000077C 6617B004            1045  	st.h r2, 0x000004B0[r6]
+00000780 8505                1046  	br9 .BB.LABEL.21_14
+00000782                     1047  .BB.LABEL.21_6:	; if_else_bb73
+00000782                     1048  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 848
+00000782 85170100            1049  	ld.bu 0x00000000[r5], r2
+00000786 0206ABFF            1050  	addi 0xFFFFFFAB, r2, r0
+0000078A 8A05                1051  	bnz9 .BB.LABEL.21_11
+0000078C                     1052  .BB.LABEL.21_7:	; if_then_bb84
+0000078C                     1053  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 851
+0000078C 05170000            1054  	ld.b 0x00000000[r5], r2
+00000790                     1055  	mov #_g_mpuUartProtocalBuffer.1, r5
+00000790 250600000000            -- mov         0x0,tp
+00000796 45170000            1056  	st.b r2, 0x00000000[r5]
+0000079A 0112                1057  	mov 0x00000001, r2
+0000079C                     1058  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 852
+0000079C 6517B004            1059  	st.h r2, 0x000004B0[r5]
+000007A0                     1060  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 853
+000007A0 6507B204            1061  	st.h r0, 0x000004B2[r5]
+000007A4 8505                1062  	br9 .BB.LABEL.21_14
+000007A6                     1063  .BB.LABEL.21_8:	; if_else_bb105
+000007A6                     1064  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 861
+000007A6                     1065  	mov #_g_mpuUartProtocalBuffer.1, r5
+000007A6 250600000000            -- mov         0x0,tp
+000007AC 0230                1066  	mov r2, r6
+000007AE C531                1067  	add r5, r6
+000007B0 D43EFFFF            1068  	andi 0x0000FFFF, r20, r7
+000007B4 D739                1069  	add r23, r7
+000007B6 073F0000            1070  	ld.b 0x00000000[r7], r7
+000007BA 463F0000            1071  	st.b r7, 0x00000000[r6]
+000007BE 253FB004            1072  	ld.h 0x000004B0[r5], r7
+000007C2 413A                1073  	add 0x00000001, r7
+000007C4 653FB004            1074  	st.h r7, 0x000004B0[r5]
+000007C8 6712                1075  	cmp 0x00000007, r2
+000007CA 8F05                1076  	bgt9 .BB.LABEL.21_12
+000007CC                     1077  .BB.LABEL.21_9:	; if_then_bb113
+000007CC                     1078  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 865
+000007CC C700                1079  	zxh r7
+000007CE 683A                1080  	cmp 0x00000008, r7
+000007D0 8A05                1081  	bnz9 .BB.LABEL.21_14
+000007D2                     1082  .BB.LABEL.21_10:	; if_then_bb138
+000007D2                     1083  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 867
+000007D2                     1084  	mov #_g_mpuUartProtocalBuffer.1, r2
+000007D2 220600000000            -- mov         0x0,hp
+000007D8 822F0700            1085  	ld.bu 0x00000006[r2], r5
+000007DC 02370500            1086  	ld.b 0x00000005[r2], r6
+000007E0 C832                1087  	shl 0x00000008, r6
+000007E2 0531                1088  	or r5, r6
+000007E4 6237B204            1089  	st.h r6, 0x000004B2[r2]
+000007E8                     1090  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 868
+000007E8 C600                1091  	zxh r6
+000007EA 2016A704            1092  	movea 0x000004A7, r0, r2
+000007EE E231                1093  	cmp r2, r6
+000007F0 8105                1094  	bl9 .BB.LABEL.21_14
+000007F2                     1095  .BB.LABEL.21_11:	; if_then_bb164
+000007F2                     1096  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 0
+000007F2                     1097  	mov #_g_mpuUartProtocalBuffer.1, r2
+000007F2 220600000000            -- mov         0x0,hp
+000007F8 6207B004            1098  	st.h r0, 0x000004B0[r2]
+000007FC 6207B204            1099  	st.h r0, 0x000004B2[r2]
+00000800 8505                1100  	br9 .BB.LABEL.21_14
+00000802                     1101  .BB.LABEL.21_12:	; if_else_bb171
+00000802                     1102  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 879
+00000802 40160000            1103  	movhi HIGHW1(#_g_mpuUartProtocalBuffer.1+0x000004B2), r0, r2
+00000806 E2170100            1104  	ld.hu LOWW(#_g_mpuUartProtocalBuffer.1+0x000004B2)[r2], r2
+0000080A 4A12                1105  	add 0x0000000A, r2
+0000080C C72EFFFF            1106  	andi 0x0000FFFF, r7, r5
+00000810 E229                1107  	cmp r2, r5
+00000812 8605                1108  	blt9 .BB.LABEL.21_14
+00000814                     1109  .BB.LABEL.21_13:	; if_then_bb201
+00000814                     1110  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 882
+00000814 C700                1111  	zxh r7
+00000816                     1112  	mov #_g_mpuUartProtocalBuffer.1, r24
+00000816 380600000000            -- mov         0x0,r24
+0000081C 1830                1113  	mov r24, r6
+0000081E 1540                1114  	mov r21, r8
+00000820 80FF0000            1115  	jarl _MpuDataDispatch.1, r31
+00000824                     1116  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 883
+00000824 7807B204            1117  	st.h r0, 0x000004B2[r24]
+00000828                     1118  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 884
+00000828 7807B004            1119  	st.h r0, 0x000004B0[r24]
+0000082C                     1120  .BB.LABEL.21_14:	; if_break_bb216
+0000082C                     1121  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 0
+0000082C 41A2                1122  	add 0x00000001, r20
+0000082E                     1123  .BB.LABEL.21_15:	; bb219
+0000082E                     1124  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 831
+0000082E D416FFFF            1125  	andi 0x0000FFFF, r20, r2
+00000832 F611                1126  	cmp r22, r2
+00000834 8105                1127  	bl9 .BB.LABEL.21_1
+00000836                     1128  .BB.LABEL.21_16:	; return
+00000836                     1129  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 888
+00000836 40063F8F            1130  	dispose 0x00000000, 0x00000479, [r31]
+0000083A                     1131  _MpuHalUartInterruptCallback:
+0000083A                     1132  	.stack _MpuHalUartInterruptCallback = 0
+0000083A                     1133  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 890
+0000083A 40160000            1134  	movhi HIGHW1(#_g_mpuUartRxBufId), r0, r2
+0000083E                     1135  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 892
+0000083E 82170100            1136  	ld.bu LOWW(#_g_mpuUartRxBufId)[r2], r2
+00000842 6012                1137  	cmp 0x00000000, r2
+00000844 8205                1138  	bz9 .BB.LABEL.22_5
+00000846                     1139  .BB.LABEL.22_1:	; if_then_bb
+00000846                     1140  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 894
+00000846 40160000            1141  	movhi HIGHW1(#_g_mpuUartRxBufCount1), r0, r2
+0000084A E2170100            1142  	ld.hu LOWW(#_g_mpuUartRxBufCount1)[r2], r2
+0000084E 020639FF            1143  	addi 0xFFFFFF39, r2, r0
+00000852 8F05                1144  	bgt9 .BB.LABEL.22_3
+00000854                     1145  .BB.LABEL.22_2:	; if_then_bb10
+00000854                     1146  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 896
+00000854 40160000            1147  	movhi HIGHW1(#_g_mpuUartRxBufCount1), r0, r2
+00000858 E22F0100            1148  	ld.hu LOWW(#_g_mpuUartRxBufCount1)[r2], r5
+0000085C                     1149  	mov #_g_uartReceiveData1, r7
+0000085C 270600000000            -- mov         0x0,r7
+00000862 C539                1150  	add r5, r7
+00000864 47370000            1151  	st.b r6, 0x00000000[r7]
+00000868                     1152  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 897
+00000868 222F0000            1153  	ld.h LOWW(#_g_mpuUartRxBufCount1)[r2], r5
+0000086C 412A                1154  	add 0x00000001, r5
+0000086E 622F0000            1155  	st.h r5, LOWW(#_g_mpuUartRxBufCount1)[r2]
+00000872                     1156  .BB.LABEL.22_3:	; if_break_bb
+00000872                     1157  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 899
+00000872 40160000            1158  	movhi HIGHW1(#_g_mpuUartRxBufDealFlag), r0, r2
+00000876 82170100            1159  	ld.bu LOWW(#_g_mpuUartRxBufDealFlag)[r2], r2
+0000087A 6012                1160  	cmp 0x00000000, r2
+0000087C 8A05                1161  	bnz9 .BB.LABEL.22_9
+0000087E                     1162  .BB.LABEL.22_4:	; if_then_bb26
+0000087E                     1163  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 901
+0000087E 40160000            1164  	movhi HIGHW1(#_g_mpuUartRxBufId), r0, r2
+00000882 42070000            1165  	st.b r0, LOWW(#_g_mpuUartRxBufId)[r2]
+00000886                     1166  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 902
+00000886 40160000            1167  	movhi HIGHW1(#_g_mpuUartRxBufCount0), r0, r2
+0000088A 62070000            1168  	st.h r0, LOWW(#_g_mpuUartRxBufCount0)[r2]
+0000088E                     1169  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 903
+0000088E 40160000            1170  	movhi HIGHW1(#_g_mpuUartRxBufDealFlag), r0, r2
+00000892 012A                1171  	mov 0x00000001, r5
+00000894 422F0000            1172  	st.b r5, LOWW(#_g_mpuUartRxBufDealFlag)[r2]
+00000898 7F00                1173  	jmp [r31]
+0000089A                     1174  .BB.LABEL.22_5:	; if_else_bb
+0000089A                     1175  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 908
+0000089A 40160000            1176  	movhi HIGHW1(#_g_mpuUartRxBufCount0), r0, r2
+0000089E E2170100            1177  	ld.hu LOWW(#_g_mpuUartRxBufCount0)[r2], r2
+000008A2 020639FF            1178  	addi 0xFFFFFF39, r2, r0
+000008A6 8F05                1179  	bgt9 .BB.LABEL.22_7
+000008A8                     1180  .BB.LABEL.22_6:	; if_then_bb33
+000008A8                     1181  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 910
+000008A8 40160000            1182  	movhi HIGHW1(#_g_mpuUartRxBufCount0), r0, r2
+000008AC E22F0100            1183  	ld.hu LOWW(#_g_mpuUartRxBufCount0)[r2], r5
+000008B0                     1184  	mov #_g_uartReceiveData0, r7
+000008B0 270600000000            -- mov         0x0,r7
+000008B6 C539                1185  	add r5, r7
+000008B8 47370000            1186  	st.b r6, 0x00000000[r7]
+000008BC                     1187  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 911
+000008BC 222F0000            1188  	ld.h LOWW(#_g_mpuUartRxBufCount0)[r2], r5
+000008C0 412A                1189  	add 0x00000001, r5
+000008C2 622F0000            1190  	st.h r5, LOWW(#_g_mpuUartRxBufCount0)[r2]
+000008C6                     1191  .BB.LABEL.22_7:	; if_break_bb40
+000008C6                     1192  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 913
+000008C6 40160000            1193  	movhi HIGHW1(#_g_mpuUartRxBufDealFlag), r0, r2
+000008CA 82170100            1194  	ld.bu LOWW(#_g_mpuUartRxBufDealFlag)[r2], r2
+000008CE 6012                1195  	cmp 0x00000000, r2
+000008D0 8A05                1196  	bnz9 .BB.LABEL.22_9
+000008D2                     1197  .BB.LABEL.22_8:	; if_then_bb52
+000008D2                     1198  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 0
+000008D2 0112                1199  	mov 0x00000001, r2
+000008D4                     1200  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 915
+000008D4 402E0000            1201  	movhi HIGHW1(#_g_mpuUartRxBufId), r0, r5
+000008D8 45170000            1202  	st.b r2, LOWW(#_g_mpuUartRxBufId)[r5]
+000008DC                     1203  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 916
+000008DC 402E0000            1204  	movhi HIGHW1(#_g_mpuUartRxBufCount1), r0, r5
+000008E0 65070000            1205  	st.h r0, LOWW(#_g_mpuUartRxBufCount1)[r5]
+000008E4                     1206  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 917
+000008E4 402E0000            1207  	movhi HIGHW1(#_g_mpuUartRxBufDealFlag), r0, r5
+000008E8 45170000            1208  	st.b r2, LOWW(#_g_mpuUartRxBufDealFlag)[r5]
+000008EC                     1209  .BB.LABEL.22_9:	; return
+000008EC                     1210  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 920
+000008EC 7F00                1211  	jmp [r31]
+000008EE                     1212  _MpuHalUartTimerCallback:
+000008EE                     1213  	.stack _MpuHalUartTimerCallback = 12
+000008EE                     1214  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 922
+000008EE 8007210C            1215  	prepare 0x00000061, 0x00000000
+000008F2                     1216  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 924
+000008F2 40160000            1217  	movhi HIGHW1(#_g_mpuUartRxBufId), r0, r2
+000008F6 82170100            1218  	ld.bu LOWW(#_g_mpuUartRxBufId)[r2], r2
+000008FA 6112                1219  	cmp 0x00000001, r2
+000008FC 8A05                1220  	bnz9 .BB.LABEL.23_3
+000008FE                     1221  .BB.LABEL.23_1:	; bb
+000008FE                     1222  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 0
+000008FE 40160000            1223  	movhi HIGHW1(#_g_mpuUartRxBufCount0), r0, r2
+00000902 E2170100            1224  	ld.hu LOWW(#_g_mpuUartRxBufCount0)[r2], r2
+00000906 6012                1225  	cmp 0x00000000, r2
+00000908 8205                1226  	bz9 .BB.LABEL.23_3
+0000090A                     1227  .BB.LABEL.23_2:	; if_then_bb
+0000090A                     1228  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 926
+0000090A 40A60000            1229  	movhi HIGHW1(#_g_mpuUartRxBufCount0), r0, r20
+0000090E F43F0100            1230  	ld.hu LOWW(#_g_mpuUartRxBufCount0)[r20], r7
+00000912                     1231  	mov #_g_uartReceiveData0, r21
+00000912 350600000000            -- mov         0x0,r21
+00000918 0142                1232  	mov 0x00000001, r8
+0000091A 1530                1233  	mov r21, r6
+0000091C 80FF0000            1234  	jarl _UartProtocalProcess, r31
+00000920 2046C800            1235  	movea 0x000000C8, r0, r8
+00000924 003A                1236  	mov 0x00000000, r7
+00000926                     1237  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 927
+00000926 1530                1238  	mov r21, r6
+00000928 80FF0000            1239  	jarl _memset, r31
+0000092C                     1240  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 928
+0000092C 74070000            1241  	st.h r0, LOWW(#_g_mpuUartRxBufCount0)[r20]
+00000930 8505                1242  	br9 .BB.LABEL.23_6
+00000932                     1243  .BB.LABEL.23_3:	; if_else_bb
+00000932                     1244  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 930
+00000932 40160000            1245  	movhi HIGHW1(#_g_mpuUartRxBufId), r0, r2
+00000936 82170100            1246  	ld.bu LOWW(#_g_mpuUartRxBufId)[r2], r2
+0000093A 6012                1247  	cmp 0x00000000, r2
+0000093C 8A05                1248  	bnz9 .BB.LABEL.23_6
+0000093E                     1249  .BB.LABEL.23_4:	; bb20
+0000093E                     1250  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 0
+0000093E 40160000            1251  	movhi HIGHW1(#_g_mpuUartRxBufCount1), r0, r2
+00000942 E2170100            1252  	ld.hu LOWW(#_g_mpuUartRxBufCount1)[r2], r2
+00000946 6012                1253  	cmp 0x00000000, r2
+00000948 8205                1254  	bz9 .BB.LABEL.23_6
+0000094A                     1255  .BB.LABEL.23_5:	; if_then_bb33
+0000094A                     1256  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 932
+0000094A 40A60000            1257  	movhi HIGHW1(#_g_mpuUartRxBufCount1), r0, r20
+0000094E F43F0100            1258  	ld.hu LOWW(#_g_mpuUartRxBufCount1)[r20], r7
+00000952                     1259  	mov #_g_uartReceiveData1, r21
+00000952 350600000000            -- mov         0x0,r21
+00000958 0142                1260  	mov 0x00000001, r8
+0000095A 1530                1261  	mov r21, r6
+0000095C 80FF0000            1262  	jarl _UartProtocalProcess, r31
+00000960 2046C800            1263  	movea 0x000000C8, r0, r8
+00000964 003A                1264  	mov 0x00000000, r7
+00000966                     1265  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 933
+00000966 1530                1266  	mov r21, r6
+00000968 80FF0000            1267  	jarl _memset, r31
+0000096C                     1268  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 934
+0000096C 74070000            1269  	st.h r0, LOWW(#_g_mpuUartRxBufCount1)[r20]
+00000970                     1270  .BB.LABEL.23_6:	; if_break_bb36
+00000970                     1271  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 936
+00000970 40160000            1272  	movhi HIGHW1(#_g_mpuUartRxBufDealFlag), r0, r2
+00000974 42070000            1273  	st.b r0, LOWW(#_g_mpuUartRxBufDealFlag)[r2]
+00000978 40063F0C            1274  	dispose 0x00000000, 0x00000061, [r31]
+0000097C                     1275  _MpuHalMainUartInit:
+0000097C                     1276  	.stack _MpuHalMainUartInit = 4
+0000097C                     1277  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 939
+0000097C 80072100            1278  	prepare 0x00000001, 0x00000000
+00000980                     1279  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 941
+00000980 80FF0000            1280  	jarl _R_UART5_Create, r31
+00000984                     1281  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 942
+00000984 80FF0000            1282  	jarl _R_UART5_Start, r31
+00000988 40063F00            1283  	dispose 0x00000000, 0x00000001, [r31]
+0000098C                     1284  _MpuHalInit:
+0000098C                     1285  	.stack _MpuHalInit = 8
+0000098C                     1286  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 945
+0000098C 80072108            1287  	prepare 0x00000041, 0x00000000
+00000990                     1288  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 947
+00000990                     1289  	mov #_g_mpuManage.3, r20
+00000990 340600000000            -- mov         0x0,r20
+00000996 20460419            1290  	movea 0x00001904, r0, r8
+0000099A 003A                1291  	mov 0x00000000, r7
+0000099C 1430                1292  	mov r20, r6
+0000099E 80FF0000            1293  	jarl _memset, r31
+000009A2 0A12                1294  	mov 0x0000000A, r2
+000009A4                     1295  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 948
+000009A4 54170100            1296  	st.b r2, 0x00000001[r20]
+000009A8 0112                1297  	mov 0x00000001, r2
+000009AA                     1298  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 949
+000009AA 54170000            1299  	st.b r2, 0x00000000[r20]
+000009AE                     1300  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 950
+000009AE 80FF0000            1301  	jarl _MpuHalGpioInit.1, r31
+000009B2                     1302  	mov 0x00070800, r6
+000009B2 260600080700            -- mov         0x70800,r6
+000009B8                     1303  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 955
+000009B8 80FF0000            1304  	jarl _MpuHalMainUartInit, r31
+000009BC 40063F08            1305  	dispose 0x00000000, 0x00000041, [r31]
+000009C0                     1306  _MpuHalTxTaskInit:
+000009C0                     1307  	.stack _MpuHalTxTaskInit = 8
+000009C0                     1308  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 959
+000009C0 80072108            1309  	prepare 0x00000041, 0x00000000
+000009C4                     1310  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 961
+000009C4                     1311  	mov #_g_mpuUartTxBuffer.2, r20
+000009C4 340600000000            -- mov         0x0,r20
+000009CA 7407020C            1312  	st.h r0, 0x00000C02[r20]
+000009CE                     1313  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 962
+000009CE 7407040C            1314  	st.h r0, 0x00000C04[r20]
+000009D2 043A                1315  	mov 0x00000004, r7
+000009D4 20361400            1316  	movea 0x00000014, r0, r6
+000009D8                     1317  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 963
+000009D8 80FF0000            1318  	jarl _xQueueCreate, r31
+000009DC 54570000            1319  	st.b r10, 0x00000000[r20]
+000009E0 40063F08            1320  	dispose 0x00000000, 0x00000041, [r31]
+000009E4                     1321  _MpuHalTxTask:
+000009E4                     1322  	.stack _MpuHalTxTask = 20
+000009E4                     1323  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 967
+000009E4 8207210E            1324  	prepare 0x00000071, 0x00000004
+000009E8                     1325  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 975
+000009E8 80FF0000            1326  	jarl _R_UART5_SendStatus, r31
+000009EC 6052                1327  	cmp 0x00000000, r10
+000009EE 8A05                1328  	bnz9 .BB.LABEL.27_7
+000009F0                     1329  .BB.LABEL.27_1:	; if_break_bb
+000009F0                     1330  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 981
+000009F0 40160000            1331  	movhi HIGHW1(#_g_mpuUartTxBuffer.2), r0, r2
+000009F4 82370100            1332  	ld.bu LOWW(#_g_mpuUartTxBuffer.2)[r2], r6
+000009F8 0042                1333  	mov 0x00000000, r8
+000009FA 0338                1334  	mov r3, r7
+000009FC 80FF0000            1335  	jarl _xQueueReceive, r31
+00000A00 6152                1336  	cmp 0x00000001, r10
+00000A02 8A05                1337  	bnz9 .BB.LABEL.27_7
+00000A04                     1338  .BB.LABEL.27_2:	; if_break_bb15
+00000A04                     1339  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 986
+00000A04 23A70100            1340  	ld.w 0x00000000[r3], r20
+00000A08 1438                1341  	mov r20, r7
+00000A0A 903A                1342  	shr 0x00000010, r7
+00000A0C                     1343  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 988
+00000A0C D406FFFF            1344  	andi 0x0000FFFF, r20, r0
+00000A10 8205                1345  	bz9 .BB.LABEL.27_7
+00000A12                     1346  .BB.LABEL.27_3:	; bb27
+00000A12                     1347  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 0
+00000A12 D416FFFF            1348  	andi 0x0000FFFF, r20, r2
+00000A16 020600F8            1349  	addi 0xFFFFF800, r2, r0
+00000A1A 8F05                1350  	bgt9 .BB.LABEL.27_7
+00000A1C                     1351  .BB.LABEL.27_4:	; bb38
+00000A1C 40160000            1352  	movhi HIGHW1(#_g_mpuUartTxBuffer.2+0x00000C04), r0, r2
+00000A20 E2170100            1353  	ld.hu LOWW(#_g_mpuUartTxBuffer.2+0x00000C04)[r2], r2
+00000A24 D42EFFFF            1354  	andi 0x0000FFFF, r20, r5
+00000A28 E229                1355  	cmp r2, r5
+00000A2A 8B05                1356  	bh9 .BB.LABEL.27_7
+00000A2C                     1357  .BB.LABEL.27_5:	; if_break_bb55
+00000A2C                     1358  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 996
+00000A2C                     1359  	mov #_g_mpuUartTxBuffer.2, r2
+00000A2C 220600000000            -- mov         0x0,hp
+00000A32 22AE0108            1360  	movea 0x00000801, r2, r21
+00000A36 D4B6FFFF            1361  	andi 0x0000FFFF, r20, r22
+00000A3A 1530                1362  	mov r21, r6
+00000A3C 1640                1363  	mov r22, r8
+00000A3E 80FF0000            1364  	jarl _MpuUartRingCopyOut.1, r31
+00000A42                     1365  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 997
+00000A42 1530                1366  	mov r21, r6
+00000A44 1638                1367  	mov r22, r7
+00000A46 80FF0000            1368  	jarl _R_UART5_Send, r31
+00000A4A 6052                1369  	cmp 0x00000000, r10
+00000A4C 8A05                1370  	bnz9 .BB.LABEL.27_7
+00000A4E                     1371  .BB.LABEL.27_6:	; if_then_bb64
+00000A4E                     1372  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 999
+00000A4E 40160000            1373  	movhi HIGHW1(#_g_mpuUartTxBuffer.2+0x00000C04), r0, r2
+00000A52 222F0000            1374  	ld.h LOWW(#_g_mpuUartTxBuffer.2+0x00000C04)[r2], r5
+00000A56 B429                1375  	sub r20, r5
+00000A58 622F0000            1376  	st.h r5, LOWW(#_g_mpuUartTxBuffer.2+0x00000C04)[r2]
+00000A5C                     1377  .BB.LABEL.27_7:	; return
+00000A5C                     1378  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 1007
+00000A5C 42063F0E            1379  	dispose 0x00000004, 0x00000071, [r31]
+00000A60                     1380  _MpuUartTransmit.1:
+00000A60                     1381  	.stack _MpuUartTransmit.1 = 24
+00000A60                     1382  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 1009
+00000A60 8207210F            1383  	prepare 0x00000079, 0x00000004
+00000A64 07A0                1384  	mov r7, r20
+00000A66 06AE0000            1385  	addi 0x00000000, r6, r21
+00000A6A                     1386  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 1015
+00000A6A 8205                1387  	bz9 .BB.LABEL.28_2
+00000A6C                     1388  .BB.LABEL.28_1:	; entry
+00000A6C                     1389  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 0
+00000A6C 60A2                1390  	cmp 0x00000000, r20
+00000A6E 8A05                1391  	bnz9 .BB.LABEL.28_3
+00000A70                     1392  .BB.LABEL.28_2:	; entry.bb118_crit_edge
+00000A70 8056FFFF            1393  	ori 0x0000FFFF, r0, r10
+00000A74 8505                1394  	br9 .BB.LABEL.28_10
+00000A76                     1395  .BB.LABEL.28_3:	; bb18
+00000A76 140600F8            1396  	addi 0xFFFFF800, r20, r0
+00000A7A 8F05                1397  	bgt9 .BB.LABEL.28_2
+00000A7C                     1398  .BB.LABEL.28_4:	; if_break_bb
+00000A7C                     1399  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 1020
+00000A7C 40160000            1400  	movhi HIGHW1(#_g_mpuUartTxBuffer.2+0x00000C04), r0, r2
+00000A80 E2170100            1401  	ld.hu LOWW(#_g_mpuUartTxBuffer.2+0x00000C04)[r2], r2
+00000A84 202E0008            1402  	movea 0x00000800, r0, r5
+00000A88 A229                1403  	sub r2, r5
+00000A8A E5A1                1404  	cmp r5, r20
+00000A8C 8F05                1405  	bgt9 .BB.LABEL.28_2
+00000A8E                     1406  .BB.LABEL.28_5:	; if_break_bb42
+00000A8E                     1407  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 1025
+00000A8E                     1408  	mov #_g_mpuUartTxBuffer.2, r6
+00000A8E 260600000000            -- mov         0x0,r6
+00000A94                     1409  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 1026
+00000A94 E6B7030C            1410  	ld.hu 0x00000C02[r6], r22
+00000A98                     1411  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 1028
+00000A98 D631                1412  	add r22, r6
+00000A9A 20BE0008            1413  	movea 0x00000800, r0, r23
+00000A9E                     1414  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 1027
+00000A9E B6B9                1415  	sub r22, r23
+00000AA0                     1416  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 1026
+00000AA0 1610                1417  	mov r22, r2
+00000AA2 D012                1418  	shl 0x00000010, r2
+00000AA4 63170100            1419  	st.w r2, 0x00000000[r3]
+00000AA8                     1420  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 1028
+00000AA8 4132                1421  	add 0x00000001, r6
+00000AAA D716FFFF            1422  	andi 0x0000FFFF, r23, r2
+00000AAE 1538                1423  	mov r21, r7
+00000AB0 F411                1424  	cmp r20, r2
+00000AB2 8105                1425  	bl9 .BB.LABEL.28_7
+00000AB4                     1426  .BB.LABEL.28_6:	; if_then_bb58
+00000AB4                     1427  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 1030
+00000AB4 1440                1428  	mov r20, r8
+00000AB6 8505                1429  	br9 .BB.LABEL.28_8
+00000AB8                     1430  .BB.LABEL.28_7:	; if_else_bb
+00000AB8                     1431  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 1034
+00000AB8 D700                1432  	zxh r23
+00000ABA 1740                1433  	mov r23, r8
+00000ABC 80FF0000            1434  	jarl _memcpy, r31
+00000AC0                     1435  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 1035
+00000AC0 1440                1436  	mov r20, r8
+00000AC2 B741                1437  	sub r23, r8
+00000AC4 1538                1438  	mov r21, r7
+00000AC6 D739                1439  	add r23, r7
+00000AC8                     1440  	mov #_g_mpuUartTxBuffer.2, r6
+00000AC8 260600000000            -- mov         0x0,r6
+00000ACE 4132                1441  	add 0x00000001, r6
+00000AD0                     1442  .BB.LABEL.28_8:	; if_else_bb
+00000AD0                     1443  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 0
+00000AD0 80FF0000            1444  	jarl _memcpy, r31
+00000AD4                     1445  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 1037
+00000AD4 1610                1446  	mov r22, r2
+00000AD6 D411                1447  	add r20, r2
+00000AD8 C216FF07            1448  	andi 0x000007FF, r2, r2
+00000ADC                     1449  	mov #_g_mpuUartTxBuffer.2, r5
+00000ADC 250600000000            -- mov         0x0,tp
+00000AE2 6517020C            1450  	st.h r2, 0x00000C02[r5]
+00000AE6                     1451  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 1038
+00000AE6 2517040C            1452  	ld.h 0x00000C04[r5], r2
+00000AEA D411                1453  	add r20, r2
+00000AEC 6517040C            1454  	st.h r2, 0x00000C04[r5]
+00000AF0                     1455  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 1039
+00000AF0 23170100            1456  	ld.w 0x00000000[r3], r2
+00000AF4 1411                1457  	or r20, r2
+00000AF6 63170100            1458  	st.w r2, 0x00000000[r3]
+00000AFA                     1459  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 1040
+00000AFA 85370100            1460  	ld.bu 0x00000000[r5], r6
+00000AFE 0042                1461  	mov 0x00000000, r8
+00000B00 0338                1462  	mov r3, r7
+00000B02 80FF0000            1463  	jarl _xQueueSend, r31
+00000B06 6152                1464  	cmp 0x00000001, r10
+00000B08 8A05                1465  	bnz9 .BB.LABEL.28_11
+00000B0A                     1466  .BB.LABEL.28_9:	; if_break_bb83.bb118_crit_edge
+00000B0A                     1467  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 0
+00000B0A 0052                1468  	mov 0x00000000, r10
+00000B0C                     1469  .BB.LABEL.28_10:	; bb118
+00000B0C                     1470  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 1047
+00000B0C EA00                1471  	sxh r10
+00000B0E 42063F0F            1472  	dispose 0x00000004, 0x00000079, [r31]
+00000B12                     1473  .BB.LABEL.28_11:	; if_then_bb107
+00000B12                     1474  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 1042
+00000B12                     1475  	mov #_g_mpuUartTxBuffer.2, r2
+00000B12 220600000000            -- mov         0x0,hp
+00000B18 62B7020C            1476  	st.h r22, 0x00000C02[r2]
+00000B1C                     1477  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 1043
+00000B1C 222F040C            1478  	ld.h 0x00000C04[r2], r5
+00000B20 B429                1479  	sub r20, r5
+00000B22 622F040C            1480  	st.h r5, 0x00000C04[r2]
+00000B26 1F52                1481  	mov 0xFFFFFFFF, r10
+00000B28                     1482  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 1044
+00000B28 42063F0F            1483  	dispose 0x00000004, 0x00000079, [r31]
+00000B2C                     1484  _MpuHalUartPrintErrState:
+00000B2C                     1485  	.stack _MpuHalUartPrintErrState = 8
+00000B2C                     1486  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 1049
+00000B2C 80072108            1487  	prepare 0x00000041, 0x00000000
+00000B30                     1488  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 1054
+00000B30 40160000            1489  	movhi HIGHW1(#_timeCount.7.MpuHalUartPrintErrState), r0, r2
+00000B34 222F0100            1490  	ld.w LOWW(#_timeCount.7.MpuHalUartPrintErrState)[r2], r5
+00000B38 412A                1491  	add 0x00000001, r5
+00000B3A 622F0100            1492  	st.w r5, LOWW(#_timeCount.7.MpuHalUartPrintErrState)[r2]
+00000B3E 2016E803            1493  	movea 0x000003E8, r0, r2
+00000B42                     1494  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 1055
+00000B42 E6178202            1495  	divhu r6, r2, r0
+00000B46 E229                1496  	cmp r2, r5
+00000B48 8105                1497  	bl9 .BB.LABEL.29_3
+00000B4A                     1498  .BB.LABEL.29_1:	; if_break_bb
+00000B4A                     1499  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 1059
+00000B4A 40160000            1500  	movhi HIGHW1(#_timeCount.7.MpuHalUartPrintErrState), r0, r2
+00000B4E 62070100            1501  	st.w r0, LOWW(#_timeCount.7.MpuHalUartPrintErrState)[r2]
+00000B52                     1502  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 1061
+00000B52 40160000            1503  	movhi HIGHW1(#_g_mpuUartErrorFlag), r0, r2
+00000B56 82170100            1504  	ld.bu LOWW(#_g_mpuUartErrorFlag)[r2], r2
+00000B5A 6112                1505  	cmp 0x00000001, r2
+00000B5C 8A05                1506  	bnz9 .BB.LABEL.29_3
+00000B5E                     1507  .BB.LABEL.29_2:	; if_then_bb14
+00000B5E                     1508  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 1063
+00000B5E 40A60000            1509  	movhi HIGHW1(#_g_mpuUartErrorType), r0, r20
+00000B62 943F0100            1510  	ld.bu LOWW(#_g_mpuUartErrorType)[r20], r7
+00000B66                     1511  	mov #.STR.1, r6
+00000B66 260600000000            -- mov         0x0,r6
+00000B6C 80FF0000            1512  	jarl _LogHalPrint, r31
+00000B70                     1513  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 1064
+00000B70 40160000            1514  	movhi HIGHW1(#_g_mpuUartErrorFlag), r0, r2
+00000B74 42070000            1515  	st.b r0, LOWW(#_g_mpuUartErrorFlag)[r2]
+00000B78                     1516  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 1065
+00000B78 54070000            1517  	st.b r0, LOWW(#_g_mpuUartErrorType)[r20]
+00000B7C                     1518  .BB.LABEL.29_3:	; return
+00000B7C                     1519  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/mpuHal.c", 1067
+00000B7C 40063F08            1520  	dispose 0x00000000, 0x00000041, [r31]
+00000000                     1521  	.section .data, data
+00000000                     1522  	.align 2
+00000000                     1523  _g_mpuUartReciveCount:
+00000000 0000                1524  	.ds (2)
+00000002                     1525  _g_mpuUartErrorType:
+00000002 00                  1526  	.ds (1)
+00000003                     1527  _g_mpuUartErrorFlag:
+00000003 00                  1528  	.ds (1)
+00000004                     1529  _g_mpuSetRecvErrorFlag:
+00000004 00                  1530  	.ds (1)
+00000005                     1531  _g_mpuUartRxBufDealFlag:
+00000005 00                  1532  	.ds (1)
+00000006 0000                1533  	.align 4
+00000008                     1534  _timeCount.4.MpuHalCycleProcess:
+00000008 00000000            1535  	.ds (4)
+0000000C                     1536  _errCount.6.MpuHalUartPrintErrState:
+0000000C 00                  1537  	.ds (1)
+0000000D 000000              1538  	.align 4
+00000010                     1539  _timeCount.7.MpuHalUartPrintErrState:
+00000010 00000000            1540  	.ds (4)
+00000000                     1541  	.section .bss, bss
+00000000                     1542  _g_uartReceiveData0:
+00000000                     1543  	.ds (200)
+000000C8                     1544  _g_uartReceiveData1:
+000000C8                     1545  	.ds (200)
+00000190                     1546  _g_mpuUartRxBufId:
+00000190                     1547  	.ds (1)
+00000191 00                  1548  	.align 2
+00000192                     1549  _g_mpuUartRxBufCount0:
+00000192                     1550  	.ds (2)
+00000194                     1551  	.align 2
+00000194                     1552  _g_mpuUartRxBufCount1:
+00000194                     1553  	.ds (2)
+00000196                     1554  	.align 2
+00000196                     1555  _g_mpuUartProtocalBuffer.1:
+00000196                     1556  	.ds (1204)
+0000064A                     1557  	.align 2
+0000064A                     1558  _g_mpuUartTxBuffer.2:
+0000064A                     1559  	.ds (3078)
+00001250                     1560  	.align 4
+00001250                     1561  _g_mpuManage.3:
+00001250                     1562  	.ds (6404)
+00002B54                     1563  _sTxBuffer.5.MpuHalTransmit:
+00002B54                     1564  	.ds (2048)
+00000000                     1565  	.section .const, const
+00000000                     1566  .STR.1:
+00000000 6D                  1567  	.db 0x6D,0x70,0x75,0x20,0x75,0x61,0x72,0x74,0x3A,0x20,0x30,0x78,0x25,0x30,0x32,0x58
+00000001 70              
+00000002 75              
+00000003 20              
+00000004 75              
+00000005 61              
+00000006 72              
+00000007 74              
+00000008 3A              
+00000009 20              
+0000000A 30              
+0000000B 78              
+0000000C 25              
+0000000D 30              
+0000000E 32              
+0000000F 58              
+00000010 0D                  1568  	.db 0x0D,0x0A
+00000011 0A              
+00000012 00                  1569  	.ds (1)
+
+Section List
+Attr     Size                Name
+
+TEXT         2944 (00000B80) .text
+DATA           20 (00000014) .data
+BSS         13140 (00003354) .bss
+CONST          19 (00000013) .const
+
+Command Line Parameter
+-Xcpu=g3kh -Xreg_mode=32 -Xep=callee -Xcharacter_set=none -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\diagnostic -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\parameter_store -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu\port -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu\uart -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu\iic -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\vehicle_data_to_mpu -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\power_manage -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\mcu_cpu_sync -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\remote_control -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\can_cycle_send -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\project_configure -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\sdk\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\commonLib\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\hal\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\icu\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Icu_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\vss -ID:\wk\sirun\project\dazhong\code\mcu_app\ASW\CDD_FVM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\EEIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanTSyn -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\StbM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CSM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\RSA -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\RandomGen\CTR_DRBG -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\MAC\CMAC -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\Hash\sha256 -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\dh -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\AES -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CryInterface -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\SecOC -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\NvM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\MemIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\Fee -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\WdgM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\WdgIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Wdg_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Gpt_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Fls_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\wdg\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\gpt\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\fls\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\IpduM -ID:\wk\sirun\project\dazhong\code\mcu_app\ASW\APP -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\BswM -ID:\wk\sirun\project\dazhong\code\mcu_app\ASW\BSW_Ext -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\Dcm -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanTp -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Dem -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Libraries\E2E -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Libraries\Crc -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\NmIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanNm -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config\RTE\Rte -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config\RTE\SchM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Libraries\IStd -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\EcuM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\ComM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanSM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\Com -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\PDUR -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\CommonInclude -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config\RH850F1K -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Extend\inc -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Kernel\inc -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Portable\Mcu -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Portable\Processor -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Adc_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Can_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Dio_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Mcu_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Port_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\adc\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\can\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\dio\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\general -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\mcu\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\port\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\CanGeneral\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\Det\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\MemIf\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\SchM\include -DRH850_F1KM_S1_2MB -Xprn_path=DefaultBuild -Xno_warning=50013 -oD:\wk\sirun\project\dazhong\code\mcu_app\Toolchain\CSPLUS_V81200\DefaultBuild\mpuHal.obj D:\wk\sirun\project\dazhong\code\mcu_app\Toolchain\CSPLUS_V81200\DefaultBuild\mpuHal.asm 
+

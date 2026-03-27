@@ -76,8 +76,9 @@
  *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\stubs\4.2.2\Dem\xml\Dem_Can.arxml
  *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\stubs\4.2.2\EcuM\xml\EcuM_can.arxml
  *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\stubs\4.2.2\Os\xml\Os_Can.arxml
+ *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\Config\ECUC\test_EcuM_EcuM_ecuc.arxml
  *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\common_family\generator\Sample_Application_F1x.trxml
- * GENERATED ON:  27 Jan 2026 - 05:47:31
+ * GENERATED ON:  20 Mar 2026 - 04:11:28
  */
 
 /*******************************************************************************
@@ -225,6 +226,8 @@ CONST(Can_ControllerPCConfigType, CAN_RSCAN_CONFIG_DATA)
     CAN_RSCAN_BOM_HALT_BUSOFF_ENTRY | CAN_RSCAN_BOEIE,
     /* ulTHLCC */
     CAN_RSCAN_THLDTE,
+    /* ucWakeupSourceId */
+    EcuMWakeupSource_CAN,
     /* pICRec */
     /* MISRA Violation: START Msg(2:0303)-1 */
     (P2VAR(volatile uint16, CAN_CONFIG_DATA, REGSPACE)) 0xFFFFB0E4UL,
@@ -236,6 +239,14 @@ CONST(Can_ControllerPCConfigType, CAN_RSCAN_CONFIG_DATA)
     /* pICErr */
     /* MISRA Violation: START Msg(2:0303)-1 */
     (P2VAR(volatile uint16, CAN_CONFIG_DATA, REGSPACE)) 0xFFFFB0E2UL,
+    /* END Msg(2:0303)-1 */
+    /* pICWakeup */
+    /* MISRA Violation: START Msg(2:0303)-1 */
+    (P2VAR(volatile uint16, CAN_CONFIG_DATA, REGSPACE)) 0xFFFFB04CUL,
+    /* END Msg(2:0303)-1 */
+    /* pFCLAReg */
+    /* MISRA Violation: START Msg(2:0303)-1 */
+    (P2VAR(volatile uint8, CAN_CONFIG_DATA, REGSPACE)) 0xFFC34024UL,
     /* END Msg(2:0303)-1 */
     /* ulWUFMask */
     CAN_RSCAN_WUF_CHANNEL_1

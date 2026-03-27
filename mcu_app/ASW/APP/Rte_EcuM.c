@@ -25,47 +25,10 @@
 ******************************************************************************/
 #include "Os.h"
 #include "Rte_EcuM.h"
-
+#include "Dio.h"
+#include "BswM.h"
 /*******************************************************************************
  **                        Global Function                                    **
 ******************************************************************************/
-
-
-/*******************************************************************************
-*Function-Name        Rte_Switch_EcuM_CurrentMode_currentMode
-*Service ID           <None>
-*Sync/Async           <Synchronous>
-*Reentrancy           <Non Reentrant>
-*param-Name[in]       <None>
-*Param-Name[out]      <None>
-*Param-Name[in/out]   <None>
-*return               Std_ReturnType
-*PreCondition         <None>
-*CallByAPI            <None>
-******************************************************************************/
-
-Std_ReturnType SchM_Switch_currentMode(Rte_ModeType_EcuM_Mode mode)
-{
-	(void)mode;
-	return RTE_E_OK;
-}
-
-/*******************************************************************************
-*Function-Name        Rte_Mode_EcuM_CurrentMode_currentMode
-*Service ID           <None>
-*Sync/Async           <Synchronous>
-*Reentrancy           <Non Reentrant>
-*param-Name[in]       <None>
-*Param-Name[out]      <None>
-*Param-Name[in/out]   <None>
-*return               Rte_ModeType_EcuM_Mode
-*PreCondition         <None>
-*CallByAPI            <None>
-******************************************************************************/
-
-Rte_ModeType_EcuM_Mode SchM_SwitchAck_currentMode(void)
-{
-	return RTE_E_OK;
-}
 
 

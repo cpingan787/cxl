@@ -4,6 +4,7 @@
 #include "crc8_16_32.h"
 
 #include "r_cg_macrodriver.h"
+#include "r_cg_uart.h"
 
 #include "stdio.h"
 #include "Dio.h"
@@ -18,8 +19,9 @@
 // #define SCB_SPI_OVERSAMPLING                  8
 #define MPU_HAL_HANDLE_INSTANSE_MAX 15
 #define MPU_PROTOCAL_HEADER_LEN 8
-#define MPU_HAL_TX_BUFFER 1072 // 4096
-#define MPU_HAL_RX_BUFFER 1096
+#define MPU_HAL_TX_BUFFER 2048 // 4096
+#define MPU_HAL_TX_SINGLE_BUFFER 1024
+#define MPU_HAL_RX_BUFFER 2048
 #define MPU_HAL_UART_INT_RX_BUF_LEN 200
 
 typedef struct 
@@ -32,7 +34,9 @@ typedef struct
 {
     QueueHandle_t txQueueHandle;
     uint8_t buffer[MPU_HAL_TX_BUFFER];
+    uint8_t activeBuffer[MPU_HAL_TX_SINGLE_BUFFER];
     uint16_t index;
+    uint16_t usedSize;
 } MpuUartTxBuffer_t;
 
 volatile uint16_t g_mpuUartReciveCount = 0;
@@ -48,7 +52,6 @@ volatile uint16_t g_mpuUartRxBufCount1;
 volatile uint8_t g_mpuUartRxBufDealFlag = 0;
 
 static MpuUartProtocalBuffer_t g_mpuUartProtocalBuffer;
-
 static MpuUartTxBuffer_t g_mpuUartTxBuffer;
 static int16_t MpuUartTransmit(const uint8_t *pTxData, uint16_t txLength);
 
@@ -378,6 +381,27 @@ static uint16_t MpuPackGetCrc(uint8_t header[], const MpuHalDataPack_t *pMsg)
     return crc;
 }
 
+static void MpuUartRingCopyOut(uint8_t *pDst, uint16_t startAddress, uint16_t length)
+{
+    uint16_t firstCopyLength;
+
+    if ((pDst == NULL) || (length == 0))
+    {
+        return;
+    }
+
+    firstCopyLength = MPU_HAL_TX_BUFFER - startAddress;
+    if (length <= firstCopyLength)
+    {
+        memcpy(pDst, &g_mpuUartTxBuffer.buffer[startAddress], length);
+    }
+    else
+    {
+        memcpy(pDst, &g_mpuUartTxBuffer.buffer[startAddress], firstCopyLength);
+        memcpy(&pDst[firstCopyLength], &g_mpuUartTxBuffer.buffer[0], length - firstCopyLength);
+    }
+}
+
 void MpuHalCycleProcess(uint32_t cycleTime)
 {
     static uint32_t timeCount = 0;
@@ -585,7 +609,10 @@ int16_t MpuHalTransmit(int16_t handle, const MpuHalDataPack_t *pTxMsg)
                 index++;
                 sTxBuffer[index] = crc & 0xFF;
                 index++;
-                MpuUartTransmit(sTxBuffer, index);
+                if (MpuUartTransmit(sTxBuffer, index) != MPU_HAL_STATUS_OK)
+                {
+                    ret = MPU_HAL_STATUS_ERR;
+                }
                 // taskEXIT_CRITICAL();
                 __enable_irq();
             }
@@ -743,16 +770,18 @@ void MpuHalSetMode(uint8_t wakeMode)
 {
     if (0 == wakeMode)
     {
-        R_UART5_Stop();
+        // R_UART5_Stop();
         g_mpuManage.wakeMode = wakeMode;
+        Dio_WriteChannel(DioConf_DioChannel_DIO_Channel_NAD_V2X_5V0__EN_Pin1_7, STD_LOW);
     }
     else if (1 == wakeMode)
     {
-        R_UART5_Start();
+        // R_UART5_Start();
         /*wake up mpu*/
         g_mpuManage.wakeoutTimeCount = 0;
         MpuHalSetWakeOut(1);
         g_mpuManage.wakeMode = wakeMode;
+        Dio_WriteChannel(DioConf_DioChannel_DIO_Channel_NAD_V2X_5V0__EN_Pin1_7, STD_HIGH);
     }
 }
 #if (0)
@@ -816,9 +845,17 @@ void UartProtocalProcess(uint8_t *pData, uint16_t dataLength, uint8_t IsrFlag)
                 pProtocalData->data[pProtocalData->dataCount] = pData[i];
                 pProtocalData->dataCount++;
             }
+            else if (0x55 == pData[i])
+            {
+                /* Keep the latest 0x55 as a new candidate frame start. */
+                pProtocalData->data[0] = pData[i];
+                pProtocalData->dataCount = 1;
+                pProtocalData->dataLength = 0;
+            }
             else
             {
                 pProtocalData->dataCount = 0;
+                pProtocalData->dataLength = 0;
             }
         }
         else if (pProtocalData->dataCount < MPU_PROTOCAL_HEADER_LEN)
@@ -921,19 +958,17 @@ void MpuHalInit(void)
 
 void MpuHalTxTaskInit(void)
 {
+    g_mpuUartTxBuffer.index = 0;
+    g_mpuUartTxBuffer.usedSize = 0;
     g_mpuUartTxBuffer.txQueueHandle = xQueueCreate(20, // The number of items the queue can hold.
                                                    sizeof(uint32_t));
 }
 
 void MpuHalTxTask(void)
 {
-    uint32_t queueData, remain, i;
+    uint32_t queueData;
     uint16_t startAddress;
     uint16_t length;
-    // 长度2
-    // ucountSemaphore = xSemaphoreCreateCounting(3000,0);
-    uint8_t temp[50], j;
-    uint8_t ret;
 
     // while(1)
     {
@@ -948,63 +983,67 @@ void MpuHalTxTask(void)
             return;
         }
         // 发送FIFO中的数据;
-        i = 0;
         startAddress = (queueData >> 16) & 0xFFFF;
-        remain = length = queueData & 0xFFFF;
-        R_UART5_Send(&g_mpuUartTxBuffer.buffer[startAddress], length);
-#if (0)
-        while (i < length)
+        length = queueData & 0xFFFF;
+        if ((length == 0) || (length > MPU_HAL_TX_BUFFER) || (length > g_mpuUartTxBuffer.usedSize))
         {
-            if (remain > 40)
-            {
-                for (j = 0; j < 40; j++)
-                {
-                    temp[j] = g_mpuUartTxBuffer.buffer[startAddress++];
-                    if (startAddress >= MPU_HAL_TX_BUFFER)
-                    {
-                        startAddress = 0;
-                    }
-                }
-                R_UART5_Send(temp, 40);
-                // vTaskDelay(1);
-                i = i + 40;
-                remain = remain - 40;
-            }
-            else
-            {
-                for (j = 0; j < remain; j++)
-                {
-                    temp[j] = g_mpuUartTxBuffer.buffer[startAddress++];
-                    if (startAddress >= MPU_HAL_TX_BUFFER)
-                    {
-                        startAddress = 0;
-                    }
-                }
-                R_UART5_Send(temp, remain);
-                i = i + remain;
-                // vTaskDelay(1);
-            }
+            return;
         }
-#endif
+
+        /* R_UART5_Send keeps using the provided buffer until the interrupt-driven
+         * transmission completes, so wrapped ring data must be linearized first.
+         */
+        MpuUartRingCopyOut(g_mpuUartTxBuffer.activeBuffer, startAddress, length);
+        if (R_UART5_Send(g_mpuUartTxBuffer.activeBuffer, length) == MD_OK)
+        {
+            g_mpuUartTxBuffer.usedSize -= length;
+        }
+        else
+        {
+            /* Keep the frame queued so a transient busy state cannot drop it silently. */
+            // (void)xQueueSendToFront(g_mpuUartTxBuffer.txQueueHandle, &queueData, 0);
+        }
     }
 }
 
 static int16_t MpuUartTransmit(const uint8_t *pTxData, uint16_t txLength)
 {
-    uint16_t i;
+    uint16_t startAddress;
+    uint16_t firstCopyLength;
     uint32_t data;
-    data = g_mpuUartTxBuffer.index << 16;
-    for (i = 0; i < txLength; i++)
+
+    if ((pTxData == NULL) || (txLength == 0) || (txLength > MPU_HAL_TX_BUFFER))
     {
-        g_mpuUartTxBuffer.buffer[g_mpuUartTxBuffer.index++] = pTxData[i];
-        if (g_mpuUartTxBuffer.index >= MPU_HAL_TX_BUFFER)
-        {
-            g_mpuUartTxBuffer.index = 0;
-        }
+        return MPU_HAL_STATUS_ERR;
     }
+
+    if (txLength > (MPU_HAL_TX_BUFFER - g_mpuUartTxBuffer.usedSize))
+    {
+        return MPU_HAL_STATUS_ERR;
+    }
+
+    startAddress = g_mpuUartTxBuffer.index;
+    data = ((uint32_t)startAddress) << 16;
+    firstCopyLength = MPU_HAL_TX_BUFFER - startAddress;
+    if (txLength <= firstCopyLength)
+    {
+        memcpy(&g_mpuUartTxBuffer.buffer[startAddress], pTxData, txLength);
+    }
+    else
+    {
+        memcpy(&g_mpuUartTxBuffer.buffer[startAddress], pTxData, firstCopyLength);
+        memcpy(&g_mpuUartTxBuffer.buffer[0], &pTxData[firstCopyLength], txLength - firstCopyLength);
+    }
+    g_mpuUartTxBuffer.index = (startAddress + txLength) % MPU_HAL_TX_BUFFER;
+    g_mpuUartTxBuffer.usedSize += txLength;
     data |= txLength;
-    xQueueSend(g_mpuUartTxBuffer.txQueueHandle, &data, 0);
-    return 0;
+    if (xQueueSend(g_mpuUartTxBuffer.txQueueHandle, &data, 0) != pdPASS)
+    {
+        g_mpuUartTxBuffer.index = startAddress;
+        g_mpuUartTxBuffer.usedSize -= txLength;
+        return MPU_HAL_STATUS_ERR;
+    }
+    return MPU_HAL_STATUS_OK;
 }
 
 void MpuHalUartPrintErrState(uint16_t cycleTime)
@@ -1018,4 +1057,11 @@ void MpuHalUartPrintErrState(uint16_t cycleTime)
         return;
     }
     timeCount = 0;
+
+    if(g_mpuUartErrorFlag == 1)
+    {
+        TBOX_PRINT("mpu uart: 0x%02X\r\n", g_mpuUartErrorType);
+        g_mpuUartErrorFlag = 0;
+        g_mpuUartErrorType = 0;
+    }
 }

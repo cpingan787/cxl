@@ -19,7 +19,7 @@
  * @file              : Os_Intvet.c
  * @license           : 
  * @licenseExpiryDate : 
- * @date              : 2026-03-03 20:34:15
+ * @date              : 2026-03-22 18:23:34
  * @customer          : iSoft
  * @description       : Configuration parameter of OS
  * @toolVersion       : 2.2.0.3
@@ -192,6 +192,150 @@ void Os_ISR_TAUB0I12_IRQ_Handler(void)
     /* PRQA S 0310, 0306, 1006 ++ */ /* VL_Os_0310, VL_Os_0306, VL_Os_1006 */
     /* PRQA S 0404, 3415 ++ */ /* VL_Os_VolatileAccess, VL_Os_3415 */
     OS_ARCH_ISR2_EPILOGUE(CFG_ISR_TAUB0I12_IRQ_ID);
+    /* PRQA S 0404, 3415 -- */
+    /* PRQA S 0310, 0306, 1006 -- */
+}
+#define OS_STOP_SEC_CODE_FAST
+#include "Os_MemMap.h"
+#define OS_START_SEC_CODE_FAST
+#include "Os_MemMap.h"
+void Os_ISR_TAUB0I8_IRQ_Handler(void) 
+{
+    /* PRQA S 0306, 1006, 2991 ++ */ /* VL_Os_0306, VL_Os_1006, VL_Os_2991 */
+    OS_ARCH_ISR2_PROLOGUE(CFG_ISR_TAUB0I8_IRQ_ID);
+    /* PRQA S 0306, 1006, 2991 -- */
+    ISR_TAUB0I8_IRQ_Handler();
+    /* PRQA S 0310, 0306, 1006 ++ */ /* VL_Os_0310, VL_Os_0306, VL_Os_1006 */
+    /* PRQA S 0404, 3415 ++ */ /* VL_Os_VolatileAccess, VL_Os_3415 */
+    OS_ARCH_ISR2_EPILOGUE(CFG_ISR_TAUB0I8_IRQ_ID);
+    /* PRQA S 0404, 3415 -- */
+    /* PRQA S 0310, 0306, 1006 -- */
+}
+#define OS_STOP_SEC_CODE_FAST
+#include "Os_MemMap.h"
+#define OS_START_SEC_CODE_FAST
+#include "Os_MemMap.h"
+void Os_ISR_TAUB0I9_IRQ_Handler(void) 
+{
+    /* PRQA S 0306, 1006, 2991 ++ */ /* VL_Os_0306, VL_Os_1006, VL_Os_2991 */
+    OS_ARCH_ISR2_PROLOGUE(CFG_ISR_TAUB0I9_IRQ_ID);
+    /* PRQA S 0306, 1006, 2991 -- */
+    ISR_TAUB0I9_IRQ_Handler();
+    /* PRQA S 0310, 0306, 1006 ++ */ /* VL_Os_0310, VL_Os_0306, VL_Os_1006 */
+    /* PRQA S 0404, 3415 ++ */ /* VL_Os_VolatileAccess, VL_Os_3415 */
+    OS_ARCH_ISR2_EPILOGUE(CFG_ISR_TAUB0I9_IRQ_ID);
+    /* PRQA S 0404, 3415 -- */
+    /* PRQA S 0310, 0306, 1006 -- */
+}
+#define OS_STOP_SEC_CODE_FAST
+#include "Os_MemMap.h"
+#define OS_START_SEC_CODE_FAST
+#include "Os_MemMap.h"
+void Os_ISR_P1_IRQ_Handler(void) 
+{
+    /* PRQA S 0306, 1006, 2991 ++ */ /* VL_Os_0306, VL_Os_1006, VL_Os_2991 */
+    OS_ARCH_ISR2_PROLOGUE(CFG_ISR_P1_IRQ_ID);
+    /* PRQA S 0306, 1006, 2991 -- */
+    ISR_P1_IRQ_Handler();
+    /* PRQA S 0310, 0306, 1006 ++ */ /* VL_Os_0310, VL_Os_0306, VL_Os_1006 */
+    /* PRQA S 0404, 3415 ++ */ /* VL_Os_VolatileAccess, VL_Os_3415 */
+    OS_ARCH_ISR2_EPILOGUE(CFG_ISR_P1_IRQ_ID);
+    /* PRQA S 0404, 3415 -- */
+    /* PRQA S 0310, 0306, 1006 -- */
+}
+#define OS_STOP_SEC_CODE_FAST
+#include "Os_MemMap.h"
+#define OS_START_SEC_CODE_FAST
+#include "Os_MemMap.h"
+void Os_ISR_P2_IRQ_Handler(void) 
+{
+    /* PRQA S 0306, 1006, 2991 ++ */ /* VL_Os_0306, VL_Os_1006, VL_Os_2991 */
+    OS_ARCH_ISR2_PROLOGUE(CFG_ISR_P2_IRQ_ID);
+    /* PRQA S 0306, 1006, 2991 -- */
+    ISR_P2_IRQ_Handler();
+    /* PRQA S 0310, 0306, 1006 ++ */ /* VL_Os_0310, VL_Os_0306, VL_Os_1006 */
+    /* PRQA S 0404, 3415 ++ */ /* VL_Os_VolatileAccess, VL_Os_3415 */
+    OS_ARCH_ISR2_EPILOGUE(CFG_ISR_P2_IRQ_ID);
+    /* PRQA S 0404, 3415 -- */
+    /* PRQA S 0310, 0306, 1006 -- */
+}
+#define OS_STOP_SEC_CODE_FAST
+#include "Os_MemMap.h"
+#define OS_START_SEC_CODE_FAST
+#include "Os_MemMap.h"
+void Os_ISR_P5_IRQ_Handler(void) 
+{
+    /* PRQA S 0306, 1006, 2991 ++ */ /* VL_Os_0306, VL_Os_1006, VL_Os_2991 */
+    OS_ARCH_ISR2_PROLOGUE(CFG_ISR_P5_IRQ_ID);
+    /* PRQA S 0306, 1006, 2991 -- */
+    ISR_P5_IRQ_Handler();
+    /* PRQA S 0310, 0306, 1006 ++ */ /* VL_Os_0310, VL_Os_0306, VL_Os_1006 */
+    /* PRQA S 0404, 3415 ++ */ /* VL_Os_VolatileAccess, VL_Os_3415 */
+    OS_ARCH_ISR2_EPILOGUE(CFG_ISR_P5_IRQ_ID);
+    /* PRQA S 0404, 3415 -- */
+    /* PRQA S 0310, 0306, 1006 -- */
+}
+#define OS_STOP_SEC_CODE_FAST
+#include "Os_MemMap.h"
+#define OS_START_SEC_CODE_FAST
+#include "Os_MemMap.h"
+void Os_ISR_P6_IRQ_Handler(void) 
+{
+    /* PRQA S 0306, 1006, 2991 ++ */ /* VL_Os_0306, VL_Os_1006, VL_Os_2991 */
+    OS_ARCH_ISR2_PROLOGUE(CFG_ISR_P6_IRQ_ID);
+    /* PRQA S 0306, 1006, 2991 -- */
+    ISR_P6_IRQ_Handler();
+    /* PRQA S 0310, 0306, 1006 ++ */ /* VL_Os_0310, VL_Os_0306, VL_Os_1006 */
+    /* PRQA S 0404, 3415 ++ */ /* VL_Os_VolatileAccess, VL_Os_3415 */
+    OS_ARCH_ISR2_EPILOGUE(CFG_ISR_P6_IRQ_ID);
+    /* PRQA S 0404, 3415 -- */
+    /* PRQA S 0310, 0306, 1006 -- */
+}
+#define OS_STOP_SEC_CODE_FAST
+#include "Os_MemMap.h"
+#define OS_START_SEC_CODE_FAST
+#include "Os_MemMap.h"
+void Os_ISR_P7_IRQ_Handler(void) 
+{
+    /* PRQA S 0306, 1006, 2991 ++ */ /* VL_Os_0306, VL_Os_1006, VL_Os_2991 */
+    OS_ARCH_ISR2_PROLOGUE(CFG_ISR_P7_IRQ_ID);
+    /* PRQA S 0306, 1006, 2991 -- */
+    ISR_P7_IRQ_Handler();
+    /* PRQA S 0310, 0306, 1006 ++ */ /* VL_Os_0310, VL_Os_0306, VL_Os_1006 */
+    /* PRQA S 0404, 3415 ++ */ /* VL_Os_VolatileAccess, VL_Os_3415 */
+    OS_ARCH_ISR2_EPILOGUE(CFG_ISR_P7_IRQ_ID);
+    /* PRQA S 0404, 3415 -- */
+    /* PRQA S 0310, 0306, 1006 -- */
+}
+#define OS_STOP_SEC_CODE_FAST
+#include "Os_MemMap.h"
+#define OS_START_SEC_CODE_FAST
+#include "Os_MemMap.h"
+void Os_ISR_P9_IRQ_Handler(void) 
+{
+    /* PRQA S 0306, 1006, 2991 ++ */ /* VL_Os_0306, VL_Os_1006, VL_Os_2991 */
+    OS_ARCH_ISR2_PROLOGUE(CFG_ISR_P9_IRQ_ID);
+    /* PRQA S 0306, 1006, 2991 -- */
+    ISR_P9_IRQ_Handler();
+    /* PRQA S 0310, 0306, 1006 ++ */ /* VL_Os_0310, VL_Os_0306, VL_Os_1006 */
+    /* PRQA S 0404, 3415 ++ */ /* VL_Os_VolatileAccess, VL_Os_3415 */
+    OS_ARCH_ISR2_EPILOGUE(CFG_ISR_P9_IRQ_ID);
+    /* PRQA S 0404, 3415 -- */
+    /* PRQA S 0310, 0306, 1006 -- */
+}
+#define OS_STOP_SEC_CODE_FAST
+#include "Os_MemMap.h"
+#define OS_START_SEC_CODE_FAST
+#include "Os_MemMap.h"
+void Os_ISR_P14_IRQ_Handler(void) 
+{
+    /* PRQA S 0306, 1006, 2991 ++ */ /* VL_Os_0306, VL_Os_1006, VL_Os_2991 */
+    OS_ARCH_ISR2_PROLOGUE(CFG_ISR_P14_IRQ_ID);
+    /* PRQA S 0306, 1006, 2991 -- */
+    ISR_P14_IRQ_Handler();
+    /* PRQA S 0310, 0306, 1006 ++ */ /* VL_Os_0310, VL_Os_0306, VL_Os_1006 */
+    /* PRQA S 0404, 3415 ++ */ /* VL_Os_VolatileAccess, VL_Os_3415 */
+    OS_ARCH_ISR2_EPILOGUE(CFG_ISR_P14_IRQ_ID);
     /* PRQA S 0404, 3415 -- */
     /* PRQA S 0310, 0306, 1006 -- */
 }

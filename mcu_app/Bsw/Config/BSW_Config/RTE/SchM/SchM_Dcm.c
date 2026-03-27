@@ -34,6 +34,7 @@
 #include "SchM_Internal.h"
 #include "SchM_Dcm.h"
 #include "Os.h"
+#include "mpuHal.h"
 
 #define RTE_START_SEC_CODE
 #include "Rte_MemMap.h"
@@ -72,6 +73,7 @@ Std_ReturnType SchM_Switch_DcmDiagnosticSessionControl(uint8 mode)
 Std_ReturnType SchM_Switch_DcmEcuReset(uint8 mode)
 {
     Std_ReturnType rtn = E_OK;
+    MpuHalReset();
     SchM_PerformReset(mode);
     return rtn;
 }

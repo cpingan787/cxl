@@ -1,0 +1,1567 @@
+RH850 Family Assembler V2.07.00.03 Assemble Source List
+
+OFFSET   CODE                  NO  SOURCE STATEMENT
+
+00000000                        1  #CC-RH Compiler RH850 Assembler Source
+00000000                        2  #@	CC-RH Version : V2.07.00  [06 Dec 2024]
+00000000                        3  #@	Command : ..\..\Bsw\Communication\Common\Dcm\UDS\Dcm_UDS0x31.c -oDefaultBuild\Dcm_UDS0x31.obj -Xcpu=g3kh -Xno_warning=20188,20111 -g -g_line -I..\..\Srcode\app\diagnostic -I..\..\Srcode\app\parameter_store -I..\..\Cpu\port -I..\..\Cpu\uart -I..\..\Cpu\iic -I..\..\Srcode\app\vehicle_data_to_mpu -I..\..\Srcode\app\power_manage -I..\..\Srcode\app\mcu_cpu_sync -I..\..\Srcode\app\remote_control -I..\..\Srcode\app\can_cycle_send -I..\..\Srcode\app\project_configure -I..\..\Srcode\sdk\include -I..\..\Srcode\commonLib\include -I..\..\Srcode\hal\include -I..\..\Bsw\Mcal\icu\include -I..\..\Bsw\Config\MCAL_Config\Icu_OutPut\include -I..\..\Bsw\Crypto\CRYPTO\vss -I..\..\ASW\CDD_FVM -I..\..\Bsw\Memory\EEIf -I..\..\Bsw\Communication\CAN\CanTSyn -I..\..\Bsw\SystemServices\StbM -I..\..\Bsw\Crypto\CSM -I..\..\Bsw\Crypto\CRYPTO\RSA -I..\..\Bsw\Crypto\CRYPTO\RandomGen\CTR_DRBG -I..\..\Bsw\Crypto\CRYPTO\MAC\CMAC -I..\..\Bsw\Crypto\CRYPTO\Hash\sha256 -I..\..\Bsw\Crypto\CRYPTO\dh -I..\..\Bsw\Crypto\CRYPTO\AES -I..\..\Bsw\Crypto\CRYPTO -I..\..\Bsw\Crypto\CryInterface -I..\..\Bsw\Communication\Common\SecOC -I..\..\Bsw\Memory\NvM -I..\..\Bsw\Memory\MemIf -I..\..\Bsw\Memory\Fee -I..\..\Bsw\SystemServices\WdgM -I..\..\Bsw\SystemServices\WdgIf -I..\..\Bsw\Config\MCAL_Config\Wdg_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Gpt_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Fls_OutPut\include -I..\..\Bsw\Mcal\wdg\include -I..\..\Bsw\Mcal\gpt\include -I..\..\Bsw\Mcal\fls\include -I..\..\Bsw\Communication\Common\IpduM -I..\..\ASW\APP -I..\..\Bsw\SystemServices\BswM -I..\..\ASW\BSW_Ext -I..\..\Bsw\Communication\Common\Dcm -I..\..\Bsw\Communication\CAN\CanTp -I..\..\Bsw\SystemServices\Dem -I..\..\Bsw\Libraries\E2E -I..\..\Bsw\Libraries\Crc -I..\..\Bsw\Communication\Common\NmIf -I..\..\Bsw\Communication\CAN\CanNm -I..\..\Bsw\Config\BSW_Config\RTE\Rte -I..\..\Bsw\Config\BSW_Config\RTE\SchM -I..\..\Bsw\Libraries\IStd -I..\..\Bsw\SystemServices\EcuM -I..\..\Bsw\SystemServices\ComM -I..\..\Bsw\Communication\CAN\CanSM -I..\..\Bsw\Communication\CAN\CanIf -I..\..\Bsw\Communication\Common\Com -I..\..\Bsw\Communication\Common\PDUR -I..\..\Cpu -I..\..\Bsw\CommonInclude -I..\..\Bsw\Config\BSW_Config -I..\..\Bsw\Config\BSW_Config\RH850F1K -I..\..\Bsw\SystemServices\Os\Extend\inc -I..\..\Bsw\SystemServices\Os\Kernel\inc -I..\..\Bsw\SystemServices\Os\Portable\Mcu -I..\..\Bsw\SystemServices\Os\Portable\Processor -I..\..\Bsw\Config\MCAL_Config\Adc_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Can_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Dio_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Mcu_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Port_OutPut\include -I..\..\Bsw\Mcal\adc\include -I..\..\Bsw\Mcal\can\include -I..\..\Bsw\Mcal\dio\include -I..\..\Bsw\Mcal\general -I..\..\Bsw\Mcal\mcu\include -I..\..\Bsw\Mcal\port\include -I..\..\Bsw\Mcal\stubs\CanGeneral\include -I..\..\Bsw\Mcal\stubs\Det\include -I..\..\Bsw\Mcal\stubs\MemIf\include -I..\..\Bsw\Mcal\stubs\SchM\include -DRH850_F1KM_S1_2MB -lang=c99 -Xfloat=fpu -Xround=zero -Xdiv -Xasm_path=DefaultBuild -Xasm_option=-Xprn_path=DefaultBuild -c -MAKEUD=DefaultBuild -Xexec_time=C:\Users\xlchen\AppData\Local\Temp\CSPlusBuildTool_3d63b41f1dd644739da054faf5f64e8aauwwyjwu.k1l
+00000000                        4  #@	compiled at Fri Mar 27 09:50:05 2026
+00000000                        5  
+00000000                        6  	.file "..\..\Bsw\Communication\Common\Dcm\UDS\Dcm_UDS0x31.c"
+00000000                        7  
+00000000                        8  	$reg_mode 32
+00000000                        9  	.dbl_size 8
+00000000                       10  
+00000000                       11  	.extern _Dcm_RoutineControlState
+00000000                       12  	.extern _Dcm_ProtocolCtrl
+00000000                       13  	.extern _Dcm_ChannelCtrl
+00000000                       14  	.extern _Dcm_MsgCtrl
+00000000                       15  	.extern _Dcm_Channel
+00000000                       16  	.extern _DcmPbCfgPtr
+00000000                       17  	.extern _Dcm_MkCtrl
+00000000                       18  	.public _Dcm_UDS0x31
+00000000                       19  	.extern _DsdInternal_ProcessingDone
+00000000                       20  
+00000000                       21  	.section .text, text
+00000000                       22  _DsdInternal_SetNrc.1:
+00000000                       23  	.stack _DsdInternal_SetNrc.1 = 0
+00000000                       24  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/Dcm_Internal.h", 364
+00000000 E6161C00              25  	mulhi 0x0000001C, r6, r2
+00000004                       26  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/Dcm_Internal.h", 368
+00000004                       27  	mov #_Dcm_ProtocolCtrl, r5
+00000004 250600000000            -- mov         0x0,tp
+0000000A C229                  28  	add r2, r5
+0000000C 85170300              29  	ld.bu 0x00000002[r5], r2
+00000010                       30  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/Dcm_Internal.h", 369
+00000010 C612                  31  	shl 0x00000006, r2
+00000012                       32  	mov #_Dcm_MsgCtrl, r5
+00000012 250600000000            -- mov         0x0,tp
+00000018 C229                  33  	add r2, r5
+0000001A 453F0200              34  	st.b r7, 0x00000002[r5]
+0000001E 0112                  35  	mov 0x00000001, r2
+00000020                       36  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/Dcm_Internal.h", 370
+00000020 65170900              37  	st.w r2, 0x00000008[r5]
+00000024 7F00                  38  	jmp [r31]
+00000026                       39  _Dcm_UdsSesAndSecCheck.1:
+00000026                       40  	.stack _Dcm_UdsSesAndSecCheck.1 = 0
+00000026                       41  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 59
+00000026 6032                  42  	cmp 0x00000000, r6
+00000028                       43  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 81
+00000028 8A05                  44  	bnz9 .BB.LABEL.2_2
+0000002A                       45  .BB.LABEL.2_1:	; entry.if_break_bb64_crit_edge
+0000002A                       46  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 0
+0000002A 0052                  47  	mov 0x00000000, r10
+0000002C 8505                  48  	br9 .BB.LABEL.2_9
+0000002E                       49  .BB.LABEL.2_2:	; if_then_bb
+0000002E                       50  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 84
+0000002E 86170900              51  	ld.bu 0x00000008[r6], r2
+00000032 6012                  52  	cmp 0x00000000, r2
+00000034 8205                  53  	bz9 .BB.LABEL.2_1
+00000036                       54  .BB.LABEL.2_3:	; if_then_bb.bb35_crit_edge
+00000036                       55  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 0
+00000036 002A                  56  	mov 0x00000000, r5
+00000038 0540                  57  	mov r5, r8
+0000003A 8505                  58  	br9 .BB.LABEL.2_5
+0000003C                       59  .BB.LABEL.2_4:	; bb
+0000003C                       60  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 88
+0000003C 264F0D00              61  	ld.w 0x0000000C[r6], r9
+00000040 C856FF00              62  	andi 0x000000FF, r8, r10
+00000044 CA49                  63  	add r10, r9
+00000046 894F0100              64  	ld.bu 0x00000000[r9], r9
+0000004A 40560000              65  	movhi HIGHW1(#_Dcm_MkCtrl), r0, r10
+0000004E 8A570100              66  	ld.bu LOWW(#_Dcm_MkCtrl)[r10], r10
+00000052 E951                  67  	cmp r9, r10
+00000054                       68  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 90
+00000054 E12F042B              69  	cmov 0x00000002, 0x00000001, r5, r5
+00000058 4142                  70  	add 0x00000001, r8
+0000005A                       71  .BB.LABEL.2_5:	; bb35
+0000005A                       72  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 86
+0000005A C84EFF00              73  	andi 0x000000FF, r8, r9
+0000005E E249                  74  	cmp r2, r9
+00000060 8905                  75  	bnc9 .BB.LABEL.2_7
+00000062                       76  .BB.LABEL.2_6:	; bb35
+00000062                       77  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 0
+00000062 C506FF00              78  	andi 0x000000FF, r5, r0
+00000066 8205                  79  	bz9 .BB.LABEL.2_4
+00000068                       80  .BB.LABEL.2_7:	; bb54
+00000068                       81  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 93
+00000068 C506FF00              82  	andi 0x000000FF, r5, r0
+0000006C 8A05                  83  	bnz9 .BB.LABEL.2_1
+0000006E                       84  .BB.LABEL.2_8:	; if_then_bb60
+0000006E                       85  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 0
+0000006E 20163100              86  	movea 0x00000031, r0, r2
+00000072                       87  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 95
+00000072 47170000              88  	st.b r2, 0x00000000[r7]
+00000076 0152                  89  	mov 0x00000001, r10
+00000078                       90  .BB.LABEL.2_9:	; if_break_bb64
+00000078                       91  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 111
+00000078 6032                  92  	cmp 0x00000000, r6
+0000007A 8205                  93  	bz9 .BB.LABEL.2_18
+0000007C                       94  .BB.LABEL.2_10:	; if_then_bb69
+0000007C                       95  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 115
+0000007C 6052                  96  	cmp 0x00000000, r10
+0000007E 86170100              97  	ld.bu 0x00000000[r6], r2
+00000082 8A05                  98  	bnz9 .BB.LABEL.2_18
+00000084                       99  .BB.LABEL.2_11:	; if_then_bb69
+00000084                      100  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 0
+00000084 6012                 101  	cmp 0x00000000, r2
+00000086 8205                 102  	bz9 .BB.LABEL.2_18
+00000088                      103  .BB.LABEL.2_12:	; if_then_bb69.bb109_crit_edge
+00000088 002A                 104  	mov 0x00000000, r5
+0000008A 0540                 105  	mov r5, r8
+0000008C 8505                 106  	br9 .BB.LABEL.2_14
+0000008E                      107  .BB.LABEL.2_13:	; bb91
+0000008E                      108  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 119
+0000008E 264F0500             109  	ld.w 0x00000004[r6], r9
+00000092 C85EFF00             110  	andi 0x000000FF, r8, r11
+00000096 CB49                 111  	add r11, r9
+00000098 894F0100             112  	ld.bu 0x00000000[r9], r9
+0000009C 405E0000             113  	movhi HIGHW1(#_Dcm_MkCtrl+0x00000001), r0, r11
+000000A0 8B5F0100             114  	ld.bu LOWW(#_Dcm_MkCtrl+0x00000001)[r11], r11
+000000A4 E959                 115  	cmp r9, r11
+000000A6                      116  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 122
+000000A6 E12F042B             117  	cmov 0x00000002, 0x00000001, r5, r5
+000000AA 4142                 118  	add 0x00000001, r8
+000000AC                      119  .BB.LABEL.2_14:	; bb109
+000000AC                      120  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 117
+000000AC C84EFF00             121  	andi 0x000000FF, r8, r9
+000000B0 E249                 122  	cmp r2, r9
+000000B2 8905                 123  	bnc9 .BB.LABEL.2_16
+000000B4                      124  .BB.LABEL.2_15:	; bb109
+000000B4                      125  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 0
+000000B4 C506FF00             126  	andi 0x000000FF, r5, r0
+000000B8 8205                 127  	bz9 .BB.LABEL.2_13
+000000BA                      128  .BB.LABEL.2_16:	; bb129
+000000BA                      129  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 125
+000000BA C506FF00             130  	andi 0x000000FF, r5, r0
+000000BE 8A05                 131  	bnz9 .BB.LABEL.2_18
+000000C0                      132  .BB.LABEL.2_17:	; if_then_bb135
+000000C0                      133  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 0
+000000C0 20163300             134  	movea 0x00000033, r0, r2
+000000C4                      135  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 128
+000000C4 47170000             136  	st.b r2, 0x00000000[r7]
+000000C8 0152                 137  	mov 0x00000001, r10
+000000CA                      138  .BB.LABEL.2_18:	; if_break_bb139
+000000CA                      139  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 135
+000000CA 7F00                 140  	jmp [r31]
+000000CC                      141  _Dcm_UdsRCSesAndSecCheck.1:
+000000CC                      142  	.stack _Dcm_UdsRCSesAndSecCheck.1 = 24
+000000CC                      143  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 151
+000000CC 8007218F             144  	prepare 0x00000479, 0x00000000
+000000D0 07A0                 145  	mov r7, r20
+000000D2 08A8                 146  	mov r8, r21
+000000D4                      147  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 157
+000000D4 40160000             148  	movhi HIGHW1(#_DcmPbCfgPtr), r0, r2
+000000D8 22170100             149  	ld.w LOWW(#_DcmPbCfgPtr)[r2], r2
+000000DC 22170900             150  	ld.w 0x00000008[r2], r2
+000000E0 22B75100             151  	ld.w 0x00000050[r2], r22
+000000E4                      152  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 166
+000000E4 F4161800             153  	mulhi 0x00000018, r20, r2
+000000E8 D611                 154  	add r22, r2
+000000EA                      155  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 172
+000000EA 222F0900             156  	ld.w 0x00000008[r2], r5
+000000EE                      157  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 166
+000000EE 22BF0D00             158  	ld.w 0x0000000C[r2], r23
+000000F2                      159  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 169
+000000F2 E6161C00             160  	mulhi 0x0000001C, r6, r2
+000000F6                      161  	mov #_Dcm_ProtocolCtrl, r6
+000000F6 260600000000            -- mov         0x0,r6
+000000FC C231                 162  	add r2, r6
+000000FE                      163  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 170
+000000FE 86170300             164  	ld.bu 0x00000002[r6], r2
+00000102 C612                 165  	shl 0x00000006, r2
+00000104                      166  	mov #_Dcm_MsgCtrl, r6
+00000104 260600000000            -- mov         0x0,r6
+0000010A C231                 167  	add r2, r6
+0000010C A6C70100             168  	ld.bu 0x00000001[r6], r24
+00000110                      169  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 173
+00000110 0530                 170  	mov r5, r6
+00000112 1538                 171  	mov r21, r7
+00000114 80FF0000             172  	jarl _Dcm_UdsSesAndSecCheck.1, r31
+00000118                      173  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 182
+00000118 6052                 174  	cmp 0x00000000, r10
+0000011A 8A05                 175  	bnz9 .BB.LABEL.3_4
+0000011C                      176  .BB.LABEL.3_1:	; entry
+0000011C                      177  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 0
+0000011C 61C2                 178  	cmp 0x00000001, r24
+0000011E 8A05                 179  	bnz9 .BB.LABEL.3_4
+00000120                      180  .BB.LABEL.3_2:	; bb52
+00000120 F4161800             181  	mulhi 0x00000018, r20, r2
+00000124 D611                 182  	add r22, r2
+00000126 22171100             183  	ld.w 0x00000010[r2], r2
+0000012A 6012                 184  	cmp 0x00000000, r2
+0000012C 8205                 185  	bz9 .BB.LABEL.3_4
+0000012E                      186  .BB.LABEL.3_3:	; if_then_bb
+0000012E                      187  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 184
+0000012E F4161800             188  	mulhi 0x00000018, r20, r2
+00000132 D611                 189  	add r22, r2
+00000134 22171100             190  	ld.w 0x00000010[r2], r2
+00000138 22370500             191  	ld.w 0x00000004[r2], r6
+0000013C                      192  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 185
+0000013C 1538                 193  	mov r21, r7
+0000013E 80FF0000             194  	jarl _Dcm_UdsSesAndSecCheck.1, r31
+00000142                      195  .BB.LABEL.3_4:	; if_break_bb
+00000142                      196  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 195
+00000142 6052                 197  	cmp 0x00000000, r10
+00000144 8A05                 198  	bnz9 .BB.LABEL.3_8
+00000146                      199  .BB.LABEL.3_5:	; if_break_bb
+00000146                      200  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 0
+00000146 62C2                 201  	cmp 0x00000002, r24
+00000148 8A05                 202  	bnz9 .BB.LABEL.3_8
+0000014A                      203  .BB.LABEL.3_6:	; bb90
+0000014A F4161800             204  	mulhi 0x00000018, r20, r2
+0000014E D611                 205  	add r22, r2
+00000150 22171500             206  	ld.w 0x00000014[r2], r2
+00000154 6012                 207  	cmp 0x00000000, r2
+00000156 8205                 208  	bz9 .BB.LABEL.3_8
+00000158                      209  .BB.LABEL.3_7:	; if_then_bb104
+00000158                      210  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 197
+00000158 F4161800             211  	mulhi 0x00000018, r20, r2
+0000015C D611                 212  	add r22, r2
+0000015E 22171500             213  	ld.w 0x00000014[r2], r2
+00000162 22370500             214  	ld.w 0x00000004[r2], r6
+00000166                      215  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 198
+00000166 1538                 216  	mov r21, r7
+00000168 80FF0000             217  	jarl _Dcm_UdsSesAndSecCheck.1, r31
+0000016C                      218  .BB.LABEL.3_8:	; if_break_bb113
+0000016C                      219  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 208
+0000016C 60BA                 220  	cmp 0x00000000, r23
+0000016E 8205                 221  	bz9 .BB.LABEL.3_12
+00000170                      222  .BB.LABEL.3_9:	; if_break_bb113
+00000170                      223  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 0
+00000170 6052                 224  	cmp 0x00000000, r10
+00000172 8A05                 225  	bnz9 .BB.LABEL.3_12
+00000174                      226  .BB.LABEL.3_10:	; if_break_bb113
+00000174 63C2                 227  	cmp 0x00000003, r24
+00000176 8A05                 228  	bnz9 .BB.LABEL.3_12
+00000178                      229  .BB.LABEL.3_11:	; if_then_bb142
+00000178                      230  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 211
+00000178 37370500             231  	ld.w 0x00000004[r23], r6
+0000017C                      232  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 213
+0000017C 1538                 233  	mov r21, r7
+0000017E 80FF0000             234  	jarl _Dcm_UdsSesAndSecCheck.1, r31
+00000182                      235  .BB.LABEL.3_12:	; if_break_bb149
+00000182                      236  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 222
+00000182 6052                 237  	cmp 0x00000000, r10
+00000184 8A05                 238  	bnz9 .BB.LABEL.3_17
+00000186                      239  .BB.LABEL.3_13:	; if_break_bb149
+00000186                      240  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 0
+00000186 60BA                 241  	cmp 0x00000000, r23
+00000188 8A05                 242  	bnz9 .BB.LABEL.3_17
+0000018A                      243  .BB.LABEL.3_14:	; bb165
+0000018A F4161800             244  	mulhi 0x00000018, r20, r2
+0000018E D611                 245  	add r22, r2
+00000190 22171500             246  	ld.w 0x00000014[r2], r2
+00000194 6012                 247  	cmp 0x00000000, r2
+00000196 8A05                 248  	bnz9 .BB.LABEL.3_17
+00000198                      249  .BB.LABEL.3_15:	; bb178
+00000198 F4161800             250  	mulhi 0x00000018, r20, r2
+0000019C C2B1                 251  	add r2, r22
+0000019E 36171100             252  	ld.w 0x00000010[r22], r2
+000001A2 6012                 253  	cmp 0x00000000, r2
+000001A4 8A05                 254  	bnz9 .BB.LABEL.3_17
+000001A6                      255  .BB.LABEL.3_16:	; if_then_bb192
+000001A6 20162200             256  	movea 0x00000022, r0, r2
+000001AA                      257  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 234
+000001AA 55170000             258  	st.b r2, 0x00000000[r21]
+000001AE 0152                 259  	mov 0x00000001, r10
+000001B0                      260  .BB.LABEL.3_17:	; if_break_bb194
+000001B0                      261  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 238
+000001B0 40063F8F             262  	dispose 0x00000000, 0x00000479, [r31]
+000001B4                      263  _Dcm_UdsRCStartRoutine.1:
+000001B4                      264  	.stack _Dcm_UdsRCStartRoutine.1 = 28
+000001B4                      265  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 257
+000001B4 8207218F             266  	prepare 0x00000479, 0x00000004
+000001B8                      267  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 271
+000001B8 0610                 268  	mov r6, r2
+000001BA C612                 269  	shl 0x00000006, r2
+000001BC                      270  	mov #_Dcm_MsgCtrl, r5
+000001BC 250600000000            -- mov         0x0,tp
+000001C2 C229                 271  	add r2, r5
+000001C4                      272  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 272
+000001C4 A5170700             273  	ld.bu 0x00000007[r5], r2
+000001C8 E2161400             274  	mulhi 0x00000014, r2, r2
+000001CC                      275  	mov #_Dcm_ChannelCtrl, r5
+000001CC 250600000000            -- mov         0x0,tp
+000001D2 C229                 276  	add r2, r5
+000001D4 85170100             277  	ld.bu 0x00000000[r5], r2
+000001D8 EC12                 278  	mulh 0x0000000C, r2
+000001DA 402E0000             279  	movhi HIGHW1(#_DcmPbCfgPtr), r0, r5
+000001DE 252F0100             280  	ld.w LOWW(#_DcmPbCfgPtr)[r5], r5
+000001E2 25570100             281  	ld.w 0x00000000[r5], r10
+000001E6 2A570500             282  	ld.w 0x00000004[r10], r10
+000001EA C251                 283  	add r2, r10
+000001EC                      284  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 274
+000001EC 25170900             285  	ld.w 0x00000008[r5], r2
+000001F0 22175100             286  	ld.w 0x00000050[r2], r2
+000001F4                      287  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 277
+000001F4 27A70500             288  	ld.w 0x00000004[r7], r20
+000001F8                      289  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 278
+000001F8 942F0100             290  	ld.bu 0x00000000[r20], r5
+000001FC E52E1800             291  	mulhi 0x00000018, r5, r5
+00000200 C511                 292  	add r5, r2
+00000202 22AF1100             293  	ld.w 0x00000010[r2], r21
+00000206                      294  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 279
+00000206 60AA                 295  	cmp 0x00000000, r21
+00000208                      296  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 272
+00000208 2A170900             297  	ld.w 0x00000008[r10], r2
+0000020C 08B0                 298  	mov r8, r22
+0000020E 07B8                 299  	mov r7, r23
+00000210 0628                 300  	mov r6, r5
+00000212                      301  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 279
+00000212 8A05                 302  	bnz9 .BB.LABEL.4_2
+00000214                      303  .BB.LABEL.4_1:	; if_then_bb
+00000214                      304  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 0
+00000214 20361200             305  	movea 0x00000012, r0, r6
+00000218                      306  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 282
+00000218 49370000             307  	st.b r6, 0x00000000[r9]
+0000021C 0132                 308  	mov 0x00000001, r6
+0000021E                      309  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 283
+0000021E 56370000             310  	st.b r6, 0x00000000[r22]
+00000222                      311  .BB.LABEL.4_2:	; if_break_bb
+00000222                      312  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 285
+00000222 96370100             313  	ld.bu 0x00000000[r22], r6
+00000226 6032                 314  	cmp 0x00000000, r6
+00000228 8205                 315  	bz9 .BB.LABEL.4_4
+0000022A                      316  .BB.LABEL.4_3:	; if_break_bb.if_break_bb207_crit_edge
+0000022A                      317  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 0
+0000022A 00C2                 318  	mov 0x00000000, r24
+0000022C 1838                 319  	mov r24, r7
+0000022E 8505                 320  	br9 .BB.LABEL.4_23
+00000230                      321  .BB.LABEL.4_4:	; if_then_bb65
+00000230                      322  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 287
+00000230 35C71100             323  	ld.w 0x00000010[r21], r24
+00000234 60C2                 324  	cmp 0x00000000, r24
+00000236 8A05                 325  	bnz9 .BB.LABEL.4_6
+00000238                      326  .BB.LABEL.4_5:	; if_then_bb65.if_break_bb103_crit_edge
+00000238                      327  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 0
+00000238 003A                 328  	mov 0x00000000, r7
+0000023A 8505                 329  	br9 .BB.LABEL.4_9
+0000023C                      330  .BB.LABEL.4_6:	; if_then_bb72
+0000023C                      331  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 290
+0000023C 98370100             332  	ld.bu 0x00000000[r24], r6
+00000240 0042                 333  	mov 0x00000000, r8
+00000242 0838                 334  	mov r8, r7
+00000244 8505                 335  	br9 .BB.LABEL.4_8
+00000246                      336  .BB.LABEL.4_7:	; bb
+00000246                      337  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 292
+00000246 C856FF00             338  	andi 0x000000FF, r8, r10
+0000024A C452                 339  	shl 0x00000004, r10
+0000024C 385F0500             340  	ld.w 0x00000004[r24], r11
+00000250 CA59                 341  	add r10, r11
+00000252                      342  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 294
+00000252 EB570500             343  	ld.hu 0x00000004[r11], r10
+00000256 CA39                 344  	add r10, r7
+00000258 4142                 345  	add 0x00000001, r8
+0000025A                      346  .BB.LABEL.4_8:	; bb94
+0000025A                      347  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 290
+0000025A C856FF00             348  	andi 0x000000FF, r8, r10
+0000025E E651                 349  	cmp r6, r10
+00000260 8105                 350  	bl9 .BB.LABEL.4_7
+00000262                      351  .BB.LABEL.4_9:	; if_break_bb103
+00000262                      352  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 301
+00000262 35371500             353  	ld.w 0x00000014[r21], r6
+00000266 6032                 354  	cmp 0x00000000, r6
+00000268 8A05                 355  	bnz9 .BB.LABEL.4_11
+0000026A                      356  .BB.LABEL.4_10:	; if_break_bb103.if_break_bb143_crit_edge
+0000026A                      357  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 0
+0000026A 00C2                 358  	mov 0x00000000, r24
+0000026C 8505                 359  	br9 .BB.LABEL.4_14
+0000026E                      360  .BB.LABEL.4_11:	; if_then_bb110
+0000026E                      361  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 304
+0000026E 86470100             362  	ld.bu 0x00000000[r6], r8
+00000272 0052                 363  	mov 0x00000000, r10
+00000274 0AC0                 364  	mov r10, r24
+00000276 8505                 365  	br9 .BB.LABEL.4_13
+00000278                      366  .BB.LABEL.4_12:	; bb116
+00000278                      367  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 306
+00000278 CA5EFF00             368  	andi 0x000000FF, r10, r11
+0000027C C45A                 369  	shl 0x00000004, r11
+0000027E 26670500             370  	ld.w 0x00000004[r6], r12
+00000282 CB61                 371  	add r11, r12
+00000284                      372  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 308
+00000284 EC5F0500             373  	ld.hu 0x00000004[r12], r11
+00000288 CBC1                 374  	add r11, r24
+0000028A 4152                 375  	add 0x00000001, r10
+0000028C                      376  .BB.LABEL.4_13:	; bb133
+0000028C                      377  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 304
+0000028C CA5EFF00             378  	andi 0x000000FF, r10, r11
+00000290 E859                 379  	cmp r8, r11
+00000292 8105                 380  	bl9 .BB.LABEL.4_12
+00000294                      381  .BB.LABEL.4_14:	; if_break_bb143
+00000294                      382  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 317
+00000294 35371100             383  	ld.w 0x00000010[r21], r6
+00000298 6032                 384  	cmp 0x00000000, r6
+0000029A 8205                 385  	bz9 .BB.LABEL.4_17
+0000029C                      386  .BB.LABEL.4_15:	; bb149
+0000029C                      387  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 0
+0000029C 86470100             388  	ld.bu 0x00000000[r6], r8
+000002A0 C442                 389  	shl 0x00000004, r8
+000002A2 26370500             390  	ld.w 0x00000004[r6], r6
+000002A6 C641                 391  	add r6, r8
+000002A8 2837F9FF             392  	ld.w 0xFFFFFFF8[r8], r6
+000002AC 6E32                 393  	cmp 0x0000000E, r6
+000002AE 8A05                 394  	bnz9 .BB.LABEL.4_17
+000002B0                      395  .BB.LABEL.4_16:	; bb149.bb169_crit_edge
+000002B0 0032                 396  	mov 0x00000000, r6
+000002B2 8505                 397  	br9 .BB.LABEL.4_18
+000002B4                      398  .BB.LABEL.4_17:	; bb168
+000002B4 0132                 399  	mov 0x00000001, r6
+000002B6                      400  .BB.LABEL.4_18:	; bb169
+000002B6 0540                 401  	mov r5, r8
+000002B8 C642                 402  	shl 0x00000006, r8
+000002BA                      403  	mov #_Dcm_MsgCtrl, r10
+000002BA 2A0600000000            -- mov         0x0,r10
+000002C0 C851                 404  	add r8, r10
+000002C2 2A471100             405  	ld.w 0x00000010[r10], r8
+000002C6 07560400             406  	addi 0x00000004, r7, r10
+000002CA 6032                 407  	cmp 0x00000000, r6
+000002CC 8A05                 408  	bnz9 .BB.LABEL.4_21
+000002CE                      409  .BB.LABEL.4_19:	; if_then_bb174
+000002CE                      410  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 323
+000002CE E851                 411  	cmp r8, r10
+000002D0 8305                 412  	bnh9 .BB.LABEL.4_23
+000002D2                      413  .BB.LABEL.4_20:	; if_then_bb186
+000002D2                      414  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 0
+000002D2 20461300             415  	movea 0x00000013, r0, r8
+000002D6                      416  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 326
+000002D6 49470000             417  	st.b r8, 0x00000000[r9]
+000002DA 0142                 418  	mov 0x00000001, r8
+000002DC                      419  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 327
+000002DC 56470000             420  	st.b r8, 0x00000000[r22]
+000002E0 8505                 421  	br9 .BB.LABEL.4_23
+000002E2                      422  .BB.LABEL.4_21:	; if_else_bb190
+000002E2                      423  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 332
+000002E2 E851                 424  	cmp r8, r10
+000002E4 8205                 425  	bz9 .BB.LABEL.4_23
+000002E6                      426  .BB.LABEL.4_22:	; if_then_bb202
+000002E6                      427  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 0
+000002E6 20361300             428  	movea 0x00000013, r0, r6
+000002EA                      429  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 335
+000002EA 49370000             430  	st.b r6, 0x00000000[r9]
+000002EE 0132                 431  	mov 0x00000001, r6
+000002F0                      432  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 336
+000002F0 56370000             433  	st.b r6, 0x00000000[r22]
+000002F4                      434  .BB.LABEL.4_23:	; if_break_bb207
+000002F4                      435  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 341
+000002F4 96370100             436  	ld.bu 0x00000000[r22], r6
+000002F8 6032                 437  	cmp 0x00000000, r6
+000002FA 8A05                 438  	bnz9 .BB.LABEL.4_26
+000002FC                      439  .BB.LABEL.4_24:	; if_then_bb214
+000002FC                      440  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 343
+000002FC 35570100             441  	ld.w 0x00000000[r21], r10
+00000300                      442  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 344
+00000300 6052                 443  	cmp 0x00000000, r10
+00000302 8A05                 444  	bnz9 .BB.LABEL.4_26
+00000304                      445  .BB.LABEL.4_25:	; if_then_bb222
+00000304                      446  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 0
+00000304 20363100             447  	movea 0x00000031, r0, r6
+00000308                      448  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 347
+00000308 49370000             449  	st.b r6, 0x00000000[r9]
+0000030C 0132                 450  	mov 0x00000001, r6
+0000030E                      451  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 348
+0000030E 56370000             452  	st.b r6, 0x00000000[r22]
+00000312                      453  .BB.LABEL.4_26:	; if_break_bb226
+00000312                      454  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 359
+00000312 96370100             455  	ld.bu 0x00000000[r22], r6
+00000316 6032                 456  	cmp 0x00000000, r6
+00000318 8A05                 457  	bnz9 .BB.LABEL.4_41
+0000031A                      458  .BB.LABEL.4_27:	; if_then_bb233
+0000031A                      459  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 362
+0000031A 603A                 460  	cmp 0x00000000, r7
+0000031C 8A05                 461  	bnz9 .BB.LABEL.4_29
+0000031E                      462  .BB.LABEL.4_28:	; if_then_bb233.if_break_bb246_crit_edge
+0000031E                      463  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 0
+0000031E 0032                 464  	mov 0x00000000, r6
+00000320 8505                 465  	br9 .BB.LABEL.4_30
+00000322                      466  .BB.LABEL.4_29:	; if_then_bb238
+00000322                      467  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 364
+00000322 0530                 468  	mov r5, r6
+00000324 C632                 469  	shl 0x00000006, r6
+00000326                      470  	mov #_Dcm_MsgCtrl, r8
+00000326 280600000000            -- mov         0x0,r8
+0000032C C641                 471  	add r6, r8
+0000032E 28370D00             472  	ld.w 0x0000000C[r8], r6
+00000332 4432                 473  	add 0x00000004, r6
+00000334                      474  .BB.LABEL.4_30:	; if_break_bb246
+00000334                      475  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 367
+00000334 60C2                 476  	cmp 0x00000000, r24
+00000336 8A05                 477  	bnz9 .BB.LABEL.4_32
+00000338                      478  .BB.LABEL.4_31:	; if_break_bb246.if_break_bb255_crit_edge
+00000338                      479  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 0
+00000338 0012                 480  	mov 0x00000000, r2
+0000033A 8505                 481  	br9 .BB.LABEL.4_33
+0000033C                      482  .BB.LABEL.4_32:	; if_then_bb251
+0000033C                      483  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 369
+0000033C                      484  	mov #_Dcm_Channel, r8
+0000033C 280600000000            -- mov         0x0,r8
+00000342 C811                 485  	add r8, r2
+00000344 4412                 486  	add 0x00000004, r2
+00000346                      487  .BB.LABEL.4_33:	; if_break_bb255
+00000346                      488  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 371
+00000346 35471100             489  	ld.w 0x00000010[r21], r8
+0000034A 6042                 490  	cmp 0x00000000, r8
+0000034C 8205                 491  	bz9 .BB.LABEL.4_36
+0000034E                      492  .BB.LABEL.4_34:	; bb261
+0000034E                      493  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 0
+0000034E 885F0100             494  	ld.bu 0x00000000[r8], r11
+00000352 C45A                 495  	shl 0x00000004, r11
+00000354 28470500             496  	ld.w 0x00000004[r8], r8
+00000358 C859                 497  	add r8, r11
+0000035A 2B47F9FF             498  	ld.w 0xFFFFFFF8[r11], r8
+0000035E 6E42                 499  	cmp 0x0000000E, r8
+00000360 8A05                 500  	bnz9 .BB.LABEL.4_36
+00000362                      501  .BB.LABEL.4_35:	; if_then_bb287
+00000362                      502  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 377
+00000362 5F3A                 503  	add 0xFFFFFFFF, r7
+00000364                      504  .BB.LABEL.4_36:	; if_break_bb290
+00000364                      505  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 379
+00000364 C62A                 506  	shl 0x00000006, r5
+00000366                      507  	mov #_Dcm_MsgCtrl, r8
+00000366 280600000000            -- mov         0x0,r8
+0000036C C541                 508  	add r5, r8
+0000036E 282F1100             509  	ld.w 0x00000010[r8], r5
+00000372 A729                 510  	sub r7, r5
+00000374 5C2A                 511  	add 0xFFFFFFFC, r5
+00000376 772F0C00             512  	st.h r5, 0x0000000C[r23]
+0000037A                      513  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 381
+0000037A B73F0100             514  	ld.bu 0x00000001[r23], r7
+0000037E 634F0100             515  	st.w r9, 0x00000000[r3]
+00000382                      516  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 379
+00000382 174E0C00             517  	addi 0x0000000C, r23, r9
+00000386                      518  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 381
+00000386 0240                 519  	mov r2, r8
+00000388 EAC760F9             520  	jarl [r10], r31
+0000038C 56570000             521  	st.b r10, 0x00000000[r22]
+00000390                      522  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 387
+00000390 35171500             523  	ld.w 0x00000014[r21], r2
+00000394 6012                 524  	cmp 0x00000000, r2
+00000396 8205                 525  	bz9 .BB.LABEL.4_39
+00000398                      526  .BB.LABEL.4_37:	; bb319
+00000398                      527  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 0
+00000398 822F0100             528  	ld.bu 0x00000000[r2], r5
+0000039C C42A                 529  	shl 0x00000004, r5
+0000039E 22170500             530  	ld.w 0x00000004[r2], r2
+000003A2 C229                 531  	add r2, r5
+000003A4 2517F9FF             532  	ld.w 0xFFFFFFF8[r5], r2
+000003A8 6E12                 533  	cmp 0x0000000E, r2
+000003AA 8A05                 534  	bnz9 .BB.LABEL.4_39
+000003AC                      535  .BB.LABEL.4_38:	; if_then_bb345
+000003AC                      536  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 394
+000003AC F7170D00             537  	ld.hu 0x0000000C[r23], r2
+000003B0                      538  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 393
+000003B0 C2C1                 539  	add r2, r24
+000003B2                      540  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 394
+000003B2 5FC2                 541  	add 0xFFFFFFFF, r24
+000003B4                      542  .BB.LABEL.4_39:	; if_break_bb354
+000003B4                      543  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 396
+000003B4 96170100             544  	ld.bu 0x00000000[r22], r2
+000003B8 6012                 545  	cmp 0x00000000, r2
+000003BA 8A05                 546  	bnz9 .BB.LABEL.4_41
+000003BC                      547  .BB.LABEL.4_40:	; if_then_bb361
+000003BC                      548  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 398
+000003BC 94170100             549  	ld.bu 0x00000000[r20], r2
+000003C0 C212                 550  	shl 0x00000002, r2
+000003C2                      551  	mov #_Dcm_RoutineControlState, r5
+000003C2 250600000000            -- mov         0x0,tp
+000003C8 C229                 552  	add r2, r5
+000003CA 0112                 553  	mov 0x00000001, r2
+000003CC 65170100             554  	st.w r2, 0x00000000[r5]
+000003D0                      555  .BB.LABEL.4_41:	; if_break_bb367
+000003D0                      556  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 0
+000003D0 1850                 557  	mov r24, r10
+000003D2                      558  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 402
+000003D2 42063F8F             559  	dispose 0x00000004, 0x00000479, [r31]
+000003D6                      560  _Dcm_UdsRCStopRoutine.1:
+000003D6                      561  	.stack _Dcm_UdsRCStopRoutine.1 = 24
+000003D6                      562  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 421
+000003D6 8207210F             563  	prepare 0x00000079, 0x00000004
+000003DA                      564  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 435
+000003DA 0610                 565  	mov r6, r2
+000003DC C612                 566  	shl 0x00000006, r2
+000003DE                      567  	mov #_Dcm_MsgCtrl, r5
+000003DE 250600000000            -- mov         0x0,tp
+000003E4 C229                 568  	add r2, r5
+000003E6 A5170700             569  	ld.bu 0x00000007[r5], r2
+000003EA E2161400             570  	mulhi 0x00000014, r2, r2
+000003EE                      571  	mov #_Dcm_ChannelCtrl, r5
+000003EE 250600000000            -- mov         0x0,tp
+000003F4 C229                 572  	add r2, r5
+000003F6 85170100             573  	ld.bu 0x00000000[r5], r2
+000003FA EC12                 574  	mulh 0x0000000C, r2
+000003FC 402E0000             575  	movhi HIGHW1(#_DcmPbCfgPtr), r0, r5
+00000400 252F0100             576  	ld.w LOWW(#_DcmPbCfgPtr)[r5], r5
+00000404 25570100             577  	ld.w 0x00000000[r5], r10
+00000408 2A570500             578  	ld.w 0x00000004[r10], r10
+0000040C C251                 579  	add r2, r10
+0000040E                      580  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 439
+0000040E 25170900             581  	ld.w 0x00000008[r5], r2
+00000412 22175100             582  	ld.w 0x00000050[r2], r2
+00000416                      583  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 443
+00000416 272F0500             584  	ld.w 0x00000004[r7], r5
+0000041A 852F0100             585  	ld.bu 0x00000000[r5], r5
+0000041E E52E1800             586  	mulhi 0x00000018, r5, r5
+00000422 C229                 587  	add r2, r5
+00000424 252F1500             588  	ld.w 0x00000014[r5], r5
+00000428 602A                 589  	cmp 0x00000000, r5
+0000042A                      590  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 435
+0000042A 2A2F0900             591  	ld.w 0x00000008[r10], r5
+0000042E 08A0                 592  	mov r8, r20
+00000430 07A8                 593  	mov r7, r21
+00000432 0638                 594  	mov r6, r7
+00000434                      595  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 443
+00000434 8A05                 596  	bnz9 .BB.LABEL.5_2
+00000436                      597  .BB.LABEL.5_1:	; if_then_bb
+00000436                      598  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 0
+00000436 20361200             599  	movea 0x00000012, r0, r6
+0000043A                      600  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 446
+0000043A 49370000             601  	st.b r6, 0x00000000[r9]
+0000043E 0132                 602  	mov 0x00000001, r6
+00000440                      603  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 447
+00000440 54370000             604  	st.b r6, 0x00000000[r20]
+00000444                      605  .BB.LABEL.5_2:	; if_break_bb
+00000444                      606  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 450
+00000444 94370100             607  	ld.bu 0x00000000[r20], r6
+00000448 6032                 608  	cmp 0x00000000, r6
+0000044A 8205                 609  	bz9 .BB.LABEL.5_4
+0000044C                      610  .BB.LABEL.5_3:	; if_break_bb.if_break_bb211_crit_edge
+0000044C                      611  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 0
+0000044C 00B2                 612  	mov 0x00000000, r22
+0000044E 1610                 613  	mov r22, r2
+00000450 8505                 614  	br9 .BB.LABEL.5_23
+00000452                      615  .BB.LABEL.5_4:	; if_then_bb60
+00000452                      616  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 452
+00000452 35B70500             617  	ld.w 0x00000004[r21], r22
+00000456 96B70100             618  	ld.bu 0x00000000[r22], r22
+0000045A F6B61800             619  	mulhi 0x00000018, r22, r22
+0000045E D611                 620  	add r22, r2
+00000460 22BF1500             621  	ld.w 0x00000014[r2], r23
+00000464                      622  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 453
+00000464 37B71100             623  	ld.w 0x00000010[r23], r22
+00000468 60B2                 624  	cmp 0x00000000, r22
+0000046A 8A05                 625  	bnz9 .BB.LABEL.5_6
+0000046C                      626  .BB.LABEL.5_5:	; if_then_bb60.if_break_bb107_crit_edge
+0000046C                      627  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 0
+0000046C 0012                 628  	mov 0x00000000, r2
+0000046E 8505                 629  	br9 .BB.LABEL.5_9
+00000470                      630  .BB.LABEL.5_6:	; if_then_bb76
+00000470                      631  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 456
+00000470 96370100             632  	ld.bu 0x00000000[r22], r6
+00000474 0042                 633  	mov 0x00000000, r8
+00000476 0810                 634  	mov r8, r2
+00000478 8505                 635  	br9 .BB.LABEL.5_8
+0000047A                      636  .BB.LABEL.5_7:	; bb
+0000047A                      637  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 458
+0000047A C856FF00             638  	andi 0x000000FF, r8, r10
+0000047E C452                 639  	shl 0x00000004, r10
+00000480 365F0500             640  	ld.w 0x00000004[r22], r11
+00000484 CA59                 641  	add r10, r11
+00000486                      642  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 460
+00000486 EB570500             643  	ld.hu 0x00000004[r11], r10
+0000048A CA11                 644  	add r10, r2
+0000048C 4142                 645  	add 0x00000001, r8
+0000048E                      646  .BB.LABEL.5_8:	; bb98
+0000048E                      647  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 456
+0000048E C856FF00             648  	andi 0x000000FF, r8, r10
+00000492 E651                 649  	cmp r6, r10
+00000494 8105                 650  	bl9 .BB.LABEL.5_7
+00000496                      651  .BB.LABEL.5_9:	; if_break_bb107
+00000496                      652  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 467
+00000496 37371500             653  	ld.w 0x00000014[r23], r6
+0000049A 6032                 654  	cmp 0x00000000, r6
+0000049C 8A05                 655  	bnz9 .BB.LABEL.5_11
+0000049E                      656  .BB.LABEL.5_10:	; if_break_bb107.if_break_bb147_crit_edge
+0000049E                      657  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 0
+0000049E 00B2                 658  	mov 0x00000000, r22
+000004A0 8505                 659  	br9 .BB.LABEL.5_14
+000004A2                      660  .BB.LABEL.5_11:	; if_then_bb114
+000004A2                      661  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 470
+000004A2 86470100             662  	ld.bu 0x00000000[r6], r8
+000004A6 0052                 663  	mov 0x00000000, r10
+000004A8 0AB0                 664  	mov r10, r22
+000004AA 8505                 665  	br9 .BB.LABEL.5_13
+000004AC                      666  .BB.LABEL.5_12:	; bb120
+000004AC                      667  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 472
+000004AC CA5EFF00             668  	andi 0x000000FF, r10, r11
+000004B0 C45A                 669  	shl 0x00000004, r11
+000004B2 26670500             670  	ld.w 0x00000004[r6], r12
+000004B6 CB61                 671  	add r11, r12
+000004B8                      672  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 474
+000004B8 EC5F0500             673  	ld.hu 0x00000004[r12], r11
+000004BC CBB1                 674  	add r11, r22
+000004BE 4152                 675  	add 0x00000001, r10
+000004C0                      676  .BB.LABEL.5_13:	; bb137
+000004C0                      677  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 470
+000004C0 CA5EFF00             678  	andi 0x000000FF, r10, r11
+000004C4 E859                 679  	cmp r8, r11
+000004C6 8105                 680  	bl9 .BB.LABEL.5_12
+000004C8                      681  .BB.LABEL.5_14:	; if_break_bb147
+000004C8                      682  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 482
+000004C8 37371100             683  	ld.w 0x00000010[r23], r6
+000004CC 6032                 684  	cmp 0x00000000, r6
+000004CE 8205                 685  	bz9 .BB.LABEL.5_17
+000004D0                      686  .BB.LABEL.5_15:	; bb153
+000004D0                      687  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 0
+000004D0 86470100             688  	ld.bu 0x00000000[r6], r8
+000004D4 C442                 689  	shl 0x00000004, r8
+000004D6 26370500             690  	ld.w 0x00000004[r6], r6
+000004DA C641                 691  	add r6, r8
+000004DC 2837F9FF             692  	ld.w 0xFFFFFFF8[r8], r6
+000004E0 6E32                 693  	cmp 0x0000000E, r6
+000004E2 8A05                 694  	bnz9 .BB.LABEL.5_17
+000004E4                      695  .BB.LABEL.5_16:	; bb153.bb173_crit_edge
+000004E4 0032                 696  	mov 0x00000000, r6
+000004E6 8505                 697  	br9 .BB.LABEL.5_18
+000004E8                      698  .BB.LABEL.5_17:	; bb172
+000004E8 0132                 699  	mov 0x00000001, r6
+000004EA                      700  .BB.LABEL.5_18:	; bb173
+000004EA 0740                 701  	mov r7, r8
+000004EC C642                 702  	shl 0x00000006, r8
+000004EE                      703  	mov #_Dcm_MsgCtrl, r10
+000004EE 2A0600000000            -- mov         0x0,r10
+000004F4 C851                 704  	add r8, r10
+000004F6 2A471100             705  	ld.w 0x00000010[r10], r8
+000004FA 02560400             706  	addi 0x00000004, r2, r10
+000004FE 6032                 707  	cmp 0x00000000, r6
+00000500 8A05                 708  	bnz9 .BB.LABEL.5_21
+00000502                      709  .BB.LABEL.5_19:	; if_then_bb178
+00000502                      710  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 488
+00000502 E851                 711  	cmp r8, r10
+00000504 8305                 712  	bnh9 .BB.LABEL.5_23
+00000506                      713  .BB.LABEL.5_20:	; if_then_bb190
+00000506                      714  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 0
+00000506 20461300             715  	movea 0x00000013, r0, r8
+0000050A                      716  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 491
+0000050A 49470000             717  	st.b r8, 0x00000000[r9]
+0000050E 0142                 718  	mov 0x00000001, r8
+00000510                      719  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 492
+00000510 54470000             720  	st.b r8, 0x00000000[r20]
+00000514 8505                 721  	br9 .BB.LABEL.5_23
+00000516                      722  .BB.LABEL.5_21:	; if_else_bb194
+00000516                      723  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 497
+00000516 E851                 724  	cmp r8, r10
+00000518 8205                 725  	bz9 .BB.LABEL.5_23
+0000051A                      726  .BB.LABEL.5_22:	; if_then_bb206
+0000051A                      727  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 0
+0000051A 20361300             728  	movea 0x00000013, r0, r6
+0000051E                      729  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 500
+0000051E 49370000             730  	st.b r6, 0x00000000[r9]
+00000522 0132                 731  	mov 0x00000001, r6
+00000524                      732  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 501
+00000524 54370000             733  	st.b r6, 0x00000000[r20]
+00000528                      734  .BB.LABEL.5_23:	; if_break_bb211
+00000528                      735  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 506
+00000528 94370100             736  	ld.bu 0x00000000[r20], r6
+0000052C 6032                 737  	cmp 0x00000000, r6
+0000052E 8A05                 738  	bnz9 .BB.LABEL.5_26
+00000530                      739  .BB.LABEL.5_24:	; if_then_bb218
+00000530                      740  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 508
+00000530 37570100             741  	ld.w 0x00000000[r23], r10
+00000534                      742  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 509
+00000534 6052                 743  	cmp 0x00000000, r10
+00000536 8A05                 744  	bnz9 .BB.LABEL.5_26
+00000538                      745  .BB.LABEL.5_25:	; if_then_bb226
+00000538                      746  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 0
+00000538 20363100             747  	movea 0x00000031, r0, r6
+0000053C                      748  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 512
+0000053C 49370000             749  	st.b r6, 0x00000000[r9]
+00000540 0132                 750  	mov 0x00000001, r6
+00000542                      751  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 513
+00000542 54370000             752  	st.b r6, 0x00000000[r20]
+00000546                      753  .BB.LABEL.5_26:	; if_break_bb230
+00000546                      754  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 517
+00000546 94370100             755  	ld.bu 0x00000000[r20], r6
+0000054A 6032                 756  	cmp 0x00000000, r6
+0000054C 8A05                 757  	bnz9 .BB.LABEL.5_29
+0000054E                      758  .BB.LABEL.5_27:	; bb236
+0000054E                      759  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 0
+0000054E 35370500             760  	ld.w 0x00000004[r21], r6
+00000552 86370100             761  	ld.bu 0x00000000[r6], r6
+00000556 C232                 762  	shl 0x00000002, r6
+00000558                      763  	mov #_Dcm_RoutineControlState, r8
+00000558 280600000000            -- mov         0x0,r8
+0000055E C641                 764  	add r6, r8
+00000560 28370100             765  	ld.w 0x00000000[r8], r6
+00000564 6132                 766  	cmp 0x00000001, r6
+00000566 8205                 767  	bz9 .BB.LABEL.5_29
+00000568                      768  .BB.LABEL.5_28:	; if_then_bb254
+00000568 20362400             769  	movea 0x00000024, r0, r6
+0000056C                      770  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 520
+0000056C 49370000             771  	st.b r6, 0x00000000[r9]
+00000570 0132                 772  	mov 0x00000001, r6
+00000572                      773  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 521
+00000572 54370000             774  	st.b r6, 0x00000000[r20]
+00000576                      775  .BB.LABEL.5_29:	; if_break_bb257
+00000576                      776  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 523
+00000576 94370100             777  	ld.bu 0x00000000[r20], r6
+0000057A 6032                 778  	cmp 0x00000000, r6
+0000057C 8A05                 779  	bnz9 .BB.LABEL.5_44
+0000057E                      780  .BB.LABEL.5_30:	; if_then_bb264
+0000057E                      781  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 526
+0000057E 6012                 782  	cmp 0x00000000, r2
+00000580 8A05                 783  	bnz9 .BB.LABEL.5_32
+00000582                      784  .BB.LABEL.5_31:	; if_then_bb264.if_break_bb277_crit_edge
+00000582                      785  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 0
+00000582 0032                 786  	mov 0x00000000, r6
+00000584 8505                 787  	br9 .BB.LABEL.5_33
+00000586                      788  .BB.LABEL.5_32:	; if_then_bb269
+00000586                      789  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 528
+00000586 0730                 790  	mov r7, r6
+00000588 C632                 791  	shl 0x00000006, r6
+0000058A                      792  	mov #_Dcm_MsgCtrl, r8
+0000058A 280600000000            -- mov         0x0,r8
+00000590 C641                 793  	add r6, r8
+00000592 28370D00             794  	ld.w 0x0000000C[r8], r6
+00000596 4432                 795  	add 0x00000004, r6
+00000598                      796  .BB.LABEL.5_33:	; if_break_bb277
+00000598                      797  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 531
+00000598 60B2                 798  	cmp 0x00000000, r22
+0000059A 8A05                 799  	bnz9 .BB.LABEL.5_35
+0000059C                      800  .BB.LABEL.5_34:	; if_break_bb277.if_break_bb286_crit_edge
+0000059C                      801  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 0
+0000059C 002A                 802  	mov 0x00000000, r5
+0000059E 8505                 803  	br9 .BB.LABEL.5_36
+000005A0                      804  .BB.LABEL.5_35:	; if_then_bb282
+000005A0                      805  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 533
+000005A0                      806  	mov #_Dcm_Channel, r8
+000005A0 280600000000            -- mov         0x0,r8
+000005A6 C829                 807  	add r8, r5
+000005A8 442A                 808  	add 0x00000004, r5
+000005AA                      809  .BB.LABEL.5_36:	; if_break_bb286
+000005AA                      810  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 535
+000005AA 37471100             811  	ld.w 0x00000010[r23], r8
+000005AE 6042                 812  	cmp 0x00000000, r8
+000005B0 8205                 813  	bz9 .BB.LABEL.5_39
+000005B2                      814  .BB.LABEL.5_37:	; bb292
+000005B2                      815  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 0
+000005B2 885F0100             816  	ld.bu 0x00000000[r8], r11
+000005B6 C45A                 817  	shl 0x00000004, r11
+000005B8 28470500             818  	ld.w 0x00000004[r8], r8
+000005BC C859                 819  	add r8, r11
+000005BE 2B47F9FF             820  	ld.w 0xFFFFFFF8[r11], r8
+000005C2 6E42                 821  	cmp 0x0000000E, r8
+000005C4 8A05                 822  	bnz9 .BB.LABEL.5_39
+000005C6                      823  .BB.LABEL.5_38:	; if_then_bb318
+000005C6                      824  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 541
+000005C6 5F12                 825  	add 0xFFFFFFFF, r2
+000005C8                      826  .BB.LABEL.5_39:	; if_break_bb321
+000005C8                      827  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 543
+000005C8 C63A                 828  	shl 0x00000006, r7
+000005CA                      829  	mov #_Dcm_MsgCtrl, r8
+000005CA 280600000000            -- mov         0x0,r8
+000005D0 C741                 830  	add r7, r8
+000005D2 283F1100             831  	ld.w 0x00000010[r8], r7
+000005D6 A239                 832  	sub r2, r7
+000005D8 5C3A                 833  	add 0xFFFFFFFC, r7
+000005DA 753F0C00             834  	st.h r7, 0x0000000C[r21]
+000005DE                      835  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 545
+000005DE B53F0100             836  	ld.bu 0x00000001[r21], r7
+000005E2 634F0100             837  	st.w r9, 0x00000000[r3]
+000005E6                      838  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 543
+000005E6 154E0C00             839  	addi 0x0000000C, r21, r9
+000005EA                      840  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 545
+000005EA 0540                 841  	mov r5, r8
+000005EC EAC760F9             842  	jarl [r10], r31
+000005F0 54570000             843  	st.b r10, 0x00000000[r20]
+000005F4                      844  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 551
+000005F4 37171500             845  	ld.w 0x00000014[r23], r2
+000005F8 6012                 846  	cmp 0x00000000, r2
+000005FA 8205                 847  	bz9 .BB.LABEL.5_42
+000005FC                      848  .BB.LABEL.5_40:	; bb350
+000005FC                      849  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 0
+000005FC 822F0100             850  	ld.bu 0x00000000[r2], r5
+00000600 C42A                 851  	shl 0x00000004, r5
+00000602 22170500             852  	ld.w 0x00000004[r2], r2
+00000606 C229                 853  	add r2, r5
+00000608 2517F9FF             854  	ld.w 0xFFFFFFF8[r5], r2
+0000060C 6E12                 855  	cmp 0x0000000E, r2
+0000060E 8A05                 856  	bnz9 .BB.LABEL.5_42
+00000610                      857  .BB.LABEL.5_41:	; if_then_bb376
+00000610                      858  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 558
+00000610 F5170D00             859  	ld.hu 0x0000000C[r21], r2
+00000614                      860  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 557
+00000614 C2B1                 861  	add r2, r22
+00000616                      862  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 558
+00000616 5FB2                 863  	add 0xFFFFFFFF, r22
+00000618                      864  .BB.LABEL.5_42:	; if_break_bb385
+00000618                      865  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 560
+00000618 94170100             866  	ld.bu 0x00000000[r20], r2
+0000061C 6012                 867  	cmp 0x00000000, r2
+0000061E 8A05                 868  	bnz9 .BB.LABEL.5_44
+00000620                      869  .BB.LABEL.5_43:	; if_then_bb392
+00000620                      870  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 562
+00000620 35170500             871  	ld.w 0x00000004[r21], r2
+00000624 82170100             872  	ld.bu 0x00000000[r2], r2
+00000628 C212                 873  	shl 0x00000002, r2
+0000062A                      874  	mov #_Dcm_RoutineControlState, r5
+0000062A 250600000000            -- mov         0x0,tp
+00000630 C229                 875  	add r2, r5
+00000632 0212                 876  	mov 0x00000002, r2
+00000634 65170100             877  	st.w r2, 0x00000000[r5]
+00000638                      878  .BB.LABEL.5_44:	; if_break_bb400
+00000638                      879  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 0
+00000638 1650                 880  	mov r22, r10
+0000063A                      881  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 566
+0000063A 42063F0F             882  	dispose 0x00000004, 0x00000079, [r31]
+0000063E                      883  _Dcm_UdsRCReqRoutineResult.1:
+0000063E                      884  	.stack _Dcm_UdsRCReqRoutineResult.1 = 24
+0000063E                      885  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 585
+0000063E 8207210F             886  	prepare 0x00000079, 0x00000004
+00000642                      887  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 599
+00000642 0610                 888  	mov r6, r2
+00000644 C612                 889  	shl 0x00000006, r2
+00000646                      890  	mov #_Dcm_MsgCtrl, r5
+00000646 250600000000            -- mov         0x0,tp
+0000064C C229                 891  	add r2, r5
+0000064E A5170700             892  	ld.bu 0x00000007[r5], r2
+00000652 E2161400             893  	mulhi 0x00000014, r2, r2
+00000656                      894  	mov #_Dcm_ChannelCtrl, r5
+00000656 250600000000            -- mov         0x0,tp
+0000065C C229                 895  	add r2, r5
+0000065E 85170100             896  	ld.bu 0x00000000[r5], r2
+00000662 EC12                 897  	mulh 0x0000000C, r2
+00000664 402E0000             898  	movhi HIGHW1(#_DcmPbCfgPtr), r0, r5
+00000668 252F0100             899  	ld.w LOWW(#_DcmPbCfgPtr)[r5], r5
+0000066C 25570100             900  	ld.w 0x00000000[r5], r10
+00000670 2A570500             901  	ld.w 0x00000004[r10], r10
+00000674 C251                 902  	add r2, r10
+00000676                      903  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 603
+00000676 25170900             904  	ld.w 0x00000008[r5], r2
+0000067A 22175100             905  	ld.w 0x00000050[r2], r2
+0000067E                      906  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 607
+0000067E 272F0500             907  	ld.w 0x00000004[r7], r5
+00000682 852F0100             908  	ld.bu 0x00000000[r5], r5
+00000686 E52E1800             909  	mulhi 0x00000018, r5, r5
+0000068A C511                 910  	add r5, r2
+0000068C 22A70D00             911  	ld.w 0x0000000C[r2], r20
+00000690                      912  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 608
+00000690 60A2                 913  	cmp 0x00000000, r20
+00000692                      914  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 599
+00000692 2A170900             915  	ld.w 0x00000008[r10], r2
+00000696 08A8                 916  	mov r8, r21
+00000698 07B0                 917  	mov r7, r22
+0000069A 0628                 918  	mov r6, r5
+0000069C                      919  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 608
+0000069C 8A05                 920  	bnz9 .BB.LABEL.6_2
+0000069E                      921  .BB.LABEL.6_1:	; if_then_bb
+0000069E                      922  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 0
+0000069E 20361200             923  	movea 0x00000012, r0, r6
+000006A2                      924  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 610
+000006A2 49370000             925  	st.b r6, 0x00000000[r9]
+000006A6 0132                 926  	mov 0x00000001, r6
+000006A8                      927  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 611
+000006A8 55370000             928  	st.b r6, 0x00000000[r21]
+000006AC                      929  .BB.LABEL.6_2:	; if_break_bb
+000006AC                      930  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 614
+000006AC 95370100             931  	ld.bu 0x00000000[r21], r6
+000006B0 6032                 932  	cmp 0x00000000, r6
+000006B2 8205                 933  	bz9 .BB.LABEL.6_4
+000006B4                      934  .BB.LABEL.6_3:	; if_break_bb.if_break_bb203_crit_edge
+000006B4                      935  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 0
+000006B4 00BA                 936  	mov 0x00000000, r23
+000006B6 1738                 937  	mov r23, r7
+000006B8 8505                 938  	br9 .BB.LABEL.6_23
+000006BA                      939  .BB.LABEL.6_4:	; if_then_bb61
+000006BA                      940  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 616
+000006BA 34BF1100             941  	ld.w 0x00000010[r20], r23
+000006BE 60BA                 942  	cmp 0x00000000, r23
+000006C0 8A05                 943  	bnz9 .BB.LABEL.6_6
+000006C2                      944  .BB.LABEL.6_5:	; if_then_bb61.if_break_bb99_crit_edge
+000006C2                      945  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 0
+000006C2 003A                 946  	mov 0x00000000, r7
+000006C4 8505                 947  	br9 .BB.LABEL.6_9
+000006C6                      948  .BB.LABEL.6_6:	; if_then_bb68
+000006C6                      949  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 619
+000006C6 97370100             950  	ld.bu 0x00000000[r23], r6
+000006CA 0042                 951  	mov 0x00000000, r8
+000006CC 0838                 952  	mov r8, r7
+000006CE 8505                 953  	br9 .BB.LABEL.6_8
+000006D0                      954  .BB.LABEL.6_7:	; bb
+000006D0                      955  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 621
+000006D0 C856FF00             956  	andi 0x000000FF, r8, r10
+000006D4 C452                 957  	shl 0x00000004, r10
+000006D6 375F0500             958  	ld.w 0x00000004[r23], r11
+000006DA CA59                 959  	add r10, r11
+000006DC                      960  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 623
+000006DC EB570500             961  	ld.hu 0x00000004[r11], r10
+000006E0 CA39                 962  	add r10, r7
+000006E2 4142                 963  	add 0x00000001, r8
+000006E4                      964  .BB.LABEL.6_8:	; bb90
+000006E4                      965  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 619
+000006E4 C856FF00             966  	andi 0x000000FF, r8, r10
+000006E8 E651                 967  	cmp r6, r10
+000006EA 8105                 968  	bl9 .BB.LABEL.6_7
+000006EC                      969  .BB.LABEL.6_9:	; if_break_bb99
+000006EC                      970  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 630
+000006EC 34371500             971  	ld.w 0x00000014[r20], r6
+000006F0 6032                 972  	cmp 0x00000000, r6
+000006F2 8A05                 973  	bnz9 .BB.LABEL.6_11
+000006F4                      974  .BB.LABEL.6_10:	; if_break_bb99.if_break_bb139_crit_edge
+000006F4                      975  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 0
+000006F4 00BA                 976  	mov 0x00000000, r23
+000006F6 8505                 977  	br9 .BB.LABEL.6_14
+000006F8                      978  .BB.LABEL.6_11:	; if_then_bb106
+000006F8                      979  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 633
+000006F8 86470100             980  	ld.bu 0x00000000[r6], r8
+000006FC 0052                 981  	mov 0x00000000, r10
+000006FE 0AB8                 982  	mov r10, r23
+00000700 8505                 983  	br9 .BB.LABEL.6_13
+00000702                      984  .BB.LABEL.6_12:	; bb112
+00000702                      985  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 635
+00000702 CA5EFF00             986  	andi 0x000000FF, r10, r11
+00000706 C45A                 987  	shl 0x00000004, r11
+00000708 26670500             988  	ld.w 0x00000004[r6], r12
+0000070C CB61                 989  	add r11, r12
+0000070E                      990  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 637
+0000070E EC5F0500             991  	ld.hu 0x00000004[r12], r11
+00000712 CBB9                 992  	add r11, r23
+00000714 4152                 993  	add 0x00000001, r10
+00000716                      994  .BB.LABEL.6_13:	; bb129
+00000716                      995  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 633
+00000716 CA5EFF00             996  	andi 0x000000FF, r10, r11
+0000071A E859                 997  	cmp r8, r11
+0000071C 8105                 998  	bl9 .BB.LABEL.6_12
+0000071E                      999  .BB.LABEL.6_14:	; if_break_bb139
+0000071E                     1000  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 644
+0000071E 34371100            1001  	ld.w 0x00000010[r20], r6
+00000722 6032                1002  	cmp 0x00000000, r6
+00000724 8205                1003  	bz9 .BB.LABEL.6_17
+00000726                     1004  .BB.LABEL.6_15:	; bb145
+00000726                     1005  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 0
+00000726 86470100            1006  	ld.bu 0x00000000[r6], r8
+0000072A C442                1007  	shl 0x00000004, r8
+0000072C 26370500            1008  	ld.w 0x00000004[r6], r6
+00000730 C641                1009  	add r6, r8
+00000732 2837F9FF            1010  	ld.w 0xFFFFFFF8[r8], r6
+00000736 6E32                1011  	cmp 0x0000000E, r6
+00000738 8A05                1012  	bnz9 .BB.LABEL.6_17
+0000073A                     1013  .BB.LABEL.6_16:	; bb145.bb165_crit_edge
+0000073A 0032                1014  	mov 0x00000000, r6
+0000073C 8505                1015  	br9 .BB.LABEL.6_18
+0000073E                     1016  .BB.LABEL.6_17:	; bb164
+0000073E 0132                1017  	mov 0x00000001, r6
+00000740                     1018  .BB.LABEL.6_18:	; bb165
+00000740 0540                1019  	mov r5, r8
+00000742 C642                1020  	shl 0x00000006, r8
+00000744                     1021  	mov #_Dcm_MsgCtrl, r10
+00000744 2A0600000000            -- mov         0x0,r10
+0000074A C851                1022  	add r8, r10
+0000074C 2A471100            1023  	ld.w 0x00000010[r10], r8
+00000750 07560400            1024  	addi 0x00000004, r7, r10
+00000754 6032                1025  	cmp 0x00000000, r6
+00000756 8A05                1026  	bnz9 .BB.LABEL.6_21
+00000758                     1027  .BB.LABEL.6_19:	; if_then_bb170
+00000758                     1028  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 651
+00000758 E851                1029  	cmp r8, r10
+0000075A 8305                1030  	bnh9 .BB.LABEL.6_23
+0000075C                     1031  .BB.LABEL.6_20:	; if_then_bb182
+0000075C                     1032  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 0
+0000075C 20461300            1033  	movea 0x00000013, r0, r8
+00000760                     1034  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 654
+00000760 49470000            1035  	st.b r8, 0x00000000[r9]
+00000764 0142                1036  	mov 0x00000001, r8
+00000766                     1037  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 655
+00000766 55470000            1038  	st.b r8, 0x00000000[r21]
+0000076A 8505                1039  	br9 .BB.LABEL.6_23
+0000076C                     1040  .BB.LABEL.6_21:	; if_else_bb186
+0000076C                     1041  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 660
+0000076C E851                1042  	cmp r8, r10
+0000076E 8205                1043  	bz9 .BB.LABEL.6_23
+00000770                     1044  .BB.LABEL.6_22:	; if_then_bb198
+00000770                     1045  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 0
+00000770 20361300            1046  	movea 0x00000013, r0, r6
+00000774                     1047  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 663
+00000774 49370000            1048  	st.b r6, 0x00000000[r9]
+00000778 0132                1049  	mov 0x00000001, r6
+0000077A                     1050  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 664
+0000077A 55370000            1051  	st.b r6, 0x00000000[r21]
+0000077E                     1052  .BB.LABEL.6_23:	; if_break_bb203
+0000077E                     1053  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 669
+0000077E 95370100            1054  	ld.bu 0x00000000[r21], r6
+00000782 6032                1055  	cmp 0x00000000, r6
+00000784 8A05                1056  	bnz9 .BB.LABEL.6_26
+00000786                     1057  .BB.LABEL.6_24:	; if_then_bb210
+00000786                     1058  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 671
+00000786 34570100            1059  	ld.w 0x00000000[r20], r10
+0000078A                     1060  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 672
+0000078A 6052                1061  	cmp 0x00000000, r10
+0000078C 8A05                1062  	bnz9 .BB.LABEL.6_26
+0000078E                     1063  .BB.LABEL.6_25:	; if_then_bb218
+0000078E                     1064  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 0
+0000078E 20363100            1065  	movea 0x00000031, r0, r6
+00000792                     1066  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 674
+00000792 49370000            1067  	st.b r6, 0x00000000[r9]
+00000796 0132                1068  	mov 0x00000001, r6
+00000798                     1069  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 675
+00000798 55370000            1070  	st.b r6, 0x00000000[r21]
+0000079C                     1071  .BB.LABEL.6_26:	; if_break_bb222
+0000079C                     1072  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 678
+0000079C 95370100            1073  	ld.bu 0x00000000[r21], r6
+000007A0 6032                1074  	cmp 0x00000000, r6
+000007A2 8A05                1075  	bnz9 .BB.LABEL.6_29
+000007A4                     1076  .BB.LABEL.6_27:	; bb228
+000007A4                     1077  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 0
+000007A4 36370500            1078  	ld.w 0x00000004[r22], r6
+000007A8 86370100            1079  	ld.bu 0x00000000[r6], r6
+000007AC C232                1080  	shl 0x00000002, r6
+000007AE                     1081  	mov #_Dcm_RoutineControlState, r8
+000007AE 280600000000            -- mov         0x0,r8
+000007B4 C641                1082  	add r6, r8
+000007B6 28370100            1083  	ld.w 0x00000000[r8], r6
+000007BA 6032                1084  	cmp 0x00000000, r6
+000007BC 8A05                1085  	bnz9 .BB.LABEL.6_29
+000007BE                     1086  .BB.LABEL.6_28:	; if_then_bb246
+000007BE 20362400            1087  	movea 0x00000024, r0, r6
+000007C2                     1088  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 681
+000007C2 49370000            1089  	st.b r6, 0x00000000[r9]
+000007C6 0132                1090  	mov 0x00000001, r6
+000007C8                     1091  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 682
+000007C8 55370000            1092  	st.b r6, 0x00000000[r21]
+000007CC                     1093  .BB.LABEL.6_29:	; if_break_bb249
+000007CC                     1094  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 684
+000007CC 95370100            1095  	ld.bu 0x00000000[r21], r6
+000007D0 6032                1096  	cmp 0x00000000, r6
+000007D2 8A05                1097  	bnz9 .BB.LABEL.6_42
+000007D4                     1098  .BB.LABEL.6_30:	; if_then_bb256
+000007D4                     1099  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 687
+000007D4 603A                1100  	cmp 0x00000000, r7
+000007D6 8A05                1101  	bnz9 .BB.LABEL.6_32
+000007D8                     1102  .BB.LABEL.6_31:	; if_then_bb256.if_break_bb269_crit_edge
+000007D8                     1103  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 0
+000007D8 0032                1104  	mov 0x00000000, r6
+000007DA 8505                1105  	br9 .BB.LABEL.6_33
+000007DC                     1106  .BB.LABEL.6_32:	; if_then_bb261
+000007DC                     1107  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 689
+000007DC 0530                1108  	mov r5, r6
+000007DE C632                1109  	shl 0x00000006, r6
+000007E0                     1110  	mov #_Dcm_MsgCtrl, r8
+000007E0 280600000000            -- mov         0x0,r8
+000007E6 C641                1111  	add r6, r8
+000007E8 28370D00            1112  	ld.w 0x0000000C[r8], r6
+000007EC 4432                1113  	add 0x00000004, r6
+000007EE                     1114  .BB.LABEL.6_33:	; if_break_bb269
+000007EE                     1115  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 692
+000007EE 60BA                1116  	cmp 0x00000000, r23
+000007F0 8A05                1117  	bnz9 .BB.LABEL.6_35
+000007F2                     1118  .BB.LABEL.6_34:	; if_break_bb269.if_break_bb278_crit_edge
+000007F2                     1119  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 0
+000007F2 0012                1120  	mov 0x00000000, r2
+000007F4 8505                1121  	br9 .BB.LABEL.6_36
+000007F6                     1122  .BB.LABEL.6_35:	; if_then_bb274
+000007F6                     1123  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 694
+000007F6                     1124  	mov #_Dcm_Channel, r8
+000007F6 280600000000            -- mov         0x0,r8
+000007FC C811                1125  	add r8, r2
+000007FE 4412                1126  	add 0x00000004, r2
+00000800                     1127  .BB.LABEL.6_36:	; if_break_bb278
+00000800                     1128  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 696
+00000800 34471100            1129  	ld.w 0x00000010[r20], r8
+00000804 6042                1130  	cmp 0x00000000, r8
+00000806 8205                1131  	bz9 .BB.LABEL.6_39
+00000808                     1132  .BB.LABEL.6_37:	; bb284
+00000808                     1133  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 0
+00000808 885F0100            1134  	ld.bu 0x00000000[r8], r11
+0000080C C45A                1135  	shl 0x00000004, r11
+0000080E 28470500            1136  	ld.w 0x00000004[r8], r8
+00000812 C859                1137  	add r8, r11
+00000814 2B47F9FF            1138  	ld.w 0xFFFFFFF8[r11], r8
+00000818 6E42                1139  	cmp 0x0000000E, r8
+0000081A 8A05                1140  	bnz9 .BB.LABEL.6_39
+0000081C                     1141  .BB.LABEL.6_38:	; if_then_bb310
+0000081C                     1142  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 703
+0000081C 5F3A                1143  	add 0xFFFFFFFF, r7
+0000081E                     1144  .BB.LABEL.6_39:	; if_break_bb313
+0000081E                     1145  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 706
+0000081E C62A                1146  	shl 0x00000006, r5
+00000820                     1147  	mov #_Dcm_MsgCtrl, r8
+00000820 280600000000            -- mov         0x0,r8
+00000826 C541                1148  	add r5, r8
+00000828 282F1100            1149  	ld.w 0x00000010[r8], r5
+0000082C A729                1150  	sub r7, r5
+0000082E 5C2A                1151  	add 0xFFFFFFFC, r5
+00000830 762F0C00            1152  	st.h r5, 0x0000000C[r22]
+00000834                     1153  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 708
+00000834 B63F0100            1154  	ld.bu 0x00000001[r22], r7
+00000838 634F0100            1155  	st.w r9, 0x00000000[r3]
+0000083C                     1156  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 706
+0000083C 164E0C00            1157  	addi 0x0000000C, r22, r9
+00000840                     1158  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 708
+00000840 0240                1159  	mov r2, r8
+00000842 EAC760F9            1160  	jarl [r10], r31
+00000846 55570000            1161  	st.b r10, 0x00000000[r21]
+0000084A                     1162  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 714
+0000084A 34171500            1163  	ld.w 0x00000014[r20], r2
+0000084E 6012                1164  	cmp 0x00000000, r2
+00000850 8205                1165  	bz9 .BB.LABEL.6_42
+00000852                     1166  .BB.LABEL.6_40:	; bb342
+00000852                     1167  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 0
+00000852 822F0100            1168  	ld.bu 0x00000000[r2], r5
+00000856 C42A                1169  	shl 0x00000004, r5
+00000858 22170500            1170  	ld.w 0x00000004[r2], r2
+0000085C C229                1171  	add r2, r5
+0000085E 2517F9FF            1172  	ld.w 0xFFFFFFF8[r5], r2
+00000862 6E12                1173  	cmp 0x0000000E, r2
+00000864 8A05                1174  	bnz9 .BB.LABEL.6_42
+00000866                     1175  .BB.LABEL.6_41:	; if_then_bb368
+00000866                     1176  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 722
+00000866 F6170D00            1177  	ld.hu 0x0000000C[r22], r2
+0000086A                     1178  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 721
+0000086A C2B9                1179  	add r2, r23
+0000086C                     1180  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 722
+0000086C 1756FFFF            1181  	addi 0xFFFFFFFF, r23, r10
+00000870 42063F0F            1182  	dispose 0x00000004, 0x00000079, [r31]
+00000874                     1183  .BB.LABEL.6_42:	; if_break_bb378
+00000874                     1184  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 726
+00000874 1750                1185  	mov r23, r10
+00000876 42063F0F            1186  	dispose 0x00000004, 0x00000079, [r31]
+0000087A                     1187  _Dcm_RCConditonCheck.1:
+0000087A                     1188  	.stack _Dcm_RCConditonCheck.1 = 0
+0000087A                     1189  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 1121
+0000087A E6161C00            1190  	mulhi 0x0000001C, r6, r2
+0000087E                     1191  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 1131
+0000087E                     1192  	mov #_Dcm_ProtocolCtrl, r5
+0000087E 250600000000            -- mov         0x0,tp
+00000884 C229                1193  	add r2, r5
+00000886 85170300            1194  	ld.bu 0x00000002[r5], r2
+0000088A                     1195  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 1139
+0000088A C612                1196  	shl 0x00000006, r2
+0000088C                     1197  	mov #_Dcm_MsgCtrl, r5
+0000088C 250600000000            -- mov         0x0,tp
+00000892 C229                1198  	add r2, r5
+00000894 25171100            1199  	ld.w 0x00000010[r5], r2
+00000898                     1200  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 1142
+00000898 6412                1201  	cmp 0x00000004, r2
+0000089A                     1202  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 1140
+0000089A 25170D00            1203  	ld.w 0x0000000C[r5], r2
+0000089E                     1204  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 1137
+0000089E 402E0000            1205  	movhi HIGHW1(#_DcmPbCfgPtr), r0, r5
+000008A2 252F0100            1206  	ld.w LOWW(#_DcmPbCfgPtr)[r5], r5
+000008A6 252F0900            1207  	ld.w 0x00000008[r5], r5
+000008AA                     1208  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 1138
+000008AA 25375100            1209  	ld.w 0x00000050[r5], r6
+000008AE                     1210  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 1142
+000008AE 8105                1211  	bl9 .BB.LABEL.7_2
+000008B0                     1212  .BB.LABEL.7_1:	; entry.if_break_bb_crit_edge
+000008B0                     1213  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 0
+000008B0 0052                1214  	mov 0x00000000, r10
+000008B2 8505                1215  	br9 .BB.LABEL.7_3
+000008B4                     1216  .BB.LABEL.7_2:	; if_then_bb
+000008B4 204E1300            1217  	movea 0x00000013, r0, r9
+000008B8                     1218  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 1145
+000008B8 484F0000            1219  	st.b r9, 0x00000000[r8]
+000008BC 0152                1220  	mov 0x00000001, r10
+000008BE                     1221  .BB.LABEL.7_3:	; if_break_bb
+000008BE                     1222  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 1157
+000008BE 6052                1223  	cmp 0x00000000, r10
+000008C0 8A05                1224  	bnz9 .BB.LABEL.7_13
+000008C2                     1225  .BB.LABEL.7_4:	; if_then_bb46
+000008C2                     1226  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 1160
+000008C2 024F0200            1227  	ld.b 0x00000002[r2], r9
+000008C6 C84A                1228  	shl 0x00000008, r9
+000008C8 A2170300            1229  	ld.bu 0x00000003[r2], r2
+000008CC 0249                1230  	or r2, r9
+000008CE 0012                1231  	mov 0x00000000, r2
+000008D0 0258                1232  	mov r2, r11
+000008D2 8505                1233  	br9 .BB.LABEL.7_9
+000008D4                     1234  .BB.LABEL.7_5:	; bb
+000008D4                     1235  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 1163
+000008D4 CB66FF00            1236  	andi 0x000000FF, r11, r12
+000008D8 F8674002            1237  	mul 0x00000018, r12, r0
+000008DC C661                1238  	add r6, r12
+000008DE EC670100            1239  	ld.hu 0x00000000[r12], r12
+000008E2 C96EFFFF            1240  	andi 0x0000FFFF, r9, r13
+000008E6 EC69                1241  	cmp r12, r13
+000008E8 8A05                1242  	bnz9 .BB.LABEL.7_8
+000008EA                     1243  .BB.LABEL.7_6:	; bb73
+000008EA                     1244  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 0
+000008EA CB66FF00            1245  	andi 0x000000FF, r11, r12
+000008EE F8674002            1246  	mul 0x00000018, r12, r0
+000008F2 C661                1247  	add r6, r12
+000008F4 8C670500            1248  	ld.bu 0x00000004[r12], r12
+000008F8 6162                1249  	cmp 0x00000001, r12
+000008FA 8A05                1250  	bnz9 .BB.LABEL.7_8
+000008FC                     1251  .BB.LABEL.7_7:	; if_then_bb90
+000008FC                     1252  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 1166
+000008FC 27170500            1253  	ld.w 0x00000004[r7], r2
+00000900 425F0000            1254  	st.b r11, 0x00000000[r2]
+00000904 0112                1255  	mov 0x00000001, r2
+00000906                     1256  .BB.LABEL.7_8:	; if_break_bb95
+00000906                     1257  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 0
+00000906 415A                1258  	add 0x00000001, r11
+00000908                     1259  .BB.LABEL.7_9:	; bb98
+00000908                     1260  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 1161
+00000908 CB66FF00            1261  	andi 0x000000FF, r11, r12
+0000090C 856F4D00            1262  	ld.bu 0x0000004C[r5], r13
+00000910 ED61                1263  	cmp r13, r12
+00000912 8905                1264  	bnc9 .BB.LABEL.7_11
+00000914                     1265  .BB.LABEL.7_10:	; bb98
+00000914                     1266  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 0
+00000914 C206FF00            1267  	andi 0x000000FF, r2, r0
+00000918 8205                1268  	bz9 .BB.LABEL.7_5
+0000091A                     1269  .BB.LABEL.7_11:	; bb120
+0000091A                     1270  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 1180
+0000091A C206FF00            1271  	andi 0x000000FF, r2, r0
+0000091E 8A05                1272  	bnz9 .BB.LABEL.7_13
+00000920                     1273  .BB.LABEL.7_12:	; if_then_bb126
+00000920                     1274  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 0
+00000920 20163100            1275  	movea 0x00000031, r0, r2
+00000924                     1276  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 1183
+00000924 48170000            1277  	st.b r2, 0x00000000[r8]
+00000928 0152                1278  	mov 0x00000001, r10
+0000092A                     1279  .BB.LABEL.7_13:	; if_break_bb129
+0000092A                     1280  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 1190
+0000092A 7F00                1281  	jmp [r31]
+0000092C                     1282  _Dcm_UDS0x31:
+0000092C                     1283  	.stack _Dcm_UDS0x31 = 64
+0000092C                     1284  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 1206
+0000092C 8C07A1FF            1285  	prepare 0x000007FD, 0x00000018
+00000930 07A0                1286  	mov r7, r20
+00000932 08A8                1287  	mov r8, r21
+00000934                     1288  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 1216
+00000934 63071500            1289  	st.w r0, 0x00000014[r3]
+00000938                     1290  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 1226
+00000938 F4161C00            1291  	mulhi 0x0000001C, r20, r2
+0000093C                     1292  	mov #_Dcm_ProtocolCtrl, r5
+0000093C 250600000000            -- mov         0x0,tp
+00000942 C229                1293  	add r2, r5
+00000944                     1294  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 1227
+00000944 85B70300            1295  	ld.bu 0x00000002[r5], r22
+00000948                     1296  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 1229
+00000948 1610                1297  	mov r22, r2
+0000094A C612                1298  	shl 0x00000006, r2
+0000094C                     1299  	mov #_Dcm_MsgCtrl, r5
+0000094C 250600000000            -- mov         0x0,tp
+00000952 C229                1300  	add r2, r5
+00000954                     1301  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 1249
+00000954 A5BF0100            1302  	ld.bu 0x00000001[r5], r23
+00000958                     1303  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 1230
+00000958 A5170700            1304  	ld.bu 0x00000007[r5], r2
+0000095C E2161400            1305  	mulhi 0x00000014, r2, r2
+00000960                     1306  	mov #_Dcm_ChannelCtrl, r5
+00000960 250600000000            -- mov         0x0,tp
+00000966 C229                1307  	add r2, r5
+00000968                     1308  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 1231
+00000968 85C70100            1309  	ld.bu 0x00000000[r5], r24
+0000096C                     1310  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 1232
+0000096C F8160C00            1311  	mulhi 0x0000000C, r24, r2
+00000970                     1312  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 1231
+00000970 402E0000            1313  	movhi HIGHW1(#_DcmPbCfgPtr), r0, r5
+00000974 252F0100            1314  	ld.w LOWW(#_DcmPbCfgPtr)[r5], r5
+00000978 252F0100            1315  	ld.w 0x00000000[r5], r5
+0000097C 25CF0500            1316  	ld.w 0x00000004[r5], r25
+00000980                     1317  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 1232
+00000980 D911                1318  	add r25, r2
+00000982 22D70900            1319  	ld.w 0x00000008[r2], r26
+00000986                     1320  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 1235
+00000986 43370100            1321  	st.b r6, 0x00000001[r3]
+0000098A 23161300            1322  	movea 0x00000013, r3, r2
+0000098E                     1323  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 1236
+0000098E 63170500            1324  	st.w r2, 0x00000004[r3]
+00000992 23161400            1325  	movea 0x00000014, r3, r2
+00000996                     1326  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 1237
+00000996 63170900            1327  	st.w r2, 0x00000008[r3]
+0000099A 0338                1328  	mov r3, r7
+0000099C                     1329  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 1239
+0000099C 1430                1330  	mov r20, r6
+0000099E 80FF0000            1331  	jarl _Dcm_RCConditonCheck.1, r31
+000009A2 43571200            1332  	st.b r10, 0x00000012[r3]
+000009A6                     1333  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 1249
+000009A6 6052                1334  	cmp 0x00000000, r10
+000009A8 8205                1335  	bz9 .BB.LABEL.8_2
+000009AA                     1336  .BB.LABEL.8_1:	; entry.if_break_bb142_crit_edge
+000009AA                     1337  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 0
+000009AA 00DA                1338  	mov 0x00000000, r27
+000009AC 8505                1339  	br9 .BB.LABEL.8_15
+000009AE                     1340  .BB.LABEL.8_2:	; if_then_bb
+000009AE                     1341  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 1252
+000009AE 16D8                1342  	mov r22, r27
+000009B0 C6DA                1343  	shl 0x00000006, r27
+000009B2                     1344  	mov #_Dcm_MsgCtrl, r2
+000009B2 220600000000            -- mov         0x0,hp
+000009B8 DB11                1345  	add r27, r2
+000009BA 22DF0D00            1346  	ld.w 0x0000000C[r2], r27
+000009BE BBE70300            1347  	ld.bu 0x00000003[r27], r28
+000009C2 1BDF0200            1348  	ld.b 0x00000002[r27], r27
+000009C6                     1349  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 1258
+000009C6 A33F1300            1350  	ld.bu 0x00000013[r3], r7
+000009CA 1430                1351  	mov r20, r6
+000009CC 1540                1352  	mov r21, r8
+000009CE 80FF0000            1353  	jarl _Dcm_UdsRCSesAndSecCheck.1, r31
+000009D2 43571200            1354  	st.b r10, 0x00000012[r3]
+000009D6                     1355  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 1252
+000009D6 C8DA                1356  	shl 0x00000008, r27
+000009D8 1CD9                1357  	or r28, r27
+000009DA                     1358  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 1259
+000009DA 61BA                1359  	cmp 0x00000001, r23
+000009DC 8205                1360  	bz9 .BB.LABEL.8_7
+000009DE                     1361  .BB.LABEL.8_3:	; if_then_bb
+000009DE                     1362  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 0
+000009DE 6052                1363  	cmp 0x00000000, r10
+000009E0 8A05                1364  	bnz9 .BB.LABEL.8_7
+000009E2                     1365  .BB.LABEL.8_4:	; if_then_bb
+000009E2 62BA                1366  	cmp 0x00000002, r23
+000009E4 8205                1367  	bz9 .BB.LABEL.8_7
+000009E6                     1368  .BB.LABEL.8_5:	; if_then_bb
+000009E6 63BA                1369  	cmp 0x00000003, r23
+000009E8 8205                1370  	bz9 .BB.LABEL.8_7
+000009EA                     1371  .BB.LABEL.8_6:	; if_then_bb117
+000009EA 20161200            1372  	movea 0x00000012, r0, r2
+000009EE                     1373  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 1266
+000009EE 55170000            1374  	st.b r2, 0x00000000[r21]
+000009F2 0112                1375  	mov 0x00000001, r2
+000009F4                     1376  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 1267
+000009F4 43171200            1377  	st.b r2, 0x00000012[r3]
+000009F8                     1378  .BB.LABEL.8_7:	; if_break_bb119
+000009F8                     1379  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 1271
+000009F8 83171300            1380  	ld.bu 0x00000012[r3], r2
+000009FC 6012                1381  	cmp 0x00000000, r2
+000009FE 8A05                1382  	bnz9 .BB.LABEL.8_15
+00000A00                     1383  .BB.LABEL.8_8:	; if_then_bb125
+00000A00                     1384  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 1273
+00000A00 63BA                1385  	cmp 0x00000003, r23
+00000A02 8205                1386  	bz9 .BB.LABEL.8_13
+00000A04                     1387  .BB.LABEL.8_9:	; if_then_bb125
+00000A04                     1388  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 0
+00000A04 62BA                1389  	cmp 0x00000002, r23
+00000A06 8205                1390  	bz9 .BB.LABEL.8_12
+00000A08                     1391  .BB.LABEL.8_10:	; if_then_bb125
+00000A08 61BA                1392  	cmp 0x00000001, r23
+00000A0A 8A05                1393  	bnz9 .BB.LABEL.8_14
+00000A0C                     1394  .BB.LABEL.8_11:	; switch_clause_bb
+00000A0C 23461200            1395  	movea 0x00000012, r3, r8
+00000A10 0338                1396  	mov r3, r7
+00000A12                     1397  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 1278
+00000A12 1630                1398  	mov r22, r6
+00000A14 1548                1399  	mov r21, r9
+00000A16 80FF0000            1400  	jarl _Dcm_UdsRCStartRoutine.1, r31
+00000A1A 63571500            1401  	st.w r10, 0x00000014[r3]
+00000A1E 8505                1402  	br9 .BB.LABEL.8_15
+00000A20                     1403  .BB.LABEL.8_12:	; switch_clause_bb131
+00000A20                     1404  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 0
+00000A20 23461200            1405  	movea 0x00000012, r3, r8
+00000A24 0338                1406  	mov r3, r7
+00000A26                     1407  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 1284
+00000A26 1630                1408  	mov r22, r6
+00000A28 1548                1409  	mov r21, r9
+00000A2A 80FF0000            1410  	jarl _Dcm_UdsRCStopRoutine.1, r31
+00000A2E 63571500            1411  	st.w r10, 0x00000014[r3]
+00000A32 8505                1412  	br9 .BB.LABEL.8_15
+00000A34                     1413  .BB.LABEL.8_13:	; switch_clause_bb135
+00000A34                     1414  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 0
+00000A34 23461200            1415  	movea 0x00000012, r3, r8
+00000A38 0338                1416  	mov r3, r7
+00000A3A                     1417  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 1290
+00000A3A 1630                1418  	mov r22, r6
+00000A3C 1548                1419  	mov r21, r9
+00000A3E 80FF0000            1420  	jarl _Dcm_UdsRCReqRoutineResult.1, r31
+00000A42 63571500            1421  	st.w r10, 0x00000014[r3]
+00000A46 8505                1422  	br9 .BB.LABEL.8_15
+00000A48                     1423  .BB.LABEL.8_14:	; switch_clause_bb139
+00000A48                     1424  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 0
+00000A48 20161200            1425  	movea 0x00000012, r0, r2
+00000A4C                     1426  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 1295
+00000A4C 55170000            1427  	st.b r2, 0x00000000[r21]
+00000A50 0112                1428  	mov 0x00000001, r2
+00000A52                     1429  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 1296
+00000A52 43171200            1430  	st.b r2, 0x00000012[r3]
+00000A56                     1431  .BB.LABEL.8_15:	; if_break_bb142
+00000A56                     1432  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 1305
+00000A56 83171300            1433  	ld.bu 0x00000012[r3], r2
+00000A5A 6012                1434  	cmp 0x00000000, r2
+00000A5C 8A05                1435  	bnz9 .BB.LABEL.8_18
+00000A5E                     1436  .BB.LABEL.8_16:	; bb147
+00000A5E                     1437  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 0
+00000A5E ECC2                1438  	mulh 0x0000000C, r24
+00000A60 D8C9                1439  	add r24, r25
+00000A62 39170500            1440  	ld.w 0x00000004[r25], r2
+00000A66 232F1500            1441  	ld.w 0x00000014[r3], r5
+00000A6A 442A                1442  	add 0x00000004, r5
+00000A6C E229                1443  	cmp r2, r5
+00000A6E 8305                1444  	bnh9 .BB.LABEL.8_18
+00000A70                     1445  .BB.LABEL.8_17:	; if_then_bb163
+00000A70 20161400            1446  	movea 0x00000014, r0, r2
+00000A74                     1447  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 1308
+00000A74 55170000            1448  	st.b r2, 0x00000000[r21]
+00000A78 0112                1449  	mov 0x00000001, r2
+00000A7A                     1450  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 1309
+00000A7A 43171200            1451  	st.b r2, 0x00000012[r3]
+00000A7E                     1452  .BB.LABEL.8_18:	; if_break_bb165
+00000A7E                     1453  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 1312
+00000A7E 83171300            1454  	ld.bu 0x00000012[r3], r2
+00000A82 6012                1455  	cmp 0x00000000, r2
+00000A84 8205                1456  	bz9 .BB.LABEL.8_22
+00000A86                     1457  .BB.LABEL.8_19:	; if_break_bb165
+00000A86                     1458  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 0
+00000A86 5F12                1459  	add 0xFFFFFFFF, r2
+00000A88 6012                1460  	cmp 0x00000000, r2
+00000A8A 8205                1461  	bz9 .BB.LABEL.8_24
+00000A8C                     1462  .BB.LABEL.8_20:	; if_break_bb165
+00000A8C 6912                1463  	cmp 0x00000009, r2
+00000A8E 8A05                1464  	bnz9 .BB.LABEL.8_23
+00000A90                     1465  .BB.LABEL.8_21:	; switch_clause_bb201
+00000A90                     1466  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 1327
+00000A90 C6B2                1467  	shl 0x00000006, r22
+00000A92                     1468  	mov #_Dcm_MsgCtrl, r20
+00000A92 340600000000            -- mov         0x0,r20
+00000A98 D6A1                1469  	add r22, r20
+00000A9A 0112                1470  	mov 0x00000001, r2
+00000A9C 54173D00            1471  	st.b r2, 0x0000003D[r20]
+00000AA0 8505                1472  	br9 .BB.LABEL.8_24
+00000AA2                     1473  .BB.LABEL.8_22:	; switch_clause_bb168
+00000AA2                     1474  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 1315
+00000AA2                     1475  	mov #_Dcm_Channel, r2
+00000AA2 220600000000            -- mov         0x0,hp
+00000AA8 C2D1                1476  	add r2, r26
+00000AAA 20167100            1477  	movea 0x00000071, r0, r2
+00000AAE 5A170000            1478  	st.b r2, 0x00000000[r26]
+00000AB2                     1479  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 1316
+00000AB2 5ABF0100            1480  	st.b r23, 0x00000001[r26]
+00000AB6                     1481  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 1317
+00000AB6 1B10                1482  	mov r27, r2
+00000AB8 8812                1483  	shr 0x00000008, r2
+00000ABA 5A170200            1484  	st.b r2, 0x00000002[r26]
+00000ABE                     1485  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 1318
+00000ABE 5ADF0300            1486  	st.b r27, 0x00000003[r26]
+00000AC2                     1487  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 1319
+00000AC2 C6B2                1488  	shl 0x00000006, r22
+00000AC4                     1489  	mov #_Dcm_MsgCtrl, r2
+00000AC4 220600000000            -- mov         0x0,hp
+00000ACA D611                1490  	add r22, r2
+00000ACC 23B71500            1491  	ld.w 0x00000014[r3], r22
+00000AD0 44B2                1492  	add 0x00000004, r22
+00000AD2 62B72100            1493  	st.w r22, 0x00000020[r2]
+00000AD6                     1494  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 1320
+00000AD6 23B71500            1495  	ld.w 0x00000014[r3], r22
+00000ADA 44B2                1496  	add 0x00000004, r22
+00000ADC 62B71900            1497  	st.w r22, 0x00000018[r2]
+00000AE0                     1498  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 1321
+00000AE0 62D71500            1499  	st.w r26, 0x00000014[r2]
+00000AE4                     1500  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 1322
+00000AE4 1430                1501  	mov r20, r6
+00000AE6 80FF0000            1502  	jarl _DsdInternal_ProcessingDone, r31
+00000AEA 8505                1503  	br9 .BB.LABEL.8_24
+00000AEC                     1504  .BB.LABEL.8_23:	; switch_clause_bb206
+00000AEC                     1505  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 0
+00000AEC 203E2200            1506  	movea 0x00000022, r0, r7
+00000AF0                     1507  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 1338
+00000AF0 1430                1508  	mov r20, r6
+00000AF2 80FF0000            1509  	jarl _DsdInternal_SetNrc.1, r31
+00000AF6                     1510  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 1339
+00000AF6 1430                1511  	mov r20, r6
+00000AF8 80FF0000            1512  	jarl _DsdInternal_ProcessingDone, r31
+00000AFC 0112                1513  	mov 0x00000001, r2
+00000AFE                     1514  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 1340
+00000AFE 43171200            1515  	st.b r2, 0x00000012[r3]
+00000B02                     1516  .BB.LABEL.8_24:	; switch_break_bb209
+00000B02                     1517  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Communication/Common/Dcm/UDS/Dcm_UDS0x31.c", 1345
+00000B02 83571300            1518  	ld.bu 0x00000012[r3], r10
+00000B06 4C06BFFF            1519  	dispose 0x00000018, 0x000007FD, [r31]
+
+Section List
+Attr     Size                Name
+
+TEXT         2826 (00000B0A) .text
+
+Command Line Parameter
+-Xcpu=g3kh -Xreg_mode=32 -Xep=callee -Xcharacter_set=none -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\diagnostic -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\parameter_store -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu\port -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu\uart -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu\iic -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\vehicle_data_to_mpu -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\power_manage -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\mcu_cpu_sync -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\remote_control -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\can_cycle_send -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\project_configure -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\sdk\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\commonLib\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\hal\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\icu\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Icu_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\vss -ID:\wk\sirun\project\dazhong\code\mcu_app\ASW\CDD_FVM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\EEIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanTSyn -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\StbM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CSM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\RSA -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\RandomGen\CTR_DRBG -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\MAC\CMAC -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\Hash\sha256 -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\dh -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\AES -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CryInterface -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\SecOC -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\NvM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\MemIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\Fee -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\WdgM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\WdgIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Wdg_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Gpt_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Fls_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\wdg\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\gpt\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\fls\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\IpduM -ID:\wk\sirun\project\dazhong\code\mcu_app\ASW\APP -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\BswM -ID:\wk\sirun\project\dazhong\code\mcu_app\ASW\BSW_Ext -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\Dcm -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanTp -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Dem -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Libraries\E2E -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Libraries\Crc -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\NmIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanNm -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config\RTE\Rte -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config\RTE\SchM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Libraries\IStd -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\EcuM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\ComM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanSM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\Com -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\PDUR -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\CommonInclude -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config\RH850F1K -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Extend\inc -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Kernel\inc -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Portable\Mcu -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Portable\Processor -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Adc_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Can_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Dio_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Mcu_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Port_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\adc\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\can\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\dio\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\general -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\mcu\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\port\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\CanGeneral\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\Det\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\MemIf\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\SchM\include -DRH850_F1KM_S1_2MB -Xprn_path=DefaultBuild -Xno_warning=50013 -oD:\wk\sirun\project\dazhong\code\mcu_app\Toolchain\CSPLUS_V81200\DefaultBuild\Dcm_UDS0x31.obj D:\wk\sirun\project\dazhong\code\mcu_app\Toolchain\CSPLUS_V81200\DefaultBuild\Dcm_UDS0x31.asm 
+

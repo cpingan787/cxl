@@ -66,6 +66,8 @@
 #endif
 #include "Det.h"
 #include "CanIf_Cbk.h"
+#include "canMsgToMpu.h"
+
 /*******************************************************************************
 **                       Version  Check                                       **
 *******************************************************************************/
@@ -1761,6 +1763,11 @@ CanIf_RxIndication(
                 else
 #endif /* STD_ON == CANIF_PRIVATE_DLC_CHECK */
                 {
+                    (void)SaveCanMsgToBuffer(
+                        0u,
+                        ((uint32_t)canId & 0x1FFFFFFFu),
+                        (uint8_t)PduInfoPtr->SduLength,
+                        PduInfoPtr->SduDataPtr);
                     CanIf_RxIndicationHandle(
                         rxPduIndex,
 #if (STD_ON == CANIF_META_DATA_SUPPORT)

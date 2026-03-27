@@ -115,7 +115,7 @@
  *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\Config\ECUC\test_Port_Port0_ecuc.arxml
  *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\modules\port\R422_PORT_F1x_BSWMDT.arxml
  *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\stubs\4.2.2\Dem\xml\Dem_Port.arxml
- * GENERATED ON:  27 Feb 2026 - 10:55:49
+ * GENERATED ON:  19 Mar 2026 - 17:19:40
  */
 
 #ifndef PORT_CFG_H
@@ -285,7 +285,8 @@
 /* Number of input ports configured */
 #define PORT_NUM_OF_INPUT_PORTS             0x01U
 
-
+/* Number of digital filters configured */
+#define PORT_NUM_OF_DNFA                    0x01U
 /* Protection command register 0 */
 #define PORT_PROTCMD0                       PROTCMD0
 
@@ -297,7 +298,7 @@
 
 
 /* Availability of DNFA noise elimination registers. */
-#define PORT_DNFA_REG_CONFIG                STD_OFF
+#define PORT_DNFA_REG_CONFIG                STD_ON
 
 /* Availability of FCLA noise elimination registers. */
 #define PORT_FCLA_REG_CONFIG                STD_OFF

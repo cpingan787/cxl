@@ -19,7 +19,7 @@
  * @file              : Os_Interrupt_Cfg.h
  * @license           : 
  * @licenseExpiryDate : 
- * @date              : 2026-03-03 20:34:16
+ * @date              : 2026-03-22 18:23:36
  * @customer          : iSoft
  * @description       : Configuration parameter of OS
  * @toolVersion       : 2.2.0.3
@@ -43,8 +43,8 @@
 /* ========================================== external function definitions ========================================= */
 
 /* ========================================== internal function definitions ========================================= */
-#define     CFG_ISR_MAX								(19U)
-#define     CFG_ISR2_MAX							(19U)
+#define     CFG_ISR_MAX								(28U)
+#define     CFG_ISR2_MAX							(28U)
 /* wether support interrupt nest */
 #define     CFG_INT_NEST_ENABLE             		TRUE
 /* highest ISR2 interrupt priority */
@@ -52,8 +52,8 @@
 
 
 /* Core0*/
-#define     CFG_ISR_MAX_CORE0						(19U)
-#define     CFG_ISR2_MAX_CORE0						(19U)
+#define     CFG_ISR_MAX_CORE0						(28U)
+#define     CFG_ISR2_MAX_CORE0						(28U)
 
 /* PRQA S 0722, 0724, 1271, 1434, 0723, 0784 ++ *//* VL_Os_0722, VL_Os_0724, VL_Os_1271, VL_Os_1434, VL_Os_0723, VL_Os_0784 */
 typedef enum
@@ -69,6 +69,15 @@ typedef enum
     CFG_ISR_TAUJ0I0_IRQ_ID,
     CFG_ISR_TAUD0I9_IRQ_ID,
     CFG_ISR_TAUB0I12_IRQ_ID,
+    CFG_ISR_TAUB0I8_IRQ_ID,
+    CFG_ISR_TAUB0I9_IRQ_ID,
+    CFG_ISR_P1_IRQ_ID,
+    CFG_ISR_P2_IRQ_ID,
+    CFG_ISR_P5_IRQ_ID,
+    CFG_ISR_P6_IRQ_ID,
+    CFG_ISR_P7_IRQ_ID,
+    CFG_ISR_P9_IRQ_ID,
+    CFG_ISR_P14_IRQ_ID,
     CFG_ISR_RLIN34TX0_IRQ_ID,
     CFG_ISR_RLIN34RX1_IRQ_ID,
     CFG_ISR_RLIN34ERR2_IRQ_ID,

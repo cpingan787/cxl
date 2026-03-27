@@ -47,7 +47,7 @@ CONST(EcuM_SleepModeCfgType, ECUM_CONST) EcuM_SleepModeCfgs[ECUM_MAX_SLEEP_MODE_
 {
     /*EcuMSleepMode*/
     {
-        FALSE,    /*sleepSuspend*/
+        TRUE,    /*sleepSuspend*/
         0xff,        /*mcuMode(sleep)*/
         2,    /*numberOfWakeSource*/
         &Ecum_WkSources_0[0],/*wkSrcIdx*/

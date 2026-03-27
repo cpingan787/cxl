@@ -30,6 +30,7 @@
 #include "Rte_Type.h"
 #include "BswM_Cfg.h"
 #include "BswM_Swc.h"
+#include "PowManager.h"
 /*******************************************************************************
  **                        Macro Definitions                                  **
 ******************************************************************************/
@@ -88,6 +89,7 @@ Std_ReturnType EcuM_GetCurrentTime(EcuM_TimeType* time);
 Std_ReturnType EcuM_GetWakeupTime(EcuM_TimeType* time);
 
 #define Rte_SwitchAck_EcuM_CurrentMode_currentMode() ((Std_ReturnType) 0)
+
 
 #endif
 

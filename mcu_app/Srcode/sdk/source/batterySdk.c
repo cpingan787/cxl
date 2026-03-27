@@ -5,12 +5,12 @@
 #include "powerManageSdk.h"
 #include "batterySdk.h"
 
-#if(0)
-static const uint32_t g_cellNumber                = 3;                   //备用电池单体个数
+
+static const uint32_t g_cellNumber                = 2;                   //备用电池单体个数
 static const uint32_t g_cellMaxVoltage            = 1340;                //单体电池最大电压单位：mv
 static const uint32_t g_cellMinVoltage            = 1240;                //单体电池最小电压单位：mv
 //static const uint32_t g_lowVoltageChargeTime      = 6*60*60*1000;        //检测到电压过低后备用电池放电时长，单位ms
-static const uint32_t g_middleVoltageChargeTime   = 6*60*60*1000;        //备用电池充电时长，单位ms
+static const uint32_t g_middleVoltageChargeTime   = 8*60*60*1000;        //备用电池充电时长，单位ms
 static const uint32_t g_temperatureRMap[]         = {                    //温度--电压对应值，单位°C
     173200,    //-40 单位：°C
     164200,    // -39
@@ -154,8 +154,9 @@ static const uint32_t g_temperatureRMap[]         = {                    //温�
     1018,      // 99
     992        // 100---992.40
 };
-#endif
-const static uint32_t g_FDKPercentTable[] = {3100,3340,3539,3617,3662,3695,3716,3733,3750,3765,3774,3787,3795,3798,3813,3821,3828,3837,3845,3853,3863,3873,3882,3892,3894,3914,3958,3986,4018,4062,4117,4200};
+
+// const static uint32_t g_FDKPercentTable[] = {3100,3340,3539,3617,3662,3695,3716,3733,3750,3765,3774,3787,3795,3798,3813,3821,3828,3837,3845,3853,3863,3873,3882,3892,3894,3914,3958,3986,4018,4062,4117,4200};
+const static uint32_t g_FDKPercentTable[] = {2133,2227,2359,2411,2441,2463,2477,2489,2500,2510,2516,2525,2530,2532,2542,2547,2552,2558,2563,2569,2575,2582,2588,2595,2596,2609,2639,2657,2679,2708,2745,2800};
 const static uint32_t g_XYSRPercentTable[] = {3100,3358,3401,3494,3533,3560,3586,3606,3624,3637,3650,3660,3670,3680,3688,3698,3706,3713,3721,3730,3738,3739,3746,3760,3761,3768,3769,3775,3779,3795,3801,3815,3824,3837,3854,3876,3910,3940,3990,4030,4100,4200};
     
 static int16_t g_sleepStateHandle = -1;                         //获取休眠状态handle
@@ -176,7 +177,7 @@ static uint8_t g_batteryConnectFlag = 1;                        //备用电池�
 static BatteryType_E g_batteryTpye = E_BATTERY_XYSR;            //备用电池电池型号
 //static uint8_t g_batteryVoltageAlarmFlag = 0;                   //备用电池电压异常警告标记  0：normal 1:低压警告 2：高压警告
 static uint8_t g_batteryTempAlarmFlag = 0;                      //备用电池温度异常警告标记  0：normal 1：低温警告 2；高温警告
-#if(0)
+
 /*************************************************
   Function:       BatterySdkAdConversion
   Description:    模块内部接口，将AD采集的电压数据转换为温感的电阻值
@@ -190,8 +191,8 @@ static void BatterySdkAdConversion(uint32_t ntcValue,uint32_t *resisterOut)
     int32_t refVoltage;
     uint32_t resisterPull;
     refVoltage = 3300;//3300mv
-    resisterPull = 20000;//20K
-    
+    resisterPull = 10000; // 20K
+
     if(ntcValue>=refVoltage)
     {
         ntcValue = refVoltage - 1;
@@ -212,6 +213,7 @@ static void BatterySdkAdConversion(uint32_t ntcValue,uint32_t *resisterOut)
 *************************************************/
 static int16_t ResisterToTemperature(uint32_t resisterIn,int32_t *tmpValue)
 {
+
   int32_t size;
   int32_t i;
   int32_t j;
@@ -259,7 +261,7 @@ static int16_t ResisterToTemperature(uint32_t resisterIn,int32_t *tmpValue)
     *tmpValue = (i*100)+((j-i)*100)*(g_temperatureRMap[i]-resisterIn)/(g_temperatureRMap[i]-g_temperatureRMap[j]);
     *tmpValue -= 40*100;//unit:0.01C
   }
-  
+
   return 0;
 }
 
@@ -297,7 +299,7 @@ static void BatterySdkTmpErrorProcess()
     {
         g_batteryTempAlarmFlag = 0;
     }
-    
+
     if(g_BatteryConfigure->batteryNoPlugInErrorFun != NULL)
     {
         g_BatteryConfigure->batteryNoPlugInErrorFun(lowFlag);
@@ -351,7 +353,6 @@ static void BatterySdkChargeStateTemperatureCheck(void)
         {
             g_batteryState = E_BatteryState_BatteryVoltageCheck;
         }
-        
     }
     else if(g_sleepState == 0)
     {
@@ -406,7 +407,7 @@ static void BatterySdkChargeStateVoltageCheck(void)
             {
                 g_batteryState = E_BatteryState_LowVoltageCharge;
             }
-            //开始6H计时 
+            //开始8H计时 
             TimerHalStartTime(g_batterySdkTimerHandle,g_middleVoltageChargeTime);
             //开始充电
             BatteryHalEnableCharge();
@@ -667,7 +668,7 @@ static void BatterySdkChargeStateManage()
 *************************************************/
 int16_t BatterySdkInit(const BatteryConfigure_t *pBatteryConfigure,uint16_t cycleTime,BatteryType_E batteryType)
 {
-    const char modulName[] = {'B','a','t','t','e','r','y','S','d','k'};
+    // const char modulName[] = {'B','a','t','t','e','r','y','S','d','k'};
     if(pBatteryConfigure != NULL)
     {
         g_BatteryConfigure = pBatteryConfigure;
@@ -677,13 +678,13 @@ int16_t BatterySdkInit(const BatteryConfigure_t *pBatteryConfigure,uint16_t cycl
         g_cycleTime = cycleTime;
     }
     g_batterySdkTimerHandle = TimerHalOpen();
-    g_sleepStateHandle = PowerManageSdkOpenHandle(modulName);
+    // g_sleepStateHandle = PowerManageSdkOpenHandle(modulName);
     g_batteryTpye = batteryType;
     
     g_mutexHandle = xSemaphoreCreateMutex();
     return 0;
 }
-#endif
+
 /*************************************************
   Function:       BatterySdkCycleProcess
   Description:    备用电池管理周期调用接口，该接口需要以一定周期进行循环调用
@@ -697,23 +698,23 @@ void BatterySdkCycleProcess(void)
     int16_t ret = -1;
     uint32_t tmpValue = 0;
     uint32_t volValue = 0;
-#if(0)  // TODO guanyuan
+
     //是否测试模式
     if(g_testModeFlag == 1)
     {
         //休眠状态设置为唤醒
         g_sleepState = 1;
     }
-    else
-    {
-        g_sleepState=PowerManageSdkGetSleepState(g_sleepStateHandle);
-        //是否休眠状态
-        if(g_sleepState == 0)
-        {
-            //获取休眠状态成功响应
-            PowerManageSdkSetSleepAck(g_sleepStateHandle);
-        }
-    }
+    // else // TODO guanyuan
+    // {
+    //     g_sleepState=PowerManageSdkGetSleepState(g_sleepStateHandle);
+    //     //是否休眠状态
+    //     if(g_sleepState == 0)
+    //     {
+    //         //获取休眠状态成功响应
+    //         PowerManageSdkSetSleepAck(g_sleepStateHandle);
+    //     }
+    // }
     if(g_getTempSuccessFlag==0 || g_adGetStateFlag==0)
     {
         //获取NTC电压
@@ -767,7 +768,6 @@ void BatterySdkCycleProcess(void)
         //备用电池充电状态管理
         BatterySdkChargeStateManage();
     }
-#endif
 }
 
 /*************************************************
@@ -792,7 +792,7 @@ int16_t BatterySdkGetVoltage(uint32_t *pVoltage)
     xSemaphoreGive(g_mutexHandle);
     return 0;
 }
-#if(0)
+
 /*************************************************
   Function:       BatterySdkGetTemperature
   Description:    获取备用电池温度接口
@@ -817,7 +817,7 @@ int16_t BatterySdkGetTemperature(int32_t *pTemperature)
     ResisterToTemperature(resister,pTemperature);
     return 0; 
 }
-
+#if(0)
 /*************************************************
   Function:       BatterySdkSetTestMode
   Description:    设置备用电池进入测试模式接口
@@ -940,7 +940,7 @@ int16_t BatterySdkTestModeDischargeStop(void)
     
     return -1;
 }
-
+#endif
 /*************************************************
   Function:       BatterySdkGetBatteyStatus
   Description:    获取备用电池的连接状态
@@ -954,7 +954,7 @@ uint8_t BatterySdkGetBatteyStatus(void)
 {
     return g_batteryConnectFlag;
 }
-#endif
+
 /*************************************************
   Function:       BatterySdkGetBatteySoc
   Description:    获取备用电池的电池电量接口
@@ -965,7 +965,7 @@ uint8_t BatterySdkGetBatteyStatus(void)
 *************************************************/
 uint32_t BatterySdkGetBatteySoc(void)
 {
-#if(0)  // TODO guanyuan
+
     uint32_t i = 0;
     uint32_t percentTableSize;
     const uint32_t *pTable = NULL; 
@@ -1002,10 +1002,10 @@ uint32_t BatterySdkGetBatteySoc(void)
 			return (i*section - (section * (uint32_t)(pTable[i] - voltage)) / 
 			(uint32_t)(pTable[i] - pTable[i-1]))/1000;
 	}
-#endif 
+
 	return 100;    
 }
-#if(0)
+
 /*************************************************
   Function:       BatterySdkGetBatteyVoltageAlarm
   Description:    获取备用电池的电量过低报警状态
@@ -1066,5 +1066,3 @@ uint32_t BatterySdkGetBatteyChargingDuration(void)
     }
     return 0;
 }
-#endif
-

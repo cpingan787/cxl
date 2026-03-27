@@ -1,0 +1,708 @@
+RH850 Family Assembler V2.07.00.03 Assemble Source List
+
+OFFSET   CODE                  NO  SOURCE STATEMENT
+
+00000000                        1  #CC-RH Compiler RH850 Assembler Source
+00000000                        2  #@	CC-RH Version : V2.07.00  [06 Dec 2024]
+00000000                        3  #@	Command : ..\..\Srcode\sdk\source\timeSyncSdk.c -oDefaultBuild\timeSyncSdk.obj -Xcpu=g3kh -Xno_warning=20188,20111 -g -g_line -I..\..\Srcode\app\diagnostic -I..\..\Srcode\app\parameter_store -I..\..\Cpu\port -I..\..\Cpu\uart -I..\..\Cpu\iic -I..\..\Srcode\app\vehicle_data_to_mpu -I..\..\Srcode\app\power_manage -I..\..\Srcode\app\mcu_cpu_sync -I..\..\Srcode\app\remote_control -I..\..\Srcode\app\can_cycle_send -I..\..\Srcode\app\project_configure -I..\..\Srcode\sdk\include -I..\..\Srcode\commonLib\include -I..\..\Srcode\hal\include -I..\..\Bsw\Mcal\icu\include -I..\..\Bsw\Config\MCAL_Config\Icu_OutPut\include -I..\..\Bsw\Crypto\CRYPTO\vss -I..\..\ASW\CDD_FVM -I..\..\Bsw\Memory\EEIf -I..\..\Bsw\Communication\CAN\CanTSyn -I..\..\Bsw\SystemServices\StbM -I..\..\Bsw\Crypto\CSM -I..\..\Bsw\Crypto\CRYPTO\RSA -I..\..\Bsw\Crypto\CRYPTO\RandomGen\CTR_DRBG -I..\..\Bsw\Crypto\CRYPTO\MAC\CMAC -I..\..\Bsw\Crypto\CRYPTO\Hash\sha256 -I..\..\Bsw\Crypto\CRYPTO\dh -I..\..\Bsw\Crypto\CRYPTO\AES -I..\..\Bsw\Crypto\CRYPTO -I..\..\Bsw\Crypto\CryInterface -I..\..\Bsw\Communication\Common\SecOC -I..\..\Bsw\Memory\NvM -I..\..\Bsw\Memory\MemIf -I..\..\Bsw\Memory\Fee -I..\..\Bsw\SystemServices\WdgM -I..\..\Bsw\SystemServices\WdgIf -I..\..\Bsw\Config\MCAL_Config\Wdg_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Gpt_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Fls_OutPut\include -I..\..\Bsw\Mcal\wdg\include -I..\..\Bsw\Mcal\gpt\include -I..\..\Bsw\Mcal\fls\include -I..\..\Bsw\Communication\Common\IpduM -I..\..\ASW\APP -I..\..\Bsw\SystemServices\BswM -I..\..\ASW\BSW_Ext -I..\..\Bsw\Communication\Common\Dcm -I..\..\Bsw\Communication\CAN\CanTp -I..\..\Bsw\SystemServices\Dem -I..\..\Bsw\Libraries\E2E -I..\..\Bsw\Libraries\Crc -I..\..\Bsw\Communication\Common\NmIf -I..\..\Bsw\Communication\CAN\CanNm -I..\..\Bsw\Config\BSW_Config\RTE\Rte -I..\..\Bsw\Config\BSW_Config\RTE\SchM -I..\..\Bsw\Libraries\IStd -I..\..\Bsw\SystemServices\EcuM -I..\..\Bsw\SystemServices\ComM -I..\..\Bsw\Communication\CAN\CanSM -I..\..\Bsw\Communication\CAN\CanIf -I..\..\Bsw\Communication\Common\Com -I..\..\Bsw\Communication\Common\PDUR -I..\..\Cpu -I..\..\Bsw\CommonInclude -I..\..\Bsw\Config\BSW_Config -I..\..\Bsw\Config\BSW_Config\RH850F1K -I..\..\Bsw\SystemServices\Os\Extend\inc -I..\..\Bsw\SystemServices\Os\Kernel\inc -I..\..\Bsw\SystemServices\Os\Portable\Mcu -I..\..\Bsw\SystemServices\Os\Portable\Processor -I..\..\Bsw\Config\MCAL_Config\Adc_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Can_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Dio_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Mcu_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Port_OutPut\include -I..\..\Bsw\Mcal\adc\include -I..\..\Bsw\Mcal\can\include -I..\..\Bsw\Mcal\dio\include -I..\..\Bsw\Mcal\general -I..\..\Bsw\Mcal\mcu\include -I..\..\Bsw\Mcal\port\include -I..\..\Bsw\Mcal\stubs\CanGeneral\include -I..\..\Bsw\Mcal\stubs\Det\include -I..\..\Bsw\Mcal\stubs\MemIf\include -I..\..\Bsw\Mcal\stubs\SchM\include -DRH850_F1KM_S1_2MB -lang=c99 -Xfloat=fpu -Xround=zero -Xdiv -Xasm_path=DefaultBuild -Xasm_option=-Xprn_path=DefaultBuild -c -MAKEUD=DefaultBuild -Xexec_time=C:\Users\xlchen\AppData\Local\Temp\CSPlusBuildTool_b2cdb38a5ec0436f960147d8ea9a0137sspbdagi.fij
+00000000                        4  #@	compiled at Fri Mar 27 09:50:56 2026
+00000000                        5  
+00000000                        6  	.file "..\..\Srcode\sdk\source\timeSyncSdk.c"
+00000000                        7  
+00000000                        8  	$reg_mode 32
+00000000                        9  	.dbl_size 8
+00000000                       10  
+00000000                       11  	.extern _Com_SendSignal
+00000000                       12  	.public _TimeSyncSdkInit
+00000000                       13  	.public _TimeSyncSdkCycleProcess
+00000000                       14  	.extern _TimerHalSetRtcTime
+00000000                       15  	.public _TimeSyncSdkGetRealTime
+00000000                       16  	.extern _TimerHalGetRtcTime
+00000000                       17  	.public _TimeSyncSdkGetUtcTime
+00000000                       18  
+00000000                       19  	.section .text, text
+00000000                       20  _TimeSyncGetLocalTimeFromRtc.1:
+00000000                       21  	.stack _TimeSyncGetLocalTimeFromRtc.1 = 48
+00000000                       22  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 37
+00000000 8107E1FF              23  	prepare 0x00000FFF, 0x00000000
+00000004                       24  	mov 0x386D4380, r2
+00000004 220680436D38            -- mov         0x386d4380,hp
+0000000A                       25  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 42
+0000000A E231                  26  	cmp r2, r6
+0000000C 23A73500              27  	ld.w 0x00000034[r3], r20
+00000010 23AF3100              28  	ld.w 0x00000030[r3], r21
+00000014 09B0                  29  	mov r9, r22
+00000016 E1070100              30  	bl17 .BB.LABEL.1_23
+0000001A                       31  .BB.LABEL.1_1:	; if_break_bb
+0000001A                       32  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 47
+0000001A E716100E              33  	mulhi 0x00000E10, r7, r2
+0000001E C231                  34  	add r2, r6
+00000020                       35  	mov 0xC792BC80, r2
+00000020 220680BC92C7            -- mov         0xc792bc80,hp
+00000026 06B8                  36  	mov r6, r23
+00000028 C2B9                  37  	add r2, r23
+0000002A                       38  	mov 0x00015180, r2
+0000002A 220680510100            -- mov         0x15180,hp
+00000030                       39  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 48
+00000030 17C0                  40  	mov r23, r24
+00000032 E2C7C202              41  	divu r2, r24, r0
+00000036 0012                  42  	mov 0x00000000, r2
+00000038 202ED007              43  	movea 0x000007D0, r0, r5
+0000003C 8505                  44  	br9 .BB.LABEL.1_9
+0000003E                       45  .BB.LABEL.1_2:	; bb24
+0000003E                       46  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 0
+0000003E 20369001              47  	movea 0x00000190, r0, r6
+00000042                       48  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 53
+00000042 0538                  49  	mov r5, r7
+00000044 E63F823A              50  	divhu r6, r7, r7
+00000048 603A                  51  	cmp 0x00000000, r7
+0000004A 8205                  52  	bz9 .BB.LABEL.1_5
+0000004C                       53  .BB.LABEL.1_3:	; bb29
+0000004C                       54  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 0
+0000004C C5060300              55  	andi 0x00000003, r5, r0
+00000050 8A05                  56  	bnz9 .BB.LABEL.1_7
+00000052                       57  .BB.LABEL.1_4:	; bb34
+00000052 20366400              58  	movea 0x00000064, r0, r6
+00000056 0538                  59  	mov r5, r7
+00000058 E63F823A              60  	divhu r6, r7, r7
+0000005C 603A                  61  	cmp 0x00000000, r7
+0000005E 8205                  62  	bz9 .BB.LABEL.1_7
+00000060                       63  .BB.LABEL.1_5:	; if_then_bb53
+00000060 20366E01              64  	movea 0x0000016E, r0, r6
+00000064                       65  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 55
+00000064 E6C1                  66  	cmp r6, r24
+00000066 E0178203              67  	sbf 0x00000001, r0, r2, r0
+0000006A 8105                  68  	bl9 .BB.LABEL.1_10
+0000006C                       69  .BB.LABEL.1_6:	; if_then_bb58
+0000006C                       70  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 57
+0000006C 18C692FE              71  	addi 0xFFFFFE92, r24, r24
+00000070 8505                  72  	br9 .BB.LABEL.1_8
+00000072                       73  .BB.LABEL.1_7:	; if_else_bb63
+00000072                       74  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 67
+00000072 18C693FE              75  	addi 0xFFFFFE93, r24, r24
+00000076                       76  .BB.LABEL.1_8:	; if_else_bb63
+00000076                       77  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 0
+00000076 1F32                  78  	mov 0xFFFFFFFF, r6
+00000078 E617A213              79  	adf 0x00000001, r6, r2, r2
+0000007C                       80  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 69
+0000007C 412A                  81  	add 0x00000001, r5
+0000007E 20363308              82  	movea 0x00000833, r0, r6
+00000082                       83  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 70
+00000082 E629                  84  	cmp r6, r5
+00000084 8B05                  85  	bh9 .BB.LABEL.1_23
+00000086                       86  .BB.LABEL.1_9:	; bb76
+00000086                       87  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 0
+00000086 20366C01              88  	movea 0x0000016C, r0, r6
+0000008A                       89  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 51
+0000008A F831                  90  	cmp r24, r6
+0000008C E2078203              91  	sbf 0x00000001, r2, r0, r0
+00000090 8105                  92  	bl9 .BB.LABEL.1_2
+00000092                       93  .BB.LABEL.1_10:	; bb82
+00000092                       94  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 75
+00000092 682F0100              95  	st.w r5, 0x00000000[r8]
+00000096 00CA                  96  	mov 0x00000000, r25
+00000098 8505                  97  	br9 .BB.LABEL.1_21
+0000009A                       98  .BB.LABEL.1_11:	; bb85
+0000009A                       99  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 79
+0000009A 282F0100             100  	ld.w 0x00000000[r8], r5
+0000009E 20369001             101  	movea 0x00000190, r0, r6
+000000A2 0538                 102  	mov r5, r7
+000000A4 E63F823A             103  	divhu r6, r7, r7
+000000A8 603A                 104  	cmp 0x00000000, r7
+000000AA 8205                 105  	bz9 .BB.LABEL.1_17
+000000AC                      106  .BB.LABEL.1_12:	; bb91
+000000AC                      107  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 0
+000000AC C5060300             108  	andi 0x00000003, r5, r0
+000000B0 8A05                 109  	bnz9 .BB.LABEL.1_15
+000000B2                      110  .BB.LABEL.1_13:	; bb97
+000000B2 20366400             111  	movea 0x00000064, r0, r6
+000000B6 E62F822A             112  	divhu r6, r5, r5
+000000BA 61CA                 113  	cmp 0x00000001, r25
+000000BC 8A05                 114  	bnz9 .BB.LABEL.1_15
+000000BE                      115  .BB.LABEL.1_14:	; bb97
+000000BE 602A                 116  	cmp 0x00000000, r5
+000000C0 8A05                 117  	bnz9 .BB.LABEL.1_18
+000000C2                      118  .BB.LABEL.1_15:	; if_else_bb140
+000000C2                      119  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 92
+000000C2                      120  	mov #_g_monTable.1, r5
+000000C2 250600000000            -- mov         0x0,tp
+000000C8 D929                 121  	add r25, r5
+000000CA 852F0100             122  	ld.bu 0x00000000[r5], r5
+000000CE E5C1                 123  	cmp r5, r24
+000000D0 E0178203             124  	sbf 0x00000001, r0, r2, r0
+000000D4 8105                 125  	bl9 .BB.LABEL.1_22
+000000D6                      126  .BB.LABEL.1_16:	; if_then_bb149
+000000D6                      127  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 0
+000000D6 0032                 128  	mov 0x00000000, r6
+000000D8                      129  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 94
+000000D8 A5C1                 130  	sub r5, r24
+000000DA E6178213             131  	sbf 0x00000001, r6, r2, r2
+000000DE 8505                 132  	br9 .BB.LABEL.1_20
+000000E0                      133  .BB.LABEL.1_17:	; bb117
+000000E0                      134  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 0
+000000E0 61CA                 135  	cmp 0x00000001, r25
+000000E2 8A05                 136  	bnz9 .BB.LABEL.1_15
+000000E4                      137  .BB.LABEL.1_18:	; if_then_bb129
+000000E4 202E1D00             138  	movea 0x0000001D, r0, r5
+000000E8                      139  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 81
+000000E8 E5C1                 140  	cmp r5, r24
+000000EA E0178203             141  	sbf 0x00000001, r0, r2, r0
+000000EE 8105                 142  	bl9 .BB.LABEL.1_22
+000000F0                      143  .BB.LABEL.1_19:	; if_then_bb134
+000000F0                      144  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 0
+000000F0 1F2A                 145  	mov 0xFFFFFFFF, r5
+000000F2                      146  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 83
+000000F2 18C6E3FF             147  	addi 0xFFFFFFE3, r24, r24
+000000F6 E517A213             148  	adf 0x00000001, r5, r2, r2
+000000FA                      149  .BB.LABEL.1_20:	; if_break_bb159
+000000FA                      150  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 101
+000000FA 41CA                 151  	add 0x00000001, r25
+000000FC                      152  .BB.LABEL.1_21:	; bb162
+000000FC                      153  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 0
+000000FC 202E1B00             154  	movea 0x0000001B, r0, r5
+00000100                      155  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 77
+00000100 F829                 156  	cmp r24, r5
+00000102 E2078203             157  	sbf 0x00000001, r2, r0, r0
+00000106 8105                 158  	bl9 .BB.LABEL.1_11
+00000108                      159  .BB.LABEL.1_22:	; bb168
+00000108                      160  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 0
+00000108                      161  	mov 0x00015180, r2
+00000108 220680510100            -- mov         0x15180,hp
+0000010E                      162  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 105
+0000010E E2BFC2BA             163  	divu r2, r23, r23
+00000112 00D2                 164  	mov 0x00000000, r26
+00000114 20DE100E             165  	movea 0x00000E10, r0, r27
+00000118                      166  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 106
+00000118 1730                 167  	mov r23, r6
+0000011A 1A38                 168  	mov r26, r7
+0000011C 1B40                 169  	mov r27, r8
+0000011E 1A48                 170  	mov r26, r9
+00000120 80FF0000             171  	jarl __COM_udiv64, r31
+00000124 0AE0                 172  	mov r10, r28
+00000126                      173  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 107
+00000126 1730                 174  	mov r23, r6
+00000128 1A38                 175  	mov r26, r7
+0000012A 1B40                 176  	mov r27, r8
+0000012C 1A48                 177  	mov r26, r9
+0000012E 80FF0000             178  	jarl __COM_urem64, r31
+00000132 0AB8                 179  	mov r10, r23
+00000134 0BD8                 180  	mov r11, r27
+00000136 20EE3C00             181  	movea 0x0000003C, r0, r29
+0000013A 1730                 182  	mov r23, r6
+0000013C 1B38                 183  	mov r27, r7
+0000013E 1D40                 184  	mov r29, r8
+00000140 1A48                 185  	mov r26, r9
+00000142 80FF0000             186  	jarl __COM_udiv64, r31
+00000146 0AF0                 187  	mov r10, r30
+00000148                      188  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 108
+00000148 1730                 189  	mov r23, r6
+0000014A 1B38                 190  	mov r27, r7
+0000014C 1D40                 191  	mov r29, r8
+0000014E 1A48                 192  	mov r26, r9
+00000150 80FF0000             193  	jarl __COM_urem64, r31
+00000154                      194  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 103
+00000154 41CA                 195  	add 0x00000001, r25
+00000156 56CF0000             196  	st.b r25, 0x00000000[r22]
+0000015A                      197  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 104
+0000015A 41C2                 198  	add 0x00000001, r24
+0000015C 55C70000             199  	st.b r24, 0x00000000[r21]
+00000160                      200  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 106
+00000160 54E70000             201  	st.b r28, 0x00000000[r20]
+00000164 23173900             202  	ld.w 0x00000038[r3], r2
+00000168                      203  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 107
+00000168 42F70000             204  	st.b r30, 0x00000000[r2]
+0000016C 23173D00             205  	ld.w 0x0000003C[r3], r2
+00000170                      206  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 108
+00000170 42570000             207  	st.b r10, 0x00000000[r2]
+00000174                      208  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 109
+00000174 1A50                 209  	mov r26, r10
+00000176 4106FFFF             210  	dispose 0x00000000, 0x00000FFF, [r31]
+0000017A                      211  .BB.LABEL.1_23:	; bb195
+0000017A                      212  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 0
+0000017A 1F52                 213  	mov 0xFFFFFFFF, r10
+0000017C                      214  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 110
+0000017C 4106FFFF             215  	dispose 0x00000000, 0x00000FFF, [r31]
+00000180                      216  _TimeSyncSdkSendGnssTimeSignal.1:
+00000180                      217  	.stack _TimeSyncSdkSendGnssTimeSignal.1 = 32
+00000180                      218  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 120
+00000180 8E072100             219  	prepare 0x00000001, 0x0000001C
+00000184                      220  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 122
+00000184 63071900             221  	st.w r0, 0x00000018[r3]
+00000188                      222  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 123
+00000188 43071700             223  	st.b r0, 0x00000017[r3]
+0000018C                      224  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 124
+0000018C 43071600             225  	st.b r0, 0x00000016[r3]
+00000190                      226  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 125
+00000190 43071500             227  	st.b r0, 0x00000015[r3]
+00000194                      228  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 126
+00000194 43071400             229  	st.b r0, 0x00000014[r3]
+00000198                      230  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 127
+00000198 43071300             231  	st.b r0, 0x00000013[r3]
+0000019C                      232  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 128
+0000019C                      233  	mov #_g_gnssData.2, r2
+0000019C 220600000000            -- mov         0x0,hp
+000001A2 022F0700             234  	ld.b 0x00000007[r2], r5
+000001A6 432F1200             235  	st.b r5, 0x00000012[r3]
+000001AA                      236  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 129
+000001AA 823F0500             237  	ld.bu 0x00000004[r2], r7
+000001AE 22370100             238  	ld.w 0x00000000[r2], r6
+000001B2 23161300             239  	movea 0x00000013, r3, r2
+000001B6 63170D00             240  	st.w r2, 0x0000000C[r3]
+000001BA 23161400             241  	movea 0x00000014, r3, r2
+000001BE 63170900             242  	st.w r2, 0x00000008[r3]
+000001C2 23161500             243  	movea 0x00000015, r3, r2
+000001C6 63170500             244  	st.w r2, 0x00000004[r3]
+000001CA 23161600             245  	movea 0x00000016, r3, r2
+000001CE 63170100             246  	st.w r2, 0x00000000[r3]
+000001D2 234E1700             247  	movea 0x00000017, r3, r9
+000001D6 23461800             248  	movea 0x00000018, r3, r8
+000001DA 80FF0000             249  	jarl _TimeSyncGetLocalTimeFromRtc.1, r31
+000001DE                      250  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 130
+000001DE 6052                 251  	cmp 0x00000000, r10
+000001E0 8205                 252  	bz9 .BB.LABEL.2_3
+000001E2                      253  .BB.LABEL.2_1:	; if_then_bb
+000001E2                      254  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 132
+000001E2 43071200             255  	st.b r0, 0x00000012[r3]
+000001E6                      256  .BB.LABEL.2_2:	; if_then_bb
+000001E6                      257  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 0
+000001E6 233E1200             258  	movea 0x00000012, r3, r7
+000001EA 20363400             259  	movea 0x00000034, r0, r6
+000001EE 80FF0000             260  	jarl _Com_SendSignal, r31
+000001F2                      261  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 144
+000001F2 4E063F00             262  	dispose 0x0000001C, 0x00000001, [r31]
+000001F6                      263  .BB.LABEL.2_3:	; if_break_bb
+000001F6                      264  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 0
+000001F6 23161800             265  	movea 0x00000018, r3, r2
+000001FA                      266  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 136
+000001FA 02170000             267  	ld.b 0x00000000[r2], r2
+000001FE 22163000             268  	movea 0x00000030, r2, r2
+00000202 43171100             269  	st.b r2, 0x00000011[r3]
+00000206 233E1100             270  	movea 0x00000011, r3, r7
+0000020A 20363300             271  	movea 0x00000033, r0, r6
+0000020E                      272  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 137
+0000020E 80FF0000             273  	jarl _Com_SendSignal, r31
+00000212 233E1700             274  	movea 0x00000017, r3, r7
+00000216 20363900             275  	movea 0x00000039, r0, r6
+0000021A                      276  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 138
+0000021A 80FF0000             277  	jarl _Com_SendSignal, r31
+0000021E 233E1600             278  	movea 0x00000016, r3, r7
+00000222 20363800             279  	movea 0x00000038, r0, r6
+00000226                      280  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 139
+00000226 80FF0000             281  	jarl _Com_SendSignal, r31
+0000022A 233E1500             282  	movea 0x00000015, r3, r7
+0000022E 20363700             283  	movea 0x00000037, r0, r6
+00000232                      284  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 140
+00000232 80FF0000             285  	jarl _Com_SendSignal, r31
+00000236 233E1400             286  	movea 0x00000014, r3, r7
+0000023A 20363600             287  	movea 0x00000036, r0, r6
+0000023E                      288  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 141
+0000023E 80FF0000             289  	jarl _Com_SendSignal, r31
+00000242 233E1300             290  	movea 0x00000013, r3, r7
+00000246 20363500             291  	movea 0x00000035, r0, r6
+0000024A                      292  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 142
+0000024A 80FF0000             293  	jarl _Com_SendSignal, r31
+0000024E 8505                 294  	br9 .BB.LABEL.2_2
+00000250                      295  _TimeSyncSdkSendNtpTimeSignal.1:
+00000250                      296  	.stack _TimeSyncSdkSendNtpTimeSignal.1 = 32
+00000250                      297  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 154
+00000250 8E072100             298  	prepare 0x00000001, 0x0000001C
+00000254                      299  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 156
+00000254 63071900             300  	st.w r0, 0x00000018[r3]
+00000258                      301  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 157
+00000258 43071700             302  	st.b r0, 0x00000017[r3]
+0000025C                      303  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 158
+0000025C 43071600             304  	st.b r0, 0x00000016[r3]
+00000260                      305  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 159
+00000260 43071500             306  	st.b r0, 0x00000015[r3]
+00000264                      307  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 160
+00000264 43071400             308  	st.b r0, 0x00000014[r3]
+00000268                      309  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 161
+00000268 43071300             310  	st.b r0, 0x00000013[r3]
+0000026C                      311  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 162
+0000026C                      312  	mov #_g_ntpData.3, r2
+0000026C 220600000000            -- mov         0x0,hp
+00000272 022F0700             313  	ld.b 0x00000007[r2], r5
+00000276 432F1200             314  	st.b r5, 0x00000012[r3]
+0000027A                      315  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 163
+0000027A 823F0500             316  	ld.bu 0x00000004[r2], r7
+0000027E 22370100             317  	ld.w 0x00000000[r2], r6
+00000282 23161300             318  	movea 0x00000013, r3, r2
+00000286 63170D00             319  	st.w r2, 0x0000000C[r3]
+0000028A 23161400             320  	movea 0x00000014, r3, r2
+0000028E 63170900             321  	st.w r2, 0x00000008[r3]
+00000292 23161500             322  	movea 0x00000015, r3, r2
+00000296 63170500             323  	st.w r2, 0x00000004[r3]
+0000029A 23161600             324  	movea 0x00000016, r3, r2
+0000029E 63170100             325  	st.w r2, 0x00000000[r3]
+000002A2 234E1700             326  	movea 0x00000017, r3, r9
+000002A6 23461800             327  	movea 0x00000018, r3, r8
+000002AA 80FF0000             328  	jarl _TimeSyncGetLocalTimeFromRtc.1, r31
+000002AE                      329  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 164
+000002AE 6052                 330  	cmp 0x00000000, r10
+000002B0 8205                 331  	bz9 .BB.LABEL.3_3
+000002B2                      332  .BB.LABEL.3_1:	; if_then_bb
+000002B2                      333  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 166
+000002B2 43071200             334  	st.b r0, 0x00000012[r3]
+000002B6                      335  .BB.LABEL.3_2:	; if_then_bb
+000002B6                      336  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 0
+000002B6 233E1200             337  	movea 0x00000012, r3, r7
+000002BA 20363F00             338  	movea 0x0000003F, r0, r6
+000002BE 80FF0000             339  	jarl _Com_SendSignal, r31
+000002C2                      340  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 178
+000002C2 4E063F00             341  	dispose 0x0000001C, 0x00000001, [r31]
+000002C6                      342  .BB.LABEL.3_3:	; if_break_bb
+000002C6                      343  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 0
+000002C6 23161800             344  	movea 0x00000018, r3, r2
+000002CA                      345  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 170
+000002CA 02170000             346  	ld.b 0x00000000[r2], r2
+000002CE 22163000             347  	movea 0x00000030, r2, r2
+000002D2 43171100             348  	st.b r2, 0x00000011[r3]
+000002D6 233E1100             349  	movea 0x00000011, r3, r7
+000002DA 20364000             350  	movea 0x00000040, r0, r6
+000002DE                      351  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 171
+000002DE 80FF0000             352  	jarl _Com_SendSignal, r31
+000002E2 233E1700             353  	movea 0x00000017, r3, r7
+000002E6 20363A00             354  	movea 0x0000003A, r0, r6
+000002EA                      355  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 172
+000002EA 80FF0000             356  	jarl _Com_SendSignal, r31
+000002EE 233E1600             357  	movea 0x00000016, r3, r7
+000002F2 20363D00             358  	movea 0x0000003D, r0, r6
+000002F6                      359  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 173
+000002F6 80FF0000             360  	jarl _Com_SendSignal, r31
+000002FA 233E1500             361  	movea 0x00000015, r3, r7
+000002FE 20363B00             362  	movea 0x0000003B, r0, r6
+00000302                      363  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 174
+00000302 80FF0000             364  	jarl _Com_SendSignal, r31
+00000306 233E1400             365  	movea 0x00000014, r3, r7
+0000030A 20363E00             366  	movea 0x0000003E, r0, r6
+0000030E                      367  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 175
+0000030E 80FF0000             368  	jarl _Com_SendSignal, r31
+00000312 233E1300             369  	movea 0x00000013, r3, r7
+00000316 20363C00             370  	movea 0x0000003C, r0, r6
+0000031A                      371  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 176
+0000031A 80FF0000             372  	jarl _Com_SendSignal, r31
+0000031E 8505                 373  	br9 .BB.LABEL.3_2
+00000320                      374  _TimeSyncSdkInit:
+00000320                      375  	.stack _TimeSyncSdkInit = 12
+00000320                      376  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 189
+00000320 541A                 377  	add 0xFFFFFFF4, r3
+00000322 0B12                 378  	mov 0x0000000B, r2
+00000324                      379  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 191
+00000324                      380  	mov #.STR.1, r5
+00000324 250600000000            -- mov         0x0,tp
+0000032A 23360100             381  	movea 0x00000001, r3, r6
+0000032E C611                 382  	add r6, r2
+00000330 8505                 383  	br9 .BB.LABEL.4_2
+00000332                      384  .BB.LABEL.4_1:	; entry
+00000332 053F0000             385  	ld.b 0x00000000[r5], r7
+00000336 463F0000             386  	st.b r7, 0x00000000[r6]
+0000033A 412A                 387  	add 0x00000001, r5
+0000033C 4132                 388  	add 0x00000001, r6
+0000033E                      389  .BB.LABEL.4_2:	; entry
+0000033E E611                 390  	cmp r6, r2
+00000340 8A05                 391  	bnz9 .BB.LABEL.4_1
+00000342                      392  .BB.LABEL.4_3:	; entry
+00000342                      393  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 195
+00000342 40160000             394  	movhi HIGHW1(#_g_gnssData.2+0x00000007), r0, r2
+00000346 42070000             395  	st.b r0, LOWW(#_g_gnssData.2+0x00000007)[r2]
+0000034A                      396  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 196
+0000034A 40160000             397  	movhi HIGHW1(#_g_ntpData.3+0x00000007), r0, r2
+0000034E 42070000             398  	st.b r0, LOWW(#_g_ntpData.3+0x00000007)[r2]
+00000352 46061F00             399  	dispose 0x0000000C, 0x00000000, [r31]
+00000356                      400  _TimeSyncSdkCycleProcess:
+00000356                      401  	.stack _TimeSyncSdkCycleProcess = 8
+00000356                      402  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 209
+00000356 80072108             403  	prepare 0x00000041, 0x00000000
+0000035A                      404  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 224
+0000035A 6032                 405  	cmp 0x00000000, r6
+0000035C E2070100             406  	bz17 .BB.LABEL.5_15
+00000360                      407  .BB.LABEL.5_1:	; bb
+00000360                      408  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 0
+00000360 26170900             409  	ld.w 0x00000008[r6], r2
+00000364 6012                 410  	cmp 0x00000000, r2
+00000366 E2070100             411  	bz17 .BB.LABEL.5_15
+0000036A                      412  .BB.LABEL.5_2:	; bb22
+0000036A E6170700             413  	ld.hu 0x00000006[r6], r2
+0000036E 6012                 414  	cmp 0x00000000, r2
+00000370 E2070100             415  	bz17 .BB.LABEL.5_15
+00000374                      416  .BB.LABEL.5_3:	; if_then_bb37
+00000374                      417  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 226
+00000374 26A70900             418  	ld.w 0x00000008[r6], r20
+00000378                      419  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 233
+00000378 B4170500             420  	ld.bu 0x00000005[r20], r2
+0000037C C22EF000             421  	andi 0x000000F0, r2, r5
+00000380 502A                 422  	add 0xFFFFFFF0, r5
+00000382 8A05                 423  	bnz9 .BB.LABEL.5_8
+00000384                      424  .BB.LABEL.5_4:	; if_then_bb49
+00000384                      425  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 235
+00000384 C2160F00             426  	andi 0x0000000F, r2, r2
+00000388                      427  	mov #_g_gnssData.2, r5
+00000388 250600000000            -- mov         0x0,tp
+0000038E 45170600             428  	st.b r2, 0x00000006[r5]
+00000392                      429  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 236
+00000392 B4170500             430  	ld.bu 0x00000005[r20], r2
+00000396 8412                 431  	shr 0x00000004, r2
+00000398 45170500             432  	st.b r2, 0x00000005[r5]
+0000039C                      433  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 237
+0000039C 85170700             434  	ld.bu 0x00000006[r5], r2
+000003A0 6012                 435  	cmp 0x00000000, r2
+000003A2                      436  	mov #_g_gnssData.2, r2
+000003A2 220600000000            -- mov         0x0,hp
+000003A8 8A05                 437  	bnz9 .BB.LABEL.5_6
+000003AA                      438  .BB.LABEL.5_5:	; if_then_bb68
+000003AA                      439  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 239
+000003AA 42070700             440  	st.b r0, 0x00000007[r2]
+000003AE                      441  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 240
+000003AE 62070100             442  	st.w r0, 0x00000000[r2]
+000003B2 8505                 443  	br9 .BB.LABEL.5_7
+000003B4                      444  .BB.LABEL.5_6:	; if_else_bb69
+000003B4                      445  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 0
+000003B4 012A                 446  	mov 0x00000001, r5
+000003B6                      447  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 244
+000003B6 422F0700             448  	st.b r5, 0x00000007[r2]
+000003BA                      449  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 245
+000003BA 14370000             450  	ld.b 0x00000000[r20], r6
+000003BE D832                 451  	shl 0x00000018, r6
+000003C0 B42F0100             452  	ld.bu 0x00000001[r20], r5
+000003C4 D02A                 453  	shl 0x00000010, r5
+000003C6 0531                 454  	or r5, r6
+000003C8 942F0300             455  	ld.bu 0x00000002[r20], r5
+000003CC C82A                 456  	shl 0x00000008, r5
+000003CE 0531                 457  	or r5, r6
+000003D0 B42F0300             458  	ld.bu 0x00000003[r20], r5
+000003D4 0531                 459  	or r5, r6
+000003D6 62370100             460  	st.w r6, 0x00000000[r2]
+000003DA                      461  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 246
+000003DA 80FF0000             462  	jarl _TimerHalSetRtcTime, r31
+000003DE                      463  .BB.LABEL.5_7:	; if_break_bb
+000003DE                      464  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 248
+000003DE 14170400             465  	ld.b 0x00000004[r20], r2
+000003E2 40A60000             466  	movhi HIGHW1(#_g_gnssData.2+0x00000004), r0, r20
+000003E6 54170000             467  	st.b r2, LOWW(#_g_gnssData.2+0x00000004)[r20]
+000003EA                      468  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 249
+000003EA 80FF0000             469  	jarl _TimeSyncSdkSendGnssTimeSignal.1, r31
+000003EE 40063F08             470  	dispose 0x00000000, 0x00000041, [r31]
+000003F2                      471  .BB.LABEL.5_8:	; if_else_bb97
+000003F2                      472  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 251
+000003F2 C22EF000             473  	andi 0x000000F0, r2, r5
+000003F6 0506E0FF             474  	addi 0xFFFFFFE0, r5, r0
+000003FA 8A05                 475  	bnz9 .BB.LABEL.5_14
+000003FC                      476  .BB.LABEL.5_9:	; if_then_bb106
+000003FC                      477  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 253
+000003FC C2160F00             478  	andi 0x0000000F, r2, r2
+00000400                      479  	mov #_g_ntpData.3, r5
+00000400 250600000000            -- mov         0x0,tp
+00000406 45170600             480  	st.b r2, 0x00000006[r5]
+0000040A                      481  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 254
+0000040A B4170500             482  	ld.bu 0x00000005[r20], r2
+0000040E 8412                 483  	shr 0x00000004, r2
+00000410 45170500             484  	st.b r2, 0x00000005[r5]
+00000414                      485  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 255
+00000414 85170700             486  	ld.bu 0x00000006[r5], r2
+00000418 6012                 487  	cmp 0x00000000, r2
+0000041A                      488  	mov #_g_ntpData.3, r2
+0000041A 220600000000            -- mov         0x0,hp
+00000420 8A05                 489  	bnz9 .BB.LABEL.5_11
+00000422                      490  .BB.LABEL.5_10:	; if_then_bb125
+00000422                      491  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 257
+00000422 42070700             492  	st.b r0, 0x00000007[r2]
+00000426                      493  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 258
+00000426 62070100             494  	st.w r0, 0x00000000[r2]
+0000042A 8505                 495  	br9 .BB.LABEL.5_13
+0000042C                      496  .BB.LABEL.5_11:	; if_else_bb126
+0000042C                      497  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 0
+0000042C 012A                 498  	mov 0x00000001, r5
+0000042E                      499  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 262
+0000042E 422F0700             500  	st.b r5, 0x00000007[r2]
+00000432                      501  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 263
+00000432 14370000             502  	ld.b 0x00000000[r20], r6
+00000436 D832                 503  	shl 0x00000018, r6
+00000438 B42F0100             504  	ld.bu 0x00000001[r20], r5
+0000043C D02A                 505  	shl 0x00000010, r5
+0000043E 0531                 506  	or r5, r6
+00000440 942F0300             507  	ld.bu 0x00000002[r20], r5
+00000444 C82A                 508  	shl 0x00000008, r5
+00000446 0531                 509  	or r5, r6
+00000448 B42F0300             510  	ld.bu 0x00000003[r20], r5
+0000044C 0531                 511  	or r5, r6
+0000044E 62370100             512  	st.w r6, 0x00000000[r2]
+00000452                      513  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 264
+00000452 40160000             514  	movhi HIGHW1(#_g_gnssData.2+0x00000007), r0, r2
+00000456 82170100             515  	ld.bu LOWW(#_g_gnssData.2+0x00000007)[r2], r2
+0000045A 6012                 516  	cmp 0x00000000, r2
+0000045C 8A05                 517  	bnz9 .BB.LABEL.5_13
+0000045E                      518  .BB.LABEL.5_12:	; if_then_bb154
+0000045E                      519  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 266
+0000045E 80FF0000             520  	jarl _TimerHalSetRtcTime, r31
+00000462                      521  .BB.LABEL.5_13:	; if_break_bb158
+00000462                      522  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 269
+00000462 14170400             523  	ld.b 0x00000004[r20], r2
+00000466 402E0000             524  	movhi HIGHW1(#_g_ntpData.3+0x00000004), r0, r5
+0000046A 45170000             525  	st.b r2, LOWW(#_g_ntpData.3+0x00000004)[r5]
+0000046E                      526  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 270
+0000046E 80FF0000             527  	jarl _TimeSyncSdkSendNtpTimeSignal.1, r31
+00000472 40063F08             528  	dispose 0x00000000, 0x00000041, [r31]
+00000476                      529  .BB.LABEL.5_14:	; if_else_bb162
+00000476                      530  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 274
+00000476 40160000             531  	movhi HIGHW1(#_g_ntpData.3+0x00000007), r0, r2
+0000047A 42070000             532  	st.b r0, LOWW(#_g_ntpData.3+0x00000007)[r2]
+0000047E                      533  .BB.LABEL.5_15:	; return
+0000047E                      534  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 280
+0000047E 40063F08             535  	dispose 0x00000000, 0x00000041, [r31]
+00000482                      536  _TimeSyncSdkGetRealTime:
+00000482                      537  	.stack _TimeSyncSdkGetRealTime = 48
+00000482                      538  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 337
+00000482 8A0721CF             539  	prepare 0x00000679, 0x00000014
+00000486                      540  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 339
+00000486 63071100             541  	st.w r0, 0x00000010[r3]
+0000048A                      542  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 340
+0000048A 40160000             543  	movhi HIGHW1(#_g_ntpData.3+0x00000007), r0, r2
+0000048E 82170100             544  	ld.bu LOWW(#_g_ntpData.3+0x00000007)[r2], r2
+00000492 6012                 545  	cmp 0x00000000, r2
+00000494 23A73900             546  	ld.w 0x00000038[r3], r20
+00000498 23AF3500             547  	ld.w 0x00000034[r3], r21
+0000049C 23B73100             548  	ld.w 0x00000030[r3], r22
+000004A0 09B8                 549  	mov r9, r23
+000004A2 08C0                 550  	mov r8, r24
+000004A4 07C8                 551  	mov r7, r25
+000004A6 8A05                 552  	bnz9 .BB.LABEL.6_3
+000004A8                      553  .BB.LABEL.6_1:	; bb
+000004A8                      554  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 0
+000004A8 40160000             555  	movhi HIGHW1(#_g_gnssData.2+0x00000007), r0, r2
+000004AC 82170100             556  	ld.bu LOWW(#_g_gnssData.2+0x00000007)[r2], r2
+000004B0 6012                 557  	cmp 0x00000000, r2
+000004B2 8A05                 558  	bnz9 .BB.LABEL.6_3
+000004B4                      559  .BB.LABEL.6_2:	; bb.bb44_crit_edge
+000004B4 8056FFFF             560  	ori 0x0000FFFF, r0, r10
+000004B8 8505                 561  	br9 .BB.LABEL.6_5
+000004BA                      562  .BB.LABEL.6_3:	; if_break_bb
+000004BA 23361000             563  	movea 0x00000010, r3, r6
+000004BE                      564  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 344
+000004BE 80FF0000             565  	jarl _TimerHalGetRtcTime, r31
+000004C2                      566  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 345
+000004C2 40160000             567  	movhi HIGHW1(#_g_gnssData.2+0x00000004), r0, r2
+000004C6 823F0100             568  	ld.bu LOWW(#_g_gnssData.2+0x00000004)[r2], r7
+000004CA 23371100             569  	ld.w 0x00000010[r3], r6
+000004CE 63A70D00             570  	st.w r20, 0x0000000C[r3]
+000004D2 63AF0900             571  	st.w r21, 0x00000008[r3]
+000004D6 63B70500             572  	st.w r22, 0x00000004[r3]
+000004DA 63BF0100             573  	st.w r23, 0x00000000[r3]
+000004DE 1940                 574  	mov r25, r8
+000004E0 1848                 575  	mov r24, r9
+000004E2 80FF0000             576  	jarl _TimeSyncGetLocalTimeFromRtc.1, r31
+000004E6                      577  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 346
+000004E6 6052                 578  	cmp 0x00000000, r10
+000004E8 8A05                 579  	bnz9 .BB.LABEL.6_6
+000004EA                      580  .BB.LABEL.6_4:	; if_break_bb.bb44_crit_edge
+000004EA                      581  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 0
+000004EA 0152                 582  	mov 0x00000001, r10
+000004EC                      583  .BB.LABEL.6_5:	; bb44
+000004EC                      584  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 388
+000004EC EA00                 585  	sxh r10
+000004EE 4A063FCF             586  	dispose 0x00000014, 0x00000679, [r31]
+000004F2                      587  .BB.LABEL.6_6:	; if_else_bb
+000004F2                      588  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 0
+000004F2 1F52                 589  	mov 0xFFFFFFFF, r10
+000004F4                      590  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 352
+000004F4 4A063FCF             591  	dispose 0x00000014, 0x00000679, [r31]
+000004F8                      592  _TimeSyncSdkGetUtcTime:
+000004F8                      593  	.stack _TimeSyncSdkGetUtcTime = 12
+000004F8                      594  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 400
+000004F8 82072108             595  	prepare 0x00000041, 0x00000004
+000004FC 06A0                 596  	mov r6, r20
+000004FE                      597  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 402
+000004FE 63070100             598  	st.w r0, 0x00000000[r3]
+00000502 0330                 599  	mov r3, r6
+00000504                      600  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 404
+00000504 80FF0000             601  	jarl _TimerHalGetRtcTime, r31
+00000508                      602  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 405
+00000508 40160000             603  	movhi HIGHW1(#_g_ntpData.3+0x00000007), r0, r2
+0000050C 82170100             604  	ld.bu LOWW(#_g_ntpData.3+0x00000007)[r2], r2
+00000510 6012                 605  	cmp 0x00000000, r2
+00000512 8A05                 606  	bnz9 .BB.LABEL.7_3
+00000514                      607  .BB.LABEL.7_1:	; bb
+00000514                      608  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 0
+00000514 40160000             609  	movhi HIGHW1(#_g_gnssData.2+0x00000007), r0, r2
+00000518 82170100             610  	ld.bu LOWW(#_g_gnssData.2+0x00000007)[r2], r2
+0000051C 6012                 611  	cmp 0x00000000, r2
+0000051E 8A05                 612  	bnz9 .BB.LABEL.7_3
+00000520                      613  .BB.LABEL.7_2:	; if_then_bb
+00000520                      614  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 408
+00000520 23170100             615  	ld.w 0x00000000[r3], r2
+00000524                      616  	mov 0xC792BC80, r5
+00000524 250680BC92C7            -- mov         0xc792bc80,tp
+0000052A C511                 617  	add r5, r2
+0000052C 63170100             618  	st.w r2, 0x00000000[r3]
+00000530                      619  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 409
+00000530 74170100             620  	st.w r2, 0x00000000[r20]
+00000534 0152                 621  	mov 0x00000001, r10
+00000536                      622  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 410
+00000536 42063F08             623  	dispose 0x00000004, 0x00000041, [r31]
+0000053A                      624  .BB.LABEL.7_3:	; if_else_bb
+0000053A                      625  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 420
+0000053A 23170100             626  	ld.w 0x00000000[r3], r2
+0000053E                      627  	mov 0x386D4380, r5
+0000053E 250680436D38            -- mov         0x386d4380,tp
+00000544 E511                 628  	cmp r5, r2
+00000546 8105                 629  	bl9 .BB.LABEL.7_5
+00000548                      630  .BB.LABEL.7_4:	; if_break_bb47
+00000548                      631  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 0
+00000548                      632  	mov 0xC792BC80, r5
+00000548 250680BC92C7            -- mov         0xc792bc80,tp
+0000054E                      633  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 425
+0000054E C511                 634  	add r5, r2
+00000550 63170100             635  	st.w r2, 0x00000000[r3]
+00000554                      636  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 426
+00000554 74170100             637  	st.w r2, 0x00000000[r20]
+00000558 0052                 638  	mov 0x00000000, r10
+0000055A                      639  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 427
+0000055A 42063F08             640  	dispose 0x00000004, 0x00000041, [r31]
+0000055E                      641  .BB.LABEL.7_5:	; bb53
+0000055E                      642  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 0
+0000055E 1F52                 643  	mov 0xFFFFFFFF, r10
+00000560                      644  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/sdk/source/timeSyncSdk.c", 428
+00000560 42063F08             645  	dispose 0x00000004, 0x00000041, [r31]
+00000000                      646  	.section .const, const
+00000000                      647  _g_monTable.1:
+00000000 1F                   648  	.db 0x1F,0x1C,0x1F,0x1E,0x1F,0x1E,0x1F,0x1F,0x1E,0x1F,0x1E,0x1F
+00000001 1C              
+00000002 1F              
+00000003 1E              
+00000004 1F              
+00000005 1E              
+00000006 1F              
+00000007 1F              
+00000008 1E              
+00000009 1F              
+0000000A 1E              
+0000000B 1F              
+0000000C                      649  .STR.1:
+0000000C 74                   650  	.db 0x74,0x69,0x6D,0x65,0x73,0x79,0x6E,0x63,0x73,0x64,0x6B
+0000000D 69              
+0000000E 6D              
+0000000F 65              
+00000010 73              
+00000011 79              
+00000012 6E              
+00000013 63              
+00000014 73              
+00000015 64              
+00000016 6B              
+00000000                      651  	.section .bss, bss
+00000000                      652  	.align 4
+00000000                      653  _g_gnssData.2:
+00000000                      654  	.ds (8)
+00000008                      655  	.align 4
+00000008                      656  _g_ntpData.3:
+00000008                      657  	.ds (8)
+
+Section List
+Attr     Size                Name
+
+TEXT         1380 (00000564) .text
+BSS            16 (00000010) .bss
+CONST          23 (00000017) .const
+
+Command Line Parameter
+-Xcpu=g3kh -Xreg_mode=32 -Xep=callee -Xcharacter_set=none -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\diagnostic -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\parameter_store -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu\port -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu\uart -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu\iic -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\vehicle_data_to_mpu -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\power_manage -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\mcu_cpu_sync -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\remote_control -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\can_cycle_send -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\project_configure -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\sdk\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\commonLib\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\hal\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\icu\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Icu_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\vss -ID:\wk\sirun\project\dazhong\code\mcu_app\ASW\CDD_FVM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\EEIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanTSyn -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\StbM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CSM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\RSA -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\RandomGen\CTR_DRBG -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\MAC\CMAC -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\Hash\sha256 -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\dh -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\AES -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CryInterface -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\SecOC -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\NvM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\MemIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\Fee -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\WdgM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\WdgIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Wdg_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Gpt_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Fls_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\wdg\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\gpt\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\fls\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\IpduM -ID:\wk\sirun\project\dazhong\code\mcu_app\ASW\APP -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\BswM -ID:\wk\sirun\project\dazhong\code\mcu_app\ASW\BSW_Ext -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\Dcm -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanTp -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Dem -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Libraries\E2E -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Libraries\Crc -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\NmIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanNm -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config\RTE\Rte -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config\RTE\SchM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Libraries\IStd -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\EcuM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\ComM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanSM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\Com -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\PDUR -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\CommonInclude -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config\RH850F1K -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Extend\inc -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Kernel\inc -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Portable\Mcu -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Portable\Processor -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Adc_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Can_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Dio_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Mcu_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Port_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\adc\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\can\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\dio\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\general -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\mcu\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\port\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\CanGeneral\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\Det\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\MemIf\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\SchM\include -DRH850_F1KM_S1_2MB -Xprn_path=DefaultBuild -Xno_warning=50013 -oD:\wk\sirun\project\dazhong\code\mcu_app\Toolchain\CSPLUS_V81200\DefaultBuild\timeSyncSdk.obj D:\wk\sirun\project\dazhong\code\mcu_app\Toolchain\CSPLUS_V81200\DefaultBuild\timeSyncSdk.asm 
+

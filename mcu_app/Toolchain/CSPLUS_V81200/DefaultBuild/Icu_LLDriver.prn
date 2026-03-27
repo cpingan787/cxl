@@ -1,0 +1,2512 @@
+RH850 Family Assembler V2.07.00.03 Assemble Source List
+
+OFFSET   CODE                  NO  SOURCE STATEMENT
+
+00000000                        1  #CC-RH Compiler RH850 Assembler Source
+00000000                        2  #@	CC-RH Version : V2.07.00  [06 Dec 2024]
+00000000                        3  #@	Command : ..\..\Bsw\Mcal\icu\src\Icu_LLDriver.c -oDefaultBuild\Icu_LLDriver.obj -Xcpu=g3kh -Xno_warning=20188,20111 -g -g_line -I..\..\Srcode\app\diagnostic -I..\..\Srcode\app\parameter_store -I..\..\Cpu\port -I..\..\Cpu\uart -I..\..\Cpu\iic -I..\..\Srcode\app\vehicle_data_to_mpu -I..\..\Srcode\app\power_manage -I..\..\Srcode\app\mcu_cpu_sync -I..\..\Srcode\app\remote_control -I..\..\Srcode\app\can_cycle_send -I..\..\Srcode\app\project_configure -I..\..\Srcode\sdk\include -I..\..\Srcode\commonLib\include -I..\..\Srcode\hal\include -I..\..\Bsw\Mcal\icu\include -I..\..\Bsw\Config\MCAL_Config\Icu_OutPut\include -I..\..\Bsw\Crypto\CRYPTO\vss -I..\..\ASW\CDD_FVM -I..\..\Bsw\Memory\EEIf -I..\..\Bsw\Communication\CAN\CanTSyn -I..\..\Bsw\SystemServices\StbM -I..\..\Bsw\Crypto\CSM -I..\..\Bsw\Crypto\CRYPTO\RSA -I..\..\Bsw\Crypto\CRYPTO\RandomGen\CTR_DRBG -I..\..\Bsw\Crypto\CRYPTO\MAC\CMAC -I..\..\Bsw\Crypto\CRYPTO\Hash\sha256 -I..\..\Bsw\Crypto\CRYPTO\dh -I..\..\Bsw\Crypto\CRYPTO\AES -I..\..\Bsw\Crypto\CRYPTO -I..\..\Bsw\Crypto\CryInterface -I..\..\Bsw\Communication\Common\SecOC -I..\..\Bsw\Memory\NvM -I..\..\Bsw\Memory\MemIf -I..\..\Bsw\Memory\Fee -I..\..\Bsw\SystemServices\WdgM -I..\..\Bsw\SystemServices\WdgIf -I..\..\Bsw\Config\MCAL_Config\Wdg_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Gpt_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Fls_OutPut\include -I..\..\Bsw\Mcal\wdg\include -I..\..\Bsw\Mcal\gpt\include -I..\..\Bsw\Mcal\fls\include -I..\..\Bsw\Communication\Common\IpduM -I..\..\ASW\APP -I..\..\Bsw\SystemServices\BswM -I..\..\ASW\BSW_Ext -I..\..\Bsw\Communication\Common\Dcm -I..\..\Bsw\Communication\CAN\CanTp -I..\..\Bsw\SystemServices\Dem -I..\..\Bsw\Libraries\E2E -I..\..\Bsw\Libraries\Crc -I..\..\Bsw\Communication\Common\NmIf -I..\..\Bsw\Communication\CAN\CanNm -I..\..\Bsw\Config\BSW_Config\RTE\Rte -I..\..\Bsw\Config\BSW_Config\RTE\SchM -I..\..\Bsw\Libraries\IStd -I..\..\Bsw\SystemServices\EcuM -I..\..\Bsw\SystemServices\ComM -I..\..\Bsw\Communication\CAN\CanSM -I..\..\Bsw\Communication\CAN\CanIf -I..\..\Bsw\Communication\Common\Com -I..\..\Bsw\Communication\Common\PDUR -I..\..\Cpu -I..\..\Bsw\CommonInclude -I..\..\Bsw\Config\BSW_Config -I..\..\Bsw\Config\BSW_Config\RH850F1K -I..\..\Bsw\SystemServices\Os\Extend\inc -I..\..\Bsw\SystemServices\Os\Kernel\inc -I..\..\Bsw\SystemServices\Os\Portable\Mcu -I..\..\Bsw\SystemServices\Os\Portable\Processor -I..\..\Bsw\Config\MCAL_Config\Adc_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Can_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Dio_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Mcu_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Port_OutPut\include -I..\..\Bsw\Mcal\adc\include -I..\..\Bsw\Mcal\can\include -I..\..\Bsw\Mcal\dio\include -I..\..\Bsw\Mcal\general -I..\..\Bsw\Mcal\mcu\include -I..\..\Bsw\Mcal\port\include -I..\..\Bsw\Mcal\stubs\CanGeneral\include -I..\..\Bsw\Mcal\stubs\Det\include -I..\..\Bsw\Mcal\stubs\MemIf\include -I..\..\Bsw\Mcal\stubs\SchM\include -DRH850_F1KM_S1_2MB -lang=c99 -Xfloat=fpu -Xround=zero -Xdiv -Xasm_path=DefaultBuild -Xasm_option=-Xprn_path=DefaultBuild -c -MAKEUD=DefaultBuild -Xexec_time=C:\Users\xlchen\AppData\Local\Temp\CSPlusBuildTool_f51a29cf8bac40c597f4f4a92b8dd079srvhaugf.yj5
+00000000                        4  #@	compiled at Fri Mar 27 09:50:34 2026
+00000000                        5  
+00000000                        6  	.file "..\..\Bsw\Mcal\icu\src\Icu_LLDriver.c"
+00000000                        7  
+00000000                        8  	$reg_mode 32
+00000000                        9  	.dbl_size 8
+00000000                       10  
+00000000                       11  	.extern _Icu_GaaTAUDBOsReg_BaseAddress
+00000000                       12  	.extern _Icu_GaaTAUDBUserReg_BaseAddress
+00000000                       13  	.extern _Icu_GaaTAUDBChReg_BaseAddress
+00000000                       14  	.extern _Icu_GpfclaReg_BaseAddress
+00000000                       15  	.extern _Icu_GaaReg_8bit
+00000000                       16  	.extern _Icu_GaaRegMirror_8bit
+00000000                       17  	.extern _Icu_GpChannelConfig
+00000000                       18  	.extern _Icu_GpTimerChannelConfig
+00000000                       19  	.extern _Icu_GpTAUUnitConfig
+00000000                       20  	.extern _Icu_GpChannelRamData
+00000000                       21  	.extern _Icu_GpEdgeCountData
+00000000                       22  	.extern _Icu_GpTimeStampData
+00000000                       23  	.extern _Icu_GpSignalMeasurementData
+00000000                       24  	.extern _Icu_GaaTAUDBChannelRegMirror
+00000000                       25  	.extern _Icu_GaaFclaRegsMirror
+00000000                       26  	.extern _Icu_GenModuleMode
+00000000                       27  	.extern _Icu_GaaChannelMeasureStatus
+00000000                       28  	.public _Icu_HW_Init
+00000000                       29  	.extern _Dem_ReportErrorStatus
+00000000                       30  	.public _Icu_HW_DeInit
+00000000                       31  	.public _Icu_HW_EdgeCountingInit
+00000000                       32  	.public _Icu_HW_TimestampInit
+00000000                       33  	.public _Icu_HW_SignalMeasurementInit
+00000000                       34  	.public _Icu_HW_SetActivation
+00000000                       35  	.extern _SchM_Enter_Icu_ICU_CHANNEL_DATA_PROTECTION
+00000000                       36  	.extern _SchM_Exit_Icu_ICU_CHANNEL_DATA_PROTECTION
+00000000                       37  	.extern _SchM_Enter_Icu_ICU_EDGECOUNT_DATA_PROTECTION
+00000000                       38  	.extern _SchM_Exit_Icu_ICU_EDGECOUNT_DATA_PROTECTION
+00000000                       39  	.public _Icu_HW_SetMode
+00000000                       40  	.public _Icu_HW_StartCountMeasurement
+00000000                       41  	.public _Icu_HW_StopCountMeasurement
+00000000                       42  	.public _Icu_HW_GetEdgeNumbers
+00000000                       43  	.public _Icu_HW_ResetEdgeCount
+00000000                       44  	.public _Icu_HW_EnableEdgeDetection
+00000000                       45  	.public _Icu_HW_DisableEdgeDetection
+00000000                       46  	.public _Icu_TimerIsr
+00000000                       47  	.public _Icu_ServiceSignalMeasurement
+00000000                       48  	.public _Icu_ServiceTimestamp
+00000000                       49  	.extern _EcuM_CheckWakeup
+00000000                       50  	.public _Icu_ExternalInterruptIsr
+00000000                       51  	.public _Icu_HW_GetInputLevel
+00000000                       52  	.public _Icu_HW_GetTAUInCountValue
+00000000                       53  	.public _Icu_HW_SynchronousInit
+00000000                       54  	.public _Icu_HW_SynchronousStart
+00000000                       55  	.public _Icu_HW_SynchronousStop
+00000000                       56  	.public _Icu_HW_SynchronousDeInit
+00000000                       57  	.public _Icu_HWCheckConsistency
+00000000                       58  
+00000000                       59  	.section .text, text
+00000000                       60  _Icu_HW_Init:
+00000000                       61  	.stack _Icu_HW_Init = 24
+00000000                       62  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 816
+00000000 8007218F              63  	prepare 0x00000479, 0x00000000
+00000004                       64  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 893
+00000004 40160000              65  	movhi HIGHW1(#_Icu_GpTAUUnitConfig), r0, r2
+00000008 22A70100              66  	ld.w LOWW(#_Icu_GpTAUUnitConfig)[r2], r20
+0000000C                       67  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 887
+0000000C 40160000              68  	movhi HIGHW1(#_Icu_GpTimerChannelConfig), r0, r2
+00000010 22AF0100              69  	ld.w LOWW(#_Icu_GpTimerChannelConfig)[r2], r21
+00000014                       70  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 879
+00000014 40160000              71  	movhi HIGHW1(#_Icu_GpChannelConfig), r0, r2
+00000018 22B70100              72  	ld.w LOWW(#_Icu_GpChannelConfig)[r2], r22
+0000001C 00BA                  73  	mov 0x00000000, r23
+0000001E 8505                  74  	br9 .BB.LABEL.1_6
+00000020                       75  .BB.LABEL.1_1:	; bb
+00000020                       76  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 906
+00000020 14170400              77  	ld.b 0x00000004[r20], r2
+00000024 5F12                  78  	add 0xFFFFFFFF, r2
+00000026 8200                  79  	zxb r2
+00000028 6112                  80  	cmp 0x00000001, r2
+0000002A 8B05                  81  	bh9 .BB.LABEL.1_5
+0000002C                       82  .BB.LABEL.1_2:	; if_then_bb
+0000002C                       83  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 919
+0000002C D4C70800              84  	tst1 0x00000000, 0x00000008[r20]
+00000030 8205                  85  	bz9 .BB.LABEL.1_5
+00000032                       86  .BB.LABEL.1_3:	; if_then_bb40
+00000032                       87  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 922
+00000032 B4170100              88  	ld.bu 0x00000001[r20], r2
+00000036 C212                  89  	shl 0x00000002, r2
+00000038                       90  	mov #_Icu_GaaTAUDBOsReg_BaseAddress, r5
+00000038 250600000000            -- mov         0x0,tp
+0000003E C229                  91  	add r2, r5
+00000040 25170100              92  	ld.w 0x00000000[r5], r2
+00000044                       93  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 927
+00000044 342F0200              94  	ld.h 0x00000002[r20], r5
+00000048 622F0000              95  	st.h r5, 0x00000000[r2]
+0000004C                       96  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 931
+0000004C F42F0300              97  	ld.hu 0x00000002[r20], r5
+00000050 E2170100              98  	ld.hu 0x00000000[r2], r2
+00000054 E229                  99  	cmp r2, r5
+00000056 8205                 100  	bz9 .BB.LABEL.1_5
+00000058                      101  .BB.LABEL.1_4:	; if_then_bb64
+00000058                      102  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 0
+00000058 0132                 103  	mov 0x00000001, r6
+0000005A 0638                 104  	mov r6, r7
+0000005C 80FF0000             105  	jarl _Dem_ReportErrorStatus, r31
+00000060                      106  .BB.LABEL.1_5:	; if_break_bb68
+00000060                      107  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1011
+00000060 41BA                 108  	add 0x00000001, r23
+00000062 4AA2                 109  	add 0x0000000A, r20
+00000064                      110  .BB.LABEL.1_6:	; bb73
+00000064                      111  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 900
+00000064 D706FF00             112  	andi 0x000000FF, r23, r0
+00000068 8205                 113  	bz9 .BB.LABEL.1_1
+0000006A                      114  .BB.LABEL.1_7:	; bb73.bb254_crit_edge
+0000006A                      115  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 0
+0000006A 00A2                 116  	mov 0x00000000, r20
+0000006C 8505                 117  	br9 .BB.LABEL.1_27
+0000006E                      118  .BB.LABEL.1_8:	; bb80
+0000006E                      119  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1066
+0000006E B6171900             120  	ld.bu 0x00000019[r22], r2
+00000072 C2BE0300             121  	andi 0x00000003, r2, r23
+00000076                      122  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1073
+00000076 8412                 123  	shr 0x00000004, r2
+00000078 C2160300             124  	andi 0x00000003, r2, r2
+0000007C 6112                 125  	cmp 0x00000001, r2
+0000007E 8205                 126  	bz9 .BB.LABEL.1_10
+00000080                      127  .BB.LABEL.1_9:	; bb97
+00000080                      128  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 0
+00000080 16171900             129  	ld.b 0x00000019[r22], r2
+00000084 8412                 130  	shr 0x00000004, r2
+00000086 C2160300             131  	andi 0x00000003, r2, r2
+0000008A 6212                 132  	cmp 0x00000002, r2
+0000008C 8A05                 133  	bnz9 .BB.LABEL.1_20
+0000008E                      134  .BB.LABEL.1_10:	; if_then_bb115
+0000008E                      135  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1084
+0000008E 96170500             136  	ld.bu 0x00000004[r22], r2
+00000092 C212                 137  	shl 0x00000002, r2
+00000094                      138  	mov #_Icu_GaaTAUDBChReg_BaseAddress, r5
+00000094 250600000000            -- mov         0x0,tp
+0000009A C229                 139  	add r2, r5
+0000009C 25C70100             140  	ld.w 0x00000000[r5], r24
+000000A0                      141  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1089
+000000A0 35170000             142  	ld.h 0x00000000[r21], r2
+000000A4 78170002             143  	st.h r2, 0x00000200[r24]
+000000A8                      144  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1093
+000000A8 F5170100             145  	ld.hu 0x00000000[r21], r2
+000000AC F82F0102             146  	ld.hu 0x00000200[r24], r5
+000000B0 E511                 147  	cmp r5, r2
+000000B2 8205                 148  	bz9 .BB.LABEL.1_12
+000000B4                      149  .BB.LABEL.1_11:	; if_then_bb139
+000000B4                      150  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 0
+000000B4 0132                 151  	mov 0x00000001, r6
+000000B6 0638                 152  	mov r6, r7
+000000B8 80FF0000             153  	jarl _Dem_ReportErrorStatus, r31
+000000BC                      154  .BB.LABEL.1_12:	; if_break_bb141
+000000BC                      155  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1098
+000000BC 15170200             156  	ld.b 0x00000002[r21], r2
+000000C0 5817C000             157  	st.b r2, 0x000000C0[r24]
+000000C4 D416FF00             158  	andi 0x000000FF, r20, r2
+000000C8                      159  	mov #_Icu_GaaTAUDBChannelRegMirror, r5
+000000C8 250600000000            -- mov         0x0,tp
+000000CE C229                 160  	add r2, r5
+000000D0 15170200             161  	ld.b 0x00000002[r21], r2
+000000D4 45170000             162  	st.b r2, 0x00000000[r5]
+000000D8                      163  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1102
+000000D8 95170300             164  	ld.bu 0x00000002[r21], r2
+000000DC 982FC100             165  	ld.bu 0x000000C0[r24], r5
+000000E0 C52E0300             166  	andi 0x00000003, r5, r5
+000000E4 E511                 167  	cmp r5, r2
+000000E6 8205                 168  	bz9 .BB.LABEL.1_14
+000000E8                      169  .BB.LABEL.1_13:	; if_then_bb166
+000000E8                      170  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 0
+000000E8 0132                 171  	mov 0x00000001, r6
+000000EA 0638                 172  	mov r6, r7
+000000EC 80FF0000             173  	jarl _Dem_ReportErrorStatus, r31
+000000F0                      174  .BB.LABEL.1_14:	; if_break_bb168
+000000F0                      175  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1107
+000000F0 63BA                 176  	cmp 0x00000003, r23
+000000F2 8A05                 177  	bnz9 .BB.LABEL.1_16
+000000F4                      178  .BB.LABEL.1_15:	; if_then_bb173
+000000F4                      179  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 0
+000000F4 1F12                 180  	mov 0xFFFFFFFF, r2
+000000F6                      181  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1110
+000000F6 78170000             182  	st.h r2, 0x00000000[r24]
+000000FA                      183  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1114
+000000FA F8C70100             184  	ld.hu 0x00000000[r24], r24
+000000FE 8016FFFF             185  	ori 0x0000FFFF, r0, r2
+00000102 E2C1                 186  	cmp r2, r24
+00000104 8A05                 187  	bnz9 .BB.LABEL.1_18
+00000106 8505                 188  	br9 .BB.LABEL.1_19
+00000108                      189  .BB.LABEL.1_16:	; if_else_bb187
+00000108                      190  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1118
+00000108 61BA                 191  	cmp 0x00000001, r23
+0000010A 8A05                 192  	bnz9 .BB.LABEL.1_19
+0000010C                      193  .BB.LABEL.1_17:	; if_then_bb192
+0000010C                      194  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 0
+0000010C 0112                 195  	mov 0x00000001, r2
+0000010E                      196  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1121
+0000010E 58178001             197  	st.b r2, 0x00000180[r24]
+00000112                      198  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1124
+00000112 D8C74001             199  	tst1 0x00000000, 0x00000140[r24]
+00000116 8205                 200  	bz9 .BB.LABEL.1_19
+00000118                      201  .BB.LABEL.1_18:	; if_then_bb203
+00000118                      202  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 0
+00000118 0132                 203  	mov 0x00000001, r6
+0000011A 0638                 204  	mov r6, r7
+0000011C 80FF0000             205  	jarl _Dem_ReportErrorStatus, r31
+00000120                      206  .BB.LABEL.1_19:	; if_break_bb208
+00000120                      207  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1135
+00000120 36170D00             208  	ld.w 0x0000000C[r22], r2
+00000124 022F0000             209  	ld.b 0x00000000[r2], r5
+00000128 852E8000             210  	ori 0x00000080, r5, r5
+0000012C 422F0000             211  	st.b r5, 0x00000000[r2]
+00000130                      212  .BB.LABEL.1_20:	; if_break_bb235
+00000130                      213  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1212
+00000130 61BA                 214  	cmp 0x00000001, r23
+00000132 8205                 215  	bz9 .BB.LABEL.1_25
+00000134                      216  .BB.LABEL.1_21:	; if_break_bb235
+00000134                      217  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 0
+00000134 62BA                 218  	cmp 0x00000002, r23
+00000136 8205                 219  	bz9 .BB.LABEL.1_24
+00000138                      220  .BB.LABEL.1_22:	; if_break_bb235
+00000138 63BA                 221  	cmp 0x00000003, r23
+0000013A 8A05                 222  	bnz9 .BB.LABEL.1_26
+0000013C                      223  .BB.LABEL.1_23:	; switch_clause_bb
+0000013C                      224  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1220
+0000013C 1530                 225  	mov r21, r6
+0000013E 80FF0000             226  	jarl _Icu_HW_EdgeCountingInit, r31
+00000142 8505                 227  	br9 .BB.LABEL.1_26
+00000144                      228  .BB.LABEL.1_24:	; switch_clause_bb239
+00000144                      229  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1230
+00000144 1530                 230  	mov r21, r6
+00000146 80FF0000             231  	jarl _Icu_HW_TimestampInit, r31
+0000014A 8505                 232  	br9 .BB.LABEL.1_26
+0000014C                      233  .BB.LABEL.1_25:	; switch_clause_bb242
+0000014C                      234  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1240
+0000014C 1530                 235  	mov r21, r6
+0000014E 80FF0000             236  	jarl _Icu_HW_SignalMeasurementInit, r31
+00000152                      237  .BB.LABEL.1_26:	; bb247
+00000152                      238  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1264
+00000152 41A2                 239  	add 0x00000001, r20
+00000154 46AA                 240  	add 0x00000006, r21
+00000156                      241  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1255
+00000156 36B61C00             242  	movea 0x0000001C, r22, r22
+0000015A                      243  .BB.LABEL.1_27:	; bb254
+0000015A                      244  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1059
+0000015A D416FF00             245  	andi 0x000000FF, r20, r2
+0000015E 6212                 246  	cmp 0x00000002, r2
+00000160 8105                 247  	bl9 .BB.LABEL.1_8
+00000162                      248  .BB.LABEL.1_28:	; bb254.bb301_crit_edge
+00000162                      249  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 0
+00000162 02A2                 250  	mov 0x00000002, r20
+00000164 8505                 251  	br9 .BB.LABEL.1_32
+00000166                      252  .BB.LABEL.1_29:	; bb261
+00000166                      253  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1288
+00000166 B6171900             254  	ld.bu 0x00000019[r22], r2
+0000016A                      255  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1294
+0000016A C2060300             256  	andi 0x00000003, r2, r0
+0000016E 8A05                 257  	bnz9 .BB.LABEL.1_31
+00000170                      258  .BB.LABEL.1_30:	; if_then_bb273
+00000170                      259  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1305
+00000170 36170D00             260  	ld.w 0x0000000C[r22], r2
+00000174                      261  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1299
+00000174 162F1900             262  	ld.b 0x00000019[r22], r5
+00000178                      263  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1305
+00000178 02370000             264  	ld.b 0x00000000[r2], r6
+0000017C 86368000             265  	ori 0x00000080, r6, r6
+00000180 42370000             266  	st.b r6, 0x00000000[r2]
+00000184                      267  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1299
+00000184 822A                 268  	shr 0x00000002, r5
+00000186 C53E0300             269  	andi 0x00000003, r5, r7
+0000018A                      270  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1310
+0000018A D436FF00             271  	andi 0x000000FF, r20, r6
+0000018E 0042                 272  	mov 0x00000000, r8
+00000190 80FF0000             273  	jarl _Icu_HW_SetActivation, r31
+00000194                      274  .BB.LABEL.1_31:	; if_break_bb296
+00000194                      275  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1321
+00000194 41A2                 276  	add 0x00000001, r20
+00000196 36B61C00             277  	movea 0x0000001C, r22, r22
+0000019A                      278  .BB.LABEL.1_32:	; bb301
+0000019A                      279  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1279
+0000019A D416FF00             280  	andi 0x000000FF, r20, r2
+0000019E 6812                 281  	cmp 0x00000008, r2
+000001A0 8105                 282  	bl9 .BB.LABEL.1_29
+000001A2                      283  .BB.LABEL.1_33:	; return
+000001A2                      284  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1325
+000001A2 40063F8F             285  	dispose 0x00000000, 0x00000479, [r31]
+000001A6                      286  _Icu_HW_DeInit:
+000001A6                      287  	.stack _Icu_HW_DeInit = 16
+000001A6                      288  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1377
+000001A6 8007210E             289  	prepare 0x00000071, 0x00000000
+000001AA                      290  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1420
+000001AA 40160000             291  	movhi HIGHW1(#_Icu_GpChannelConfig), r0, r2
+000001AE 22A70100             292  	ld.w LOWW(#_Icu_GpChannelConfig)[r2], r20
+000001B2 00AA                 293  	mov 0x00000000, r21
+000001B4 8505                 294  	br9 .BB.LABEL.2_16
+000001B6                      295  .BB.LABEL.2_1:	; bb
+000001B6                      296  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1466
+000001B6 14171900             297  	ld.b 0x00000019[r20], r2
+000001BA 8412                 298  	shr 0x00000004, r2
+000001BC C2160300             299  	andi 0x00000003, r2, r2
+000001C0 6112                 300  	cmp 0x00000001, r2
+000001C2 8205                 301  	bz9 .BB.LABEL.2_3
+000001C4                      302  .BB.LABEL.2_2:	; bb17
+000001C4                      303  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 0
+000001C4 14171900             304  	ld.b 0x00000019[r20], r2
+000001C8 8412                 305  	shr 0x00000004, r2
+000001CA C2160300             306  	andi 0x00000003, r2, r2
+000001CE 6212                 307  	cmp 0x00000002, r2
+000001D0 8A05                 308  	bnz9 .BB.LABEL.2_12
+000001D2                      309  .BB.LABEL.2_3:	; if_then_bb
+000001D2                      310  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1479
+000001D2 94170500             311  	ld.bu 0x00000004[r20], r2
+000001D6 C212                 312  	shl 0x00000002, r2
+000001D8                      313  	mov #_Icu_GaaTAUDBChReg_BaseAddress, r5
+000001D8 250600000000            -- mov         0x0,tp
+000001DE C229                 314  	add r2, r5
+000001E0 25B70100             315  	ld.w 0x00000000[r5], r22
+000001E4 B4171900             316  	ld.bu 0x00000019[r20], r2
+000001E8                      317  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1475
+000001E8 C2160300             318  	andi 0x00000003, r2, r2
+000001EC                      319  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1483
+000001EC 6112                 320  	cmp 0x00000001, r2
+000001EE 8A05                 321  	bnz9 .BB.LABEL.2_6
+000001F0                      322  .BB.LABEL.2_4:	; if_then_bb50
+000001F0                      323  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 0
+000001F0 0112                 324  	mov 0x00000001, r2
+000001F2                      325  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1489
+000001F2 56178001             326  	st.b r2, 0x00000180[r22]
+000001F6                      327  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1493
+000001F6 D6C74001             328  	tst1 0x00000000, 0x00000140[r22]
+000001FA 8205                 329  	bz9 .BB.LABEL.2_6
+000001FC                      330  .BB.LABEL.2_5:	; if_then_bb61
+000001FC                      331  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 0
+000001FC 0132                 332  	mov 0x00000001, r6
+000001FE 0638                 333  	mov r6, r7
+00000200 80FF0000             334  	jarl _Dem_ReportErrorStatus, r31
+00000204                      335  .BB.LABEL.2_6:	; if_break_bb63
+00000204                      336  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1504
+00000204 76070002             337  	st.h r0, 0x00000200[r22]
+00000208                      338  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1507
+00000208 F6170102             339  	ld.hu 0x00000200[r22], r2
+0000020C 6012                 340  	cmp 0x00000000, r2
+0000020E 8205                 341  	bz9 .BB.LABEL.2_8
+00000210                      342  .BB.LABEL.2_7:	; if_then_bb74
+00000210                      343  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 0
+00000210 0132                 344  	mov 0x00000001, r6
+00000212 0638                 345  	mov r6, r7
+00000214 80FF0000             346  	jarl _Dem_ReportErrorStatus, r31
+00000218                      347  .BB.LABEL.2_8:	; if_break_bb76
+00000218                      348  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1511
+00000218 76070000             349  	st.h r0, 0x00000000[r22]
+0000021C                      350  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1513
+0000021C F6170100             351  	ld.hu 0x00000000[r22], r2
+00000220 6012                 352  	cmp 0x00000000, r2
+00000222 8205                 353  	bz9 .BB.LABEL.2_10
+00000224                      354  .BB.LABEL.2_9:	; if_then_bb87
+00000224                      355  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 0
+00000224 0132                 356  	mov 0x00000001, r6
+00000226 0638                 357  	mov r6, r7
+00000228 80FF0000             358  	jarl _Dem_ReportErrorStatus, r31
+0000022C                      359  .BB.LABEL.2_10:	; if_break_bb89
+0000022C                      360  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1517
+0000022C 5607C000             361  	st.b r0, 0x000000C0[r22]
+00000230 D516FF00             362  	andi 0x000000FF, r21, r2
+00000234                      363  	mov #_Icu_GaaTAUDBChannelRegMirror, r5
+00000234 250600000000            -- mov         0x0,tp
+0000023A C229                 364  	add r2, r5
+0000023C 45070000             365  	st.b r0, 0x00000000[r5]
+00000240                      366  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1521
+00000240 9617C100             367  	ld.bu 0x000000C0[r22], r2
+00000244 C2060300             368  	andi 0x00000003, r2, r0
+00000248 8205                 369  	bz9 .BB.LABEL.2_12
+0000024A                      370  .BB.LABEL.2_11:	; if_then_bb104
+0000024A                      371  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 0
+0000024A 0132                 372  	mov 0x00000001, r6
+0000024C 0638                 373  	mov r6, r7
+0000024E 80FF0000             374  	jarl _Dem_ReportErrorStatus, r31
+00000252                      375  .BB.LABEL.2_12:	; if_break_bb121
+00000252                      376  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1594
+00000252 34170D00             377  	ld.w 0x0000000C[r20], r2
+00000256                      378  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1597
+00000256 022F0000             379  	ld.b 0x00000000[r2], r5
+0000025A 852E8000             380  	ori 0x00000080, r5, r5
+0000025E 422F0000             381  	st.b r5, 0x00000000[r2]
+00000262                      382  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1604
+00000262 B4171900             383  	ld.bu 0x00000019[r20], r2
+00000266                      384  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1608
+00000266 C2060300             385  	andi 0x00000003, r2, r0
+0000026A 8A05                 386  	bnz9 .BB.LABEL.2_15
+0000026C                      387  .BB.LABEL.2_13:	; if_then_bb144
+0000026C                      388  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1612
+0000026C 40160000             389  	movhi HIGHW1(#_Icu_GpfclaReg_BaseAddress), r0, r2
+00000270 222F0100             390  	ld.w LOWW(#_Icu_GpfclaReg_BaseAddress)[r2], r5
+00000274 94370500             391  	ld.bu 0x00000004[r20], r6
+00000278 C629                 392  	add r6, r5
+0000027A 45070000             393  	st.b r0, 0x00000000[r5]
+0000027E D52EFF00             394  	andi 0x000000FF, r21, r5
+00000282                      395  	mov #_Icu_GaaFclaRegsMirror, r6
+00000282 260600000000            -- mov         0x0,r6
+00000288 C531                 396  	add r5, r6
+0000028A 46070000             397  	st.b r0, 0x00000000[r6]
+0000028E                      398  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1618
+0000028E 22170100             399  	ld.w LOWW(#_Icu_GpfclaReg_BaseAddress)[r2], r2
+00000292 942F0500             400  	ld.bu 0x00000004[r20], r5
+00000296 C511                 401  	add r5, r2
+00000298 82170100             402  	ld.bu 0x00000000[r2], r2
+0000029C C2060700             403  	andi 0x00000007, r2, r0
+000002A0 8205                 404  	bz9 .BB.LABEL.2_15
+000002A2                      405  .BB.LABEL.2_14:	; if_then_bb171
+000002A2                      406  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 0
+000002A2 0132                 407  	mov 0x00000001, r6
+000002A4 0638                 408  	mov r6, r7
+000002A6 80FF0000             409  	jarl _Dem_ReportErrorStatus, r31
+000002AA                      410  .BB.LABEL.2_15:	; if_break_bb175
+000002AA                      411  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1641
+000002AA 41AA                 412  	add 0x00000001, r21
+000002AC                      413  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1632
+000002AC 34A61C00             414  	movea 0x0000001C, r20, r20
+000002B0                      415  .BB.LABEL.2_16:	; bb182
+000002B0                      416  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1460
+000002B0 D516FF00             417  	andi 0x000000FF, r21, r2
+000002B4 6812                 418  	cmp 0x00000008, r2
+000002B6 8105                 419  	bl9 .BB.LABEL.2_1
+000002B8                      420  .BB.LABEL.2_17:	; return
+000002B8                      421  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1647
+000002B8 40063F0E             422  	dispose 0x00000000, 0x00000071, [r31]
+000002BC                      423  _Icu_HW_EdgeCountingInit:
+000002BC                      424  	.stack _Icu_HW_EdgeCountingInit = 0
+000002BC                      425  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1694
+000002BC 40160000             426  	movhi HIGHW1(#_Icu_GpEdgeCountData), r0, r2
+000002C0                      427  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1710
+000002C0 22170100             428  	ld.w LOWW(#_Icu_GpEdgeCountData)[r2], r2
+000002C4 862F0500             429  	ld.bu 0x00000004[r6], r5
+000002C8 C22A                 430  	shl 0x00000002, r5
+000002CA C511                 431  	add r5, r2
+000002CC C2870000             432  	clr1 0x00000000, 0x00000000[r2]
+000002D0 7F00                 433  	jmp [r31]
+000002D2                      434  _Icu_HW_TimestampInit:
+000002D2                      435  	.stack _Icu_HW_TimestampInit = 0
+000002D2                      436  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1759
+000002D2 86170500             437  	ld.bu 0x00000004[r6], r2
+000002D6                      438  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1773
+000002D6 EC12                 439  	mulh 0x0000000C, r2
+000002D8 402E0000             440  	movhi HIGHW1(#_Icu_GpTimeStampData), r0, r5
+000002DC 25370100             441  	ld.w LOWW(#_Icu_GpTimeStampData)[r5], r6
+000002E0 C231                 442  	add r2, r6
+000002E2 66070600             443  	st.h r0, 0x00000006[r6]
+000002E6                      444  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1776
+000002E6 252F0100             445  	ld.w LOWW(#_Icu_GpTimeStampData)[r5], r5
+000002EA C229                 446  	add r2, r5
+000002EC 65070100             447  	st.w r0, 0x00000000[r5]
+000002F0 7F00                 448  	jmp [r31]
+000002F2                      449  _Icu_HW_SignalMeasurementInit:
+000002F2                      450  	.stack _Icu_HW_SignalMeasurementInit = 0
+000002F2                      451  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1822
+000002F2 86170500             452  	ld.bu 0x00000004[r6], r2
+000002F6                      453  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1839
+000002F6 EC12                 454  	mulh 0x0000000C, r2
+000002F8 402E0000             455  	movhi HIGHW1(#_Icu_GpSignalMeasurementData), r0, r5
+000002FC 25370100             456  	ld.w LOWW(#_Icu_GpSignalMeasurementData)[r5], r6
+00000300 C231                 457  	add r2, r6
+00000302 66070100             458  	st.w r0, 0x00000000[r6]
+00000306                      459  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1843
+00000306 25370100             460  	ld.w LOWW(#_Icu_GpSignalMeasurementData)[r5], r6
+0000030A C231                 461  	add r2, r6
+0000030C 66070500             462  	st.w r0, 0x00000004[r6]
+00000310                      463  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1846
+00000310 252F0100             464  	ld.w LOWW(#_Icu_GpSignalMeasurementData)[r5], r5
+00000314 C229                 465  	add r2, r5
+00000316 65070900             466  	st.w r0, 0x00000008[r5]
+0000031A 7F00                 467  	jmp [r31]
+0000031C                      468  _Icu_HW_SetActivation:
+0000031C                      469  	.stack _Icu_HW_SetActivation = 32
+0000031C                      470  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1898
+0000031C 800721EF             471  	prepare 0x00000779, 0x00000000
+00000320                      472  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1928
+00000320 40160000             473  	movhi HIGHW1(#_Icu_GpChannelConfig), r0, r2
+00000324 22A70100             474  	ld.w LOWW(#_Icu_GpChannelConfig)[r2], r20
+00000328 E6161C00             475  	mulhi 0x0000001C, r6, r2
+0000032C D411                 476  	add r20, r2
+0000032E                      477  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1952
+0000032E A22F1900             478  	ld.bu 0x00000019[r2], r5
+00000332 C5AE0300             479  	andi 0x00000003, r5, r21
+00000336                      480  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1958
+00000336 60AA                 481  	cmp 0x00000000, r21
+00000338                      482  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1942
+00000338 402E0000             483  	movhi HIGHW1(#_Icu_GpTimerChannelConfig), r0, r5
+0000033C 25B70100             484  	ld.w LOWW(#_Icu_GpTimerChannelConfig)[r5], r22
+00000340                      485  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1958
+00000340 06B8                 486  	mov r6, r23
+00000342 06C0                 487  	mov r6, r24
+00000344 07C8                 488  	mov r7, r25
+00000346 06D0                 489  	mov r6, r26
+00000348 EA070100             490  	bnz17 .BB.LABEL.6_13
+0000034C                      491  .BB.LABEL.6_1:	; if_then_bb
+0000034C                      492  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1961
+0000034C A2AF1900             493  	ld.bu 0x00000019[r2], r21
+00000350 D5063000             494  	andi 0x00000030, r21, r0
+00000354 8A05                 495  	bnz9 .BB.LABEL.6_10
+00000356                      496  .BB.LABEL.6_2:	; if_then_bb36
+00000356                      497  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1966
+00000356 F8AE1C00             498  	mulhi 0x0000001C, r24, r21
+0000035A D5A1                 499  	add r21, r20
+0000035C 94AF0500             500  	ld.bu 0x00000004[r20], r21
+00000360 40B60000             501  	movhi HIGHW1(#_Icu_GpfclaReg_BaseAddress), r0, r22
+00000364 36BF0100             502  	ld.w LOWW(#_Icu_GpfclaReg_BaseAddress)[r22], r23
+00000368 D5B9                 503  	add r21, r23
+0000036A 57070000             504  	st.b r0, 0x00000000[r23]
+0000036E                      505  	mov #_Icu_GaaFclaRegsMirror, r21
+0000036E 350600000000            -- mov         0x0,r21
+00000374 DAA9                 506  	add r26, r21
+00000376 55070000             507  	st.b r0, 0x00000000[r21]
+0000037A                      508  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1972
+0000037A 94AF0500             509  	ld.bu 0x00000004[r20], r21
+0000037E                      510  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1966
+0000037E 44A2                 511  	add 0x00000004, r20
+00000380                      512  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1972
+00000380 36B70100             513  	ld.w LOWW(#_Icu_GpfclaReg_BaseAddress)[r22], r22
+00000384 D5B1                 514  	add r21, r22
+00000386 96AF0100             515  	ld.bu 0x00000000[r22], r21
+0000038A D5060700             516  	andi 0x00000007, r21, r0
+0000038E 8205                 517  	bz9 .BB.LABEL.6_4
+00000390                      518  .BB.LABEL.6_3:	; if_then_bb63
+00000390                      519  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 0
+00000390 0132                 520  	mov 0x00000001, r6
+00000392 0638                 521  	mov r6, r7
+00000394 80FF0000             522  	jarl _Dem_ReportErrorStatus, r31
+00000398                      523  .BB.LABEL.6_4:	; if_break_bb
+00000398                      524  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1976
+00000398 40AE0000             525  	movhi HIGHW1(#_Icu_GpfclaReg_BaseAddress), r0, r21
+0000039C 35AF0100             526  	ld.w LOWW(#_Icu_GpfclaReg_BaseAddress)[r21], r21
+000003A0 94B70100             527  	ld.bu 0x00000000[r20], r22
+000003A4 D6A9                 528  	add r22, r21
+000003A6 62CA                 529  	cmp 0x00000002, r25
+000003A8 8A05                 530  	bnz9 .BB.LABEL.6_6
+000003AA                      531  .BB.LABEL.6_5:	; if_then_bb68
+000003AA                      532  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 0
+000003AA 03B2                 533  	mov 0x00000003, r22
+000003AC                      534  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1979
+000003AC 55B70000             535  	st.b r22, 0x00000000[r21]
+000003B0                      536  	mov #_Icu_GaaFclaRegsMirror, r21
+000003B0 350600000000            -- mov         0x0,r21
+000003B6 DAA9                 537  	add r26, r21
+000003B8 55B70000             538  	st.b r22, 0x00000000[r21]
+000003BC                      539  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1984
+000003BC 40AE0000             540  	movhi HIGHW1(#_Icu_GpfclaReg_BaseAddress), r0, r21
+000003C0 35AF0100             541  	ld.w LOWW(#_Icu_GpfclaReg_BaseAddress)[r21], r21
+000003C4 94A70100             542  	ld.bu 0x00000000[r20], r20
+000003C8 D4A9                 543  	add r20, r21
+000003CA 95AF0100             544  	ld.bu 0x00000000[r21], r21
+000003CE D5AE0700             545  	andi 0x00000007, r21, r21
+000003D2 63AA                 546  	cmp 0x00000003, r21
+000003D4 8A05                 547  	bnz9 .BB.LABEL.6_9
+000003D6 80070000             548  	jr .BB.LABEL.6_18
+000003DA                      549  .BB.LABEL.6_6:	; if_else_bb98
+000003DA                      550  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1989
+000003DA 60CA                 551  	cmp 0x00000000, r25
+000003DC 8A05                 552  	bnz9 .BB.LABEL.6_8
+000003DE                      553  .BB.LABEL.6_7:	; if_then_bb103
+000003DE                      554  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 0
+000003DE 02B2                 555  	mov 0x00000002, r22
+000003E0                      556  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1992
+000003E0 55B70000             557  	st.b r22, 0x00000000[r21]
+000003E4                      558  	mov #_Icu_GaaFclaRegsMirror, r21
+000003E4 350600000000            -- mov         0x0,r21
+000003EA DAA9                 559  	add r26, r21
+000003EC 55B70000             560  	st.b r22, 0x00000000[r21]
+000003F0                      561  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 1997
+000003F0 40AE0000             562  	movhi HIGHW1(#_Icu_GpfclaReg_BaseAddress), r0, r21
+000003F4 35AF0100             563  	ld.w LOWW(#_Icu_GpfclaReg_BaseAddress)[r21], r21
+000003F8 94A70100             564  	ld.bu 0x00000000[r20], r20
+000003FC D4A9                 565  	add r20, r21
+000003FE 95AF0100             566  	ld.bu 0x00000000[r21], r21
+00000402 D5AE0700             567  	andi 0x00000007, r21, r21
+00000406 62AA                 568  	cmp 0x00000002, r21
+00000408 8A05                 569  	bnz9 .BB.LABEL.6_9
+0000040A 8505                 570  	br9 .BB.LABEL.6_18
+0000040C                      571  .BB.LABEL.6_8:	; if_else_bb133
+0000040C                      572  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 0
+0000040C 01B2                 573  	mov 0x00000001, r22
+0000040E                      574  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2005
+0000040E 55B70000             575  	st.b r22, 0x00000000[r21]
+00000412                      576  	mov #_Icu_GaaFclaRegsMirror, r21
+00000412 350600000000            -- mov         0x0,r21
+00000418 DAA9                 577  	add r26, r21
+0000041A 55B70000             578  	st.b r22, 0x00000000[r21]
+0000041E                      579  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2010
+0000041E 40AE0000             580  	movhi HIGHW1(#_Icu_GpfclaReg_BaseAddress), r0, r21
+00000422 35AF0100             581  	ld.w LOWW(#_Icu_GpfclaReg_BaseAddress)[r21], r21
+00000426 94A70100             582  	ld.bu 0x00000000[r20], r20
+0000042A D4A9                 583  	add r20, r21
+0000042C 95A70100             584  	ld.bu 0x00000000[r21], r20
+00000430 D4A60700             585  	andi 0x00000007, r20, r20
+00000434 61A2                 586  	cmp 0x00000001, r20
+00000436 8205                 587  	bz9 .BB.LABEL.6_18
+00000438                      588  .BB.LABEL.6_9:	; if_then_bb160
+00000438                      589  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 0
+00000438 0132                 590  	mov 0x00000001, r6
+0000043A 0638                 591  	mov r6, r7
+0000043C 80FF0000             592  	jarl _Dem_ReportErrorStatus, r31
+00000440                      593  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2185
+00000440 40063FEF             594  	dispose 0x00000000, 0x00000779, [r31]
+00000444                      595  .BB.LABEL.6_10:	; if_else_bb165
+00000444                      596  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2023
+00000444 80FF0000             597  	jarl _SchM_Enter_Icu_ICU_CHANNEL_DATA_PROTECTION, r31
+00000448                      598  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2026
+00000448 F8AE1C00             599  	mulhi 0x0000001C, r24, r21
+0000044C D5A1                 600  	add r21, r20
+0000044E 94A70500             601  	ld.bu 0x00000004[r20], r20
+00000452 C2A2                 602  	shl 0x00000002, r20
+00000454                      603  	mov #_Icu_GaaTAUDBChReg_BaseAddress, r21
+00000454 350600000000            -- mov         0x0,r21
+0000045A D4A9                 604  	add r20, r21
+0000045C 35A70100             605  	ld.w 0x00000000[r21], r20
+00000460                      606  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2030
+00000460 54CFC000             607  	st.b r25, 0x000000C0[r20]
+00000464                      608  	mov #_Icu_GaaTAUDBChannelRegMirror, r21
+00000464 350600000000            -- mov         0x0,r21
+0000046A DAA9                 609  	add r26, r21
+0000046C 55CF0000             610  	st.b r25, 0x00000000[r21]
+00000470                      611  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2036
+00000470 94A7C100             612  	ld.bu 0x000000C0[r20], r20
+00000474 D4A60300             613  	andi 0x00000003, r20, r20
+00000478 9900                 614  	zxb r25
+0000047A F4C9                 615  	cmp r20, r25
+0000047C 8205                 616  	bz9 .BB.LABEL.6_12
+0000047E                      617  .BB.LABEL.6_11:	; if_then_bb193
+0000047E                      618  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 0
+0000047E 0132                 619  	mov 0x00000001, r6
+00000480 0638                 620  	mov r6, r7
+00000482 80FF0000             621  	jarl _Dem_ReportErrorStatus, r31
+00000486                      622  .BB.LABEL.6_12:	; if_break_bb195
+00000486                      623  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2042
+00000486 80FF0000             624  	jarl _SchM_Exit_Icu_ICU_CHANNEL_DATA_PROTECTION, r31
+0000048A 40063FEF             625  	dispose 0x00000000, 0x00000779, [r31]
+0000048E                      626  .BB.LABEL.6_13:	; if_else_bb197
+0000048E                      627  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2065
+0000048E 80FF0000             628  	jarl _SchM_Enter_Icu_ICU_EDGECOUNT_DATA_PROTECTION, r31
+00000492                      629  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2068
+00000492 F8161C00             630  	mulhi 0x0000001C, r24, r2
+00000496 C2A1                 631  	add r2, r20
+00000498 94170500             632  	ld.bu 0x00000004[r20], r2
+0000049C C212                 633  	shl 0x00000002, r2
+0000049E                      634  	mov #_Icu_GaaTAUDBChReg_BaseAddress, r5
+0000049E 250600000000            -- mov         0x0,tp
+000004A4 C229                 635  	add r2, r5
+000004A6 25170100             636  	ld.w 0x00000000[r5], r2
+000004AA                      637  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2070
+000004AA 63AA                 638  	cmp 0x00000003, r21
+000004AC 8A05                 639  	bnz9 .BB.LABEL.6_15
+000004AE                      640  .BB.LABEL.6_14:	; if_then_bb208
+000004AE                      641  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2074
+000004AE E6BA                 642  	mulh 0x00000006, r23
+000004B0 D7B1                 643  	add r23, r22
+000004B2                      644  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2082
+000004B2 962F0500             645  	ld.bu 0x00000004[r22], r5
+000004B6 C22A                 646  	shl 0x00000002, r5
+000004B8 40360000             647  	movhi HIGHW1(#_Icu_GpEdgeCountData), r0, r6
+000004BC 26370100             648  	ld.w LOWW(#_Icu_GpEdgeCountData)[r6], r6
+000004C0 C531                 649  	add r5, r6
+000004C2 C6C70000             650  	tst1 0x00000000, 0x00000000[r6]
+000004C6 8A05                 651  	bnz9 .BB.LABEL.6_17
+000004C8                      652  .BB.LABEL.6_15:	; if_else_bb252
+000004C8                      653  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 0
+000004C8 42CFC000             654  	st.b r25, 0x000000C0[r2]
+000004CC                      655  	mov #_Icu_GaaTAUDBChannelRegMirror, r5
+000004CC 250600000000            -- mov         0x0,tp
+000004D2 DA29                 656  	add r26, r5
+000004D4 45CF0000             657  	st.b r25, 0x00000000[r5]
+000004D8 8217C100             658  	ld.bu 0x000000C0[r2], r2
+000004DC C2160300             659  	andi 0x00000003, r2, r2
+000004E0 9900                 660  	zxb r25
+000004E2 E2C9                 661  	cmp r2, r25
+000004E4 8205                 662  	bz9 .BB.LABEL.6_17
+000004E6                      663  .BB.LABEL.6_16:	; if_then_bb274
+000004E6 0132                 664  	mov 0x00000001, r6
+000004E8 0638                 665  	mov r6, r7
+000004EA 80FF0000             666  	jarl _Dem_ReportErrorStatus, r31
+000004EE                      667  .BB.LABEL.6_17:	; if_break_bb277
+000004EE                      668  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2116
+000004EE 80FF0000             669  	jarl _SchM_Exit_Icu_ICU_EDGECOUNT_DATA_PROTECTION, r31
+000004F2                      670  .BB.LABEL.6_18:	; return
+000004F2                      671  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2185
+000004F2 40063FEF             672  	dispose 0x00000000, 0x00000779, [r31]
+000004F6                      673  _Icu_HW_SetMode:
+000004F6                      674  	.stack _Icu_HW_SetMode = 24
+000004F6                      675  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2232
+000004F6 8007218F             676  	prepare 0x00000479, 0x00000000
+000004FA 00A2                 677  	mov 0x00000000, r20
+000004FC 06A8                 678  	mov r6, r21
+000004FE 8505                 679  	br9 .BB.LABEL.7_10
+00000500                      680  .BB.LABEL.7_1:	; bb
+00000500                      681  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2254
+00000500 40160000             682  	movhi HIGHW1(#_Icu_GpChannelRamData), r0, r2
+00000504 22170100             683  	ld.w LOWW(#_Icu_GpChannelRamData)[r2], r2
+00000508                      684  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2252
+00000508 D42EFF00             685  	andi 0x000000FF, r20, r5
+0000050C                      686  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2254
+0000050C 0530                 687  	mov r5, r6
+0000050E C232                 688  	shl 0x00000002, r6
+00000510 C611                 689  	add r6, r2
+00000512 82B70100             690  	ld.bu 0x00000000[r2], r22
+00000516                      691  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2252
+00000516 40160000             692  	movhi HIGHW1(#_Icu_GpChannelConfig), r0, r2
+0000051A 22BF0100             693  	ld.w LOWW(#_Icu_GpChannelConfig)[r2], r23
+0000051E                      694  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2262
+0000051E FC2F4002             695  	mul 0x0000001C, r5, r0
+00000522 C5B9                 696  	add r5, r23
+00000524 37C70D00             697  	ld.w 0x0000000C[r23], r24
+00000528                      698  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2268
+00000528 80FF0000             699  	jarl _SchM_Enter_Icu_ICU_CHANNEL_DATA_PROTECTION, r31
+0000052C                      700  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2262
+0000052C 4CBA                 701  	add 0x0000000C, r23
+0000052E                      702  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2273
+0000052E D6060200             703  	andi 0x00000002, r22, r0
+00000532 8A05                 704  	bnz9 .BB.LABEL.7_9
+00000534                      705  .BB.LABEL.7_2:	; if_then_bb
+00000534                      706  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2275
+00000534 61AA                 707  	cmp 0x00000001, r21
+00000536 8A05                 708  	bnz9 .BB.LABEL.7_4
+00000538                      709  .BB.LABEL.7_3:	; if_then_bb39
+00000538                      710  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2279
+00000538 18B70000             711  	ld.b 0x00000000[r24], r22
+0000053C 96B68000             712  	ori 0x00000080, r22, r22
+00000540 58B70000             713  	st.b r22, 0x00000000[r24]
+00000544 8505                 714  	br9 .BB.LABEL.7_9
+00000546                      715  .BB.LABEL.7_4:	; if_else_bb
+00000546                      716  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2288
+00000546 37170100             717  	ld.w 0x00000000[r23], r2
+0000054A 6012                 718  	cmp 0x00000000, r2
+0000054C 8205                 719  	bz9 .BB.LABEL.7_6
+0000054E                      720  .BB.LABEL.7_5:	; if_then_bb54
+0000054E                      721  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2299
+0000054E E22F0100             722  	ld.hu 0x00000000[r2], r5
+00000552 C52EFFEF             723  	andi 0x0000EFFF, r5, r5
+00000556 622F0000             724  	st.h r5, 0x00000000[r2]
+0000055A 37170100             725  	ld.w 0x00000000[r23], r2
+0000055E 22170000             726  	ld.h 0x00000000[r2], r2
+00000562 1F00                 727  	syncp
+00000564                      728  .BB.LABEL.7_6:	; if_break_bb
+00000564                      729  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2313
+00000564 D6060400             730  	andi 0x00000004, r22, r0
+00000568 8205                 731  	bz9 .BB.LABEL.7_9
+0000056A                      732  .BB.LABEL.7_7:	; if_then_bb75
+0000056A                      733  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2315
+0000056A 37170100             734  	ld.w 0x00000000[r23], r2
+0000056E 6012                 735  	cmp 0x00000000, r2
+00000570 8205                 736  	bz9 .BB.LABEL.7_9
+00000572                      737  .BB.LABEL.7_8:	; if_then_bb83
+00000572                      738  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2319
+00000572 98170100             739  	ld.bu 0x00000000[r24], r2
+00000576 C2167F00             740  	andi 0x0000007F, r2, r2
+0000057A 58170000             741  	st.b r2, 0x00000000[r24]
+0000057E                      742  .BB.LABEL.7_9:	; if_break_bb98
+0000057E                      743  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2342
+0000057E 80FF0000             744  	jarl _SchM_Exit_Icu_ICU_CHANNEL_DATA_PROTECTION, r31
+00000582 41A2                 745  	add 0x00000001, r20
+00000584                      746  .BB.LABEL.7_10:	; bb101
+00000584                      747  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2247
+00000584 D416FF00             748  	andi 0x000000FF, r20, r2
+00000588 6812                 749  	cmp 0x00000008, r2
+0000058A 8105                 750  	bl9 .BB.LABEL.7_1
+0000058C                      751  .BB.LABEL.7_11:	; bb107
+0000058C                      752  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2349
+0000058C 40160000             753  	movhi HIGHW1(#_Icu_GenModuleMode), r0, r2
+00000590 62AF0100             754  	st.w r21, LOWW(#_Icu_GenModuleMode)[r2]
+00000594 40063F8F             755  	dispose 0x00000000, 0x00000479, [r31]
+00000598                      756  _Icu_HW_StartCountMeasurement:
+00000598                      757  	.stack _Icu_HW_StartCountMeasurement = 28
+00000598                      758  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2403
+00000598 800721CF             759  	prepare 0x00000679, 0x00000000
+0000059C 06A0                 760  	mov r6, r20
+0000059E                      761  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2442
+0000059E 40160000             762  	movhi HIGHW1(#_Icu_GpTimerChannelConfig), r0, r2
+000005A2 22AF0100             763  	ld.w LOWW(#_Icu_GpTimerChannelConfig)[r2], r21
+000005A6                      764  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2446
+000005A6 F4160600             765  	mulhi 0x00000006, r20, r2
+000005AA D511                 766  	add r21, r2
+000005AC A2B70300             767  	ld.bu 0x00000003[r2], r22
+000005B0                      768  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2439
+000005B0 40160000             769  	movhi HIGHW1(#_Icu_GpChannelConfig), r0, r2
+000005B4 22BF0100             770  	ld.w LOWW(#_Icu_GpChannelConfig)[r2], r23
+000005B8                      771  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2446
+000005B8 40160000             772  	movhi HIGHW1(#_Icu_GpTAUUnitConfig), r0, r2
+000005BC 22C70100             773  	ld.w LOWW(#_Icu_GpTAUUnitConfig)[r2], r24
+000005C0                      774  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2455
+000005C0 80FF0000             775  	jarl _SchM_Enter_Icu_ICU_CHANNEL_DATA_PROTECTION, r31
+000005C4                      776  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2439
+000005C4 F4161C00             777  	mulhi 0x0000001C, r20, r2
+000005C8 C2B9                 778  	add r2, r23
+000005CA                      779  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2461
+000005CA 37170D00             780  	ld.w 0x0000000C[r23], r2
+000005CE 172E0C00             781  	addi 0x0000000C, r23, r5
+000005D2 6012                 782  	cmp 0x00000000, r2
+000005D4 8205                 783  	bz9 .BB.LABEL.8_2
+000005D6                      784  .BB.LABEL.8_1:	; if_then_bb
+000005D6                      785  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2475
+000005D6 E2370100             786  	ld.hu 0x00000000[r2], r6
+000005DA C636FFEF             787  	andi 0x0000EFFF, r6, r6
+000005DE 62370000             788  	st.h r6, 0x00000000[r2]
+000005E2 25170100             789  	ld.w 0x00000000[r5], r2
+000005E6 22170000             790  	ld.h 0x00000000[r2], r2
+000005EA 1F00                 791  	syncp
+000005EC                      792  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2482
+000005EC 25170100             793  	ld.w 0x00000000[r5], r2
+000005F0                      794  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2483
+000005F0 822F0100             795  	ld.bu 0x00000000[r2], r5
+000005F4 C52E7F00             796  	andi 0x0000007F, r5, r5
+000005F8 422F0000             797  	st.b r5, 0x00000000[r2]
+000005FC                      798  .BB.LABEL.8_2:	; if_break_bb
+000005FC                      799  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2494
+000005FC B7CF1900             800  	ld.bu 0x00000019[r23], r25
+00000600                      801  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2501
+00000600 80FF0000             802  	jarl _SchM_Exit_Icu_ICU_CHANNEL_DATA_PROTECTION, r31
+00000604                      803  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2494
+00000604 D9160300             804  	andi 0x00000003, r25, r2
+00000608                      805  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2505
+00000608 6112                 806  	cmp 0x00000001, r2
+0000060A 8A05                 807  	bnz9 .BB.LABEL.8_7
+0000060C                      808  .BB.LABEL.8_3:	; if_then_bb63
+0000060C                      809  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2511
+0000060C 80FF0000             810  	jarl _SchM_Enter_Icu_ICU_CHANNEL_DATA_PROTECTION, r31
+00000610                      811  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2519
+00000610 40160000             812  	movhi HIGHW1(#_Icu_GpChannelRamData), r0, r2
+00000614 22170100             813  	ld.w LOWW(#_Icu_GpChannelRamData)[r2], r2
+00000618 1428                 814  	mov r20, r5
+0000061A C22A                 815  	shl 0x00000002, r5
+0000061C C511                 816  	add r5, r2
+0000061E C2A70000             817  	clr1 0x00000004, 0x00000000[r2]
+00000622                      818  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2525
+00000622                      819  	mov #_Icu_GaaChannelMeasureStatus, r25
+00000622 390600000000            -- mov         0x0,r25
+00000628 D4C9                 820  	add r20, r25
+0000062A 0112                 821  	mov 0x00000001, r2
+0000062C 59170000             822  	st.b r2, 0x00000000[r25]
+00000630                      823  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2531
+00000630 80FF0000             824  	jarl _SchM_Exit_Icu_ICU_CHANNEL_DATA_PROTECTION, r31
+00000634                      825  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2539
+00000634 F4160600             826  	mulhi 0x00000006, r20, r2
+00000638 C2A9                 827  	add r2, r21
+0000063A D5D70500             828  	tst1 0x00000002, 0x00000005[r21]
+0000063E 8205                 829  	bz9 .BB.LABEL.8_7
+00000640                      830  .BB.LABEL.8_4:	; if_then_bb84
+00000640                      831  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2547
+00000640 40BE0000             832  	movhi HIGHW1(#_Icu_GpChannelConfig), r0, r23
+00000644 37AF0100             833  	ld.w LOWW(#_Icu_GpChannelConfig)[r23], r21
+00000648                      834  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2554
+00000648 80FF0000             835  	jarl _SchM_Enter_Icu_ICU_CHANNEL_DATA_PROTECTION, r31
+0000064C                      836  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2558
+0000064C 40BE0000             837  	movhi HIGHW1(#_Icu_GpChannelRamData), r0, r23
+00000650 37BF0100             838  	ld.w LOWW(#_Icu_GpChannelRamData)[r23], r23
+00000654 1410                 839  	mov r20, r2
+00000656 C212                 840  	shl 0x00000002, r2
+00000658 D711                 841  	add r23, r2
+0000065A C2A70400             842  	clr1 0x00000004, 0x00000004[r2]
+0000065E 01BA                 843  	mov 0x00000001, r23
+00000660                      844  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2564
+00000660 59BF0100             845  	st.b r23, 0x00000001[r25]
+00000664                      846  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2547
+00000664 F4BE1C00             847  	mulhi 0x0000001C, r20, r23
+00000668 D7A9                 848  	add r23, r21
+0000066A                      849  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2568
+0000066A 35172900             850  	ld.w 0x00000028[r21], r2
+0000066E 6012                 851  	cmp 0x00000000, r2
+00000670                      852  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2547
+00000670 35BE1C00             853  	movea 0x0000001C, r21, r23
+00000674                      854  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2568
+00000674 8205                 855  	bz9 .BB.LABEL.8_6
+00000676                      856  .BB.LABEL.8_5:	; if_then_bb110
+00000676                      857  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2581
+00000676 E22F0100             858  	ld.hu 0x00000000[r2], r5
+0000067A C52EFFEF             859  	andi 0x0000EFFF, r5, r5
+0000067E 622F0000             860  	st.h r5, 0x00000000[r2]
+00000682 35172900             861  	ld.w 0x00000028[r21], r2
+00000686 22170000             862  	ld.h 0x00000000[r2], r2
+0000068A 1F00                 863  	syncp
+0000068C                      864  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2587
+0000068C 35172900             865  	ld.w 0x00000028[r21], r2
+00000690                      866  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2589
+00000690 822F0100             867  	ld.bu 0x00000000[r2], r5
+00000694 C52E7F00             868  	andi 0x0000007F, r5, r5
+00000698 422F0000             869  	st.b r5, 0x00000000[r2]
+0000069C                      870  .BB.LABEL.8_6:	; if_break_bb137
+0000069C                      871  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2602
+0000069C 80FF0000             872  	jarl _SchM_Exit_Icu_ICU_CHANNEL_DATA_PROTECTION, r31
+000006A0                      873  .BB.LABEL.8_7:	; if_break_bb141
+000006A0                      874  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2631
+000006A0 80FF0000             875  	jarl _SchM_Enter_Icu_ICU_CHANNEL_DATA_PROTECTION, r31
+000006A4                      876  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2635
+000006A4 EAB2                 877  	mulh 0x0000000A, r22
+000006A6 D6C1                 878  	add r22, r24
+000006A8 98170100             879  	ld.bu 0x00000000[r24], r2
+000006AC C212                 880  	shl 0x00000002, r2
+000006AE                      881  	mov #_Icu_GaaTAUDBUserReg_BaseAddress, r5
+000006AE 250600000000            -- mov         0x0,tp
+000006B4 C229                 882  	add r2, r5
+000006B6 25A70100             883  	ld.w 0x00000000[r5], r20
+000006BA                      884  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2638
+000006BA 37171400             885  	ld.h 0x00000014[r23], r2
+000006BE 74178801             886  	st.h r2, 0x00000188[r20]
+000006C2                      887  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2642
+000006C2 34178001             888  	ld.h 0x00000180[r20], r2
+000006C6 372F1400             889  	ld.h 0x00000014[r23], r5
+000006CA 4511                 890  	and r5, r2
+000006CC C206FFFF             891  	andi 0x0000FFFF, r2, r0
+000006D0 8205                 892  	bz9 .BB.LABEL.8_9
+000006D2                      893  .BB.LABEL.8_8:	; if_then_bb165
+000006D2                      894  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 0
+000006D2 0132                 895  	mov 0x00000001, r6
+000006D4 0638                 896  	mov r6, r7
+000006D6 80FF0000             897  	jarl _Dem_ReportErrorStatus, r31
+000006DA                      898  .BB.LABEL.8_9:	; if_break_bb167
+000006DA                      899  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2646
+000006DA 37171400             900  	ld.h 0x00000014[r23], r2
+000006DE 74178401             901  	st.h r2, 0x00000184[r20]
+000006E2                      902  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2649
+000006E2 F7171500             903  	ld.hu 0x00000014[r23], r2
+000006E6 342F8001             904  	ld.h 0x00000180[r20], r5
+000006EA 37371400             905  	ld.h 0x00000014[r23], r6
+000006EE 4629                 906  	and r6, r5
+000006F0 C500                 907  	zxh r5
+000006F2 E229                 908  	cmp r2, r5
+000006F4 8205                 909  	bz9 .BB.LABEL.8_11
+000006F6                      910  .BB.LABEL.8_10:	; if_then_bb189
+000006F6                      911  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 0
+000006F6 0132                 912  	mov 0x00000001, r6
+000006F8 0638                 913  	mov r6, r7
+000006FA 80FF0000             914  	jarl _Dem_ReportErrorStatus, r31
+000006FE                      915  .BB.LABEL.8_11:	; if_break_bb191
+000006FE                      916  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2657
+000006FE 80FF0000             917  	jarl _SchM_Exit_Icu_ICU_CHANNEL_DATA_PROTECTION, r31
+00000702 40063FCF             918  	dispose 0x00000000, 0x00000679, [r31]
+00000706                      919  _Icu_HW_StopCountMeasurement:
+00000706                      920  	.stack _Icu_HW_StopCountMeasurement = 28
+00000706                      921  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2757
+00000706 800721CF             922  	prepare 0x00000679, 0x00000000
+0000070A 06A0                 923  	mov r6, r20
+0000070C                      924  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2796
+0000070C 40160000             925  	movhi HIGHW1(#_Icu_GpTimerChannelConfig), r0, r2
+00000710 22AF0100             926  	ld.w LOWW(#_Icu_GpTimerChannelConfig)[r2], r21
+00000714                      927  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2800
+00000714 F4160600             928  	mulhi 0x00000006, r20, r2
+00000718 D511                 929  	add r21, r2
+0000071A A2B70300             930  	ld.bu 0x00000003[r2], r22
+0000071E                      931  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2793
+0000071E 40160000             932  	movhi HIGHW1(#_Icu_GpChannelConfig), r0, r2
+00000722 22BF0100             933  	ld.w LOWW(#_Icu_GpChannelConfig)[r2], r23
+00000726                      934  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2800
+00000726 40160000             935  	movhi HIGHW1(#_Icu_GpTAUUnitConfig), r0, r2
+0000072A 22C70100             936  	ld.w LOWW(#_Icu_GpTAUUnitConfig)[r2], r24
+0000072E                      937  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2810
+0000072E 80FF0000             938  	jarl _SchM_Enter_Icu_ICU_CHANNEL_DATA_PROTECTION, r31
+00000732                      939  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2793
+00000732 F4161C00             940  	mulhi 0x0000001C, r20, r2
+00000736 C2B9                 941  	add r2, r23
+00000738                      942  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2816
+00000738 37170D00             943  	ld.w 0x0000000C[r23], r2
+0000073C                      944  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2817
+0000073C 022F0000             945  	ld.b 0x00000000[r2], r5
+00000740 852E8000             946  	ori 0x00000080, r5, r5
+00000744 422F0000             947  	st.b r5, 0x00000000[r2]
+00000748                      948  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2824
+00000748 80FF0000             949  	jarl _SchM_Exit_Icu_ICU_CHANNEL_DATA_PROTECTION, r31
+0000074C                      950  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2830
+0000074C B7171900             951  	ld.bu 0x00000019[r23], r2
+00000750 C2160300             952  	andi 0x00000003, r2, r2
+00000754                      953  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2833
+00000754 6112                 954  	cmp 0x00000001, r2
+00000756 8A05                 955  	bnz9 .BB.LABEL.9_3
+00000758                      956  .BB.LABEL.9_1:	; if_then_bb
+00000758                      957  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2838
+00000758 80FF0000             958  	jarl _SchM_Enter_Icu_ICU_CHANNEL_DATA_PROTECTION, r31
+0000075C                      959  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2843
+0000075C                      960  	mov #_Icu_GaaChannelMeasureStatus, r25
+0000075C 390600000000            -- mov         0x0,r25
+00000762 D4C9                 961  	add r20, r25
+00000764 59070000             962  	st.b r0, 0x00000000[r25]
+00000768                      963  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2848
+00000768 80FF0000             964  	jarl _SchM_Exit_Icu_ICU_CHANNEL_DATA_PROTECTION, r31
+0000076C                      965  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2857
+0000076C F4160600             966  	mulhi 0x00000006, r20, r2
+00000770 C2A9                 967  	add r2, r21
+00000772 D5D70500             968  	tst1 0x00000002, 0x00000005[r21]
+00000776 8205                 969  	bz9 .BB.LABEL.9_3
+00000778                      970  .BB.LABEL.9_2:	; if_then_bb54
+00000778                      971  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2865
+00000778 40BE0000             972  	movhi HIGHW1(#_Icu_GpChannelConfig), r0, r23
+0000077C 37BF0100             973  	ld.w LOWW(#_Icu_GpChannelConfig)[r23], r23
+00000780                      974  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2873
+00000780 80FF0000             975  	jarl _SchM_Enter_Icu_ICU_CHANNEL_DATA_PROTECTION, r31
+00000784                      976  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2878
+00000784 59070100             977  	st.b r0, 0x00000001[r25]
+00000788                      978  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2865
+00000788 F4161C00             979  	mulhi 0x0000001C, r20, r2
+0000078C C2B9                 980  	add r2, r23
+0000078E                      981  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2882
+0000078E 37172900             982  	ld.w 0x00000028[r23], r2
+00000792                      983  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2884
+00000792 022F0000             984  	ld.b 0x00000000[r2], r5
+00000796 852E8000             985  	ori 0x00000080, r5, r5
+0000079A 422F0000             986  	st.b r5, 0x00000000[r2]
+0000079E                      987  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2890
+0000079E 80FF0000             988  	jarl _SchM_Exit_Icu_ICU_CHANNEL_DATA_PROTECTION, r31
+000007A2                      989  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2865
+000007A2 37BE1C00             990  	movea 0x0000001C, r23, r23
+000007A6                      991  .BB.LABEL.9_3:	; if_break_bb76
+000007A6                      992  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2918
+000007A6 80FF0000             993  	jarl _SchM_Enter_Icu_ICU_CHANNEL_DATA_PROTECTION, r31
+000007AA                      994  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2922
+000007AA EAB2                 995  	mulh 0x0000000A, r22
+000007AC D6C1                 996  	add r22, r24
+000007AE 98170100             997  	ld.bu 0x00000000[r24], r2
+000007B2 C212                 998  	shl 0x00000002, r2
+000007B4                      999  	mov #_Icu_GaaTAUDBUserReg_BaseAddress, r5
+000007B4 250600000000            -- mov         0x0,tp
+000007BA C229                1000  	add r2, r5
+000007BC 25170100            1001  	ld.w 0x00000000[r5], r2
+000007C0                     1002  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2925
+000007C0 372F1400            1003  	ld.h 0x00000014[r23], r5
+000007C4 622F8801            1004  	st.h r5, 0x00000188[r2]
+000007C8                     1005  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2929
+000007C8 22178001            1006  	ld.h 0x00000180[r2], r2
+000007CC 372F1400            1007  	ld.h 0x00000014[r23], r5
+000007D0 4511                1008  	and r5, r2
+000007D2 C206FFFF            1009  	andi 0x0000FFFF, r2, r0
+000007D6 8205                1010  	bz9 .BB.LABEL.9_5
+000007D8                     1011  .BB.LABEL.9_4:	; if_then_bb100
+000007D8                     1012  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 0
+000007D8 0132                1013  	mov 0x00000001, r6
+000007DA 0638                1014  	mov r6, r7
+000007DC 80FF0000            1015  	jarl _Dem_ReportErrorStatus, r31
+000007E0                     1016  .BB.LABEL.9_5:	; if_break_bb102
+000007E0                     1017  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 2935
+000007E0 80FF0000            1018  	jarl _SchM_Exit_Icu_ICU_CHANNEL_DATA_PROTECTION, r31
+000007E4 40063FCF            1019  	dispose 0x00000000, 0x00000679, [r31]
+000007E8                     1020  _Icu_HW_GetEdgeNumbers:
+000007E8                     1021  	.stack _Icu_HW_GetEdgeNumbers = 16
+000007E8                     1022  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3020
+000007E8 8007210E            1023  	prepare 0x00000071, 0x00000000
+000007EC                     1024  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3044
+000007EC 40160000            1025  	movhi HIGHW1(#_Icu_GpChannelConfig), r0, r2
+000007F0 22170100            1026  	ld.w LOWW(#_Icu_GpChannelConfig)[r2], r2
+000007F4                     1027  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3058
+000007F4 E62E1C00            1028  	mulhi 0x0000001C, r6, r5
+000007F8 C511                1029  	add r5, r2
+000007FA 82170500            1030  	ld.bu 0x00000004[r2], r2
+000007FE C212                1031  	shl 0x00000002, r2
+00000800                     1032  	mov #_Icu_GaaTAUDBChReg_BaseAddress, r5
+00000800 250600000000            -- mov         0x0,tp
+00000806 C229                1033  	add r2, r5
+00000808 25A70100            1034  	ld.w 0x00000000[r5], r20
+0000080C                     1035  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3047
+0000080C 40160000            1036  	movhi HIGHW1(#_Icu_GpTimerChannelConfig), r0, r2
+00000810 22170100            1037  	ld.w LOWW(#_Icu_GpTimerChannelConfig)[r2], r2
+00000814                     1038  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3051
+00000814 E632                1039  	mulh 0x00000006, r6
+00000816 C611                1040  	add r6, r2
+00000818                     1041  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3054
+00000818 82AF0500            1042  	ld.bu 0x00000004[r2], r21
+0000081C 40160000            1043  	movhi HIGHW1(#_Icu_GpEdgeCountData), r0, r2
+00000820 22B70100            1044  	ld.w LOWW(#_Icu_GpEdgeCountData)[r2], r22
+00000824                     1045  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3063
+00000824 80FF0000            1046  	jarl _SchM_Enter_Icu_ICU_CHANNEL_DATA_PROTECTION, r31
+00000828                     1047  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3068
+00000828 34170000            1048  	ld.h 0x00000000[r20], r2
+0000082C 342F8000            1049  	ld.h 0x00000080[r20], r5
+00000830 A511                1050  	sub r5, r2
+00000832 C2AA                1051  	shl 0x00000002, r21
+00000834 D5B1                1052  	add r21, r22
+00000836 76170200            1053  	st.h r2, 0x00000002[r22]
+0000083A                     1054  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3075
+0000083A 80FF0000            1055  	jarl _SchM_Exit_Icu_ICU_CHANNEL_DATA_PROTECTION, r31
+0000083E 40063F0E            1056  	dispose 0x00000000, 0x00000071, [r31]
+00000842                     1057  _Icu_HW_ResetEdgeCount:
+00000842                     1058  	.stack _Icu_HW_ResetEdgeCount = 20
+00000842                     1059  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3130
+00000842 8007210F            1060  	prepare 0x00000079, 0x00000000
+00000846 06A0                1061  	mov r6, r20
+00000848                     1062  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3160
+00000848 40160000            1063  	movhi HIGHW1(#_Icu_GpTimerChannelConfig), r0, r2
+0000084C 22170100            1064  	ld.w LOWW(#_Icu_GpTimerChannelConfig)[r2], r2
+00000850                     1065  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3166
+00000850 F42E0600            1066  	mulhi 0x00000006, r20, r5
+00000854 C511                1067  	add r5, r2
+00000856                     1068  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3173
+00000856 822F0500            1069  	ld.bu 0x00000004[r2], r5
+0000085A C22A                1070  	shl 0x00000002, r5
+0000085C 40360000            1071  	movhi HIGHW1(#_Icu_GpEdgeCountData), r0, r6
+00000860 26370100            1072  	ld.w LOWW(#_Icu_GpEdgeCountData)[r6], r6
+00000864 C531                1073  	add r5, r6
+00000866                     1074  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3154
+00000866 402E0000            1075  	movhi HIGHW1(#_Icu_GpChannelConfig), r0, r5
+0000086A 25AF0100            1076  	ld.w LOWW(#_Icu_GpChannelConfig)[r5], r21
+0000086E                     1077  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3173
+0000086E C6870000            1078  	clr1 0x00000000, 0x00000000[r6]
+00000872                     1079  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3177
+00000872 A2B70300            1080  	ld.bu 0x00000003[r2], r22
+00000876 40160000            1081  	movhi HIGHW1(#_Icu_GpTAUUnitConfig), r0, r2
+0000087A 22BF0100            1082  	ld.w LOWW(#_Icu_GpTAUUnitConfig)[r2], r23
+0000087E                     1083  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3185
+0000087E 80FF0000            1084  	jarl _SchM_Enter_Icu_ICU_CHANNEL_DATA_PROTECTION, r31
+00000882                     1085  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3189
+00000882 F6160A00            1086  	mulhi 0x0000000A, r22, r2
+00000886 D711                1087  	add r23, r2
+00000888 02170400            1088  	ld.b 0x00000004[r2], r2
+0000088C 5F12                1089  	add 0xFFFFFFFF, r2
+0000088E 8200                1090  	zxb r2
+00000890 6112                1091  	cmp 0x00000001, r2
+00000892 8B05                1092  	bh9 .BB.LABEL.11_11
+00000894                     1093  .BB.LABEL.11_1:	; if_then_bb
+00000894                     1094  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3193
+00000894 EAB2                1095  	mulh 0x0000000A, r22
+00000896 D6B9                1096  	add r22, r23
+00000898 97170100            1097  	ld.bu 0x00000000[r23], r2
+0000089C C212                1098  	shl 0x00000002, r2
+0000089E                     1099  	mov #_Icu_GaaTAUDBUserReg_BaseAddress, r5
+0000089E 250600000000            -- mov         0x0,tp
+000008A4 C229                1100  	add r2, r5
+000008A6                     1101  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3203
+000008A6 F4161C00            1102  	mulhi 0x0000001C, r20, r2
+000008AA C2A9                1103  	add r2, r21
+000008AC                     1104  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3198
+000008AC 40160000            1105  	movhi HIGHW1(#_Icu_GpChannelRamData), r0, r2
+000008B0 22170100            1106  	ld.w LOWW(#_Icu_GpChannelRamData)[r2], r2
+000008B4                     1107  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3203
+000008B4 C2A2                1108  	shl 0x00000002, r20
+000008B6 D411                1109  	add r20, r2
+000008B8 C2DF0000            1110  	tst1 0x00000003, 0x00000000[r2]
+000008BC F5171500            1111  	ld.hu 0x00000014[r21], r2
+000008C0 35A61400            1112  	movea 0x00000014, r21, r20
+000008C4                     1113  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3193
+000008C4 25AF0100            1114  	ld.w 0x00000000[r5], r21
+000008C8 75178401            1115  	st.h r2, 0x00000184[r21]
+000008CC F4170100            1116  	ld.hu 0x00000000[r20], r2
+000008D0 352F8001            1117  	ld.h 0x00000180[r21], r5
+000008D4 34370000            1118  	ld.h 0x00000000[r20], r6
+000008D8                     1119  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3203
+000008D8 8205                1120  	bz9 .BB.LABEL.11_7
+000008DA                     1121  .BB.LABEL.11_2:	; if_then_bb71
+000008DA                     1122  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3211
+000008DA 4629                1123  	and r6, r5
+000008DC C500                1124  	zxh r5
+000008DE E229                1125  	cmp r2, r5
+000008E0 8205                1126  	bz9 .BB.LABEL.11_4
+000008E2                     1127  .BB.LABEL.11_3:	; if_then_bb94
+000008E2                     1128  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 0
+000008E2 0132                1129  	mov 0x00000001, r6
+000008E4 0638                1130  	mov r6, r7
+000008E6 80FF0000            1131  	jarl _Dem_ReportErrorStatus, r31
+000008EA                     1132  .BB.LABEL.11_4:	; if_break_bb
+000008EA                     1133  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3216
+000008EA 34170000            1134  	ld.h 0x00000000[r20], r2
+000008EE 75178801            1135  	st.h r2, 0x00000188[r21]
+000008F2                     1136  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3219
+000008F2 35178001            1137  	ld.h 0x00000180[r21], r2
+000008F6 342F0000            1138  	ld.h 0x00000000[r20], r5
+000008FA 4511                1139  	and r5, r2
+000008FC C206FFFF            1140  	andi 0x0000FFFF, r2, r0
+00000900 8205                1141  	bz9 .BB.LABEL.11_6
+00000902                     1142  .BB.LABEL.11_5:	; if_then_bb112
+00000902                     1143  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 0
+00000902 0132                1144  	mov 0x00000001, r6
+00000904 0638                1145  	mov r6, r7
+00000906 80FF0000            1146  	jarl _Dem_ReportErrorStatus, r31
+0000090A                     1147  .BB.LABEL.11_6:	; if_break_bb114
+0000090A                     1148  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3224
+0000090A 34170000            1149  	ld.h 0x00000000[r20], r2
+0000090E 75178401            1150  	st.h r2, 0x00000184[r21]
+00000912                     1151  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3227
+00000912 F4170100            1152  	ld.hu 0x00000000[r20], r2
+00000916 35AF8001            1153  	ld.h 0x00000180[r21], r21
+0000091A 34A70000            1154  	ld.h 0x00000000[r20], r20
+0000091E 54A9                1155  	and r20, r21
+00000920 D500                1156  	zxh r21
+00000922 E2A9                1157  	cmp r2, r21
+00000924 8A05                1158  	bnz9 .BB.LABEL.11_10
+00000926 8505                1159  	br9 .BB.LABEL.11_11
+00000928                     1160  .BB.LABEL.11_7:	; if_else_bb139
+00000928                     1161  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3238
+00000928 4629                1162  	and r6, r5
+0000092A C500                1163  	zxh r5
+0000092C E229                1164  	cmp r2, r5
+0000092E 8205                1165  	bz9 .BB.LABEL.11_9
+00000930                     1166  .BB.LABEL.11_8:	; if_then_bb161
+00000930                     1167  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 0
+00000930 0132                1168  	mov 0x00000001, r6
+00000932 0638                1169  	mov r6, r7
+00000934 80FF0000            1170  	jarl _Dem_ReportErrorStatus, r31
+00000938                     1171  .BB.LABEL.11_9:	; if_break_bb163
+00000938                     1172  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3243
+00000938 34170000            1173  	ld.h 0x00000000[r20], r2
+0000093C 75178801            1174  	st.h r2, 0x00000188[r21]
+00000940                     1175  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3246
+00000940 35178001            1176  	ld.h 0x00000180[r21], r2
+00000944 342F0000            1177  	ld.h 0x00000000[r20], r5
+00000948 4511                1178  	and r5, r2
+0000094A C206FFFF            1179  	andi 0x0000FFFF, r2, r0
+0000094E 8205                1180  	bz9 .BB.LABEL.11_11
+00000950                     1181  .BB.LABEL.11_10:	; if_then_bb181
+00000950                     1182  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 0
+00000950 0132                1183  	mov 0x00000001, r6
+00000952 0638                1184  	mov r6, r7
+00000954 80FF0000            1185  	jarl _Dem_ReportErrorStatus, r31
+00000958                     1186  .BB.LABEL.11_11:	; if_break_bb186
+00000958                     1187  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3259
+00000958 80FF0000            1188  	jarl _SchM_Exit_Icu_ICU_CHANNEL_DATA_PROTECTION, r31
+0000095C 40063F0F            1189  	dispose 0x00000000, 0x00000079, [r31]
+00000960                     1190  _Icu_HW_EnableEdgeDetection:
+00000960                     1191  	.stack _Icu_HW_EnableEdgeDetection = 8
+00000960                     1192  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3312
+00000960 80072108            1193  	prepare 0x00000041, 0x00000000
+00000964                     1194  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3324
+00000964 40160000            1195  	movhi HIGHW1(#_Icu_GpChannelConfig), r0, r2
+00000968 22A70100            1196  	ld.w LOWW(#_Icu_GpChannelConfig)[r2], r20
+0000096C                     1197  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3329
+0000096C E6161C00            1198  	mulhi 0x0000001C, r6, r2
+00000970 C2A1                1199  	add r2, r20
+00000972 34170D00            1200  	ld.w 0x0000000C[r20], r2
+00000976 4CA2                1201  	add 0x0000000C, r20
+00000978 6012                1202  	cmp 0x00000000, r2
+0000097A 8205                1203  	bz9 .BB.LABEL.12_2
+0000097C                     1204  .BB.LABEL.12_1:	; if_then_bb
+0000097C                     1205  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3335
+0000097C 80FF0000            1206  	jarl _SchM_Enter_Icu_ICU_CHANNEL_DATA_PROTECTION, r31
+00000980                     1207  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3349
+00000980 34170100            1208  	ld.w 0x00000000[r20], r2
+00000984 E22F0100            1209  	ld.hu 0x00000000[r2], r5
+00000988 C52EFFEF            1210  	andi 0x0000EFFF, r5, r5
+0000098C 622F0000            1211  	st.h r5, 0x00000000[r2]
+00000990 34170100            1212  	ld.w 0x00000000[r20], r2
+00000994 22170000            1213  	ld.h 0x00000000[r2], r2
+00000998 1F00                1214  	syncp
+0000099A                     1215  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3356
+0000099A 34170100            1216  	ld.w 0x00000000[r20], r2
+0000099E                     1217  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3357
+0000099E 822F0100            1218  	ld.bu 0x00000000[r2], r5
+000009A2 C52E7F00            1219  	andi 0x0000007F, r5, r5
+000009A6 422F0000            1220  	st.b r5, 0x00000000[r2]
+000009AA                     1221  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3364
+000009AA 80FF0000            1222  	jarl _SchM_Exit_Icu_ICU_CHANNEL_DATA_PROTECTION, r31
+000009AE                     1223  .BB.LABEL.12_2:	; return
+000009AE                     1224  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3372
+000009AE 40063F08            1225  	dispose 0x00000000, 0x00000041, [r31]
+000009B2                     1226  _Icu_HW_DisableEdgeDetection:
+000009B2                     1227  	.stack _Icu_HW_DisableEdgeDetection = 12
+000009B2                     1228  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3416
+000009B2 8007210C            1229  	prepare 0x00000061, 0x00000000
+000009B6 06A0                1230  	mov r6, r20
+000009B8                     1231  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3429
+000009B8 40160000            1232  	movhi HIGHW1(#_Icu_GpChannelConfig), r0, r2
+000009BC 22AF0100            1233  	ld.w LOWW(#_Icu_GpChannelConfig)[r2], r21
+000009C0                     1234  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3435
+000009C0 80FF0000            1235  	jarl _SchM_Enter_Icu_ICU_CHANNEL_DATA_PROTECTION, r31
+000009C4                     1236  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3441
+000009C4 F4161C00            1237  	mulhi 0x0000001C, r20, r2
+000009C8 C2A9                1238  	add r2, r21
+000009CA 35170D00            1239  	ld.w 0x0000000C[r21], r2
+000009CE                     1240  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3442
+000009CE 022F0000            1241  	ld.b 0x00000000[r2], r5
+000009D2 852E8000            1242  	ori 0x00000080, r5, r5
+000009D6 422F0000            1243  	st.b r5, 0x00000000[r2]
+000009DA                     1244  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3447
+000009DA 80FF0000            1245  	jarl _SchM_Exit_Icu_ICU_CHANNEL_DATA_PROTECTION, r31
+000009DE 40063F0C            1246  	dispose 0x00000000, 0x00000061, [r31]
+000009E2                     1247  _Icu_TimerIsr:
+000009E2                     1248  	.stack _Icu_TimerIsr = 28
+000009E2                     1249  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3505
+000009E2 800721CF            1250  	prepare 0x00000679, 0x00000000
+000009E6                     1251  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3546
+000009E6 40160000            1252  	movhi HIGHW1(#_Icu_GpChannelConfig), r0, r2
+000009EA 22A70100            1253  	ld.w LOWW(#_Icu_GpChannelConfig)[r2], r20
+000009EE E6AE1C00            1254  	mulhi 0x0000001C, r6, r21
+000009F2 D4A9                1255  	add r20, r21
+000009F4                     1256  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3558
+000009F4 B5171900            1257  	ld.bu 0x00000019[r21], r2
+000009F8 C2160300            1258  	andi 0x00000003, r2, r2
+000009FC                     1259  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3564
+000009FC 6112                1260  	cmp 0x00000001, r2
+000009FE                     1261  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3552
+000009FE 402E0000            1262  	movhi HIGHW1(#_Icu_GpTimerChannelConfig), r0, r5
+00000A02 25B70100            1263  	ld.w LOWW(#_Icu_GpTimerChannelConfig)[r5], r22
+00000A06                     1264  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3564
+00000A06 06B8                1265  	mov r6, r23
+00000A08 06C0                1266  	mov r6, r24
+00000A0A 06C8                1267  	mov r6, r25
+00000A0C 8A05                1268  	bnz9 .BB.LABEL.14_6
+00000A0E                     1269  .BB.LABEL.14_1:	; if_then_bb
+00000A0E                     1270  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3567
+00000A0E 1930                1271  	mov r25, r6
+00000A10 80FF0000            1272  	jarl _Icu_ServiceSignalMeasurement, r31
+00000A14                     1273  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3571
+00000A14 E6BA                1274  	mulh 0x00000006, r23
+00000A16 D7B1                1275  	add r23, r22
+00000A18 B6170500            1276  	ld.bu 0x00000005[r22], r2
+00000A1C C2160300            1277  	andi 0x00000003, r2, r2
+00000A20 6212                1278  	cmp 0x00000002, r2
+00000A22 8A05                1279  	bnz9 .BB.LABEL.14_5
+00000A24                     1280  .BB.LABEL.14_2:	; if_then_bb35
+00000A24                     1281  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3576
+00000A24                     1282  	mov #_Icu_GaaChannelMeasureStatus, r2
+00000A24 220600000000            -- mov         0x0,hp
+00000A2A D911                1283  	add r25, r2
+00000A2C 82B70100            1284  	ld.bu 0x00000000[r2], r22
+00000A30 61B2                1285  	cmp 0x00000001, r22
+00000A32 8A05                1286  	bnz9 .BB.LABEL.14_4
+00000A34                     1287  .BB.LABEL.14_3:	; if_then_bb44
+00000A34                     1288  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 0
+00000A34 02B2                1289  	mov 0x00000002, r22
+00000A36                     1290  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3579
+00000A36 42B70000            1291  	st.b r22, 0x00000000[r2]
+00000A3A 8505                1292  	br9 .BB.LABEL.14_15
+00000A3C                     1293  .BB.LABEL.14_4:	; if_else_bb
+00000A3C                     1294  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3582
+00000A3C 82170100            1295  	ld.bu 0x00000000[r2], r2
+00000A40 6212                1296  	cmp 0x00000002, r2
+00000A42 8A05                1297  	bnz9 .BB.LABEL.14_15
+00000A44                     1298  .BB.LABEL.14_5:	; if_else_bb77
+00000A44                     1299  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 0
+00000A44 1910                1300  	mov r25, r2
+00000A46 C212                1301  	shl 0x00000002, r2
+00000A48 40B60000            1302  	movhi HIGHW1(#_Icu_GpChannelRamData), r0, r22
+00000A4C 36BF0100            1303  	ld.w LOWW(#_Icu_GpChannelRamData)[r22], r23
+00000A50 C2B9                1304  	add r2, r23
+00000A52 D7870000            1305  	clr1 0x00000000, 0x00000000[r23]
+00000A56 36B70100            1306  	ld.w LOWW(#_Icu_GpChannelRamData)[r22], r22
+00000A5A C2B1                1307  	add r2, r22
+00000A5C D6270000            1308  	set1 0x00000004, 0x00000000[r22]
+00000A60 8505                1309  	br9 .BB.LABEL.14_15
+00000A62                     1310  .BB.LABEL.14_6:	; if_else_bb97
+00000A62                     1311  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3605
+00000A62 6012                1312  	cmp 0x00000000, r2
+00000A64 8A05                1313  	bnz9 .BB.LABEL.14_11
+00000A66                     1314  .BB.LABEL.14_7:	; if_then_bb102
+00000A66                     1315  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3612
+00000A66 40160000            1316  	movhi HIGHW1(#_Icu_GpChannelRamData), r0, r2
+00000A6A 22170100            1317  	ld.w LOWW(#_Icu_GpChannelRamData)[r2], r2
+00000A6E 19B0                1318  	mov r25, r22
+00000A70 C2B2                1319  	shl 0x00000002, r22
+00000A72 D611                1320  	add r22, r2
+00000A74 C2D70000            1321  	tst1 0x00000002, 0x00000000[r2]
+00000A78 8205                1322  	bz9 .BB.LABEL.14_10
+00000A7A                     1323  .BB.LABEL.14_8:	; if_then_bb116
+00000A7A                     1324  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3619
+00000A7A F8161C00            1325  	mulhi 0x0000001C, r24, r2
+00000A7E D411                1326  	add r20, r2
+00000A80 22170100            1327  	ld.w 0x00000000[r2], r2
+00000A84 6012                1328  	cmp 0x00000000, r2
+00000A86 8205                1329  	bz9 .BB.LABEL.14_10
+00000A88                     1330  .BB.LABEL.14_9:	; if_then_bb123
+00000A88                     1331  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3622
+00000A88 E2C760F9            1332  	jarl [r2], r31
+00000A8C                     1333  .BB.LABEL.14_10:	; if_break_bb130
+00000A8C                     1334  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3638
+00000A8C 40160000            1335  	movhi HIGHW1(#_Icu_GpChannelRamData), r0, r2
+00000A90 22170100            1336  	ld.w LOWW(#_Icu_GpChannelRamData)[r2], r2
+00000A94 19B0                1337  	mov r25, r22
+00000A96 C2B2                1338  	shl 0x00000002, r22
+00000A98 D611                1339  	add r22, r2
+00000A9A C2870000            1340  	clr1 0x00000000, 0x00000000[r2]
+00000A9E 8505                1341  	br9 .BB.LABEL.14_15
+00000AA0                     1342  .BB.LABEL.14_11:	; if_else_bb140
+00000AA0                     1343  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3644
+00000AA0 6212                1344  	cmp 0x00000002, r2
+00000AA2 8A05                1345  	bnz9 .BB.LABEL.14_13
+00000AA4                     1346  .BB.LABEL.14_12:	; if_then_bb145
+00000AA4                     1347  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3655
+00000AA4 F8B61C00            1348  	mulhi 0x0000001C, r24, r22
+00000AA8 D4B1                1349  	add r20, r22
+00000AAA 96B70500            1350  	ld.bu 0x00000004[r22], r22
+00000AAE C2B2                1351  	shl 0x00000002, r22
+00000AB0                     1352  	mov #_Icu_GaaTAUDBChReg_BaseAddress, r23
+00000AB0 370600000000            -- mov         0x0,r23
+00000AB6 D6B9                1353  	add r22, r23
+00000AB8 37B70100            1354  	ld.w 0x00000000[r23], r22
+00000ABC                     1355  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3661
+00000ABC F63F0100            1356  	ld.hu 0x00000000[r22], r7
+00000AC0 413A                1357  	add 0x00000001, r7
+00000AC2                     1358  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3667
+00000AC2 1930                1359  	mov r25, r6
+00000AC4 80FF0000            1360  	jarl _Icu_ServiceTimestamp, r31
+00000AC8 8505                1361  	br9 .BB.LABEL.14_15
+00000ACA                     1362  .BB.LABEL.14_13:	; if_else_bb159
+00000ACA                     1363  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3709
+00000ACA E6BA                1364  	mulh 0x00000006, r23
+00000ACC D7B1                1365  	add r23, r22
+00000ACE                     1366  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3716
+00000ACE 96170500            1367  	ld.bu 0x00000004[r22], r2
+00000AD2 C212                1368  	shl 0x00000002, r2
+00000AD4 402E0000            1369  	movhi HIGHW1(#_Icu_GpEdgeCountData), r0, r5
+00000AD8 252F0100            1370  	ld.w LOWW(#_Icu_GpEdgeCountData)[r5], r5
+00000ADC C229                1371  	add r2, r5
+00000ADE C5070000            1372  	set1 0x00000000, 0x00000000[r5]
+00000AE2                     1373  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3726
+00000AE2 F8161C00            1374  	mulhi 0x0000001C, r24, r2
+00000AE6 D411                1375  	add r20, r2
+00000AE8 22170100            1376  	ld.w 0x00000000[r2], r2
+00000AEC 6012                1377  	cmp 0x00000000, r2
+00000AEE 8205                1378  	bz9 .BB.LABEL.14_15
+00000AF0                     1379  .BB.LABEL.14_14:	; if_then_bb178
+00000AF0                     1380  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3729
+00000AF0 E2C760F9            1381  	jarl [r2], r31
+00000AF4                     1382  .BB.LABEL.14_15:	; if_break_bb186
+00000AF4                     1383  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3750
+00000AF4 40160000            1384  	movhi HIGHW1(#_Icu_GenModuleMode), r0, r2
+00000AF8 22170100            1385  	ld.w LOWW(#_Icu_GenModuleMode)[r2], r2
+00000AFC 6112                1386  	cmp 0x00000001, r2
+00000AFE 8A05                1387  	bnz9 .BB.LABEL.14_19
+00000B00                     1388  .BB.LABEL.14_16:	; bb
+00000B00                     1389  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 0
+00000B00 D5FF1900            1390  	tst1 0x00000007, 0x00000019[r21]
+00000B04 8A05                1391  	bnz9 .BB.LABEL.14_19
+00000B06                     1392  .BB.LABEL.14_17:	; bb204
+00000B06 F8161C00            1393  	mulhi 0x0000001C, r24, r2
+00000B0A C2A1                1394  	add r2, r20
+00000B0C 34171100            1395  	ld.w 0x00000010[r20], r2
+00000B10 6012                1396  	cmp 0x00000000, r2
+00000B12 8205                1397  	bz9 .BB.LABEL.14_19
+00000B14                     1398  .BB.LABEL.14_18:	; if_then_bb218
+00000B14                     1399  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3757
+00000B14 40160000            1400  	movhi HIGHW1(#_Icu_GpChannelConfig), r0, r2
+00000B18 22170100            1401  	ld.w LOWW(#_Icu_GpChannelConfig)[r2], r2
+00000B1C F92E1C00            1402  	mulhi 0x0000001C, r25, r5
+00000B20 C511                1403  	add r5, r2
+00000B22 22371100            1404  	ld.w 0x00000010[r2], r6
+00000B26                     1405  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3760
+00000B26 80FF0000            1406  	jarl _EcuM_CheckWakeup, r31
+00000B2A                     1407  .BB.LABEL.14_19:	; return
+00000B2A                     1408  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3829
+00000B2A 40063FCF            1409  	dispose 0x00000000, 0x00000679, [r31]
+00000B2E                     1410  _Icu_ServiceSignalMeasurement:
+00000B2E                     1411  	.stack _Icu_ServiceSignalMeasurement = 0
+00000B2E                     1412  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3884
+00000B2E 40160000            1413  	movhi HIGHW1(#_Icu_GpChannelConfig), r0, r2
+00000B32                     1414  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3914
+00000B32 22170100            1415  	ld.w LOWW(#_Icu_GpChannelConfig)[r2], r2
+00000B36                     1416  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3943
+00000B36 E62E1C00            1417  	mulhi 0x0000001C, r6, r5
+00000B3A C511                1418  	add r5, r2
+00000B3C 82170500            1419  	ld.bu 0x00000004[r2], r2
+00000B40 C212                1420  	shl 0x00000002, r2
+00000B42                     1421  	mov #_Icu_GaaTAUDBChReg_BaseAddress, r5
+00000B42 250600000000            -- mov         0x0,tp
+00000B48 C229                1422  	add r2, r5
+00000B4A                     1423  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3917
+00000B4A 40160000            1424  	movhi HIGHW1(#_Icu_GpTimerChannelConfig), r0, r2
+00000B4E 22170100            1425  	ld.w LOWW(#_Icu_GpTimerChannelConfig)[r2], r2
+00000B52                     1426  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3922
+00000B52 E632                1427  	mulh 0x00000006, r6
+00000B54 C611                1428  	add r6, r2
+00000B56                     1429  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3929
+00000B56 A2370500            1430  	ld.bu 0x00000005[r2], r6
+00000B5A                     1431  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3948
+00000B5A C63E0300            1432  	andi 0x00000003, r6, r7
+00000B5E 613A                1433  	cmp 0x00000001, r7
+00000B60                     1434  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3926
+00000B60 82170500            1435  	ld.bu 0x00000004[r2], r2
+00000B64                     1436  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3943
+00000B64 252F0100            1437  	ld.w 0x00000000[r5], r5
+00000B68                     1438  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3926
+00000B68 403E0000            1439  	movhi HIGHW1(#_Icu_GpSignalMeasurementData), r0, r7
+00000B6C 273F0100            1440  	ld.w LOWW(#_Icu_GpSignalMeasurementData)[r7], r7
+00000B70                     1441  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3948
+00000B70 8205                1442  	bz9 .BB.LABEL.15_2
+00000B72                     1443  .BB.LABEL.15_1:	; bb
+00000B72                     1444  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 0
+00000B72 C6060300            1445  	andi 0x00000003, r6, r0
+00000B76 8A05                1446  	bnz9 .BB.LABEL.15_3
+00000B78                     1447  .BB.LABEL.15_2:	; if_then_bb
+00000B78                     1448  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3955
+00000B78 EC12                1449  	mulh 0x0000000C, r2
+00000B7A C239                1450  	add r2, r7
+00000B7C E5170100            1451  	ld.hu 0x00000000[r5], r2
+00000B80 4112                1452  	add 0x00000001, r2
+00000B82 67170100            1453  	st.w r2, 0x00000000[r7]
+00000B86 7F00                1454  	jmp [r31]
+00000B88                     1455  .BB.LABEL.15_3:	; if_else_bb
+00000B88                     1456  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3962
+00000B88 EC12                1457  	mulh 0x0000000C, r2
+00000B8A C239                1458  	add r2, r7
+00000B8C 27170100            1459  	ld.w 0x00000000[r7], r2
+00000B90 67170900            1460  	st.w r2, 0x00000008[r7]
+00000B94                     1461  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 3965
+00000B94 E5170100            1462  	ld.hu 0x00000000[r5], r2
+00000B98 4112                1463  	add 0x00000001, r2
+00000B9A 67170500            1464  	st.w r2, 0x00000004[r7]
+00000B9E 7F00                1465  	jmp [r31]
+00000BA0                     1466  _Icu_ServiceTimestamp:
+00000BA0                     1467  	.stack _Icu_ServiceTimestamp = 28
+00000BA0                     1468  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4074
+00000BA0 800721CF            1469  	prepare 0x00000679, 0x00000000
+00000BA4                     1470  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4104
+00000BA4 40160000            1471  	movhi HIGHW1(#_Icu_GpTimerChannelConfig), r0, r2
+00000BA8 22A70100            1472  	ld.w LOWW(#_Icu_GpTimerChannelConfig)[r2], r20
+00000BAC                     1473  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4108
+00000BAC E6160600            1474  	mulhi 0x00000006, r6, r2
+00000BB0 D411                1475  	add r20, r2
+00000BB2                     1476  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4113
+00000BB2 82170500            1477  	ld.bu 0x00000004[r2], r2
+00000BB6                     1478  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4119
+00000BB6 E2AE0C00            1479  	mulhi 0x0000000C, r2, r21
+00000BBA                     1480  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4113
+00000BBA 402E0000            1481  	movhi HIGHW1(#_Icu_GpTimeStampData), r0, r5
+00000BBE 252F0100            1482  	ld.w LOWW(#_Icu_GpTimeStampData)[r5], r5
+00000BC2                     1483  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4119
+00000BC2 C5A9                1484  	add r5, r21
+00000BC4 F5470700            1485  	ld.hu 0x00000006[r21], r8
+00000BC8 F54F0500            1486  	ld.hu 0x00000004[r21], r9
+00000BCC 15B60400            1487  	addi 0x00000004, r21, r22
+00000BD0 46AA                1488  	add 0x00000006, r21
+00000BD2 E941                1489  	cmp r9, r8
+00000BD4                     1490  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4097
+00000BD4 40460000            1491  	movhi HIGHW1(#_Icu_GpChannelConfig), r0, r8
+00000BD8 28470100            1492  	ld.w LOWW(#_Icu_GpChannelConfig)[r8], r8
+00000BDC                     1493  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4119
+00000BDC 06B8                1494  	mov r6, r23
+00000BDE 06C0                1495  	mov r6, r24
+00000BE0 8905                1496  	bnc9 .BB.LABEL.16_9
+00000BE2                     1497  .BB.LABEL.16_1:	; if_then_bb
+00000BE2                     1498  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4123
+00000BE2 E2CE0C00            1499  	mulhi 0x0000000C, r2, r25
+00000BE6 C5C9                1500  	add r5, r25
+00000BE8 394F0100            1501  	ld.w 0x00000000[r25], r9
+00000BEC 693F0100            1502  	st.w r7, 0x00000000[r9]
+00000BF0                     1503  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4124
+00000BF0 353F0000            1504  	ld.h 0x00000000[r21], r7
+00000BF4 413A                1505  	add 0x00000001, r7
+00000BF6 753F0000            1506  	st.h r7, 0x00000000[r21]
+00000BFA                     1507  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4125
+00000BFA 393F0100            1508  	ld.w 0x00000000[r25], r7
+00000BFE 443A                1509  	add 0x00000004, r7
+00000C00 793F0100            1510  	st.w r7, 0x00000000[r25]
+00000C04                     1511  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4135
+00000C04 403E0000            1512  	movhi HIGHW1(#_Icu_GpChannelRamData), r0, r7
+00000C08 273F0100            1513  	ld.w LOWW(#_Icu_GpChannelRamData)[r7], r7
+00000C0C 1848                1514  	mov r24, r9
+00000C0E C24A                1515  	shl 0x00000002, r9
+00000C10 C939                1516  	add r9, r7
+00000C12 C7D70000            1517  	tst1 0x00000002, 0x00000000[r7]
+00000C16 8205                1518  	bz9 .BB.LABEL.16_5
+00000C18                     1519  .BB.LABEL.16_2:	; if_then_bb56
+00000C18                     1520  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4140
+00000C18 EC12                1521  	mulh 0x0000000C, r2
+00000C1A C229                1522  	add r2, r5
+00000C1C 25170800            1523  	ld.h 0x00000008[r5], r2
+00000C20 4112                1524  	add 0x00000001, r2
+00000C22 65170800            1525  	st.h r2, 0x00000008[r5]
+00000C26                     1526  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4142
+00000C26 E53F0B00            1527  	ld.hu 0x0000000A[r5], r7
+00000C2A                     1528  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4140
+00000C2A 482A                1529  	add 0x00000008, r5
+00000C2C                     1530  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4142
+00000C2C C200                1531  	zxh r2
+00000C2E E711                1532  	cmp r7, r2
+00000C30 8A05                1533  	bnz9 .BB.LABEL.16_5
+00000C32                     1534  .BB.LABEL.16_3:	; if_then_bb72
+00000C32                     1535  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4147
+00000C32 65070000            1536  	st.h r0, 0x00000000[r5]
+00000C36                     1537  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4154
+00000C36 E6161C00            1538  	mulhi 0x0000001C, r6, r2
+00000C3A C241                1539  	add r2, r8
+00000C3C 28170100            1540  	ld.w 0x00000000[r8], r2
+00000C40 6012                1541  	cmp 0x00000000, r2
+00000C42 8205                1542  	bz9 .BB.LABEL.16_5
+00000C44                     1543  .BB.LABEL.16_4:	; if_then_bb82
+00000C44                     1544  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4158
+00000C44 E2C760F9            1545  	jarl [r2], r31
+00000C48                     1546  .BB.LABEL.16_5:	; if_break_bb89
+00000C48                     1547  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4177
+00000C48 F6170100            1548  	ld.hu 0x00000000[r22], r2
+00000C4C F52F0100            1549  	ld.hu 0x00000000[r21], r5
+00000C50 E511                1550  	cmp r5, r2
+00000C52 8B05                1551  	bh9 .BB.LABEL.16_9
+00000C54                     1552  .BB.LABEL.16_6:	; if_then_bb101
+00000C54                     1553  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4183
+00000C54 E6BA                1554  	mulh 0x00000006, r23
+00000C56 D7A1                1555  	add r23, r20
+00000C58 D4DF0500            1556  	tst1 0x00000003, 0x00000005[r20]
+00000C5C 8205                1557  	bz9 .BB.LABEL.16_8
+00000C5E                     1558  .BB.LABEL.16_7:	; if_then_bb110
+00000C5E                     1559  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4187
+00000C5E 75070000            1560  	st.h r0, 0x00000000[r21]
+00000C62                     1561  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4189
+00000C62 8011                1562  	subr r0, r2
+00000C64 C212                1563  	shl 0x00000002, r2
+00000C66 39C70100            1564  	ld.w 0x00000000[r25], r24
+00000C6A C2C1                1565  	add r2, r24
+00000C6C 79C70100            1566  	st.w r24, 0x00000000[r25]
+00000C70 40063FCF            1567  	dispose 0x00000000, 0x00000679, [r31]
+00000C74                     1568  .BB.LABEL.16_8:	; if_else_bb124
+00000C74                     1569  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 0
+00000C74 203E1F00            1570  	movea 0x0000001F, r0, r7
+00000C78                     1571  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4196
+00000C78 1830                1572  	mov r24, r6
+00000C7A 80FF0000            1573  	jarl _Icu_HW_StopCountMeasurement, r31
+00000C7E                     1574  .BB.LABEL.16_9:	; return
+00000C7E                     1575  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4209
+00000C7E 40063FCF            1576  	dispose 0x00000000, 0x00000679, [r31]
+00000C82                     1577  _Icu_ExternalInterruptIsr:
+00000C82                     1578  	.stack _Icu_ExternalInterruptIsr = 20
+00000C82                     1579  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4257
+00000C82 8007210F            1580  	prepare 0x00000079, 0x00000000
+00000C86                     1581  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4285
+00000C86 40160000            1582  	movhi HIGHW1(#_Icu_GpChannelConfig), r0, r2
+00000C8A 22A70100            1583  	ld.w LOWW(#_Icu_GpChannelConfig)[r2], r20
+00000C8E E6AE1C00            1584  	mulhi 0x0000001C, r6, r21
+00000C92 D4A9                1585  	add r20, r21
+00000C94                     1586  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4296
+00000C94 40160000            1587  	movhi HIGHW1(#_Icu_GpChannelRamData), r0, r2
+00000C98 22170100            1588  	ld.w LOWW(#_Icu_GpChannelRamData)[r2], r2
+00000C9C 0628                1589  	mov r6, r5
+00000C9E C22A                1590  	shl 0x00000002, r5
+00000CA0 C511                1591  	add r5, r2
+00000CA2 C2D70000            1592  	tst1 0x00000002, 0x00000000[r2]
+00000CA6 06B0                1593  	mov r6, r22
+00000CA8 06B8                1594  	mov r6, r23
+00000CAA 8205                1595  	bz9 .BB.LABEL.17_3
+00000CAC                     1596  .BB.LABEL.17_1:	; if_then_bb
+00000CAC                     1597  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4305
+00000CAC F6161C00            1598  	mulhi 0x0000001C, r22, r2
+00000CB0 D411                1599  	add r20, r2
+00000CB2 22170100            1600  	ld.w 0x00000000[r2], r2
+00000CB6 6012                1601  	cmp 0x00000000, r2
+00000CB8 8205                1602  	bz9 .BB.LABEL.17_3
+00000CBA                     1603  .BB.LABEL.17_2:	; if_then_bb25
+00000CBA                     1604  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4309
+00000CBA E2C760F9            1605  	jarl [r2], r31
+00000CBE                     1606  .BB.LABEL.17_3:	; if_break_bb30
+00000CBE                     1607  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4329
+00000CBE 40160000            1608  	movhi HIGHW1(#_Icu_GpChannelRamData), r0, r2
+00000CC2 22170100            1609  	ld.w LOWW(#_Icu_GpChannelRamData)[r2], r2
+00000CC6 1728                1610  	mov r23, r5
+00000CC8 C22A                1611  	shl 0x00000002, r5
+00000CCA C511                1612  	add r5, r2
+00000CCC C2870000            1613  	clr1 0x00000000, 0x00000000[r2]
+00000CD0                     1614  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4345
+00000CD0 40160000            1615  	movhi HIGHW1(#_Icu_GenModuleMode), r0, r2
+00000CD4 22170100            1616  	ld.w LOWW(#_Icu_GenModuleMode)[r2], r2
+00000CD8 6112                1617  	cmp 0x00000001, r2
+00000CDA 8A05                1618  	bnz9 .BB.LABEL.17_7
+00000CDC                     1619  .BB.LABEL.17_4:	; bb
+00000CDC                     1620  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 0
+00000CDC D5FF1900            1621  	tst1 0x00000007, 0x00000019[r21]
+00000CE0 8A05                1622  	bnz9 .BB.LABEL.17_7
+00000CE2                     1623  .BB.LABEL.17_5:	; bb58
+00000CE2 F6161C00            1624  	mulhi 0x0000001C, r22, r2
+00000CE6 C2A1                1625  	add r2, r20
+00000CE8 34171100            1626  	ld.w 0x00000010[r20], r2
+00000CEC 6012                1627  	cmp 0x00000000, r2
+00000CEE 8205                1628  	bz9 .BB.LABEL.17_7
+00000CF0                     1629  .BB.LABEL.17_6:	; if_then_bb72
+00000CF0                     1630  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4352
+00000CF0 40160000            1631  	movhi HIGHW1(#_Icu_GpChannelConfig), r0, r2
+00000CF4 22170100            1632  	ld.w LOWW(#_Icu_GpChannelConfig)[r2], r2
+00000CF8 F72E1C00            1633  	mulhi 0x0000001C, r23, r5
+00000CFC C511                1634  	add r5, r2
+00000CFE 22371100            1635  	ld.w 0x00000010[r2], r6
+00000D02                     1636  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4355
+00000D02 80FF0000            1637  	jarl _EcuM_CheckWakeup, r31
+00000D06                     1638  .BB.LABEL.17_7:	; return
+00000D06                     1639  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4424
+00000D06 40063F0F            1640  	dispose 0x00000000, 0x00000079, [r31]
+00000D0A                     1641  _Icu_HW_GetInputLevel:
+00000D0A                     1642  	.stack _Icu_HW_GetInputLevel = 0
+00000D0A                     1643  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4473
+00000D0A 40160000            1644  	movhi HIGHW1(#_Icu_GpChannelConfig), r0, r2
+00000D0E                     1645  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4485
+00000D0E 22170100            1646  	ld.w LOWW(#_Icu_GpChannelConfig)[r2], r2
+00000D12                     1647  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4490
+00000D12 E62E1C00            1648  	mulhi 0x0000001C, r6, r5
+00000D16 C229                1649  	add r2, r5
+00000D18 252F0900            1650  	ld.w 0x00000008[r5], r5
+00000D1C 602A                1651  	cmp 0x00000000, r5
+00000D1E 8205                1652  	bz9 .BB.LABEL.18_6
+00000D20                     1653  .BB.LABEL.18_1:	; if_then_bb
+00000D20                     1654  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4494
+00000D20 E63E1C00            1655  	mulhi 0x0000001C, r6, r7
+00000D24 C239                1656  	add r2, r7
+00000D26 873F1900            1657  	ld.bu 0x00000018[r7], r7
+00000D2A E6361C00            1658  	mulhi 0x0000001C, r6, r6
+00000D2E C611                1659  	add r6, r2
+00000D30 E52F0100            1660  	ld.hu 0x00000000[r5], r5
+00000D34 E2171700            1661  	ld.hu 0x00000016[r2], r2
+00000D38 4229                1662  	and r2, r5
+00000D3A 603A                1663  	cmp 0x00000000, r7
+00000D3C 8A05                1664  	bnz9 .BB.LABEL.18_4
+00000D3E                     1665  .BB.LABEL.18_2:	; if_then_bb19
+00000D3E                     1666  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4497
+00000D3E E229                1667  	cmp r2, r5
+00000D40 8A05                1668  	bnz9 .BB.LABEL.18_6
+00000D42                     1669  .BB.LABEL.18_3:	; if_then_bb37
+00000D42                     1670  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 0
+00000D42 0152                1671  	mov 0x00000001, r10
+00000D44                     1672  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4501
+00000D44 7F00                1673  	jmp [r31]
+00000D46                     1674  .BB.LABEL.18_4:	; if_else_bb38
+00000D46                     1675  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4511
+00000D46 8500                1676  	zxb r5
+00000D48 E229                1677  	cmp r2, r5
+00000D4A 8A05                1678  	bnz9 .BB.LABEL.18_6
+00000D4C                     1679  .BB.LABEL.18_5:	; if_then_bb58
+00000D4C                     1680  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 0
+00000D4C 0152                1681  	mov 0x00000001, r10
+00000D4E                     1682  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4516
+00000D4E 7F00                1683  	jmp [r31]
+00000D50                     1684  .BB.LABEL.18_6:	; if_break_bb63
+00000D50                     1685  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 0
+00000D50 0052                1686  	mov 0x00000000, r10
+00000D52                     1687  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4531
+00000D52 7F00                1688  	jmp [r31]
+00000D54                     1689  _Icu_HW_GetTAUInCountValue:
+00000D54                     1690  	.stack _Icu_HW_GetTAUInCountValue = 0
+00000D54                     1691  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4578
+00000D54 40160000            1692  	movhi HIGHW1(#_Icu_GpChannelConfig), r0, r2
+00000D58                     1693  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4599
+00000D58 22170100            1694  	ld.w LOWW(#_Icu_GpChannelConfig)[r2], r2
+00000D5C E62E1C00            1695  	mulhi 0x0000001C, r6, r5
+00000D60 C229                1696  	add r2, r5
+00000D62                     1697  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4627
+00000D62 053F1900            1698  	ld.b 0x00000019[r5], r7
+00000D66 843A                1699  	shr 0x00000004, r7
+00000D68 C73E0300            1700  	andi 0x00000003, r7, r7
+00000D6C 613A                1701  	cmp 0x00000001, r7
+00000D6E 8205                1702  	bz9 .BB.LABEL.19_2
+00000D70                     1703  .BB.LABEL.19_1:	; bb
+00000D70                     1704  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 0
+00000D70 052F1900            1705  	ld.b 0x00000019[r5], r5
+00000D74 842A                1706  	shr 0x00000004, r5
+00000D76 C52E0300            1707  	andi 0x00000003, r5, r5
+00000D7A 622A                1708  	cmp 0x00000002, r5
+00000D7C 8A05                1709  	bnz9 .BB.LABEL.19_3
+00000D7E                     1710  .BB.LABEL.19_2:	; if_then_bb
+00000D7E                     1711  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4631
+00000D7E E62E1C00            1712  	mulhi 0x0000001C, r6, r5
+00000D82 C511                1713  	add r5, r2
+00000D84 82170500            1714  	ld.bu 0x00000004[r2], r2
+00000D88 C212                1715  	shl 0x00000002, r2
+00000D8A                     1716  	mov #_Icu_GaaTAUDBChReg_BaseAddress, r5
+00000D8A 250600000000            -- mov         0x0,tp
+00000D90 C229                1717  	add r2, r5
+00000D92 25170100            1718  	ld.w 0x00000000[r5], r2
+00000D96                     1719  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4635
+00000D96 E2578100            1720  	ld.hu 0x00000080[r2], r10
+00000D9A 7F00                1721  	jmp [r31]
+00000D9C                     1722  .BB.LABEL.19_3:	; if_break_bb
+00000D9C                     1723  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 0
+00000D9C 0052                1724  	mov 0x00000000, r10
+00000D9E                     1725  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4648
+00000D9E 7F00                1726  	jmp [r31]
+00000DA0                     1727  _Icu_HW_SynchronousInit:
+00000DA0                     1728  	.stack _Icu_HW_SynchronousInit = 28
+00000DA0                     1729  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4699
+00000DA0 800721CF            1730  	prepare 0x00000679, 0x00000000
+00000DA4 00A2                1731  	mov 0x00000000, r20
+00000DA6 80070000            1732  	jr .BB.LABEL.20_18
+00000DAA                     1733  .BB.LABEL.20_1:	; bb
+00000DAA                     1734  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4719
+00000DAA 40160000            1735  	movhi HIGHW1(#_Icu_GpChannelConfig), r0, r2
+00000DAE 22AF0100            1736  	ld.w LOWW(#_Icu_GpChannelConfig)[r2], r21
+00000DB2 D4B6FF00            1737  	andi 0x000000FF, r20, r22
+00000DB6 16B8                1738  	mov r22, r23
+00000DB8 FCBF4002            1739  	mul 0x0000001C, r23, r0
+00000DBC D5B9                1740  	add r21, r23
+00000DBE                     1741  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4727
+00000DBE B7171900            1742  	ld.bu 0x00000019[r23], r2
+00000DC2                     1743  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4731
+00000DC2 0228                1744  	mov r2, r5
+00000DC4 822A                1745  	shr 0x00000002, r5
+00000DC6 C5C60300            1746  	andi 0x00000003, r5, r24
+00000DCA                     1747  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4732
+00000DCA C2060300            1748  	andi 0x00000003, r2, r0
+00000DCE EA070100            1749  	bnz17 .BB.LABEL.20_12
+00000DD2                     1750  .BB.LABEL.20_2:	; if_then_bb
+00000DD2                     1751  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4735
+00000DD2 D7C71A00            1752  	tst1 0x00000000, 0x0000001A[r23]
+00000DD6 E2070100            1753  	bz17 .BB.LABEL.20_12
+00000DDA                     1754  .BB.LABEL.20_3:	; bb34
+00000DDA                     1755  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 0
+00000DDA B7171900            1756  	ld.bu 0x00000019[r23], r2
+00000DDE C2063000            1757  	andi 0x00000030, r2, r0
+00000DE2 8A05                1758  	bnz9 .BB.LABEL.20_12
+00000DE4                     1759  .BB.LABEL.20_4:	; if_then_bb51
+00000DE4                     1760  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4741
+00000DE4 F6CE1C00            1761  	mulhi 0x0000001C, r22, r25
+00000DE8 D5C9                1762  	add r21, r25
+00000DEA 99170500            1763  	ld.bu 0x00000004[r25], r2
+00000DEE 402E0000            1764  	movhi HIGHW1(#_Icu_GpfclaReg_BaseAddress), r0, r5
+00000DF2 25370100            1765  	ld.w LOWW(#_Icu_GpfclaReg_BaseAddress)[r5], r6
+00000DF6 C231                1766  	add r2, r6
+00000DF8 46070000            1767  	st.b r0, 0x00000000[r6]
+00000DFC D416FF00            1768  	andi 0x000000FF, r20, r2
+00000E00                     1769  	mov #_Icu_GaaFclaRegsMirror, r6
+00000E00 260600000000            -- mov         0x0,r6
+00000E06 C231                1770  	add r2, r6
+00000E08 46070000            1771  	st.b r0, 0x00000000[r6]
+00000E0C                     1772  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4747
+00000E0C 99170500            1773  	ld.bu 0x00000004[r25], r2
+00000E10                     1774  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4741
+00000E10 44CA                1775  	add 0x00000004, r25
+00000E12                     1776  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4747
+00000E12 252F0100            1777  	ld.w LOWW(#_Icu_GpfclaReg_BaseAddress)[r5], r5
+00000E16 C229                1778  	add r2, r5
+00000E18 85170100            1779  	ld.bu 0x00000000[r5], r2
+00000E1C C2060700            1780  	andi 0x00000007, r2, r0
+00000E20 8205                1781  	bz9 .BB.LABEL.20_6
+00000E22                     1782  .BB.LABEL.20_5:	; if_then_bb79
+00000E22                     1783  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 0
+00000E22 0132                1784  	mov 0x00000001, r6
+00000E24 0638                1785  	mov r6, r7
+00000E26 80FF0000            1786  	jarl _Dem_ReportErrorStatus, r31
+00000E2A                     1787  .BB.LABEL.20_6:	; if_break_bb
+00000E2A                     1788  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4751
+00000E2A 40160000            1789  	movhi HIGHW1(#_Icu_GpfclaReg_BaseAddress), r0, r2
+00000E2E 22170100            1790  	ld.w LOWW(#_Icu_GpfclaReg_BaseAddress)[r2], r2
+00000E32 992F0100            1791  	ld.bu 0x00000000[r25], r5
+00000E36 C511                1792  	add r5, r2
+00000E38 62C2                1793  	cmp 0x00000002, r24
+00000E3A 8A05                1794  	bnz9 .BB.LABEL.20_8
+00000E3C                     1795  .BB.LABEL.20_7:	; if_then_bb85
+00000E3C                     1796  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 0
+00000E3C 03C2                1797  	mov 0x00000003, r24
+00000E3E                     1798  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4756
+00000E3E 42C70000            1799  	st.b r24, 0x00000000[r2]
+00000E42 D416FF00            1800  	andi 0x000000FF, r20, r2
+00000E46                     1801  	mov #_Icu_GaaFclaRegsMirror, r5
+00000E46 250600000000            -- mov         0x0,tp
+00000E4C C229                1802  	add r2, r5
+00000E4E 45C70000            1803  	st.b r24, 0x00000000[r5]
+00000E52                     1804  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4763
+00000E52 40160000            1805  	movhi HIGHW1(#_Icu_GpfclaReg_BaseAddress), r0, r2
+00000E56 22170100            1806  	ld.w LOWW(#_Icu_GpfclaReg_BaseAddress)[r2], r2
+00000E5A 99C70100            1807  	ld.bu 0x00000000[r25], r24
+00000E5E D811                1808  	add r24, r2
+00000E60 82170100            1809  	ld.bu 0x00000000[r2], r2
+00000E64 C2160700            1810  	andi 0x00000007, r2, r2
+00000E68 6312                1811  	cmp 0x00000003, r2
+00000E6A 8A05                1812  	bnz9 .BB.LABEL.20_11
+00000E6C 8505                1813  	br9 .BB.LABEL.20_12
+00000E6E                     1814  .BB.LABEL.20_8:	; if_else_bb115
+00000E6E                     1815  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 0
+00000E6E                     1816  	mov #_Icu_GaaFclaRegsMirror, r6
+00000E6E 260600000000            -- mov         0x0,r6
+00000E74                     1817  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4771
+00000E74 60C2                1818  	cmp 0x00000000, r24
+00000E76 8A05                1819  	bnz9 .BB.LABEL.20_10
+00000E78                     1820  .BB.LABEL.20_9:	; if_then_bb121
+00000E78                     1821  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 0
+00000E78 022A                1822  	mov 0x00000002, r5
+00000E7A                     1823  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4776
+00000E7A 422F0000            1824  	st.b r5, 0x00000000[r2]
+00000E7E D416FF00            1825  	andi 0x000000FF, r20, r2
+00000E82 C231                1826  	add r2, r6
+00000E84 462F0000            1827  	st.b r5, 0x00000000[r6]
+00000E88                     1828  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4783
+00000E88 40160000            1829  	movhi HIGHW1(#_Icu_GpfclaReg_BaseAddress), r0, r2
+00000E8C 22170100            1830  	ld.w LOWW(#_Icu_GpfclaReg_BaseAddress)[r2], r2
+00000E90 99CF0100            1831  	ld.bu 0x00000000[r25], r25
+00000E94 D911                1832  	add r25, r2
+00000E96 82170100            1833  	ld.bu 0x00000000[r2], r2
+00000E9A C2160700            1834  	andi 0x00000007, r2, r2
+00000E9E 6212                1835  	cmp 0x00000002, r2
+00000EA0 8A05                1836  	bnz9 .BB.LABEL.20_11
+00000EA2 8505                1837  	br9 .BB.LABEL.20_12
+00000EA4                     1838  .BB.LABEL.20_10:	; if_else_bb151
+00000EA4                     1839  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 0
+00000EA4 012A                1840  	mov 0x00000001, r5
+00000EA6                     1841  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4792
+00000EA6 422F0000            1842  	st.b r5, 0x00000000[r2]
+00000EAA D416FF00            1843  	andi 0x000000FF, r20, r2
+00000EAE C231                1844  	add r2, r6
+00000EB0 462F0000            1845  	st.b r5, 0x00000000[r6]
+00000EB4                     1846  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4798
+00000EB4 40160000            1847  	movhi HIGHW1(#_Icu_GpfclaReg_BaseAddress), r0, r2
+00000EB8 22170100            1848  	ld.w LOWW(#_Icu_GpfclaReg_BaseAddress)[r2], r2
+00000EBC 992F0100            1849  	ld.bu 0x00000000[r25], r5
+00000EC0 C511                1850  	add r5, r2
+00000EC2 82170100            1851  	ld.bu 0x00000000[r2], r2
+00000EC6 C2160700            1852  	andi 0x00000007, r2, r2
+00000ECA 6112                1853  	cmp 0x00000001, r2
+00000ECC 8205                1854  	bz9 .BB.LABEL.20_12
+00000ECE                     1855  .BB.LABEL.20_11:	; if_then_bb178
+00000ECE                     1856  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 0
+00000ECE 0132                1857  	mov 0x00000001, r6
+00000ED0 0638                1858  	mov r6, r7
+00000ED2 80FF0000            1859  	jarl _Dem_ReportErrorStatus, r31
+00000ED6                     1860  .BB.LABEL.20_12:	; if_break_bb186
+00000ED6                     1861  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4817
+00000ED6 D7C71A00            1862  	tst1 0x00000000, 0x0000001A[r23]
+00000EDA 8205                1863  	bz9 .BB.LABEL.20_17
+00000EDC                     1864  .BB.LABEL.20_13:	; bb196
+00000EDC                     1865  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 0
+00000EDC B7171900            1866  	ld.bu 0x00000019[r23], r2
+00000EE0 C2063000            1867  	andi 0x00000030, r2, r0
+00000EE4 8205                1868  	bz9 .BB.LABEL.20_17
+00000EE6                     1869  .BB.LABEL.20_14:	; if_then_bb214
+00000EE6                     1870  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4824
+00000EE6 80FF0000            1871  	jarl _SchM_Enter_Icu_ICU_CHANNEL_DATA_PROTECTION, r31
+00000EEA                     1872  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4831
+00000EEA D416FF00            1873  	andi 0x000000FF, r20, r2
+00000EEE C212                1874  	shl 0x00000002, r2
+00000EF0 402E0000            1875  	movhi HIGHW1(#_Icu_GpChannelRamData), r0, r5
+00000EF4 252F0100            1876  	ld.w LOWW(#_Icu_GpChannelRamData)[r5], r5
+00000EF8 C229                1877  	add r2, r5
+00000EFA C5070000            1878  	set1 0x00000000, 0x00000000[r5]
+00000EFE                     1879  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4836
+00000EFE F6161C00            1880  	mulhi 0x0000001C, r22, r2
+00000F02 C2A9                1881  	add r2, r21
+00000F04 35170D00            1882  	ld.w 0x0000000C[r21], r2
+00000F08 4CAA                1883  	add 0x0000000C, r21
+00000F0A 6012                1884  	cmp 0x00000000, r2
+00000F0C 8205                1885  	bz9 .BB.LABEL.20_16
+00000F0E                     1886  .BB.LABEL.20_15:	; if_then_bb230
+00000F0E                     1887  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4848
+00000F0E E22F0100            1888  	ld.hu 0x00000000[r2], r5
+00000F12 C52EFFEF            1889  	andi 0x0000EFFF, r5, r5
+00000F16 622F0000            1890  	st.h r5, 0x00000000[r2]
+00000F1A 35170100            1891  	ld.w 0x00000000[r21], r2
+00000F1E 22170000            1892  	ld.h 0x00000000[r2], r2
+00000F22 1F00                1893  	syncp
+00000F24                     1894  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4854
+00000F24 35170100            1895  	ld.w 0x00000000[r21], r2
+00000F28                     1896  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4856
+00000F28 822F0100            1897  	ld.bu 0x00000000[r2], r5
+00000F2C C52E7F00            1898  	andi 0x0000007F, r5, r5
+00000F30 422F0000            1899  	st.b r5, 0x00000000[r2]
+00000F34                     1900  .BB.LABEL.20_16:	; if_break_bb257
+00000F34                     1901  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4868
+00000F34 80FF0000            1902  	jarl _SchM_Exit_Icu_ICU_CHANNEL_DATA_PROTECTION, r31
+00000F38                     1903  .BB.LABEL.20_17:	; if_break_bb259
+00000F38                     1904  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 0
+00000F38 41A2                1905  	add 0x00000001, r20
+00000F3A                     1906  .BB.LABEL.20_18:	; bb262
+00000F3A                     1907  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4714
+00000F3A D416FF00            1908  	andi 0x000000FF, r20, r2
+00000F3E 6812                1909  	cmp 0x00000008, r2
+00000F40 E1070100            1910  	bl17 .BB.LABEL.20_1
+00000F44                     1911  .BB.LABEL.20_19:	; return
+00000F44                     1912  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4877
+00000F44 40063FCF            1913  	dispose 0x00000000, 0x00000679, [r31]
+00000F48                     1914  _Icu_HW_SynchronousStart:
+00000F48                     1915  	.stack _Icu_HW_SynchronousStart = 12
+00000F48                     1916  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4931
+00000F48 8007210C            1917  	prepare 0x00000061, 0x00000000
+00000F4C 00A2                1918  	mov 0x00000000, r20
+00000F4E 8505                1919  	br9 .BB.LABEL.21_5
+00000F50                     1920  .BB.LABEL.21_1:	; bb
+00000F50                     1921  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4975
+00000F50 40160000            1922  	movhi HIGHW1(#_Icu_GpTAUUnitConfig), r0, r2
+00000F54 22AF0100            1923  	ld.w LOWW(#_Icu_GpTAUUnitConfig)[r2], r21
+00000F58                     1924  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4981
+00000F58 80FF0000            1925  	jarl _SchM_Enter_Icu_ICU_CHANNEL_DATA_PROTECTION, r31
+00000F5C                     1926  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4975
+00000F5C D416FF00            1927  	andi 0x000000FF, r20, r2
+00000F60                     1928  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4986
+00000F60 0228                1929  	mov r2, r5
+00000F62 EA2F4002            1930  	mul 0x0000000A, r5, r0
+00000F66 D529                1931  	add r21, r5
+00000F68 052F0400            1932  	ld.b 0x00000004[r5], r5
+00000F6C 5F2A                1933  	add 0xFFFFFFFF, r5
+00000F6E 8500                1934  	zxb r5
+00000F70 612A                1935  	cmp 0x00000001, r5
+00000F72 8B05                1936  	bh9 .BB.LABEL.21_4
+00000F74                     1937  .BB.LABEL.21_2:	; if_then_bb
+00000F74                     1938  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4990
+00000F74 EA12                1939  	mulh 0x0000000A, r2
+00000F76 C2A9                1940  	add r2, r21
+00000F78 95170100            1941  	ld.bu 0x00000000[r21], r2
+00000F7C C212                1942  	shl 0x00000002, r2
+00000F7E                     1943  	mov #_Icu_GaaTAUDBUserReg_BaseAddress, r5
+00000F7E 250600000000            -- mov         0x0,tp
+00000F84 C229                1944  	add r2, r5
+00000F86 25170100            1945  	ld.w 0x00000000[r5], r2
+00000F8A                     1946  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4993
+00000F8A 352F0600            1947  	ld.h 0x00000006[r21], r5
+00000F8E 622F8401            1948  	st.h r5, 0x00000184[r2]
+00000F92                     1949  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4997
+00000F92 F52F0700            1950  	ld.hu 0x00000006[r21], r5
+00000F96 22178001            1951  	ld.h 0x00000180[r2], r2
+00000F9A 35370600            1952  	ld.h 0x00000006[r21], r6
+00000F9E 4611                1953  	and r6, r2
+00000FA0 C200                1954  	zxh r2
+00000FA2 E511                1955  	cmp r5, r2
+00000FA4 8205                1956  	bz9 .BB.LABEL.21_4
+00000FA6                     1957  .BB.LABEL.21_3:	; if_then_bb57
+00000FA6                     1958  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 0
+00000FA6 0132                1959  	mov 0x00000001, r6
+00000FA8 0638                1960  	mov r6, r7
+00000FAA 80FF0000            1961  	jarl _Dem_ReportErrorStatus, r31
+00000FAE                     1962  .BB.LABEL.21_4:	; if_break_bb59
+00000FAE                     1963  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5027
+00000FAE 80FF0000            1964  	jarl _SchM_Exit_Icu_ICU_CHANNEL_DATA_PROTECTION, r31
+00000FB2 41A2                1965  	add 0x00000001, r20
+00000FB4                     1966  .BB.LABEL.21_5:	; bb62
+00000FB4                     1967  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 4969
+00000FB4 D406FF00            1968  	andi 0x000000FF, r20, r0
+00000FB8 8205                1969  	bz9 .BB.LABEL.21_1
+00000FBA                     1970  .BB.LABEL.21_6:	; bb62.bb120_crit_edge
+00000FBA                     1971  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 0
+00000FBA 00A2                1972  	mov 0x00000000, r20
+00000FBC 8505                1973  	br9 .BB.LABEL.21_11
+00000FBE                     1974  .BB.LABEL.21_7:	; bb69
+00000FBE                     1975  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5039
+00000FBE 40160000            1976  	movhi HIGHW1(#_Icu_GpChannelConfig), r0, r2
+00000FC2 22170100            1977  	ld.w LOWW(#_Icu_GpChannelConfig)[r2], r2
+00000FC6 D42EFF00            1978  	andi 0x000000FF, r20, r5
+00000FCA FC2F4002            1979  	mul 0x0000001C, r5, r0
+00000FCE C511                1980  	add r5, r2
+00000FD0                     1981  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5053
+00000FD0 C2C71A00            1982  	tst1 0x00000000, 0x0000001A[r2]
+00000FD4 8205                1983  	bz9 .BB.LABEL.21_10
+00000FD6                     1984  .BB.LABEL.21_8:	; bb91
+00000FD6                     1985  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5045
+00000FD6 A2171900            1986  	ld.bu 0x00000019[r2], r2
+00000FDA C2160300            1987  	andi 0x00000003, r2, r2
+00000FDE 6112                1988  	cmp 0x00000001, r2
+00000FE0 8A05                1989  	bnz9 .BB.LABEL.21_10
+00000FE2                     1990  .BB.LABEL.21_9:	; if_then_bb103
+00000FE2                     1991  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5059
+00000FE2 80FF0000            1992  	jarl _SchM_Enter_Icu_ICU_CHANNEL_DATA_PROTECTION, r31
+00000FE6                     1993  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5065
+00000FE6 D416FF00            1994  	andi 0x000000FF, r20, r2
+00000FEA 0228                1995  	mov r2, r5
+00000FEC C22A                1996  	shl 0x00000002, r5
+00000FEE 40360000            1997  	movhi HIGHW1(#_Icu_GpChannelRamData), r0, r6
+00000FF2 26370100            1998  	ld.w LOWW(#_Icu_GpChannelRamData)[r6], r6
+00000FF6 C531                1999  	add r5, r6
+00000FF8 C6A70000            2000  	clr1 0x00000004, 0x00000000[r6]
+00000FFC                     2001  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5073
+00000FFC                     2002  	mov #_Icu_GaaChannelMeasureStatus, r5
+00000FFC 250600000000            -- mov         0x0,tp
+00001002 C229                2003  	add r2, r5
+00001004 0112                2004  	mov 0x00000001, r2
+00001006 45170000            2005  	st.b r2, 0x00000000[r5]
+0000100A                     2006  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5078
+0000100A 80FF0000            2007  	jarl _SchM_Exit_Icu_ICU_CHANNEL_DATA_PROTECTION, r31
+0000100E                     2008  .BB.LABEL.21_10:	; if_break_bb117
+0000100E                     2009  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 0
+0000100E 41A2                2010  	add 0x00000001, r20
+00001010                     2011  .BB.LABEL.21_11:	; bb120
+00001010                     2012  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5032
+00001010 D416FF00            2013  	andi 0x000000FF, r20, r2
+00001014 6812                2014  	cmp 0x00000008, r2
+00001016 8105                2015  	bl9 .BB.LABEL.21_7
+00001018                     2016  .BB.LABEL.21_12:	; bb120.bb212_crit_edge
+00001018                     2017  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 0
+00001018 00A2                2018  	mov 0x00000000, r20
+0000101A 8505                2019  	br9 .BB.LABEL.21_19
+0000101C                     2020  .BB.LABEL.21_13:	; bb127
+0000101C                     2021  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5102
+0000101C 80FF0000            2022  	jarl _SchM_Enter_Icu_ICU_CHANNEL_DATA_PROTECTION, r31
+00001020                     2023  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5108
+00001020 D416FF00            2024  	andi 0x000000FF, r20, r2
+00001024                     2025  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5111
+00001024 0228                2026  	mov r2, r5
+00001026 C22A                2027  	shl 0x00000002, r5
+00001028 40360000            2028  	movhi HIGHW1(#_Icu_GpChannelRamData), r0, r6
+0000102C 26370100            2029  	ld.w LOWW(#_Icu_GpChannelRamData)[r6], r6
+00001030 C531                2030  	add r5, r6
+00001032                     2031  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5108
+00001032 402E0000            2032  	movhi HIGHW1(#_Icu_GpChannelConfig), r0, r5
+00001036 252F0100            2033  	ld.w LOWW(#_Icu_GpChannelConfig)[r5], r5
+0000103A                     2034  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5111
+0000103A C6070000            2035  	set1 0x00000000, 0x00000000[r6]
+0000103E                     2036  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5108
+0000103E 0230                2037  	mov r2, r6
+00001040 FC374002            2038  	mul 0x0000001C, r6, r0
+00001044 C531                2039  	add r5, r6
+00001046                     2040  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5118
+00001046 C6C71A00            2041  	tst1 0x00000000, 0x0000001A[r6]
+0000104A 8205                2042  	bz9 .BB.LABEL.21_18
+0000104C                     2043  .BB.LABEL.21_14:	; if_then_bb151
+0000104C                     2044  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5124
+0000104C A6371900            2045  	ld.bu 0x00000019[r6], r6
+00001050 C6063000            2046  	andi 0x00000030, r6, r0
+00001054 8A05                2047  	bnz9 .BB.LABEL.21_17
+00001056                     2048  .BB.LABEL.21_15:	; if_then_bb162
+00001056                     2049  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5128
+00001056 E2161C00            2050  	mulhi 0x0000001C, r2, r2
+0000105A C229                2051  	add r2, r5
+0000105C 25170D00            2052  	ld.w 0x0000000C[r5], r2
+00001060 4C2A                2053  	add 0x0000000C, r5
+00001062 6012                2054  	cmp 0x00000000, r2
+00001064 8205                2055  	bz9 .BB.LABEL.21_17
+00001066                     2056  .BB.LABEL.21_16:	; if_then_bb169
+00001066                     2057  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5140
+00001066 E2370100            2058  	ld.hu 0x00000000[r2], r6
+0000106A C636FFEF            2059  	andi 0x0000EFFF, r6, r6
+0000106E 62370000            2060  	st.h r6, 0x00000000[r2]
+00001072 25170100            2061  	ld.w 0x00000000[r5], r2
+00001076 22170000            2062  	ld.h 0x00000000[r2], r2
+0000107A 1F00                2063  	syncp
+0000107C                     2064  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5146
+0000107C 25170100            2065  	ld.w 0x00000000[r5], r2
+00001080                     2066  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5148
+00001080 822F0100            2067  	ld.bu 0x00000000[r2], r5
+00001084 C52E7F00            2068  	andi 0x0000007F, r5, r5
+00001088 422F0000            2069  	st.b r5, 0x00000000[r2]
+0000108C                     2070  .BB.LABEL.21_17:	; if_break_bb198
+0000108C                     2071  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5165
+0000108C 40160000            2072  	movhi HIGHW1(#_Icu_GpChannelRamData), r0, r2
+00001090 22170100            2073  	ld.w LOWW(#_Icu_GpChannelRamData)[r2], r2
+00001094 D42EFF00            2074  	andi 0x000000FF, r20, r5
+00001098 C22A                2075  	shl 0x00000002, r5
+0000109A C511                2076  	add r5, r2
+0000109C C2170000            2077  	set1 0x00000002, 0x00000000[r2]
+000010A0                     2078  .BB.LABEL.21_18:	; if_break_bb209
+000010A0                     2079  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5177
+000010A0 80FF0000            2080  	jarl _SchM_Exit_Icu_ICU_CHANNEL_DATA_PROTECTION, r31
+000010A4 41A2                2081  	add 0x00000001, r20
+000010A6                     2082  .BB.LABEL.21_19:	; bb212
+000010A6                     2083  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5096
+000010A6 D416FF00            2084  	andi 0x000000FF, r20, r2
+000010AA 6812                2085  	cmp 0x00000008, r2
+000010AC 8105                2086  	bl9 .BB.LABEL.21_13
+000010AE                     2087  .BB.LABEL.21_20:	; return
+000010AE                     2088  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5182
+000010AE 40063F0C            2089  	dispose 0x00000000, 0x00000061, [r31]
+000010B2                     2090  _Icu_HW_SynchronousStop:
+000010B2                     2091  	.stack _Icu_HW_SynchronousStop = 16
+000010B2                     2092  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5235
+000010B2 8007210E            2093  	prepare 0x00000071, 0x00000000
+000010B6 00A2                2094  	mov 0x00000000, r20
+000010B8 8505                2095  	br9 .BB.LABEL.22_5
+000010BA                     2096  .BB.LABEL.22_1:	; bb
+000010BA                     2097  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5270
+000010BA 40160000            2098  	movhi HIGHW1(#_Icu_GpTAUUnitConfig), r0, r2
+000010BE 22AF0100            2099  	ld.w LOWW(#_Icu_GpTAUUnitConfig)[r2], r21
+000010C2                     2100  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5276
+000010C2 80FF0000            2101  	jarl _SchM_Enter_Icu_ICU_CHANNEL_DATA_PROTECTION, r31
+000010C6                     2102  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5270
+000010C6 D416FF00            2103  	andi 0x000000FF, r20, r2
+000010CA                     2104  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5281
+000010CA 0228                2105  	mov r2, r5
+000010CC EA2F4002            2106  	mul 0x0000000A, r5, r0
+000010D0 D529                2107  	add r21, r5
+000010D2 052F0400            2108  	ld.b 0x00000004[r5], r5
+000010D6 5F2A                2109  	add 0xFFFFFFFF, r5
+000010D8 8500                2110  	zxb r5
+000010DA 612A                2111  	cmp 0x00000001, r5
+000010DC 8B05                2112  	bh9 .BB.LABEL.22_4
+000010DE                     2113  .BB.LABEL.22_2:	; if_then_bb
+000010DE                     2114  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5286
+000010DE EA12                2115  	mulh 0x0000000A, r2
+000010E0 C2A9                2116  	add r2, r21
+000010E2 95170100            2117  	ld.bu 0x00000000[r21], r2
+000010E6 C212                2118  	shl 0x00000002, r2
+000010E8                     2119  	mov #_Icu_GaaTAUDBUserReg_BaseAddress, r5
+000010E8 250600000000            -- mov         0x0,tp
+000010EE C229                2120  	add r2, r5
+000010F0 25170100            2121  	ld.w 0x00000000[r5], r2
+000010F4                     2122  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5290
+000010F4 352F0600            2123  	ld.h 0x00000006[r21], r5
+000010F8 622F8801            2124  	st.h r5, 0x00000188[r2]
+000010FC                     2125  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5293
+000010FC 22178001            2126  	ld.h 0x00000180[r2], r2
+00001100 352F0600            2127  	ld.h 0x00000006[r21], r5
+00001104 4511                2128  	and r5, r2
+00001106 C206FFFF            2129  	andi 0x0000FFFF, r2, r0
+0000110A 8205                2130  	bz9 .BB.LABEL.22_4
+0000110C                     2131  .BB.LABEL.22_3:	; if_then_bb52
+0000110C                     2132  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 0
+0000110C 0132                2133  	mov 0x00000001, r6
+0000110E 0638                2134  	mov r6, r7
+00001110 80FF0000            2135  	jarl _Dem_ReportErrorStatus, r31
+00001114                     2136  .BB.LABEL.22_4:	; if_break_bb54
+00001114                     2137  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5319
+00001114 80FF0000            2138  	jarl _SchM_Exit_Icu_ICU_CHANNEL_DATA_PROTECTION, r31
+00001118 41A2                2139  	add 0x00000001, r20
+0000111A                     2140  .BB.LABEL.22_5:	; bb57
+0000111A                     2141  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5264
+0000111A D406FF00            2142  	andi 0x000000FF, r20, r0
+0000111E 8205                2143  	bz9 .BB.LABEL.22_1
+00001120                     2144  .BB.LABEL.22_6:	; bb57.bb106_crit_edge
+00001120                     2145  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 0
+00001120 00A2                2146  	mov 0x00000000, r20
+00001122 8505                2147  	br9 .BB.LABEL.22_11
+00001124                     2148  .BB.LABEL.22_7:	; bb64
+00001124                     2149  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5331
+00001124 40160000            2150  	movhi HIGHW1(#_Icu_GpChannelConfig), r0, r2
+00001128 22170100            2151  	ld.w LOWW(#_Icu_GpChannelConfig)[r2], r2
+0000112C D42EFF00            2152  	andi 0x000000FF, r20, r5
+00001130 FC2F4002            2153  	mul 0x0000001C, r5, r0
+00001134 C511                2154  	add r5, r2
+00001136                     2155  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5345
+00001136 C2C71A00            2156  	tst1 0x00000000, 0x0000001A[r2]
+0000113A 8205                2157  	bz9 .BB.LABEL.22_10
+0000113C                     2158  .BB.LABEL.22_8:	; bb86
+0000113C                     2159  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5337
+0000113C A2171900            2160  	ld.bu 0x00000019[r2], r2
+00001140 C2160300            2161  	andi 0x00000003, r2, r2
+00001144 6112                2162  	cmp 0x00000001, r2
+00001146 8A05                2163  	bnz9 .BB.LABEL.22_10
+00001148                     2164  .BB.LABEL.22_9:	; if_then_bb98
+00001148                     2165  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5351
+00001148 80FF0000            2166  	jarl _SchM_Enter_Icu_ICU_CHANNEL_DATA_PROTECTION, r31
+0000114C                     2167  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5355
+0000114C D416FF00            2168  	andi 0x000000FF, r20, r2
+00001150                     2169  	mov #_Icu_GaaChannelMeasureStatus, r5
+00001150 250600000000            -- mov         0x0,tp
+00001156 C229                2170  	add r2, r5
+00001158 45070000            2171  	st.b r0, 0x00000000[r5]
+0000115C                     2172  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5360
+0000115C 80FF0000            2173  	jarl _SchM_Exit_Icu_ICU_CHANNEL_DATA_PROTECTION, r31
+00001160                     2174  .BB.LABEL.22_10:	; if_break_bb103
+00001160                     2175  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 0
+00001160 41A2                2176  	add 0x00000001, r20
+00001162                     2177  .BB.LABEL.22_11:	; bb106
+00001162                     2178  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5324
+00001162 D416FF00            2179  	andi 0x000000FF, r20, r2
+00001166 6812                2180  	cmp 0x00000008, r2
+00001168 8105                2181  	bl9 .BB.LABEL.22_7
+0000116A                     2182  .BB.LABEL.22_12:	; bb106.bb195_crit_edge
+0000116A                     2183  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 0
+0000116A 00A2                2184  	mov 0x00000000, r20
+0000116C 8505                2185  	br9 .BB.LABEL.22_19
+0000116E                     2186  .BB.LABEL.22_13:	; bb113
+0000116E                     2187  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5384
+0000116E 40160000            2188  	movhi HIGHW1(#_Icu_GpChannelConfig), r0, r2
+00001172 22AF0100            2189  	ld.w LOWW(#_Icu_GpChannelConfig)[r2], r21
+00001176 D4B6FF00            2190  	andi 0x000000FF, r20, r22
+0000117A 1610                2191  	mov r22, r2
+0000117C FC174002            2192  	mul 0x0000001C, r2, r0
+00001180 D511                2193  	add r21, r2
+00001182                     2194  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5390
+00001182 C2C71A00            2195  	tst1 0x00000000, 0x0000001A[r2]
+00001186 8205                2196  	bz9 .BB.LABEL.22_18
+00001188                     2197  .BB.LABEL.22_14:	; if_then_bb128
+00001188                     2198  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5396
+00001188 A2171900            2199  	ld.bu 0x00000019[r2], r2
+0000118C C2063000            2200  	andi 0x00000030, r2, r0
+00001190 8A05                2201  	bnz9 .BB.LABEL.22_17
+00001192                     2202  .BB.LABEL.22_15:	; if_then_bb139
+00001192                     2203  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5402
+00001192 80FF0000            2204  	jarl _SchM_Enter_Icu_ICU_CHANNEL_DATA_PROTECTION, r31
+00001196                     2205  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5409
+00001196 D416FF00            2206  	andi 0x000000FF, r20, r2
+0000119A C212                2207  	shl 0x00000002, r2
+0000119C 402E0000            2208  	movhi HIGHW1(#_Icu_GpChannelRamData), r0, r5
+000011A0 252F0100            2209  	ld.w LOWW(#_Icu_GpChannelRamData)[r5], r5
+000011A4 C229                2210  	add r2, r5
+000011A6 C5070000            2211  	set1 0x00000000, 0x00000000[r5]
+000011AA                     2212  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5417
+000011AA 80FF0000            2213  	jarl _SchM_Exit_Icu_ICU_CHANNEL_DATA_PROTECTION, r31
+000011AE                     2214  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5421
+000011AE F6161C00            2215  	mulhi 0x0000001C, r22, r2
+000011B2 C2A9                2216  	add r2, r21
+000011B4 35170D00            2217  	ld.w 0x0000000C[r21], r2
+000011B8 4CAA                2218  	add 0x0000000C, r21
+000011BA 6012                2219  	cmp 0x00000000, r2
+000011BC 8205                2220  	bz9 .BB.LABEL.22_17
+000011BE                     2221  .BB.LABEL.22_16:	; if_then_bb155
+000011BE                     2222  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5428
+000011BE E22F0100            2223  	ld.hu 0x00000000[r2], r5
+000011C2 C52EFFEF            2224  	andi 0x0000EFFF, r5, r5
+000011C6 622F0000            2225  	st.h r5, 0x00000000[r2]
+000011CA                     2226  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5434
+000011CA 35170100            2227  	ld.w 0x00000000[r21], r2
+000011CE 022F0000            2228  	ld.b 0x00000000[r2], r5
+000011D2 852E8000            2229  	ori 0x00000080, r5, r5
+000011D6 422F0000            2230  	st.b r5, 0x00000000[r2]
+000011DA                     2231  .BB.LABEL.22_17:	; if_break_bb181
+000011DA                     2232  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5453
+000011DA 80FF0000            2233  	jarl _SchM_Enter_Icu_ICU_CHANNEL_DATA_PROTECTION, r31
+000011DE                     2234  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5459
+000011DE D416FF00            2235  	andi 0x000000FF, r20, r2
+000011E2 C212                2236  	shl 0x00000002, r2
+000011E4 402E0000            2237  	movhi HIGHW1(#_Icu_GpChannelRamData), r0, r5
+000011E8 252F0100            2238  	ld.w LOWW(#_Icu_GpChannelRamData)[r5], r5
+000011EC C229                2239  	add r2, r5
+000011EE C5970000            2240  	clr1 0x00000002, 0x00000000[r5]
+000011F2                     2241  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5464
+000011F2 80FF0000            2242  	jarl _SchM_Exit_Icu_ICU_CHANNEL_DATA_PROTECTION, r31
+000011F6                     2243  .BB.LABEL.22_18:	; if_break_bb192
+000011F6                     2244  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 0
+000011F6 41A2                2245  	add 0x00000001, r20
+000011F8                     2246  .BB.LABEL.22_19:	; bb195
+000011F8                     2247  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5378
+000011F8 D416FF00            2248  	andi 0x000000FF, r20, r2
+000011FC 6812                2249  	cmp 0x00000008, r2
+000011FE 8105                2250  	bl9 .BB.LABEL.22_13
+00001200                     2251  .BB.LABEL.22_20:	; return
+00001200                     2252  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5476
+00001200 40063F0E            2253  	dispose 0x00000000, 0x00000071, [r31]
+00001204                     2254  _Icu_HW_SynchronousDeInit:
+00001204                     2255  	.stack _Icu_HW_SynchronousDeInit = 0
+00001204                     2256  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5524
+00001204 0012                2257  	mov 0x00000000, r2
+00001206 8505                2258  	br9 .BB.LABEL.23_6
+00001208                     2259  .BB.LABEL.23_1:	; bb
+00001208                     2260  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5534
+00001208 402E0000            2261  	movhi HIGHW1(#_Icu_GpChannelConfig), r0, r5
+0000120C 252F0100            2262  	ld.w LOWW(#_Icu_GpChannelConfig)[r5], r5
+00001210 C236FF00            2263  	andi 0x000000FF, r2, r6
+00001214 0638                2264  	mov r6, r7
+00001216 FC3F4002            2265  	mul 0x0000001C, r7, r0
+0000121A C539                2266  	add r5, r7
+0000121C                     2267  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5540
+0000121C C7C71A00            2268  	tst1 0x00000000, 0x0000001A[r7]
+00001220 8205                2269  	bz9 .BB.LABEL.23_5
+00001222                     2270  .BB.LABEL.23_2:	; bb15
+00001222                     2271  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 0
+00001222 A73F1900            2272  	ld.bu 0x00000019[r7], r7
+00001226 C7063000            2273  	andi 0x00000030, r7, r0
+0000122A 8205                2274  	bz9 .BB.LABEL.23_5
+0000122C                     2275  .BB.LABEL.23_3:	; if_then_bb
+0000122C                     2276  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5549
+0000122C 403E0000            2277  	movhi HIGHW1(#_Icu_GpChannelRamData), r0, r7
+00001230 273F0100            2278  	ld.w LOWW(#_Icu_GpChannelRamData)[r7], r7
+00001234 C246FF00            2279  	andi 0x000000FF, r2, r8
+00001238 C242                2280  	shl 0x00000002, r8
+0000123A C839                2281  	add r8, r7
+0000123C C7070000            2282  	set1 0x00000000, 0x00000000[r7]
+00001240                     2283  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5554
+00001240 E6361C00            2284  	mulhi 0x0000001C, r6, r6
+00001244 C629                2285  	add r6, r5
+00001246 25370D00            2286  	ld.w 0x0000000C[r5], r6
+0000124A 4C2A                2287  	add 0x0000000C, r5
+0000124C 6032                2288  	cmp 0x00000000, r6
+0000124E 8205                2289  	bz9 .BB.LABEL.23_5
+00001250                     2290  .BB.LABEL.23_4:	; if_then_bb47
+00001250                     2291  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5561
+00001250 E63F0100            2292  	ld.hu 0x00000000[r6], r7
+00001254 C73EFFEF            2293  	andi 0x0000EFFF, r7, r7
+00001258 663F0000            2294  	st.h r7, 0x00000000[r6]
+0000125C                     2295  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5566
+0000125C 252F0100            2296  	ld.w 0x00000000[r5], r5
+00001260 05370000            2297  	ld.b 0x00000000[r5], r6
+00001264 86368000            2298  	ori 0x00000080, r6, r6
+00001268 45370000            2299  	st.b r6, 0x00000000[r5]
+0000126C                     2300  .BB.LABEL.23_5:	; if_break_bb71
+0000126C                     2301  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 0
+0000126C 4112                2302  	add 0x00000001, r2
+0000126E                     2303  .BB.LABEL.23_6:	; bb74
+0000126E                     2304  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5529
+0000126E C22EFF00            2305  	andi 0x000000FF, r2, r5
+00001272 682A                2306  	cmp 0x00000008, r5
+00001274 8105                2307  	bl9 .BB.LABEL.23_1
+00001276                     2308  .BB.LABEL.23_7:	; return
+00001276                     2309  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5582
+00001276 7F00                2310  	jmp [r31]
+00001278                     2311  _Icu_HWCheckConsistency:
+00001278                     2312  	.stack _Icu_HWCheckConsistency = 0
+00001278                     2313  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5638
+00001278 0052                2314  	mov 0x00000000, r10
+0000127A                     2315  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5694
+0000127A 6032                2316  	cmp 0x00000000, r6
+0000127C 8A05                2317  	bnz9 .BB.LABEL.24_16
+0000127E                     2318  .BB.LABEL.24_1:	; entry.bb75_crit_edge
+0000127E                     2319  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 0
+0000127E 0A10                2320  	mov r10, r2
+00001280 8505                2321  	br9 .BB.LABEL.24_7
+00001282                     2322  .BB.LABEL.24_2:	; bb
+00001282                     2323  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5708
+00001282 402E0000            2324  	movhi HIGHW1(#_Icu_GpTAUUnitConfig), r0, r5
+00001286 252F0100            2325  	ld.w LOWW(#_Icu_GpTAUUnitConfig)[r5], r5
+0000128A C236FF00            2326  	andi 0x000000FF, r2, r6
+0000128E                     2327  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5716
+0000128E 0638                2328  	mov r6, r7
+00001290 EA3F4002            2329  	mul 0x0000000A, r7, r0
+00001294 C539                2330  	add r5, r7
+00001296 073F0400            2331  	ld.b 0x00000004[r7], r7
+0000129A 5F3A                2332  	add 0xFFFFFFFF, r7
+0000129C 8700                2333  	zxb r7
+0000129E 623A                2334  	cmp 0x00000002, r7
+000012A0 8905                2335  	bnc9 .BB.LABEL.24_6
+000012A2                     2336  .BB.LABEL.24_3:	; if_then_bb35
+000012A2                     2337  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5724
+000012A2 E63E0A00            2338  	mulhi 0x0000000A, r6, r7
+000012A6 C539                2339  	add r5, r7
+000012A8 C7C70800            2340  	tst1 0x00000000, 0x00000008[r7]
+000012AC 8205                2341  	bz9 .BB.LABEL.24_6
+000012AE                     2342  .BB.LABEL.24_4:	; bb51
+000012AE                     2343  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5720
+000012AE EA32                2344  	mulh 0x0000000A, r6
+000012B0 C629                2345  	add r6, r5
+000012B2 E5370300            2346  	ld.hu 0x00000002[r5], r6
+000012B6 A52F0100            2347  	ld.bu 0x00000001[r5], r5
+000012BA C22A                2348  	shl 0x00000002, r5
+000012BC                     2349  	mov #_Icu_GaaTAUDBOsReg_BaseAddress, r7
+000012BC 270600000000            -- mov         0x0,r7
+000012C2 C539                2350  	add r5, r7
+000012C4 272F0100            2351  	ld.w 0x00000000[r7], r5
+000012C8 E52F0100            2352  	ld.hu 0x00000000[r5], r5
+000012CC E531                2353  	cmp r5, r6
+000012CE 8205                2354  	bz9 .BB.LABEL.24_6
+000012D0                     2355  .BB.LABEL.24_5:	; if_then_bb70
+000012D0                     2356  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 0
+000012D0 0152                2357  	mov 0x00000001, r10
+000012D2                     2358  .BB.LABEL.24_6:	; if_break_bb72
+000012D2 4112                2359  	add 0x00000001, r2
+000012D4                     2360  .BB.LABEL.24_7:	; bb75
+000012D4                     2361  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5702
+000012D4 C206FF00            2362  	andi 0x000000FF, r2, r0
+000012D8 8205                2363  	bz9 .BB.LABEL.24_2
+000012DA                     2364  .BB.LABEL.24_8:	; bb75.bb169_crit_edge
+000012DA                     2365  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 0
+000012DA 0012                2366  	mov 0x00000000, r2
+000012DC 8505                2367  	br9 .BB.LABEL.24_15
+000012DE                     2368  .BB.LABEL.24_9:	; bb82
+000012DE                     2369  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5815
+000012DE 402E0000            2370  	movhi HIGHW1(#_Icu_GpChannelConfig), r0, r5
+000012E2 252F0100            2371  	ld.w LOWW(#_Icu_GpChannelConfig)[r5], r5
+000012E6 C236FF00            2372  	andi 0x000000FF, r2, r6
+000012EA 0638                2373  	mov r6, r7
+000012EC FC3F4002            2374  	mul 0x0000001C, r7, r0
+000012F0 C539                2375  	add r5, r7
+000012F2                     2376  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5825
+000012F2 07471900            2377  	ld.b 0x00000019[r7], r8
+000012F6 8442                2378  	shr 0x00000004, r8
+000012F8 C8460300            2379  	andi 0x00000003, r8, r8
+000012FC 6142                2380  	cmp 0x00000001, r8
+000012FE                     2381  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5816
+000012FE 40460000            2382  	movhi HIGHW1(#_Icu_GpTimerChannelConfig), r0, r8
+00001302 28470100            2383  	ld.w LOWW(#_Icu_GpTimerChannelConfig)[r8], r8
+00001306                     2384  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5825
+00001306 8205                2385  	bz9 .BB.LABEL.24_11
+00001308                     2386  .BB.LABEL.24_10:	; bb100
+00001308                     2387  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 0
+00001308 074F1900            2388  	ld.b 0x00000019[r7], r9
+0000130C 844A                2389  	shr 0x00000004, r9
+0000130E C94E0300            2390  	andi 0x00000003, r9, r9
+00001312 624A                2391  	cmp 0x00000002, r9
+00001314 8A05                2392  	bnz9 .BB.LABEL.24_14
+00001316                     2393  .BB.LABEL.24_11:	; if_then_bb118
+00001316                     2394  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5834
+00001316 E64E0600            2395  	mulhi 0x00000006, r6, r9
+0000131A C941                2396  	add r9, r8
+0000131C E8470100            2397  	ld.hu 0x00000000[r8], r8
+00001320                     2398  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5831
+00001320 E6361C00            2399  	mulhi 0x0000001C, r6, r6
+00001324 C629                2400  	add r6, r5
+00001326 852F0500            2401  	ld.bu 0x00000004[r5], r5
+0000132A C22A                2402  	shl 0x00000002, r5
+0000132C                     2403  	mov #_Icu_GaaTAUDBChReg_BaseAddress, r6
+0000132C 260600000000            -- mov         0x0,r6
+00001332 C531                2404  	add r5, r6
+00001334 262F0100            2405  	ld.w 0x00000000[r6], r5
+00001338                     2406  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5834
+00001338 E5370102            2407  	ld.hu 0x00000200[r5], r6
+0000133C E641                2408  	cmp r6, r8
+0000133E                     2409  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5838
+0000133E E1571453            2410  	cmov 0x0000000A, 0x00000001, r10, r10
+00001342                     2411  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5847
+00001342 A7371900            2412  	ld.bu 0x00000019[r7], r6
+00001346 C6360300            2413  	andi 0x00000003, r6, r6
+0000134A 6332                2414  	cmp 0x00000003, r6
+0000134C 8A05                2415  	bnz9 .BB.LABEL.24_14
+0000134E                     2416  .BB.LABEL.24_12:	; bb148
+0000134E                     2417  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 0
+0000134E E52F0100            2418  	ld.hu 0x00000000[r5], r5
+00001352 8036FFFF            2419  	ori 0x0000FFFF, r0, r6
+00001356 E629                2420  	cmp r6, r5
+00001358 8205                2421  	bz9 .BB.LABEL.24_14
+0000135A                     2422  .BB.LABEL.24_13:	; if_then_bb163
+0000135A 0152                2423  	mov 0x00000001, r10
+0000135C                     2424  .BB.LABEL.24_14:	; if_break_bb166
+0000135C 4112                2425  	add 0x00000001, r2
+0000135E                     2426  .BB.LABEL.24_15:	; bb169
+0000135E                     2427  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5808
+0000135E C22EFF00            2428  	andi 0x000000FF, r2, r5
+00001362 622A                2429  	cmp 0x00000002, r5
+00001364 8105                2430  	bl9 .BB.LABEL.24_9
+00001366 8505                2431  	br9 .BB.LABEL.24_20
+00001368                     2432  .BB.LABEL.24_16:	; if_else_bb176
+00001368                     2433  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5911
+00001368 6132                2434  	cmp 0x00000001, r6
+0000136A 8A05                2435  	bnz9 .BB.LABEL.24_20
+0000136C                     2436  .BB.LABEL.24_17:	; if_else_bb176.bb203_crit_edge
+0000136C                     2437  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 0
+0000136C 0A10                2438  	mov r10, r2
+0000136E 8505                2439  	br9 .BB.LABEL.24_19
+00001370                     2440  .BB.LABEL.24_18:	; bb182
+00001370                     2441  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5917
+00001370 C22EFF00            2442  	andi 0x000000FF, r2, r5
+00001374 C22A                2443  	shl 0x00000002, r5
+00001376                     2444  	mov #_Icu_GaaRegMirror_8bit, r6
+00001376 260600000000            -- mov         0x0,r6
+0000137C C531                2445  	add r5, r6
+0000137E                     2446  	mov #_Icu_GaaReg_8bit, r7
+0000137E 270600000000            -- mov         0x0,r7
+00001384 C729                2447  	add r7, r5
+00001386 252F0100            2448  	ld.w 0x00000000[r5], r5
+0000138A 852F0100            2449  	ld.bu 0x00000000[r5], r5
+0000138E 26370100            2450  	ld.w 0x00000000[r6], r6
+00001392 86370100            2451  	ld.bu 0x00000000[r6], r6
+00001396 E629                2452  	cmp r6, r5
+00001398                     2453  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5920
+00001398 E1571453            2454  	cmov 0x0000000A, 0x00000001, r10, r10
+0000139C 4112                2455  	add 0x00000001, r2
+0000139E                     2456  .BB.LABEL.24_19:	; bb203
+0000139E                     2457  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5914
+0000139E C22EFF00            2458  	andi 0x000000FF, r2, r5
+000013A2 672A                2459  	cmp 0x00000007, r5
+000013A4 8605                2460  	blt9 .BB.LABEL.24_18
+000013A6                     2461  .BB.LABEL.24_20:	; if_break_bb212
+000013A6                     2462  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Bsw/Mcal/icu/src/Icu_LLDriver.c", 5934
+000013A6 8A00                2463  	zxb r10
+000013A8 7F00                2464  	jmp [r31]
+
+Section List
+Attr     Size                Name
+
+TEXT         5034 (000013AA) .text
+
+Command Line Parameter
+-Xcpu=g3kh -Xreg_mode=32 -Xep=callee -Xcharacter_set=none -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\diagnostic -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\parameter_store -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu\port -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu\uart -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu\iic -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\vehicle_data_to_mpu -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\power_manage -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\mcu_cpu_sync -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\remote_control -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\can_cycle_send -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\project_configure -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\sdk\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\commonLib\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\hal\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\icu\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Icu_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\vss -ID:\wk\sirun\project\dazhong\code\mcu_app\ASW\CDD_FVM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\EEIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanTSyn -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\StbM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CSM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\RSA -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\RandomGen\CTR_DRBG -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\MAC\CMAC -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\Hash\sha256 -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\dh -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\AES -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CryInterface -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\SecOC -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\NvM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\MemIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\Fee -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\WdgM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\WdgIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Wdg_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Gpt_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Fls_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\wdg\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\gpt\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\fls\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\IpduM -ID:\wk\sirun\project\dazhong\code\mcu_app\ASW\APP -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\BswM -ID:\wk\sirun\project\dazhong\code\mcu_app\ASW\BSW_Ext -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\Dcm -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanTp -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Dem -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Libraries\E2E -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Libraries\Crc -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\NmIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanNm -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config\RTE\Rte -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config\RTE\SchM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Libraries\IStd -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\EcuM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\ComM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanSM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\Com -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\PDUR -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\CommonInclude -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config\RH850F1K -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Extend\inc -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Kernel\inc -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Portable\Mcu -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Portable\Processor -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Adc_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Can_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Dio_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Mcu_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Port_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\adc\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\can\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\dio\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\general -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\mcu\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\port\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\CanGeneral\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\Det\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\MemIf\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\SchM\include -DRH850_F1KM_S1_2MB -Xprn_path=DefaultBuild -Xno_warning=50013 -oD:\wk\sirun\project\dazhong\code\mcu_app\Toolchain\CSPLUS_V81200\DefaultBuild\Icu_LLDriver.obj D:\wk\sirun\project\dazhong\code\mcu_app\Toolchain\CSPLUS_V81200\DefaultBuild\Icu_LLDriver.asm 
+

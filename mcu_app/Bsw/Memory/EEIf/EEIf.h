@@ -35,6 +35,23 @@
 //#include "Common.h"
 //#include "MemM.h"
 
+enum USERDATA_BLOCK0
+{
+    BLOCK_ID_IDX = 0,
+    REPROGRAM_ADDR_IDX = 2,
+    RESET_ADDR_IDX = 6,
+    SECURITY_ADDR_IDX = 10,
+    NEGATIVERES_ADDR_IDX = 14,
+    DID_F110_ADDR_IDX = 20,
+    DID_F198_ADDR_IDX = 36,
+    DID_F187_ADDR_IDX = 37,
+    DID_F18A_ADDR_IDX = 38,
+    DID_F199_ADDR_IDX = 39
+};
+
+#define DID_F110_LEN                            ((uint32)0x10U)
+
+
 /*********************************************************************************************************************/
 /* function Import                                                                                                 */
 /*********************************************************************************************************************/

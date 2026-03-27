@@ -1,0 +1,1735 @@
+RH850 Family Assembler V2.07.00.03 Assemble Source List
+
+OFFSET   CODE                  NO  SOURCE STATEMENT
+
+00000000                        1  #CC-RH Compiler RH850 Assembler Source
+00000000                        2  #@	CC-RH Version : V2.07.00  [06 Dec 2024]
+00000000                        3  #@	Command : ..\..\Srcode\hal\source\timerHal.c -oDefaultBuild\timerHal.obj -Xcpu=g3kh -Xno_warning=20188,20111 -g -g_line -I..\..\Srcode\app\diagnostic -I..\..\Srcode\app\parameter_store -I..\..\Cpu\port -I..\..\Cpu\uart -I..\..\Cpu\iic -I..\..\Srcode\app\vehicle_data_to_mpu -I..\..\Srcode\app\power_manage -I..\..\Srcode\app\mcu_cpu_sync -I..\..\Srcode\app\remote_control -I..\..\Srcode\app\can_cycle_send -I..\..\Srcode\app\project_configure -I..\..\Srcode\sdk\include -I..\..\Srcode\commonLib\include -I..\..\Srcode\hal\include -I..\..\Bsw\Mcal\icu\include -I..\..\Bsw\Config\MCAL_Config\Icu_OutPut\include -I..\..\Bsw\Crypto\CRYPTO\vss -I..\..\ASW\CDD_FVM -I..\..\Bsw\Memory\EEIf -I..\..\Bsw\Communication\CAN\CanTSyn -I..\..\Bsw\SystemServices\StbM -I..\..\Bsw\Crypto\CSM -I..\..\Bsw\Crypto\CRYPTO\RSA -I..\..\Bsw\Crypto\CRYPTO\RandomGen\CTR_DRBG -I..\..\Bsw\Crypto\CRYPTO\MAC\CMAC -I..\..\Bsw\Crypto\CRYPTO\Hash\sha256 -I..\..\Bsw\Crypto\CRYPTO\dh -I..\..\Bsw\Crypto\CRYPTO\AES -I..\..\Bsw\Crypto\CRYPTO -I..\..\Bsw\Crypto\CryInterface -I..\..\Bsw\Communication\Common\SecOC -I..\..\Bsw\Memory\NvM -I..\..\Bsw\Memory\MemIf -I..\..\Bsw\Memory\Fee -I..\..\Bsw\SystemServices\WdgM -I..\..\Bsw\SystemServices\WdgIf -I..\..\Bsw\Config\MCAL_Config\Wdg_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Gpt_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Fls_OutPut\include -I..\..\Bsw\Mcal\wdg\include -I..\..\Bsw\Mcal\gpt\include -I..\..\Bsw\Mcal\fls\include -I..\..\Bsw\Communication\Common\IpduM -I..\..\ASW\APP -I..\..\Bsw\SystemServices\BswM -I..\..\ASW\BSW_Ext -I..\..\Bsw\Communication\Common\Dcm -I..\..\Bsw\Communication\CAN\CanTp -I..\..\Bsw\SystemServices\Dem -I..\..\Bsw\Libraries\E2E -I..\..\Bsw\Libraries\Crc -I..\..\Bsw\Communication\Common\NmIf -I..\..\Bsw\Communication\CAN\CanNm -I..\..\Bsw\Config\BSW_Config\RTE\Rte -I..\..\Bsw\Config\BSW_Config\RTE\SchM -I..\..\Bsw\Libraries\IStd -I..\..\Bsw\SystemServices\EcuM -I..\..\Bsw\SystemServices\ComM -I..\..\Bsw\Communication\CAN\CanSM -I..\..\Bsw\Communication\CAN\CanIf -I..\..\Bsw\Communication\Common\Com -I..\..\Bsw\Communication\Common\PDUR -I..\..\Cpu -I..\..\Bsw\CommonInclude -I..\..\Bsw\Config\BSW_Config -I..\..\Bsw\Config\BSW_Config\RH850F1K -I..\..\Bsw\SystemServices\Os\Extend\inc -I..\..\Bsw\SystemServices\Os\Kernel\inc -I..\..\Bsw\SystemServices\Os\Portable\Mcu -I..\..\Bsw\SystemServices\Os\Portable\Processor -I..\..\Bsw\Config\MCAL_Config\Adc_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Can_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Dio_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Mcu_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Port_OutPut\include -I..\..\Bsw\Mcal\adc\include -I..\..\Bsw\Mcal\can\include -I..\..\Bsw\Mcal\dio\include -I..\..\Bsw\Mcal\general -I..\..\Bsw\Mcal\mcu\include -I..\..\Bsw\Mcal\port\include -I..\..\Bsw\Mcal\stubs\CanGeneral\include -I..\..\Bsw\Mcal\stubs\Det\include -I..\..\Bsw\Mcal\stubs\MemIf\include -I..\..\Bsw\Mcal\stubs\SchM\include -DRH850_F1KM_S1_2MB -lang=c99 -Xfloat=fpu -Xround=zero -Xdiv -Xasm_path=DefaultBuild -Xasm_option=-Xprn_path=DefaultBuild -c -MAKEUD=DefaultBuild -Xexec_time=C:\Users\xlchen\AppData\Local\Temp\CSPlusBuildTool_d62c752867e9427e92591a07f49eddaa1zjfcbiq.p2w
+00000000                        4  #@	compiled at Fri Mar 27 09:51:06 2026
+00000000                        5  
+00000000                        6  	.file "..\..\Srcode\hal\source\timerHal.c"
+00000000                        7  
+00000000                        8  	$reg_mode 32
+00000000                        9  	.dbl_size 8
+00000000                       10  
+00000000                       11  	.public _TimerHalInterruptCallback
+00000000                       12  	.public _RtcInit
+00000000                       13  	.extern _I2cReadRegisterValue
+00000000                       14  	.extern _LogHalPrint
+00000000                       15  	.public _TimerHalInit
+00000000                       16  	.extern _R_RIIC0_Create
+00000000                       17  	.extern _R_RIIC0_Start
+00000000                       18  	.public _TimerHalOpen
+00000000                       19  	.public _TimerHalStartTime
+00000000                       20  	.public _TimerHalStopTime
+00000000                       21  	.public _TimerHalIsTimeout
+00000000                       22  	.public _TimerHalGetRemainder
+00000000                       23  	.public _RtcToTimestamp
+00000000                       24  	.public _TimestampToRtcRegisters
+00000000                       25  	.public _TimerHalSetRtcTime
+00000000                       26  	.extern _I2cWriteRegisterValue
+00000000                       27  	.public _TimerHalGetRtcTime
+00000000                       28  	.public _TimerHalPrepareSleep
+00000000                       29  	.public _TimerHalGetSleepDuration
+00000000                       30  	.public _TimerHalGetRtcStatus
+00000000                       31  	.public _TimerHalClearRtcAlarmFlag
+00000000                       32  	.public _TimerHalSetMode
+00000000                       33  	.public _TimerHalTestMain
+00000000                       34  
+00000000                       35  	.section .text, text
+00000000                       36  _TimerHalInterruptCallback:
+00000000                       37  	.stack _TimerHalInterruptCallback = 0
+00000000                       38  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 60
+00000000 0012                  39  	mov 0x00000000, r2
+00000002 8505                  40  	br9 .BB.LABEL.1_4
+00000004                       41  .BB.LABEL.1_1:	; bb
+00000004                       42  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 66
+00000004 C22EFF00              43  	andi 0x000000FF, r2, r5
+00000008 C32A                  44  	shl 0x00000003, r5
+0000000A                       45  	mov #_g_peripheralTimer.1, r6
+0000000A 260600000000            -- mov         0x0,r6
+00000010 C531                  46  	add r5, r6
+00000012 262F0500              47  	ld.w 0x00000004[r6], r5
+00000016 602A                  48  	cmp 0x00000000, r5
+00000018 8205                  49  	bz9 .BB.LABEL.1_3
+0000001A                       50  .BB.LABEL.1_2:	; if_then_bb
+0000001A                       51  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 68
+0000001A C22EFF00              52  	andi 0x000000FF, r2, r5
+0000001E C32A                  53  	shl 0x00000003, r5
+00000020                       54  	mov #_g_peripheralTimer.1, r6
+00000020 260600000000            -- mov         0x0,r6
+00000026 C531                  55  	add r5, r6
+00000028 262F0500              56  	ld.w 0x00000004[r6], r5
+0000002C 5F2A                  57  	add 0xFFFFFFFF, r5
+0000002E 662F0500              58  	st.w r5, 0x00000004[r6]
+00000032                       59  .BB.LABEL.1_3:	; if_break_bb
+00000032                       60  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 0
+00000032 4112                  61  	add 0x00000001, r2
+00000034                       62  .BB.LABEL.1_4:	; bb16
+00000034                       63  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 64
+00000034 C22EFF00              64  	andi 0x000000FF, r2, r5
+00000038 622A                  65  	cmp 0x00000002, r5
+0000003A 8605                  66  	blt9 .BB.LABEL.1_1
+0000003C                       67  .BB.LABEL.1_5:	; return
+0000003C                       68  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 81
+0000003C 7F00                  69  	jmp [r31]
+0000003E                       70  _RtcInit:
+0000003E                       71  	.stack _RtcInit = 56
+0000003E                       72  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 83
+0000003E 9607210C              73  	prepare 0x00000061, 0x0000002C
+00000042 20161400              74  	movea 0x00000014, r0, r2
+00000046 002A                  75  	mov 0x00000000, r5
+00000048 23361800              76  	movea 0x00000018, r3, r6
+0000004C                       77  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 86
+0000004C C611                  78  	add r6, r2
+0000004E 8505                  79  	br9 .BB.LABEL.2_2
+00000050                       80  .BB.LABEL.2_1:	; entry
+00000050 462F0000              81  	st.b r5, 0x00000000[r6]
+00000054 4132                  82  	add 0x00000001, r6
+00000056                       83  .BB.LABEL.2_2:	; entry
+00000056 E611                  84  	cmp r6, r2
+00000058 8A05                  85  	bnz9 .BB.LABEL.2_1
+0000005A                       86  .BB.LABEL.2_3:	; entry
+0000005A 43071800              87  	st.b r0, 0x00000018[r3]
+0000005E 20A66400              88  	movea 0x00000064, r0, r20
+00000062                       89  .BB.LABEL.2_4:	; bb
+00000062                       90  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 0
+00000062 2016B2FF              91  	movea 0xFFFFFFB2, r0, r2
+00000066                       92  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 93
+00000066 43171700              93  	st.b r2, 0x00000017[r3]
+0000006A 084A                  94  	mov 0x00000008, r9
+0000006C 23461800              95  	movea 0x00000018, r3, r8
+00000070 233E1700              96  	movea 0x00000017, r3, r7
+00000074 20363200              97  	movea 0x00000032, r0, r6
+00000078                       98  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 94
+00000078 80FF0000              99  	jarl _I2cReadRegisterValue, r31
+0000007C                      100  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 95
+0000007C 0AAE0000             101  	addi 0x00000000, r10, r21
+00000080 8A05                 102  	bnz9 .BB.LABEL.2_6
+00000082                      103  .BB.LABEL.2_5:	; if_then_bb
+00000082                      104  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 97
+00000082 A3171F00             105  	ld.bu 0x0000001F[r3], r2
+00000086 832F1F00             106  	ld.bu 0x0000001E[r3], r5
+0000008A A3371D00             107  	ld.bu 0x0000001D[r3], r6
+0000008E 83571D00             108  	ld.bu 0x0000001C[r3], r10
+00000092 A35F1B00             109  	ld.bu 0x0000001B[r3], r11
+00000096 834F1B00             110  	ld.bu 0x0000001A[r3], r9
+0000009A A3471900             111  	ld.bu 0x00000019[r3], r8
+0000009E 833F1900             112  	ld.bu 0x00000018[r3], r7
+000000A2 63171100             113  	st.w r2, 0x00000010[r3]
+000000A6 632F0D00             114  	st.w r5, 0x0000000C[r3]
+000000AA 63370900             115  	st.w r6, 0x00000008[r3]
+000000AE 63570500             116  	st.w r10, 0x00000004[r3]
+000000B2 635F0100             117  	st.w r11, 0x00000000[r3]
+000000B6                      118  	mov #.STR.1, r6
+000000B6 260600000000            -- mov         0x0,r6
+000000BC 80FF0000             119  	jarl _LogHalPrint, r31
+000000C0                      120  .BB.LABEL.2_6:	; if_break_bb
+000000C0                      121  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 112
+000000C0 60AA                 122  	cmp 0x00000000, r21
+000000C2 8205                 123  	bz9 .BB.LABEL.2_8
+000000C4                      124  .BB.LABEL.2_7:	; if_break_bb52
+000000C4                      125  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 91
+000000C4 1416FFFF             126  	addi 0xFFFFFFFF, r20, r2
+000000C8 D406FF00             127  	andi 0x000000FF, r20, r0
+000000CC 02A0                 128  	mov r2, r20
+000000CE 8A05                 129  	bnz9 .BB.LABEL.2_4
+000000D0                      130  .BB.LABEL.2_8:	; bb61
+000000D0                      131  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 118
+000000D0 D406FF00             132  	andi 0x000000FF, r20, r0
+000000D4 8A05                 133  	bnz9 .BB.LABEL.2_10
+000000D6                      134  .BB.LABEL.2_9:	; if_then_bb67
+000000D6                      135  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 120
+000000D6                      136  	mov #.STR.189, r6
+000000D6 260600000000            -- mov         0x0,r6
+000000DC 80FF0000             137  	jarl _LogHalPrint, r31
+000000E0                      138  .BB.LABEL.2_10:	; return
+000000E0                      139  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 122
+000000E0 56063F0C             140  	dispose 0x0000002C, 0x00000061, [r31]
+000000E4                      141  _TimerHalInit:
+000000E4                      142  	.stack _TimerHalInit = 4
+000000E4                      143  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 132
+000000E4 80072100             144  	prepare 0x00000001, 0x00000000
+000000E8                      145  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 134
+000000E8 80FF0000             146  	jarl _R_RIIC0_Create, r31
+000000EC                      147  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 135
+000000EC 80FF0000             148  	jarl _R_RIIC0_Start, r31
+000000F0                      149  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 136
+000000F0 80FF0000             150  	jarl _RtcInit, r31
+000000F4 40063F00             151  	dispose 0x00000000, 0x00000001, [r31]
+000000F8                      152  _TimerHalOpen:
+000000F8                      153  	.stack _TimerHalOpen = 0
+000000F8                      154  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 152
+000000F8 E0876001             155  	ei
+000000FC 0052                 156  	mov 0x00000000, r10
+000000FE 8505                 157  	br9 .BB.LABEL.4_4
+00000100                      158  .BB.LABEL.4_1:	; bb
+00000100                      159  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 155
+00000100 0A10                 160  	mov r10, r2
+00000102 E200                 161  	sxh r2
+00000104 C312                 162  	shl 0x00000003, r2
+00000106                      163  	mov #_g_peripheralTimer.1, r5
+00000106 250600000000            -- mov         0x0,tp
+0000010C C229                 164  	add r2, r5
+0000010E 85170100             165  	ld.bu 0x00000000[r5], r2
+00000112 6012                 166  	cmp 0x00000000, r2
+00000114 8A05                 167  	bnz9 .BB.LABEL.4_3
+00000116                      168  .BB.LABEL.4_2:	; if_then_bb
+00000116                      169  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 157
+00000116 0A10                 170  	mov r10, r2
+00000118 E200                 171  	sxh r2
+0000011A C312                 172  	shl 0x00000003, r2
+0000011C                      173  	mov #_g_peripheralTimer.1, r5
+0000011C 250600000000            -- mov         0x0,tp
+00000122 C229                 174  	add r2, r5
+00000124 0112                 175  	mov 0x00000001, r2
+00000126 45170000             176  	st.b r2, 0x00000000[r5]
+0000012A 8505                 177  	br9 .BB.LABEL.4_6
+0000012C                      178  .BB.LABEL.4_3:	; if_break_bb
+0000012C                      179  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 0
+0000012C 4152                 180  	add 0x00000001, r10
+0000012E                      181  .BB.LABEL.4_4:	; bb18
+0000012E                      182  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 153
+0000012E 0A10                 183  	mov r10, r2
+00000130 E200                 184  	sxh r2
+00000132 6212                 185  	cmp 0x00000002, r2
+00000134 8605                 186  	blt9 .BB.LABEL.4_1
+00000136                      187  .BB.LABEL.4_5:	; bb18.bb25_crit_edge
+00000136                      188  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 0
+00000136 8056FFFF             189  	ori 0x0000FFFF, r0, r10
+0000013A                      190  .BB.LABEL.4_6:	; bb25
+0000013A                      191  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 162
+0000013A E0876001             192  	ei
+0000013E                      193  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 165
+0000013E EA00                 194  	sxh r10
+00000140 7F00                 195  	jmp [r31]
+00000142                      196  _TimerHalStartTime:
+00000142                      197  	.stack _TimerHalStartTime = 0
+00000142                      198  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 177
+00000142 C616FFFF             199  	andi 0x0000FFFF, r6, r2
+00000146                      200  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 179
+00000146 6112                 201  	cmp 0x00000001, r2
+00000148 8B05                 202  	bh9 .BB.LABEL.5_2
+0000014A                      203  .BB.LABEL.5_1:	; if_break_bb14
+0000014A                      204  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 187
+0000014A E0076001             205  	di
+0000014E                      206  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 188
+0000014E C332                 207  	shl 0x00000003, r6
+00000150                      208  	mov #_g_peripheralTimer.1, r2
+00000150 220600000000            -- mov         0x0,hp
+00000156 C611                 209  	add r6, r2
+00000158 623F0500             210  	st.w r7, 0x00000004[r2]
+0000015C 012A                 211  	mov 0x00000001, r5
+0000015E                      212  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 189
+0000015E 422F0100             213  	st.b r5, 0x00000001[r2]
+00000162                      214  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 190
+00000162 E0876001             215  	ei
+00000166 0052                 216  	mov 0x00000000, r10
+00000168                      217  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 191
+00000168 7F00                 218  	jmp [r31]
+0000016A                      219  .BB.LABEL.5_2:	; bb25
+0000016A                      220  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 0
+0000016A 1F52                 221  	mov 0xFFFFFFFF, r10
+0000016C                      222  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 192
+0000016C 7F00                 223  	jmp [r31]
+0000016E                      224  _TimerHalStopTime:
+0000016E                      225  	.stack _TimerHalStopTime = 0
+0000016E                      226  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 203
+0000016E C616FFFF             227  	andi 0x0000FFFF, r6, r2
+00000172                      228  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 205
+00000172 6112                 229  	cmp 0x00000001, r2
+00000174 8B05                 230  	bh9 .BB.LABEL.6_2
+00000176                      231  .BB.LABEL.6_1:	; if_break_bb13
+00000176                      232  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 213
+00000176 E0076001             233  	di
+0000017A                      234  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 214
+0000017A C332                 235  	shl 0x00000003, r6
+0000017C                      236  	mov #_g_peripheralTimer.1, r2
+0000017C 220600000000            -- mov         0x0,hp
+00000182 C611                 237  	add r6, r2
+00000184 42070100             238  	st.b r0, 0x00000001[r2]
+00000188                      239  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 215
+00000188 E0876001             240  	ei
+0000018C 0052                 241  	mov 0x00000000, r10
+0000018E                      242  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 216
+0000018E 7F00                 243  	jmp [r31]
+00000190                      244  .BB.LABEL.6_2:	; bb19
+00000190                      245  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 0
+00000190 1F52                 246  	mov 0xFFFFFFFF, r10
+00000192                      247  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 217
+00000192 7F00                 248  	jmp [r31]
+00000194                      249  _TimerHalIsTimeout:
+00000194                      250  	.stack _TimerHalIsTimeout = 0
+00000194                      251  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 228
+00000194 C616FFFF             252  	andi 0x0000FFFF, r6, r2
+00000198                      253  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 232
+00000198 6212                 254  	cmp 0x00000002, r2
+0000019A 8105                 255  	bl9 .BB.LABEL.7_2
+0000019C                      256  .BB.LABEL.7_1:	; entry.bb42_crit_edge
+0000019C                      257  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 0
+0000019C 8056FFFF             258  	ori 0x0000FFFF, r0, r10
+000001A0 8505                 259  	br9 .BB.LABEL.7_6
+000001A2                      260  .BB.LABEL.7_2:	; if_break_bb15
+000001A2                      261  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 241
+000001A2 E0076001             262  	di
+000001A6                      263  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 242
+000001A6 C332                 264  	shl 0x00000003, r6
+000001A8                      265  	mov #_g_peripheralTimer.1, r2
+000001A8 220600000000            -- mov         0x0,hp
+000001AE C611                 266  	add r6, r2
+000001B0 A22F0100             267  	ld.bu 0x00000001[r2], r5
+000001B4                      268  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 243
+000001B4 22170500             269  	ld.w 0x00000004[r2], r2
+000001B8                      270  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 244
+000001B8 E0876001             271  	ei
+000001BC                      272  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 246
+000001BC 602A                 273  	cmp 0x00000000, r5
+000001BE 8A05                 274  	bnz9 .BB.LABEL.7_4
+000001C0                      275  .BB.LABEL.7_3:	; if_break_bb15.bb42_crit_edge
+000001C0                      276  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 0
+000001C0 8056FEFF             277  	ori 0x0000FFFE, r0, r10
+000001C4 8505                 278  	br9 .BB.LABEL.7_6
+000001C6                      279  .BB.LABEL.7_4:	; if_break_bb33
+000001C6                      280  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 250
+000001C6 6012                 281  	cmp 0x00000000, r2
+000001C8 8205                 282  	bz9 .BB.LABEL.7_7
+000001CA                      283  .BB.LABEL.7_5:	; if_break_bb33.bb42_crit_edge
+000001CA                      284  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 0
+000001CA 0152                 285  	mov 0x00000001, r10
+000001CC                      286  .BB.LABEL.7_6:	; bb42
+000001CC                      287  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 258
+000001CC EA00                 288  	sxh r10
+000001CE 7F00                 289  	jmp [r31]
+000001D0                      290  .BB.LABEL.7_7:	; if_else_bb
+000001D0                      291  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 0
+000001D0 0052                 292  	mov 0x00000000, r10
+000001D2                      293  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 256
+000001D2 7F00                 294  	jmp [r31]
+000001D4                      295  _TimerHalGetRemainder:
+000001D4                      296  	.stack _TimerHalGetRemainder = 0
+000001D4                      297  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 269
+000001D4 C616FFFF             298  	andi 0x0000FFFF, r6, r2
+000001D8                      299  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 273
+000001D8 6112                 300  	cmp 0x00000001, r2
+000001DA 8B05                 301  	bh9 .BB.LABEL.8_3
+000001DC                      302  .BB.LABEL.8_1:	; if_break_bb15
+000001DC                      303  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 282
+000001DC E0076001             304  	di
+000001E0                      305  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 283
+000001E0 C332                 306  	shl 0x00000003, r6
+000001E2                      307  	mov #_g_peripheralTimer.1, r2
+000001E2 220600000000            -- mov         0x0,hp
+000001E8 C611                 308  	add r6, r2
+000001EA A22F0100             309  	ld.bu 0x00000001[r2], r5
+000001EE                      310  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 284
+000001EE 22570500             311  	ld.w 0x00000004[r2], r10
+000001F2                      312  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 285
+000001F2 E0876001             313  	ei
+000001F6                      314  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 287
+000001F6 602A                 315  	cmp 0x00000000, r5
+000001F8 8205                 316  	bz9 .BB.LABEL.8_3
+000001FA                      317  .BB.LABEL.8_2:	; if_break_bb33
+000001FA                      318  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 291
+000001FA 7F00                 319  	jmp [r31]
+000001FC                      320  .BB.LABEL.8_3:	; bb43
+000001FC                      321  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 0
+000001FC 0052                 322  	mov 0x00000000, r10
+000001FE                      323  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 299
+000001FE 7F00                 324  	jmp [r31]
+00000200                      325  _bcd2dec.1:
+00000200                      326  	.stack _bcd2dec.1 = 0
+00000200                      327  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 306
+00000200 C6160F00             328  	andi 0x0000000F, r6, r2
+00000204                      329  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 308
+00000204 8432                 330  	shr 0x00000004, r6
+00000206 EA32                 331  	mulh 0x0000000A, r6
+00000208 C231                 332  	add r2, r6
+0000020A                      333  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 309
+0000020A C656FF00             334  	andi 0x000000FF, r6, r10
+0000020E 7F00                 335  	jmp [r31]
+00000210                      336  _IsLeapYear.1:
+00000210                      337  	.stack _IsLeapYear.1 = 0
+00000210                      338  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 316
+00000210 20169001             339  	movea 0x00000190, r0, r2
+00000214                      340  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 318
+00000214 0628                 341  	mov r6, r5
+00000216 E22F822A             342  	divhu r2, r5, r5
+0000021A 602A                 343  	cmp 0x00000000, r5
+0000021C 8205                 344  	bz9 .BB.LABEL.10_4
+0000021E                      345  .BB.LABEL.10_1:	; bb
+0000021E                      346  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 0
+0000021E C6060300             347  	andi 0x00000003, r6, r0
+00000222 8A05                 348  	bnz9 .BB.LABEL.10_3
+00000224                      349  .BB.LABEL.10_2:	; bb11
+00000224 20166400             350  	movea 0x00000064, r0, r2
+00000228 E2378232             351  	divhu r2, r6, r6
+0000022C 6032                 352  	cmp 0x00000000, r6
+0000022E 8A05                 353  	bnz9 .BB.LABEL.10_4
+00000230                      354  .BB.LABEL.10_3:	; bb24
+00000230 0052                 355  	mov 0x00000000, r10
+00000232                      356  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 319
+00000232 7F00                 357  	jmp [r31]
+00000234                      358  .BB.LABEL.10_4:	; bb25
+00000234                      359  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 0
+00000234 0152                 360  	mov 0x00000001, r10
+00000236                      361  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 319
+00000236 7F00                 362  	jmp [r31]
+00000238                      363  _RtcToTimestamp:
+00000238                      364  	.stack _RtcToTimestamp = 48
+00000238                      365  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 332
+00000238 860721FF             366  	prepare 0x000007F9, 0x0000000C
+0000023C 07A0                 367  	mov r7, r20
+0000023E 08A8                 368  	mov r8, r21
+00000240 09B0                 369  	mov r9, r22
+00000242                      370  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 336
+00000242 80FF0000             371  	jarl _bcd2dec.1, r31
+00000246 0AB8                 372  	mov r10, r23
+00000248                      373  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 337
+00000248 1430                 374  	mov r20, r6
+0000024A 80FF0000             375  	jarl _bcd2dec.1, r31
+0000024E 0AA0                 376  	mov r10, r20
+00000250                      377  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 338
+00000250 1530                 378  	mov r21, r6
+00000252 80FF0000             379  	jarl _bcd2dec.1, r31
+00000256 0AA8                 380  	mov r10, r21
+00000258                      381  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 339
+00000258 1630                 382  	mov r22, r6
+0000025A 80FF0000             383  	jarl _bcd2dec.1, r31
+0000025E 0AB0                 384  	mov r10, r22
+00000260 23373100             385  	ld.w 0x00000030[r3], r6
+00000264                      386  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 340
+00000264 80FF0000             387  	jarl _bcd2dec.1, r31
+00000268 0AC0                 388  	mov r10, r24
+0000026A 23373500             389  	ld.w 0x00000034[r3], r6
+0000026E                      390  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 341
+0000026E 80FF0000             391  	jarl _bcd2dec.1, r31
+00000272 0C12                 392  	mov 0x0000000C, r2
+00000274                      393  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 344
+00000274                      394  	mov #.STR.1241, r5
+00000274 250600000000            -- mov         0x0,tp
+0000027A 0330                 395  	mov r3, r6
+0000027C C611                 396  	add r6, r2
+0000027E 8505                 397  	br9 .BB.LABEL.11_2
+00000280                      398  .BB.LABEL.11_1:	; entry
+00000280 053F0000             399  	ld.b 0x00000000[r5], r7
+00000284 463F0000             400  	st.b r7, 0x00000000[r6]
+00000288 412A                 401  	add 0x00000001, r5
+0000028A 4132                 402  	add 0x00000001, r6
+0000028C                      403  .BB.LABEL.11_2:	; entry
+0000028C E611                 404  	cmp r6, r2
+0000028E 8A05                 405  	bnz9 .BB.LABEL.11_1
+00000290                      406  .BB.LABEL.11_3:	; entry
+00000290                      407  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 336
+00000290 37BED007             408  	movea 0x000007D0, r23, r23
+00000294 20CEB207             409  	movea 0x000007B2, r0, r25
+00000298 00D2                 410  	mov 0x00000000, r26
+0000029A                      411  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 349
+0000029A 0AD8                 412  	mov r10, r27
+0000029C 8505                 413  	br9 .BB.LABEL.11_5
+0000029E                      414  .BB.LABEL.11_4:	; bb
+0000029E                      415  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 350
+0000029E D936FFFF             416  	andi 0x0000FFFF, r25, r6
+000002A2 80FF0000             417  	jarl _IsLeapYear.1, r31
+000002A6 6052                 418  	cmp 0x00000000, r10
+000002A8 20166E01             419  	movea 0x0000016E, r0, r2
+000002AC 202E6D01             420  	movea 0x0000016D, r0, r5
+000002B0 E5172413             421  	cmov 0x00000002, r5, r2, r2
+000002B4 C2D1                 422  	add r2, r26
+000002B6 41CA                 423  	add 0x00000001, r25
+000002B8                      424  .BB.LABEL.11_5:	; bb45
+000002B8                      425  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 349
+000002B8 D916FFFF             426  	andi 0x0000FFFF, r25, r2
+000002BC D72EFFFF             427  	andi 0x0000FFFF, r23, r5
+000002C0 E511                 428  	cmp r5, r2
+000002C2 8105                 429  	bl9 .BB.LABEL.11_4
+000002C4                      430  .BB.LABEL.11_6:	; bb45.bb85_crit_edge
+000002C4                      431  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 0
+000002C4 01CA                 432  	mov 0x00000001, r25
+000002C6 8505                 433  	br9 .BB.LABEL.11_11
+000002C8                      434  .BB.LABEL.11_7:	; bb54
+000002C8                      435  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 355
+000002C8 D916FF00             436  	andi 0x000000FF, r25, r2
+000002CC 0328                 437  	mov r3, r5
+000002CE C229                 438  	add r2, r5
+000002D0 A52FFFFF             439  	ld.bu 0xFFFFFFFF[r5], r5
+000002D4 C5D1                 440  	add r5, r26
+000002D6                      441  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 356
+000002D6 6212                 442  	cmp 0x00000002, r2
+000002D8 8A05                 443  	bnz9 .BB.LABEL.11_10
+000002DA                      444  .BB.LABEL.11_8:	; bb68
+000002DA                      445  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 0
+000002DA D736FFFF             446  	andi 0x0000FFFF, r23, r6
+000002DE 80FF0000             447  	jarl _IsLeapYear.1, r31
+000002E2 6052                 448  	cmp 0x00000000, r10
+000002E4 8205                 449  	bz9 .BB.LABEL.11_10
+000002E6                      450  .BB.LABEL.11_9:	; if_then_bb
+000002E6                      451  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 357
+000002E6 41D2                 452  	add 0x00000001, r26
+000002E8                      453  .BB.LABEL.11_10:	; if_break_bb
+000002E8                      454  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 0
+000002E8 41CA                 455  	add 0x00000001, r25
+000002EA                      456  .BB.LABEL.11_11:	; bb85
+000002EA                      457  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 354
+000002EA D916FF00             458  	andi 0x000000FF, r25, r2
+000002EE F411                 459  	cmp r20, r2
+000002F0 8105                 460  	bl9 .BB.LABEL.11_7
+000002F2                      461  .BB.LABEL.11_12:	; bb93
+000002F2                      462  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 362
+000002F2 DAA9                 463  	add r26, r21
+000002F4                      464  	mov 0x00015180, r2
+000002F4 220680510100            -- mov         0x15180,hp
+000002FA E2AF2002             465  	mul r2, r21, r0
+000002FE                      466  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 365
+000002FE F616100E             467  	mulhi 0x00000E10, r22, r2
+00000302 C2A9                 468  	add r2, r21
+00000304 F8163C00             469  	mulhi 0x0000003C, r24, r2
+00000308 C2A9                 470  	add r2, r21
+0000030A DBA9                 471  	add r27, r21
+0000030C                      472  	mov 0xFFFEAE80, r2
+0000030C 220680AEFEFF            -- mov         0xfffeae80,hp
+00000312 1550                 473  	mov r21, r10
+00000314 C251                 474  	add r2, r10
+00000316                      475  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 371
+00000316 46063FFF             476  	dispose 0x0000000C, 0x000007F9, [r31]
+0000031A                      477  _dec2bcd.1:
+0000031A                      478  	.stack _dec2bcd.1 = 0
+0000031A                      479  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 378
+0000031A 0A12                 480  	mov 0x0000000A, r2
+0000031C                      481  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 379
+0000031C E2378212             482  	divhu r2, r6, r2
+00000320 C432                 483  	shl 0x00000004, r6
+00000322 0231                 484  	or r2, r6
+00000324                      485  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 380
+00000324 C656FF00             486  	andi 0x000000FF, r6, r10
+00000328 7F00                 487  	jmp [r31]
+0000032A                      488  _TimerHalWeekdayToRtcMask.1:
+0000032A                      489  	.stack _TimerHalWeekdayToRtcMask.1 = 0
+0000032A                      490  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 404
+0000032A 4432                 491  	add 0x00000004, r6
+0000032C 0712                 492  	mov 0x00000007, r2
+0000032E                      493  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 412
+0000032E E2378232             494  	divhu r2, r6, r6
+00000332                      495  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 414
+00000332 5F32                 496  	add 0xFFFFFFFF, r6
+00000334 6532                 497  	cmp 0x00000005, r6
+00000336 8B05                 498  	bh9 .BB.LABEL.13_8
+00000338                      499  .BB.LABEL.13_1:	; entry
+00000338                      500  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 0
+00000338 C132                 501  	shl 0x00000001, r6
+0000033A E60600000000         502  	jmp #.SWITCH.LABEL.13_9[r6]
+00000340                      503  .SWITCH.LABEL.13_9:
+00000340 8505                 504  	br9 .BB.LABEL.13_2
+00000342 8505                 505  	br9 .BB.LABEL.13_3
+00000344 8505                 506  	br9 .BB.LABEL.13_4
+00000346 8505                 507  	br9 .BB.LABEL.13_5
+00000348 8505                 508  	br9 .BB.LABEL.13_6
+0000034A 8505                 509  	br9 .BB.LABEL.13_7
+0000034C                      510  .SWITCH.LABEL.13_9.END:
+0000034C                      511  .BB.LABEL.13_2:	; switch_clause_bb9
+0000034C 0252                 512  	mov 0x00000002, r10
+0000034E                      513  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 417
+0000034E 7F00                 514  	jmp [r31]
+00000350                      515  .BB.LABEL.13_3:	; switch_clause_bb11
+00000350                      516  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 0
+00000350 0452                 517  	mov 0x00000004, r10
+00000352                      518  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 418
+00000352 7F00                 519  	jmp [r31]
+00000354                      520  .BB.LABEL.13_4:	; switch_clause_bb13
+00000354                      521  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 0
+00000354 0852                 522  	mov 0x00000008, r10
+00000356                      523  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 419
+00000356 7F00                 524  	jmp [r31]
+00000358                      525  .BB.LABEL.13_5:	; switch_clause_bb15
+00000358                      526  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 0
+00000358 20561000             527  	movea 0x00000010, r0, r10
+0000035C                      528  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 420
+0000035C 7F00                 529  	jmp [r31]
+0000035E                      530  .BB.LABEL.13_6:	; switch_clause_bb17
+0000035E                      531  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 0
+0000035E 20562000             532  	movea 0x00000020, r0, r10
+00000362                      533  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 421
+00000362 7F00                 534  	jmp [r31]
+00000364                      535  .BB.LABEL.13_7:	; switch_clause_bb19
+00000364                      536  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 0
+00000364 20564000             537  	movea 0x00000040, r0, r10
+00000368                      538  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 422
+00000368 7F00                 539  	jmp [r31]
+0000036A                      540  .BB.LABEL.13_8:	; bb23
+0000036A                      541  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 0
+0000036A 0152                 542  	mov 0x00000001, r10
+0000036C                      543  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 425
+0000036C 7F00                 544  	jmp [r31]
+0000036E                      545  _TimestampToRtcRegisters:
+0000036E                      546  	.stack _TimestampToRtcRegisters = 44
+0000036E                      547  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 435
+0000036E 860721EF             548  	prepare 0x00000779, 0x0000000C
+00000372                      549  	mov 0x00015180, r2
+00000372 220680510100            -- mov         0x15180,hp
+00000378                      550  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 436
+00000378 06A0                 551  	mov r6, r20
+0000037A E2A7C2AA             552  	divu r2, r20, r21
+0000037E 20B6B207             553  	movea 0x000007B2, r0, r22
+00000382 07B8                 554  	mov r7, r23
+00000384 06C0                 555  	mov r6, r24
+00000386 8505                 556  	br9 .BB.LABEL.14_2
+00000388                      557  .BB.LABEL.14_1:	; if_break_bb
+00000388                      558  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 449
+00000388 C2166F01             559  	andi 0x0000016F, r2, r2
+0000038C A2A1                 560  	sub r2, r20
+0000038E                      561  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 450
+0000038E 41B2                 562  	add 0x00000001, r22
+00000390                      563  .BB.LABEL.14_2:	; bb39
+00000390                      564  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 447
+00000390 D636FFFF             565  	andi 0x0000FFFF, r22, r6
+00000394 80FF0000             566  	jarl _IsLeapYear.1, r31
+00000398 6052                 567  	cmp 0x00000000, r10
+0000039A 20166E01             568  	movea 0x0000016E, r0, r2
+0000039E 202E6D01             569  	movea 0x0000016D, r0, r5
+000003A2 E5172413             570  	cmov 0x00000002, r5, r2, r2
+000003A6                      571  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 448
+000003A6 E2A1                 572  	cmp r2, r20
+000003A8 8905                 573  	bnc9 .BB.LABEL.14_1
+000003AA                      574  .BB.LABEL.14_3:	; bb41
+000003AA                      575  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 0
+000003AA 0C12                 576  	mov 0x0000000C, r2
+000003AC                      577  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 454
+000003AC                      578  	mov #.STR.1306, r5
+000003AC 250600000000            -- mov         0x0,tp
+000003B2 0330                 579  	mov r3, r6
+000003B4 C611                 580  	add r6, r2
+000003B6 8505                 581  	br9 .BB.LABEL.14_5
+000003B8                      582  .BB.LABEL.14_4:	; bb41
+000003B8 053F0000             583  	ld.b 0x00000000[r5], r7
+000003BC 463F0000             584  	st.b r7, 0x00000000[r6]
+000003C0 412A                 585  	add 0x00000001, r5
+000003C2 4132                 586  	add 0x00000001, r6
+000003C4                      587  .BB.LABEL.14_5:	; bb41
+000003C4 E611                 588  	cmp r6, r2
+000003C6 8A05                 589  	bnz9 .BB.LABEL.14_4
+000003C8                      590  .BB.LABEL.14_6:	; bb41
+000003C8                      591  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 456
+000003C8 D636FFFF             592  	andi 0x0000FFFF, r22, r6
+000003CC 80FF0000             593  	jarl _IsLeapYear.1, r31
+000003D0 6052                 594  	cmp 0x00000000, r10
+000003D2 8A05                 595  	bnz9 .BB.LABEL.14_8
+000003D4                      596  .BB.LABEL.14_7:	; bb41.bb64_crit_edge
+000003D4                      597  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 0
+000003D4 01CA                 598  	mov 0x00000001, r25
+000003D6 8505                 599  	br9 .BB.LABEL.14_10
+000003D8                      600  .BB.LABEL.14_8:	; if_then_bb48
+000003D8 20CE1D00             601  	movea 0x0000001D, r0, r25
+000003DC 43CF0100             602  	st.b r25, 0x00000001[r3]
+000003E0 01CA                 603  	mov 0x00000001, r25
+000003E2 8505                 604  	br9 .BB.LABEL.14_10
+000003E4                      605  .BB.LABEL.14_9:	; bb52
+000003E4                      606  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 460
+000003E4 82170100             607  	ld.bu 0x00000000[r2], r2
+000003E8 A2A1                 608  	sub r2, r20
+000003EA                      609  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 461
+000003EA 41CA                 610  	add 0x00000001, r25
+000003EC                      611  .BB.LABEL.14_10:	; bb64
+000003EC                      612  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 459
+000003EC D916FF00             613  	andi 0x000000FF, r25, r2
+000003F0 0328                 614  	mov r3, r5
+000003F2 C511                 615  	add r5, r2
+000003F4 A22FFFFF             616  	ld.bu 0xFFFFFFFF[r2], r5
+000003F8 5F12                 617  	add 0xFFFFFFFF, r2
+000003FA E5A1                 618  	cmp r5, r20
+000003FC 8905                 619  	bnc9 .BB.LABEL.14_9
+000003FE                      620  .BB.LABEL.14_11:	; bb76
+000003FE                      621  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 0
+000003FE 2016100E             622  	movea 0x00000E10, r0, r2
+00000402                      623  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 466
+00000402 E2AF82D2             624  	divhu r2, r21, r26
+00000406 20163C00             625  	movea 0x0000003C, r0, r2
+0000040A                      626  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 468
+0000040A E2D78232             627  	divhu r2, r26, r6
+0000040E                      628  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 472
+0000040E 80FF0000             629  	jarl _dec2bcd.1, r31
+00000412 57570000             630  	st.b r10, 0x00000000[r23]
+00000416                      631  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 473
+00000416 1A30                 632  	mov r26, r6
+00000418 80FF0000             633  	jarl _dec2bcd.1, r31
+0000041C 57570100             634  	st.b r10, 0x00000001[r23]
+00000420                      635  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 474
+00000420 D536FF00             636  	andi 0x000000FF, r21, r6
+00000424 80FF0000             637  	jarl _dec2bcd.1, r31
+00000428 57570200             638  	st.b r10, 0x00000002[r23]
+0000042C                      639  	mov 0x00015180, r2
+0000042C 220680510100            -- mov         0x15180,hp
+00000432                      640  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 475
+00000432 1830                 641  	mov r24, r6
+00000434 E237C202             642  	divu r2, r6, r0
+00000438 80FF0000             643  	jarl _TimerHalWeekdayToRtcMask.1, r31
+0000043C 57570300             644  	st.b r10, 0x00000003[r23]
+00000440                      645  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 463
+00000440 41A2                 646  	add 0x00000001, r20
+00000442                      647  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 476
+00000442 D436FF00             648  	andi 0x000000FF, r20, r6
+00000446 80FF0000             649  	jarl _dec2bcd.1, r31
+0000044A 57570400             650  	st.b r10, 0x00000004[r23]
+0000044E                      651  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 477
+0000044E D936FF00             652  	andi 0x000000FF, r25, r6
+00000452 80FF0000             653  	jarl _dec2bcd.1, r31
+00000456 57570500             654  	st.b r10, 0x00000005[r23]
+0000045A                      655  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 478
+0000045A 36363000             656  	movea 0x00000030, r22, r6
+0000045E                      657  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 479
+0000045E 8600                 658  	zxb r6
+00000460 80FF0000             659  	jarl _dec2bcd.1, r31
+00000464 57570600             660  	st.b r10, 0x00000006[r23]
+00000468 46063FEF             661  	dispose 0x0000000C, 0x00000779, [r31]
+0000046C                      662  _TimerHalSetRtcTime:
+0000046C                      663  	.stack _TimerHalSetRtcTime = 56
+0000046C                      664  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 490
+0000046C 9607210C             665  	prepare 0x00000061, 0x0000002C
+00000470                      666  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 496
+00000470 43072B00             667  	st.b r0, 0x0000002B[r3]
+00000474 43072A00             668  	st.b r0, 0x0000002A[r3]
+00000478 43072900             669  	st.b r0, 0x00000029[r3]
+0000047C 43072800             670  	st.b r0, 0x00000028[r3]
+00000480 43072700             671  	st.b r0, 0x00000027[r3]
+00000484 43072600             672  	st.b r0, 0x00000026[r3]
+00000488 43072500             673  	st.b r0, 0x00000025[r3]
+0000048C 43072500             674  	st.b r0, 0x00000025[r3]
+00000490 23A61100             675  	movea 0x00000011, r3, r20
+00000494 20161400             676  	movea 0x00000014, r0, r2
+00000498 002A                 677  	mov 0x00000000, r5
+0000049A                      678  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 497
+0000049A D411                 679  	add r20, r2
+0000049C 1438                 680  	mov r20, r7
+0000049E 8505                 681  	br9 .BB.LABEL.15_2
+000004A0                      682  .BB.LABEL.15_1:	; entry
+000004A0 472F0000             683  	st.b r5, 0x00000000[r7]
+000004A4 413A                 684  	add 0x00000001, r7
+000004A6                      685  .BB.LABEL.15_2:	; entry
+000004A6 E711                 686  	cmp r7, r2
+000004A8 8A05                 687  	bnz9 .BB.LABEL.15_1
+000004AA                      688  .BB.LABEL.15_3:	; entry
+000004AA 43071100             689  	st.b r0, 0x00000011[r3]
+000004AE                      690  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 499
+000004AE 43071000             691  	st.b r0, 0x00000010[r3]
+000004B2 23AE2500             692  	movea 0x00000025, r3, r21
+000004B6                      693  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 502
+000004B6 1538                 694  	mov r21, r7
+000004B8 80FF0000             695  	jarl _TimestampToRtcRegisters, r31
+000004BC                      696  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 505
+000004BC A3172500             697  	ld.bu 0x00000025[r3], r2
+000004C0 832F2700             698  	ld.bu 0x00000026[r3], r5
+000004C4 A3372700             699  	ld.bu 0x00000027[r3], r6
+000004C8 83572900             700  	ld.bu 0x00000028[r3], r10
+000004CC A34F2900             701  	ld.bu 0x00000029[r3], r9
+000004D0 83472B00             702  	ld.bu 0x0000002A[r3], r8
+000004D4 A33F2B00             703  	ld.bu 0x0000002B[r3], r7
+000004D8 63170D00             704  	st.w r2, 0x0000000C[r3]
+000004DC 632F0900             705  	st.w r5, 0x00000008[r3]
+000004E0 63370500             706  	st.w r6, 0x00000004[r3]
+000004E4 63570100             707  	st.w r10, 0x00000000[r3]
+000004E8                      708  	mov #.STR.1333, r6
+000004E8 260600000000            -- mov         0x0,r6
+000004EE 80FF0000             709  	jarl _LogHalPrint, r31
+000004F2                      710  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 509
+000004F2 15170000             711  	ld.b 0x00000000[r21], r2
+000004F6 43171100             712  	st.b r2, 0x00000011[r3]
+000004FA                      713  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 510
+000004FA 15170100             714  	ld.b 0x00000001[r21], r2
+000004FE 43171200             715  	st.b r2, 0x00000012[r3]
+00000502                      716  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 511
+00000502 15170200             717  	ld.b 0x00000002[r21], r2
+00000506 43171300             718  	st.b r2, 0x00000013[r3]
+0000050A                      719  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 512
+0000050A 15170300             720  	ld.b 0x00000003[r21], r2
+0000050E 43171400             721  	st.b r2, 0x00000014[r3]
+00000512                      722  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 513
+00000512 15170400             723  	ld.b 0x00000004[r21], r2
+00000516 43171500             724  	st.b r2, 0x00000015[r3]
+0000051A                      725  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 514
+0000051A 15170500             726  	ld.b 0x00000005[r21], r2
+0000051E 43171600             727  	st.b r2, 0x00000016[r3]
+00000522                      728  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 515
+00000522 15170600             729  	ld.b 0x00000006[r21], r2
+00000526 43171700             730  	st.b r2, 0x00000017[r3]
+0000052A                      731  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 516
+0000052A 43071000             732  	st.b r0, 0x00000010[r3]
+0000052E 074A                 733  	mov 0x00000007, r9
+00000530 233E1000             734  	movea 0x00000010, r3, r7
+00000534 20363200             735  	movea 0x00000032, r0, r6
+00000538                      736  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 517
+00000538 1440                 737  	mov r20, r8
+0000053A 80FF0000             738  	jarl _I2cWriteRegisterValue, r31
+0000053E                      739  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 523
+0000053E 56063F0C             740  	dispose 0x0000002C, 0x00000061, [r31]
+00000542                      741  _TimerHalGetRtcTime:
+00000542                      742  	.stack _TimerHalGetRtcTime = 44
+00000542                      743  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 533
+00000542 9007210C             744  	prepare 0x00000061, 0x00000020
+00000546 06A0                 745  	mov r6, r20
+00000548 23460C00             746  	movea 0x0000000C, r3, r8
+0000054C 20161400             747  	movea 0x00000014, r0, r2
+00000550 002A                 748  	mov 0x00000000, r5
+00000552                      749  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 538
+00000552 C811                 750  	add r8, r2
+00000554 0830                 751  	mov r8, r6
+00000556 8505                 752  	br9 .BB.LABEL.16_2
+00000558                      753  .BB.LABEL.16_1:	; entry
+00000558 462F0000             754  	st.b r5, 0x00000000[r6]
+0000055C 4132                 755  	add 0x00000001, r6
+0000055E                      756  .BB.LABEL.16_2:	; entry
+0000055E E611                 757  	cmp r6, r2
+00000560 8A05                 758  	bnz9 .BB.LABEL.16_1
+00000562                      759  .BB.LABEL.16_3:	; entry
+00000562 43070C00             760  	st.b r0, 0x0000000C[r3]
+00000566                      761  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 542
+00000566 43070B00             762  	st.b r0, 0x0000000B[r3]
+0000056A 074A                 763  	mov 0x00000007, r9
+0000056C 233E0B00             764  	movea 0x0000000B, r3, r7
+00000570 20363200             765  	movea 0x00000032, r0, r6
+00000574                      766  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 543
+00000574 80FF0000             767  	jarl _I2cReadRegisterValue, r31
+00000578                      768  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 544
+00000578 0AAE0000             769  	addi 0x00000000, r10, r21
+0000057C 8205                 770  	bz9 .BB.LABEL.16_5
+0000057E                      771  .BB.LABEL.16_4:	; if_then_bb
+0000057E                      772  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 546
+0000057E                      773  	mov #.STR.1353, r6
+0000057E 260600000000            -- mov         0x0,r6
+00000584 80FF0000             774  	jarl _LogHalPrint, r31
+00000588                      775  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 547
+00000588 1550                 776  	mov r21, r10
+0000058A 50063F0C             777  	dispose 0x00000020, 0x00000061, [r31]
+0000058E                      778  .BB.LABEL.16_5:	; if_break_bb
+0000058E                      779  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 549
+0000058E 83170D00             780  	ld.bu 0x0000000C[r3], r2
+00000592 A32F0D00             781  	ld.bu 0x0000000D[r3], r5
+00000596 834F0F00             782  	ld.bu 0x0000000E[r3], r9
+0000059A 83471100             783  	ld.bu 0x00000010[r3], r8
+0000059E A33F1100             784  	ld.bu 0x00000011[r3], r7
+000005A2 83371300             785  	ld.bu 0x00000012[r3], r6
+000005A6 63170500             786  	st.w r2, 0x00000004[r3]
+000005AA 632F0100             787  	st.w r5, 0x00000000[r3]
+000005AE 80FF0000             788  	jarl _RtcToTimestamp, r31
+000005B2 74570100             789  	st.w r10, 0x00000000[r20]
+000005B6 0052                 790  	mov 0x00000000, r10
+000005B8                      791  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 550
+000005B8 50063F0C             792  	dispose 0x00000020, 0x00000061, [r31]
+000005BC                      793  _TimerHalConfigDateAlarm.1:
+000005BC                      794  	.stack _TimerHalConfigDateAlarm.1 = 20
+000005BC                      795  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 553
+000005BC 88072100             796  	prepare 0x00000001, 0x00000010
+000005C0                      797  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 555
+000005C0 43070F00             798  	st.b r0, 0x0000000F[r3]
+000005C4 43070E00             799  	st.b r0, 0x0000000E[r3]
+000005C8 43070D00             800  	st.b r0, 0x0000000D[r3]
+000005CC 43070C00             801  	st.b r0, 0x0000000C[r3]
+000005D0 43070B00             802  	st.b r0, 0x0000000B[r3]
+000005D4 43070A00             803  	st.b r0, 0x0000000A[r3]
+000005D8 43070900             804  	st.b r0, 0x00000009[r3]
+000005DC 43070900             805  	st.b r0, 0x00000009[r3]
+000005E0 233E0900             806  	movea 0x00000009, r3, r7
+000005E4                      807  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 561
+000005E4 80FF0000             808  	jarl _TimestampToRtcRegisters, r31
+000005E8                      809  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 564
+000005E8 83170B00             810  	ld.bu 0x0000000A[r3], r2
+000005EC C2167F00             811  	andi 0x0000007F, r2, r2
+000005F0 43170600             812  	st.b r2, 0x00000006[r3]
+000005F4                      813  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 567
+000005F4 A3170B00             814  	ld.bu 0x0000000B[r3], r2
+000005F8 C2167F00             815  	andi 0x0000007F, r2, r2
+000005FC 43170700             816  	st.b r2, 0x00000007[r3]
+00000600                      817  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 570
+00000600 A3170D00             818  	ld.bu 0x0000000D[r3], r2
+00000604 C2167F00             819  	andi 0x0000007F, r2, r2
+00000608 43170800             820  	st.b r2, 0x00000008[r3]
+0000060C                      821  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 573
+0000060C 80FF0000             822  	jarl _TimerHalClearRtcAlarmFlag, r31
+00000610 0D12                 823  	mov 0x0000000D, r2
+00000612                      824  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 576
+00000612 43170500             825  	st.b r2, 0x00000005[r3]
+00000616 014A                 826  	mov 0x00000001, r9
+00000618 23460400             827  	movea 0x00000004, r3, r8
+0000061C 233E0500             828  	movea 0x00000005, r3, r7
+00000620 20363200             829  	movea 0x00000032, r0, r6
+00000624                      830  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 577
+00000624 80FF0000             831  	jarl _I2cReadRegisterValue, r31
+00000628 6052                 832  	cmp 0x00000000, r10
+0000062A 8205                 833  	bz9 .BB.LABEL.17_2
+0000062C                      834  .BB.LABEL.17_1:	; if_then_bb
+0000062C                      835  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 579
+0000062C                      836  	mov #.STR.1382, r6
+0000062C 260600000000            -- mov         0x0,r6
+00000632 8505                 837  	br9 .BB.LABEL.17_8
+00000634                      838  .BB.LABEL.17_2:	; if_break_bb
+00000634                      839  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 582
+00000634 C3370400             840  	set1 0x00000006, 0x00000004[r3]
+00000638 0D12                 841  	mov 0x0000000D, r2
+0000063A                      842  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 583
+0000063A 43170500             843  	st.b r2, 0x00000005[r3]
+0000063E 014A                 844  	mov 0x00000001, r9
+00000640 23460400             845  	movea 0x00000004, r3, r8
+00000644 233E0500             846  	movea 0x00000005, r3, r7
+00000648 20363200             847  	movea 0x00000032, r0, r6
+0000064C                      848  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 584
+0000064C 80FF0000             849  	jarl _I2cWriteRegisterValue, r31
+00000650 6052                 850  	cmp 0x00000000, r10
+00000652 8205                 851  	bz9 .BB.LABEL.17_4
+00000654                      852  .BB.LABEL.17_3:	; if_then_bb48
+00000654                      853  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 586
+00000654                      854  	mov #.STR.1383, r6
+00000654 260600000000            -- mov         0x0,r6
+0000065A 8505                 855  	br9 .BB.LABEL.17_8
+0000065C                      856  .BB.LABEL.17_4:	; if_break_bb50
+0000065C                      857  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 0
+0000065C 0812                 858  	mov 0x00000008, r2
+0000065E                      859  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 591
+0000065E 43170500             860  	st.b r2, 0x00000005[r3]
+00000662 034A                 861  	mov 0x00000003, r9
+00000664 23460600             862  	movea 0x00000006, r3, r8
+00000668 233E0500             863  	movea 0x00000005, r3, r7
+0000066C 20363200             864  	movea 0x00000032, r0, r6
+00000670                      865  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 592
+00000670 80FF0000             866  	jarl _I2cWriteRegisterValue, r31
+00000674 6052                 867  	cmp 0x00000000, r10
+00000676 8205                 868  	bz9 .BB.LABEL.17_6
+00000678                      869  .BB.LABEL.17_5:	; if_then_bb57
+00000678                      870  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 594
+00000678                      871  	mov #.STR.1384, r6
+00000678 260600000000            -- mov         0x0,r6
+0000067E 8505                 872  	br9 .BB.LABEL.17_8
+00000680                      873  .BB.LABEL.17_6:	; if_break_bb59
+00000680                      874  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 0
+00000680 0F12                 875  	mov 0x0000000F, r2
+00000682                      876  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 599
+00000682 43170500             877  	st.b r2, 0x00000005[r3]
+00000686 014A                 878  	mov 0x00000001, r9
+00000688 23460300             879  	movea 0x00000003, r3, r8
+0000068C 233E0500             880  	movea 0x00000005, r3, r7
+00000690 20363200             881  	movea 0x00000032, r0, r6
+00000694                      882  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 600
+00000694 80FF0000             883  	jarl _I2cReadRegisterValue, r31
+00000698 6052                 884  	cmp 0x00000000, r10
+0000069A 8205                 885  	bz9 .BB.LABEL.17_9
+0000069C                      886  .BB.LABEL.17_7:	; if_then_bb65
+0000069C                      887  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 602
+0000069C                      888  	mov #.STR.1385, r6
+0000069C 260600000000            -- mov         0x0,r6
+000006A2                      889  .BB.LABEL.17_8:	; if_then_bb65
+000006A2                      890  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 0
+000006A2 80FF0000             891  	jarl _LogHalPrint, r31
+000006A6 0152                 892  	mov 0x00000001, r10
+000006A8                      893  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 614
+000006A8 48063F00             894  	dispose 0x00000010, 0x00000001, [r31]
+000006AC                      895  .BB.LABEL.17_9:	; if_break_bb67
+000006AC                      896  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 605
+000006AC C31F0300             897  	set1 0x00000003, 0x00000003[r3]
+000006B0 0F12                 898  	mov 0x0000000F, r2
+000006B2                      899  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 606
+000006B2 43170500             900  	st.b r2, 0x00000005[r3]
+000006B6 014A                 901  	mov 0x00000001, r9
+000006B8 23460300             902  	movea 0x00000003, r3, r8
+000006BC 233E0500             903  	movea 0x00000005, r3, r7
+000006C0 20363200             904  	movea 0x00000032, r0, r6
+000006C4                      905  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 607
+000006C4 80FF0000             906  	jarl _I2cWriteRegisterValue, r31
+000006C8 6052                 907  	cmp 0x00000000, r10
+000006CA 8205                 908  	bz9 .BB.LABEL.17_11
+000006CC                      909  .BB.LABEL.17_10:	; if_then_bb77
+000006CC                      910  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 609
+000006CC                      911  	mov #.STR.1386, r6
+000006CC 260600000000            -- mov         0x0,r6
+000006D2 8505                 912  	br9 .BB.LABEL.17_8
+000006D4                      913  .BB.LABEL.17_11:	; bb81
+000006D4                      914  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 0
+000006D4 0052                 915  	mov 0x00000000, r10
+000006D6                      916  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 614
+000006D6 48063F00             917  	dispose 0x00000010, 0x00000001, [r31]
+000006DA                      918  _TimerHalPrepareSleep:
+000006DA                      919  	.stack _TimerHalPrepareSleep = 16
+000006DA                      920  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 616
+000006DA 8207210C             921  	prepare 0x00000061, 0x00000004
+000006DE 06A60000             922  	addi 0x00000000, r6, r20
+000006E2                      923  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 621
+000006E2 8205                 924  	bz9 .BB.LABEL.18_6
+000006E4                      925  .BB.LABEL.18_1:	; if_break_bb
+000006E4                      926  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 0
+000006E4 0330                 927  	mov r3, r6
+000006E6                      928  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 626
+000006E6 80FF0000             929  	jarl _TimerHalGetRtcTime, r31
+000006EA 6052                 930  	cmp 0x00000000, r10
+000006EC 8205                 931  	bz9 .BB.LABEL.18_3
+000006EE                      932  .BB.LABEL.18_2:	; if_then_bb12
+000006EE                      933  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 628
+000006EE                      934  	mov #.STR.1402, r6
+000006EE 260600000000            -- mov         0x0,r6
+000006F4 80FF0000             935  	jarl _LogHalPrint, r31
+000006F8 0152                 936  	mov 0x00000001, r10
+000006FA                      937  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 629
+000006FA 42063F0C             938  	dispose 0x00000004, 0x00000061, [r31]
+000006FE                      939  .BB.LABEL.18_3:	; if_break_bb14
+000006FE                      940  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 632
+000006FE 23170100             941  	ld.w 0x00000000[r3], r2
+00000702 402E0000             942  	movhi HIGHW1(#_g_sleepStartUtc.2), r0, r5
+00000706 65170100             943  	st.w r2, LOWW(#_g_sleepStartUtc.2)[r5]
+0000070A                      944  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 633
+0000070A 23AF0100             945  	ld.w 0x00000000[r3], r21
+0000070E D4A9                 946  	add r20, r21
+00000710                      947  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 635
+00000710 1530                 948  	mov r21, r6
+00000712 80FF0000             949  	jarl _TimerHalConfigDateAlarm.1, r31
+00000716 1440                 950  	mov r20, r8
+00000718 1548                 951  	mov r21, r9
+0000071A 6052                 952  	cmp 0x00000000, r10
+0000071C 233F0100             953  	ld.w 0x00000000[r3], r7
+00000720 8205                 954  	bz9 .BB.LABEL.18_5
+00000722                      955  .BB.LABEL.18_4:	; if_then_bb25
+00000722                      956  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 637
+00000722                      957  	mov #.STR.1403, r6
+00000722 260600000000            -- mov         0x0,r6
+00000728 80FF0000             958  	jarl _LogHalPrint, r31
+0000072C 0152                 959  	mov 0x00000001, r10
+0000072E                      960  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 641
+0000072E 42063F0C             961  	dispose 0x00000004, 0x00000061, [r31]
+00000732                      962  .BB.LABEL.18_5:	; if_break_bb30
+00000732                      963  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 644
+00000732                      964  	mov #.STR.1404, r6
+00000732 260600000000            -- mov         0x0,r6
+00000738 80FF0000             965  	jarl _LogHalPrint, r31
+0000073C 0052                 966  	mov 0x00000000, r10
+0000073E                      967  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 649
+0000073E 42063F0C             968  	dispose 0x00000004, 0x00000061, [r31]
+00000742                      969  .BB.LABEL.18_6:	; bb35
+00000742                      970  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 0
+00000742 0152                 971  	mov 0x00000001, r10
+00000744                      972  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 650
+00000744 42063F0C             973  	dispose 0x00000004, 0x00000061, [r31]
+00000748                      974  _TimerHalGetSleepDuration:
+00000748                      975  	.stack _TimerHalGetSleepDuration = 8
+00000748                      976  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 652
+00000748 82072100             977  	prepare 0x00000001, 0x00000004
+0000074C 0330                 978  	mov r3, r6
+0000074E                      979  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 656
+0000074E 80FF0000             980  	jarl _TimerHalGetRtcTime, r31
+00000752                      981  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 658
+00000752 40160000             982  	movhi HIGHW1(#_g_sleepStartUtc.2), r0, r2
+00000756 22170100             983  	ld.w LOWW(#_g_sleepStartUtc.2)[r2], r2
+0000075A 23570100             984  	ld.w 0x00000000[r3], r10
+0000075E E251                 985  	cmp r2, r10
+00000760 8105                 986  	bl9 .BB.LABEL.19_2
+00000762                      987  .BB.LABEL.19_1:	; if_break_bb
+00000762                      988  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 661
+00000762 A251                 989  	sub r2, r10
+00000764 42063F00             990  	dispose 0x00000004, 0x00000001, [r31]
+00000768                      991  .BB.LABEL.19_2:	; bb11
+00000768                      992  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 0
+00000768 0052                 993  	mov 0x00000000, r10
+0000076A                      994  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 662
+0000076A 42063F00             995  	dispose 0x00000004, 0x00000001, [r31]
+0000076E                      996  _TimerHalGetRtcStatus:
+0000076E                      997  	.stack _TimerHalGetRtcStatus = 8
+0000076E                      998  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 664
+0000076E 82072100             999  	prepare 0x00000001, 0x00000004
+00000772 0E12                1000  	mov 0x0000000E, r2
+00000774                     1001  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 667
+00000774 43170200            1002  	st.b r2, 0x00000002[r3]
+00000778 014A                1003  	mov 0x00000001, r9
+0000077A 23460300            1004  	movea 0x00000003, r3, r8
+0000077E 233E0200            1005  	movea 0x00000002, r3, r7
+00000782 20363200            1006  	movea 0x00000032, r0, r6
+00000786                     1007  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 669
+00000786 80FF0000            1008  	jarl _I2cReadRegisterValue, r31
+0000078A 6052                1009  	cmp 0x00000000, r10
+0000078C 8A05                1010  	bnz9 .BB.LABEL.20_2
+0000078E                     1011  .BB.LABEL.20_1:	; if_break_bb
+0000078E                     1012  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 0
+0000078E 23160300            1013  	movea 0x00000003, r3, r2
+00000792                     1014  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 674
+00000792 02170000            1015  	ld.b 0x00000000[r2], r2
+00000796 8312                1016  	shr 0x00000003, r2
+00000798 C2560100            1017  	andi 0x00000001, r2, r10
+0000079C 42063F00            1018  	dispose 0x00000004, 0x00000001, [r31]
+000007A0                     1019  .BB.LABEL.20_2:	; bb19
+000007A0                     1020  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 0
+000007A0 2056FF00            1021  	movea 0x000000FF, r0, r10
+000007A4                     1022  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 675
+000007A4 42063F00            1023  	dispose 0x00000004, 0x00000001, [r31]
+000007A8                     1024  _TimerHalClearRtcAlarmFlag:
+000007A8                     1025  	.stack _TimerHalClearRtcAlarmFlag = 8
+000007A8                     1026  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 677
+000007A8 82072100            1027  	prepare 0x00000001, 0x00000004
+000007AC                     1028  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 679
+000007AC 43070300            1029  	st.b r0, 0x00000003[r3]
+000007B0 0E12                1030  	mov 0x0000000E, r2
+000007B2                     1031  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 680
+000007B2 43170200            1032  	st.b r2, 0x00000002[r3]
+000007B6 014A                1033  	mov 0x00000001, r9
+000007B8 23460300            1034  	movea 0x00000003, r3, r8
+000007BC 233E0200            1035  	movea 0x00000002, r3, r7
+000007C0 20363200            1036  	movea 0x00000032, r0, r6
+000007C4                     1037  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 682
+000007C4 80FF0000            1038  	jarl _I2cReadRegisterValue, r31
+000007C8 6052                1039  	cmp 0x00000000, r10
+000007CA 8205                1040  	bz9 .BB.LABEL.21_2
+000007CC                     1041  .BB.LABEL.21_1:	; if_then_bb
+000007CC                     1042  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 684
+000007CC                     1043  	mov #.STR.1434, r6
+000007CC 260600000000            -- mov         0x0,r6
+000007D2 80FF0000            1044  	jarl _LogHalPrint, r31
+000007D6                     1045  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 685
+000007D6 42063F00            1046  	dispose 0x00000004, 0x00000001, [r31]
+000007DA                     1047  .BB.LABEL.21_2:	; if_break_bb
+000007DA                     1048  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 688
+000007DA C39F0300            1049  	clr1 0x00000003, 0x00000003[r3]
+000007DE 0E12                1050  	mov 0x0000000E, r2
+000007E0                     1051  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 690
+000007E0 43170200            1052  	st.b r2, 0x00000002[r3]
+000007E4 014A                1053  	mov 0x00000001, r9
+000007E6 23460300            1054  	movea 0x00000003, r3, r8
+000007EA 233E0200            1055  	movea 0x00000002, r3, r7
+000007EE 20363200            1056  	movea 0x00000032, r0, r6
+000007F2                     1057  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 691
+000007F2 80FF0000            1058  	jarl _I2cWriteRegisterValue, r31
+000007F6 6052                1059  	cmp 0x00000000, r10
+000007F8 8205                1060  	bz9 .BB.LABEL.21_4
+000007FA                     1061  .BB.LABEL.21_3:	; if_then_bb15
+000007FA                     1062  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 693
+000007FA                     1063  	mov #.STR.1435, r6
+000007FA 260600000000            -- mov         0x0,r6
+00000800 80FF0000            1064  	jarl _LogHalPrint, r31
+00000804                     1065  .BB.LABEL.21_4:	; return
+00000804                     1066  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 695
+00000804 42063F00            1067  	dispose 0x00000004, 0x00000001, [r31]
+00000808                     1068  _TimerHalSetMode:
+00000808                     1069  	.stack _TimerHalSetMode = 0
+00000808                     1070  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 697
+00000808 7F00                1071  	jmp [r31]
+0000080A                     1072  _TimerHalTestMain:
+0000080A                     1073  	.stack _TimerHalTestMain = 44
+0000080A                     1074  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 711
+0000080A 94072100            1075  	prepare 0x00000001, 0x00000028
+0000080E 20161400            1076  	movea 0x00000014, r0, r2
+00000812 002A                1077  	mov 0x00000000, r5
+00000814 233E1400            1078  	movea 0x00000014, r3, r7
+00000818                     1079  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 714
+00000818 C711                1080  	add r7, r2
+0000081A 8505                1081  	br9 .BB.LABEL.23_2
+0000081C                     1082  .BB.LABEL.23_1:	; entry
+0000081C 472F0000            1083  	st.b r5, 0x00000000[r7]
+00000820 413A                1084  	add 0x00000001, r7
+00000822                     1085  .BB.LABEL.23_2:	; entry
+00000822 E711                1086  	cmp r7, r2
+00000824 8A05                1087  	bnz9 .BB.LABEL.23_1
+00000826                     1088  .BB.LABEL.23_3:	; entry
+00000826 43071400            1089  	st.b r0, 0x00000014[r3]
+0000082A                     1090  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 715
+0000082A 43071300            1091  	st.b r0, 0x00000013[r3]
+0000082E                     1092  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 720
+0000082E 40160000            1093  	movhi HIGHW1(#_count.3.TimerHalTestMain), r0, r2
+00000832 E22F0100            1094  	ld.hu LOWW(#_count.3.TimerHalTestMain)[r2], r5
+00000836 053E0100            1095  	addi 0x00000001, r5, r7
+0000083A 623F0000            1096  	st.h r7, LOWW(#_count.3.TimerHalTestMain)[r2]
+0000083E 20168813            1097  	movea 0x00001388, r0, r2
+00000842 E6178202            1098  	divhu r6, r2, r0
+00000846 E229                1099  	cmp r2, r5
+00000848 8605                1100  	blt9 .BB.LABEL.23_7
+0000084A                     1101  .BB.LABEL.23_4:	; if_break_bb
+0000084A                     1102  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 724
+0000084A 40160000            1103  	movhi HIGHW1(#_count.3.TimerHalTestMain), r0, r2
+0000084E 62070000            1104  	st.h r0, LOWW(#_count.3.TimerHalTestMain)[r2]
+00000852                     1105  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 728
+00000852                     1106  	mov #.STR.1474, r6
+00000852 260600000000            -- mov         0x0,r6
+00000858 80FF0000            1107  	jarl _LogHalPrint, r31
+0000085C                     1108  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 729
+0000085C 43071300            1109  	st.b r0, 0x00000013[r3]
+00000860 074A                1110  	mov 0x00000007, r9
+00000862 23461400            1111  	movea 0x00000014, r3, r8
+00000866 233E1300            1112  	movea 0x00000013, r3, r7
+0000086A 20363200            1113  	movea 0x00000032, r0, r6
+0000086E                     1114  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 730
+0000086E 80FF0000            1115  	jarl _I2cReadRegisterValue, r31
+00000872                     1116  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 731
+00000872 6052                1117  	cmp 0x00000000, r10
+00000874 8205                1118  	bz9 .BB.LABEL.23_6
+00000876                     1119  .BB.LABEL.23_5:	; if_then_bb23
+00000876                     1120  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 733
+00000876                     1121  	mov #.STR.1475, r6
+00000876 260600000000            -- mov         0x0,r6
+0000087C 80FF0000            1122  	jarl _LogHalPrint, r31
+00000880                     1123  .BB.LABEL.23_6:	; if_break_bb24
+00000880                     1124  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 735
+00000880 83171500            1125  	ld.bu 0x00000014[r3], r2
+00000884 A32F1500            1126  	ld.bu 0x00000015[r3], r5
+00000888 83371700            1127  	ld.bu 0x00000016[r3], r6
+0000088C A3571700            1128  	ld.bu 0x00000017[r3], r10
+00000890 834F1900            1129  	ld.bu 0x00000018[r3], r9
+00000894 A3471900            1130  	ld.bu 0x00000019[r3], r8
+00000898 833F1B00            1131  	ld.bu 0x0000001A[r3], r7
+0000089C 63170D00            1132  	st.w r2, 0x0000000C[r3]
+000008A0 632F0900            1133  	st.w r5, 0x00000008[r3]
+000008A4 63370500            1134  	st.w r6, 0x00000004[r3]
+000008A8 63570100            1135  	st.w r10, 0x00000000[r3]
+000008AC                     1136  	mov #.STR.1476, r6
+000008AC 260600000000            -- mov         0x0,r6
+000008B2 80FF0000            1137  	jarl _LogHalPrint, r31
+000008B6                     1138  .BB.LABEL.23_7:	; return
+000008B6                     1139  	.line "D:/wk/sirun/project/dazhong/code/mcu_app/Srcode/hal/source/timerHal.c", 763
+000008B6 54063F00            1140  	dispose 0x00000028, 0x00000001, [r31]
+00000000                     1141  	.section .bss, bss
+00000000                     1142  	.align 4
+00000000                     1143  _g_peripheralTimer.1:
+00000000                     1144  	.ds (16)
+00000000                     1145  	.section .data, data
+00000000                     1146  	.align 4
+00000000                     1147  _g_sleepStartUtc.2:
+00000000 00000000            1148  	.ds (4)
+00000004                     1149  	.align 2
+00000004                     1150  _count.3.TimerHalTestMain:
+00000004 0000                1151  	.ds (2)
+00000006                     1152  _setAlarmFlag.4.TimerHalTestMain:
+00000006 00                  1153  	.ds (1)
+00000000                     1154  	.section .const, const
+00000000                     1155  .STR.1:
+00000000 72                  1156  	.db 0x72,0x74,0x63,0x20,0x72,0x65,0x61,0x64,0x20,0x49,0x44,0x2C,0x20,0x72,0x65,0x67
+00000001 74              
+00000002 63              
+00000003 20              
+00000004 72              
+00000005 65              
+00000006 61              
+00000007 64              
+00000008 20              
+00000009 49              
+0000000A 44              
+0000000B 2C              
+0000000C 20              
+0000000D 72              
+0000000E 65              
+0000000F 67              
+00000010 20                  1157  	.db 0x20,0x76,0x61,0x6C,0x75,0x65,0x20,0x3D,0x20,0x25,0x30,0x32,0x58,0x2D,0x25,0x30
+00000011 76              
+00000012 61              
+00000013 6C              
+00000014 75              
+00000015 65              
+00000016 20              
+00000017 3D              
+00000018 20              
+00000019 25              
+0000001A 30              
+0000001B 32              
+0000001C 58              
+0000001D 2D              
+0000001E 25              
+0000001F 30              
+00000020 32                  1158  	.db 0x32,0x58,0x2D,0x25,0x30,0x32,0x58,0x2C,0x20,0x25,0x30,0x32,0x58,0x2C,0x20,0x25
+00000021 58              
+00000022 2D              
+00000023 25              
+00000024 30              
+00000025 32              
+00000026 58              
+00000027 2C              
+00000028 20              
+00000029 25              
+0000002A 30              
+0000002B 32              
+0000002C 58              
+0000002D 2C              
+0000002E 20              
+0000002F 25              
+00000030 30                  1159  	.db 0x30,0x32,0x58,0x20,0x25,0x30,0x32,0x58,0x2C,0x20,0x25,0x30,0x32,0x58,0x20,0x25
+00000031 32              
+00000032 58              
+00000033 20              
+00000034 25              
+00000035 30              
+00000036 32              
+00000037 58              
+00000038 2C              
+00000039 20              
+0000003A 25              
+0000003B 30              
+0000003C 32              
+0000003D 58              
+0000003E 20              
+0000003F 25              
+00000040 30                  1160  	.db 0x30,0x32,0x58,0x0D,0x0A
+00000041 32              
+00000042 58              
+00000043 0D              
+00000044 0A              
+00000045 00                  1161  	.ds (1)
+00000046                     1162  .STR.189:
+00000046 72                  1163  	.db 0x72,0x74,0x63,0x20,0x69,0x6E,0x69,0x74,0x20,0x66,0x61,0x69,0x6C,0x0D,0x0A
+00000047 74              
+00000048 63              
+00000049 20              
+0000004A 69              
+0000004B 6E              
+0000004C 69              
+0000004D 74              
+0000004E 20              
+0000004F 66              
+00000050 61              
+00000051 69              
+00000052 6C              
+00000053 0D              
+00000054 0A              
+00000055 00                  1164  	.ds (1)
+00000056                     1165  .STR.1241:
+00000056 1F                  1166  	.db 0x1F,0x1C,0x1F,0x1E,0x1F,0x1E,0x1F,0x1F,0x1E,0x1F,0x1E,0x1F
+00000057 1C              
+00000058 1F              
+00000059 1E              
+0000005A 1F              
+0000005B 1E              
+0000005C 1F              
+0000005D 1F              
+0000005E 1E              
+0000005F 1F              
+00000060 1E              
+00000061 1F              
+00000062                     1167  .STR.1306:
+00000062 1F                  1168  	.db 0x1F,0x1C,0x1F,0x1E,0x1F,0x1E,0x1F,0x1F,0x1E,0x1F,0x1E,0x1F
+00000063 1C              
+00000064 1F              
+00000065 1E              
+00000066 1F              
+00000067 1E              
+00000068 1F              
+00000069 1F              
+0000006A 1E              
+0000006B 1F              
+0000006C 1E              
+0000006D 1F              
+0000006E                     1169  .STR.1333:
+0000006E 72                  1170  	.db 0x72,0x65,0x67,0x73,0x20,0x3D,0x20,0x25,0x30,0x32,0x58,0x20,0x25,0x30,0x32,0x58
+0000006F 65              
+00000070 67              
+00000071 73              
+00000072 20              
+00000073 3D              
+00000074 20              
+00000075 25              
+00000076 30              
+00000077 32              
+00000078 58              
+00000079 20              
+0000007A 25              
+0000007B 30              
+0000007C 32              
+0000007D 58              
+0000007E 20                  1171  	.db 0x20,0x25,0x30,0x32,0x58,0x20,0x25,0x30,0x32,0x58,0x20,0x25,0x30,0x32,0x58,0x20
+0000007F 25              
+00000080 30              
+00000081 32              
+00000082 58              
+00000083 20              
+00000084 25              
+00000085 30              
+00000086 32              
+00000087 58              
+00000088 20              
+00000089 25              
+0000008A 30              
+0000008B 32              
+0000008C 58              
+0000008D 20              
+0000008E 25                  1172  	.db 0x25,0x30,0x32,0x58,0x20,0x25,0x30,0x32,0x58,0x0A
+0000008F 30              
+00000090 32              
+00000091 58              
+00000092 20              
+00000093 25              
+00000094 30              
+00000095 32              
+00000096 58              
+00000097 0A              
+00000098 00                  1173  	.ds (1)
+00000099                     1174  .STR.1353:
+00000099 72                  1175  	.db 0x72,0x74,0x63,0x20,0x72,0x65,0x61,0x64,0x20,0x74,0x69,0x6D,0x65,0x20,0x66,0x61
+0000009A 74              
+0000009B 63              
+0000009C 20              
+0000009D 72              
+0000009E 65              
+0000009F 61              
+000000A0 64              
+000000A1 20              
+000000A2 74              
+000000A3 69              
+000000A4 6D              
+000000A5 65              
+000000A6 20              
+000000A7 66              
+000000A8 61              
+000000A9 69                  1176  	.db 0x69,0x6C,0x0D,0x0A
+000000AA 6C              
+000000AB 0D              
+000000AC 0A              
+000000AD 00                  1177  	.ds (1)
+000000AE                     1178  .STR.1382:
+000000AE 72                  1179  	.db 0x72,0x65,0x61,0x64,0x20,0x43,0x54,0x52,0x31,0x20,0x66,0x61,0x69,0x6C,0x0D,0x0A
+000000AF 65              
+000000B0 61              
+000000B1 64              
+000000B2 20              
+000000B3 43              
+000000B4 54              
+000000B5 52              
+000000B6 31              
+000000B7 20              
+000000B8 66              
+000000B9 61              
+000000BA 69              
+000000BB 6C              
+000000BC 0D              
+000000BD 0A              
+000000BE 00                  1180  	.ds (1)
+000000BF                     1181  .STR.1383:
+000000BF 77                  1182  	.db 0x77,0x72,0x69,0x74,0x65,0x20,0x43,0x54,0x52,0x31,0x20,0x66,0x61,0x69,0x6C,0x0D
+000000C0 72              
+000000C1 69              
+000000C2 74              
+000000C3 65              
+000000C4 20              
+000000C5 43              
+000000C6 54              
+000000C7 52              
+000000C8 31              
+000000C9 20              
+000000CA 66              
+000000CB 61              
+000000CC 69              
+000000CD 6C              
+000000CE 0D              
+000000CF 0A                  1183  	.db 0x0A
+000000D0 00                  1184  	.ds (1)
+000000D1                     1185  .STR.1384:
+000000D1 77                  1186  	.db 0x77,0x72,0x69,0x74,0x65,0x20,0x61,0x6C,0x61,0x72,0x6D,0x20,0x74,0x69,0x6D,0x65
+000000D2 72              
+000000D3 69              
+000000D4 74              
+000000D5 65              
+000000D6 20              
+000000D7 61              
+000000D8 6C              
+000000D9 61              
+000000DA 72              
+000000DB 6D              
+000000DC 20              
+000000DD 74              
+000000DE 69              
+000000DF 6D              
+000000E0 65              
+000000E1 20                  1187  	.db 0x20,0x66,0x61,0x69,0x6C,0x0D,0x0A
+000000E2 66              
+000000E3 61              
+000000E4 69              
+000000E5 6C              
+000000E6 0D              
+000000E7 0A              
+000000E8 00                  1188  	.ds (1)
+000000E9                     1189  .STR.1385:
+000000E9 72                  1190  	.db 0x72,0x65,0x61,0x64,0x20,0x43,0x54,0x52,0x32,0x20,0x66,0x61,0x69,0x6C,0x0D,0x0A
+000000EA 65              
+000000EB 61              
+000000EC 64              
+000000ED 20              
+000000EE 43              
+000000EF 54              
+000000F0 52              
+000000F1 32              
+000000F2 20              
+000000F3 66              
+000000F4 61              
+000000F5 69              
+000000F6 6C              
+000000F7 0D              
+000000F8 0A              
+000000F9 00                  1191  	.ds (1)
+000000FA                     1192  .STR.1386:
+000000FA 77                  1193  	.db 0x77,0x72,0x69,0x74,0x65,0x20,0x43,0x54,0x52,0x32,0x20,0x66,0x61,0x69,0x6C,0x0D
+000000FB 72              
+000000FC 69              
+000000FD 74              
+000000FE 65              
+000000FF 20              
+00000100 43              
+00000101 54              
+00000102 52              
+00000103 32              
+00000104 20              
+00000105 66              
+00000106 61              
+00000107 69              
+00000108 6C              
+00000109 0D              
+0000010A 0A                  1194  	.db 0x0A
+0000010B 00                  1195  	.ds (1)
+0000010C                     1196  .STR.1402:
+0000010C 67                  1197  	.db 0x67,0x65,0x74,0x20,0x72,0x74,0x63,0x20,0x74,0x69,0x6D,0x65,0x20,0x66,0x61,0x69
+0000010D 65              
+0000010E 74              
+0000010F 20              
+00000110 72              
+00000111 74              
+00000112 63              
+00000113 20              
+00000114 74              
+00000115 69              
+00000116 6D              
+00000117 65              
+00000118 20              
+00000119 66              
+0000011A 61              
+0000011B 69              
+0000011C 6C                  1198  	.db 0x6C,0x0D,0x0A
+0000011D 0D              
+0000011E 0A              
+0000011F 00                  1199  	.ds (1)
+00000120                     1200  .STR.1403:
+00000120 70                  1201  	.db 0x70,0x72,0x65,0x70,0x61,0x72,0x65,0x20,0x73,0x6C,0x65,0x65,0x70,0x20,0x61,0x6C
+00000121 72              
+00000122 65              
+00000123 70              
+00000124 61              
+00000125 72              
+00000126 65              
+00000127 20              
+00000128 73              
+00000129 6C              
+0000012A 65              
+0000012B 65              
+0000012C 70              
+0000012D 20              
+0000012E 61              
+0000012F 6C              
+00000130 61                  1202  	.db 0x61,0x72,0x6D,0x20,0x66,0x61,0x69,0x6C,0x2C,0x20,0x6E,0x6F,0x77,0x3D,0x25,0x6C
+00000131 72              
+00000132 6D              
+00000133 20              
+00000134 66              
+00000135 61              
+00000136 69              
+00000137 6C              
+00000138 2C              
+00000139 20              
+0000013A 6E              
+0000013B 6F              
+0000013C 77              
+0000013D 3D              
+0000013E 25              
+0000013F 6C              
+00000140 75                  1203  	.db 0x75,0x20,0x73,0x6C,0x65,0x65,0x70,0x3D,0x25,0x6C,0x75,0x20,0x61,0x6C,0x61,0x72
+00000141 20              
+00000142 73              
+00000143 6C              
+00000144 65              
+00000145 65              
+00000146 70              
+00000147 3D              
+00000148 25              
+00000149 6C              
+0000014A 75              
+0000014B 20              
+0000014C 61              
+0000014D 6C              
+0000014E 61              
+0000014F 72              
+00000150 6D                  1204  	.db 0x6D,0x3D,0x25,0x6C,0x75,0x0D,0x0A
+00000151 3D              
+00000152 25              
+00000153 6C              
+00000154 75              
+00000155 0D              
+00000156 0A              
+00000157 00                  1205  	.ds (1)
+00000158                     1206  .STR.1404:
+00000158 70                  1207  	.db 0x70,0x72,0x65,0x70,0x61,0x72,0x65,0x20,0x73,0x6C,0x65,0x65,0x70,0x20,0x6F,0x6B
+00000159 72              
+0000015A 65              
+0000015B 70              
+0000015C 61              
+0000015D 72              
+0000015E 65              
+0000015F 20              
+00000160 73              
+00000161 6C              
+00000162 65              
+00000163 65              
+00000164 70              
+00000165 20              
+00000166 6F              
+00000167 6B              
+00000168 2C                  1208  	.db 0x2C,0x20,0x6E,0x6F,0x77,0x3D,0x25,0x6C,0x75,0x20,0x73,0x6C,0x65,0x65,0x70,0x3D
+00000169 20              
+0000016A 6E              
+0000016B 6F              
+0000016C 77              
+0000016D 3D              
+0000016E 25              
+0000016F 6C              
+00000170 75              
+00000171 20              
+00000172 73              
+00000173 6C              
+00000174 65              
+00000175 65              
+00000176 70              
+00000177 3D              
+00000178 25                  1209  	.db 0x25,0x6C,0x75,0x20,0x61,0x6C,0x61,0x72,0x6D,0x3D,0x25,0x6C,0x75,0x0D,0x0A
+00000179 6C              
+0000017A 75              
+0000017B 20              
+0000017C 61              
+0000017D 6C              
+0000017E 61              
+0000017F 72              
+00000180 6D              
+00000181 3D              
+00000182 25              
+00000183 6C              
+00000184 75              
+00000185 0D              
+00000186 0A              
+00000187 00                  1210  	.ds (1)
+00000188                     1211  .STR.1434:
+00000188 72                  1212  	.db 0x72,0x65,0x61,0x64,0x20,0x46,0x4C,0x41,0x47,0x31,0x20,0x66,0x61,0x69,0x6C,0x0D
+00000189 65              
+0000018A 61              
+0000018B 64              
+0000018C 20              
+0000018D 46              
+0000018E 4C              
+0000018F 41              
+00000190 47              
+00000191 31              
+00000192 20              
+00000193 66              
+00000194 61              
+00000195 69              
+00000196 6C              
+00000197 0D              
+00000198 0A                  1213  	.db 0x0A
+00000199 00                  1214  	.ds (1)
+0000019A                     1215  .STR.1435:
+0000019A 63                  1216  	.db 0x63,0x6C,0x65,0x61,0x72,0x20,0x49,0x4E,0x54,0x41,0x46,0x20,0x66,0x61,0x69,0x6C
+0000019B 6C              
+0000019C 65              
+0000019D 61              
+0000019E 72              
+0000019F 20              
+000001A0 49              
+000001A1 4E              
+000001A2 54              
+000001A3 41              
+000001A4 46              
+000001A5 20              
+000001A6 66              
+000001A7 61              
+000001A8 69              
+000001A9 6C              
+000001AA 0D                  1217  	.db 0x0D,0x0A
+000001AB 0A              
+000001AC 00                  1218  	.ds (1)
+000001AD                     1219  .STR.1474:
+000001AD 72                  1220  	.db 0x72,0x74,0x63,0x20,0x72,0x65,0x61,0x64,0x20,0x74,0x69,0x6D,0x65,0x2C,0x20
+000001AE 74              
+000001AF 63              
+000001B0 20              
+000001B1 72              
+000001B2 65              
+000001B3 61              
+000001B4 64              
+000001B5 20              
+000001B6 74              
+000001B7 69              
+000001B8 6D              
+000001B9 65              
+000001BA 2C              
+000001BB 20              
+000001BC 00                  1221  	.ds (1)
+000001BD                     1222  .STR.1475:
+000001BD 72                  1223  	.db 0x72,0x74,0x63,0x20,0x72,0x65,0x61,0x64,0x20,0x74,0x69,0x6D,0x65,0x20,0x66,0x61
+000001BE 74              
+000001BF 63              
+000001C0 20              
+000001C1 72              
+000001C2 65              
+000001C3 61              
+000001C4 64              
+000001C5 20              
+000001C6 74              
+000001C7 69              
+000001C8 6D              
+000001C9 65              
+000001CA 20              
+000001CB 66              
+000001CC 61              
+000001CD 69                  1224  	.db 0x69,0x6C,0x0D,0x0A
+000001CE 6C              
+000001CF 0D              
+000001D0 0A              
+000001D1 00                  1225  	.ds (1)
+000001D2                     1226  .STR.1476:
+000001D2 72                  1227  	.db 0x72,0x65,0x67,0x20,0x76,0x61,0x6C,0x75,0x65,0x20,0x3D,0x20,0x25,0x30,0x32,0x58
+000001D3 65              
+000001D4 67              
+000001D5 20              
+000001D6 76              
+000001D7 61              
+000001D8 6C              
+000001D9 75              
+000001DA 65              
+000001DB 20              
+000001DC 3D              
+000001DD 20              
+000001DE 25              
+000001DF 30              
+000001E0 32              
+000001E1 58              
+000001E2 2D                  1228  	.db 0x2D,0x25,0x30,0x32,0x58,0x2D,0x25,0x30,0x32,0x58,0x20,0x25,0x30,0x32,0x58,0x20
+000001E3 25              
+000001E4 30              
+000001E5 32              
+000001E6 58              
+000001E7 2D              
+000001E8 25              
+000001E9 30              
+000001EA 32              
+000001EB 58              
+000001EC 20              
+000001ED 25              
+000001EE 30              
+000001EF 32              
+000001F0 58              
+000001F1 20              
+000001F2 25                  1229  	.db 0x25,0x30,0x32,0x58,0x3A,0x25,0x30,0x32,0x58,0x3A,0x25,0x30,0x32,0x58,0x0D,0x0A
+000001F3 30              
+000001F4 32              
+000001F5 58              
+000001F6 3A              
+000001F7 25              
+000001F8 30              
+000001F9 32              
+000001FA 58              
+000001FB 3A              
+000001FC 25              
+000001FD 30              
+000001FE 32              
+000001FF 58              
+00000200 0D              
+00000201 0A              
+00000202 00                  1230  	.ds (1)
+
+Section List
+Attr     Size                Name
+
+TEXT         2234 (000008BA) .text
+DATA            7 (00000007) .data
+BSS            16 (00000010) .bss
+CONST         515 (00000203) .const
+
+Command Line Parameter
+-Xcpu=g3kh -Xreg_mode=32 -Xep=callee -Xcharacter_set=none -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\diagnostic -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\parameter_store -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu\port -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu\uart -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu\iic -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\vehicle_data_to_mpu -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\power_manage -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\mcu_cpu_sync -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\remote_control -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\can_cycle_send -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\app\project_configure -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\sdk\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\commonLib\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Srcode\hal\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\icu\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Icu_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\vss -ID:\wk\sirun\project\dazhong\code\mcu_app\ASW\CDD_FVM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\EEIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanTSyn -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\StbM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CSM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\RSA -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\RandomGen\CTR_DRBG -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\MAC\CMAC -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\Hash\sha256 -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\dh -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO\AES -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CRYPTO -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Crypto\CryInterface -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\SecOC -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\NvM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\MemIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Memory\Fee -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\WdgM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\WdgIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Wdg_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Gpt_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Fls_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\wdg\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\gpt\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\fls\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\IpduM -ID:\wk\sirun\project\dazhong\code\mcu_app\ASW\APP -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\BswM -ID:\wk\sirun\project\dazhong\code\mcu_app\ASW\BSW_Ext -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\Dcm -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanTp -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Dem -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Libraries\E2E -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Libraries\Crc -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\NmIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanNm -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config\RTE\Rte -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config\RTE\SchM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Libraries\IStd -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\EcuM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\ComM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanSM -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\CAN\CanIf -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\Com -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Communication\Common\PDUR -ID:\wk\sirun\project\dazhong\code\mcu_app\Cpu -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\CommonInclude -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\BSW_Config\RH850F1K -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Extend\inc -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Kernel\inc -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Portable\Mcu -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\SystemServices\Os\Portable\Processor -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Adc_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Can_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Dio_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Mcu_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Config\MCAL_Config\Port_OutPut\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\adc\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\can\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\dio\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\general -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\mcu\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\port\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\CanGeneral\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\Det\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\MemIf\include -ID:\wk\sirun\project\dazhong\code\mcu_app\Bsw\Mcal\stubs\SchM\include -DRH850_F1KM_S1_2MB -Xprn_path=DefaultBuild -Xno_warning=50013 -oD:\wk\sirun\project\dazhong\code\mcu_app\Toolchain\CSPLUS_V81200\DefaultBuild\timerHal.obj D:\wk\sirun\project\dazhong\code\mcu_app\Toolchain\CSPLUS_V81200\DefaultBuild\timerHal.asm 
+

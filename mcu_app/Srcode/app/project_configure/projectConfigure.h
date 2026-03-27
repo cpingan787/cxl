@@ -56,7 +56,9 @@ typedef enum {
     CONFIG_ITEM_HSMID,
     CONFIG_ITEM_ENCRYPTION_ALGORITHM_FLAG,
 
-
+    CONFIG_ITEM_SOFTWARE_NUMBER,
+    CONFIG_ITEM_HARDWARE_NUMBER,
+    CONFIG_ITEM_SOFTWARE_VERSION,
 
 
 
@@ -390,23 +392,23 @@ static int16_t GetNadIMEI(uint8_t *pVersion,uint32_t *pLength);
 *************************************************/
 static int16_t GetNadSWVersion(uint8_t *pVersion,uint32_t *pLength);
 
-/*************************************************
-  Function:       GetNadHWVersion DID:B006
-  Description:    获取NAD硬件版本号
-  Input:          pVersion - 版本缓冲区
-                  pLength  - 数据长度指针
-  Return:         0-成功, 其他-失败
-*************************************************/
-static int16_t GetNadHWVersion(uint8_t *pVersion,uint32_t *pLength);
+// /*************************************************
+//   Function:       GetNadHWVersion DID:B006
+//   Description:    获取NAD硬件版本号
+//   Input:          pVersion - 版本缓冲区
+//                   pLength  - 数据长度指针
+//   Return:         0-成功, 其他-失败
+// *************************************************/
+// static int16_t GetNadHWVersion(uint8_t *pVersion,uint32_t *pLength);
 
-/*************************************************
-  Function:       GetUbloxF9KVersion DID:B00C
-  Description:    获取UbloxF9K版本号
-  Input:          pVersion - 版本缓冲区
-                  pLength  - 数据长度指针
-  Return:         0-成功, 其他-失败
-*************************************************/
-static int16_t GetUbloxF9KVersion(uint8_t *pVersion,uint32_t *pLength);
+// /*************************************************
+//   Function:       GetUbloxF9KVersion DID:B00C
+//   Description:    获取UbloxF9K版本号
+//   Input:          pVersion - 版本缓冲区
+//                   pLength  - 数据长度指针
+//   Return:         0-成功, 其他-失败
+// *************************************************/
+// static int16_t GetUbloxF9KVersion(uint8_t *pVersion,uint32_t *pLength);
 
 /*************************************************
   Function:       GetSignaturePublicKey DID:B201
@@ -435,6 +437,33 @@ static int16_t GetHSMID(uint8_t *pVersion,uint32_t *pLength);
 *************************************************/
 static int16_t GetEncryptionAlgorithmFlag(uint8_t *pVersion,uint32_t *pLength);
 
+/*************************************************
+  Function:       GetSoftwareNumber 参数同步
+  Description:    获取软件版本号
+  Input:          pData - 数据缓冲区
+                  pLength  - 数据长度指针
+  Return:         0-成功, 其他-失败
+*************************************************/
+static int16_t GetSoftwareNumber(uint8_t *pData, uint32_t *pLength);
 
+/*************************************************
+  Function:       GetHardwareNumber 参数同步
+  Description:    获取硬件版本号
+  Input:          pData - 数据缓冲区
+                  pLength  - 数据长度指针
+  Return:         0-成功, 其他-失败
+*************************************************/
+static int16_t GetHardwareNumber(uint8_t *pData, uint32_t *pLength);
+
+/*************************************************
+  Function:       GetSoftwareVersion 参数同步
+  Description:    获取软件版本
+  Input:          pData - 数据缓冲区
+                  pLength  - 数据长度指针
+  Return:         0-成功, 其他-失败
+*************************************************/
+static int16_t GetSoftwareVersion(uint8_t *pData, uint32_t *pLength);
+
+int16_t ProjectConfigSetMpuVersion(const uint8_t *pMpuVersion, uint16_t versionLen);
 
 #endif
