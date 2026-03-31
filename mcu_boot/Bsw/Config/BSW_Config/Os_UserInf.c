@@ -58,7 +58,7 @@
 /*=======[T A S K S]==========================================*/
 /* PRQA S 1532++ */ /* VL_QAC_OneFunRef */
 /*OsTask_0: Core0(CPU),Type = BASIC, Priority = 1*/
-uint32 index = 0;
+uint32 task_cnt = 0;
 extern void TstCanSendMessage(uint32 canId, uint32 data);
 TASK(OsTask_0)
 {
@@ -66,9 +66,9 @@ TASK(OsTask_0)
     /** DO NOT CHANGE THIS COMMENT!
     * <USERBLOCK OsTask_0>
     */
-   static uint32 aa = 201;
-   static uint32 time = 0;
-   if (aa == 201) 
+   static uint32 sys_cnt = 201;
+   static uint32 run_time = 0;
+   if (sys_cnt == 201) 
    {
         LogHalInit(1);
         MpuHalInit();
@@ -77,16 +77,16 @@ TASK(OsTask_0)
         uint8 flag = BootM_GetFlag();
         FirmwareUpdate_UnlockMcuFlashAck();
         TBOX_PRINT("boot start: %d\n", flag);
-        aa = 0;
+        sys_cnt = 0;
     }
 #if 1
-    aa++;
-    if (aa == 5) // 1s
+    sys_cnt++;
+    if (sys_cnt == 5) // 1s
     {
         MpuHalTxTask();
-        // TBOX_PRINT("boot1 cycle %ds\n",time);
-        aa = 0;
-        time++;
+        // TBOX_PRINT("boot1 cycle %ds\n",run_time);
+        sys_cnt = 0;
+        run_time++;
     }
 #endif
 
@@ -96,10 +96,10 @@ TASK(OsTask_0)
     Dcm_MainFunction();
     MpuHalUartTimerCallback();
     McuMpuSyncTaskMain();
-	index++;
-	if(index == 100)
+	task_cnt++;
+	if(task_cnt == 100)
 	{
-		index = 0;
+		task_cnt = 0;
     	//TstCanSendMessage();
 		
 		//Can_MainFunction_Read();

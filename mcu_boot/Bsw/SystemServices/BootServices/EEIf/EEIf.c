@@ -210,6 +210,7 @@ void EEIf_Init(void)
 {
   //  uint8 tem = E_OK;
     Fls_Init(FlsConfigSet);
+	FlsIf_Init();
   //  return tem;
 }
 
@@ -369,7 +370,6 @@ static uint8 DataReadBlockProcess(uint8* buf)
             {
                 CommF_DataCopy(buf, TargetAddressPtr, DATALEN);
                 tem = E_OK;
-                break;
             }
             else
             {

@@ -190,11 +190,6 @@ Typedef definitions
 /***********************************************************************************************************************
 Global functions
 ***********************************************************************************************************************/
-void R_UART1_Create(void);
-void R_UART1_Start(void);
-void R_UART1_Stop(void);
-MD_STATUS R_UART1_Send(uint8_t * const tx_buf, uint16_t tx_num);
-MD_STATUS R_UART1_Receive(uint8_t * const rx_buf, uint16_t rx_num);
 void R_UART4_Create(void);
 void R_UART4_Start(void);
 void R_UART4_Stop(void);
@@ -205,13 +200,9 @@ void R_UART5_Start(void);
 void R_UART5_Stop(void);
 MD_STATUS R_UART5_Send(uint8_t * const tx_buf, uint16_t tx_num);
 MD_STATUS R_UART5_Receive(uint8_t * const rx_buf, uint16_t rx_num);
-static void r_uart1_callback_receiveend(void);
-static void r_uart1_callback_sendend(void);
-static void r_uart1_callback_error(uint8_t err_type);
-static void r_uart4_callback_receiveend(void);
+
 static void r_uart4_callback_sendend(void);
 static void r_uart4_callback_error(uint8_t err_type);
-static void r_uart5_callback_receiveend(void);
 static void r_uart5_callback_sendend(void);
 static void r_uart5_callback_error(uint8_t err_type);
 

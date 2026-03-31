@@ -78,27 +78,6 @@ void R_UART4_Create(void)
 {
     /* Set LIN reset mode */
     RLN34.LCUC = _UART_LIN_RESET_MODE_CAUSED;
-    /* Disable ICRLIN34UR0 operation and clear request */
-    // INTC2.ICRLIN34UR0.BIT.MKRLIN34UR0 = _INT_PROCESSING_DISABLED;
-    // INTC2.ICRLIN34UR0.BIT.RFRLIN34UR0 = _INT_REQUEST_NOT_OCCUR;
-    // /* Disable ICRLIN34UR1 operation and clear request */
-    // INTC2.ICRLIN34UR1.BIT.MKRLIN34UR1 = _INT_PROCESSING_DISABLED;
-    // INTC2.ICRLIN34UR1.BIT.RFRLIN34UR1 = _INT_REQUEST_NOT_OCCUR;
-    // /* Disable ICRLIN34UR2 operation and clear request */
-    // INTC2.ICRLIN34UR2.BIT.MKRLIN34UR2 = _INT_PROCESSING_DISABLED;
-    // INTC2.ICRLIN34UR2.BIT.RFRLIN34UR2 = _INT_REQUEST_NOT_OCCUR;
-    // /* Set ICRLIN34UR0 table method */
-    // INTC2.ICRLIN34UR0.BIT.TBRLIN34UR0 = _INT_DIRECT_VECTOR;
-    // /* Set ICRLIN34UR0 priority */
-    // INTC2.ICRLIN34UR0.UINT16 &= _INT_PRIORITY_LOWEST;
-    // /* Set ICRLIN34UR1 table method */
-    // INTC2.ICRLIN34UR1.BIT.TBRLIN34UR1 = _INT_DIRECT_VECTOR;
-    // /* Set ICRLIN34UR1 priority */
-    // INTC2.ICRLIN34UR1.UINT16 &= _INT_PRIORITY_LOWEST;
-    // /* Set ICRLIN34UR2 table method */
-    // INTC2.ICRLIN34UR2.BIT.TBRLIN34UR2 = _INT_DIRECT_VECTOR;
-    // /* Set ICRLIN34UR2 priority */
-    // INTC2.ICRLIN34UR2.UINT16 &= _INT_PRIORITY_LOWEST;
     /* Set UART4 setting */
     RLN34.LWBR = _UART_6_SAMPLING | _UART_PRESCALER_CLOCK_SELECT_1;
     RLN34.LBRP01.UINT16 = _UART4_BAUD_RATE_PRESCALER;
@@ -139,15 +118,6 @@ void R_UART4_Start(void)
 {
     /* Enable UART4 operation */
     RLN34.LUOER |= _UART_RECEPTION_ENABLED | _UART_TRABSMISSION_ENABLED;
-    // /* Clear ICRLIN34UR0 interrupt request and enable operation */
-    // INTC2.ICRLIN34UR0.BIT.RFRLIN34UR0 = _INT_REQUEST_NOT_OCCUR;
-    // INTC2.ICRLIN34UR0.BIT.MKRLIN34UR0 = _INT_PROCESSING_ENABLED;    
-    // /* Clear ICRLIN34UR1 interrupt request and enable operation */
-    // INTC2.ICRLIN34UR1.BIT.RFRLIN34UR1 = _INT_REQUEST_NOT_OCCUR;
-    // INTC2.ICRLIN34UR1.BIT.MKRLIN34UR1 = _INT_PROCESSING_ENABLED;    
-    // /* Clear ICRLIN34UR2 interrupt request and enable operation */
-    // INTC2.ICRLIN34UR2.BIT.RFRLIN34UR2 = _INT_REQUEST_NOT_OCCUR;
-    // INTC2.ICRLIN34UR2.BIT.MKRLIN34UR2 = _INT_PROCESSING_ENABLED;    
 }
 /***********************************************************************************************************************
 * Function Name: R_UART4_Stop
@@ -260,27 +230,6 @@ void R_UART5_Create(void)
 {
     /* Set LIN reset mode */
     RLN35.LCUC = _UART_LIN_RESET_MODE_CAUSED;
-    // /* Disable ICRLIN35UR0 operation and clear request */
-    // INTC2.ICRLIN35UR0.BIT.MKRLIN35UR0 = _INT_PROCESSING_DISABLED;
-    // INTC2.ICRLIN35UR0.BIT.RFRLIN35UR0 = _INT_REQUEST_NOT_OCCUR;
-    // /* Disable ICRLIN35UR1 operation and clear request */
-    // INTC2.ICRLIN35UR1.BIT.MKRLIN35UR1 = _INT_PROCESSING_DISABLED;
-    // INTC2.ICRLIN35UR1.BIT.RFRLIN35UR1 = _INT_REQUEST_NOT_OCCUR;
-    // /* Disable ICRLIN35UR2 operation and clear request */
-    // INTC2.ICRLIN35UR2.BIT.MKRLIN35UR2 = _INT_PROCESSING_DISABLED;
-    // INTC2.ICRLIN35UR2.BIT.RFRLIN35UR2 = _INT_REQUEST_NOT_OCCUR;
-    // /* Set ICRLIN35UR0 table method */
-    // INTC2.ICRLIN35UR0.BIT.TBRLIN35UR0 = _INT_TABLE_VECTOR;
-    // /* Set ICRLIN35UR0 priority */
-    // INTC2.ICRLIN35UR0.UINT16 &= _INT_PRIORITY_LOWEST;
-    // /* Set ICRLIN35UR1 table method */
-    // INTC2.ICRLIN35UR1.BIT.TBRLIN35UR1 = _INT_TABLE_VECTOR;
-    // /* Set ICRLIN35UR1 priority */
-    // INTC2.ICRLIN35UR1.UINT16 &= _INT_PRIORITY_LOWEST;
-    // /* Set ICRLIN35UR2 table method */
-    // INTC2.ICRLIN35UR2.BIT.TBRLIN35UR2 = _INT_TABLE_VECTOR;
-    // /* Set ICRLIN35UR2 priority */
-    // INTC2.ICRLIN35UR2.UINT16 &= _INT_PRIORITY_LOWEST;
     /* Set UART5 setting */
     RLN35.LWBR = _UART_6_SAMPLING | _UART_PRESCALER_CLOCK_SELECT_2;
     RLN35.LBRP01.UINT16 = _UART5_BAUD_RATE_PRESCALER;
@@ -319,16 +268,7 @@ void R_UART5_Create(void)
 void R_UART5_Start(void)
 {
     /* Enable UART5 operation */
-    RLN35.LUOER |= _UART_RECEPTION_ENABLED | _UART_TRABSMISSION_ENABLED;
-    // /* Clear ICRLIN35UR0 interrupt request and enable operation */
-    // INTC2.ICRLIN35UR0.BIT.RFRLIN35UR0 = _INT_REQUEST_NOT_OCCUR;
-    // INTC2.ICRLIN35UR0.BIT.MKRLIN35UR0 = _INT_PROCESSING_ENABLED;    
-    // /* Clear ICRLIN35UR1 interrupt request and enable operation */
-    // INTC2.ICRLIN35UR1.BIT.RFRLIN35UR1 = _INT_REQUEST_NOT_OCCUR;
-    // INTC2.ICRLIN35UR1.BIT.MKRLIN35UR1 = _INT_PROCESSING_ENABLED;    
-    // /* Clear ICRLIN35UR2 interrupt request and enable operation */
-    // INTC2.ICRLIN35UR2.BIT.RFRLIN35UR2 = _INT_REQUEST_NOT_OCCUR;
-    // INTC2.ICRLIN35UR2.BIT.MKRLIN35UR2 = _INT_PROCESSING_ENABLED;    
+    RLN35.LUOER |= _UART_RECEPTION_ENABLED | _UART_TRABSMISSION_ENABLED;  
 }
 /***********************************************************************************************************************
 * Function Name: R_UART5_Stop

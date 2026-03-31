@@ -16,10 +16,8 @@
 #include "crc8_16_32.h"
 #include "r_cg_macrodriver.h"
 #include "Dio.h"
-#include <string.h> /* 引入 string.h 用于 memcpy 优化 */
+#include <string.h>
 
-/* 如果是 FreeRTOS 环境，引入 task.h 以使用 vTaskDelay。
-   如果是纯裸机 Bootloader，请将 vTaskDelay 替换为对应的 HAL_Delay 或 osDelay */
 #ifdef _FREERTOS_
 #include "FreeRTOS.h"
 #include "task.h"
@@ -69,7 +67,7 @@ typedef struct
     uint16_t dataBufferSize;
     volatile uint16_t rxIndexIn;    /* 接收写入指针 */
     volatile uint16_t rxIndexOut;   /* 接收读取指针 */
-    volatile uint16_t rxFrameCount; /* 缓冲区内完整的帧数 (替代原有的队列) */
+    volatile uint16_t rxFrameCount; /* 缓冲区内完整的帧数*/
     MpuHalFilter_t rxFilterConfig;
 } MpuHalHandle_t;
 
@@ -103,7 +101,7 @@ static volatile uint16_t g_txFrameLens[MPU_TX_FRAME_QUEUE_SIZE];
 static volatile uint8_t  g_txLenHead = 0;
 static volatile uint8_t  g_txLenTail = 0;
 
-/* 专用的底层发送平铺缓冲 */
+/* 底层发送平铺缓冲 */
 static uint8_t s_flatTxBuffer[MPU_TX_RING_BUF_SIZE];
 
 static MpuUartProtocalBuffer_t g_mpuUartProtocalBuffer;
@@ -135,10 +133,11 @@ static void MpuHalGpioInit(void)
 
 /*************************************************
  Function: WriteToRxInstanceRingBuffer
- Description: 辅助函数 - 安全地将完整帧写入应用层的环形缓冲区
- Input: pHandle - 句柄实例
-        src - 数据源
-        len - 写入长度
+ Description: 将完整数据帧写入指定句柄的接收环形缓冲区
+ Input: 
+        pHandle - 接收句柄
+        src     - 数据源指针
+        len     - 写入长度
  Output: None
  Return: void
 *************************************************/
@@ -165,8 +164,8 @@ static void WriteToRxInstanceRingBuffer(MpuHalHandle_t *pHandle, const uint8_t *
 /*************************************************
  Function: MpuDataDispatch
  Description: 分发 MPU 完整数据帧到指定的句柄缓冲区
- Input: pData - 指向接收数据的指针 (已包含 Header 和 CRC)
-        length - 数据总长度（字节）
+ Input: pData - 指向接收数据的指针
+        length - 数据总长度
         irq - 是否在中断上下文调用
  Output: None
  Return: void
@@ -186,7 +185,6 @@ static void MpuDataDispatch(const uint8_t *pData, uint16_t length, uint8_t irq)
             {
                 if ((pData[3] >= pHandle->rxFilterConfig.midMin) && (pData[3] <= pHandle->rxFilterConfig.midMax))
                 {
-                    /* 1. 严格计算剩余空间，杜绝环形覆盖 bug */
                     if (pHandle->rxIndexIn >= pHandle->rxIndexOut)
                     {
                         freeSpace = pHandle->dataBufferSize - (pHandle->rxIndexIn - pHandle->rxIndexOut) - 1;
@@ -196,12 +194,10 @@ static void MpuDataDispatch(const uint8_t *pData, uint16_t length, uint8_t irq)
                         freeSpace = pHandle->rxIndexOut - pHandle->rxIndexIn - 1;
                     }
 
-                    /* 2. 空间足够时才写入，否则丢弃此帧保障已存数据安全 */
                     if (length <= freeSpace)
                     {
                         WriteToRxInstanceRingBuffer(pHandle, pData, length);
                         
-                        /* 原子性增加帧计数器 */
                         __disable_irq();
                         pHandle->rxFrameCount++;
                         __enable_irq();
@@ -214,7 +210,12 @@ static void MpuDataDispatch(const uint8_t *pData, uint16_t length, uint8_t irq)
 
 /*************************************************
  Function: MpuPackHeader
- Description: 打包 MPU 数据包头
+ Description: 组装 MPU 协议包头
+ Input:
+        headerBuffer - 输出包头缓存
+        pMsg         - 数据包结构体
+ Output: headerBuffer 填充完成
+ Return: 包头长度（固定 8 字节）
 *************************************************/
 static uint8_t MpuPackHeader(uint8_t headerBuffer[], const MpuHalDataPack_t *pMsg)
 {
@@ -231,7 +232,12 @@ static uint8_t MpuPackHeader(uint8_t headerBuffer[], const MpuHalDataPack_t *pMs
 
 /*************************************************
  Function: MpuPackGetCrc
- Description: 计算 MPU 数据包头和数据的 CRC16 值
+ Description: 计算 MPU 数据包 CRC16（Header + Payload）
+ Input:
+        header - 包头数据
+        pMsg   - 数据包结构体
+ Output: None
+ Return: CRC16 校验值
 *************************************************/
 static uint16_t MpuPackGetCrc(uint8_t header[], const MpuHalDataPack_t *pMsg)
 {
@@ -243,7 +249,10 @@ static uint16_t MpuPackGetCrc(uint8_t header[], const MpuHalDataPack_t *pMsg)
 
 /*************************************************
  Function: MpuHalOpen
- Description: 打开 MPU 接收句柄
+ Description: 申请一个接收句柄实例
+ Input: None
+ Output: None
+ Return: 成功返回句柄索引，失败返回 -1
 *************************************************/
 int16_t MpuHalOpen(void)
 {
@@ -265,7 +274,12 @@ int16_t MpuHalOpen(void)
 
 /*************************************************
  Function: MpuHalSetRxFilter
- Description: 设置 MPU 接收句柄的接收过滤器
+ Description: 设置接收过滤条件
+ Input:
+        handle  - 句柄索引
+        pFilter - 过滤器配置
+ Output: None
+ Return: 状态码
 *************************************************/
 int16_t MpuHalSetRxFilter(int16_t handle, const MpuHalFilter_t *pFilter)
 {
@@ -287,8 +301,13 @@ int16_t MpuHalSetRxFilter(int16_t handle, const MpuHalFilter_t *pFilter)
 
 /*************************************************
  Function: MpuHalSetRxBuffer
- Description: 设置 MPU 接收句柄的接收缓冲区
- 注意：已移除低效的 Queue，重置读写指针与帧计数器
+ Description: 配置接收环形缓冲区
+ Input:
+        handle     - 句柄索引
+        pBuffer    - 缓冲区指针
+        bufferSize - 缓冲区大小
+ Output: None
+ Return: 状态码
 *************************************************/
 int16_t MpuHalSetRxBuffer(int16_t handle, uint8_t *pBuffer, uint32_t bufferSize)
 {
@@ -296,7 +315,6 @@ int16_t MpuHalSetRxBuffer(int16_t handle, uint8_t *pBuffer, uint32_t bufferSize)
     {
         if (pBuffer != NULL)
         {
-            /* 移除 xQueueCreate，初始化环形控制变量 */
             g_mpuManage.rxHandle[handle].rxIndexIn = 0;
             g_mpuManage.rxHandle[handle].rxIndexOut = 0;
             g_mpuManage.rxHandle[handle].rxFrameCount = 0;
@@ -311,7 +329,12 @@ int16_t MpuHalSetRxBuffer(int16_t handle, uint8_t *pBuffer, uint32_t bufferSize)
 
 /*************************************************
  Function: WriteToTxRingBuffer
- Description: 辅助函数 - 安全且极速地将数据写入 TX 环形缓冲区
+ Description: 向 TX 环形缓冲区写入数据
+ Input:
+        src - 数据源
+        len - 数据长度
+ Output: None
+ Return: void
 *************************************************/
 static void WriteToTxRingBuffer(const uint8_t *src, uint16_t len)
 {
@@ -331,7 +354,12 @@ static void WriteToTxRingBuffer(const uint8_t *src, uint16_t len)
 
 /*************************************************
  Function: MpuHalTransmit
- Description: 发送 MPU 数据包
+ Description: 发送 MPU 数据包（写入 TX 环形缓冲区）
+ Input:
+        handle - 句柄
+        pTxMsg - 待发送数据包
+ Output: None
+ Return: 状态码
 *************************************************/
 int16_t MpuHalTransmit(int16_t handle, const MpuHalDataPack_t *pTxMsg)
 {
@@ -381,7 +409,15 @@ int16_t MpuHalTransmit(int16_t handle, const MpuHalDataPack_t *pTxMsg)
 
 /*************************************************
  Function: ReadFromRingBuffer
- Description: 从环形缓冲区中提取指定长度的数据，并自动更新索引
+ Description: 从环形缓冲区读取指定长度数据
+ Input:
+        dest     - 目标缓存
+        srcBuf   - 源环形缓冲区
+        srcSize  - 缓冲区大小
+        srcIndex - 当前读指针
+        readLen  - 读取长度
+ Output: dest 填充数据
+ Return: void
 *************************************************/
 static void ReadFromRingBuffer(uint8_t *dest, const uint8_t *srcBuf, uint16_t srcSize, uint16_t *srcIndex, uint16_t readLen)
 {
@@ -403,10 +439,13 @@ static void ReadFromRingBuffer(uint8_t *dest, const uint8_t *srcBuf, uint16_t sr
 
 /*************************************************
  Function: MpuHalReceive
- Description: 接收 MPU 数据包，移除队列，改为直接读取帧缓冲区
- Input: handle - 接收句柄索引
-        pRxMsg - 指向用于存储数据的包指针
-        waitTime - 等待接收超时时间（毫秒）
+ Description: 从接收环形缓冲区读取一帧完整数据
+ Input:
+        handle   - 接收句柄
+        pRxMsg   - 接收数据结构
+        waitTime - 超时时间（轮询次数）
+ Output: pRxMsg 填充数据
+ Return: 状态码
 *************************************************/
 int16_t MpuHalReceive(int16_t handle, MpuHalDataPack_t *pRxMsg, uint32_t waitTime)
 {
@@ -423,7 +462,6 @@ int16_t MpuHalReceive(int16_t handle, MpuHalDataPack_t *pRxMsg, uint32_t waitTim
 
     pHandle = &g_mpuManage.rxHandle[handle];
 
-    /* 1. 模拟超时等待 (替换原有 xQueueReceive) */
     while ((pHandle->rxFrameCount == 0) && (waitCount > 0))
     {
         waitCount--;
@@ -431,15 +469,13 @@ int16_t MpuHalReceive(int16_t handle, MpuHalDataPack_t *pRxMsg, uint32_t waitTim
 
     if (pHandle->rxFrameCount > 0)
     {
-        uint16_t readIndex = pHandle->rxIndexOut; /* 获取当前帧起始偏移 */
+        uint16_t readIndex = pHandle->rxIndexOut;
 
-        /* 2. 预读包头以获取动态长度 */
         ReadFromRingBuffer(packHeader, pHandle->pDataBufferRx, pHandle->dataBufferSize, &readIndex, MPU_PROTOCAL_HEADER_LEN);
         
         payloadLen = ((uint16_t)packHeader[5] << 8) | packHeader[6];
         totalLen = MPU_PROTOCAL_HEADER_LEN + payloadLen + 2;
 
-        /* 3. 校验应用层 buffer 是否装得下 Payload */
         if (pRxMsg->dataBufferSize >= payloadLen)
         {
             ReadFromRingBuffer(pRxMsg->pDataBuffer, pHandle->pDataBufferRx, pHandle->dataBufferSize, &readIndex, payloadLen);
@@ -448,7 +484,6 @@ int16_t MpuHalReceive(int16_t handle, MpuHalDataPack_t *pRxMsg, uint32_t waitTim
             ReadFromRingBuffer(crcBuf, pHandle->pDataBufferRx, pHandle->dataBufferSize, &readIndex, 2);
             crcRx = ((uint16_t)crcBuf[0] << 8) | crcBuf[1];
 
-            /* 更新读指针与帧计数，释出空间 */
             __disable_irq();
             pHandle->rxIndexOut = readIndex;
             pHandle->rxFrameCount--;
@@ -468,7 +503,6 @@ int16_t MpuHalReceive(int16_t handle, MpuHalDataPack_t *pRxMsg, uint32_t waitTim
         }
         else
         {
-            /* 即使装不下，也必须将指针跳过整个报文，避免堵死 RingBuffer */
             __disable_irq();
             pHandle->rxIndexOut = (pHandle->rxIndexOut + totalLen) % pHandle->dataBufferSize;
             pHandle->rxFrameCount--;
@@ -481,7 +515,11 @@ int16_t MpuHalReceive(int16_t handle, MpuHalDataPack_t *pRxMsg, uint32_t waitTim
 
 /*************************************************
  Function: MpuHalUartInterruptCallback
- Description: UART 中断回调函数，极简入队保障中断响应速度
+ Description: UART 接收中断回调
+ Input:
+        data - 接收到的字节
+ Output: None
+ Return: void
 *************************************************/
 void MpuHalUartInterruptCallback(uint8_t data)
 {
@@ -495,7 +533,10 @@ void MpuHalUartInterruptCallback(uint8_t data)
 static uint8_t s_rxIdleTimer = 0;
 /*************************************************
  Function: MpuHalUartTimerCallback
- Description: UART 定时器回调函数（5ms周期解析）
+ Description: UART 定时处理函数
+ Input: None
+ Output: None
+ Return: void
 *************************************************/
 void MpuHalUartTimerCallback(void)
 {
@@ -526,8 +567,12 @@ void MpuHalUartTimerCallback(void)
 
 /*************************************************
  Function: UartProtocalProcess_Byte
- Description: 优化后的 UART 协议解析状态机
-              具备错位干扰自恢复能力，避免因为 1 Byte 错误导致整段丢失
+ Description: UART 协议字节流解析状态机
+ Input:
+        rx_data - 接收字节
+        IsrFlag - 是否在中断上下文
+ Output: None
+ Return: void
 *************************************************/
 static inline void UartProtocalProcess_Byte(uint8_t rx_data, uint8_t IsrFlag)
 {
@@ -537,13 +582,12 @@ static inline void UartProtocalProcess_Byte(uint8_t rx_data, uint8_t IsrFlag)
 
     if (1 == pBuf->dataCount)
     {
-        if (0x55 != rx_data) pBuf->dataCount = 0; /* 过滤非包头字符 */
+        if (0x55 != rx_data) pBuf->dataCount = 0;
     }
     else if (2 == pBuf->dataCount)
     {
         if (0xAA != rx_data)
         {
-            /* 防止出现 0x55 0x55 0xAA 这种情况导致的状态机死锁 */
             if (0x55 == rx_data)
             {
                 pBuf->data[0] = 0x55;
@@ -559,7 +603,6 @@ static inline void UartProtocalProcess_Byte(uint8_t rx_data, uint8_t IsrFlag)
     {
         pBuf->dataLength = ((uint16_t)(pBuf->data[5]) << 8) | pBuf->data[6];
         
-        /* 长度合法性校验：防止因为误码导致申请超大内存溢出 */
         if (pBuf->dataLength > (sizeof(pBuf->data) - MPU_PROTOCAL_HEADER_LEN - 2))
         {
             TBOX_PRINT("MPU HAL: Invalid dataLength %d, drop frame\r\n", pBuf->dataLength);
@@ -569,7 +612,6 @@ static inline void UartProtocalProcess_Byte(uint8_t rx_data, uint8_t IsrFlag)
     }
     else if (pBuf->dataCount >= (pBuf->dataLength + MPU_PROTOCAL_HEADER_LEN + 2))
     {
-        /* 成功接收到一完整帧，分发到应用层环形队列 */
         MpuDataDispatch(pBuf->data, pBuf->dataCount, IsrFlag);
         pBuf->dataLength = 0;
         pBuf->dataCount = 0;
@@ -578,7 +620,10 @@ static inline void UartProtocalProcess_Byte(uint8_t rx_data, uint8_t IsrFlag)
 
 /*************************************************
  Function: MpuHalMainUartInit
- Description: 初始化主 UART 接口
+ Description: 初始化主 UART 外设
+ Input: None
+ Output: None
+ Return: void
 *************************************************/
 static void MpuHalMainUartInit(void)
 {
@@ -588,7 +633,10 @@ static void MpuHalMainUartInit(void)
 
 /*************************************************
  Function: MpuHalInit
- Description: 初始化 MPU 模块
+ Description: 初始化 MPU HAL
+ Input: None
+ Output: None
+ Return: void
 *************************************************/
 void MpuHalInit(void)
 {
@@ -601,7 +649,10 @@ void MpuHalInit(void)
 
 /*************************************************
  Function: MpuHalTxTask
- Description: MPU 模块的 UART 发送任务 (无队列防撕裂机制)
+ Description: UART 发送任务
+ Input: None
+ Output: None
+ Return: void
 *************************************************/
 void MpuHalTxTask(void)
 {

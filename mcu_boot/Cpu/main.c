@@ -38,6 +38,7 @@
 #include "CanIf.h"
 #include "Std_Types.h"
 #include "McuMpuSyncTask.h"
+//#include "SecureBoot.h"
 
 uint8 ReadAppBuffer[32] = {0};
 uint8 WriteAppBuffer[32] = {0};
@@ -197,24 +198,29 @@ void main(void)
     Dio_WriteChannel(DioConf_DioChannel_DIO_Channel_CAN_STB_Pin8_6, STD_LOW);
     Dio_WriteChannel(DioConf_DioChannel_DIO_Channel_KL30_Voltage_DET_EN_Pin0_12, STD_HIGH);
     Dio_WriteChannel(DioConf_DioChannel_DIO_Channel_KL30_DOWEN_DET_EN_Pin1_6, STD_HIGH);
-    
+
     Dio_WriteChannel(DioConf_DioChannel_DIO_Channel_NAD_V2X_5V0__EN_Pin1_7, STD_HIGH);
     Dio_WriteChannel(DioConf_DioChannel_DIO_Channel_NAD_V2X_3V8_EN_Pin18_3, STD_HIGH);
+    /* 初始化安全启动模块 */
+    //SecureBoot_Init();
+    
     /* Initialize CAN Driver */
     Can_Init(CanConfigSet0);
 
-    Can_SetControllerMode(CanConf_CanController_CanController, CAN_T_START);
+    // Can_SetControllerMode(CanConf_CanController_CanController, CAN_T_START);
 
      /* Initialize Fls Driver */
-    // Fls_Init(FlsConfigSet);
-   // Fls_test();
+   //Fls_Init(FlsConfigSet);
+   //Fls_test();
     
     EcuMService_Init();
+
+   
 
     //FLc_Test();
 
     /* Initializing Security Module */
-   // SecM_Init();
+   SecM_Init();
    /* Initialize canTp */
    // CanTp_Init(NULL_PTR);
     /* Initialize dcm */
@@ -223,7 +229,7 @@ void main(void)
 //	TstCanSendMessage();
 	
 //	Can_MainFunction_Write();
-
+    Can_SetControllerMode(CanConf_CanController_CanController, CAN_T_START);
     StartOS(OSDEFAULTAPPMODE);
     while (1)
     {

@@ -86,11 +86,6 @@ void LogHalInit(uint8_t mode)
     g_debugMode = mode;
 }
 
-// static uint8_t * UartHalGetPrintDataBuffer(void)
-// {
-//   return m_PrintDataBuffer;
-// }
-
 /*************************************************
   Function:     LogHalPrint
   Description:  MPU uart or debug uart print

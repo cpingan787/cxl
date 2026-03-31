@@ -18,8 +18,6 @@
 #include "crc8_16_32.h"
 #include "Mcu.h"
 #include "MemM_cfg.h"
-// CRC 校验暂时不做
-// #include "crc8_16_32.h"
 
 /****************************** Macro Definitions ******************************/
 #define FLASH_APP_BANKA_ACTIVE_ADDRESS           0x00050000 
@@ -43,11 +41,8 @@ static uint8_t g_fotaModeFlag = 0U;
 static uint16_t g_fotaModeTimeCount = 0U;  
 static uint8_t g_mpuOtaFlag = 0U;
 static uint32_t g_otaCurSize = 0;
-
-// CRC相关
 static Crc32Objec_t g_crc32Object;
 static uint32_t g_crcData = 0xFFFFFFFF;
-// static FlashHalMetaDataInfo_t s_MetaDataInfo;
 
 /****************************** Function Declarations *************************/
 static uint8_t FirmwareUpdateSdkLoadCode(volatile uint8_t *dataPack, uint16_t dataBufferSize);
@@ -79,17 +74,15 @@ static uint8_t FirmwareUpdateSdkEraseFlash(volatile uint8_t *dataPack)
         if (address == FLASH_APP_BANKA_ABSTRACT_ADDRESS)
         {
             flashAppFlag = FLASH_APP_BANKA_ID;
-            // 先注释掉，等后期补齐 Boot 状态机驱动
-            // FlashHalWriteApp1SuccessFlag(FLASH_BANK_APP_INTEGRITY_DISABLE);
         }
         else
         {
             flashAppFlag = FLASH_APP_DEFALT_BANK_ID;
             TBOX_PRINT("05 address error\r\n");
-            return 1; // error
+            return 1;
         }
         address = 0x50000;
-        uint32_t eraseLength = APP_BANK_SIZE;  // 长度待确认, 使用传入值还是常量
+        uint32_t eraseLength = APP_BANK_SIZE;
         
         // 1. 发起擦除请求
         uint8_t retValue = FlsIf_Erase(address, eraseLength);
@@ -99,14 +92,7 @@ static uint8_t FirmwareUpdateSdkEraseFlash(volatile uint8_t *dataPack)
             TBOX_PRINT("Erase Bank %d success\r\n", flashAppFlag);
             g_flashState = E_FlashState_FlashErase;
             g_crcData = Crc32Init(&g_crc32Object, 0x04C11DB7); 
-            uint32_t WriteData = 0xFF;
-            retValue = FlsIf_Write(FLASH_APP_BANKA_ACTIVE_ADDRESS, 4, (uint8*)&WriteData);
             g_otaCurSize = 0;
-            if (retValue != E_OK)
-            {
-                TBOX_PRINT("Write Bank %d active flag failed %02x\r\n", flashAppFlag, retValue);
-                ret = 0x02; 
-            }
         }
         else
         {
@@ -240,9 +226,9 @@ static uint8_t FirmwareUpdateSdkCodeCheck(volatile uint8_t *dataPack)
                 retValue = EEIf_Write(2, 4, (uint8*)&WriteData);
                 
                 EEIf_Read(2, 4, (uint8*)&dataRead);
-                if((retValue != E_OK) || (dataRead != WriteData))
+                if (dataRead != WriteData)
                 {
-                    TBOX_PRINT("EEIf_Write failed %08x\r\n", dataRead);
+                    TBOX_PRINT("EEIf_Read failed %08x\r\n", dataRead);
                     ret = 0x01; 
                 }
                 ret = 0x00;
@@ -413,7 +399,6 @@ void FirmwareUpdateSdkCycleProcess(int16_t handle, MpuHalDataPack_t *pRxMsg)
 
         if (s_UpdateMid == E_FirmwareUpdateSdkCmd_SoftwareResetMcu)
         {
-            // delay 50ms
             delay_us(50000);
             // reset
             Mcu_PerformReset();
