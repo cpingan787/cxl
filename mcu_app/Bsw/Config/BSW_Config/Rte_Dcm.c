@@ -3174,6 +3174,24 @@ Std_ReturnType  Rte_Call_DataServices_Data_0x0100_DID_0x0100_ConditionCheckRead(
 
 #define DCM_START_SEC_CODE
 #include "Dcm_MemMap.h"
+Std_ReturnType Rte_Call_DataServices_Data_0xFFFE_DID_0xFFFE_ConditionCheckRead( Dcm_OpStatusType OpStatus, Dcm_NegativeResponseCodeType* ErrorCode )
+{
+    /** DO NOT CHANGE THIS COMMENT!
+     * <USERBLOCK Rte_Call_DataServices_Data_0xFFFE_DID_0xFFFE_ConditionCheckRead>
+     */
+    DCM_UNUSED(OpStatus);
+    DCM_UNUSED(ErrorCode);
+    return E_OK;
+    
+    /** DO NOT CHANGE THIS COMMENT!
+     * </USERBLOCK>
+     */
+}
+#define DCM_STOP_SEC_CODE
+#include "Dcm_MemMap.h"
+
+#define DCM_START_SEC_CODE
+#include "Dcm_MemMap.h"
 Std_ReturnType  Rte_Call_DataServices_Data_0xF130_DID_0xF130_ReadData( Dcm_OpStatusType  OpStatus,uint8*  Data,Dcm_NegativeResponseCodeType*  ErrorCode )
 {
     /** DO NOT CHANGE THIS COMMENT!
@@ -8482,6 +8500,33 @@ Std_ReturnType  Rte_Call_DataServices_Data_0x0100_DID_0x0100_ReadData( Dcm_OpSta
     DCM_UNUSED(ErrorCode);
     return E_OK;
 
+    /** DO NOT CHANGE THIS COMMENT!
+     * </USERBLOCK>
+     */
+}
+#define DCM_STOP_SEC_CODE
+#include "Dcm_MemMap.h"
+
+#define DCM_START_SEC_CODE
+#include "Dcm_MemMap.h"
+Std_ReturnType Rte_Call_DataServices_Data_0xFFFE_DID_0xFFFE_ReadData( Dcm_OpStatusType OpStatus,uint8* Data,Dcm_NegativeResponseCodeType* ErrorCode )
+{
+    /** DO NOT CHANGE THIS COMMENT!
+     * <USERBLOCK Rte_Call_DataServices_Data_0xFFFE_DID_0xFFFE_ReadData>
+     */
+    DCM_UNUSED(OpStatus);
+    DCM_UNUSED(ErrorCode);
+    // 读取数据(测试8字节数据)
+    Data[0] = 0x01;
+    Data[1] = 0x02;
+    Data[2] = 0x03;
+    Data[3] = 0x04;
+    Data[4] = 0x05;
+    Data[5] = 0x06;
+    Data[6] = 0x07;
+    Data[7] = 0x08;
+
+    return E_OK;
     /** DO NOT CHANGE THIS COMMENT!
      * </USERBLOCK>
      */
