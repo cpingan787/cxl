@@ -111,7 +111,7 @@ static const CanMsgDltTable_t g_canMsgDltTable[CAN_MSG_DLT_TABLE_SIZE] =
     {0x34E, 8},
     {0x34F, 8},
     {0x37A, 8},
-    {0x3A3, 64},
+    {0x3A3, 8},
     {0x3A6, 8},
     {0x3AB, 8},
     {0x3B5, 8},

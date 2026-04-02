@@ -2684,7 +2684,7 @@ static int16_t Service0x22Process(uint8_t *udsData, uint16_t udsLen, uint8_t fun
 
   if (IsDidPassthrough_22(first_did))
   {
-    if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+    if (MpuPowerSyncSdkGetNadModuleStatus() != 0)
     {
       return 0x72;
     }
@@ -2831,7 +2831,7 @@ static int16_t Service2EWriteDataBase(uint8_t *udsData, uint16_t udsLen)
     uint16_t mpu_response_length = 0;
     int8_t passthroughRet;
 
-    if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+    if (MpuPowerSyncSdkGetNadModuleStatus() != 0)
     {
         return 0x72;
     }
@@ -2957,7 +2957,7 @@ static int16_t Service0x2EProcess(uint8_t *udsData, uint16_t udsLen, uint8_t fun
   responseData[1] = udsData[1];
   responseData[2] = udsData[2];
 
-  if (did == 0xB2E5 || did == 0xF187|| did == 0xB2B4 || did == 0x0120 || did == 0x0111) 
+  if (did == 0xB2E5 || did == 0xF187|| did == 0xB2B4 || did == 0x0120)
   {
     DiagnosticDataTransmit(g_tpHandle, g_physicalTransmitCanId, responseData, 3, 0);
   }
@@ -2967,7 +2967,7 @@ static int16_t Service0x2EProcess(uint8_t *udsData, uint16_t udsLen, uint8_t fun
     uint8_t mpu_response_buffer[64]; 
     uint16_t mpu_response_length = 0;
     
-    if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+    if (MpuPowerSyncSdkGetNadModuleStatus() != 0)
     {
       return 0x72;
     }

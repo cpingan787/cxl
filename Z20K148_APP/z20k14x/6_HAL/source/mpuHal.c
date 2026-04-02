@@ -23,7 +23,7 @@
 #include "dma_drv.h"
 #include "timerHal.h"
 #include "peripheralHal.h"
-
+#include "srmc_drv.h"
 /****************************** Macro Definitions ******************************/
 #define MPU_DEBUG_QUEUE                         0
 #define MPU_HAL_HANDLE_INSTANSE_MAX             15
@@ -2756,13 +2756,22 @@ static ResultStatus_t DMA_ChannelEnable(DMA_Channel_t channel)
 *************************************************/
 void MpuHalSetSpiReady(uint8_t ready)
 {
+    static uint32_t power_init_flag = 0;
     if(ready)
     {
         spi_ready = spi_ready | 1;
+        if (power_init_flag == 0) {
+            power_init_flag = 1;
+            uint32_t ret = SRMC_GetSystemResetCause();
+            LogHalUpLoadLog("System reset cause: 0x%X", ret);
+            //TBOX_PRINT("System reset cause: 0x%X\n", ret);
+        }
+
     }
     else
     {
         spi_ready = spi_ready & 0x2;
+        //power_init_flag = 0;
     }
     GPIO_WritePinOutput(MPU_HAL_SPI_IEQ_PORT, MPU_HAL_SPI_IEQ_PORT_PIN, GPIO_LOW);
     return;

@@ -2414,6 +2414,10 @@ int16_t Service2EWriteSerialNumber(uint8_t *pData, uint16_t dataLength)
   if (storeResult == 0)
   {
     ParameterSyncSdkSetToCpu(E_ParamId_SN, pData, dataLength);
+    if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+    {
+      return -1;
+    }
   }
   return 0;
 }
@@ -3356,7 +3360,7 @@ int16_t Service2EWriteTspTimeout(uint8_t *pData, uint16_t dataLength)
   {
     return 0x13;
   }
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  if (MpuPowerSyncSdkGetNadModuleStatus() != 0)
   {
     return -1;
   }
@@ -3423,7 +3427,7 @@ int16_t Service2EWriteOfficialServiceNum(uint8_t *pData, uint16_t dataLength)
   // {
   //   return 0x72;
   // }
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  if (MpuPowerSyncSdkGetNadModuleStatus() != 0)
   {
     return -1;
   }
@@ -3442,7 +3446,7 @@ int16_t Service2EWriteEmergencyAsNum(uint8_t *pData, uint16_t dataLength)
   // {
   //   return 0x72;
   // }
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  if (MpuPowerSyncSdkGetNadModuleStatus() != 0)
   {
     return -1;
   }
@@ -3477,7 +3481,7 @@ int16_t Service2EWriteTspFlowTimeout(uint8_t *pData, uint16_t dataLength)
   // {
   //   return 0x72;
   // }
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  if (MpuPowerSyncSdkGetNadModuleStatus() != 0)
   {
     return -1;
   }
@@ -3496,7 +3500,7 @@ int16_t Service2EWriteTspAckTime(uint8_t *pData, uint16_t dataLength)
   // {
   //   return 0x72;
   // }
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  if (MpuPowerSyncSdkGetNadModuleStatus() != 0)
   {
     return -1;
   }
@@ -3534,7 +3538,7 @@ int16_t Service2EWriteIp2Addr(uint8_t *pData, uint16_t dataLength)
   // {
   //   return 0x72;
   // }
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  if (MpuPowerSyncSdkGetNadModuleStatus() != 0)
   {
     return -1;
   }
@@ -3553,7 +3557,7 @@ int16_t Service2EWritePort2(uint8_t *pData, uint16_t dataLength)
   // {
   //   return 0x72;
   // }
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  if (MpuPowerSyncSdkGetNadModuleStatus() != 0)
   {
     return -1;
   }
@@ -3592,7 +3596,7 @@ int16_t Service2EWriteLongConnCycle(uint8_t *pData, uint16_t dataLength)
   // {
   //   return 0x72;
   // }
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  if (MpuPowerSyncSdkGetNadModuleStatus() != 0)
   {
     return -1;
   }
@@ -3609,7 +3613,7 @@ int16_t Service2EWriteNormalUploadPeriod(uint8_t *pData, uint16_t len)
   // {
   //   return 0x72;
   // }
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  if (MpuPowerSyncSdkGetNadModuleStatus() != 0)
   {
     return -1;
   }
@@ -3626,7 +3630,7 @@ int16_t Service2EWriteAlarmUploadPeriod(uint8_t *pData, uint16_t len)
   // {
   //   return 0x72;
   // }
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  if (MpuPowerSyncSdkGetNadModuleStatus() != 0)
   {
     return -1;
   }
@@ -3643,7 +3647,7 @@ int16_t Service2EWriteTspDomainLen(uint8_t *pData, uint16_t len)
   // {
   //   return 0x72;
   // }
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  if (MpuPowerSyncSdkGetNadModuleStatus() != 0)
   {
     return -1;
   }
@@ -3660,7 +3664,7 @@ int16_t Service2EWriteTspDomain(uint8_t *pData, uint16_t len)
   // {
   //   return 0x72;
   // }
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  if (MpuPowerSyncSdkGetNadModuleStatus() != 0)
   {
     return -1;
   }
@@ -3677,7 +3681,7 @@ int16_t Service2EWriteTspPortNumeric(uint8_t *pData, uint16_t len)
   // {
   //   return 0x72;
   // }
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  if (MpuPowerSyncSdkGetNadModuleStatus() != 0)
   {
     return -1;
   }
@@ -3721,7 +3725,7 @@ int16_t Service2EWriteApn1Type(uint8_t *pData, uint16_t dataLength)
   // {
   //   return 0x72;
   // }
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  if (MpuPowerSyncSdkGetNadModuleStatus() != 0)
   {
     return -1;
   }
@@ -3745,7 +3749,7 @@ int16_t Service2EWriteApn2Type(uint8_t *pData, uint16_t dataLength)
   // {
   //   return 0x72;
   // }
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  if (MpuPowerSyncSdkGetNadModuleStatus() != 0)
   {
     return -1;
   }
@@ -3769,7 +3773,7 @@ int16_t Service2EWriteTspConnectSetting(uint8_t *pData, uint16_t dataLength)
   // {
   //   return 0x72;
   // }
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  if (MpuPowerSyncSdkGetNadModuleStatus() != 0)
   {
     return -1;
   }
@@ -3788,7 +3792,7 @@ int16_t Service2EWriteEmmcDeleteControl(uint8_t *pData, uint16_t dataLength)
   // {
   //   return 0x31;
   // }
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  if (MpuPowerSyncSdkGetNadModuleStatus() != 0)
   {
     return -1;
   }
@@ -3815,7 +3819,7 @@ int16_t Service2EWritePkiApply(uint8_t *pData, uint16_t dataLength)
   // {
   //   ParameterSyncSdkSetToCpu(E_ParamId_PkiApplyRequest, pData, dataLength);
   // }
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  if (MpuPowerSyncSdkGetNadModuleStatus() != 0)
   {
     return -1;
   }
@@ -3847,7 +3851,7 @@ int16_t Service2EWriteF1A1(uint8_t *pData, uint16_t dataLength)
   {
     return 0x13;
   }
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  if (MpuPowerSyncSdkGetNadModuleStatus() != 0)
   {
     return -1;
   }
@@ -3860,7 +3864,7 @@ int16_t Service2EWriteF1A2(uint8_t *pData, uint16_t dataLength)
   {
     return 0x13;
   }
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  if (MpuPowerSyncSdkGetNadModuleStatus() != 0)
   {
     return -1;
   }
@@ -3900,7 +3904,7 @@ int16_t Service2EWriteOtaDomainName(uint8_t *pData, uint16_t dataLength)
   // {
   //   return 0x72;
   // }
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  if (MpuPowerSyncSdkGetNadModuleStatus() != 0)
   {
     return -1;
   }
@@ -3919,7 +3923,7 @@ int16_t Service2EWriteOtaPort(uint8_t *pData, uint16_t dataLength)
   // {
   //   return 0x72;
   // }
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  if (MpuPowerSyncSdkGetNadModuleStatus() != 0)
   {
     return -1;
   }
@@ -4007,7 +4011,7 @@ int16_t Service2EWriteLogDomainName(uint8_t *pData, uint16_t dataLength)
   // {
   //   return 0x72;
   // }
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  if (MpuPowerSyncSdkGetNadModuleStatus() != 0)
   {
     return -1;
   }
@@ -4026,7 +4030,7 @@ int16_t Service2EWriteLogPort(uint8_t *pData, uint16_t dataLength)
   // {
   //   return 0x72;
   // }
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  if (MpuPowerSyncSdkGetNadModuleStatus() != 0)
   {
     return -1;
   }
@@ -4046,7 +4050,7 @@ int16_t Service2EWriteLogConnectionCommand(uint8_t *pData, uint16_t dataLength)
   // {
   //   return 0x72;
   // }
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  if (MpuPowerSyncSdkGetNadModuleStatus() != 0)
   {
     return -1;
   }
@@ -4065,7 +4069,7 @@ int16_t Service2EWriteEthernetConfig(uint8_t *pData, uint16_t dataLength)
   // {
   //   return 0x72;
   // }
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  if (MpuPowerSyncSdkGetNadModuleStatus() != 0)
   {
     return -1;
   }
@@ -4087,7 +4091,7 @@ int16_t Service2EWritePkiCertCycle(uint8_t *pData, uint16_t dataLength)
   // {
   //   return 0x72;
   // }
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  if (MpuPowerSyncSdkGetNadModuleStatus() != 0)
   {
     return -1;
   }
@@ -4105,7 +4109,7 @@ int16_t Service2EWriteLogAccount(uint8_t *pData, uint16_t dataLength)
   // {
   //   return 0x72;
   // }
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  if (MpuPowerSyncSdkGetNadModuleStatus() != 0)
   {
     return -1;
   }
@@ -4123,7 +4127,7 @@ int16_t Service2EWriteLogPassword(uint8_t *pData, uint16_t dataLength)
   // {
   //   return 0x72;
   // }
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  if (MpuPowerSyncSdkGetNadModuleStatus() != 0)
   {
     return -1;
   }
@@ -4146,7 +4150,7 @@ int16_t Service2EWriteLogUploadChannel(uint8_t *pData, uint16_t dataLength)
   // {
   //   return 0x72;
   // }
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  if (MpuPowerSyncSdkGetNadModuleStatus() != 0)
   {
     return -1;
   }
@@ -4175,7 +4179,7 @@ int16_t Service2EWriteLogDomainFront(uint8_t *pData, uint16_t dataLength)
   // {
   //   return 0x72;
   // }
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  if (MpuPowerSyncSdkGetNadModuleStatus() != 0)
   {
     return -1;
   }
@@ -4202,7 +4206,7 @@ int16_t Service2EWriteLogDomainLater(uint8_t *pData, uint16_t dataLength)
   // {
   //   return 0x72;
   // }
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  if (MpuPowerSyncSdkGetNadModuleStatus() != 0)
   {
     return -1;
   }
@@ -4250,7 +4254,7 @@ int16_t Service2EWriteLogPath(uint8_t *pData, uint16_t dataLength)
   // memset(g_log_path_buffer, 0x00, 256);
   // memcpy(g_log_path_buffer, pData, dataLength);
   // return SaveLogPathBuffer();
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  if (MpuPowerSyncSdkGetNadModuleStatus() != 0)
   {
     return -1;
   }
@@ -4279,7 +4283,7 @@ int16_t Service2EWriteLogPath_P1(uint8_t *pData, uint16_t dataLength)
   //   memset(&g_log_path_buffer[dataLength], 0x00, 64 - dataLength);
   // }
   // return SaveLogPathBuffer();
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  if (MpuPowerSyncSdkGetNadModuleStatus() != 0)
   {
     return -1;
   }
@@ -4297,7 +4301,7 @@ int16_t Service22ReadLogPath_P2(uint8_t *pData, uint16_t *pLength)
   // {
   //   return 0x13;
   // }
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  if (MpuPowerSyncSdkGetNadModuleStatus() != 0)
   {
     return -1;
   }
@@ -4317,7 +4321,7 @@ int16_t Service2EWriteLogPath_P2(uint8_t *pData, uint16_t dataLength)
   //   memset(&g_log_path_buffer[64 + dataLength], 0x00, 64 - dataLength);
   // }
   // return SaveLogPathBuffer();
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  if (MpuPowerSyncSdkGetNadModuleStatus() != 0)
   {
     return -1;
   }
@@ -4346,7 +4350,7 @@ int16_t Service2EWriteLogPath_P3(uint8_t *pData, uint16_t dataLength)
   //   memset(&g_log_path_buffer[128 + dataLength], 0x00, 64 - dataLength);
   // }
   // return SaveLogPathBuffer();
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  if (MpuPowerSyncSdkGetNadModuleStatus() != 0)
   {
     return -1;
   }
@@ -4375,7 +4379,7 @@ int16_t Service2EWriteLogPath_P4(uint8_t *pData, uint16_t dataLength)
   //   memset(&g_log_path_buffer[192 + dataLength], 0x00, 64 - dataLength);
   // }
   // return SaveLogPathBuffer();
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  if (MpuPowerSyncSdkGetNadModuleStatus() != 0)
   {
     return -1;
   }
@@ -4398,7 +4402,7 @@ int16_t Service2EWriteApn3Type(uint8_t *pData, uint16_t dataLength)
   // {
   //   return 0x72;
   // }
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  if (MpuPowerSyncSdkGetNadModuleStatus() != 0)
   {
     return -1;
   }
@@ -4419,7 +4423,7 @@ int16_t Service2EWriteSensitiveDataSet(uint8_t *pData, uint16_t dataLength)
   // {
   //   return 0x72;
   // }
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  if (MpuPowerSyncSdkGetNadModuleStatus() != 0)
   {
     return -1;
   }
@@ -4438,7 +4442,7 @@ int16_t Service2EWriteOtaRtcWakeupTime(uint8_t *pData, uint16_t dataLength)
   // {
   //   return 0x72;
   // }
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  if (MpuPowerSyncSdkGetNadModuleStatus() != 0)
   {
     return -1;
   }
@@ -4459,7 +4463,7 @@ int16_t Service2EWriteBuryingPointSwitch(uint8_t *pData, uint16_t dataLength)
   {
     return 0x31;
   }
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  if (MpuPowerSyncSdkGetNadModuleStatus() != 0)
   {
     return -1;
   }
@@ -4483,7 +4487,7 @@ int16_t Service2EWriteAdbStatus(uint8_t *pData, uint16_t dataLength)
   // {
   //   return 0x72;
   // }
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  if (MpuPowerSyncSdkGetNadModuleStatus() != 0)
   {
     return -1;
   }
@@ -4501,7 +4505,7 @@ int16_t Service2EWriteConnectionTestAddr(uint8_t *pData, uint16_t dataLength)
   // {
   //   return 0x72;
   // }
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  if (MpuPowerSyncSdkGetNadModuleStatus() != 0)
   {
     return -1;
   }
@@ -4510,7 +4514,7 @@ int16_t Service2EWriteConnectionTestAddr(uint8_t *pData, uint16_t dataLength)
 // 0xB289_cxl
 int16_t Service2EWriteDataBuriedPointDomain(uint8_t *pData, uint16_t dataLength)
 {
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  if (MpuPowerSyncSdkGetNadModuleStatus() != 0)
   {
     return -1;
   }
@@ -4543,7 +4547,7 @@ int16_t Service2EWriteDataBuriedPointDomain_P1(uint8_t *pData, uint16_t dataLeng
   // {
   //   return 0x72;
   // }
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  if (MpuPowerSyncSdkGetNadModuleStatus() != 0)
   {
     return -1;
   }
@@ -4576,7 +4580,7 @@ int16_t Service2EWriteDataBuriedPointDomain_P2(uint8_t *pData, uint16_t dataLeng
   // {
   //   return 0x72;
   // }
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  if (MpuPowerSyncSdkGetNadModuleStatus() != 0)
   {
     return -1;
   }
@@ -4595,7 +4599,7 @@ int16_t Service2EWriteGnssGalaxy(uint8_t *pData, uint16_t dataLength)
   // {
   //   return 0x72;
   // }
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  if (MpuPowerSyncSdkGetNadModuleStatus() != 0)
   {
     return -1;
   }
@@ -4613,7 +4617,7 @@ int16_t Service2EWriteOtaBookingTime(uint8_t *pData, uint16_t dataLength)
   // {
   //   return 0x72;
   // }
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  if (MpuPowerSyncSdkGetNadModuleStatus() != 0)
   {
     return -1;
   }
@@ -4634,7 +4638,7 @@ int16_t Service2EWriteOtaSwAcqTime(uint8_t *pData, uint16_t dataLength)
   // {
   //   return 0x72;
   // }
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  if (MpuPowerSyncSdkGetNadModuleStatus() != 0)
   {
     return -1;
   }
@@ -4673,7 +4677,7 @@ int16_t Service2EWriteFunctionConfig(uint8_t *pData, uint16_t dataLength)
   // {
   //   return 0x72;
   // }
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  if (MpuPowerSyncSdkGetNadModuleStatus() != 0)
   {
     return -1;
   }
@@ -4744,7 +4748,7 @@ int16_t Service2EWriteTcpdumpSwitch(uint8_t *pData, uint16_t dataLength)
   {
     return 0x13;
   }
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  if (MpuPowerSyncSdkGetNadModuleStatus() != 0)
   {
     return -1;
   }
@@ -4757,7 +4761,7 @@ int16_t Service2EWriteTspPlatformConnectionStatus(uint8_t *pData, uint16_t dataL
   {
     return 0x13;
   }
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  if (MpuPowerSyncSdkGetNadModuleStatus() != 0)
   {
     return -1;
   }
@@ -4770,7 +4774,7 @@ int16_t Service2EWritePKIapply(uint8_t *pData, uint16_t dataLength)
   {
     return 0x13;
   }
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  if (MpuPowerSyncSdkGetNadModuleStatus() != 0)
   {
     return -1;
   }
@@ -4783,7 +4787,7 @@ int16_t Service2ETboxCurrentRunningMode(uint8_t *pData, uint16_t dataLength)
   {
     return 0x13;
   }
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  if (MpuPowerSyncSdkGetNadModuleStatus() != 0)
   {
     return -1;
   }
@@ -4792,7 +4796,7 @@ int16_t Service2ETboxCurrentRunningMode(uint8_t *pData, uint16_t dataLength)
 // 0x0110_cxl
 int16_t Service2EWriteManufactoryMode(uint8_t *pData, uint16_t dataLength)
 {
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  if (MpuPowerSyncSdkGetNadModuleStatus() != 0)
   {
     return -1;
   }
@@ -5913,7 +5917,7 @@ int16_t Service22ReadLongConnCycle(uint8_t *pData, uint16_t *pLength)
   // }
 
   // *pLength = 8;
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  if (MpuPowerSyncSdkGetNadModuleStatus() != 0)
   {
     return -1;
   }
@@ -6353,7 +6357,7 @@ int16_t Service22ReadGnssAntennaVoltage(uint8_t *pData, uint16_t *pLength)
 // 0xB271_cxl
 int16_t Service22ReadOpenCpuTemperature(uint8_t *pData, uint16_t *pLength)
 {
-  if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+  if (MpuPowerSyncSdkGetNadModuleStatus() != 0)
   {
     return -1;
   }

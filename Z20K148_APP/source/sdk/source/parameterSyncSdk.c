@@ -558,7 +558,7 @@ static uint8_t IsValidParamData(uint8_t paramId, uint8_t *data, uint16_t length)
     return 1;
 }
 
-static uint8_t IsOfflineDataValid(uint8_t *data, uint16_t len)
+static uint8_t IsOfflineDataValid(uint8_t paramId, uint8_t *data, uint16_t len)
 {
     if (len == 0) return 0;
     
@@ -573,13 +573,33 @@ static uint8_t IsOfflineDataValid(uint8_t *data, uint16_t len)
         
         if (isAllFF == 0 && isAllZero == 0)
         {
-            return 1;
+            break;
         }
     }
 
     if (isAllFF || isAllZero)
     {
         return 0; 
+    }
+
+    // 检查是否为ASCII码字符串参数
+    if (paramId == E_ParamId_CustomSW_Version || 
+        paramId == E_ParamId_SW_Version || 
+        paramId == E_ParamId_HW_Version || 
+        paramId == E_ParamId_VIN || 
+        paramId == E_ParamId_SN || 
+        paramId == E_ParamId_ParatNumber || 
+        paramId == E_ParamId_ECallNumber || 
+        paramId == E_ParamId_BCallNumber)
+    {
+        for (k = 0; k < len; k++)
+        {
+            // 检查是否为有效的ASCII字符 (0x20-0x7E)
+            if (data[k] < 0x20 || data[k] > 0x7E)
+            {
+                return 0;
+            }
+        }
     }
 
     return 1;
@@ -703,7 +723,7 @@ static int16_t ParameterSyncResponseOfflineDidPackage(MpuHalDataPack_t *recvData
             }
         }
 
-        if (IsOfflineDataValid(pWriteDataPtr, paramLenth) == 0)
+        if (IsOfflineDataValid(paramId, pWriteDataPtr, paramLenth) == 0)
         {
             continue; 
         }
@@ -773,7 +793,7 @@ static void ParameterSyncRequstMissingOfflineDidPackage(void)
         }
         
         /* 情况 A: 本地数据有效 -> 自动跳过 (Index++) */
-        if (IsOfflineDataValid(tempBuffer, paramLen))
+        if (IsOfflineDataValid(paramId, tempBuffer, paramLen))
         {
             continue; 
         }
@@ -838,23 +858,32 @@ static void ParameterSyncProcessOfflineDidResponse(MpuHalDataPack_t *recvDataPac
         //先读本地
         if (paramId != 0xFF && g_mcuParameterWriteCbFunc != NULL)
         {
-            localLen = 0;
-            if (g_mcuParameterReadCbFunc != NULL)
+            uint8_t expectedLen = GetExpectedLengthByParamId(paramId);
+            
+            if (expectedLen != 0 && dataLen != expectedLen)
             {
-                g_mcuParameterReadCbFunc(paramId, localBuffer, &localLen);
             }
-
-            if (IsOfflineDataValid(localBuffer, localLen) == 1)
+            else if (IsValidParamData(paramId, pMpuData, dataLen) == 0)
             {
-    
-                // Local is valid, do nothing.
-                // TBOX_PRINT("DID 0x%04X already valid, skip write.\r\n", did);
             }
             else
             {
-                if (IsOfflineDataValid(pMpuData, dataLen) == 1)
+                localLen = 0;
+                if (g_mcuParameterReadCbFunc != NULL)
                 {
-                    g_mcuParameterWriteCbFunc(paramId, pMpuData, dataLen);
+                    g_mcuParameterReadCbFunc(paramId, localBuffer, &localLen);
+                }
+
+                if (IsOfflineDataValid(paramId, localBuffer, localLen) == 1)
+                {
+                    // 本地有效数据，不再覆盖
+                }
+                else
+                {
+                    if (IsOfflineDataValid(paramId, pMpuData, dataLen) == 1)
+                    {
+                        g_mcuParameterWriteCbFunc(paramId, pMpuData, dataLen);
+                    }
                 }
             }
         }
@@ -922,7 +951,7 @@ void ParameterSyncSdkCycleProcess(MpuHalDataPack_t *recvDataPack)
                         length = 0;
                         if (g_mcuParameterReadCbFunc(currentParamId, paramData, &length) == 0)
                         {
-                            if (IsOfflineDataValid(paramData, length) == 0)
+                            if (IsOfflineDataValid(currentParamId, paramData, length) == 0)
                             {
                                 if (IsValidParamData(currentParamId, pMpuData, mpuDataLen) == 1)
                                 {
@@ -995,7 +1024,7 @@ void ParameterSyncSdkCycleProcess(MpuHalDataPack_t *recvDataPack)
                 
                 if (readRet == 0)
                 {
-                    if (IsOfflineDataValid(localBuf, localLen) == 0)
+                    if (IsOfflineDataValid(paramId, localBuf, localLen) == 0)
                     {
                         allowWrite = 1;
                     }

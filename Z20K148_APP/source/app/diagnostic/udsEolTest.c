@@ -111,6 +111,8 @@ static int16_t ToolReadSerialNumber(uint8_t *pData, uint16_t *pLength);
 
 static int16_t Service2EWriteSN_PassThrough(uint8_t *pData, uint16_t dataLength); 
 static int16_t ToolReadSN_Result_PassThrough(uint8_t *pData, uint16_t *pLength);
+static int16_t ToolReadHardwareVersion(uint8_t *pData, uint16_t *pLength);
+
 // static int16_t Service2EWriteBluetoothName(uint8_t *Data, uint16_t len);
 static int16_t ToolWriteSleepStatus(uint8_t *pData, uint16_t dataLength);
 static const struc_ReadDidMap m_readDidMap[] =
@@ -133,7 +135,10 @@ static const struc_ReadDidMap m_readDidMap[] =
         {0x1216, ToolRead4GAntennaStatus},        // 19. 4G天线
         {0x1217, ToolReadGNSSAntennaStatus},      // 20. GNSS天线
         {0x1218, ToolReadSerialNumber}, // 21. SN
-        {0x1220, ToolReadSN_Result_PassThrough}, // 22. SN 读结果透传
+        {0x1220, ToolReadSN_Result_PassThrough},       // 22. SN 读结果透传
+        {0x1221, ToolReadHardwareVersion},            // 23. 读取硬件版本号
+
+
 
                                                   //    {0xF1B0, Service22ReadEcuMask                 },       //安全访问掩码
                                                   //    {0x1201, Service22ReadTboxCallNumber          },       //tbox电话号码
@@ -1504,6 +1509,15 @@ static int16_t Service2EWriteSN_PassThrough(uint8_t *pData, uint16_t dataLength)
     }
 
     return 0x72;
+}
+
+static int16_t ToolReadHardwareVersion(uint8_t *pData, uint16_t *pLength)
+{
+    uint16_t len = BOOT_HW_VERSION_LEN;
+    BootInfo_ReadHardwareVersion(pData, len);
+    *pLength = len;
+    //ProjectConfigGetGacSparePartNumber_F17F(pData, pLength);
+    return 0;
 }
 
 static int16_t ToolReadSN_Result_PassThrough(uint8_t *pData, uint16_t *pLength)
