@@ -1759,6 +1759,128 @@ Dcm_UDS0x22(
 #endif
     return ret;
 }
+/* ========================================================================= */
+/* 定义工厂下线0xBB 04 服务                            */
+/* ========================================================================= */
+FUNC(Std_ReturnType, DCM_CODE)
+Dcm_UDS0xBB(
+    Dcm_OpStatusType OpStatus,
+    uint8 ProtocolCtrlId,
+    P2VAR(Dcm_NegativeResponseCodeType, AUTOMATIC, DCM_VAR) ErrorCode)
+{
+#if (STD_ON == DCM_DSP_DID_FUNC_ENABLED)
+    uint16 RecDid;
+    uint32 ResOffset;
+    uint32 Offset;
+    uint32 ReqOffset;
+    uint8 TxChannelCtrlIndex;
+    uint8 TxChannelCfgIndex;
+    uint16 DidNum;
+    uint16 Index0;
+    uint8 DidSessionSupportNum = 0;
+    uint8 NoFindDidNum = 0;
+    uint8 NoFindDidReadNum = 0;
+    uint8 RangeDidCfgIndex;
+    boolean RangeDidFlag;
+    uint16 DidCfgIndex;
+    boolean readDidSignalFlag;
+    Dcm_MsgLenType ReqDataLen;
+#endif
+    uint8 MsgCtrlId;
+    uint8 MixPid = NONE_PID;
+    uint8 noFindPidNum = 0;
+    Std_ReturnType ret = E_OK;
+    Dcm_0x22Types Dcm_0x22Type;
+    Dcm_MsgContextType* pMsgContext;
+
+#if (STD_OFF == DCM_DSP_DID_FUNC_ENABLED)
+    *ErrorCode = DCM_E_REQUESTOUTOFRANGE;
+    return E_NOT_OK;
+#else
+    MsgCtrlId = Dcm_ProtocolCtrl[ProtocolCtrlId].MsgCtrlIndex;
+    pMsgContext = &Dcm_MsgCtrl[MsgCtrlId].MsgContext;
+    TxChannelCtrlIndex = Dcm_MsgCtrl[MsgCtrlId].Dcm_TxCtrlChannelIndex;
+    TxChannelCfgIndex = Dcm_ChannelCtrl[TxChannelCtrlIndex].Dcm_ChannelCfgIndex;
+    Offset = (DcmPbCfgPtr->pDcmDslCfg->pDcmChannelCfg)[TxChannelCfgIndex].offset;
+    ReqDataLen = Dcm_MsgCtrl[MsgCtrlId].MsgContext.ReqDataLen;
+
+    if ((ReqDataLen < 4u) || (pMsgContext->pReqData[1] != 0x04u))
+    {
+        *ErrorCode = DCM_E_SUBFUNCTIONNOTSUPPORTED;
+        return E_NOT_OK;
+    }
+
+    DidNum = (uint16)((ReqDataLen - 2u) >> 1u);
+
+    ret = DspInternalUDS0x22_DidNumbercheck(DidNum, ReqDataLen - 1u);
+    if (E_NOT_OK == ret)
+    {
+        *ErrorCode = DCM_E_INCORRECTMESSAGELENGTHORINVALIDFORMAT;
+        return E_NOT_OK;
+    }
+
+    Dcm_Channel[Offset] = 0xFBu;       /* 0xBB + 0x40 */
+    Dcm_Channel[Offset + 1u] = 0x04u;
+    ResOffset = Offset + 2u;
+    ReqOffset = 2u;                    
+    Index0 = 0u;
+
+    for (; (Index0 < DidNum) && ((E_OK == ret) || (DCM_E_PENDING == ret)); Index0++)
+    {
+        RecDid = (uint16)(((uint16)pMsgContext->pReqData[ReqOffset]) << 8u)
+                 | ((uint16)(pMsgContext->pReqData[ReqOffset + 1u]));
+        ReqOffset = ReqOffset + 2u;
+
+        if (((MixPid == NEED_CALL_UDS_API) || (MixPid == NONE_PID))
+            && ((E_OK == ret) || (DCM_E_PENDING == ret)))
+        {
+            Dcm_0x22Type.RecDid = RecDid;
+            Dcm_0x22Type.NoFindDidReadNum = &NoFindDidReadNum;
+            Dcm_0x22Type.DidSessionSupportNum = &DidSessionSupportNum;
+            Dcm_0x22Type.NoFindDidNum = &NoFindDidNum;
+            Dcm_0x22Type.ResOffset = &ResOffset;
+            Dcm_0x22Type.pRangeDidCfgIndex = &RangeDidCfgIndex;
+            Dcm_0x22Type.pDidCfgIndex = &DidCfgIndex;
+            Dcm_0x22Type.pRangeDidFlag = &RangeDidFlag;
+            Dcm_0x22Type.readDidSignalFlag = &readDidSignalFlag;
+            
+            ret = DspInternalUDS0x22_NonObdDidDeal(OpStatus, ProtocolCtrlId, &Dcm_0x22Type, ErrorCode);
+        }
+        
+        if ((OpStatus == DCM_PENDING) && (DCM_E_PENDING == ret))
+        {
+            break;
+        }
+    }
+
+    if (((NoFindDidNum == DidNum) || (NoFindDidReadNum == DidNum) || (noFindPidNum == DidNum)
+         || (DidSessionSupportNum == 0u))
+        && (E_OK == ret))
+    {
+        *ErrorCode = DCM_E_REQUESTOUTOFRANGE;
+        ret = E_NOT_OK;
+    }
+
+    if ((Dcm_0x22DidReadNvmFlag == DCM_PENDING) || ((OpStatus != DCM_PENDING) && (Dcm_0x22DidReadNvmFlag == E_OK)))
+    {
+        if (ret != E_NOT_OK)
+        {
+            ret = DCM_E_PENDING;
+        }
+        Dcm_0x22DidReadNvmFlag = 0xFF;
+    }
+
+    if (E_OK == ret)
+    {
+        pMsgContext->ResMaxDataLen = (Dcm_MsgLenType)ResOffset - Offset;
+        pMsgContext->ResDataLen = (Dcm_MsgLenType)ResOffset - Offset;
+        pMsgContext->pResData = &Dcm_Channel[Offset];
+        DsdInternal_ProcessingDone(ProtocolCtrlId);
+    }
+
+    return ret;
+#endif
+}
 #define DCM_STOP_SEC_CODE
 #include "Dcm_MemMap.h"
 #endif
