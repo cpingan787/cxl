@@ -68,10 +68,19 @@ TASK(OsTask_0)
     */
    static uint32 sys_cnt = 201;
    static uint32 run_time = 0;
+   static uint32 dataRead = 0;
    if (sys_cnt == 201) 
    {
         LogHalInit(1);
-        MpuHalInit();
+
+        FlsIf_Read(0x50000, 4, (uint8*)&dataRead);
+        if(dataRead != 0xfe)
+        {
+            
+        } else {
+            MpuHalInit();
+        }
+
 
         McuMpuSyncTaskInit();
         uint8 flag = BootM_GetFlag();

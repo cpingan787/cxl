@@ -1584,7 +1584,7 @@ static void Dsp_RC_CheckProgrammingIntegrity(void)
     {
         DCM_SET_NRC(DCM_NRC_SubFunctionNotSupported);
     }
-    else if(Dcm_ReqDataLength!=(DCM_RqLen_RoutineControlMin/* + RC_CHECKSUM_LEN*/))
+    else if(Dcm_ReqDataLength!=(DCM_RqLen_RoutineControlMin + RC_CHECKSUM_LEN))
     {
         DCM_SET_NRC(DCM_NRC_incorrectMessageLengthOrInvalidFormat);
     }
@@ -1658,10 +1658,10 @@ static void Dsp_RC_CheckProgrammingDependencies(void)
     {
         DCM_SET_NRC(DCM_NRC_incorrectMessageLengthOrInvalidFormat);
     }
-    // else if(!GetDcmState_AppACrc() && !GetDcmState_AppBCrc() && !GetDcmState_CalCrc())
-    // {
-    //     DCM_SET_NRC(DCM_NRC_requestSequenceError);
-    // }
+    else if(!GetDcmState_AppACrc() && !GetDcmState_AppBCrc() && !GetDcmState_CalCrc())
+    {
+        DCM_SET_NRC(DCM_NRC_requestSequenceError);
+    }
     else
     {
         if(RC_CheckDependency()!= E_OK)
@@ -1769,10 +1769,6 @@ static void Dsp_RequestDownload(void)
                     TransDataTotalNumofBlock = (uint16)(ProgramMemorySize/(uint16)(TRANSDATA_BLOCKSIZE_MAX-2U));
                     TransDataLastBlockSize = TRANSDATA_BLOCKSIZE_MAX;
                 }
-
-                //请求擦除 擦除整个APP，后续需修改更合适的处理方式
-                FlsIf_Erase(0x50000,0x11FFFF);
-
                 Dsd_ProcessingDone(DCM_RsLen_RequestDownload);
                 SetDcmState_AllowTransferData();
                 SetDcmState_SID36_1stBlock();
@@ -1816,31 +1812,31 @@ static uint8 Dsp_RD_SequenceCheck(void)
         DCM_SET_NRC(DCM_NRC_requestSequenceError);
         ClrDcmState_AllowTransferData();
     }
-    // else if(g_CurLogicalBlockId != MEMM_FLASHDRV)
-    // {
-    //     if(!GetDcmState_DriverCrc())
-    //     {
-    //         DCM_SET_NRC(DCM_NRC_uploadDownloadNotAccepted);
-    //     }
-    //     else if(g_CurLogicalBlockId == MEMM_APPA)
-    //     {
-    //         if(!GetDcmState_EraseMemoryAppA())
-    //         {
-    //             DCM_SET_NRC(DCM_NRC_uploadDownloadNotAccepted);
-    //         }
-    //     }
-    //     else if(g_CurLogicalBlockId == MEMM_CAL)
-    //     {
-    //         if(!GetDcmState_EraseMemoryCal())
-    //         {
-    //             DCM_SET_NRC(DCM_NRC_uploadDownloadNotAccepted);
-    //         }
-    //     }
-    //     else
-    //     {
-    //         DCM_SET_NRC(DCM_NRC_uploadDownloadNotAccepted);
-    //     }
-    // }
+    else if(g_CurLogicalBlockId != MEMM_FLASHDRV)
+    {
+        if(!GetDcmState_DriverCrc())
+        {
+            DCM_SET_NRC(DCM_NRC_uploadDownloadNotAccepted);
+        }
+        else if(g_CurLogicalBlockId == MEMM_APPA)
+        {
+            if(!GetDcmState_EraseMemoryAppA())
+            {
+                DCM_SET_NRC(DCM_NRC_uploadDownloadNotAccepted);
+            }
+        }
+        else if(g_CurLogicalBlockId == MEMM_CAL)
+        {
+            if(!GetDcmState_EraseMemoryCal())
+            {
+                DCM_SET_NRC(DCM_NRC_uploadDownloadNotAccepted);
+            }
+        }
+        else
+        {
+            DCM_SET_NRC(DCM_NRC_uploadDownloadNotAccepted);
+        }
+    }
     else
     {
         /*do nothing*/
@@ -2262,12 +2258,6 @@ static void Dsp_WriteDataByIdentifier( void )
 END_FUNCTION_HDR */
 static void Dsp_ReadDataByIdentifier(void)
 {
-
-    static uint8 f191Cnt = 0U;
-    static uint8 affcCnt = 0U;
-    static uint8 affdCnt = 0U;
-    static uint8 affeCnt = 0U;
-    static uint8 afffCnt = 0U;
     uint16 ReadDidTemp=0;
     uint16 i = 0 ;
   /*  if ((Dcm_ReqDataLength < DCM_RqLen_ReadDataByIdentifierMin)||
@@ -2298,44 +2288,6 @@ static void Dsp_ReadDataByIdentifier(void)
                        }
                        else
                        {
-                           uint16 didValue = (Dcm_SduBuffer[1] << 8) | Dcm_SduBuffer[2];
-                           switch(didValue)
-                           {
-                            //    case 0xF191:
-                            //        f191Cnt++;
-                            //        Dcm_SduBuffer[3] = f191Cnt;
-                            //        break;
-                               case 0xAFFC:
-                                   affcCnt++;
-                                   if(affcCnt % 3 == 0)
-                                   {
-                                       Dcm_SduBuffer[4] = 0x01;
-                                   }
-                                   break;
-                               case 0xAFFD:
-                                   affdCnt++;
-                                   if(affdCnt == 2)
-                                   {
-                                       Dcm_SduBuffer[3] = 0xFF;
-                                   }
-                                   break;
-                               case 0xAFFE:
-                                   affeCnt++;
-                                   if(affeCnt == 2)
-                                   {
-                                       Dcm_SduBuffer[3] = 0xFF;
-                                   }
-                                   break;
-                               case 0xAFFF:
-                                   afffCnt++;
-                                   if(afffCnt == 3 || afffCnt == 1)
-                                   {
-                                       Dcm_SduBuffer[3] = 0x01;
-                                   }
-                                   break;
-                               default:
-                                   break;
-                           }
                            Dsd_ProcessingDone(DID_Infos[i].Size + 3);
                        }
                 }

@@ -316,7 +316,7 @@ static CONST(Can_HohConfigType, CAN_RSCAN_CONFIG_DATA) Can_GaaHohConfig0[] =
     /* ucController */
     0x00U,
     /* ucTMDLC */
-    0x40U,
+    0x14U,
     /* usHohId */
     0x0002U,
     /* enBufferType */
@@ -337,7 +337,7 @@ static CONST(Can_HohConfigType, CAN_RSCAN_CONFIG_DATA) Can_GaaHohConfig0[] =
     /* ucController */
     0x00U,
     /* ucTMDLC */
-    0x40U,
+    0x14U,
     /* usHohId */
     0x0003U,
     /* enBufferType */

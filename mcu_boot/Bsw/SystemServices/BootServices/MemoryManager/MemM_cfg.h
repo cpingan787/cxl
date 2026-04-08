@@ -43,12 +43,10 @@ enum USERDATA_BLOCK0
     RESET_ADDR_IDX = 6,
     SECURITY_ADDR_IDX = 10,
     NEGATIVERES_ADDR_IDX = 14,
-    DID_F110_ADDR_IDX = 20,
-    DID_F191_ADDR_IDX = 38, //该block待定
-    DID_F198_ADDR_IDX = 36,
-    DID_F187_ADDR_IDX = 37,
-    DID_F18A_ADDR_IDX = 38,
-    DID_F199_ADDR_IDX = 39
+    DID_F198_ADDR_IDX = 22,
+    DID_F187_ADDR_IDX = 32,
+    DID_F18A_ADDR_IDX = 45,
+    DID_F199_ADDR_IDX = 55
 };
 
 /***************************************************************************************************

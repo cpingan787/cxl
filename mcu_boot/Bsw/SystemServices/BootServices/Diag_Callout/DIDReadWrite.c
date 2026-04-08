@@ -37,7 +37,7 @@ const DIDInfo_t DID_Infos[Dcm_NUMBER_OF_DIDS] =
     {
         MEMM_DRV_EE,//2
         0xF187,
-        DID_F187_LEN,//0x05
+        DID_F187_LEN,//0x0C
         DID_INFO_READ_AND_WRITE,//3
         DID_F187_ADDR_IDX,//12
     },
@@ -83,20 +83,6 @@ const DIDInfo_t DID_Infos[Dcm_NUMBER_OF_DIDS] =
         DID_INFO_READ_ONLY,//0x01U
         DID_F18A_ADDR_IDX,//25
     },
-    {
-        MEMM_DRV_EE,//2
-        0xF110,
-        DID_F110_LEN,//0x01
-        DID_INFO_READ_AND_WRITE,//0x01U
-        DID_F110_ADDR_IDX,//25
-    },
-    {
-        MEMM_DRV_FLASH,
-        0xF191,
-        DID_F191_LEN,//长度待定
-        DID_INFO_READ_ONLY,//0x01U
-        DID_F191_ADDR_IDX,//该block待定
-    }
 };
 
 /* DID(F183) write data*/
@@ -108,7 +94,7 @@ uint8 WriteDataF198[DID_F198_LEN] =
 /*DID(F187) write data */
 uint8 WriteDataF187[DID_F187_LEN] =
 {
-    0x42, 0x44, 0x30, 0x36, 0x30
+    0x42, 0x44, 0x30, 0x36, 0x30, 0x33, 0x30, 0x30, 0x30, 0x30, 0x30, 0x33
 };
 
 /*DID(F18A) write data */
@@ -196,7 +182,7 @@ Std_ReturnType DID_Write(uint8 * buf, const DIDInfo_t* ProdInfo)
         }
         case MEMM_DRV_EE:
         {
-            retValue = EEIf_Write(ProdInfo->Addr, ProdInfo->Size, buf);
+            retValue = E_OK ;//= EEIf_Write(ProdInfo->Addr, ProdInfo->Size, buf);
             break;
         }
         default:

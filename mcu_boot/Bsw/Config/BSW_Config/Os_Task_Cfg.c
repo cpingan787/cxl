@@ -73,7 +73,7 @@ static Os_StackDataType Os_TaskStack_Idle_Core0[128];
 #define OS_START_SEC_VAR_CLEARED_CORE0_32
 #include "Os_MemMap.h"
 /* PRQA S 3132 ++ */ /* VL_QAC_MagicNum */
-static Os_StackDataType Os_OsTask_0_Stack[1024];
+static Os_StackDataType Os_OsTask_0_Stack[256];
 /* PRQA S 3132 -- */
 #define OS_STOP_SEC_VAR_CLEARED_CORE0_32
 #include "Os_MemMap.h"

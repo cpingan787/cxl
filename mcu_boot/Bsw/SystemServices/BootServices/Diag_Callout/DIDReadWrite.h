@@ -24,11 +24,10 @@ typedef struct
 *                                      GLOBAL CONSTANTS
 ==================================================================================================*/
 
-#define Dcm_NUMBER_OF_DIDS                             0x0BU
+#define Dcm_NUMBER_OF_DIDS                             0x09U
 #define DID_F198_LEN                            ((uint32)0x0AU)
-#define DID_F187_LEN                            ((uint32)0x05U)
+#define DID_F187_LEN                            ((uint32)0x0CU)
 #define DID_F18A_LEN                            ((uint32)0x0AU)
-#define DID_F191_LEN                            ((uint32)0x01U)//长度待定
 #define DID_F199_LEN                            ((uint32)0x04U)
 
 #define DID_AFFB_LEN                            ((uint32)0x02U)
@@ -36,7 +35,7 @@ typedef struct
 #define DID_AFFD_LEN                            ((uint32)0x01U)
 #define DID_AFFE_LEN                            ((uint32)0x01U)
 #define DID_AFFF_LEN                            ((uint32)0x01U)
-#define DID_F110_LEN                            ((uint32)0x10U)
+
 #define DID_INFO_READ_ONLY                     0x01U
 #define DID_INFO_WRITE_ONLY                    0x02U
 #define DID_INFO_READ_AND_WRITE                0x03U

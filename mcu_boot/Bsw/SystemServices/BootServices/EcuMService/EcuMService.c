@@ -141,7 +141,7 @@ static void Service_Init(void)
     /* Get flag */
     flag = BootM_GetFlag();
     /* Initializing Security Module */
-    //SecM_Init();
+    SecM_Init();
     /* Initialize canTp */
     CanTp_Init(NULL_PTR);
     /* Initialize dcm */
