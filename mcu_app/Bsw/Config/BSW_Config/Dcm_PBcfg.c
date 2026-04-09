@@ -7509,9 +7509,9 @@ static  CONST(Dcm_DsdServiceCfgType,DCM_CONST)SRVTABLE_UDS_CAN_FD_Service[13] =
         NULL_PTR,    /*DcmDsdServiceRoleRefs*/
         0u    /*DcmDsdServiceRoleRef_Num*/
     },
-    { /* 0xBB */
+    { /* 0xBB_22 */
         TRUE,            /*DcmDsdServiceUsed*/
-        Dcm_UDS0xBB,     /*DcmDsdSidTabFnc*/
+        Dcm_UDS0xBB_22,     /*DcmDsdSidTabFnc*/
         0xBBu,           /*DcmDsdServiceId*/
         FALSE,           /*DcmDsdSubfuncAvial*/
         FALSE,           /*DcmDsdSuppressPosRsp*/

@@ -1763,7 +1763,7 @@ Dcm_UDS0x22(
 /* 定义工厂下线0xBB 04 服务                            */
 /* ========================================================================= */
 FUNC(Std_ReturnType, DCM_CODE)
-Dcm_UDS0xBB(
+Dcm_UDS0xBB_22(
     Dcm_OpStatusType OpStatus,
     uint8 ProtocolCtrlId,
     P2VAR(Dcm_NegativeResponseCodeType, AUTOMATIC, DCM_VAR) ErrorCode)
