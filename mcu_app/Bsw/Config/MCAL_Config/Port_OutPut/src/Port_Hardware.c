@@ -207,7 +207,8 @@ volatile APortReg* const
 
 
 /*Port filters registers*/
-/* volatile FCLAReg* const Port_GpFclaReg_BaseAddress */
+volatile  FCLAReg* const Port_GpFclaReg_BaseAddress = 
+  (volatile FCLAReg *) &FCLAREG;
 
 /*Digital filters registers*/
 volatile DNFAReg* const 

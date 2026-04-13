@@ -1579,8 +1579,10 @@ void PeripheralHalSetMode(uint8_t mode)
     {
         // Cy_GPIO_Set(SYS_ON_PORT,SYS_ON_PIN);
         // PeripheralHalRestartSysLed();
-        // Cy_GPIO_Set(AMP_STB_PORT,AMP_STB_PIN);
-        // Cy_GPIO_Set(AMP_MUTE_PORT,AMP_MUTE_PIN);
+        // AMP_STB
+        R_PORT_SetGpioOutput(Port1, 11, 1);
+        // AMP_MUTE
+        R_PORT_SetGpioOutput(Port1, 10, 0);
         // //Cy_GPIO_Set(FAULTZ_DET_PORT,FAULTZ_DET_PIN);
         // KL30_VOLTAGE _DET_EN
         R_PORT_SetGpioOutput(Port0, 12, 1);
@@ -1590,6 +1592,8 @@ void PeripheralHalSetMode(uint8_t mode)
         R_PORT_SetGpioOutput(Port10, 5, 1);
         // ANT_DET_PWR_EN
         R_PORT_SetGpioOutput(Port10, 10, 1);
+        // beCALL_LED_EN
+        R_PORT_SetGpioOutput(Port0, 14, 1);
     }
     else
     {
@@ -1605,10 +1609,13 @@ void PeripheralHalSetMode(uint8_t mode)
         R_PORT_SetGpioOutput(Port10, 10, 0);
         //close LED
         PeripheralHalStopSysLed();
-        //close AMP
-        // Cy_GPIO_Clr(AMP_STB_PORT,AMP_STB_PIN);
-        // Cy_GPIO_Clr(AMP_MUTE_PORT,AMP_MUTE_PIN);
+        // AMP_STB
+        R_PORT_SetGpioOutput(Port1, 11, 0);
+        // AMP_MUTE
+        R_PORT_SetGpioOutput(Port1, 10, 0);
         // //Cy_GPIO_Clr(FAULTZ_DET_PORT,FAULTZ_DET_PIN);
+        // beCALL_LED_EN
+        R_PORT_SetGpioOutput(Port0, 14, 0);
     }
 }
 
@@ -1916,6 +1923,20 @@ void PeripheralHalInit(void)
     PORT.P1 |= _PORT_Pn11_OUTPUT_HIGH;
     PORT.PM1 &= (uint16_t) ~_PORT_PMn11_MODE_UNUSED;
     PORT.PM1 |= _PORT_PMn11_MODE_OUTPUT;
+
+    // BLE_UART_RX
+    PORT.PPCMD10 = _WRITE_PROTECT_COMMAND;
+    PORT.PDSC10 &= (uint32_t) ~_PORT_PMn12_MODE_UNUSED;
+    PORT.PDSC10 |= _PORT_PDSCn12_SLOW_MODE_SELECT;
+    PORT.PPCMD10 = _WRITE_PROTECT_COMMAND;
+    PORT.PODC10 &= (uint32_t) ~_PORT_PMn12_MODE_UNUSED;
+    PORT.PODC10 |= _PORT_PODCn12_PUSH_PULL;
+    PORT.PBDC10 &= (uint16_t)~_PORT_PMn12_MODE_UNUSED;
+    PORT.PBDC10 |= _PORT_PBDCn12_PBDC_MODE_DISABLED;
+    PORT.P10 &= (uint16_t) ~_PORT_PMn12_MODE_UNUSED;
+    PORT.P10 |= _PORT_Pn12_OUTPUT_LOW;
+    PORT.PM10 &= (uint16_t) ~_PORT_PMn12_MODE_UNUSED;
+    PORT.PM10 |= _PORT_PMn12_MODE_OUTPUT;
 
   /*1ms timer init*/
   PeripheralStartSysLed();

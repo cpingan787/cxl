@@ -113,16 +113,12 @@ void McuMpuSyncTaskMain(void)
             {
                 powerSyncPack = &g_dataPack;
             }
-            else if(g_dataPack.aid == 0x30 && g_dataPack.mid == 0x01)//DTC故障码同步
-            {
-                dtcSyncPack = &g_dataPack;
-            }
         }
 
         ret = MpuHalReceive(g_mpuHandleFault,&g_dataPackFault,0);
         if(ret == MPU_HAL_STATUS_OK)
         {
-            TBOX_PRINT("sync: aid 0x%02X, mid 0x%02X, subcommond 0x%02X\r\n", g_dataPackFault.aid, g_dataPackFault.mid, (g_dataPackFault.subcommand & 0x7F));
+            //TBOX_PRINT("sync: aid 0x%02X, mid 0x%02X, subcommond 0x%02X\r\n", g_dataPackFault.aid, g_dataPackFault.mid, (g_dataPackFault.subcommand & 0x7F));
 
             if(g_dataPackFault.aid == 0x30 && g_dataPackFault.mid == 0x01)
             {

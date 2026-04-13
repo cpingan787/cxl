@@ -54,6 +54,7 @@
 #define AD_CHANNEL_BATTERY_FACTOR       300/100
 //#define AD_CHANNEL_4G_FACTOR       20/10
 #define AD_CHANNEL_NTC_FACTOR           1
+#define AD_CHANNEL_SOS_FACTOR           2 // 1/(100/(100+100))
 /*****************************************************/
 
 typedef void(* typeSetWakeupSourceCallbackPtr)(uint8_t source);
@@ -64,7 +65,6 @@ typedef struct
   uint16_t adValue[25];
   uint8_t adValid;  
 }AdConvertBuffer_t;
-
 /*************************************************
   Function:     PeripheralHalInit
   Description:  Peripheral Hal init

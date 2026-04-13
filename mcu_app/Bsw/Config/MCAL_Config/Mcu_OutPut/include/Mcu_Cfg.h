@@ -157,7 +157,7 @@
 #define MCU_CRITICAL_SECTION_PROTECTION     STD_ON
 
 /* Pre-compile option for the store-restore feature of port pin status */
-#define MCU_PORTGROUP_STATUS_BACKUP         STD_ON
+#define MCU_PORTGROUP_STATUS_BACKUP         STD_OFF
 
 /* Pre-compile option for the low power sequencer */
 #define MCU_LOW_POWER_SEQUENCER             STD_OFF
@@ -262,7 +262,7 @@
 #define MCU_MAX_CLK_SET                     0x01U
 
 /* Total count of MCU mode setting configured */
-#define MCU_MAX_MODE_SET                    0x01U
+#define MCU_MAX_MODE_SET                    0x02U
 
 /* Precompile option for PLL0 Unit */
 #define MCU_PLL0_ENABLE                     STD_OFF
@@ -351,6 +351,7 @@
 
 /* Mode Setting Handles */
 #define McuConf_McuModeSettingConf_McuModeSettingConf0 (Mcu_ModeType)0x00
+#define McuConf_McuModeSettingConf_McuModeSettingConf_Stop (Mcu_ModeType)0x01
 
 /* Reset Reason Handles */
 #define McuConf_McuResetReasonConf_McuResetReasonConf0 (Mcu_ResetType)0x00

@@ -1,4 +1,4 @@
-#include "mpuHal.h"
+﻿#include "mpuHal.h"
 #include "logHal.h"
 #include "osHal.h"
 #include "crc8_16_32.h"
@@ -54,6 +54,7 @@ volatile uint8_t g_mpuUartRxBufDealFlag = 0;
 static MpuUartProtocalBuffer_t g_mpuUartProtocalBuffer;
 static MpuUartTxBuffer_t g_mpuUartTxBuffer;
 static int16_t MpuUartTransmit(const uint8_t *pTxData, uint16_t txLength);
+static void MpuHalResetUartRuntimeState(void);
 
 typedef struct
 {
@@ -163,6 +164,7 @@ static void MpuHalSetPower(uint8_t flag)
 
 static void MpuHalSetPowerkey(uint8_t flag)
 {
+    TBOX_PRINT("set powerkey %d", flag);
     if(0==flag)
     {
         Dio_WriteChannel(DioConf_DioChannel_DIO_Channel_AG591_POWERKEY_EN_Pin18_1, STD_LOW);
@@ -175,6 +177,7 @@ static void MpuHalSetPowerkey(uint8_t flag)
 
 static void MpuHalSetWakeOut(uint8_t flag)
 {
+    TBOX_PRINT("set wakeup %d", flag);
     if(0==flag)
     {
         Dio_WriteChannel(DioConf_DioChannel_DIO_Channel_MCU_WAKEUP_NAD_Pin12_0, STD_LOW);
@@ -402,6 +405,32 @@ static void MpuUartRingCopyOut(uint8_t *pDst, uint16_t startAddress, uint16_t le
     }
 }
 
+static void MpuHalResetUartRuntimeState(void)
+{
+    g_mpuUartErrorType = 0;
+    g_mpuUartErrorFlag = 0;
+    g_mpuSetRecvErrorFlag = 0;
+    g_mpuUartReciveCount = 0;
+
+    memset((void *)g_uartReceiveData0, 0, sizeof(g_uartReceiveData0));
+    memset((void *)g_uartReceiveData1, 0, sizeof(g_uartReceiveData1));
+    g_mpuUartRxBufId = 0;
+    g_mpuUartRxBufCount0 = 0;
+    g_mpuUartRxBufCount1 = 0;
+    g_mpuUartRxBufDealFlag = 0;
+
+    memset(&g_mpuUartProtocalBuffer, 0, sizeof(g_mpuUartProtocalBuffer));
+
+    g_mpuUartTxBuffer.index = 0;
+    g_mpuUartTxBuffer.usedSize = 0;
+    memset(g_mpuUartTxBuffer.buffer, 0, sizeof(g_mpuUartTxBuffer.buffer));
+    memset(g_mpuUartTxBuffer.activeBuffer, 0, sizeof(g_mpuUartTxBuffer.activeBuffer));
+    if (g_mpuUartTxBuffer.txQueueHandle != NULL)
+    {
+        (void)xQueueReset(g_mpuUartTxBuffer.txQueueHandle);
+    }
+}
+
 void MpuHalCycleProcess(uint32_t cycleTime)
 {
     static uint32_t timeCount = 0;
@@ -460,7 +489,7 @@ void MpuHalCycleProcess(uint32_t cycleTime)
         g_mpuManage.wakeoutTimeCount++;
         if (2 == g_mpuManage.wakeoutTimeCount)
         {
-            MpuHalSetWakeOut(0);
+            MpuHalSetWakeOut(1);
         }
     }
 }
@@ -517,6 +546,10 @@ int16_t MpuHalSetRxBuffer(int16_t handle, uint8_t *pBuffer, uint32_t bufferSize)
             g_mpuManage.rxHandle[handle].rxIndexIn = 0;
             g_mpuManage.rxHandle[handle].pDataBufferRx = pBuffer;
             g_mpuManage.rxHandle[handle].dataBufferSize = bufferSize;
+            if(g_mpuManage.rxHandle[handle].rxQueueHandle == NULL)
+            {
+                return MPU_HAL_STATUS_ERR;
+            }
             return MPU_HAL_STATUS_OK;
         }
         else
@@ -770,16 +803,20 @@ void MpuHalSetMode(uint8_t wakeMode)
 {
     if (0 == wakeMode)
     {
-        // R_UART5_Stop();
+        MpuHalSetWakeOut(1);
+        R_UART5_Stop();
+        MpuHalResetUartRuntimeState();
         g_mpuManage.wakeMode = wakeMode;
         Dio_WriteChannel(DioConf_DioChannel_DIO_Channel_NAD_V2X_5V0__EN_Pin1_7, STD_LOW);
     }
     else if (1 == wakeMode)
     {
-        // R_UART5_Start();
+        R_UART5_Create();
+        MpuHalResetUartRuntimeState();
+        R_UART5_Start();
         /*wake up mpu*/
         g_mpuManage.wakeoutTimeCount = 0;
-        MpuHalSetWakeOut(1);
+        MpuHalSetWakeOut(0);
         g_mpuManage.wakeMode = wakeMode;
         Dio_WriteChannel(DioConf_DioChannel_DIO_Channel_NAD_V2X_5V0__EN_Pin1_7, STD_HIGH);
     }
@@ -939,6 +976,7 @@ void MpuHalUartTimerCallback(void)
 void MpuHalMainUartInit(uint32_t bandrate)
 {
     R_UART5_Create();
+    MpuHalResetUartRuntimeState();
     R_UART5_Start();
 }
 

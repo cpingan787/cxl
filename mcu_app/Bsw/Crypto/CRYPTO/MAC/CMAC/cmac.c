@@ -36,6 +36,7 @@
 #include "cmac.h"
 #include "Crypto_internal.h"
 #include "aes.h"
+
 #define CRYPTO_ISOFT_START_SEC_CODE
 #include "Crypto_ISoft_MemMap.h"
 #if (CRYPTO_ALGORITHM_CMAC == STD_ON)
@@ -211,12 +212,8 @@ Crypto_VerifyMAC(uint8* Key, uint8* IVKey, uint8* add, uint8 inputlength, uint8 
     uint8 k2[16] = {0X00};
     Crypto_AESData aes;
 
-    ret = LoadMacKey(&aes, Key, IVKey, k1, k2);
-    if (ret == E_OK)
-    {
-        ret = internal_GenerateMAC(&aes, inputlength, add, MAC, Key, IVKey, k1, k2);
-    }
-
+    // ret = internal_GenerateMAC(&aes, inputlength, add, MAC, Key, IVKey, k1, k2);
+    ret = VssSecocCmacGen(add, inputlength, MAC);
     if (ret == E_OK)
     {
         for (i = 0; i < Verifylength; i++)

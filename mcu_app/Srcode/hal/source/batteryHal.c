@@ -4,6 +4,7 @@
 #include "r_port.h"
 #include "r_cg_port.h"
 #include "Dio.h"
+#include "logHal.h"
 
 /*************************************************
   Function:     BatteryHalInit
@@ -70,7 +71,8 @@ int16_t BatteryHalInit(void)
 *************************************************/
 void BatteryHalEnableOut(void)
 {
-    R_PORT_SetGpioOutput(Port10, 15, 1);
+    //R_PORT_SetGpioOutput(Port10, 15, 1);
+    R_PORT_SetGpioOutput(Port20, 5, 1);
 }
 
 /*************************************************
@@ -83,7 +85,8 @@ void BatteryHalEnableOut(void)
 *************************************************/
 void BatteryHalDisableOut(void)
 {
-    R_PORT_SetGpioOutput(Port10, 15, 0);
+    //R_PORT_SetGpioOutput(Port10, 15, 0);
+    R_PORT_SetGpioOutput(Port20, 5, 0);
 }
 
 /*************************************************
@@ -125,6 +128,8 @@ int16_t BatteryHalGetVoltage(uint32_t *pVoltage)
     int16_t ret = 0;
     uint32_t voltage;
     ret = PeripheralHalAdGet(AD0_CHANNEL_BUB_VOLTAGE_ADC, &voltage);
+    //TBOX_PRINT("voltage_adccaiji = %d\n", voltage);
+
     if(ret == 0)
     {
         *pVoltage = voltage;

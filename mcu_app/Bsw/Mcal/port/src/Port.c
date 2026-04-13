@@ -846,6 +846,26 @@ FUNC (void, PORT_PRIVATE_CODE) Port_SetToDioOrAltMode (Port_PinType Pin,
 #include PORT_MEMMAP_FILE
 /* END Msg(2:0832)-20 */
 
+
+void Clear_IoHold(void)
+{
+  volatile uint8 My_LucLoopCount = PORT_UNLOCK_SEQUENCE_COUNT;
+  do
+  {
+    /* Write the write enable register */
+    /* Implements PORT_ESDD_UD_124 */
+    PORT_WRITE_REG_ONLY (&PORT_PROTCMD0, PORT_WRITE_ERROR_CLEAR_VAL)
+    /* Mask the IOHOLD bit */
+    PORT_WRITE_REG_ONLY (&PORT_IOHOLD, PORT_IOHOLD_CLEAR)
+    PORT_WRITE_REG_ONLY (&PORT_IOHOLD, ~PORT_IOHOLD_CLEAR)
+    PORT_WRITE_REG_ONLY (&PORT_IOHOLD, PORT_IOHOLD_CLEAR)
+    My_LucLoopCount--;
+
+  } while ((PORT_ZERO < My_LucLoopCount) && (PORT_PROTECTED_ERR_OCCURRED == PORT_PROTS0));
+}
+
+
+
 /* Implements PORT001, SWS_Port_00001 */
 /* Implements PORT_ESDD_UD_122 */
 /* Initialize the Port Driver module */

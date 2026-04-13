@@ -7,7 +7,7 @@
 #define TX_BUFFER_CAN_MSG_NUM_MAX       100
 #define CPU_CAN_RX_QUEUE_NUM            10
 #define CPU_CAN_DATA_LENGTH_MAX         64
-#define DV_TEST_ENABLE                  1
+#define DV_TEST_ENABLE                  0
 
 typedef struct
 {
@@ -330,13 +330,13 @@ int16_t SaveCanMsgToBuffer(uint8_t canChannel, uint32_t canId, uint8_t dlc, cons
     }
 
 #if (DV_TEST_ENABLE == 1)
-    bufferIndex = GetIndexFromCanMsgConfigureBuffer(canChannel, canId);
-    if (bufferIndex < 0)
+    if(canId != 0x361)
     {
         return 0;
     }
 #else
-    if(canId != 0x361)
+    bufferIndex = GetIndexFromCanMsgConfigureBuffer(canChannel, canId);
+    if (bufferIndex < 0)
     {
         return 0;
     }
@@ -420,7 +420,9 @@ int16_t CanMsgTransmitToCpu(int16_t mpuHandle)
                 TBOX_PRINT("0x%02X ", canMsg.canData[j]);
             }
             TBOX_PRINT("\n");
+            PowerManageSdkSetTestMode(canMsg.canData[4]);
         }
+        return 0;
 #endif
         g_txBuffer[g_txByteOffset++] = rxCanChannel;
         g_txBuffer[g_txByteOffset++] = (canMsg.canId >> 24) & 0xFFu;

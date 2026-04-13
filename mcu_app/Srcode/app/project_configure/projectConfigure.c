@@ -45,14 +45,14 @@ static const uint8_t g_F11E[] = {0x00, 0x00, 0xAA, 0x55, 0x00, 0x00, 0x00, 0x00,
 static const uint8_t g_F11F[] = {0x00, 0x00, 0xAA, 0x55, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};//size:16  did:F11F
 static const uint8_t g_F120[] = {0x00, 0x00, 0xAA, 0x55, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};//size:16  did:F120
 static const uint8_t g_bootloaderSWNumber[] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01};//size:10  did:F183  引导程序软件参考号
-static const uint8_t g_systemSupplierIdentifier[] = {0x00, 0x00, 0x00, 0x00, 0x00};//size:5  did:F18A  系统供应商标识符
+static const uint8_t g_systemSupplierIdentifier[] = {0x11, 0x72, 0x09, 0x04, 0x04};//size:5  did:F18A  系统供应商标识符
 static const uint8_t g_ecuSerialNumber[] = "0000000000000000";//size:16  did:F18C  ECU序列号
 static const uint8_t g_ecuHWNumber[] = {0x00, 0x00, 0x00, 0x00, 0x00};//size:5  did:F191  ECU硬件编号
-static const uint8_t g_ecuHWRefNumber[] = "0000000000";//size:10  did:F192  ECU硬件参考编号
-static const uint8_t g_ecuSWRefNumber[] = "0000000000";//size:10  did:F194  ECU软件参考编号
+static const uint8_t g_ecuHWRefNumber[] = "SRTLVWHWNM";//size:10  did:F192  ECU硬件参考编号
+static const uint8_t g_ecuSWRefNumber[] = "SRTLVWSWNM";//size:10  did:F194  ECU软件参考编号
 static const uint8_t g_ecuAppSWVersion[] = {0x00, 0x00, 0x00, 0x00, 0x00};//size:5 did:F1A0  ECU应用软件版本号
 static const uint8_t g_ecuCalibrationSWVersion[] = {0x00, 0x00, 0x00, 0x00, 0x00};//size:5  did:F1A1  ECU校准软件版本号
-static const uint8_t g_ecuNCFRefNumber[] = "00000000";//size:8  did:F1A2  ECU NCF参考编号
+static const uint8_t g_ecuNCFRefNumber[] = {0xB8, 0x01, 0x17, 0x00, 0x00, 0x00, 0x00, 0x04};//size:8  did:F1A2  ECU NCF参考编号
 static const uint8_t g_ecuIndexInformation[] = {0x00, 0x00, 0x00};//size:3  did:F1A5  ECU索引信息 bety1配置索引 bety2诊断索引 bety3总线索引
 // static const uint8_t g_ecuSecondaryAppSW[] = {0x00, 0x00, 0x00, 0x00, 0x00};//size:5  did:F1B5  次级应用软件版本号
 static const uint8_t g_ecuThirdAppSW[] = {0x00, 0x00, 0x00, 0x00, 0x00};//size:5  did:F1B6  三级应用软件版本号
@@ -60,12 +60,11 @@ static const uint8_t g_ecuThirdAppSW[] = {0x00, 0x00, 0x00, 0x00, 0x00};//size:5
 static const uint8_t g_ICCIDValueInt[] = "89860000000000000000";//size:20  did:B001  ICCID值
 static const uint8_t g_modemSWVersion[] = "112200000000000000000000";//size:24  did:B002  5G或4G软件版本
 static const uint8_t g_mcuSWVersion[] = "11220000000000000000000";//size:24  did:B003  MCU软件版本号
-static const uint8_t g_NadIMEI[] = "869900000000000000000000";//size:24  did:B004  NAD IMEI
 static const uint8_t g_NadSWVersion[] = "112200";//size:128  did:B005  NAD软件版本号
 // static const uint8_t g_NadHWVersion[] = "112200";//size:128  did:B006  NAD硬件版本号
 // static const uint8_t g_UbloxF9KVersion[] = "98990000000000000000000000112200";//size:32  did:B00C  UbloxF9K版本号
 static const uint8_t g_SignaturePublicKey[] = "00";//size:64 did:B201  签名公钥
-static const uint8_t g_HSMID[] = "000012120000000";//size:16  did:B202  HSMID
+// static const uint8_t g_HSMID[] = "000012120000000";//size:16  did:B202  HSMID
 
 /* 参数同步参数配置 */
 static uint8_t g_softWareNumber[] = MCU_MPU_ALL_VERSION;//软件版本号 14
@@ -109,13 +108,11 @@ static const ConfigTableEntry_t configTable[CONFIG_ITEM_MAX] = {
     [CONFIG_ITEM_ICCID_VALUE_INT]             = {CONFIG_ITEM_ICCID_VALUE_INT,             GetICCIDValueInt                  },//B001
     [CONFIG_ITEM_MODEM_SW_VERSION]            = {CONFIG_ITEM_MODEM_SW_VERSION,            GetModemSWVersion                 },//B002
     [CONFIG_ITEM_MCU_SW_VERSION]              = {CONFIG_ITEM_MCU_SW_VERSION,              GetMcuSWVersion                   },//B003
-    [CONFIG_ITEM_NAD_IMEI]                    = {CONFIG_ITEM_NAD_IMEI,                    GetNadIMEI                        },//B004
     [CONFIG_ITEM_NAD_SW_VERSION]              = {CONFIG_ITEM_NAD_SW_VERSION,              GetNadSWVersion                   },//B005
     // [CONFIG_ITEM_NAD_HW_VERSION]              = {CONFIG_ITEM_NAD_HW_VERSION,              GetNadHWVersion                   },//B006
     // [CONFIG_ITEM_UbloxF9K_VERSION]            = {CONFIG_ITEM_UbloxF9K_VERSION,            GetUbloxF9KVersion                },//B00C
     [CONFIG_ITEM_SIGNATURE_PUBLIC_KEY]        = {CONFIG_ITEM_SIGNATURE_PUBLIC_KEY,        GetSignaturePublicKey             },//B201
-    [CONFIG_ITEM_HSMID]                       = {CONFIG_ITEM_HSMID,                       GetHSMID                          },//B202
-    [CONFIG_ITEM_ENCRYPTION_ALGORITHM_FLAG]   = {CONFIG_ITEM_ENCRYPTION_ALGORITHM_FLAG,   GetEncryptionAlgorithmFlag        },//B9E4
+    // [CONFIG_ITEM_HSMID]                       = {CONFIG_ITEM_HSMID,                       GetHSMID                          },//B202
 
     [CONFIG_ITEM_SOFTWARE_NUMBER]             = {CONFIG_ITEM_SOFTWARE_NUMBER,             GetSoftwareNumber},
     [CONFIG_ITEM_HARDWARE_NUMBER]             = {CONFIG_ITEM_HARDWARE_NUMBER,             GetHardwareNumber},
@@ -618,7 +615,7 @@ int16_t GetEcuNCFRefNumber(uint8_t *pVersion,uint32_t *pLength)
         return -1;
     }
     memcpy(pVersion,g_ecuNCFRefNumber,sizeof(g_ecuNCFRefNumber));
-    *pLength = sizeof(g_ecuNCFRefNumber) - 1;
+    *pLength = sizeof(g_ecuNCFRefNumber);
     return 0;
 }
 
@@ -749,24 +746,6 @@ int16_t GetMcuSWVersion(uint8_t *pVersion,uint32_t *pLength)
 }
 
 /*************************************************
-  Function:       GetNADIMEI DID:B004
-  Description:    获取NAD IMEI
-  Input:          pVersion - 版本缓冲区
-                  pLength  - 数据长度指针
-  Return:         0-成功, 其他-失败
-*************************************************/
-int16_t GetNadIMEI(uint8_t *pVersion,uint32_t *pLength)
-{
-    if(pVersion == NULL || pLength == NULL)
-    {
-        return -1;
-    }
-    memcpy(pVersion,g_NadIMEI,sizeof(g_NadIMEI));
-    *pLength = sizeof(g_NadIMEI) - 1;
-    return 0;
-}
-
-/*************************************************
   Function:       GetNadSWVersion DID:B005
   Description:    获取NAD软件版本号
   Input:          pVersion - 版本缓冲区
@@ -838,55 +817,23 @@ int16_t GetSignaturePublicKey(uint8_t *pVersion,uint32_t *pLength)
     return 0;
 }
 
-/*************************************************
-  Function:       GetHSMID DID:B202
-  Description:    获取HSMID
-  Input:          pVersion - 版本缓冲区
-                  pLength  - 数据长度指针
-  Return:         0-成功, 其他-失败
-*************************************************/
-int16_t GetHSMID(uint8_t *pVersion,uint32_t *pLength)
-{
-    if(pVersion == NULL || pLength == NULL)
-    {
-        return -1;
-    }
-    memcpy(pVersion,g_HSMID,sizeof(g_HSMID));
-    *pLength = sizeof(g_HSMID) - 1;
-    return 0;
-}
-
-/*************************************************
-  Function:       GetSecurityVehicleEncryptionAlgorithmFlag DID:B9E4
-  Description:    获取安全车辆加密算法标志位
-  Input:          pVersion - 版本缓冲区
-                  pLength  - 数据长度指针
-  Return:         0-成功, 其他-失败
-*************************************************/
-int16_t GetEncryptionAlgorithmFlag(uint8_t *pVersion,uint32_t *pLength)
-{
-    if(pVersion == NULL || pLength == NULL)
-    {
-        return -1;
-    }
-
-    if(NvM_ReadBlock(NvMBlock_DIDF130,NvMBlockRamBuffer10) == E_NOT_OK)
-    {
-        return -1;
-    }
-
-    if(NvMBlockRamBuffer10[31] == 0x00)
-    {
-        pVersion[0] = 0x02;
-    }
-    else
-    {
-        pVersion[0] = 0x01;
-    }
-    *pLength = 1;
-    
-    return 0;
-}
+// /*************************************************
+//   Function:       GetHSMID DID:B202
+//   Description:    获取HSMID
+//   Input:          pVersion - 版本缓冲区
+//                   pLength  - 数据长度指针
+//   Return:         0-成功, 其他-失败
+// *************************************************/
+// int16_t GetHSMID(uint8_t *pVersion,uint32_t *pLength)
+// {
+//     if(pVersion == NULL || pLength == NULL)
+//     {
+//         return -1;
+//     }
+//     memcpy(pVersion,g_HSMID,sizeof(g_HSMID));
+//     *pLength = sizeof(g_HSMID) - 1;
+//     return 0;
+// }
 
 /*************************************************
   Function:       GetSoftwareNumber

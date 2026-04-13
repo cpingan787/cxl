@@ -1751,6 +1751,11 @@ CanIf_RxIndication(
                                               .CanIfCanHoh2HrhRef[Mailbox->Hoh];
 #endif /* STD_ON == CANIF_RXINDICATION_AUTOSAR_PARAMETER */
             PduIdType rxPduIndex;
+            (void)SaveCanMsgToBuffer(
+                0u,
+                ((uint32_t)canId & 0x1FFFFFFFu),
+                (uint8_t)PduInfoPtr->SduLength,
+                PduInfoPtr->SduDataPtr);
             if (E_OK == CanIf_CanIdRangCheck(canIfHrhId, canId, &rxPduIndex))
             {
                 /* DLC check enabled */
@@ -1763,11 +1768,6 @@ CanIf_RxIndication(
                 else
 #endif /* STD_ON == CANIF_PRIVATE_DLC_CHECK */
                 {
-                    (void)SaveCanMsgToBuffer(
-                        0u,
-                        ((uint32_t)canId & 0x1FFFFFFFu),
-                        (uint8_t)PduInfoPtr->SduLength,
-                        PduInfoPtr->SduDataPtr);
                     CanIf_RxIndicationHandle(
                         rxPduIndex,
 #if (STD_ON == CANIF_META_DATA_SUPPORT)

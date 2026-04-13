@@ -45,6 +45,9 @@
 #include "Dem.h"
 #include "Wdg_59_DriverA.h"
 #include "Wdg_59_DriverA_PBTypes.h"
+#include "PowManager.h"
+#include "Adc.h"
+#include "Gpt.h"
 /** DO NOT CHANGE THIS COMMENT!
  * <USERBLOCK User Includes>
  */
@@ -140,8 +143,20 @@ FUNC(void, ECUM_MCUSETMODE_CODE) EcuM_McuSetMode(Mcu_ModeType mode)
     /** DO NOT CHANGE THIS COMMENT!
      * </USERBLOCK>
      */
+    
+    Adc_StopGroupConversion(AdcConf_AdcGroup_AdcGroup0);
+    Adc_StopGroupConversion(AdcConf_AdcGroup_AdcGroup1);
+    Adc_DeInit();
+
+    Gpt_StopTimer(GptConf_GptChannelConfiguration_GptChannelConfiguration0);
+    Gpt_StopTimer(GptConf_GptChannelConfiguration_GptChannelConfiguration3);
+    Gpt_DeInit();
+
+    Pre_LowPowerMode();
+    
 	Mcu_WakeUpFactor_Preparation(0);
     Mcu_SetMode(0);
+    // Can_Init(CanConfigSet0);
 }
 
 #if (ECUM_SET_PROGRAMMABLE_INTERRUPTS == STD_ON)
@@ -499,6 +514,7 @@ FUNC(void, ECUM_ENABLEWAKEUPSOURCES_CODE) EcuM_EnableWakeupSources
              * <USERBLOCK EcuM_EnableWakeupSources EcuMWakeupSource_CAN>
              */
             /* custom code.... */
+            // Mcu_WakeUpFactor_Preparation(0);
             /** DO NOT CHANGE THIS COMMENT!
              * </USERBLOCK>
              */
@@ -508,6 +524,7 @@ FUNC(void, ECUM_ENABLEWAKEUPSOURCES_CODE) EcuM_EnableWakeupSources
              * <USERBLOCK EcuM_EnableWakeupSources EcuMWakeupSource_Local>
              */
             /* custom code.... */
+            // Mcu_WakeUpFactor_Preparation(0);
             /** DO NOT CHANGE THIS COMMENT!
              * </USERBLOCK>
              */

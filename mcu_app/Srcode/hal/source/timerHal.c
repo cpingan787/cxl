@@ -57,7 +57,63 @@ static PeripheralTimer_t g_peripheralTimer[PERIPHERAL_TIMER_INSTANCE_NUMBER];
 // static uint32_t g_rtcMsCount = 0;
 static uint32_t g_sleepStartUtc = 0;
 
-void TimerHalInterruptCallback(void)    // TODO 
+static SemaphoreHandle_t g_rtcMutexHandle = NULL;
+
+static uint8_t TimerHalRtcLockInit(void)
+{
+    if (g_rtcMutexHandle == NULL)
+    {
+        g_rtcMutexHandle = xSemaphoreCreateMutex();
+        if (g_rtcMutexHandle == NULL)
+        {
+            return 1U;
+        }
+    }
+
+    return 0U;
+}
+
+static uint8_t TimerHalRtcRead(uint8_t regAddr, uint8_t *buffer, uint16_t length)
+{
+    uint8_t ret;
+
+    if (TimerHalRtcLockInit() != 0U)
+    {
+        return 1U;
+    }
+
+    if (xSemaphoreTake(g_rtcMutexHandle, portMAX_DELAY) != pdTRUE)
+    {
+        return 1U;
+    }
+
+    ret = I2cReadRegisterValue(RTC_IIC_ADDR, &regAddr, buffer, length);
+
+    (void)xSemaphoreGive(g_rtcMutexHandle);
+    return ret;
+}
+
+static uint8_t TimerHalRtcWrite(uint8_t regAddr, uint8_t *buffer, uint16_t length)
+{
+    uint8_t ret;
+
+    if (TimerHalRtcLockInit() != 0U)
+    {
+        return 1U;
+    }
+
+    if (xSemaphoreTake(g_rtcMutexHandle, portMAX_DELAY) != pdTRUE)
+    {
+        return 1U;
+    }
+
+    ret = I2cWriteRegisterValue(RTC_IIC_ADDR, &regAddr, buffer, length);
+
+    (void)xSemaphoreGive(g_rtcMutexHandle);
+    return ret;
+}
+
+void TimerHalInterruptCallback(void)
 {
     uint8_t i;
 
@@ -77,10 +133,10 @@ void TimerHalInterruptCallback(void)    // TODO
     // }
 
     /* 运行期间递减24小时重启计时器和listen唤醒计时器（每1ms调用一次） */
-    // PowerManageSdkTimerDecrement();
+    PowerManageSdkTimerDecrement();
 }
 
-void RtcInit(void)
+static void RtcInit(void)
 {
     uint8_t waitTimeCount = 100;
     uint8_t rtcDataBuffer[20] = {0};
@@ -91,7 +147,7 @@ void RtcInit(void)
     do
     {
         regAddr = RTC_REG_ADDR_ID;
-        ret = I2cReadRegisterValue(RTC_IIC_ADDR, &regAddr, rtcDataBuffer, RTC_ID_REG_LENGTH);
+        ret = TimerHalRtcRead(regAddr, rtcDataBuffer, RTC_ID_REG_LENGTH);
         if(ret == 0)
         {
             TBOX_PRINT("rtc read ID, reg value = %02X-%02X-%02X, %02X, %02X %02X, %02X %02X\r\n", rtcDataBuffer[0], rtcDataBuffer[1], rtcDataBuffer[2], rtcDataBuffer[3], rtcDataBuffer[4], rtcDataBuffer[5], rtcDataBuffer[6], rtcDataBuffer[7]);
@@ -131,6 +187,7 @@ void RtcInit(void)
 *************************************************/
 void TimerHalInit(void)
 {
+    TimerHalRtcLockInit();
     R_RIIC0_Create();
     R_RIIC0_Start();
     RtcInit();
@@ -502,9 +559,9 @@ uint8_t TimerHalSetRtcTime(uint32_t utc)
     TimestampToRtcRegisters(utc, rtc_regs);
 
     // 年:0x25, 月:0x12, 日:0x22, 星期:0x01, 时:0x18, 分:0x19, 秒:0x15
-    TBOX_PRINT("regs = %02X %02X %02X %02X %02X %02X %02X\n",
-        rtc_regs[6], rtc_regs[5], rtc_regs[4],
-        rtc_regs[3], rtc_regs[2], rtc_regs[1], rtc_regs[0]);
+    // TBOX_PRINT("regs = %02X %02X %02X %02X %02X %02X %02X\n",
+    //     rtc_regs[6], rtc_regs[5], rtc_regs[4],
+    //     rtc_regs[3], rtc_regs[2], rtc_regs[1], rtc_regs[0]);
 
     rtcDataBuffer[length++] = rtc_regs[0];
     rtcDataBuffer[length++] = rtc_regs[1];
@@ -514,7 +571,7 @@ uint8_t TimerHalSetRtcTime(uint32_t utc)
     rtcDataBuffer[length++] = rtc_regs[5];
     rtcDataBuffer[length++] = rtc_regs[6];
     regAddr = RTC_REG_ADDR_SEC;
-    ret = I2cWriteRegisterValue(RTC_IIC_ADDR, &regAddr, rtcDataBuffer, length);
+    ret = TimerHalRtcWrite(regAddr, rtcDataBuffer, length);
     if(ret == 0)
     {
         // TBOX_PRINT("rtc read ID, reg value = %02X-%02X-%02X, %02X, %02X %02X, %02X %02X\r\n", rtcDataBuffer[0], rtcDataBuffer[1], rtcDataBuffer[2], rtcDataBuffer[3], rtcDataBuffer[4], rtcDataBuffer[5], rtcDataBuffer[6], rtcDataBuffer[7]);
@@ -540,7 +597,7 @@ uint8_t TimerHalGetRtcTime(uint32_t *pUtc)
     uint8_t ret = 0;
 
     regAddr = RTC_REG_ADDR_SEC;
-    ret = I2cReadRegisterValue(RTC_IIC_ADDR, &regAddr, rtcDataBuffer, RTC_TIME_REG_LENGTH);
+    ret = TimerHalRtcRead(regAddr, rtcDataBuffer, RTC_TIME_REG_LENGTH);
     if(ret != 0)
     {
         TBOX_PRINT("rtc read time fail\r\n");
@@ -574,14 +631,14 @@ static uint8_t TimerHalConfigDateAlarm(uint32_t utc)
 
     /* 2. 设置 EDEW=1，选择“日期报警” */
     regAddr = RTC_REG_ADDR_CTR1;
-    if (I2cReadRegisterValue(RTC_IIC_ADDR, &regAddr, &ctr1, 1) != 0)
+    if (TimerHalRtcRead(regAddr, &ctr1, 1) != 0)
     {
         TBOX_PRINT("read CTR1 fail\r\n");
         return 1;
     }
     ctr1 |= RTC_CTR1_EDEW;
     regAddr = RTC_REG_ADDR_CTR1;
-    if (I2cWriteRegisterValue(RTC_IIC_ADDR, &regAddr, &ctr1, 1) != 0)
+    if (TimerHalRtcWrite(regAddr, &ctr1, 1) != 0)
     {
         TBOX_PRINT("write CTR1 fail\r\n");
         return 1;
@@ -589,7 +646,7 @@ static uint8_t TimerHalConfigDateAlarm(uint32_t utc)
 
     /* 3. 写报警时间 08H~0AH */
     regAddr = RTC_REG_ADDR_ALARM_MIN;
-    if (I2cWriteRegisterValue(RTC_IIC_ADDR, &regAddr, buf, 3) != 0)
+    if (TimerHalRtcWrite(regAddr, buf, 3) != 0)
     {
         TBOX_PRINT("write alarm time fail\r\n");
         return 1;
@@ -597,14 +654,14 @@ static uint8_t TimerHalConfigDateAlarm(uint32_t utc)
 
     /* 4. 使能报警输出 INTAE=1 */
     regAddr = RTC_REG_ADDR_CTR2;
-    if (I2cReadRegisterValue(RTC_IIC_ADDR, &regAddr, &ctr2, 1) != 0)
+    if (TimerHalRtcRead(regAddr, &ctr2, 1) != 0)
     {
         TBOX_PRINT("read CTR2 fail\r\n");
         return 1;
     }
     ctr2 |= RTC_CTR2_INTAE;
     regAddr = RTC_REG_ADDR_CTR2;
-    if (I2cWriteRegisterValue(RTC_IIC_ADDR, &regAddr, &ctr2, 1) != 0)
+    if (TimerHalRtcWrite(regAddr, &ctr2, 1) != 0)
     {
         TBOX_PRINT("write CTR2 fail\r\n");
         return 1;
@@ -620,6 +677,7 @@ uint8_t TimerHalPrepareSleep(uint32_t sleepSeconds)
 
     if (sleepSeconds == 0)
     {
+        TBOX_PRINT("sleepSeconds can not be 0\r\n");
         return 1;
     }
 
@@ -666,7 +724,7 @@ uint8_t TimerHalGetRtcStatus(void)
     uint8_t flag;
     uint8_t regAddr = RTC_REG_ADDR_FLAG1;
 
-    if(I2cReadRegisterValue(RTC_IIC_ADDR, &regAddr, &flag, 1) != 0)
+    if(TimerHalRtcRead(regAddr, &flag, 1) != 0)
     {
         return 0xFF;
     }
@@ -679,7 +737,7 @@ void TimerHalClearRtcAlarmFlag(void)
     uint8_t flag = 0;
     uint8_t regAddr = RTC_REG_ADDR_FLAG1;
 
-    if (I2cReadRegisterValue(RTC_IIC_ADDR, &regAddr, &flag, 1) != 0)
+    if (TimerHalRtcRead(regAddr, &flag, 1) != 0)
     {
         TBOX_PRINT("read FLAG1 fail\r\n");
         return;
@@ -688,7 +746,7 @@ void TimerHalClearRtcAlarmFlag(void)
     flag &= (uint8_t)(~RTC_FLAG1_INTAF);   /* 只清 INTAF */
 
     regAddr = RTC_REG_ADDR_FLAG1;
-    if (I2cWriteRegisterValue(RTC_IIC_ADDR, &regAddr, &flag, 1) != 0)
+    if (TimerHalRtcWrite(regAddr, &flag, 1) != 0)
     {
         TBOX_PRINT("clear INTAF fail\r\n");
     }
@@ -698,12 +756,12 @@ void TimerHalSetMode(uint8_t mode)
 {
     if(mode != 0)
     {
-        // R_RIIC0_Create();
-        // R_RIIC0_Start();
+        R_RIIC0_Create();
+        R_RIIC0_Start();
     }
     else
     {
-        // R_RIIC0_Stop();
+        R_RIIC0_Stop();
     }        
 }
 
@@ -716,6 +774,19 @@ void TimerHalTestMain(uint16_t cycleTime)
     uint8_t ret = 0;
     static uint8_t setAlarmFlag = 0;
     uint32_t alarmTime = 0;
+    // static int16_t testTimerHandle = -1;  
+
+    // if(testTimerHandle < 0)
+    // {
+    //     testTimerHandle = TimerHalOpen();
+    //     TimerHalStartTime(testTimerHandle, 1000);
+    // }
+
+    // if(TimerHalIsTimeout(testTimerHandle)==0)
+    // {
+    //     TBOX_PRINT("test 1S Timer out!!!\r\n");
+    //     TimerHalStartTime(testTimerHandle, 1000);
+    // }
 
     if(count++ < (5000 / cycleTime))
     {
@@ -725,14 +796,14 @@ void TimerHalTestMain(uint16_t cycleTime)
 
     // R_PORT_ToggleGpioOutput(Port1, 2);
 
-    TBOX_PRINT("rtc read time, ");
     regAddr = RTC_REG_ADDR_SEC;
-    ret = I2cReadRegisterValue(RTC_IIC_ADDR, &regAddr, rtcDataBuffer, RTC_TIME_REG_LENGTH);
+    ret = TimerHalRtcRead(regAddr, rtcDataBuffer, RTC_TIME_REG_LENGTH);
     if(ret != 0)
     {
         TBOX_PRINT("rtc read time fail\r\n");
+        return;
     }
-    TBOX_PRINT("reg value = %02X-%02X-%02X %02X %02X:%02X:%02X\r\n", rtcDataBuffer[6], rtcDataBuffer[5], rtcDataBuffer[4], rtcDataBuffer[3], rtcDataBuffer[2], rtcDataBuffer[1], rtcDataBuffer[0]);
+    TBOX_PRINT("rtc read time: %02X-%02X-%02X %02X %02X:%02X:%02X\r\n", rtcDataBuffer[6], rtcDataBuffer[5], rtcDataBuffer[4], rtcDataBuffer[3], rtcDataBuffer[2], rtcDataBuffer[1], rtcDataBuffer[0]);
 
     // TBOX_PRINT("rtc read WPF, ");
     // regAddr = RTC_REG_ADDR_WPF;

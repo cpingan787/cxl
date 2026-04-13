@@ -3,37 +3,52 @@
 #include "canHal.h"
 #include "mpuHal.h"
 #include "logHal.h"
-// #include "powerManageSdk.h"
+#include "powerManageSdk.h"
 #include "canMsgDynamicConfigure.h"
 #include "canMsgToMpu.h"
 #include "Com.h"
+#include "Com_Callout.h"
+#include "CanNm.h"
 
 
 
 #define VEHICLE_TO_CPU_TASK_CYCLE_TIME       5//ms
 #define VEHICLE_TO_CPU_UPLOAD_CYCLE_TIME     100//ms
+#define IAM_1F1_LOST_10_FRAME_THRESHOLD      2U
 
 
 static uint8_t g_mpuDriverRxBuffer[300];
 static int16_t g_mpuHandle = -1;
+static MpuHalDataPack_t g_dataPack;
+static uint8_t g_mpuRxDataBuffer[100];
 static VehicleInfor_t g_vehicleInfor;
+static uint8_t g_lastUserMode = 0;  /* 用于跟踪用户模式变化 */
 
 static void TboxCanRxCycleProcess(void)
 {
     Std_ReturnType ret;
     uint8 signalValue = 0;
+    Nm_StateType nmStatePtr = 0;
+    Nm_ModeType nmModePtr = 0;
+    uint16_t nkiState = 0;
 
     CanMsgTransmitToCpu(g_mpuHandle);
-
-    ret = Com_ReceiveSignalGroup(IICBVC_20ms_Group03_ICBVC_RZCUCANFD_20ms_FrP03_CONTROLLER_0_IAM_Rx);
-    if(ret != E_OK)
+    // (void)CanNm_GetState(0, &nmStatePtr, &nmModePtr);
+    // if((nmStatePtr != NM_STATE_BUS_SLEEP) && (Rx_0x1F1_100msTimeoutCnt >= IAM_1F1_LOST_10_FRAME_THRESHOLD))
+    if(Rx_0x1F1_100msTimeoutCnt >= IAM_1F1_LOST_10_FRAME_THRESHOLD)
     {
         g_vehicleInfor.iccLost = 1;
+        g_vehicleInfor.userModeValid = 1;
+        g_vehicleInfor.userMode = UsgMd_1_Standby;
+        g_vehicleInfor.vehicleModeValid = 1;
+        g_vehicleInfor.vehicleMode = VehMd_0_NORMAL;
+        nkiState = 0;
+        Com_SendSignal(IIAM_NKI_CONNCANFD_IAM_CONNCANFD_NM_CONTROLLER_0_IAM_Tx, &nkiState);
+        return;
     }
-    else
-    {
-        g_vehicleInfor.iccLost = 0;
-    }
+
+    g_vehicleInfor.iccLost = 0;
+    (void)Com_ReceiveSignalGroup(IICBVC_20ms_Group03_ICBVC_RZCUCANFD_20ms_FrP03_CONTROLLER_0_IAM_Rx);
     ret = Com_ReceiveSignal(IICBVC_20ms_Group03_ICBVC_RZCUCANFD_20ms_FrP03_CONTROLLER_0_IAM_Rx_IUsgMdV_IICBVC_20ms_Group03_ICBVC_RZCUCANFD_20ms_FrP03_CONTROLLER_0_IAM_Rx, &signalValue);
     if(ret == E_OK)
     {
@@ -43,7 +58,26 @@ static void TboxCanRxCycleProcess(void)
     if(ret == E_OK)
     {
         g_vehicleInfor.userMode = signalValue;
+        /* 检测用户模式从非sleep/standby变为sleep/standby */
+        if((g_lastUserMode != UsgMd_0_Sleep) && (g_lastUserMode != UsgMd_1_Standby))
+        {
+            if((signalValue == UsgMd_0_Sleep) || (signalValue == UsgMd_1_Standby))
+            {
+                /* 用户模式从非sleep/standby变为sleep/standby，清零listen唤醒计时器 */
+                ResetListenTimer();
+            }
+        }
+        g_lastUserMode = signalValue;
+        if((signalValue == UsgMd_2_Comfortable) || (signalValue == UsgMd_3_NormalDriving) || (signalValue == UsgMd_4_AIPraking) || (signalValue == UsgMd_5_AIPilot))
+        {
+            nkiState = 1;
+        }
     }
+    // /* 用户模式无效时才使用standby mode（从flash读取的模式已经处理了无效情况） */
+    // if(g_vehicleInfor.userModeValid == 0)
+    // {
+    //     g_vehicleInfor.userMode = UsgMd_1_Standby;
+    // }
     ret = Com_ReceiveSignal(IICBVC_20ms_Group03_ICBVC_RZCUCANFD_20ms_FrP03_CONTROLLER_0_IAM_Rx_IVehMdV_IICBVC_20ms_Group03_ICBVC_RZCUCANFD_20ms_FrP03_CONTROLLER_0_IAM_Rx, &signalValue);
     if(ret == E_OK)
     {
@@ -54,7 +88,21 @@ static void TboxCanRxCycleProcess(void)
     {
         g_vehicleInfor.vehicleMode = signalValue;
     }
+    // /* 车辆模式默认为normal mode */
+    // if(g_vehicleInfor.vehicleModeValid == 0)
+    // {
+    //     g_vehicleInfor.vehicleMode = VehMd_0_NORMAL;
+    // }
 
+    ret = Com_ReceiveSignal(IICBVC_20ms_Group03_ICBVC_RZCUCANFD_20ms_FrP03_CONTROLLER_0_IAM_Rx_ISysPwrMd_IICBVC_20ms_Group03_ICBVC_RZCUCANFD_20ms_FrP03_CONTROLLER_0_IAM_Rx, &signalValue);
+    if(ret == E_OK)
+    {
+        if((signalValue == 2) || (signalValue == 3))
+        {
+            nkiState = 1;
+        }
+    }
+    Com_SendSignal(IIAM_NKI_CONNCANFD_IAM_CONNCANFD_NM_CONTROLLER_0_IAM_Tx, &nkiState);
  /* if(rxCount<(1000/VEHICLE_TO_CPU_TASK_CYCLE_TIME))
   {
     return;
@@ -75,26 +123,11 @@ uint8_t GetVehicleInfor(VehicleInfor_t *vehicleInfor)
     return 0;
 }
 
-uint8_t CheckVehicleModeIsTransport(void)
-{
-    if((g_vehicleInfor.vehicleModeValid == 1) && (g_vehicleInfor.vehicleMode == VehMd_3_TRANSPORT))
-    {
-        return 1;
-    }
-    return 0;
-}
-
-//static void PrintTaskInfo(void);
-static uint8_t g_mpuRxDataBuffer[100];
-
 void TaskVehicleDataToCpuInit(void)
 {
-    int16_t lastSleepState;
     int16_t sleepCommandHandle;
     MpuHalFilter_t mpuFilter;
-    MpuHalDataPack_t rxPack;
-    //
-    // ProjectSecocConfig();
+    
     g_mpuHandle = MpuHalOpen();
     mpuFilter.aid = 0x02;
     mpuFilter.midMin = 0x01;
@@ -106,15 +139,15 @@ void TaskVehicleDataToCpuInit(void)
     CanMsgDynamicConfigureInitialize(g_mpuHandle); 
     // sleepCommandHandle = PowerManageSdkOpenHandle("ToMpu");
 
-    lastSleepState = 0x01;
-    rxPack.pDataBuffer = g_mpuRxDataBuffer;
-    rxPack.dataBufferSize = sizeof(g_mpuRxDataBuffer);
-    rxPack.dataLength = 0;
+    g_dataPack.pDataBuffer = g_mpuRxDataBuffer;
+    g_dataPack.dataBufferSize = sizeof(g_mpuRxDataBuffer);
+    g_dataPack.dataLength = 0;
 
     g_vehicleInfor.userModeValid = 0;
     g_vehicleInfor.userMode = 0;
     g_vehicleInfor.vehicleModeValid = 0;
     g_vehicleInfor.vehicleMode = 0;
+    g_vehicleInfor.iccLost = 1;
 }
 
 void TaskVehicleDataToCpu(void)
@@ -124,9 +157,6 @@ void TaskVehicleDataToCpu(void)
     int16_t lastSleepState;
     int16_t sleepCommandHandle;
     int16_t ret;
-
-    // MpuHalFilter_t mpuFilter;
-    MpuHalDataPack_t rxPack;
 
     // while(1)
     {     
@@ -166,16 +196,15 @@ void TaskVehicleDataToCpu(void)
         if((timeCount&0x01)==0x00)
         {      
         	// SecocSdkSyncMessageCycleProcess(g_tboxCan2Handle,10);
-            //CanRxCanMsgCycleCheck(VEHICLE_TO_CPU_TASK_CYCLE_TIME*2);  
-            rxPack.dataLength = 0;
-            ret = MpuHalReceive(g_mpuHandle,&rxPack,0); 
-            if(MPU_HAL_STATUS_OK==ret)
+            //CanRxCanMsgCycleCheck(VEHICLE_TO_CPU_TASK_CYCLE_TIME*2);
+            ret = MpuHalReceive(g_mpuHandle, &g_dataPack, 0);
+            if (MPU_HAL_STATUS_OK == ret)
             {
-                CanMsgToCpuConfigureSyncCycleProcess(&rxPack,10);
+                CanMsgToCpuConfigureSyncCycleProcess(&g_dataPack, 10);
             }
             else
             {
-                CanMsgToCpuConfigureSyncCycleProcess(NULL,10);
+                CanMsgToCpuConfigureSyncCycleProcess(NULL, 10);
             }
         }
     }  	

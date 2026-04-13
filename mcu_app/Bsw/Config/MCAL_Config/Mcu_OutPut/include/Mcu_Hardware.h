@@ -145,11 +145,9 @@
 *******************************************************************************/
 
 /* Port instances to be saved */
+#define MCU_PORT_INSTANCES  0
 
-#define MCU_PORT_INSTANCES                  0x1U
-
-
-#define MCU_APORT_INSTANCES                 0x0U
+#define MCU_APORT_INSTANCES 0
 
 #define MCU_TOTAL_CLK_SRC_REG_INSTANCES     (unsigned char)12
 
@@ -205,7 +203,7 @@ extern volatile ClkMntrReg* const Clma2Reg_BaseAddress;
 /*extern volatile ClkMntrReg* const Clma3Reg_BaseAddress;*/
 
 /*Structure of MCU STBC0 registers*/
-extern volatile STBC0Reg * const Mcu_Stbc0Register_BaseAddress;
+extern volatile STBC0Reg* const Mcu_Stbc0Register_BaseAddress;
 
 /*Structure of MCU Wake-up factor registers*/
 extern volatile WUFReg* const WufReg_BaseAddress;

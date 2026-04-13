@@ -1,4 +1,4 @@
-/*==============================================================================*/
+﻿/*==============================================================================*/
 /**
  *
  * Copyright (C) iSOFT   (2023)
@@ -37,14 +37,21 @@
 #include "Dcm.h"
 #include "Dem.h"
 #include "Dem_Dcm.h"
+#include "Vss.h"
+#include "Mcu.h"
+#include "taskEcallProcess.h"
 
 #include "logHal.h"
 #include "peripheralHal.h"
+#include "timerHal.h"
+#include "ecallHal.h"
+#include "alarmSdk.h"
 
 #include "stateSyncSdk.h"
 #include "timeSyncSdk.h"
 #include "canPassthroughSdk.h"
 #include "parameterSyncSdk.h"
+#include "powerManageSdk.h"
 /* custom code.... */
 
 /** DO NOT CHANGE THIS COMMENT!
@@ -1143,10 +1150,10 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xF121_DID_0xF121_ConditionCheckRead(
 #include "Dcm_MemMap.h"
 #define DCM_START_SEC_CODE
 #include "Dcm_MemMap.h"
-Std_ReturnType  Rte_Call_DataServices_Data_0xF131_DID_0xF131_ConditionCheckRead( Dcm_OpStatusType  OpStatus,  Dcm_NegativeResponseCodeType*  ErrorCode )
+Std_ReturnType  Rte_Call_DataServices_Data_0xB932_DID_0xB932_ConditionCheckRead( Dcm_OpStatusType  OpStatus,  Dcm_NegativeResponseCodeType*  ErrorCode )
 {
     /** DO NOT CHANGE THIS COMMENT!
-     * <USERBLOCK Rte_Call_DataServices_Data_0xF131_DID_0xF131_ConditionCheckRead>
+     * <USERBLOCK Rte_Call_DataServices_Data_0xB932_DID_0xB932_ConditionCheckRead>
      */
 
     /* custom code.... */
@@ -3174,42 +3181,6 @@ Std_ReturnType  Rte_Call_DataServices_Data_0x0100_DID_0x0100_ConditionCheckRead(
 
 #define DCM_START_SEC_CODE
 #include "Dcm_MemMap.h"
-Std_ReturnType Rte_Call_DataServices_Data_0xFFFE_DID_0xFFFE_ConditionCheckRead( Dcm_OpStatusType OpStatus, Dcm_NegativeResponseCodeType* ErrorCode )
-{
-    /** DO NOT CHANGE THIS COMMENT!
-     * <USERBLOCK Rte_Call_DataServices_Data_0xFFFE_DID_0xFFFE_ConditionCheckRead>
-     */
-    DCM_UNUSED(OpStatus);
-    DCM_UNUSED(ErrorCode);
-    return E_OK;
-    
-    /** DO NOT CHANGE THIS COMMENT!
-     * </USERBLOCK>
-     */
-}
-#define DCM_STOP_SEC_CODE
-#include "Dcm_MemMap.h"
-
-#define DCM_START_SEC_CODE
-#include "Dcm_MemMap.h"
-Std_ReturnType Rte_Call_DataServices_Data_0x1201_DID_0x1201_ConditionCheckRead( Dcm_OpStatusType OpStatus, Dcm_NegativeResponseCodeType* ErrorCode )
-{
-    /** DO NOT CHANGE THIS COMMENT!
-     * <USERBLOCK Rte_Call_DataServices_Data_0x1201_DID_0x1201_ConditionCheckRead>
-     */
-    DCM_UNUSED(OpStatus);
-    DCM_UNUSED(ErrorCode);
-    return E_OK;
-    
-    /** DO NOT CHANGE THIS COMMENT!
-     * </USERBLOCK>
-     */
-}
-#define DCM_STOP_SEC_CODE
-#include "Dcm_MemMap.h"
-
-#define DCM_START_SEC_CODE
-#include "Dcm_MemMap.h"
 Std_ReturnType  Rte_Call_DataServices_Data_0xF130_DID_0xF130_ReadData( Dcm_OpStatusType  OpStatus,uint8*  Data,Dcm_NegativeResponseCodeType*  ErrorCode )
 {
     /** DO NOT CHANGE THIS COMMENT!
@@ -3219,6 +3190,25 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xF130_DID_0xF130_ReadData( Dcm_OpSta
     /* custom code.... */
     /* The length of this data is configured to be 4 bytes */
     DCM_UNUSED(OpStatus);
+    memset(Data,0,32);
+
+    // VssKeyCodeFeedback();
+    // if(未写入VSN)
+    // {
+            // 全FF
+            // memset(Data,0xFF,32);
+    // }
+    // else if(已存有VSN)
+    // {
+            // 全0
+            // memset(Data,0,32);
+    // }
+    // else
+    // {
+        
+    //     *ErrorCode = DCM_E_GENERALREJECT;
+    //     return E_NOT_OK;
+    // }
 
     if(NvM_ReadBlock(NvMBlock_DIDF130,NvMBlockRamBuffer10) == E_NOT_OK)
     {
@@ -3250,6 +3240,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xF18B_DID_0xF18B_ReadData( Dcm_OpSta
     /* custom code.... */
     /* The length of this data is configured to be 1 bytes */
     DCM_UNUSED(OpStatus);
+    memset(Data,0,3);
 
     if(NvM_ReadBlock(NvMBlock_DIDF18B,NvMBlockRamBuffer5) == E_NOT_OK)
     {
@@ -3282,6 +3273,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xF18C_DID_0xF18C_ReadData( Dcm_OpSta
     /* The length of this data is configured to be 2 bytes */
     /* F18C 可写*/
     DCM_UNUSED(OpStatus);
+    memset(Data,0,16);
 
     if(NvM_ReadBlock(NvMBlock_DIDF18C,NvMBlockRamBuffer6) == E_NOT_OK)
     {
@@ -3312,6 +3304,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xF190_DID_0xF190_ReadData( Dcm_OpSta
     /* custom code.... */
     /* The length of this data is configured to be 3 bytes */
     DCM_UNUSED(OpStatus);
+    memset(Data,0,17);
 
     if(NvM_ReadBlock(NvMBlock_DIDF190,NvMBlockRamBuffer7) == E_NOT_OK)
     {
@@ -3343,6 +3336,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xF198_DID_0xF198_ReadData( Dcm_OpSta
     /* custom code.... */
     /* The length of this data is configured to be 2 bytes */
     DCM_UNUSED(OpStatus);
+    memset(Data,0,11);
 
     if(NvM_ReadBlock(NvMBlock_DIDF198,NvMBlockRamBuffer8) == E_NOT_OK)
     {
@@ -3374,6 +3368,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xF1A8_DID_0xF1A8_ReadData( Dcm_OpSta
     /* custom code.... */
     /* The length of this data is configured to be 3 bytes */
     DCM_UNUSED(OpStatus);
+    memset(Data,0,20);
 
     if(NvM_ReadBlock(NvMBlock_DIDF1A8,NvMBlockRamBuffer9) == E_NOT_OK)
     {
@@ -3405,6 +3400,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xF1A9_DID_0xF1A9_ReadData( Dcm_OpSta
     /* custom code.... */
     /* The length of this data is configured to be 3 bytes */
     DCM_UNUSED(OpStatus);
+    memset(Data,0,5);
 
     if(NvM_ReadBlock(NvMBlock_DIDF1A9,NvMBlockRamBuffer2) == E_NOT_OK)
     {
@@ -3435,6 +3431,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xF100_DID_0xF100_ReadData( Dcm_OpSta
     /* custom code.... */
     /* The length of this data is configured to be 1 bytes */
     DCM_UNUSED(OpStatus);
+    memset(Data,0,16);
 
     uint32_t len = 0;
     if(ProjectConfig_GetItemData(CONFIG_ITEM_SVIF, Data, &len) != 0)
@@ -3466,7 +3463,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xF110_DID_0xF110_ReadData( Dcm_OpSta
     /* custom code.... */
     /* The length of this data is configured to be 2 bytes */
     DCM_UNUSED(OpStatus);
-    DCM_UNUSED(Data);
+    memset(Data,0,16);
     DCM_UNUSED(ErrorCode);
     return E_OK;
 
@@ -3487,6 +3484,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xF111_DID_0xF111_ReadData( Dcm_OpSta
     /* custom code.... */
     /* The length of this data is configured to be 2 bytes */
     DCM_UNUSED(OpStatus);
+    memset(Data,0,16);
 
     uint32_t len = 0;
     if(ProjectConfig_GetItemData(CONFIG_ITEM_F111, Data, &len) != 0)
@@ -3518,6 +3516,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xF112_DID_0xF112_ReadData( Dcm_OpSta
     /* custom code.... */
     /* The length of this data is configured to be 2 bytes */
     DCM_UNUSED(OpStatus);
+    memset(Data,0,16);
 
     uint32_t len = 0;
     if(ProjectConfig_GetItemData(CONFIG_ITEM_F112, Data, &len) != 0)
@@ -3550,6 +3549,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xF113_DID_0xF113_ReadData( Dcm_OpSta
     /* custom code.... */
     /* The length of this data is configured to be 2 bytes */
     DCM_UNUSED(OpStatus);
+    memset(Data,0,16);
 
     uint32_t len = 0;
     if(ProjectConfig_GetItemData(CONFIG_ITEM_F113, Data, &len) != 0)
@@ -3581,6 +3581,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xF114_DID_0xF114_ReadData( Dcm_OpSta
     /* custom code.... */
     /* The length of this data is configured to be 2 bytes */
     DCM_UNUSED(OpStatus);
+    memset(Data,0,16);
 
     uint32_t len = 0;
     if(ProjectConfig_GetItemData(CONFIG_ITEM_F114, Data, &len) != 0)
@@ -3612,6 +3613,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xF115_DID_0xF115_ReadData( Dcm_OpSta
     /* custom code.... */
     /* The length of this data is configured to be 2 bytes */
     DCM_UNUSED(OpStatus);
+    memset(Data,0,16);
 
     uint32_t len = 0;
     if(ProjectConfig_GetItemData(CONFIG_ITEM_F115, Data, &len) != 0)
@@ -3643,6 +3645,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xF116_DID_0xF116_ReadData( Dcm_OpSta
     /* custom code.... */
     /* The length of this data is configured to be 2 bytes */
     DCM_UNUSED(OpStatus);
+    memset(Data,0,16);
 
     uint32_t len = 0;
     if(ProjectConfig_GetItemData(CONFIG_ITEM_F116, Data, &len) != 0)
@@ -3674,6 +3677,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xF117_DID_0xF117_ReadData( Dcm_OpSta
     /* custom code.... */
     /* The length of this data is configured to be 2 bytes */
     DCM_UNUSED(OpStatus);
+    memset(Data,0,16);
 
     uint32_t len = 0;
     if(ProjectConfig_GetItemData(CONFIG_ITEM_F117, Data, &len) != 0)
@@ -3705,6 +3709,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xF118_DID_0xF118_ReadData( Dcm_OpSta
     /* custom code.... */
     /* The length of this data is configured to be 2 bytes */
     DCM_UNUSED(OpStatus);
+    memset(Data,0,16);
 
     uint32_t len = 0;
     if(ProjectConfig_GetItemData(CONFIG_ITEM_F118, Data, &len) != 0)
@@ -3736,6 +3741,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xF119_DID_0xF119_ReadData( Dcm_OpSta
     /* custom code.... */
     /* The length of this data is configured to be 2 bytes */
     DCM_UNUSED(OpStatus);
+    memset(Data,0,16);
 
     uint32_t len = 0;
     if(ProjectConfig_GetItemData(CONFIG_ITEM_F119, Data, &len) != 0)
@@ -3767,6 +3773,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xF11A_DID_0xF11A_ReadData( Dcm_OpSta
     /* custom code.... */
     /* The length of this data is configured to be 2 bytes */
     DCM_UNUSED(OpStatus);
+    memset(Data,0,16);
 
     uint32_t len = 0;
     if(ProjectConfig_GetItemData(CONFIG_ITEM_F11A, Data, &len) != 0)
@@ -3798,6 +3805,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xF11B_DID_0xF11B_ReadData( Dcm_OpSta
     /* custom code.... */
     /* The length of this data is configured to be 2 bytes */
     DCM_UNUSED(OpStatus);
+    memset(Data,0,16);
 
     uint32_t len = 0;
     if(ProjectConfig_GetItemData(CONFIG_ITEM_F11B, Data, &len) != 0)
@@ -3829,6 +3837,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xF11C_DID_0xF11C_ReadData( Dcm_OpSta
     /* custom code.... */
     /* The length of this data is configured to be 2 bytes */
     DCM_UNUSED(OpStatus);
+    memset(Data,0,16);
 
     uint32_t len = 0;
     if(ProjectConfig_GetItemData(CONFIG_ITEM_F11C, Data, &len) != 0)
@@ -3860,6 +3869,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xF11D_DID_0xF11D_ReadData( Dcm_OpSta
     /* custom code.... */
     /* The length of this data is configured to be 2 bytes */
     DCM_UNUSED(OpStatus);
+    memset(Data,0,16);
 
     uint32_t len = 0;
     if(ProjectConfig_GetItemData(CONFIG_ITEM_F11D, Data, &len) != 0)
@@ -3891,6 +3901,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xF11E_DID_0xF11E_ReadData( Dcm_OpSta
     /* custom code.... */
     /* The length of this data is configured to be 2 bytes */
     DCM_UNUSED(OpStatus);
+    memset(Data,0,16);
 
     uint32_t len = 0;
     if(ProjectConfig_GetItemData(CONFIG_ITEM_F11E, Data, &len) != 0)
@@ -3922,6 +3933,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xF11F_DID_0xF11F_ReadData( Dcm_OpSta
     /* custom code.... */
     /* The length of this data is configured to be 2 bytes */
     DCM_UNUSED(OpStatus);
+    memset(Data,0,16);
 
     uint32_t len = 0;
     if(ProjectConfig_GetItemData(CONFIG_ITEM_F11F, Data, &len) != 0)
@@ -3953,6 +3965,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xF120_DID_0xF120_ReadData( Dcm_OpSta
     /* custom code.... */
     /* The length of this data is configured to be 2 bytes */
     DCM_UNUSED(OpStatus);
+    memset(Data,0,16);
 
     uint32_t len = 0;
     if(ProjectConfig_GetItemData(CONFIG_ITEM_F120, Data, &len) != 0)
@@ -3984,7 +3997,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xF121_DID_0xF121_ReadData( Dcm_OpSta
     /* custom code.... */
     /* The length of this data is configured to be 2 bytes */
     DCM_UNUSED(OpStatus);
-    DCM_UNUSED(Data);
+    memset(Data,0,16);
     DCM_UNUSED(ErrorCode);
     return E_OK;
 
@@ -3996,19 +4009,66 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xF121_DID_0xF121_ReadData( Dcm_OpSta
 #include "Dcm_MemMap.h"
 #define DCM_START_SEC_CODE
 #include "Dcm_MemMap.h"
-Std_ReturnType  Rte_Call_DataServices_Data_0xF131_DID_0xF131_ReadData( Dcm_OpStatusType  OpStatus,uint8*  Data,Dcm_NegativeResponseCodeType*  ErrorCode )
+Std_ReturnType  Rte_Call_DataServices_Data_0xB932_DID_0xB932_ReadData( Dcm_OpStatusType  OpStatus,uint8*  Data,Dcm_NegativeResponseCodeType*  ErrorCode )
 {
     /** DO NOT CHANGE THIS COMMENT!
-     * <USERBLOCK Rte_Call_DataServices_Data_0xF131_DID_0xF131_ReadData>
+     * <USERBLOCK Rte_Call_DataServices_Data_0xB932_DID_0xB932_ReadData>
      */
 
     /* custom code.... */
     /* The length of this data is configured to be 1 bytes */
-    DCM_UNUSED(OpStatus);
-    DCM_UNUSED(Data);
-    DCM_UNUSED(ErrorCode);
-    return E_OK;
+    Std_ReturnType ret = E_OK;
+    int16_t canPassRet = 0;
+    uint8_t UDSReqData[3] = {0x22, 0xB9, 0x32};
+    uint16_t UDSReqDataLen = 3;
+    memset(Data,0,25);
 
+    if(ParameterSyncSdkGetFromCpuIsFinished()!=0)
+    {
+        ret = E_NOT_OK;
+        *ErrorCode = DCM_E_BUSYREPEATREQUEST;
+        return ret;
+    }
+    
+    switch(OpStatus)
+    {
+        case DCM_INITIAL://首次调用，发起异步请求
+            canPassRet = CanPassthrough_SendRequest(UDSReqData, UDSReqDataLen);
+            if(canPassRet == 0)
+            {
+                ret = DCM_E_PENDING;
+            }
+            else
+            {
+                ret = E_NOT_OK;
+                *ErrorCode = DCM_E_CONDITIONSNOTCORRECT;
+            }
+            
+            break;
+
+        case DCM_PENDING://后续调用，检查是否有响应
+            canPassRet = CanPassthroughRead_PENDING(UDSReqData, UDSReqDataLen, Data);
+            if(canPassRet == 0)
+            {
+                ret = E_OK;
+            }
+            else if(canPassRet == 1)//DCM_E_PENDING
+            {
+                ret = DCM_E_PENDING;
+            }
+            else if(canPassRet == -1)//timeout
+            {
+                ret = E_NOT_OK;
+                *ErrorCode = DCM_E_REQUESTOUTOFRANGE;
+            }
+            else
+            {
+                ret = E_NOT_OK;
+                *ErrorCode = canPassRet;
+            }
+            break;
+    }
+    return ret;
     /** DO NOT CHANGE THIS COMMENT!
      * </USERBLOCK>
      */
@@ -4026,6 +4086,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xF183_DID_0xF183_ReadData( Dcm_OpSta
     /* custom code.... */
     /* The length of this data is configured to be 2 bytes */
     DCM_UNUSED(OpStatus);
+    memset(Data,0,10);
 
     uint32_t len = 0;
 
@@ -4058,6 +4119,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xF187_DID_0xF187_ReadData( Dcm_OpSta
     /* custom code.... */
     /* The length of this data is configured to be 5 bytes */
     DCM_UNUSED(OpStatus);
+    memset(Data,0,10);
     
     // Std_ReturnType ret = NvM_ReadBlock(0u, (void*)Data);
     // if (ret != E_OK)
@@ -4085,6 +4147,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xF18A_DID_0xF18A_ReadData( Dcm_OpSta
     /* custom code.... */
     /* The length of this data is configured to be 1 bytes */
     DCM_UNUSED(OpStatus);
+    memset(Data,0,5);
 
     uint32_t len = 0;
     if(ProjectConfig_GetItemData(CONFIG_ITEM_SYSTEM_SUPPLIER_IDENTIFIER, Data, &len) != 0)
@@ -4116,6 +4179,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xF191_DID_0xF191_ReadData( Dcm_OpSta
     /* custom code.... */
     /* The length of this data is configured to be 1 bytes */
     DCM_UNUSED(OpStatus);
+    memset(Data,0,5);
 
     uint32_t len = 0;
     if(ProjectConfig_GetItemData(CONFIG_ITEM_ECU_HW_NUMBER, Data, &len) != 0)
@@ -4147,6 +4211,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xF192_DID_0xF192_ReadData( Dcm_OpSta
     /* custom code.... */
     /* The length of this data is configured to be 2 bytes */
     DCM_UNUSED(OpStatus);
+    memset(Data,0,10);
 
     uint32_t len = 0;
     if(ProjectConfig_GetItemData(CONFIG_ITEM_ECU_HW_REF_NUMBER, Data, &len) != 0)
@@ -4178,6 +4243,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xF194_DID_0xF194_ReadData( Dcm_OpSta
     /* custom code.... */
     /* The length of this data is configured to be 2 bytes */
     DCM_UNUSED(OpStatus);
+    memset(Data,0,10);
 
     uint32_t len = 0;
     if(ProjectConfig_GetItemData(CONFIG_ITEM_ECU_SW_REF_NUMBER, Data, &len) != 0)
@@ -4209,6 +4275,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xF1A0_DID_0xF1A0_ReadData( Dcm_OpSta
     /* custom code.... */
     /* The length of this data is configured to be 1 bytes */
     DCM_UNUSED(OpStatus);
+    memset(Data,0,5);
 
     uint32_t len = 0;
     if(ProjectConfig_GetItemData(CONFIG_ITEM_ECU_APP_SW_VERSION, Data, &len) != 0)
@@ -4240,6 +4307,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xF1A1_DID_0xF1A1_ReadData( Dcm_OpSta
     /* custom code.... */
     /* The length of this data is configured to be 1 bytes */
     DCM_UNUSED(OpStatus);
+    memset(Data,0,5);
 
     uint32_t len = 0;
     if(ProjectConfig_GetItemData(CONFIG_ITEM_ECU_CALIBRATION_SW_VERSION, Data, &len) != 0)
@@ -4271,6 +4339,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xF1A2_DID_0xF1A2_ReadData( Dcm_OpSta
     /* custom code.... */
     /* The length of this data is configured to be 1 bytes */
     DCM_UNUSED(OpStatus);
+    memset(Data,0,5);
 
     uint32_t len = 0;
     if(ProjectConfig_GetItemData(CONFIG_ITEM_ECU_NCF_REF_NUMBER, Data, &len) != 0)
@@ -4302,6 +4371,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xF1A5_DID_0xF1A5_ReadData( Dcm_OpSta
     /* custom code.... */
     /* The length of this data is configured to be 1 bytes */
     DCM_UNUSED(OpStatus);
+    memset(Data,0,3);
 
     uint32_t len = 0;
     if(ProjectConfig_GetItemData(CONFIG_ITEM_ECU_INDEX_INFORMATION, Data, &len) != 0)
@@ -4333,6 +4403,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xF1AA_DID_0xF1AA_ReadData( Dcm_OpSta
     /* custom code.... */
     /* The length of this data is configured to be 1 bytes */
     DCM_UNUSED(OpStatus);
+    memset(Data,0,5);
     DCM_UNUSED(Data);
     DCM_UNUSED(ErrorCode);
     return E_OK;
@@ -4354,6 +4425,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xF1B5_DID_0xF1B5_ReadData( Dcm_OpSta
     /* custom code.... */
     /* The length of this data is configured to be 1 bytes */
     DCM_UNUSED(OpStatus);
+    // memset(Data,0,5);
     // 暂存DID服务  无用则删除
 
     // uint32_t len = 0;
@@ -4386,6 +4458,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xF1B6_DID_0xF1B6_ReadData( Dcm_OpSta
     /* custom code.... */
     /* The length of this data is configured to be 1 bytes */
     DCM_UNUSED(OpStatus);
+    memset(Data,0,5);
 
     uint32_t len = 0;
     if(ProjectConfig_GetItemData(CONFIG_ITEM_ECU_THIRD_APP_SW, Data, &len) != 0)
@@ -4420,6 +4493,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xC001_DID_0xC001_ReadData( Dcm_OpSta
     int16_t canPassRet = 0;
     uint8_t UDSReqData[3] = {0x22, 0xC0, 0x01};
     uint16_t UDSReqDataLen = 3;
+    memset(Data,0,64);
 
     if(ParameterSyncSdkGetFromCpuIsFinished()!=0)
     {
@@ -4487,6 +4561,24 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xC002_DID_0xC002_ReadData( Dcm_OpSta
     DCM_UNUSED(OpStatus);
     DCM_UNUSED(Data);
     DCM_UNUSED(ErrorCode);
+    
+    /*
+    //C306为预留block，现用于存储F110的block编号，初始值为0
+    //C306block中，始终保存下一次2E F110应写入的block编号。22 F110则需要查看最近一次写入则需要(C306[0] - 1)
+    NvM_ReadBlock(NvMBlock_DIDC306, NvMBlockRamBuffer36);
+    uint8_t F110NumBlocks = NvMBlockRamBuffer36[0] - 1;
+
+    for(uint8_t i = 0; i < 15; i++)
+    {
+        if(DID_F110RamBuffer[i].NumBlocks == F110NumBlocks)
+        {
+            NvM_ReadBlock(DID_F110RamBuffer[i].BlockId, NvMBlockRamBuffer12);
+            memcpy( Data, DID_F110RamBuffer[i].NvM_DstPtr, 16);
+            break;
+        }
+    }
+    */
+
     return E_OK;
 
     /** DO NOT CHANGE THIS COMMENT!
@@ -4530,6 +4622,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xC004_DID_0xC004_ReadData( Dcm_OpSta
     int16_t canPassRet = 0;
     uint8_t UDSReqData[3] = {0x22, 0xC0, 0x04};
     uint16_t UDSReqDataLen = 3;
+    memset(Data,0,64);
 
     if(ParameterSyncSdkGetFromCpuIsFinished()!=0)
     {
@@ -4691,6 +4784,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xC009_DID_0xC009_ReadData( Dcm_OpSta
     int16_t canPassRet = 0;
     uint8_t UDSReqData[3] = {0x22, 0xC0, 0x09};
     uint16_t UDSReqDataLen = 3;
+    memset(Data,0,6);
 
     if(ParameterSyncSdkGetFromCpuIsFinished()!=0)
     {
@@ -4844,6 +4938,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xC011_DID_0xC011_ReadData( Dcm_OpSta
     int16_t canPassRet = 0;
     uint8_t UDSReqData[3] = {0x22, 0xC0, 0x11};
     uint16_t UDSReqDataLen = 3;
+    memset(Data,0,64);
 
     if(ParameterSyncSdkGetFromCpuIsFinished()!=0)
     {
@@ -4954,6 +5049,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xC014_DID_0xC014_ReadData( Dcm_OpSta
     int16_t canPassRet = 0;
     uint8_t UDSReqData[3] = {0x22, 0xC0, 0x14};
     uint16_t UDSReqDataLen = 3;
+    memset(Data,0,64);
 
     if(ParameterSyncSdkGetFromCpuIsFinished()!=0)
     {
@@ -5061,6 +5157,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xC102_DID_0xC102_ReadData( Dcm_OpSta
     /* custom code.... */
     /* The length of this data is configured to be 1 bytes */
     DCM_UNUSED(OpStatus);
+    memset(Data,0,2);
 
     if(NvM_ReadBlock(NvMBlock_DIDC102,NvMBlockRamBuffer30) == E_NOT_OK)
     {
@@ -5092,6 +5189,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xC106_DID_0xC106_ReadData( Dcm_OpSta
     /* custom code.... */
     /* The length of this data is configured to be 1 bytes */
     DCM_UNUSED(OpStatus);
+    memset(Data,0,8);
 
     if(NvM_ReadBlock(NvMBlock_DIDC106,NvMBlockRamBuffer31) == E_NOT_OK)
     {
@@ -5146,6 +5244,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xCA02_DID_0xCA02_ReadData( Dcm_OpSta
     int16_t canPassRet = 0;
     uint8_t UDSReqData[3] = {0x22, 0xCA, 0x02};
     uint16_t UDSReqDataLen = 3;
+    memset(Data,0,37);
 
     if(ParameterSyncSdkGetFromCpuIsFinished()!=0)
     {
@@ -5213,6 +5312,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xCA21_DID_0xCA21_ReadData( Dcm_OpSta
     int16_t canPassRet = 0;
     uint8_t UDSReqData[3] = {0x22, 0xCA, 0x21};
     uint16_t UDSReqDataLen = 3;
+    memset(Data,0,1);
 
     if(ParameterSyncSdkGetFromCpuIsFinished()!=0)
     {
@@ -5280,6 +5380,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xC305_DID_0xC305_ReadData( Dcm_OpSta
     int16_t canPassRet = 0;
     uint8_t UDSReqData[3] = {0x22, 0xC3, 0x05};
     uint16_t UDSReqDataLen = 3;
+    memset(Data,0,2);
 
     if(ParameterSyncSdkGetFromCpuIsFinished()!=0)
     {
@@ -5370,6 +5471,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xC307_DID_0xC307_ReadData( Dcm_OpSta
     int16_t canPassRet = 0;
     uint8_t UDSReqData[3] = {0x22, 0xC3, 0x07};
     uint16_t UDSReqDataLen = 3;
+    memset(Data,0,2);
 
     if(ParameterSyncSdkGetFromCpuIsFinished()!=0)
     {
@@ -5481,6 +5583,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xC30A_DID_0xC30A_ReadData( Dcm_OpSta
     int16_t canPassRet = 0;
     uint8_t UDSReqData[3] = {0x22, 0xC3, 0x0A};
     uint16_t UDSReqDataLen = 3;
+    memset(Data,0,2);
 
     if(ParameterSyncSdkGetFromCpuIsFinished()!=0)
     {
@@ -5550,6 +5653,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xC30C_DID_0xC30C_ReadData( Dcm_OpSta
     int16_t canPassRet = 0;
     uint8_t UDSReqData[3] = {0x22, 0xC3, 0x0C};
     uint16_t UDSReqDataLen = 3;
+    memset(Data,0,8);
 
     if(ParameterSyncSdkGetFromCpuIsFinished()!=0)
     {
@@ -5638,6 +5742,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xCE05_DID_0xCE05_ReadData( Dcm_OpSta
     int16_t canPassRet = 0;
     uint8_t UDSReqData[3] = {0x22, 0xCE, 0x05};
     uint16_t UDSReqDataLen = 3;
+    memset(Data,0,1);
 
     if(ParameterSyncSdkGetFromCpuIsFinished()!=0)
     {
@@ -5705,6 +5810,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xCE06_DID_0xCE06_ReadData( Dcm_OpSta
     int16_t canPassRet = 0;
     uint8_t UDSReqData[3] = {0x22, 0xCE, 0x06};
     uint16_t UDSReqDataLen = 3;
+    memset(Data,0,1);
 
     if(ParameterSyncSdkGetFromCpuIsFinished()!=0)
     {
@@ -5771,10 +5877,20 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xCF00_DID_0xCF00_ReadData( Dcm_OpSta
     /* custom code.... */
     /* The length of this data is configured to be 3 bytes */
     DCM_UNUSED(OpStatus);
-    DCM_UNUSED(Data);
-    DCM_UNUSED(ErrorCode);
-    return E_OK;
+    memset(Data,0,24);
 
+    if(NvM_ReadBlock(NvMBlock_DIDCF00,NvMBlockRamBuffer45) == E_NOT_OK)
+    {
+        *ErrorCode = DCM_E_CONDITIONSNOTCORRECT;
+        return E_NOT_OK;
+    }
+
+    for (uint8 i = 0; i < 24; i++) 
+    {
+        *(Data+i) = NvMBlockRamBuffer45[i];
+    }
+
+    return E_OK;
     /** DO NOT CHANGE THIS COMMENT!
      * </USERBLOCK>
      */
@@ -5795,6 +5911,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xC30D_DID_0xC30D_ReadData( Dcm_OpSta
     int16_t canPassRet = 0;
     uint8_t UDSReqData[3] = {0x22, 0xC3, 0x0D};
     uint16_t UDSReqDataLen = 3;
+    memset(Data,0,2);
 
     if(ParameterSyncSdkGetFromCpuIsFinished()!=0)
     {
@@ -5925,6 +6042,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0x0112_DID_0x0112_ReadData( Dcm_OpSta
     /* The length of this data is configured to be 1 bytes */
     DCM_UNUSED(OpStatus);
     DCM_UNUSED(ErrorCode);
+    memset(Data,0,1);
 
     uint32_t supplyVoltage = 0;
     uint8_t KL30_Voltage0_1V = 0;
@@ -5953,6 +6071,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xE101_DID_0xE101_ReadData( Dcm_OpSta
     /* custom code.... */
     /* The length of this data is configured to be 1 bytes */
     DCM_UNUSED(OpStatus);
+    memset(Data,0,3);
 
     uint8 ret = E_OK;
     uint32 Odometer = 0;
@@ -5989,6 +6108,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0x010B_DID_0x010B_ReadData( Dcm_OpSta
     /* The length of this data is configured to be 1 bytes */
     DCM_UNUSED(OpStatus);
     DCM_UNUSED(ErrorCode);
+    memset(Data,0,6);
 
     uint8_t timeSrc = 0;
     uint32_t year = 2026;
@@ -6000,15 +6120,13 @@ Std_ReturnType  Rte_Call_DataServices_Data_0x010B_DID_0x010B_ReadData( Dcm_OpSta
     int16_t ret = 0;
 
     ret = TimeSyncSdkGetRealTime(&timeSrc, &year, &month, &day, &hour, &minute, &second);
-    if(ret != 0)
+    if(ret == -1)
     {
         *ErrorCode = DCM_E_CONDITIONSNOTCORRECT;
         return  E_NOT_OK;
     }
-    
-    /* 计算年份存储值（current_year - 2000 = 26） */
-    // uint8_t year_value = (uint8_t)(current_year - 2000); //当前TimeSyncSdkGetRealTime获取时间为-2000之后
 
+    year = year - 2000;
     /* 填充数据（共6字节） */
     Data[0] = (uint8_t)year;  /* Year: 26 → 2026年 */
     Data[1] = month;       /* Month */
@@ -6036,8 +6154,8 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xE010_DID_0xE010_ReadData( Dcm_OpSta
     /* custom code.... */
     /* The length of this data is configured to be 1 bytes */
     DCM_UNUSED(OpStatus);
-    DCM_UNUSED(Data);
     DCM_UNUSED(ErrorCode);
+    memset(Data,0,2);
 
     uint8 ret = E_OK;
     uint16 vehicleSpeed = 0u;
@@ -6073,6 +6191,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xD002_DID_0xD002_ReadData( Dcm_OpSta
     /* The length of this data is configured to be 1 bytes */
     DCM_UNUSED(OpStatus);
     DCM_UNUSED(ErrorCode);
+    memset(Data,0,1);
     
     /* Default values */
     uint8 vehicleMode = 0x0;
@@ -6103,8 +6222,8 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xF186_DID_0xF186_ReadData( Dcm_OpSta
     /* custom code.... */
     /* The length of this data is configured to be 1 bytes */
     DCM_UNUSED(OpStatus);
-    DCM_UNUSED(Data);
     DCM_UNUSED(ErrorCode);
+    memset(Data,0,1);
 
     Dcm_SesCtrlType activeDiagnosticSession;
 
@@ -6135,57 +6254,10 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xD001_DID_0xD001_ReadData( Dcm_OpSta
 
     /* custom code.... */
     /* The length of this data is configured to be 1 bytes */
-    Std_ReturnType ret = E_OK;
-    int16_t canPassRet = 0;
-    uint8_t UDSReqData[3] = {0x22, 0xD0, 0x01};
-    uint16_t UDSReqDataLen = 3;
-
-    if(ParameterSyncSdkGetFromCpuIsFinished()!=0)
-    {
-        ret = E_NOT_OK;
-        *ErrorCode = DCM_E_BUSYREPEATREQUEST;
-        return ret;
-    }
-    
-    switch(OpStatus)
-    {
-        case DCM_INITIAL://首次调用，发起异步请求
-            canPassRet = CanPassthrough_SendRequest(UDSReqData, UDSReqDataLen);
-            if(canPassRet == 0)
-            {
-                ret = DCM_E_PENDING;
-            }
-            else
-            {
-                ret = E_NOT_OK;
-                *ErrorCode = DCM_E_CONDITIONSNOTCORRECT;
-            }
-            
-            break;
-
-        case DCM_PENDING://后续调用，检查是否有响应
-            canPassRet = CanPassthroughRead_PENDING(UDSReqData, UDSReqDataLen, Data);
-            if(canPassRet == 0)
-            {
-                ret = E_OK;
-            }
-            else if(canPassRet == 1)//DCM_E_PENDING
-            {
-                ret = DCM_E_PENDING;
-            }
-            else if(canPassRet == -1)//timeout
-            {
-                ret = E_NOT_OK;
-                *ErrorCode = DCM_E_REQUESTOUTOFRANGE;
-            }
-            else
-            {
-                ret = E_NOT_OK;
-                *ErrorCode = canPassRet;
-            }
-            break;
-    }
-    return ret;
+    DCM_UNUSED(OpStatus);
+    DCM_UNUSED(Data);
+    DCM_UNUSED(ErrorCode);
+    return E_OK;
 
     /** DO NOT CHANGE THIS COMMENT!
      * </USERBLOCK>
@@ -6207,6 +6279,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xB9C1_DID_0xB9C1_ReadData( Dcm_OpSta
     int16_t canPassRet = 0;
     uint8_t UDSReqData[3] = {0x22, 0xC1, 0x00};
     uint16_t UDSReqDataLen = 3;
+    memset(Data,0,3);
 
     if(ParameterSyncSdkGetFromCpuIsFinished()!=0)
     {
@@ -6271,57 +6344,11 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xB000_DID_0xB000_ReadData( Dcm_OpSta
 
     /* custom code.... */
     /* The length of this data is configured to be 3 bytes */
-    Std_ReturnType ret = E_OK;
-    int16_t canPassRet = 0;
-    uint8_t UDSReqData[3] = {0X22, 0XB0, 0x00};
-    uint16_t UDSReqDataLen = 3;
+    DCM_UNUSED(OpStatus);
+    DCM_UNUSED(Data);
+    DCM_UNUSED(ErrorCode);
+    return E_OK;
 
-    if(ParameterSyncSdkGetFromCpuIsFinished()!=0)
-    {
-        ret = E_NOT_OK;
-        *ErrorCode = DCM_E_BUSYREPEATREQUEST;
-        return ret;
-    }
-    
-    switch(OpStatus)
-    {
-        case DCM_INITIAL://首次调用，发起异步请求
-            canPassRet = CanPassthrough_SendRequest(UDSReqData, UDSReqDataLen);
-            if(canPassRet == 0)
-            {
-                ret = DCM_E_PENDING;
-            }
-            else
-            {
-                ret = E_NOT_OK;
-                *ErrorCode = DCM_E_CONDITIONSNOTCORRECT;
-            }
-            
-            break;
-
-        case DCM_PENDING://后续调用，检查是否有响应
-            canPassRet = CanPassthroughRead_PENDING(UDSReqData, UDSReqDataLen, Data);
-            if(canPassRet == 0)
-            {
-                ret = E_OK;
-            }
-            else if(canPassRet == 1)//DCM_E_PENDING
-            {
-                ret = DCM_E_PENDING;
-            }
-            else if(canPassRet == -1)//timeout
-            {
-                ret = E_NOT_OK;
-                *ErrorCode = DCM_E_REQUESTOUTOFRANGE;
-            }
-            else
-            {
-                ret = E_NOT_OK;
-                *ErrorCode = canPassRet;
-            }
-            break;
-    }
-    return ret;
     /** DO NOT CHANGE THIS COMMENT!
      * </USERBLOCK>
      */
@@ -6339,6 +6366,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xB001_DID_0xB001_ReadData( Dcm_OpSta
     /* custom code.... */
     /* The length of this data is configured to be 3 bytes */
     DCM_UNUSED(OpStatus);
+    memset(Data,0,20);
 
     uint32_t len = 0;
     if(ProjectConfig_GetItemData(CONFIG_ITEM_ICCID_VALUE_INT, Data, &len) != 0)
@@ -6350,6 +6378,22 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xB001_DID_0xB001_ReadData( Dcm_OpSta
     {
 
     }
+
+    /*等待block
+    DCM_UNUSED(OpStatus);
+    memset(Data,0,17);
+
+    if(NvM_ReadBlock(NvMBlock_DIDB001,NvMBlockRamBuffer?) == E_NOT_OK)
+    {
+        *ErrorCode = DCM_E_CONDITIONSNOTCORRECT;
+        return E_NOT_OK;
+    }
+
+    for (uint8 i = 0; i < 20; i++) 
+    {
+        *(Data+i) = NvMBlockRamBuffer？[i];
+    }
+    */
 
     return E_OK;
 
@@ -6369,57 +6413,21 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xB002_DID_0xB002_ReadData( Dcm_OpSta
 
     /* custom code.... */
     /* The length of this data is configured to be 3 bytes */
-    Std_ReturnType ret = E_OK;
-    int16_t canPassRet = 0;
-    uint8_t UDSReqData[3] = {0x22, 0xB0, 0x02};
-    uint16_t UDSReqDataLen = 3;
+    DCM_UNUSED(OpStatus);
+    memset(Data,0,24);
 
-    if(ParameterSyncSdkGetFromCpuIsFinished()!=0)
+    uint32_t len = 0;
+    if(ProjectConfig_GetItemData(CONFIG_ITEM_MODEM_SW_VERSION, Data, &len) != 0)
     {
-        ret = E_NOT_OK;
-        *ErrorCode = DCM_E_BUSYREPEATREQUEST;
-        return ret;
+        *ErrorCode = DCM_E_CONDITIONSNOTCORRECT;
+        return E_NOT_OK;
     }
-    
-    switch(OpStatus)
+    else
     {
-        case DCM_INITIAL://首次调用，发起异步请求
-            canPassRet = CanPassthrough_SendRequest(UDSReqData, UDSReqDataLen);
-            if(canPassRet == 0)
-            {
-                ret = DCM_E_PENDING;
-            }
-            else
-            {
-                ret = E_NOT_OK;
-                *ErrorCode = DCM_E_CONDITIONSNOTCORRECT;
-            }
-            
-            break;
 
-        case DCM_PENDING://后续调用，检查是否有响应
-            canPassRet = CanPassthroughRead_PENDING(UDSReqData, UDSReqDataLen, Data);
-            if(canPassRet == 0)
-            {
-                ret = E_OK;
-            }
-            else if(canPassRet == 1)//DCM_E_PENDING
-            {
-                ret = DCM_E_PENDING;
-            }
-            else if(canPassRet == -1)//timeout
-            {
-                ret = E_NOT_OK;
-                *ErrorCode = DCM_E_REQUESTOUTOFRANGE;
-            }
-            else
-            {
-                ret = E_NOT_OK;
-                *ErrorCode = canPassRet;
-            }
-            break;
     }
-    return ret;
+
+    return E_OK;
     /** DO NOT CHANGE THIS COMMENT!
      * </USERBLOCK>
      */
@@ -6437,6 +6445,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xB003_DID_0xB003_ReadData( Dcm_OpSta
     /* custom code.... */
     /* The length of this data is configured to be 3 bytes */
     DCM_UNUSED(OpStatus);
+    memset(Data,0,24);
 
     uint32_t len = 0;
     if(ProjectConfig_GetItemData(CONFIG_ITEM_MCU_SW_VERSION, Data, &len) != 0)
@@ -6467,25 +6476,11 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xB004_DID_0xB004_ReadData( Dcm_OpSta
 
     /* custom code.... */
     /* The length of this data is configured to be 3 bytes */
-    // DCM_UNUSED(OpStatus);
-
-    // uint32_t len = 0;
-    // if(ProjectConfig_GetItemData(CONFIG_ITEM_NAD_IMEI, Data, &len) != 0)
-    // {
-    //     *ErrorCode = DCM_E_CONDITIONSNOTCORRECT;
-    //     return E_NOT_OK;
-    // }
-    // else
-    // {
-        
-    // }
-
-    // return E_OK;
-
     Std_ReturnType ret = E_OK;
     int16_t canPassRet = 0;
     uint8_t UDSReqData[3] = {0x22, 0xB0, 0x04};
     uint16_t UDSReqDataLen = 3;
+    memset(Data,0,24);
 
     if(ParameterSyncSdkGetFromCpuIsFinished()!=0)
     {
@@ -6534,6 +6529,24 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xB004_DID_0xB004_ReadData( Dcm_OpSta
     }
     return ret;
 
+    /*等待block
+    DCM_UNUSED(OpStatus);
+    memset(Data,0,17);
+
+    if(NvM_ReadBlock(NvMBlock_DIDB004,NvMBlockRamBuffer?) == E_NOT_OK)
+    {
+        *ErrorCode = DCM_E_CONDITIONSNOTCORRECT;
+        return E_NOT_OK;
+    }
+
+    for (uint8 i = 0; i < 20; i++) 
+    {
+        *(Data+i) = NvMBlockRamBuffer？[i];
+    }
+
+    return E_OK;
+    */
+
     /** DO NOT CHANGE THIS COMMENT!
      * </USERBLOCK>
      */
@@ -6551,6 +6564,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xB005_DID_0xB005_ReadData( Dcm_OpSta
     /* custom code.... */
     /* The length of this data is configured to be 16 bytes */
     DCM_UNUSED(OpStatus);
+    memset(Data,0,128);
 
     uint32_t len = 0;
     if(ProjectConfig_GetItemData(CONFIG_ITEM_NAD_SW_VERSION, Data, &len) != 0)
@@ -6645,12 +6659,11 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xB082_DID_0xB082_ReadData( Dcm_OpSta
     /* The length of this data is configured to be 4 bytes (31-0 bits SYSTEM_TIME) */
     DCM_UNUSED(OpStatus);
     DCM_UNUSED(ErrorCode);
+    memset(Data,0,4);
 
     uint32_t systemTime = 0; /* 系统时间（秒），实际应从系统获取 */
-    
-    //获取系统时间秒数函数。。。（待适配）
+    TimerHalGetRtcTime(&systemTime);
 
-    //大端填充
     Data[0] = (uint8_t)((systemTime >> 24) & 0xFF);
     Data[1] = (uint8_t)((systemTime >> 16) & 0xFF);
     Data[2] = (uint8_t)((systemTime >> 8) & 0xFF);
@@ -6676,18 +6689,32 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xB083_DID_0xB083_ReadData( Dcm_OpSta
     /* The length of this data is configured to be 1 bytes */
     DCM_UNUSED(OpStatus);
     DCM_UNUSED(ErrorCode);
+    memset(Data,0,3);
 
-    uint8_t powerStatus[3] = {0};
+    uint8_t powerStatus = 0;
+    PowerManageSdkGetPowerInfo(NULL, &powerStatus,NULL);
 
+    switch(powerStatus)
+    {
+        case PM_HAL_WAKEUP_SOURCE_CAN1:
+            Data[0] |= (0x01);
+            break;
 
-    //获取电源状态函数。。。（待适配）
+        case PM_HAL_WAKEUP_SOURCE_MPU:
+            Data[0] |= (0x01 << 2);
+            break;
 
-    //根据唤醒源填充位
-    powerStatus[0] = 0x00;// bit0 CAN1Wake | bit2 Modem Process | bit3 BLE | bit4 LIN | bit1\7-5 Reserved
-    powerStatus[1] = 0x00;// bit0 RTC | bit1-7 Reserved
-    powerStatus[2] = 0x00;// Reserved
+        case PM_HAL_WAKEUP_SOURCE_BLE:
+            Data[0] |= (0x01 << 3);
+            break;
 
-    memcpy(Data, powerStatus, sizeof(powerStatus));
+        case PM_HAL_WAKEUP_SOURCE_RTC:
+            Data[1] |= (0x01 << 0);
+            break;
+
+        default:
+            break;
+    }
 
     return E_OK;
 
@@ -6709,24 +6736,25 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xB100_DID_0xB100_ReadData( Dcm_OpSta
     /* The length of this data is configured to be 1 bytes */
     DCM_UNUSED(OpStatus);
     DCM_UNUSED(ErrorCode);
+    memset(Data,0,1);
 
-    uint32_t GNSSadcValue0 = 0;
-    uint32_t GNSSadcValue1 = 0;
+    uint32_t gnssAdcValue0 = 0;
+    uint32_t gnssAdcValue1 = 0;
     // F9K天线 bit1-0
-    PeripheralHalAdGet(AD0_CHANNEL_MCU_GPS_ANT_ADC0, &GNSSadcValue0);
-    PeripheralHalAdGet(AD0_CHANNEL_MCU_GPS_ANT_ADC1, &GNSSadcValue1);
+    PeripheralHalAdGet(AD0_CHANNEL_MCU_GPS_ANT_ADC0, &gnssAdcValue0);
+    PeripheralHalAdGet(AD0_CHANNEL_MCU_GPS_ANT_ADC1, &gnssAdcValue1);
     Data[0] = 0;
-    if((GNSSadcValue0 >= 2050 && GNSSadcValue0 <= 2450) || (GNSSadcValue1 >= 2050 && GNSSadcValue1 <= 2450))
+    if((gnssAdcValue0 >= 2050 && gnssAdcValue0 <= 2450) || (gnssAdcValue1 >= 2050 && gnssAdcValue1 <= 2450))
     {
         //天线断开
         Data[0] = 0x00;
     }
-    else if((GNSSadcValue0 >= 2050 && GNSSadcValue0 <= 2450) || (GNSSadcValue1 >= 100 && GNSSadcValue1 <= 300))
+    else if((gnssAdcValue0 >= 2050 && gnssAdcValue0 <= 2450) || (gnssAdcValue1 >= 100 && gnssAdcValue1 <= 300))
     {
         //天线正常
         Data[0] |= (0x01);
     }
-    else if((GNSSadcValue0 ==0) || (GNSSadcValue1 == 0))
+    else if((gnssAdcValue0 ==0) || (gnssAdcValue1 == 0))
     {
         //天线对地短接
         Data[0] |= (0x02);
@@ -6758,13 +6786,14 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xB101_DID_0xB101_ReadData( Dcm_OpSta
     /* custom code.... */
     /* The length of this data is configured to be 1 bytes */
     DCM_UNUSED(OpStatus);
+    memset(Data,0,8);
 
     uint8_t *p_buf = Data;
     LocationInfoSync_t locationInfo;
 
     if(StateSyncGetLocationInfo(&locationInfo) != 0)
     {
-        *ErrorCode = DCM_E_CONDITIONSNOTCORRECT;
+        *ErrorCode = DCM_E_BUSYREPEATREQUEST;
         return E_NOT_OK;
     }
 
@@ -6797,13 +6826,14 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xB102_DID_0xB102_ReadData( Dcm_OpSta
     /* custom code.... */
     /* The length of this data is configured to be 1 bytes */
     DCM_UNUSED(OpStatus);
+    memset(Data,0,8);
 
     uint8_t *p_buf = Data;
     LocationInfoSync_t locationInfo;
 
     if(StateSyncGetLocationInfo(&locationInfo) != 0)
     {
-        *ErrorCode = DCM_E_CONDITIONSNOTCORRECT;
+        *ErrorCode = DCM_E_BUSYREPEATREQUEST;
         return E_NOT_OK;
     }
 
@@ -6865,6 +6895,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xB103_DID_0xB103_ReadData( Dcm_OpSta
     int16_t canPassRet = 0;
     uint8_t UDSReqData[3] = {0x22, 0xB1, 0x03};
     uint16_t UDSReqDataLen = 3;
+    memset(Data,0,8);
 
     if(ParameterSyncSdkGetFromCpuIsFinished()!=0)
     {
@@ -6950,8 +6981,8 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xB105_DID_0xB105_ReadData( Dcm_OpSta
     /* custom code.... */
     /* The length of this data is configured to be 1 bytes */
     DCM_UNUSED(OpStatus);
-    DCM_UNUSED(Data);
     DCM_UNUSED(ErrorCode);
+    memset(Data,0,4);
 
     uint32_t batterStatus = 0;
     uint32_t batterVol = 0;
@@ -7024,6 +7055,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xB180_DID_0xB180_ReadData( Dcm_OpSta
     int16_t canPassRet = 0;
     uint8_t UDSReqData[3] = {0x22, 0xB1, 0x80};
     uint16_t UDSReqDataLen = 3;
+    memset(Data,0,6);
 
     if(ParameterSyncSdkGetFromCpuIsFinished()!=0)
     {
@@ -7092,6 +7124,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xB181_DID_0xB181_ReadData( Dcm_OpSta
     int16_t canPassRet = 0;
     uint8_t UDSReqData[3] = {0x22, 0xB1, 0x81};
     uint16_t UDSReqDataLen = 3;
+    memset(Data,0,6);
 
     if(ParameterSyncSdkGetFromCpuIsFinished()!=0)
     {
@@ -7159,6 +7192,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xB182_DID_0xB182_ReadData( Dcm_OpSta
     int16_t canPassRet = 0;
     uint8_t UDSReqData[3] = {0x22, 0xB1, 0x82};
     uint16_t UDSReqDataLen = 3;
+    memset(Data,0,16);
 
     if(ParameterSyncSdkGetFromCpuIsFinished()!=0)
     {
@@ -7226,6 +7260,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xB183_DID_0xB183_ReadData( Dcm_OpSta
     int16_t canPassRet = 0;
     uint8_t UDSReqData[3] = {0x22, 0xB1, 0x83};
     uint16_t UDSReqDataLen = 3;
+    memset(Data,0,16);
 
     if(ParameterSyncSdkGetFromCpuIsFinished()!=0)
     {
@@ -7291,6 +7326,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xB185_DID_0xB185_ReadData( Dcm_OpSta
     /* The length of this data is configured to be 2 bytes */
     DCM_UNUSED(OpStatus);
     DCM_UNUSED(ErrorCode);
+    memset(Data,0,2);
 
     uint8_t ANT_Status[2] = {0};
     uint32_t ANT_Value = 0;
@@ -7409,6 +7445,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xB186_DID_0xB186_ReadData( Dcm_OpSta
     int16_t canPassRet = 0;
     uint8_t UDSReqData[3] = {0x22, 0xB1, 0x86};
     uint16_t UDSReqDataLen = 3;
+    memset(Data,0,16);
 
     if(ParameterSyncSdkGetFromCpuIsFinished()!=0)
     {
@@ -7476,6 +7513,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xB187_DID_0xB187_ReadData( Dcm_OpSta
     int16_t canPassRet = 0;
     uint8_t UDSReqData[3] = {0x22, 0xB1, 0x87};
     uint16_t UDSReqDataLen = 3;
+    memset(Data,0,16);
 
     if(ParameterSyncSdkGetFromCpuIsFinished()!=0)
     {
@@ -7539,11 +7577,58 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xB200_DID_0xB200_ReadData( Dcm_OpSta
 
     /* custom code.... */
     /* The length of this data is configured to be 1 bytes */
-    DCM_UNUSED(OpStatus);
-    DCM_UNUSED(Data);
-    DCM_UNUSED(ErrorCode);
-    return E_OK;
+    Std_ReturnType ret = E_OK;
+    int16_t canPassRet = 0;
+    uint8_t UDSReqData[3] = {0x22, 0xB2, 0x00};
+    uint16_t UDSReqDataLen = 3;
+    memset(Data,0,5);
 
+    if(ParameterSyncSdkGetFromCpuIsFinished()!=0)
+    {
+        ret = E_NOT_OK;
+        *ErrorCode = DCM_E_BUSYREPEATREQUEST;
+        return ret;
+    }
+    
+    switch(OpStatus)
+    {
+        case DCM_INITIAL://首次调用，发起异步请求
+            canPassRet = CanPassthrough_SendRequest(UDSReqData, UDSReqDataLen);
+            if(canPassRet == 0)
+            {
+                ret = DCM_E_PENDING;
+            }
+            else
+            {
+                ret = E_NOT_OK;
+                *ErrorCode = DCM_E_CONDITIONSNOTCORRECT;
+            }
+            
+            break;
+
+        case DCM_PENDING://后续调用，检查是否有响应
+            canPassRet = CanPassthroughRead_PENDING(UDSReqData, UDSReqDataLen, Data);
+            if(canPassRet == 0)
+            {
+                ret = E_OK;
+            }
+            else if(canPassRet == 1)//DCM_E_PENDING
+            {
+                ret = DCM_E_PENDING;
+            }
+            else if(canPassRet == -1)//timeout
+            {
+                ret = E_NOT_OK;
+                *ErrorCode = DCM_E_REQUESTOUTOFRANGE;
+            }
+            else
+            {
+                ret = E_NOT_OK;
+                *ErrorCode = canPassRet;
+            }
+            break;
+    }
+    return ret;
     /** DO NOT CHANGE THIS COMMENT!
      * </USERBLOCK>
      */
@@ -7561,7 +7646,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xB201_DID_0xB201_ReadData( Dcm_OpSta
     /* custom code.... */
     /* The length of this data is configured to be 4 bytes */
     DCM_UNUSED(OpStatus);
-
+    memset(Data,0,64);
 
     uint32_t len = 0;
     if(ProjectConfig_GetItemData(CONFIG_ITEM_SIGNATURE_PUBLIC_KEY, Data, &len) != 0)
@@ -7592,21 +7677,73 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xB202_DID_0xB202_ReadData( Dcm_OpSta
 
     /* custom code.... */
     /* The length of this data is configured to be 2 bytes */
-    DCM_UNUSED(OpStatus);
+    // DCM_UNUSED(OpStatus);
+    // 
 
-    uint32_t len = 0;
-    if(ProjectConfig_GetItemData(CONFIG_ITEM_HSMID, Data, &len) != 0)
-    {
-        *ErrorCode = DCM_E_CONDITIONSNOTCORRECT;
-        return E_NOT_OK;
-    }
-    else
-    {
+    // uint32_t len = 0;
+    // if(ProjectConfig_GetItemData(CONFIG_ITEM_HSMID, Data, &len) != 0)
+    // {
+    //     *ErrorCode = DCM_E_CONDITIONSNOTCORRECT;
+    //     return E_NOT_OK;
+    // }
+    // else
+    // {
         
+    // }
+
+    // return E_OK;
+    Std_ReturnType ret = E_OK;
+    int16_t canPassRet = 0;
+    uint8_t UDSReqData[3] = {0x22, 0xB2, 0x02};
+    uint16_t UDSReqDataLen = 3;
+    memset(Data,0,16);
+
+    if(ParameterSyncSdkGetFromCpuIsFinished()!=0)
+    {
+        ret = E_NOT_OK;
+        *ErrorCode = DCM_E_BUSYREPEATREQUEST;
+        return ret;
     }
+    
+    switch(OpStatus)
+    {
+        case DCM_INITIAL://首次调用，发起异步请求
+            canPassRet = CanPassthrough_SendRequest(UDSReqData, UDSReqDataLen);
+            if(canPassRet == 0)
+            {
+                ret = DCM_E_PENDING;
+            }
+            else
+            {
+                ret = E_NOT_OK;
+                *ErrorCode = DCM_E_CONDITIONSNOTCORRECT;
+            }
+            
+            break;
 
-    return E_OK;
-
+        case DCM_PENDING://后续调用，检查是否有响应
+            canPassRet = CanPassthroughRead_PENDING(UDSReqData, UDSReqDataLen, Data);
+            if(canPassRet == 0)
+            {
+                ret = E_OK;
+            }
+            else if(canPassRet == 1)//DCM_E_PENDING
+            {
+                ret = DCM_E_PENDING;
+            }
+            else if(canPassRet == -1)//timeout
+            {
+                ret = E_NOT_OK;
+                *ErrorCode = DCM_E_REQUESTOUTOFRANGE;
+            }
+            else
+            {
+                ret = E_NOT_OK;
+                *ErrorCode = canPassRet;
+            }
+            break;
+    }
+    return ret;
     /** DO NOT CHANGE THIS COMMENT!
      * </USERBLOCK>
      */
@@ -7623,15 +7760,16 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xB210_DID_0xB210_ReadData( Dcm_OpSta
 
     /* custom code.... */
     /* The length of this data is configured to be 1 bytes */
-
-    uint16_t VIN[17] = {0};
+    uint8_t VIN[17] = {0};
+    uint16_t len = 0;
+    memset(Data,0,2);
 
     NvM_ReadBlock(NvMBlock_DIDF190,NvMBlockRamBuffer7);
 
     memcpy(VIN, NvMBlockRamBuffer7, 17);
     Data[0] = 0;
     Data[1] = 0;
-    if(IsFlashDataValid(VIN, (uint16_t)17) == 0)
+    if(IsFlashDataValid(VIN, len) == 0)
     {
         Data[0] = 0;
         Data[1] = 0;
@@ -7664,6 +7802,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xB211_DID_0xB211_ReadData( Dcm_OpSta
     int16_t canPassRet = 0;
     uint8_t UDSReqData[3] = {0x22, 0xB2, 0x11};
     uint16_t UDSReqDataLen = 3;
+    memset(Data,0,2);
 
     if(ParameterSyncSdkGetFromCpuIsFinished()!=0)
     {
@@ -7731,6 +7870,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xB230_DID_0xB230_ReadData( Dcm_OpSta
     int16_t canPassRet = 0;
     uint8_t UDSReqData[3] = {0x22, 0xB2, 0x30};
     uint16_t UDSReqDataLen = 3;
+    memset(Data,0,3);
 
     if(ParameterSyncSdkGetFromCpuIsFinished()!=0)
     {
@@ -7794,11 +7934,58 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xB302_DID_0xB302_ReadData( Dcm_OpSta
 
     /* custom code.... */
     /* The length of this data is configured to be 1 bytes */
-    DCM_UNUSED(OpStatus);
-    DCM_UNUSED(Data);
-    DCM_UNUSED(ErrorCode);
-    return E_OK;
+    Std_ReturnType ret = E_OK;
+    int16_t canPassRet = 0;
+    uint8_t UDSReqData[3] = {0x22, 0xB3, 0x02};
+    uint16_t UDSReqDataLen = 3;
+    memset(Data,0,2);
 
+    if(ParameterSyncSdkGetFromCpuIsFinished()!=0)
+    {
+        ret = E_NOT_OK;
+        *ErrorCode = DCM_E_BUSYREPEATREQUEST;
+        return ret;
+    }
+    
+    switch(OpStatus)
+    {
+        case DCM_INITIAL://首次调用，发起异步请求
+            canPassRet = CanPassthrough_SendRequest(UDSReqData, UDSReqDataLen);
+            if(canPassRet == 0)
+            {
+                ret = DCM_E_PENDING;
+            }
+            else
+            {
+                ret = E_NOT_OK;
+                *ErrorCode = DCM_E_CONDITIONSNOTCORRECT;
+            }
+            
+            break;
+
+        case DCM_PENDING://后续调用，检查是否有响应
+            canPassRet = CanPassthroughRead_PENDING(UDSReqData, UDSReqDataLen, Data);
+            if(canPassRet == 0)
+            {
+                ret = E_OK;
+            }
+            else if(canPassRet == 1)//DCM_E_PENDING
+            {
+                ret = DCM_E_PENDING;
+            }
+            else if(canPassRet == -1)//timeout
+            {
+                ret = E_NOT_OK;
+                *ErrorCode = DCM_E_REQUESTOUTOFRANGE;
+            }
+            else
+            {
+                ret = E_NOT_OK;
+                *ErrorCode = canPassRet;
+            }
+            break;
+    }
+    return ret;
     /** DO NOT CHANGE THIS COMMENT!
      * </USERBLOCK>
      */
@@ -7819,6 +8006,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xB931_DID_0xB931_ReadData( Dcm_OpSta
     int16_t canPassRet = 0;
     uint8_t UDSReqData[3] = {0x22, 0xB9, 0x31};
     uint16_t UDSReqDataLen = 3;
+    memset(Data,0,16);
 
     if(ParameterSyncSdkGetFromCpuIsFinished()!=0)
     {
@@ -7884,16 +8072,9 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xB9E4_DID_0xB9E4_ReadData( Dcm_OpSta
     /* The length of this data is configured to be 1 bytes */
     DCM_UNUSED(OpStatus);
 
-    uint32_t len = 0;
-    if(ProjectConfig_GetItemData(CONFIG_ITEM_ENCRYPTION_ALGORITHM_FLAG, Data, &len) != 0)
-    {
-        *ErrorCode = DCM_E_CONDITIONSNOTCORRECT;
-        return E_NOT_OK;
-    }
-    else
-    {
-
-    }
+    uint8_t algFlag = 0;
+    VssGetAlgFlag(&algFlag);
+    Data[0] = algFlag;
 
     return E_OK;
 
@@ -7987,6 +8168,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xAFF6_DID_0xAFF6_ReadData( Dcm_OpSta
     int16_t canPassRet = 0;
     uint8_t UDSReqData[3] = {0x22, 0xAF, 0xF6};
     uint16_t UDSReqDataLen = 3;
+    memset(Data,0,1);
 
     if(ParameterSyncSdkGetFromCpuIsFinished()!=0)
     {
@@ -8055,6 +8237,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xBE01_DID_0xBE01_ReadData( Dcm_OpSta
     int16_t canPassRet = 0;
     uint8_t UDSReqData[3] = {0x22, 0xBE, 0x01};
     uint16_t UDSReqDataLen = 3;
+    memset(Data,0,1);
 
     if(ParameterSyncSdkGetFromCpuIsFinished()!=0)
     {
@@ -8143,6 +8326,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xBE04_DID_0xBE04_ReadData( Dcm_OpSta
     int16_t canPassRet = 0;
     uint8_t UDSReqData[3] = {0x22, 0xBE, 0x04};
     uint16_t UDSReqDataLen = 3;
+    memset(Data,0,1);
 
     if(ParameterSyncSdkGetFromCpuIsFinished()!=0)
     {
@@ -8269,6 +8453,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xBE80_DID_0xBE80_ReadData( Dcm_OpSta
     int16_t canPassRet = 0;
     uint8_t UDSReqData[3] = {0x22, 0xBE, 0x80};
     uint16_t UDSReqDataLen = 3;
+    memset(Data,0,7);
 
     if(ParameterSyncSdkGetFromCpuIsFinished()!=0)
     {
@@ -8336,6 +8521,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xBE05_DID_0xBE05_ReadData( Dcm_OpSta
     int16_t canPassRet = 0;
     uint8_t UDSReqData[3] = {0x22, 0xBE, 0x05};
     uint16_t UDSReqDataLen = 3;
+    memset(Data,0,4);
 
     if(ParameterSyncSdkGetFromCpuIsFinished()!=0)
     {
@@ -8403,6 +8589,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xBE06_DID_0xBE06_ReadData( Dcm_OpSta
     int16_t canPassRet = 0;
     uint8_t UDSReqData[3] = {0x22, 0xBE, 0x06};
     uint16_t UDSReqDataLen = 3;
+    memset(Data,0,36);
 
     if(ParameterSyncSdkGetFromCpuIsFinished()!=0)
     {
@@ -8505,73 +8692,17 @@ Std_ReturnType  Rte_Call_DataServices_Data_0x0100_DID_0x0100_ReadData( Dcm_OpSta
     /** DO NOT CHANGE THIS COMMENT!
      * <USERBLOCK Rte_Call_DataServices_Data_0x0100_DID_0x0100_ReadData>
      */
-    NvM_ReadBlock(NvMBlock_DID0100,NvMBlockRamBuffer53);
-
-    for (uint8 i = 0; i < 16; i++) 
-    {
-        *(Data+i) = NvMBlockRamBuffer53[i];
-    }
     /* custom code.... */
     /* The length of this data is configured to be 2 bytes */
     DCM_UNUSED(OpStatus);
-    DCM_UNUSED(Data);
     DCM_UNUSED(ErrorCode);
+    memset(Data,0,16);
+
+    NvM_ReadBlock(NvMBlock_DID0100,NvMBlockRamBuffer53);
+    memcpy(Data,NvMBlockRamBuffer53,16);
+
     return E_OK;
 
-    /** DO NOT CHANGE THIS COMMENT!
-     * </USERBLOCK>
-     */
-}
-#define DCM_STOP_SEC_CODE
-#include "Dcm_MemMap.h"
-
-#define DCM_START_SEC_CODE
-#include "Dcm_MemMap.h"
-Std_ReturnType Rte_Call_DataServices_Data_0xFFFE_DID_0xFFFE_ReadData( Dcm_OpStatusType OpStatus,uint8* Data,Dcm_NegativeResponseCodeType* ErrorCode )
-{
-    /** DO NOT CHANGE THIS COMMENT!
-     * <USERBLOCK Rte_Call_DataServices_Data_0xFFFE_DID_0xFFFE_ReadData>
-     */
-    DCM_UNUSED(OpStatus);
-    DCM_UNUSED(ErrorCode);
-    Data[0] = 0x01;
-    Data[1] = 0x02;
-    Data[2] = 0x03;
-    Data[3] = 0x04;
-    Data[4] = 0x05;
-    Data[5] = 0x06;
-    Data[6] = 0x07;
-    Data[7] = 0x08;
-
-    return E_OK;
-    /** DO NOT CHANGE THIS COMMENT!
-     * </USERBLOCK>
-     */
-}
-#define DCM_STOP_SEC_CODE
-#include "Dcm_MemMap.h"
-
-#define DCM_START_SEC_CODE
-#include "Dcm_MemMap.h"
-
-Std_ReturnType Rte_Call_DataServices_Data_0x1201_DID_0x1201_ReadData( Dcm_OpStatusType OpStatus,uint8* Data,Dcm_NegativeResponseCodeType* ErrorCode )
-{
-    /** DO NOT CHANGE THIS COMMENT!
-     * <USERBLOCK Rte_Call_DataServices_Data_0x1201_DID_0x1201_ReadData>
-     */
-    DCM_UNUSED(OpStatus);
-    DCM_UNUSED(ErrorCode);
-    Data[0] = 0x01;
-    Data[1] = 0x02;
-    Data[2] = 0x03;
-    Data[3] = 0x04;
-    Data[4] = 0x05;
-    Data[5] = 0x06;
-    Data[6] = 0x07;
-    Data[7] = 0x08;
-    Data[8] = 0x09;
-    Data[9] = 0x0A;
-    return E_OK;
     /** DO NOT CHANGE THIS COMMENT!
      * </USERBLOCK>
      */
@@ -8590,53 +8721,31 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xF130_DID_0xF130_WriteData( const  u
     /* custom code.... */
     /* The length of this data is configured to be 4 bytes */
     DCM_UNUSED(OpStatus);
-    NvM_RequestResultType blockret = 0;
+    uint32_t len = 32;
+    uint8_t keyId = 0;
+    uint8_t vsn[32] = {0};
+    uint8_t autoSetWroteFlag = 0;
+    uint32_t ret = 0;
+    
+    memcpy(vsn, Data, len);
+    ret = VssGenerateKeyByCode(len, vsn, keyId, autoSetWroteFlag);
 
-    switch(OpStatus)
+    if(ret == 0)
     {
-        case DCM_INITIAL:
-            /* 写入检测 F130仅支持写入一次 */
-            NvM_ReadBlock(NvMBlock_DIDF130, NvMBlockRamBuffer10);
-            return DCM_E_PENDING;
-            break;
-
-        case DCM_PENDING:
-            NvM_GetErrorStatus(NvMBlock_DIDF130, &blockret);
-            if(blockret == NVM_REQ_PENDING)
-            {
-                return DCM_E_PENDING;
-            }
-            else if(blockret == NVM_REQ_NOT_OK)
-            {
-                *ErrorCode = DCM_E_GENERALPROGRAMMINGFAILURE;
-                return DCM_E_PENDING;
-            }
-
-            for(uint8 j = 0; j < 32; j++)
-            {
-                if(NvMBlockRamBuffer10[j] != 0x00)
-                {
-                    *ErrorCode = DCM_E_CONDITIONSNOTCORRECT;
-                    return E_NOT_OK;
-                }
-            }
-
-            /* Write data to FLASH */
-            for (uint8 i = 0; i < 32; i++) 
-            {
-                NvMBlockRamBuffer10[i]= *(Data+i);
-            }
-            if(NvM_WriteBlock(NvMBlock_DIDF130,NvMBlockRamBuffer10) == E_NOT_OK)
-            {
-                *ErrorCode = DCM_E_GENERALPROGRAMMINGFAILURE;
-                return E_NOT_OK;
-            }
-            break;
-
-        default:
-            *ErrorCode = DCM_E_CONDITIONSNOTCORRECT;
-            return E_NOT_OK;
+        //成功
     }
+    else if(ret == 0x21)
+    {
+        //失败
+        *ErrorCode = DCM_E_CONDITIONSNOTCORRECT;
+        return E_NOT_OK;
+    }
+    if(ret == 0x21)
+    {
+        *ErrorCode = DCM_E_GENERALREJECT;
+        return E_NOT_OK;
+    }
+
 
     return E_OK;
     /** DO NOT CHANGE THIS COMMENT!
@@ -8735,7 +8844,11 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xF18C_DID_0xF18C_WriteData( const  u
         return E_NOT_OK;
     }
 
-    ParameterSyncSdkSetToCpu(E_PARAMID_SN, NvMBlockRamBuffer6, 16);
+    if(ParameterSyncSdkGetFromCpuIsFinished() == 0)//等待参数同步完成 如果参数同步完成则无需发送请求
+    {
+        ParameterSyncSdkSetToCpu(E_PARAMID_SN, NvMBlockRamBuffer6, 16);
+    }
+    
 
     return E_OK;
 
@@ -8768,7 +8881,10 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xF190_DID_0xF190_WriteData( const  u
         return E_NOT_OK;
     }
 
-    ParameterSyncSdkSetToCpu(E_PARAMID_SN, NvMBlockRamBuffer7, 17);
+    if(ParameterSyncSdkGetFromCpuIsFinished() == 0)//等待参数同步完成 如果参数同步完成则无需发送请求
+    {
+        ParameterSyncSdkSetToCpu(E_PARAMID_VIN, NvMBlockRamBuffer7, 17);
+    }
 
     return E_OK;
 
@@ -8895,10 +9011,10 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xF111_DID_0xF111_WriteData( const  u
 #include "Dcm_MemMap.h"
 #define DCM_START_SEC_CODE
 #include "Dcm_MemMap.h"
-Std_ReturnType  Rte_Call_DataServices_Data_0xF131_DID_0xF131_WriteData( const  uint8*  Data,uint16  DataLength,Dcm_OpStatusType  OpStatus,Dcm_NegativeResponseCodeType*  ErrorCode )
+Std_ReturnType  Rte_Call_DataServices_Data_0xB932_DID_0xB932_WriteData( const  uint8*  Data,uint16  DataLength,Dcm_OpStatusType  OpStatus,Dcm_NegativeResponseCodeType*  ErrorCode )
 {
     /** DO NOT CHANGE THIS COMMENT!
-     * <USERBLOCK Rte_Call_DataServices_Data_0xF131_DID_0xF131_WriteData>
+     * <USERBLOCK Rte_Call_DataServices_Data_0xB932_DID_0xB932_WriteData>
      */
 
     /* custom code.... */
@@ -9001,28 +9117,66 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xC002_DID_0xC002_WriteData( const  u
     DCM_UNUSED(OpStatus);
     DCM_UNUSED(ErrorCode);
 
-    
-    uint8_t i = 0;
-    uint8_t j = 0;
-
-    for(i = 0; i < 16; i++)
+    /*
+    // F110结构体
+    struct
     {
-        for(j = 0; j < 8; j++)
+        uint8_t NumBlocks;          //这次存储对应的block编号
+        NvM_BlockIdType BlockId;    //存储块ID
+        void* NvM_DstPtr;           //block指针
+    } DID_F110;
+
+    // F110存储表
+    static DID_F110 DID_F110RamBuffer[] = {
+        {0, NvMBlock_DIDF111, NvMBlockRamBuffer12},
+        {1, NvMBlock_DIDF112, NvMBlockRamBuffer12},
+        {2, NvMBlock_DIDF113, NvMBlockRamBuffer12},
+        {3, NvMBlock_DIDF114, NvMBlockRamBuffer12},
+        {4, NvMBlock_DIDF115, NvMBlockRamBuffer12},
+        {5, NvMBlock_DIDF116, NvMBlockRamBuffer12},
+        {6, NvMBlock_DIDF117, NvMBlockRamBuffer12},
+        {7, NvMBlock_DIDF118, NvMBlockRamBuffer12},
+        {8, NvMBlock_DIDF119, NvMBlockRamBuffer12},
+        {9, NvMBlock_DIDF11A, NvMBlockRamBuffer12},
+        {10, NvMBlock_DIDF11B, NvMBlockRamBuffer12},
+        {11, NvMBlock_DIDF11C, NvMBlockRamBuffer12},
+        {12, NvMBlock_DIDF11D, NvMBlockRamBuffer12},
+        {13, NvMBlock_DIDF11E, NvMBlockRamBuffer12},
+        {14, NvMBlock_DIDF11F, NvMBlockRamBuffer12},
+    };
+
+    Std_ReturnType ret = E_OK;
+    uint8_t F110NumBlocks = 0;
+
+    //C306为预留block，现用于存储F110的block编号，初始值为0
+    //C306block中，始终保存下一次2E F110应写入的block编号
+    //如果第一次写入，保存在F111，后续按顺序写入F112-F11F。当F11F写满后，从F112开始写入
+    NvM_ReadBlock(NvMBlock_DIDC306, NvMBlockRamBuffer36);
+    F110NumBlocks = NvMBlockRamBuffer36[0];
+    
+    for(uint8_t i = 0; i < 15; i++)
+    {
+        if(DID_F110RamBuffer[i].NumBlocks == F110NumBlocks)
         {
-            if(DIDs_DTC_Configuation[i*8+j] != 0)
-            {
-                if ((Data[i] & (1u << j)) == 0)
-                {
-                    Dem_SetDTCSuppression(DIDs_DTC_Configuation[i*8+j], DEM_DTC_FORMAT_UDS, TRUE);//抑制
-                }
-                else
-                {
-                    Dem_SetDTCSuppression(DIDs_DTC_Configuation[i*8+j], DEM_DTC_FORMAT_UDS, FALSE);//不抑制
-                }
-            }
+            memcpy(DID_F110RamBuffer[i].NvM_DstPtr, Data, 16);
+            NvM_WriteBlock(DID_F110RamBuffer[i].BlockId, NvMBlockRamBuffer12);
         }
     }
-    
+
+    //更新C306block中的block编号为下一次写入时的block编号
+    if(F110NumBlocks >= 14)
+    {
+        F110NumBlocks = 1;
+    }
+    else
+    {
+        F110NumBlocks++;
+    }
+    NvMBlockRamBuffer36[0] = F110NumBlocks;
+    NvM_WriteBlock(NvMBlock_DIDC306, NvMBlockRamBuffer36);
+
+    */
+
 
     return E_OK;
 
@@ -9586,7 +9740,6 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xC016_DID_0xC016_WriteData( const  u
     /** DO NOT CHANGE THIS COMMENT!
      * <USERBLOCK Rte_Call_DataServices_Data_0xC016_DID_0xC016_WriteData>
      */
-
     /* custom code.... */
     /* The length of this data is configured to be 4 bytes */
     DCM_UNUSED(Data);
@@ -9653,6 +9806,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xC106_DID_0xC106_WriteData( const  u
         *ErrorCode = DCM_E_GENERALPROGRAMMINGFAILURE;
         return E_NOT_OK;
     }
+    ResetListenTimer();
 
     return E_OK;
     /** DO NOT CHANGE THIS COMMENT!
@@ -10352,10 +10506,19 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xCF00_DID_0xCF00_WriteData( const  u
 
     /* custom code.... */
     /* The length of this data is configured to be 3 bytes */
-    DCM_UNUSED(Data);
-    DCM_UNUSED(DataLength);
     DCM_UNUSED(OpStatus);
-    DCM_UNUSED(ErrorCode);
+
+    for (uint8 i = 0; i < 24; i++) 
+    {
+       NvMBlockRamBuffer45[i]= *(Data+i);
+    }
+
+    if(NvM_WriteBlock(NvMBlock_DIDCF00,NvMBlockRamBuffer45) == E_NOT_OK)
+    {
+        *ErrorCode = DCM_E_GENERALPROGRAMMINGFAILURE;
+        return E_NOT_OK;
+    }
+
     return E_OK;
 
     /** DO NOT CHANGE THIS COMMENT!
@@ -10521,6 +10684,31 @@ Std_ReturnType  Rte_Call_DataServices_Data_0x0100_DID_0x0100_WriteData( const  u
     DCM_UNUSED(DataLength);
     DCM_UNUSED(OpStatus);
     DCM_UNUSED(ErrorCode);
+
+    uint8_t i = 0;
+    uint8_t j = 0;
+
+    for(i = 0; i < 16; i++)
+    {
+        for(j = 0; j < 8; j++)
+        {
+            if(DIDs_DTC_Configuation[i*8+j] != 0)
+            {
+                if ((Data[i] & (1u << j)) == 0)
+                {
+                    Dem_SetDTCSuppression(DIDs_DTC_Configuation[i*8+j], DEM_DTC_FORMAT_UDS, TRUE);//抑制
+                }
+                else
+                {
+                    Dem_SetDTCSuppression(DIDs_DTC_Configuation[i*8+j], DEM_DTC_FORMAT_UDS, FALSE);//不抑制
+                }
+            }
+        }
+    }
+
+    memcpy(NvMBlockRamBuffer53,Data,DataLength);
+    NvM_WriteBlock(NvMBlock_DID0100,NvMBlockRamBuffer53);
+
     return E_OK;
 
     /** DO NOT CHANGE THIS COMMENT!
@@ -10529,6 +10717,34 @@ Std_ReturnType  Rte_Call_DataServices_Data_0x0100_DID_0x0100_WriteData( const  u
 }
 #define DCM_STOP_SEC_CODE
 #include "Dcm_MemMap.h"
+
+void DIDs_DTC_Configuation_Init(void)
+{
+    uint8_t Data[16] = {0};
+    uint8_t i = 0;
+    uint8_t j = 0;
+    
+    NvM_ReadBlock(NvMBlock_DID0100,NvMBlockRamBuffer53);
+    memcpy(Data,NvMBlockRamBuffer53,16);
+
+    for(i = 0; i < 16; i++)
+    {
+        for(j = 0; j < 8; j++)
+        {
+            if(DIDs_DTC_Configuation[i*8+j] != 0)
+            {
+                if ((Data[i] & (1u << j)) == 0)
+                {
+                    Dem_SetDTCSuppression(DIDs_DTC_Configuation[i*8+j], DEM_DTC_FORMAT_UDS, TRUE);//抑制
+                }
+                else
+                {
+                    Dem_SetDTCSuppression(DIDs_DTC_Configuation[i*8+j], DEM_DTC_FORMAT_UDS, FALSE);//不抑制
+                }
+            }
+        }
+    }
+}
 /***************************Routine Part****************************************/
 #define DCM_START_SEC_CODE
 #include "Dcm_MemMap.h"
@@ -10546,8 +10762,58 @@ Std_ReturnType  Rte_Call_RoutineServices_Routine_0xAF09_RequestResults(
      */
 
     /* custom code.... */
-    DCM_UNUSED(InBuffer);
-    DCM_UNUSED(OpStatus);
+    Std_ReturnType ret = E_OK;
+    int16_t canPassRet = 0;
+    uint8_t UDSReqData[5] = {0x31, 0x03, 0xAF, 0x09};
+    uint16_t UDSReqDataLen = 4;
+    uint8_t UDSRespData[10] = {0};
+
+    if(ParameterSyncSdkGetFromCpuIsFinished()!=0)
+    {
+        ret = E_NOT_OK;
+        *ErrorCode = DCM_E_BUSYREPEATREQUEST;
+        return ret;
+    }
+    
+    switch(OpStatus)
+    {
+        case DCM_INITIAL://首次调用，发起异步请求
+            canPassRet = CanPassthrough_SendRequest(UDSReqData, UDSReqDataLen);
+            if(canPassRet == 0)
+            {
+                ret = DCM_E_PENDING;
+            }
+            else
+            {
+                ret = E_NOT_OK;
+                *ErrorCode = DCM_E_CONDITIONSNOTCORRECT;
+            }
+            break;
+
+        case DCM_PENDING://后续调用，检查是否有响应
+            canPassRet = CanPassthroughRoutine_PENDING(UDSReqData, UDSReqDataLen, UDSRespData, currentDataLength);
+            memcpy(OutBuffer,UDSRespData,*currentDataLength);
+            if(canPassRet == 0)
+            {
+                ret = E_OK;
+            }
+            else if(canPassRet == 1)//DCM_E_PENDING
+            {
+                ret = DCM_E_PENDING;
+            }
+            else if(canPassRet == -1)//timeout
+            {
+                ret = E_NOT_OK;
+                *ErrorCode = DCM_E_REQUESTOUTOFRANGE;
+            }
+            else
+            {
+                ret = E_NOT_OK;
+                *ErrorCode = canPassRet;
+            }
+            break;
+    }
+    return ret;
 
     return E_OK;
 
@@ -10573,11 +10839,61 @@ Std_ReturnType  Rte_Call_RoutineServices_Routine_0xAF0A_RequestResults(
      */
 
     /* custom code.... */
-    DCM_UNUSED(InBuffer);
-    DCM_UNUSED(OpStatus);
+    Std_ReturnType ret = E_OK;
+    int16_t canPassRet = 0;
+    uint8_t UDSReqData[5] = {0x31, 0x03, 0xAF, 0x0A};
+    uint16_t UDSReqDataLen = 4;
+    uint8_t UDSRespData[10] = {0};
 
-    return E_OK;
+    memcpy(UDSReqData + 4,InBuffer,1);
+    UDSReqDataLen += 1;
 
+    if(ParameterSyncSdkGetFromCpuIsFinished()!=0)
+    {
+        ret = E_NOT_OK;
+        *ErrorCode = DCM_E_BUSYREPEATREQUEST;
+        return ret;
+    }
+    
+    switch(OpStatus)
+    {
+        case DCM_INITIAL://首次调用，发起异步请求
+            canPassRet = CanPassthrough_SendRequest(UDSReqData, UDSReqDataLen);
+            if(canPassRet == 0)
+            {
+                ret = DCM_E_PENDING;
+            }
+            else
+            {
+                ret = E_NOT_OK;
+                *ErrorCode = DCM_E_CONDITIONSNOTCORRECT;
+            }
+            break;
+
+        case DCM_PENDING://后续调用，检查是否有响应
+            canPassRet = CanPassthroughRoutine_PENDING(UDSReqData, UDSReqDataLen, UDSRespData, currentDataLength);
+            memcpy(OutBuffer,UDSRespData,*currentDataLength);
+            if(canPassRet == 0)
+            {
+                ret = E_OK;
+            }
+            else if(canPassRet == 1)//DCM_E_PENDING
+            {
+                ret = DCM_E_PENDING;
+            }
+            else if(canPassRet == -1)//timeout
+            {
+                ret = E_NOT_OK;
+                *ErrorCode = DCM_E_REQUESTOUTOFRANGE;
+            }
+            else
+            {
+                ret = E_NOT_OK;
+                *ErrorCode = canPassRet;
+            }
+            break;
+    }
+    return ret;
     /** DO NOT CHANGE THIS COMMENT!
      * </USERBLOCK>
      */
@@ -10600,11 +10916,58 @@ Std_ReturnType  Rte_Call_RoutineServices_Routine_0xAFF7_RequestResults(
      */
 
     /* custom code.... */
-    DCM_UNUSED(InBuffer);
-    DCM_UNUSED(OpStatus);
-    DCM_UNUSED(ErrorCode);
+    Std_ReturnType ret = E_OK;
+    int16_t canPassRet = 0;
+    uint8_t UDSReqData[5] = {0x31, 0x03, 0xAF, 0xF7};
+    uint16_t UDSReqDataLen = 4;
+    uint8_t UDSRespData[10] = {0};
 
-    return E_OK;
+    if(ParameterSyncSdkGetFromCpuIsFinished()!=0)
+    {
+        ret = E_NOT_OK;
+        *ErrorCode = DCM_E_BUSYREPEATREQUEST;
+        return ret;
+    }
+    
+    switch(OpStatus)
+    {
+        case DCM_INITIAL://首次调用，发起异步请求
+            canPassRet = CanPassthrough_SendRequest(UDSReqData, UDSReqDataLen);
+            if(canPassRet == 0)
+            {
+                ret = DCM_E_PENDING;
+            }
+            else
+            {
+                ret = E_NOT_OK;
+                *ErrorCode = DCM_E_CONDITIONSNOTCORRECT;
+            }
+            break;
+
+        case DCM_PENDING://后续调用，检查是否有响应
+            canPassRet = CanPassthroughRoutine_PENDING(UDSReqData, UDSReqDataLen, UDSRespData, currentDataLength);
+            memcpy(OutBuffer,UDSRespData,*currentDataLength);
+            if(canPassRet == 0)
+            {
+                ret = E_OK;
+            }
+            else if(canPassRet == 1)//DCM_E_PENDING
+            {
+                ret = DCM_E_PENDING;
+            }
+            else if(canPassRet == -1)//timeout
+            {
+                ret = E_NOT_OK;
+                *ErrorCode = DCM_E_REQUESTOUTOFRANGE;
+            }
+            else
+            {
+                ret = E_NOT_OK;
+                *ErrorCode = canPassRet;
+            }
+            break;
+    }
+    return ret;
 
     /** DO NOT CHANGE THIS COMMENT!
      * </USERBLOCK>
@@ -10628,12 +10991,58 @@ Std_ReturnType  Rte_Call_RoutineServices_Routine_0xFE02_RequestResults(
      */
 
     /* custom code.... */
-    DCM_UNUSED(InBuffer);
-    DCM_UNUSED(OutBuffer);
-    DCM_UNUSED(currentDataLength);
-    DCM_UNUSED(ErrorCode);
-    DCM_UNUSED(OpStatus);
-    return E_OK;
+    Std_ReturnType ret = E_OK;
+    int16_t canPassRet = 0;
+    uint8_t UDSReqData[5] = {0x31, 0x03, 0xFE, 0x02};
+    uint16_t UDSReqDataLen = 4;
+    uint8_t UDSRespData[10] = {0};
+
+    if(ParameterSyncSdkGetFromCpuIsFinished()!=0)
+    {
+        ret = E_NOT_OK;
+        *ErrorCode = DCM_E_BUSYREPEATREQUEST;
+        return ret;
+    }
+    
+    switch(OpStatus)
+    {
+        case DCM_INITIAL://首次调用，发起异步请求
+            canPassRet = CanPassthrough_SendRequest(UDSReqData, UDSReqDataLen);
+            if(canPassRet == 0)
+            {
+                ret = DCM_E_PENDING;
+            }
+            else
+            {
+                ret = E_NOT_OK;
+                *ErrorCode = DCM_E_CONDITIONSNOTCORRECT;
+            }
+            break;
+
+        case DCM_PENDING://后续调用，检查是否有响应
+            canPassRet = CanPassthroughRoutine_PENDING(UDSReqData, UDSReqDataLen, UDSRespData, currentDataLength);
+            memcpy(OutBuffer,UDSRespData,*currentDataLength);
+            if(canPassRet == 0)
+            {
+                ret = E_OK;
+            }
+            else if(canPassRet == 1)//DCM_E_PENDING
+            {
+                ret = DCM_E_PENDING;
+            }
+            else if(canPassRet == -1)//timeout
+            {
+                ret = E_NOT_OK;
+                *ErrorCode = DCM_E_REQUESTOUTOFRANGE;
+            }
+            else
+            {
+                ret = E_NOT_OK;
+                *ErrorCode = canPassRet;
+            }
+            break;
+    }
+    return ret;
 
     /** DO NOT CHANGE THIS COMMENT!
      * </USERBLOCK>
@@ -10718,7 +11127,7 @@ Std_ReturnType  Rte_Call_RoutineServices_Routine_0xAF08_Start(
     /* custom code.... */
     Std_ReturnType ret = E_OK;
     int16_t canPassRet = 0;
-    uint8_t UDSReqData[4] = {0x32, 0x01, 0xAF, 0x08};
+    uint8_t UDSReqData[4] = {0x31, 0x01, 0xAF, 0x08};
     uint16_t UDSReqDataLen = 4;
 
     memcpy(UDSReqData + 4,InBuffer,*currentDataLength);
@@ -10791,11 +11200,58 @@ Std_ReturnType  Rte_Call_RoutineServices_Routine_0xAF09_Start(
      */
 
     /* custom code.... */
-    DCM_UNUSED(InBuffer);
-    DCM_UNUSED(OutBuffer);
-    DCM_UNUSED(currentDataLength);
-    DCM_UNUSED(OpStatus);
+    Std_ReturnType ret = E_OK;
+    int16_t canPassRet = 0;
+    uint8_t UDSReqData[5] = {0x31, 0x01, 0xAF, 0x09};
+    uint16_t UDSReqDataLen = 4;
+    uint8_t UDSRespData[10] = {0};
 
+    if(ParameterSyncSdkGetFromCpuIsFinished()!=0)
+    {
+        ret = E_NOT_OK;
+        *ErrorCode = DCM_E_BUSYREPEATREQUEST;
+        return ret;
+    }
+    
+    switch(OpStatus)
+    {
+        case DCM_INITIAL://首次调用，发起异步请求
+            canPassRet = CanPassthrough_SendRequest(UDSReqData, UDSReqDataLen);
+            if(canPassRet == 0)
+            {
+                ret = DCM_E_PENDING;
+            }
+            else
+            {
+                ret = E_NOT_OK;
+                *ErrorCode = DCM_E_CONDITIONSNOTCORRECT;
+            }
+            break;
+
+        case DCM_PENDING://后续调用，检查是否有响应
+            canPassRet = CanPassthroughRoutine_PENDING(UDSReqData, UDSReqDataLen, UDSRespData, currentDataLength);
+            memcpy(OutBuffer,UDSRespData,*currentDataLength);
+            if(canPassRet == 0)
+            {
+                ret = E_OK;
+            }
+            else if(canPassRet == 1)//DCM_E_PENDING
+            {
+                ret = DCM_E_PENDING;
+            }
+            else if(canPassRet == -1)//timeout
+            {
+                ret = E_NOT_OK;
+                *ErrorCode = DCM_E_REQUESTOUTOFRANGE;
+            }
+            else
+            {
+                ret = E_NOT_OK;
+                *ErrorCode = canPassRet;
+            }
+            break;
+    }
+    return ret;
     return E_OK;
 
     /** DO NOT CHANGE THIS COMMENT!
@@ -10820,13 +11276,61 @@ Std_ReturnType  Rte_Call_RoutineServices_Routine_0xAF0A_Start(
      */
 
     /* custom code.... */
-    DCM_UNUSED(InBuffer);
-    DCM_UNUSED(OutBuffer);
-    DCM_UNUSED(currentDataLength);
-    DCM_UNUSED(OpStatus);
+    Std_ReturnType ret = E_OK;
+    int16_t canPassRet = 0;
+    uint8_t UDSReqData[5] = {0x31, 0x01, 0xAF, 0x0A};
+    uint16_t UDSReqDataLen = 4;
+    uint8_t UDSRespData[10] = {0};
 
-    return E_OK;
+    memcpy(UDSReqData + 4,InBuffer,1);
+    UDSReqDataLen += 1;
 
+    if(ParameterSyncSdkGetFromCpuIsFinished()!=0)
+    {
+        ret = E_NOT_OK;
+        *ErrorCode = DCM_E_BUSYREPEATREQUEST;
+        return ret;
+    }
+    
+    switch(OpStatus)
+    {
+        case DCM_INITIAL://首次调用，发起异步请求
+            canPassRet = CanPassthrough_SendRequest(UDSReqData, UDSReqDataLen);
+            if(canPassRet == 0)
+            {
+                ret = DCM_E_PENDING;
+            }
+            else
+            {
+                ret = E_NOT_OK;
+                *ErrorCode = DCM_E_CONDITIONSNOTCORRECT;
+            }
+            break;
+
+        case DCM_PENDING://后续调用，检查是否有响应
+            canPassRet = CanPassthroughRoutine_PENDING(UDSReqData, UDSReqDataLen, UDSRespData, currentDataLength);
+            memcpy(OutBuffer,UDSRespData,*currentDataLength);
+            if(canPassRet == 0)
+            {
+                ret = E_OK;
+            }
+            else if(canPassRet == 1)//DCM_E_PENDING
+            {
+                ret = DCM_E_PENDING;
+            }
+            else if(canPassRet == -1)//timeout
+            {
+                ret = E_NOT_OK;
+                *ErrorCode = DCM_E_REQUESTOUTOFRANGE;
+            }
+            else
+            {
+                ret = E_NOT_OK;
+                *ErrorCode = canPassRet;
+            }
+            break;
+    }
+    return ret;
     /** DO NOT CHANGE THIS COMMENT!
      * </USERBLOCK>
      */
@@ -10849,13 +11353,58 @@ Std_ReturnType  Rte_Call_RoutineServices_Routine_0xAFF7_Start(
      */
 
     /* custom code.... */
-    DCM_UNUSED(InBuffer);
-    DCM_UNUSED(OutBuffer);
-    DCM_UNUSED(currentDataLength);
-    DCM_UNUSED(ErrorCode);
-    DCM_UNUSED(OpStatus);
-    return E_OK;
+    Std_ReturnType ret = E_OK;
+    int16_t canPassRet = 0;
+    uint8_t UDSReqData[5] = {0x31, 0x01, 0xAF, 0xF7};
+    uint16_t UDSReqDataLen = 4;
+    uint8_t UDSRespData[10] = {0};
 
+    if(ParameterSyncSdkGetFromCpuIsFinished()!=0)
+    {
+        ret = E_NOT_OK;
+        *ErrorCode = DCM_E_BUSYREPEATREQUEST;
+        return ret;
+    }
+    
+    switch(OpStatus)
+    {
+        case DCM_INITIAL://首次调用，发起异步请求
+            canPassRet = CanPassthrough_SendRequest(UDSReqData, UDSReqDataLen);
+            if(canPassRet == 0)
+            {
+                ret = DCM_E_PENDING;
+            }
+            else
+            {
+                ret = E_NOT_OK;
+                *ErrorCode = DCM_E_CONDITIONSNOTCORRECT;
+            }
+            break;
+
+        case DCM_PENDING://后续调用，检查是否有响应
+            canPassRet = CanPassthroughRoutine_PENDING(UDSReqData, UDSReqDataLen, UDSRespData, currentDataLength);
+            memcpy(OutBuffer,UDSRespData,*currentDataLength);
+            if(canPassRet == 0)
+            {
+                ret = E_OK;
+            }
+            else if(canPassRet == 1)//DCM_E_PENDING
+            {
+                ret = DCM_E_PENDING;
+            }
+            else if(canPassRet == -1)//timeout
+            {
+                ret = E_NOT_OK;
+                *ErrorCode = DCM_E_REQUESTOUTOFRANGE;
+            }
+            else
+            {
+                ret = E_NOT_OK;
+                *ErrorCode = canPassRet;
+            }
+            break;
+    }
+    return ret;
     /** DO NOT CHANGE THIS COMMENT!
      * </USERBLOCK>
      */
@@ -10878,12 +11427,61 @@ Std_ReturnType  Rte_Call_RoutineServices_Routine_0xFE02_Start(
      */
 
     /* custom code.... */
-    DCM_UNUSED(InBuffer);
-    DCM_UNUSED(OutBuffer);
-    DCM_UNUSED(currentDataLength);
-    DCM_UNUSED(ErrorCode);
-    DCM_UNUSED(OpStatus);
-    return E_OK;
+    Std_ReturnType ret = E_OK;
+    int16_t canPassRet = 0;
+    uint8_t UDSReqData[5] = {0x31, 0x01, 0xFE, 0x02};
+    uint16_t UDSReqDataLen = 4;
+    uint8_t UDSRespData[10] = {0};
+
+    memcpy(UDSReqData + 4,InBuffer,6);
+    UDSReqDataLen += 6;
+
+    if(ParameterSyncSdkGetFromCpuIsFinished()!=0)
+    {
+        ret = E_NOT_OK;
+        *ErrorCode = DCM_E_BUSYREPEATREQUEST;
+        return ret;
+    }
+    
+    switch(OpStatus)
+    {
+        case DCM_INITIAL://首次调用，发起异步请求
+            canPassRet = CanPassthrough_SendRequest(UDSReqData, UDSReqDataLen);
+            if(canPassRet == 0)
+            {
+                ret = DCM_E_PENDING;
+            }
+            else
+            {
+                ret = E_NOT_OK;
+                *ErrorCode = DCM_E_CONDITIONSNOTCORRECT;
+            }
+            break;
+
+        case DCM_PENDING://后续调用，检查是否有响应
+            canPassRet = CanPassthroughRoutine_PENDING(UDSReqData, UDSReqDataLen, UDSRespData, currentDataLength);
+            memcpy(OutBuffer,UDSRespData,*currentDataLength);
+            if(canPassRet == 0)
+            {
+                ret = E_OK;
+            }
+            else if(canPassRet == 1)//DCM_E_PENDING
+            {
+                ret = DCM_E_PENDING;
+            }
+            else if(canPassRet == -1)//timeout
+            {
+                ret = E_NOT_OK;
+                *ErrorCode = DCM_E_REQUESTOUTOFRANGE;
+            }
+            else
+            {
+                ret = E_NOT_OK;
+                *ErrorCode = canPassRet;
+            }
+            break;
+    }
+    return ret;
 
     /** DO NOT CHANGE THIS COMMENT!
      * </USERBLOCK>
@@ -10907,13 +11505,62 @@ Std_ReturnType  Rte_Call_RoutineServices_Routine_0xFE80_Start(
      */
 
     /* custom code.... */
-    DCM_UNUSED(InBuffer);
-    DCM_UNUSED(OutBuffer);
-    DCM_UNUSED(currentDataLength);
-    DCM_UNUSED(ErrorCode);
-    DCM_UNUSED(OpStatus);
-    return E_OK;
+    Std_ReturnType ret = E_OK;
+    int16_t canPassRet = 0;
+    uint8_t UDSReqData[6] = {0x31, 0x01, 0xFE, 0x80};
+    uint16_t UDSReqDataLen = 4;
+    uint8_t UDSRespData[10] = {0};
 
+    memcpy(UDSReqData + 4,InBuffer,2);
+    UDSReqDataLen += 2;
+
+    if(ParameterSyncSdkGetFromCpuIsFinished()!=0)
+    {
+        ret = E_NOT_OK;
+        *ErrorCode = DCM_E_BUSYREPEATREQUEST;
+        return ret;
+    }
+    
+    switch(OpStatus)
+    {
+        case DCM_INITIAL://首次调用，发起异步请求
+            canPassRet = CanPassthrough_SendRequest(UDSReqData, UDSReqDataLen);
+            if(canPassRet == 0)
+            {
+                ret = DCM_E_PENDING;
+            }
+            else
+            {
+                ret = E_NOT_OK;
+                *ErrorCode = DCM_E_CONDITIONSNOTCORRECT;
+            }
+            break;
+
+        case DCM_PENDING://后续调用，检查是否有响应
+            canPassRet = CanPassthroughRoutine_PENDING(UDSReqData, UDSReqDataLen, UDSRespData, currentDataLength);
+            TBOX_PRINT("%d %d %d %d %d %d \r\n",UDSRespData[0],UDSRespData[1],UDSRespData[2],UDSRespData[3],UDSRespData[4],UDSRespData[5]);
+            memcpy(OutBuffer,UDSRespData,*currentDataLength);
+            if(canPassRet == 0)
+            {
+                ret = E_OK;
+            }
+            else if(canPassRet == 1)//DCM_E_PENDING
+            {
+                ret = DCM_E_PENDING;
+            }
+            else if(canPassRet == -1)//timeout
+            {
+                ret = E_NOT_OK;
+                *ErrorCode = DCM_E_REQUESTOUTOFRANGE;
+            }
+            else
+            {
+                ret = E_NOT_OK;
+                *ErrorCode = canPassRet;
+            }
+            break;
+    }
+    return ret;
     /** DO NOT CHANGE THIS COMMENT!
      * </USERBLOCK>
      */
@@ -10996,7 +11643,7 @@ Std_ReturnType  Rte_Call_RoutineServices_Routine_0xAF05_Start(
     /* custom code.... */
     Std_ReturnType ret = E_OK;
     int16_t canPassRet = 0;
-    uint8_t UDSReqData[4] = {0x32, 0x01, 0xAF, 0x05};
+    uint8_t UDSReqData[4] = {0x31, 0x01, 0xAF, 0x05};
     uint16_t UDSReqDataLen = 4;
 
     memcpy(UDSReqData + 4,InBuffer,*currentDataLength);
@@ -11075,12 +11722,12 @@ Std_ReturnType  Rte_Call_RoutineServices_Routine_0xAF06_Start(
     DCM_UNUSED(ErrorCode);
     DCM_UNUSED(OpStatus);
 
-    // SosLledState_e ecallStatus = 0;
-    // GetSosLedState(ecallStatus);
-    // if(ecallStatus == E_SOS_LED_STATE_NO_ECALL)
-    // {
-    //     AlarmSdkEcallTriger(E_ECALL_TRIGGER_TEST_MODE);
-    // }
+    SosLledState_e ecallStatus = 0;
+    ecallStatus = GetSosLedState();
+    if(ecallStatus == E_SOS_LED_STATE_NO_ECALL)
+    {
+        AlarmSdkEcallTriger(E_ECALL_TRIGGER_TEST_MODE);
+    }
 
     return E_OK;
 
@@ -11112,12 +11759,12 @@ Std_ReturnType  Rte_Call_RoutineServices_Routine_0xAF07_Start(
     DCM_UNUSED(ErrorCode);
     DCM_UNUSED(OpStatus);
 
-    // SosLledState_e ecallStatus = 0;
-    // GetSosLedState(ecallStatus);
-    // if(ecallStatus == E_SOS_LED_STATE_NO_ECALL)
-    // {
-    //     AlarmSdkEcallTriger(E_ECALL_TRIGGER_TEST_MODE);
-    // }
+    SosLledState_e ecallStatus = 0;
+    ecallStatus = GetSosLedState();
+    if(ecallStatus == E_SOS_LED_STATE_NO_ECALL)
+    {
+        AlarmSdkEcallTriger(E_ECALL_TRIGGER_TEST_MODE);
+    }
     
     return E_OK;
 
@@ -11146,7 +11793,7 @@ Std_ReturnType  Rte_Call_RoutineServices_Routine_0xAF08_Stop(
     /* custom code.... */
     Std_ReturnType ret = E_OK;
     int16_t canPassRet = 0;
-    uint8_t UDSReqData[4] = {0x32, 0x02, 0xAF, 0x08};
+    uint8_t UDSReqData[4] = {0x31, 0x02, 0xAF, 0x08};
     uint16_t UDSReqDataLen = 4;
 
     memcpy(UDSReqData + 4,InBuffer,*currentDataLength);

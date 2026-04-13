@@ -15,12 +15,25 @@
 /****************************** Macro Definitions ******************************/
 #define VSS_ALG_TYPE_INTERNATIONAL_CRYP      (1)
 #define VSS_ALG_TYPE_NATIONAL_CRYP           (2)
-#define VSS_CONFIG_KEY_NUM_MAX               (8)
-#define VSS_CONFIG_KEY_VALID_LEN             (1)
-#define VSS_CONFIG_SM4CMAC_KEY_LEN           (16)
 #define VSS_CONFIG_AES_KEY_LEN               (16)
 #define VSS_CONFIG_SM2_KEY_LEN               (65)
 #define VSS_CONFIG_ECC256_KEY_LEN            (65)
+
+#define VSS_NVM_BLOCK_VSN_ADDR                0
+#define VSS_NVM_BLOCK_VSN_LEN                 32
+#define VSS_NVM_BLOCK_VSN_ACTIVE_ADDR         (VSS_NVM_BLOCK_VSN_ADDR + VSS_NVM_BLOCK_VSN_LEN)
+#define VSS_NVM_BLOCK_VSN_ACTIVE_LEN          1
+#define VSS_NVM_BLOCK_SM4_KEY0_ADDR           (VSS_NVM_BLOCK_VSN_ACTIVE_ADDR + VSS_NVM_BLOCK_VSN_ACTIVE_LEN)
+#define VSS_NVM_BLOCK_SM4_KEY_LEN             16
+#define VSS_NVM_BLOCK_SM4_KEY1_ADDR           (VSS_NVM_BLOCK_SM4_KEY0_ADDR + VSS_NVM_BLOCK_SM4_KEY_LEN)
+#define VSS_NVM_BLOCK_SM4_KEY2_ADDR           (VSS_NVM_BLOCK_SM4_KEY1_ADDR + VSS_NVM_BLOCK_SM4_KEY_LEN)
+#define VSS_NVM_BLOCK_SM4_KEY3_ADDR           (VSS_NVM_BLOCK_SM4_KEY2_ADDR + VSS_NVM_BLOCK_SM4_KEY_LEN)
+#define VSS_NVM_BLOCK_SM4_KEY0_ACTIVE_ADDR    (VSS_NVM_BLOCK_SM4_KEY3_ADDR + VSS_NVM_BLOCK_SM4_KEY_LEN)
+#define VSS_NVM_BLOCK_SM4_KEY_ACTIVE_LEN      1
+#define VSS_NVM_BLOCK_SM4_KEY1_ACTIVE_ADDR    (VSS_NVM_BLOCK_SM4_KEY0_ACTIVE_ADDR + VSS_NVM_BLOCK_SM4_KEY_ACTIVE_LEN)
+#define VSS_NVM_BLOCK_SM4_KEY2_ACTIVE_ADDR    (VSS_NVM_BLOCK_SM4_KEY1_ACTIVE_ADDR + VSS_NVM_BLOCK_SM4_KEY_ACTIVE_LEN)
+#define VSS_NVM_BLOCK_SM4_KEY3_ACTIVE_ADDR    (VSS_NVM_BLOCK_SM4_KEY2_ACTIVE_ADDR + VSS_NVM_BLOCK_SM4_KEY_ACTIVE_LEN)
+#define VSS_NVM_BLOCK_MAX_SIZE                (VSS_NVM_BLOCK_SM4_KEY3_ACTIVE_ADDR + VSS_NVM_BLOCK_SM4_KEY_ACTIVE_LEN)
 
 /****************************** Type Definitions ******************************/
 typedef uint32_t VssflashFunc(VssItemType_e itemType, VssFlashOperaType_e rwflag, uint8_t keyId, uint8_t *pData, uint32_t pLength);
@@ -38,6 +51,11 @@ typedef enum {
 } VssSM4KeyType_e;
 
 typedef enum {
+    VSS_AES_KEY = 0,
+    VSS_AES_KEY_MAX
+} VssAESKeyType_e;
+
+typedef enum {
     VSS_OTA_SM2_KEY = 0,
     VSS_SM2_KEY_MAX
 } VssSM2KeyType_e;
@@ -53,13 +71,26 @@ typedef enum {
  Description: 算法库初始化（MCU软算法版本）。注册回调并初始化底层软算法库适配层。
  Input:  flashCb FLASH密钥存储区域读写回调
          wdtCb   看门狗复位回调
+         pData  - 数据缓冲区
+         pLength  - 数据长度
  Output: None
  Return: 0x00-成功
          0x18-算法不支持（type非0）
          其他-由适配层返回
  Others:
 *************************************************/
-uint32_t VssCryptoInit(VssflashFunc* flashCb, VssWdtFeedFunc* wdtCb);
+uint32_t VssCryptoInit(VssflashFunc* flashCb, VssWdtFeedFunc* wdtCb, uint8_t* pData, uint32_t pLength);
+
+/*************************************************
+ Function: VssGetCtxData
+ Description: 获取上下文数据
+ Input:  pData  - 数据缓冲区
+         pLength  - 数据长度
+ Output: None
+ Return: 0-成功, 其他-失败
+ Others:
+*************************************************/
+uint32_t VssGetCtxData(uint8_t* pData, uint32_t pLength);
 
 /*************************************************
  Function: VssSecocCmacGen
@@ -86,6 +117,16 @@ uint32_t VssSecocCmacGen(uint8_t* inData, uint32_t inLen, uint8_t* out16);
  Others: 内部包含获取密钥、生成随机挑战值、计算应答值的全流程。
 *************************************************/
 uint32_t Vss_Challenge_Response(uint8_t *outChallenge, uint8_t *outResponse);
+
+/*************************************************
+ Function: Vss_SetVSNActive
+ Description: 激活VSN
+ Input:  None
+ Output: None
+ Return: 0-成功, 其他-失败
+ Others:
+*************************************************/
+uint32_t Vss_SetVSNActive(void);
 
 /*************************************************
  Function: Vss_SetSecOCKeyActive

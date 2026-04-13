@@ -48,13 +48,11 @@ typedef enum {
     CONFIG_ITEM_ICCID_VALUE_INT,
     CONFIG_ITEM_MODEM_SW_VERSION,
     CONFIG_ITEM_MCU_SW_VERSION,
-    CONFIG_ITEM_NAD_IMEI,
     CONFIG_ITEM_NAD_SW_VERSION,
     // CONFIG_ITEM_NAD_HW_VERSION,
     // CONFIG_ITEM_UbloxF9K_VERSION,
     CONFIG_ITEM_SIGNATURE_PUBLIC_KEY,
-    CONFIG_ITEM_HSMID,
-    CONFIG_ITEM_ENCRYPTION_ALGORITHM_FLAG,
+    // CONFIG_ITEM_HSMID,
 
     CONFIG_ITEM_SOFTWARE_NUMBER,
     CONFIG_ITEM_HARDWARE_NUMBER,
@@ -357,7 +355,7 @@ static int16_t GetEcuThirdAppSW(uint8_t *pVersion,uint32_t *pLength);
 static int16_t GetICCIDValueInt(uint8_t *pVersion,uint32_t *pLength);
 
 /*************************************************
-  Function:       GetModemSWVersion DID:B001
+  Function:       GetModemSWVersion DID:B002
   Description:    获取5G或4G软件版本号
   Input:          pVersion - 版本缓冲区
                   pLength  - 数据长度指针
@@ -373,15 +371,6 @@ static int16_t GetModemSWVersion(uint8_t *pVersion,uint32_t *pLength);
   Return:         0-成功, 其他-失败
 *************************************************/
 static int16_t GetMcuSWVersion(uint8_t *pVersion,uint32_t *pLength);
-
-/*************************************************
-  Function:       GetNADIMEI DID:B004
-  Description:    获取NAD IMEI
-  Input:          pVersion - 版本缓冲区
-                  pLength  - 数据长度指针
-  Return:         0-成功, 其他-失败
-*************************************************/
-static int16_t GetNadIMEI(uint8_t *pVersion,uint32_t *pLength);
 
 /*************************************************
   Function:       GetNadSWVersion DID:B005
@@ -419,23 +408,14 @@ static int16_t GetNadSWVersion(uint8_t *pVersion,uint32_t *pLength);
 *************************************************/
 static int16_t GetSignaturePublicKey(uint8_t *pVersion,uint32_t *pLength);
 
-/*************************************************
-  Function:       GetHSMID DID:B202
-  Description:    获取HSMID
-  Input:          pVersion - 版本缓冲区
-                  pLength  - 数据长度指针
-  Return:         0-成功, 其他-失败
-*************************************************/
-static int16_t GetHSMID(uint8_t *pVersion,uint32_t *pLength);
-
-/*************************************************
-  Function:       GetEncryptionAlgorithmFlag DID:B9E4
-  Description:    获取安全加密算法标志位
-  Input:          pVersion - 版本缓冲区
-                  pLength  - 数据长度指针
-  Return:         0-成功, 其他-失败
-*************************************************/
-static int16_t GetEncryptionAlgorithmFlag(uint8_t *pVersion,uint32_t *pLength);
+// /*************************************************
+//   Function:       GetHSMID DID:B202
+//   Description:    获取HSMID
+//   Input:          pVersion - 版本缓冲区
+//                   pLength  - 数据长度指针
+//   Return:         0-成功, 其他-失败
+// *************************************************/
+// static int16_t GetHSMID(uint8_t *pVersion,uint32_t *pLength);
 
 /*************************************************
   Function:       GetSoftwareNumber 参数同步

@@ -79,6 +79,8 @@
 #include "mcuMpuSyncTask.h"
 #include "taskPowerManage.h"
 #include "timerHal.h"
+#include "ecallHal.h"
+#include "taskEcallProcess.h"
 #include "remoteControlTask.h"
 #include "canPeriodTask.h"
 
@@ -144,6 +146,8 @@ TASK(OsTask_Init)
 
     Icu_StartSignalMeasurement(IcuConf_IcuChannel_IcuChannel_0_Crash); 
 
+    LogHalInit(1);
+
     /**For K30 PowerON need to checck CAN wakeup */
     Can_SetControllerMode(CanConf_CanController_CanController, CAN_T_WAKEUP);
     Can_SetControllerMode(CanConf_CanController_CanController, CAN_T_START);
@@ -175,18 +179,20 @@ TASK(OsTask_Init)
     SetRelAlarm(OsAlarm_100ms, 5, 100);
 
     PeripheralHalInit();
-    LogHalInit(1);
     MpuHalInit();
     TimerHalInit();
+    
 
     // C3��������ĳ�ʼ�����֣����ΪxxxInit�������ڴ˴�����
     MpuHalTxTaskInit();
     McuMpuSyncTaskInit();
     TaskPowerManageInit();
     TaskVehicleDataToCpuInit();
+    EcallHalInit();
     RemoteControlTaskInit();
-    DtcGpioInit();
-    TBOX_PRINT("app system start\n");
+    DtcDetectProcessInit();
+    CanPassthroughWithMpuInit();
+    TBOX_PRINT("system start %X\r\n", Mcu_GetResetReason());
 
     /** DO NOT CHANGE THIS COMMENT!
     * </USERBLOCK>
@@ -220,6 +226,7 @@ TASK(OsTask_1ms)
     /** DO NOT CHANGE THIS COMMENT!
     * </USERBLOCK>
     */
+    os1msTimer();
     CanSM_MainFunction();/**passwakeup -Second: Start canif and controller */
     if (E_OK != TerminateTask())
     {
@@ -309,7 +316,7 @@ TASK(OsTask_10ms)
     /** DO NOT CHANGE THIS COMMENT!
     * </USERBLOCK>
     */
-
+    TaskEcallProcess();
     if (E_OK != TerminateTask())
     {
         while (1)
@@ -376,13 +383,14 @@ TASK(OsTask_100ms)
     {
         CrashTimeElapsed = Icu_GetTimeElapsed(IcuConf_IcuChannel_IcuChannel_0_Crash);
         R_PORT_ToggleGpioOutput(APort1, 1);
+        // Dv_Test();
     }
 	if(test100 % 200 == 0)
 	{
 		gIOHwAbDI_IG1_St = STD_HIGH;
 	}
-    TimerHalTestMain(100);
-    TaskAntDetect100ms();
+    //TimerHalTestMain(100);
+    TaskDtcDetect100ms();
     // LogHalTestMain(100);
     if (E_OK != TerminateTask())
     {

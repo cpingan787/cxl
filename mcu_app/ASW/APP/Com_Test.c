@@ -19,6 +19,8 @@
 #include "CanTSyn.h"
 #include "StbM.h"
 #include "Can.h"
+#include "Mcu.h"
+#include "stateSyncSdk.h"
 
 #define	StbM_SlaveTimeBaseId	0		/*  StbM Slave time domain ID */
 
@@ -28,7 +30,7 @@
 #define	SlaveTestCanLength	    8	    /*  CanTSyn Slave Test Data Length */
 #define	SlaveTestCanHth	        CanConf_CanHardwareObject_CanHardwareObject_Tx0	    /*  CanTSyn Slave Test Can Hth */
 
-#define DV_TEST_ENABLE 0
+#define DV_TEST_ENABLE          0
 #if(DV_TEST_ENABLE == 1)
 /*  系统状态报文 CAN IDs */
 #define NetworkStatusCanID 0x460                                        /*  移动网络连接状态 CAN ID */
@@ -53,6 +55,8 @@ uint8 Event_TestSig1 = 0;
 uint8 Test_ComTxSig0 = 0;
 uint8 Test_ComRxSig0 = 0;
 uint8 testcom[8]={0};
+
+Mcu_ResetType Mcu_ResetReason;
 
 StbM_TimeStampType timestamp;
 StbM_UserDataType userData;
@@ -130,6 +134,7 @@ void CanTSyn_SlaveTest(void)
     PduInfo.sdu[5] = (uint8)((timestamp.nanoseconds & 0x00ff0000) >> 16);
     PduInfo.sdu[6] = (uint8)((timestamp.nanoseconds & 0x0000ff00) >> 8);
     PduInfo.sdu[7] = (uint8)((timestamp.nanoseconds & 0x000000ff));
+    PduInfo.sdu[7] = (uint8)(Mcu_ResetReason);
 
     Can_Write(SlaveTestCanHth, &PduInfo);
 }
@@ -144,28 +149,35 @@ void CanTSyn_SlaveTest(void)
 *******************************************************************************/
 void SendNetworkStatusMsg(void)
 {
-    NetInfoSync_t netInfo = {0};
+    CpuDtcSync_t dtcInfo = {0};
     uint8 csqValue = 99; /*  默认无信号 */
     uint8 operatorNetwork = 0x00; /*  默认UNKNOWN */
-    uint8 connState = 0x00; /*  默认Normal */
+    uint8 connState = 0x02; /*  默认UNKNOWN */
 
-    /*  从SDK获取网络信息 */
-    sint16 statusNet = StateSyncGetNetInfo(&netInfo);
-    if (statusNet == 0)
+    /*  从SDK获取网络状态 */
+    if (StateSyncGetDtcstate(&dtcInfo) == 0)
     {
-        /*  Byte4: 移动网络连接状态 - creg: 0=成功, 1=失败 */
-        connState = (netInfo.creg == 0) ? 0x00 : 0x01;
+        /*  Byte4: 移动网络连接状态 */
+        connState = dtcInfo.dtcState.mobileNetState;
         /*  Byte5: CSQ信号值 */
-        csqValue = ((netInfo.csq <= 31) || (netInfo.csq == 99)) ? netInfo.csq : 99;
-        /*  Byte6: 运营商网络 - netType: 0=GSM, 1=LTE */
-        /*  映射: GSM->0x02, LTE->0x06 */
-        if (netInfo.netType == 0)
+        csqValue = ((dtcInfo.dtcState.signalStrength <= 31) || (dtcInfo.dtcState.signalStrength == 99)) ?
+            dtcInfo.dtcState.signalStrength : 99;
+        /*  Byte6: 运营商网络 */
+        if (dtcInfo.dtcState.networkType == 0)
         {
-            operatorNetwork = 0x02; /*  GSM */
+            operatorNetwork = 0x02; /*  2G */
         }
-        else if (netInfo.netType == 1)
+        else if (dtcInfo.dtcState.networkType == 1)
         {
-            operatorNetwork = 0x06; /*  LTE */
+            operatorNetwork = 0x03; /*  3G */
+        }
+        else if (dtcInfo.dtcState.networkType == 2)
+        {
+            operatorNetwork = 0x06; /*  4G */
+        }
+        else if (dtcInfo.dtcState.networkType == 3)
+        {
+            operatorNetwork = 0x07; /*  5G */
         }
         else
         {
@@ -192,6 +204,18 @@ static uint8 GetDtcBitState(uint32 dtcBitmap, uint8 bitIndex)
     return ((dtcBitmap & ((uint32)1u << bitIndex)) != 0u) ? 0x01u : 0x00u;
 }
 
+static uint8 GetSpeakerFaultState(uint32 dtcBitmap)
+{
+    if ((GetDtcBitState(dtcBitmap, E_STATE_SYNC_DTC_BIT_SPEAKER_TO_GROUND_SHORT) != 0u) ||
+        (GetDtcBitState(dtcBitmap, E_STATE_SYNC_DTC_BIT_SPEAKER_OPEN_OR_SHORT) != 0u) ||
+        (GetDtcBitState(dtcBitmap, E_STATE_SYNC_DTC_BIT_SPEAKER_TO_POWER_SHORT) != 0u))
+    {
+        return 0x01u;
+    }
+
+    return 0x00u;
+}
+
 /*******************************************************************************
 **  函数名称: SendSystemStatusMsg
 **  功能描述: 发送系统硬件状态报文 (0x461)
@@ -207,20 +231,27 @@ void SendSystemStatusMsg(void)
 {
     CpuDtcSync_t dtcInfo = {0};
     uint32 dtcBitmap = 0u;
-    uint8 emmcState = 0x00u;
-    uint8 phyState = 0x00u;
-    uint8 speakerState = 0x00u;
-    uint8 hsmState = 0x00u;
-    uint8 gpsState = 0x00u;
+    uint8 emmcState = 0x02u;
+    uint8 phyState = 0x02u;
+    uint8 speakerState = 0x02u;
+    uint8 hsmState = 0x02u;
+    uint8 gpsState = 0x02u;
 
     if (StateSyncGetDtcstate(&dtcInfo) == 0)
     {
         dtcBitmap = dtcInfo.dtcState.dtcBitmap;
-        emmcState = GetDtcBitState(dtcBitmap, E_STATE_SYNC_DTC_BIT_UNDEFINED_19);
-        phyState = GetDtcBitState(dtcBitmap, E_STATE_SYNC_DTC_BIT_UNDEFINED_20);
-        speakerState = GetDtcBitState(dtcBitmap, E_STATE_SYNC_DTC_BIT_UNDEFINED_21);
-        hsmState = GetDtcBitState(dtcBitmap, E_STATE_SYNC_DTC_BIT_UNDEFINED_22);
-        gpsState = GetDtcBitState(dtcBitmap, E_STATE_SYNC_DTC_BIT_UNDEFINED_23);
+        if(dtcInfo.dtcState.emmcState == 0)
+        {
+            emmcState = 0x1u;
+        }
+        else
+        {
+            emmcState = 0x00u;
+        }
+        phyState = dtcInfo.dtcState.phyState;
+        speakerState = GetSpeakerFaultState(dtcBitmap);
+        hsmState = dtcInfo.dtcState.hsmState;
+        gpsState = dtcInfo.dtcState.gpsLocationState;
     }
 
     /*  报文格式: 04 61 0B XX XX XX XX XX */
@@ -261,7 +292,7 @@ void SendSystemInfoMsg(void)
     if (statusHal == 0)
     {
         /*  Byte4: CPU温度 */
-        cpuTemp = (uint8)(halState.tmpStatus / 10);
+        cpuTemp = (uint8)(halState.cpu0Temp / 10);
         /*  Byte5: CPU占用率 */
         cpuUsage = (halState.cpuUsage <= 99) ? halState.cpuUsage : 99;
     }

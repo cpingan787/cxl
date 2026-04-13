@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-/* 软件定时器接口 */
+void TimerHalInterruptCallback(void);
 void TimerHalInit(void);
 int16_t TimerHalOpen(void);
 int16_t TimerHalStartTime(int16_t timerHandle,uint32_t time_ms);

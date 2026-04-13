@@ -177,7 +177,7 @@ int16_t CanPeriodCycleProcess(void);
                   -1：失败
   Others:
 *************************************************/
-uint8_t CanPeriodGetVehTime(uint8_t *year,uint8_t *month,uint8_t *day,uint8_t *hour,uint8_t *min,uint8_t *sec);
+int8_t CanPeriodGetVehTime(uint8_t *year,uint8_t *month,uint8_t *day,uint8_t *hour,uint8_t *min,uint8_t *sec);
 
 #endif
 

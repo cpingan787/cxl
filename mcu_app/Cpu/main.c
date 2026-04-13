@@ -58,6 +58,8 @@
 #include "EEIf.h"
 #include "Rte_EcuM.h"
 #include "peripheralHal.h"
+#include "timerHal.h"
+#include "taskPowerManage.h"
 
 extern void Fls_test(void);
 
@@ -103,6 +105,7 @@ void Gpt_Notification_0 (void)
 {
     Gpt0Index++;
     // TstCanSendMessage();
+    TimerHalInterruptCallback();
 }
 
 uint8 Gpt2Index = 0;
@@ -153,6 +156,8 @@ void TstCanSendMessage(void)
     Std_ReturnType tRet = Can_Write(CanConf_CanHardwareObject_CanHardwareObject_Tx0, &tPduInfo);
 }
 
+extern void Clear_IoHold(void);
+
 void main(void)
 {
     Std_ReturnType GenReturnValue;
@@ -165,6 +170,8 @@ void main(void)
     while (Mcu_GetPllStatus() != MCU_PLL_LOCKED);
     /* Activate the PLL Clock */
     Mcu_DistributePllClock();
+
+    Clear_IoHold();
 
     /* Initialize the Port pins */
     Port_Init(PortConfigSet0);
@@ -204,6 +211,8 @@ void main(void)
         if (NVM_USE_InitTIME == 5000)
             break;
      }while(InitNvMReadAllStatus == NVM_REQ_PENDING);
+
+     EepromSetReadAllResult(InitNvMReadAllStatus);  
 
     EcuM_Init();
 

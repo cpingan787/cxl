@@ -358,6 +358,22 @@ void R_UART4_Stop(void)
     INTC2.ICRLIN34UR1.BIT.RFRLIN34UR1 = _INT_REQUEST_NOT_OCCUR;
     /* Clear ICRLIN34UR2 request */
     INTC2.ICRLIN34UR2.BIT.RFRLIN34UR2 = _INT_REQUEST_NOT_OCCUR;
+    PORT.PMC12 &= _PORT_CLEAR_BIT1;
+    PORT.PIBC12 &= _PORT_CLEAR_BIT1;
+    PORT.PBDC12 &= _PORT_CLEAR_BIT1;
+    PORT.PFC12 &= _PORT_CLEAR_BIT1;
+    PORT.PFCE12 &= _PORT_CLEAR_BIT1;
+    PORT.PFCAE12 &= _PORT_CLEAR_BIT1;
+    PORT.PM12 |= _PORT_SET_BIT1;
+
+    PORT.PMC12 &= _PORT_CLEAR_BIT2;
+    PORT.PIBC12 &= _PORT_CLEAR_BIT2;
+    PORT.PBDC12 &= _PORT_CLEAR_BIT2;
+    PORT.PFC12 &= _PORT_CLEAR_BIT2;
+    PORT.PFCE12 &= _PORT_CLEAR_BIT2;
+    PORT.PFCAE12 &= _PORT_CLEAR_BIT2;
+    PORT.P12 |= _PORT_SET_BIT2;
+    PORT.PM12 &= _PORT_CLEAR_BIT2;
     /* Synchronization processing */
     g_cg_sync_read = RLN34.LCUC;
     __syncp();
@@ -493,6 +509,13 @@ void R_UART5_Create(void)
     PORT.PFC1 &= _PORT_CLEAR_BIT5;
     PORT.PMC1 |= _PORT_SET_BIT5;  
     PORT.PM1 &= _PORT_CLEAR_BIT5;
+
+    gp_uart5_tx_address = 0;
+    g_uart5_tx_count = 0U;
+    gp_uart5_rx_address = 0;
+    g_uart5_rx_count = 0U;
+    g_uart5_rx_length = 0U;
+    RLN35.LEST &= (uint8_t) ~_UART_CLEAR_ERROR_FLAG;
 }
 /***********************************************************************************************************************
 * Function Name: R_UART5_Start
@@ -539,6 +562,30 @@ void R_UART5_Stop(void)
     // INTC2.ICRLIN35UR1.BIT.RFRLIN35UR1 = _INT_REQUEST_NOT_OCCUR;
     // /* Clear ICRLIN35UR2 request */
     // INTC2.ICRLIN35UR2.BIT.RFRLIN35UR2 = _INT_REQUEST_NOT_OCCUR;
+    RLN35.LEST &= (uint8_t) ~_UART_CLEAR_ERROR_FLAG;
+    gp_uart5_tx_address = 0;
+    g_uart5_tx_count = 0U;
+    gp_uart5_rx_address = 0;
+    g_uart5_rx_count = 0U;
+    g_uart5_rx_length = 0U;
+    /* RX goes to GPIO high-impedance to reduce toggling/leakage during sleep. */
+    PORT.PMC1 &= _PORT_CLEAR_BIT4;
+    PORT.PIBC1 &= _PORT_CLEAR_BIT4;
+    PORT.PBDC1 &= _PORT_CLEAR_BIT4;
+    PORT.PFC1 &= _PORT_CLEAR_BIT4;
+    PORT.PFCE1 &= _PORT_CLEAR_BIT4;
+    PORT.PFCAE1 &= _PORT_CLEAR_BIT4;
+    PORT.PM1 |= _PORT_SET_BIT4;
+
+    /* Keep TX at UART idle-high level as a GPIO output to avoid line chatter. */
+    PORT.PMC1 &= _PORT_CLEAR_BIT5;
+    PORT.PIBC1 &= _PORT_CLEAR_BIT5;
+    PORT.PBDC1 &= _PORT_CLEAR_BIT5;
+    PORT.PFC1 &= _PORT_CLEAR_BIT5;
+    PORT.PFCE1 &= _PORT_CLEAR_BIT5;
+    PORT.PFCAE1 &= _PORT_CLEAR_BIT5;
+    PORT.P1 |= _PORT_SET_BIT5;
+    PORT.PM1 &= _PORT_CLEAR_BIT5;
     /* Synchronization processing */
     g_cg_sync_read = RLN35.LCUC;
     __syncp();

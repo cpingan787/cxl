@@ -83,7 +83,7 @@
     #define  DCM_UDS_SERVICE0X85_ENABLED            (STD_ON) /*ControlDTCSetting*/
     #define  DCM_UDS_SERVICE0X86_ENABLED            (STD_OFF) /*ResponseOnEvent*/
     #define  DCM_UDS_SERVICE0X87_ENABLED            (STD_OFF) /*LinkControl*/
-    #define  DCM_UDS_SERVICE0XBB_22_ENABLED            (STD_ON) /*ReadDataByIdentifier*/
+
 /**********************************************/
 /*OBD Protocol*/
 #define  DCM_OBD_FUNC_ENABLED                       (STD_OFF)   /*Enable/Disable OBD Protocol*/

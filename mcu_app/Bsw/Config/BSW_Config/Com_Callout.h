@@ -28,6 +28,9 @@
 
 #include "ComStack_Types.h"
 
+extern uint8 Rx_0x1F1_100msTimeoutFlag;
+extern uint16 Rx_0x1F1_100msTimeoutCnt;
+
 boolean IAM_CONNCAN_100ms_FrP18_CONTROLLER_0_IAM_Tx(PduIdType PduId, PduInfoType* PduInfoPtr);
 
 boolean IAM_SecOC_ComKeyResp_CONTROLLER_0_IAM_Tx(PduIdType PduId, PduInfoType* PduInfoPtr);

@@ -40,7 +40,7 @@ static int16_t RemoteControlGenealPrecondition(uint8_t *cmdData)
     NvM_RequestResultType nvmStatus = NVM_REQ_PENDING;
     uint32 nvmReadTime = 0;
     uint32_t voltage = 0;
-    VehicleInfor_t *vehicleInfor = NULL;
+    VehicleInfor_t vehicleInfor = {0};
     
     NvM_ReadBlock(NvMBlock_DIDC30C, appEnableConfig);   // NvMBlockRamBuffer41
     do
@@ -71,7 +71,7 @@ static int16_t RemoteControlGenealPrecondition(uint8_t *cmdData)
 
     GetVehicleInfor(&vehicleInfor);
     // return E_REMOTE_CTRL_RESULT_ERR_ICC_NODE_LOST   // TODO guanyuan
-    switch(vehicleInfor->userMode)
+    switch(vehicleInfor.userMode)
     {
         case UsgMd_0_Sleep:
         case UsgMd_1_Standby:
@@ -92,7 +92,7 @@ static int16_t RemoteControlGenealPrecondition(uint8_t *cmdData)
             return E_REMOTE_CTRL_RESULT_ERR_USER_MODE_INVALID;
             break;
     }
-    if(vehicleInfor->vehicleMode == VehMd_8_Engineering)
+    if(vehicleInfor.vehicleMode == VehMd_8_Engineering)
     {
         return E_REMOTE_CTRL_RESULT_ERR_VEHICLE_MODE_INVALID;
     }

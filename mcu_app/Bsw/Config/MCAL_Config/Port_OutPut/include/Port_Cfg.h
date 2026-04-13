@@ -115,7 +115,7 @@
  *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\Config\ECUC\test_Port_Port0_ecuc.arxml
  *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\modules\port\R422_PORT_F1x_BSWMDT.arxml
  *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\stubs\4.2.2\Dem\xml\Dem_Port.arxml
- * GENERATED ON:  19 Mar 2026 - 17:19:40
+ * GENERATED ON:   3 Apr 2026 - 19:18:31
  */
 
 #ifndef PORT_CFG_H
@@ -198,7 +198,7 @@
 #define PORT_CRITICAL_SECTION_PROTECTION    STD_ON
 
 /* Enables/Disables the checking of port pin backup status */
-#define PORT_PIN_STATUS_BACKUP              STD_ON
+#define PORT_PIN_STATUS_BACKUP              STD_OFF
 
 /* Indicates the number of Alternative Modes  */
 #define PORT_MAX_MODE                       (uint8)0x0f
@@ -220,7 +220,7 @@
 #define PORT_VERSION_CHECK_EXT_MODULES      STD_ON
 
 /* Enables/Disables Port_SetToDioMode and Port_SetToAlternateMode API */
-#define PORT_SET_TO_DIO_ALT_MODE_API        STD_OFF
+#define PORT_SET_TO_DIO_ALT_MODE_API        STD_ON
 
 /* User define value for Endless Loop. */
 #define PORT_UNLOCK_SEQUENCE_COUNT          (uint8)0x14
@@ -273,7 +273,7 @@
 
 
 /* Number of mode / dir / dioAlt changeable pins */
-#define PORT_NUM_OF_PINS_MODIFIABLE         0x07U
+#define PORT_NUM_OF_PINS_MODIFIABLE         0x1cU
 /* Number of config set configured */
 #define PORT_NUM_OF_CONFIGSET               0x01U
 /* Number of numeric ports configured */
@@ -284,7 +284,8 @@
 #define PORT_NUM_OF_ANALOG_PORTS            0x02U
 /* Number of input ports configured */
 #define PORT_NUM_OF_INPUT_PORTS             0x01U
-
+/* Number of analog and/or digital filters configured */
+#define PORT_NUM_OF_FCLA                    0x06U
 /* Number of digital filters configured */
 #define PORT_NUM_OF_DNFA                    0x01U
 /* Protection command register 0 */
@@ -301,7 +302,7 @@
 #define PORT_DNFA_REG_CONFIG                STD_ON
 
 /* Availability of FCLA noise elimination registers. */
-#define PORT_FCLA_REG_CONFIG                STD_OFF
+#define PORT_FCLA_REG_CONFIG                STD_ON
 
 /* Availability of DNFAnENnoise elimination registers. */
 #define PORT_DNFAEN_REG_AVAILABLE           STD_ON

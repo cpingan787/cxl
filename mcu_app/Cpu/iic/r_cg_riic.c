@@ -154,6 +154,15 @@ void R_RIIC0_Create(void)
     PORT.PFCAE10 &= _PORT_CLEAR_BIT2;
     PORT.PMC10 |= _PORT_SET_BIT2;
     PORT.PM10 &= _PORT_CLEAR_BIT2;
+    g_riic0_mode_flag = 0U;
+    g_riic0_state = 0U;
+    g_riic0_slave_address = 0U;
+    gp_riic0_tx_address = 0;
+    g_riic0_tx_count = 0U;
+    gp_riic0_rx_address = 0;
+    g_riic0_rx_count = 0U;
+    g_riic0_rx_length = 0U;
+    g_riic0_dummy_read_count = 0U;
 }
 /***********************************************************************************************************************
 * Function Name: R_RIIC0_Start
@@ -181,6 +190,8 @@ void R_RIIC0_Start(void)
 ***********************************************************************************************************************/
 void R_RIIC0_Stop(void)
 {
+    uint32_t tmp_port;
+
     /* Disable RIIC0 interrupt operation and clear request */
     // INTC2.ICRIIC0TI.BIT.RFRIIC0TI = _INT_REQUEST_NOT_OCCUR;
     // INTC2.ICRIIC0TEI.BIT.RFRIIC0TEI = _INT_REQUEST_NOT_OCCUR;
@@ -190,8 +201,50 @@ void R_RIIC0_Stop(void)
     // INTC2.ICRIIC0TEI.BIT.MKRIIC0TEI = _INT_PROCESSING_DISABLED;
     // INTC2.ICRIIC0RI.BIT.MKRIIC0RI = _INT_PROCESSING_DISABLED;
     // INTC2.ICRIIC0EE.BIT.MKRIIC0EE = _INT_PROCESSING_DISABLED;
+    RIIC0.CR2.UINT32 |= _RIIC_STOP_CONDITION_REQUEST;
+    RIIC0.CR1.UINT32 |= _RIIC_INTERNAL_RESET;
+    RIIC0.CR1.UINT32 &= _RIIC_DISABLE;
+    g_riic0_mode_flag = 0U;
+    g_riic0_state = 0U;
+    g_riic0_slave_address = 0U;
+    gp_riic0_tx_address = 0;
+    g_riic0_tx_count = 0U;
+    gp_riic0_rx_address = 0;
+    g_riic0_rx_count = 0U;
+    g_riic0_rx_length = 0U;
+    g_riic0_dummy_read_count = 0U;
+    /* Keep I2C lines released high with open-drain GPIO during sleep. */
+    PORT.PMC10 &= _PORT_CLEAR_BIT3;
+    PORT.PIBC10 &= _PORT_CLEAR_BIT3;
+    PORT.PIPC10 &= _PORT_CLEAR_BIT3;
+    PORT.PFC10 &= _PORT_CLEAR_BIT3;
+    PORT.PFCE10 &= _PORT_CLEAR_BIT3;
+    PORT.PFCAE10 &= _PORT_CLEAR_BIT3;
+    PORT.PBDC10 |= _PORT_SET_BIT3;
+    tmp_port = PORT.PODC10;
+    PORT.PPCMD10 = _WRITE_PROTECT_COMMAND;
+    PORT.PODC10= (tmp_port | _PORT_SET_BIT3);
+    PORT.PODC10= (uint32_t) ~(tmp_port | _PORT_SET_BIT3);
+    PORT.PODC10= (tmp_port | _PORT_SET_BIT3);
+    PORT.P10 |= _PORT_SET_BIT3;
+    PORT.PM10 &= _PORT_CLEAR_BIT3;
+
+    PORT.PMC10 &= _PORT_CLEAR_BIT2;
+    PORT.PIBC10 &= _PORT_CLEAR_BIT2;
+    PORT.PIPC10 &= _PORT_CLEAR_BIT2;
+    PORT.PFC10 &= _PORT_CLEAR_BIT2;
+    PORT.PFCE10 &= _PORT_CLEAR_BIT2;
+    PORT.PFCAE10 &= _PORT_CLEAR_BIT2;
+    PORT.PBDC10 |= _PORT_SET_BIT2;
+    tmp_port = PORT.PODC10;
+    PORT.PPCMD10 = _WRITE_PROTECT_COMMAND;
+    PORT.PODC10= (tmp_port | _PORT_SET_BIT2);
+    PORT.PODC10= (uint32_t) ~(tmp_port | _PORT_SET_BIT2);
+    PORT.PODC10= (tmp_port | _PORT_SET_BIT2);
+    PORT.P10 |= _PORT_SET_BIT2;
+    PORT.PM10 &= _PORT_CLEAR_BIT2;
     /* Synchronization processing */
-    g_cg_sync_read = INTC2.ICRIIC0RI.UINT16;
+    g_cg_sync_read = RIIC0.CR1.UINT32;
     __syncp();
 }
 /***********************************************************************************************************************

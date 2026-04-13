@@ -116,7 +116,7 @@
 #define NvMBlock_DIDCF00               45U
 #define NvMBlock_DIDC30D               46U
 #define NvMBlock_Reserved_block0               47U
-#define NvMBlock_Reserved_block1               48U
+#define NvMBlock_Reserved_block1               48U  // 用做密钥管理区, 占用254字节
 #define NvMBlock_Reserved_block2               49U
 #define NvMBlock_27Key_error_count               50U
 #define NvMBlock_SecOc_count               51U

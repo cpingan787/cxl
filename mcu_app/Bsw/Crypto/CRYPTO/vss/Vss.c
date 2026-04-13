@@ -26,7 +26,7 @@ static struct
     uint8_t vsn[VSS_VSN_SIZE];
     uint8_t vsnActiveFlg;
     uint8_t algFlg;
-    uint8_t sm4Key[VSS_SM4_KEY_MAX][VSS_CONFIG_SM4CMAC_KEY_LEN];
+    uint8_t sm4Key[VSS_SM4_KEY_MAX][VSS_NVM_BLOCK_SM4_KEY_LEN];
     uint8_t sm4KeyActiveFlg[VSS_SM4_KEY_MAX];
     uint8_t sm2Key[VSS_CONFIG_SM2_KEY_LEN];
     uint8_t ecc256Key[VSS_CONFIG_ECC256_KEY_LEN];
@@ -45,13 +45,15 @@ static uint32_t VssGetKeyByKeyId(uint32_t keyId, VssItemType_e vssitem, uint8_t*
  Description: 算法库初始化（MCU软算法版本）。注册回调并初始化底层软算法库适配层。
  Input:  flashCb FLASH密钥存储区域读写回调
          wdtCb   看门狗喂狗回调
+         pData  - 数据缓冲区
+         pLength  - 数据长度
  Output: None
  Return: 0x00-成功
          0x18-算法不支持（type非0）
          其他-由适配层返回
  Others:
 *************************************************/
-uint32_t VssCryptoInit(VssflashFunc* flashCb, VssWdtFeedFunc* wdtCb)
+uint32_t VssCryptoInit(VssflashFunc* flashCb, VssWdtFeedFunc* wdtCb, uint8_t* pData, uint32_t pLength)
 {
     uint32_t ret = VSS_RET_SUCCESS;
 
@@ -65,7 +67,37 @@ uint32_t VssCryptoInit(VssflashFunc* flashCb, VssWdtFeedFunc* wdtCb)
     gVssCtx.flashCb = flashCb;
     gVssCtx.wdtCb   = wdtCb;
 
-    ret = gVssCtx.flashCb(VSS_ITEM_VSN_ACTIVE, VSS_FLASH_Write, VSS_VSN_0, &gVssCtx.vsnActiveFlg, VSS_CONFIG_KEY_VALID_LEN);
+    VssGetCtxData(pData, pLength);
+
+    return VSS_RET_SUCCESS;
+}
+
+/*************************************************
+ Function: VssGetCtxData
+ Description: 获取上下文数据
+ Input:  pData  - 数据缓冲区
+         pLength  - 数据长度
+ Output: None
+ Return: 0-成功, 其他-失败
+ Others:
+*************************************************/
+uint32_t VssGetCtxData(uint8_t* pData, uint32_t pLength)
+{
+    if (pData == NULL || pLength == 0)
+    {
+        return VSS_ERR_PARAM_CHECK_FAILED;
+    }
+
+    memcpy(gVssCtx.vsn, &pData[VSS_NVM_BLOCK_VSN_ADDR], VSS_NVM_BLOCK_VSN_LEN);
+    memcpy(&gVssCtx.vsnActiveFlg, &pData[VSS_NVM_BLOCK_VSN_ACTIVE_ADDR], VSS_NVM_BLOCK_VSN_ACTIVE_LEN);
+    memcpy(&gVssCtx.sm4Key[VSS_SECOC_KEY], &pData[VSS_NVM_BLOCK_SM4_KEY0_ADDR], VSS_NVM_BLOCK_SM4_KEY_LEN);
+    memcpy(&gVssCtx.sm4Key[VSS_AUTH_KEY], &pData[VSS_NVM_BLOCK_SM4_KEY1_ADDR], VSS_NVM_BLOCK_SM4_KEY_LEN);
+    memcpy(&gVssCtx.sm4KeyActiveFlg[VSS_SECOC_KEY], &pData[VSS_NVM_BLOCK_SM4_KEY0_ACTIVE_ADDR], VSS_NVM_BLOCK_SM4_KEY_ACTIVE_LEN);
+    memcpy(&gVssCtx.sm4KeyActiveFlg[VSS_AUTH_KEY], &pData[VSS_NVM_BLOCK_SM4_KEY1_ACTIVE_ADDR], VSS_NVM_BLOCK_SM4_KEY_ACTIVE_LEN);
+
+
+
+    TBOX_PRINT("vsnActiveFlg = %d\n", gVssCtx.vsnActiveFlg);
 
     return VSS_RET_SUCCESS;
 }
@@ -84,50 +116,21 @@ uint32_t VssSecocCmacGen(uint8_t* inData, uint32_t inLen, uint8_t* out16)
     uint32_t ret = VSS_RET_SUCCESS;
     uint8_t keyValid = 0;
 
-#if 0
     /* 获取VSN是否已写入 */
-    ret = VssGetKeyActive(VSS_ITEM_VSN_ACTIVE, VSS_VSN_0, &keyValid);
-    if (ret != VSS_RET_SUCCESS)
+    if (gVssCtx.vsnActiveFlg == 0)
     {
-        return ret;
-    }
-
-    if (keyValid == 0)
-    {
-        // 电控单元车辆安全码未写入, 同步报文及安全报文无法发出
         return VSS_ERR_KEY_INVALID;
     }
 
-    ret = VssGetKeyActive(VSS_ITEM_SM4_KEY_ACTIVE, VSS_SECOC_KEY, &keyValid);
-    if (ret != VSS_RET_SUCCESS)
+    if (gVssCtx.sm4KeyActiveFlg[VSS_SECOC_KEY] == 0)
     {
-        return VSS_ERR_FLASH_RW_FAILED;
+        const uint8_t defaultKey[VSS_NVM_BLOCK_SM4_KEY_LEN] = {0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 0x10}; // 使用默认密钥
+        ret = VssAdapter_Sm4CMac(defaultKey, inData, inLen, out16);
     }
-
-    ret = VssGetAlgFlag(&gVssCtx.algFlg);
-    if (ret != VSS_RET_SUCCESS)
+    else
     {
-        return ret;
+        ret = VssSM4CMacByKeyId(VSS_SECOC_KEY, inData, inLen, out16);
     }
-
-    /* 通讯密钥未使能 */
-    if (keyValid == 0)
-    {
-        uint8_t defaultKey[VSS_CONFIG_SM4CMAC_KEY_LEN] = {0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 0x10}; // 使用默认密钥
-        if (gVssCtx.algFlg == VSS_ALG_TYPE_NATIONAL_CRYP)
-        {
-            ret = VssAdapter_Sm4CMac(defaultKey, inData, inLen, out16);
-        }
-    } else {
-        if (gVssCtx.algFlg == VSS_ALG_TYPE_NATIONAL_CRYP)
-        {
-            ret = VssSM4CMacByKeyId(VSS_SECOC_KEY, inData, inLen, out16);
-        }
-    }
-#else
-    uint8_t defaultKey[VSS_CONFIG_SM4CMAC_KEY_LEN] = {0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 0x10}; // 使用默认密钥
-    ret = VssAdapter_Sm4CMac(defaultKey, inData, inLen, out16);
-#endif
 
     return ret;
 }
@@ -155,7 +158,7 @@ uint32_t Vss_Challenge_Response(uint8_t *outChallenge, uint8_t *outResponse)
         return VSS_ERR_PARAM_CHECK_FAILED;
     }
 
-    ret = VssGetKeyByKeyId(VSS_AUTH_KEY, VSS_ITEM_SM4_KEY, key, VSS_CONFIG_SM4CMAC_KEY_LEN);
+    ret = VssGetKeyByKeyId(VSS_AUTH_KEY, VSS_ITEM_SM4_KEY, key, VSS_NVM_BLOCK_SM4_KEY_LEN);
     if (ret != VSS_RET_SUCCESS)
     {
         return VSS_ERR_KEY_INVALID;
@@ -171,6 +174,24 @@ uint32_t Vss_Challenge_Response(uint8_t *outChallenge, uint8_t *outResponse)
     memset(key, 0, sizeof(key));
 
     return VSS_RET_SUCCESS;
+}
+
+/*************************************************
+ Function: Vss_SetVSNActive
+ Description: 激活VSN
+ Input:  None
+ Output: None
+ Return: 0-成功, 其他-失败
+ Others:
+*************************************************/
+uint32_t Vss_SetVSNActive(void)
+{
+    uint32_t ret = VSS_RET_SUCCESS;
+    
+    /* 调用VssSetKeyActive设置VSN为激活状态 */
+    ret = VssSetKeyActive(VSS_ITEM_VSN_ACTIVE, VSS_VSN_0, 1);
+    
+    return ret;
 }
 
 /*************************************************
@@ -190,7 +211,6 @@ uint32_t Vss_SetSecOCKeyActive(void)
     
     return ret;
 }
-
 
 /*************************************************
  Function: VssGenerateKeyByCode
@@ -307,7 +327,7 @@ uint32_t VssSetKeyActive(VssItemType_e vssitem, uint8_t keyId, uint8_t valid)
         if (gVssCtx.vsnActiveFlg != valid)
         {
             gVssCtx.vsnActiveFlg = valid;
-            ret = gVssCtx.flashCb(vssitem, VSS_FLASH_Write, keyId, &gVssCtx.vsnActiveFlg, VSS_CONFIG_KEY_VALID_LEN);
+            ret = gVssCtx.flashCb(vssitem, VSS_FLASH_Write, keyId, &gVssCtx.vsnActiveFlg, VSS_NVM_BLOCK_VSN_ACTIVE_LEN);
         }
     }
     else if (vssitem == VSS_ITEM_SM4_KEY_ACTIVE)
@@ -319,7 +339,7 @@ uint32_t VssSetKeyActive(VssItemType_e vssitem, uint8_t keyId, uint8_t valid)
         if (gVssCtx.sm4KeyActiveFlg[keyId] != valid)
         {
             gVssCtx.sm4KeyActiveFlg[keyId] = valid;
-            ret = gVssCtx.flashCb(vssitem, VSS_FLASH_Write, keyId, &gVssCtx.sm4KeyActiveFlg[keyId], VSS_CONFIG_KEY_VALID_LEN);
+            ret = gVssCtx.flashCb(vssitem, VSS_FLASH_Write, keyId, &gVssCtx.sm4KeyActiveFlg[keyId], VSS_NVM_BLOCK_SM4_KEY_ACTIVE_LEN);
         }
     } else;
 
@@ -354,7 +374,7 @@ uint32_t VssGetKeyActive(VssItemType_e vssitem, uint8_t keyId, uint8_t* valid)
         {
             return VSS_ERR_PARAM_CHECK_FAILED;
         }
-        ret = gVssCtx.flashCb(vssitem, VSS_FLASH_Read, keyId, &gVssCtx.vsnActiveFlg, VSS_CONFIG_KEY_VALID_LEN);
+        ret = gVssCtx.flashCb(vssitem, VSS_FLASH_Read, keyId, &gVssCtx.vsnActiveFlg, VSS_NVM_BLOCK_VSN_ACTIVE_LEN);
         if (ret != VSS_RET_SUCCESS)
         {
             return VSS_ERR_FLASH_RW_FAILED;
@@ -369,7 +389,7 @@ uint32_t VssGetKeyActive(VssItemType_e vssitem, uint8_t keyId, uint8_t* valid)
         }
         if (gVssCtx.sm4KeyActiveFlg[keyId] != valid)
         {
-            ret = gVssCtx.flashCb(vssitem, VSS_FLASH_Read, keyId, &gVssCtx.sm4KeyActiveFlg[keyId], VSS_CONFIG_KEY_VALID_LEN);
+            ret = gVssCtx.flashCb(vssitem, VSS_FLASH_Read, keyId, &gVssCtx.sm4KeyActiveFlg[keyId], VSS_NVM_BLOCK_SM4_KEY_ACTIVE_LEN);
             if (ret != VSS_RET_SUCCESS)
             {
                 return VSS_ERR_FLASH_RW_FAILED;
@@ -408,6 +428,8 @@ uint32_t VssSetVSN(uint8_t* vsn, uint32_t inLen)
     if (memcmp(gVssCtx.vsn, vsn, inLen) != 0)
     {
         memcpy(gVssCtx.vsn, vsn, inLen);
+        gVssCtx.vsnActiveFlg = 1;
+        TBOX_PRINT("set vsn active\n");
         ret = gVssCtx.flashCb(VSS_ITEM_VSN, VSS_FLASH_Write, VSS_VSN_0, gVssCtx.vsn, VSS_VSN_SIZE);
     }
 
@@ -459,19 +481,19 @@ uint32_t VssGetVSN(uint8_t* vsn, uint32_t inLen)
 uint32_t VssSM4CMacByKeyId(uint32_t keyId, uint8_t* inData, uint32_t inLen, uint8_t* outData)
 {
     uint32_t ret = VSS_RET_SUCCESS;
-    uint8_t pkey[VSS_CONFIG_SM4CMAC_KEY_LEN] = {0};
+    uint8_t pkey[VSS_NVM_BLOCK_SM4_KEY_LEN] = {0};
 
     if (gVssCtx.state != VSS_INIT)
     {
         return VSS_ERR_NOT_INITIALIZED;
     }
 
-    if ((keyId > VSS_CONFIG_KEY_NUM_MAX) || (inData == NULL) || (outData == NULL) || (inLen == 0))
+    if ((keyId >= VSS_SM4_KEY_MAX) || (inData == NULL) || (outData == NULL) || (inLen == 0))
     {
         return VSS_ERR_PARAM_CHECK_FAILED;
     }
 
-    VssGetKeyByKeyId(keyId, VSS_ITEM_SM4_KEY, pkey, VSS_CONFIG_SM4CMAC_KEY_LEN);
+    VssGetKeyByKeyId(keyId, VSS_ITEM_SM4_KEY, pkey, VSS_NVM_BLOCK_SM4_KEY_LEN);
 
     ret = VssAdapter_Sm4CMac(pkey, inData, inLen, outData);
     if (ret != VSS_RET_SUCCESS)

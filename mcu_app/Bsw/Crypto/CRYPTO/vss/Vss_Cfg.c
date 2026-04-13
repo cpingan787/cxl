@@ -8,9 +8,22 @@
 *************************************************/
 /****************************** include ***************************************/
 #include "Vss_Cfg.h"
-#include "NVM_Cfg.h"
+#include "NvM_Types.h"
 
 /****************************** Macro Definitions ******************************/
+/*
+    NVM配置表
+    1. VSN ------------------- 0  - 31
+    2. VSN_ACTIVE ------------ 32 - 33
+    3. SM4_SECOC_KEY --------- 34 - 50
+    4. SM4_IDV_KEY ----------- 51 - 67
+    5. SM4_KEY_RESERV0 -------- 68 - 84
+    6. SM4_KEY_RESERV1 -------- 85 - 101
+    7. SM4_SECOC_ACTIVE ------- 102 - 103
+    8. SM4_IDV_ACTIVE --------- 104 - 105
+    9. SM4_ACTIVE_RESERV0 ----- 106 - 107
+    10. SM4_ACTIVE_RESERV1 ---- 108 - 109
+*/
 
 /****************************** Type Definitions ******************************/
 typedef uint32_t (*VssflashFunc_t)(VssFlashOperaType_e rwflag, uint8_t keyId,uint8_t *pData, uint32_t pLength);
@@ -32,6 +45,10 @@ static const VssFlashTableEntry_t configTable[VSS_ITEM_MAX] = {
     [VSS_ITEM_ECC256_KEY]         = {VSS_ITEM_ECC256_KEY,         VssConfig_Ecc256KeyByindex},
 };
 
+/****************************** Function Declarations *************************/
+static void VssConfig_NvmRead(void);
+static void VssConfig_NvmWrite(uint32_t addrOffset, uint8_t *pData, uint32_t pLength);
+
 /****************************** Public Function Implementations ******************************/
 /*************************************************
  Function: Vss_InitConfig
@@ -44,7 +61,8 @@ static const VssFlashTableEntry_t configTable[VSS_ITEM_MAX] = {
 *************************************************/
 uint32_t Vss_InitConfig(void)
 {
-    return VssCryptoInit(VssConfig_flashFunc, VssConfig_WdtFeed);
+    VssConfig_NvmRead();
+    return VssCryptoInit(VssConfig_flashFunc, VssConfig_WdtFeed, NvMBlockRamBuffer48, 254);
 }
 
 /*************************************************
@@ -87,6 +105,67 @@ static void VssConfig_WdtFeed(void)
 }
 
 /*************************************************
+  Function:       VssConfig_NvmRead
+  Description:    NVM读取函数
+  Input:          None
+  Return:         None
+*************************************************/
+static void VssConfig_NvmRead(void)
+{
+    NvM_RequestResultType blockret = 0;
+    uint32_t timeout = 0;
+
+    NvM_ReadBlock(NvMBlock_Reserved_block1, NvMBlockRamBuffer48);
+    /* 等待读取完成 */
+    do{
+        timeout++;
+        NvM_MainFunction();
+        Fee_MainFunction();
+        Fls_MainFunction();
+        NvM_GetErrorStatus(NvMBlock_Reserved_block1, &blockret);
+        if (timeout >= 5000) {
+            break;
+        }
+    } while (blockret == NVM_REQ_PENDING);
+}
+
+/*************************************************
+  Function:       VssConfig_NvmWrite
+  Description:    NVM写入函数
+  Input:          addrOffset - 写入地址移量
+                  pData    - 数据缓冲区
+                  pLength  - 数据长度
+  Return:         None
+*************************************************/
+static void VssConfig_NvmWrite(uint32_t addrOffset, uint8_t *pData, uint32_t pLength)
+{
+    uint32_t timeout = 0;
+    NvM_RequestResultType blockret = 0;
+
+    if (addrOffset == VSS_NVM_BLOCK_VSN_ADDR)
+    {
+        memcpy(&NvMBlockRamBuffer48[addrOffset], pData, pLength);
+        NvMBlockRamBuffer48[VSS_NVM_BLOCK_VSN_ACTIVE_ADDR] = 1; // 写入激活
+        NvM_WriteBlock(NvMBlock_Reserved_block1, NvMBlockRamBuffer48);
+    }
+    else {
+        memcpy(&NvMBlockRamBuffer48[addrOffset], pData, pLength);
+        NvM_WriteBlock(NvMBlock_Reserved_block1, NvMBlockRamBuffer48);
+    }
+
+    do{
+        timeout++;
+        NvM_MainFunction();
+        Fee_MainFunction();
+        Fls_MainFunction();
+        NvM_GetErrorStatus(NvMBlock_Reserved_block1, &blockret);
+        if (timeout >= 5000) {
+            break;
+        }
+    } while (blockret == NVM_REQ_PENDING);
+}
+
+/*************************************************
   Function:       VssConfig_VSNRw
   Description:    VSN读写
   Input:          rwflag   - 读写标志
@@ -99,27 +178,20 @@ static uint32_t VssConfig_VSNRw(VssFlashOperaType_e rwflag, uint8_t keyId, uint8
 {
     uint32_t ret = VSS_RET_SUCCESS;
 
-    if ((pData == NULL) || (keyId != 0))
+    if ((pData == NULL) || (keyId != 0) || (pLength != VSS_NVM_BLOCK_VSN_LEN))
     {
         return VSS_ERR_PARAM_CHECK_FAILED;
     }
 
+    VssConfig_NvmRead();
+
     if (rwflag == VSS_FLASH_Write)
     {
-        uint32_t addrOffset = 0;
-        /* 待适配安全存储写入接口 */
+        VssConfig_NvmWrite(VSS_NVM_BLOCK_VSN_ADDR, pData, VSS_NVM_BLOCK_VSN_LEN);
     }
     else if (rwflag == VSS_FLASH_Read)
     {
-        if (NvM_ReadBlock(NvMBlock_DIDF130, NvMBlockRamBuffer10) == E_NOT_OK)
-        {
-            return E_NOT_OK;
-        }
-    
-        for (uint8 i = 0; i < 32; i++) 
-        {
-            *(pData+i) = NvMBlockRamBuffer10[i];
-        }
+        memcpy(pData, &NvMBlockRamBuffer48[VSS_NVM_BLOCK_VSN_ADDR], VSS_NVM_BLOCK_VSN_LEN);
     } else{
         ret = VSS_ERR_PARAM_CHECK_FAILED;
     }
@@ -140,20 +212,20 @@ static uint32_t VssConfig_VSNActiveRw(VssFlashOperaType_e rwflag, uint8_t keyId,
 {
     uint32_t ret = VSS_RET_SUCCESS;
 
-    if ((pData == NULL) || (keyId != 0))
+    if ((pData == NULL) || (keyId != 0) || (pLength != VSS_NVM_BLOCK_VSN_ACTIVE_LEN))
     {
         return VSS_ERR_PARAM_CHECK_FAILED;
     }
-
+    
+    VssConfig_NvmRead();
+    
     if (rwflag == VSS_FLASH_Write)
     {
-        uint32_t addrOffset = 0;
-        /* 待适配安全存储写入接口 */
+        VssConfig_NvmWrite(VSS_NVM_BLOCK_VSN_ACTIVE_ADDR, pData, VSS_NVM_BLOCK_VSN_ACTIVE_LEN);
     }
     else if (rwflag == VSS_FLASH_Read)
     {
-        uint32_t addrOffset = 0;
-        /* 待适配安全存储读取接口 */
+        memcpy(pData, &NvMBlockRamBuffer48[VSS_NVM_BLOCK_VSN_ACTIVE_ADDR], VSS_NVM_BLOCK_VSN_ACTIVE_LEN);
     } else{
         ret = VSS_ERR_PARAM_CHECK_FAILED;
     }
@@ -178,26 +250,27 @@ static uint32_t VssConfig_SM4CmacKeyByindex(VssFlashOperaType_e rwflag, uint8_t 
     {
         return VSS_ERR_PARAM_CHECK_FAILED;
     }
+    
+    VssConfig_NvmRead();
 
     if (rwflag == VSS_FLASH_Write)
     {
-        uint32_t addrOffset = keyId * VSS_CONFIG_SM4CMAC_KEY_LEN;
-        /* 待适配安全存储写入接口 */
+        uint32_t addrOffset = keyId * VSS_NVM_BLOCK_SM4_KEY_LEN;
+        VssConfig_NvmWrite(VSS_NVM_BLOCK_SM4_KEY0_ADDR + addrOffset, pData, VSS_NVM_BLOCK_SM4_KEY_LEN);
     }
     else if (rwflag == VSS_FLASH_Read)
     {
-        uint32_t addrOffset = keyId * VSS_CONFIG_SM4CMAC_KEY_LEN;
-        /* 待适配安全存储读取接口 */
+        uint32_t addrOffset = keyId * VSS_NVM_BLOCK_SM4_KEY_LEN;
         const uint8_t sm4_key_stub[32] = {
             /* [Offset 0] KeyID = 0 的密钥 */
-            0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88, 
-            0x99, 0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0xFF, 0x00,
+            0x45, 0xA3, 0xD7, 0x86, 0x30, 0x38, 0x97, 0x1B, 
+            0x77, 0xDB, 0x79, 0x97, 0x2C, 0xAD, 0x76, 0xDE,
     
             /* [Offset 16] KeyID = 1 的密钥 */
-            0x5A, 0x5A, 0x5A, 0x5A, 0x5A, 0x5A, 0x5A, 0x5A, 
-            0x5A, 0x5A, 0x5A, 0x5A, 0x5A, 0x5A, 0x5A, 0x5A
+            0x6E, 0x92, 0xF7, 0xDA, 0x70, 0x2A, 0xD5, 0xF7, 
+            0xB5, 0xAD, 0xF4, 0xC3, 0x0D, 0x6C, 0x14, 0x97,
         };
-        memcpy(pData, &sm4_key_stub[addrOffset], VSS_CONFIG_SM4CMAC_KEY_LEN); // 打桩验证
+        memcpy(pData, &sm4_key_stub[addrOffset], VSS_NVM_BLOCK_SM4_KEY_LEN); // 打桩验证
     } else{
         ret = VSS_ERR_PARAM_CHECK_FAILED;
     }
@@ -218,21 +291,25 @@ static uint32_t VssConfig_SM4CmacKeyActiveByindex(VssFlashOperaType_e rwflag, ui
 {
     uint32_t ret = VSS_RET_SUCCESS;
 
-    if ((pData == NULL) || (keyId >= VSS_CONFIG_KEY_NUM_MAX))
+    if ((pData == NULL) || (keyId >= VSS_SM4_KEY_MAX) || (pLength != VSS_NVM_BLOCK_SM4_KEY_ACTIVE_LEN))
     {
         return VSS_ERR_PARAM_CHECK_FAILED;
     }
+    
+    VssConfig_NvmRead();
 
     if (rwflag == VSS_FLASH_Write)
     {
-        uint32_t addrOffset = keyId;
-        /* 待适配安全存储写入接口 */
+        uint32_t addrOffset = keyId * VSS_NVM_BLOCK_SM4_KEY_ACTIVE_LEN;
+        VssConfig_NvmWrite(VSS_NVM_BLOCK_SM4_KEY0_ACTIVE_ADDR + addrOffset, pData, VSS_NVM_BLOCK_SM4_KEY_ACTIVE_LEN);
     }
     else if (rwflag == VSS_FLASH_Read)
     {
-        uint32_t addrOffset = keyId;
-        /* 待适配安全存储读取接口 */
-    } else{
+        uint32_t addrOffset = keyId * VSS_NVM_BLOCK_SM4_KEY_ACTIVE_LEN;
+        memcpy(pData, &NvMBlockRamBuffer48[VSS_NVM_BLOCK_SM4_KEY0_ACTIVE_ADDR + addrOffset], VSS_NVM_BLOCK_SM4_KEY_ACTIVE_LEN);
+    } 
+    else
+    {
         ret = VSS_ERR_PARAM_CHECK_FAILED;
     }
     
@@ -252,7 +329,7 @@ static uint32_t VssConfig_AESKeyByindex(VssFlashOperaType_e rwflag, uint8_t keyI
 {
     uint32_t ret = VSS_RET_SUCCESS;
 
-    if ((pData == NULL) || (keyId >= VSS_CONFIG_KEY_NUM_MAX))
+    if ((pData == NULL) || (keyId >= VSS_AES_KEY_MAX))
     {
         return VSS_ERR_PARAM_CHECK_FAILED;
     }
@@ -286,7 +363,7 @@ static uint32_t VssConfig_AESKeyActiveByindex(VssFlashOperaType_e rwflag, uint8_
 {
     uint32_t ret = VSS_RET_SUCCESS;
 
-    if ((pData == NULL) || (keyId >= VSS_CONFIG_KEY_NUM_MAX))
+    if ((pData == NULL) || (keyId >= VSS_AES_KEY_MAX))
     {
         return VSS_ERR_PARAM_CHECK_FAILED;
     }
@@ -332,7 +409,7 @@ static uint32_t VssConfig_SM2KeyByindex(VssFlashOperaType_e rwflag, uint8_t keyI
         0x20,
     };
 
-    if ((pData == NULL) || (keyId >= VSS_CONFIG_KEY_NUM_MAX))
+    if ((pData == NULL) || (keyId >= VSS_SM2_KEY_MAX))
     {
         return VSS_ERR_PARAM_CHECK_FAILED;
     }
@@ -379,7 +456,7 @@ static uint32_t VssConfig_Ecc256KeyByindex(VssFlashOperaType_e rwflag, uint8_t k
         0x7F
     };
 
-    if ((pData == NULL) || (keyId >= VSS_CONFIG_KEY_NUM_MAX))
+    if ((pData == NULL) || (keyId >= VSS_ECC256_KEY_MAX))
     {
         return VSS_ERR_PARAM_CHECK_FAILED;
     }

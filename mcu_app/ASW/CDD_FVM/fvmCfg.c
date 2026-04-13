@@ -70,30 +70,12 @@ Std_ReturnType Fvm_InitConfig(void)
 *************************************************/
 static void SecocSaveTripCount(uint32_t value)
 {
-    // nvm接口待适配
     ILib_memcpy(
-                (const uint8*)NvM_BlockDescriptor[NvMBlock_SecOc_count - 1u]
+                (const uint8*)NvM_BlockDescriptor[NvMBlock_SecOc_count - 1]
                 .NvmRamBlockDataAddress,
                 &value,
             FVM_TRIP_COUNTER_VALUE_NVMBLOCK_LEN);
-    Std_ReturnType ret = NvM_WriteBlock(NvMBlock_SecOc_count,NULL_PTR);
-    uint8 isEnable=GetTripCounterDetectEnable();
-    if(isEnable)
-    {
-        if(ret != E_OK)
-        {
-            //写入失败
-            Dem_SetEventStatus(EventParameter_0xE00444,DEM_EVENT_STATUS_FAILED);
-            TBOX_PRINT("Fvm_SaveTripCount failed, ret = %d", ret);
-        }
-        else
-        {
-            //写入成功
-            Dem_SetEventStatus(EventParameter_0xE00444,DEM_EVENT_STATUS_PASSED);
-            TBOX_PRINT("Fvm_SaveTripCount success, value = %d", value);
-        }
-    }   
-    
+    NvM_WriteBlock(NvMBlock_SecOc_count,NULL_PTR);
 }
 
 /*************************************************
@@ -116,6 +98,44 @@ static void SecocReadTripCount(uint32_t* pValue)
                 (const uint8*)NvM_BlockDescriptor[NvMBlock_SecOc_count - 1u]
                 .NvmRamBlockDataAddress,
             FVM_TRIP_COUNTER_VALUE_NVMBLOCK_LEN);
+    }
+}
+
+
+static uint8 TripCntIsFaultStatus(NvM_RequestResultType requestResult)          //判断SecOc_count是否属于故障状态
+{
+    if ((requestResult == NVM_REQ_NOT_OK) ||                                    
+        (requestResult == NVM_REQ_INTEGRITY_FAILED) ||                          
+        (requestResult == NVM_REQ_REDUNDANCY_FAILED) ||                         
+        (requestResult == NVM_REQ_NV_INVALIDATED) ||                            
+        (requestResult == NVM_REQ_CANCELED))                                    
+    {
+        return 1;                                                              //返回1表示故障状态
+    }
+
+    return 0;                                                                  
+}
+
+
+void SecocTripCntDtcMonitor_200ms(void)                                         //200ms周期监控SecOc_count这个block当前状态
+{
+    NvM_RequestResultType requestResult = NVM_REQ_PENDING;                      
+    uint8 isEnable = GetTripCounterDetectEnable();                              //监测使能条件是否满足
+
+    if (isEnable == 0)                                                         
+    {
+        return;                                                                
+    }
+
+    NvM_GetErrorStatus(NvMBlock_SecOc_count, &requestResult);             
+
+    if (requestResult == NVM_REQ_OK)                                            
+    {
+        Dem_SetEventStatus(EventParameter_0xE00444, DEM_EVENT_STATUS_PASSED);   
+    }
+    else if (TripCntIsFaultStatus(requestResult) != 0)                         
+    {
+        Dem_SetEventStatus(EventParameter_0xE00444, DEM_EVENT_STATUS_FAILED);   
     }
 }
 

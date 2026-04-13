@@ -28,6 +28,8 @@
 #include "Dem.h"
 #include "fvm.h"
 #include "Rte_E2EXf.h"
+
+#include "taskPowerManage.h"
 #include "logHal.h"
 #include "Vss.h"
 
@@ -10397,22 +10399,33 @@ void Rte_COMCbk_IIdentityChlg_ICB_CONNCANFD_Event_FrS67_CONTROLLER_0_IAM_Rx(void
         5、方向: IAM To ZXD;
     */
 
-    uint8 IIdentityChlg[8] = {0};
-    Com_ReceiveSignal(IIdentityChlg_ICB_CONNCANFD_Event_FrS67_CONTROLLER_0_IAM_Rx, IIdentityChlg); // 见Com_PBcfg.c
+    static uint8 IIdentityChlgBase[8] = {0};
+    static uint8 IIdentityChlg[8] = {0};
+    Com_ReceiveSignal(IIdentityChlg_ICB_CONNCANFD_Event_FrS67_CONTROLLER_0_IAM_Rx, IIdentityChlgBase); // 见Com_PBcfg.c
+    for (uint8 i = 0; i < 8; i++) {
+        IIdentityChlg[7 - i] = IIdentityChlgBase[i];
+    }
+
     TBOX_PRINT("IIdentityChlg: 0x%02X %02X %02X %02X %02X %02X %02X %02X\n", 
         IIdentityChlg[0], IIdentityChlg[1], IIdentityChlg[2], IIdentityChlg[3], 
         IIdentityChlg[4], IIdentityChlg[5], IIdentityChlg[6], IIdentityChlg[7]);
  
-    uint8 IIAMIdentityResp[8] = {0};
-    uint32 status = Vss_Challenge_Response(IIdentityChlg, IIAMIdentityResp);
+    static uint8 IIAMIdentityRespBase[8] = {0};
+    static uint8 IIAMIdentityResp[8] = {0};
+    uint32 status = Vss_Challenge_Response(IIdentityChlg, IIAMIdentityRespBase);
+    for (uint8 i = 0; i < 8; i++) {
+        IIAMIdentityResp[7 - i] = IIAMIdentityRespBase[i];
+    }
+
     TBOX_PRINT("IIAMIdentityResp status: %d\n", status);
-    Com_SendSignal(IIAMIdentityResp_IAM_CONNCAN_Event_FrS20_CONTROLLER_0_IAM_Tx, IIAMIdentityResp);
+    Com_SendSignal(IIAMIdentityResp_IAM_CONNCAN_Event_FrS20_CONTROLLER_0_IAM_Tx, &IIAMIdentityResp);
 
     /** DO NOT CHANGE THIS COMMENT!
      * </USERBLOCK>
      */
 }
 
+static uint8 Rx_SyncMsgCnt = 0;
 void Rte_COMCbk_SecuredIPdu_ICC_SecOC_SyncMsg_CO_synthesized_ICBVC_SecOC_SyncMsg__CONTROLLER_0_IAM_Rx(void)
 {
     /** DO NOT CHANGE THIS COMMENT!
@@ -10422,23 +10435,25 @@ void Rte_COMCbk_SecuredIPdu_ICC_SecOC_SyncMsg_CO_synthesized_ICBVC_SecOC_SyncMsg
     uint32 ICBVC_SecOC_SyncMsg_TripCnt = 0; 
     uint32 ICBVC_SecOC_SyncMsg_ResetCnt = 0; 
     Com_ReceiveSignal(SecuredIPdu_ICC_SecOC_SyncMsg_CO_synthesized_ICBVC_SecOC_SyncMsg__CONTROLLER_0_IAM_Rx,ICBVC_SecOC_SyncMsg);
-
-    ICBVC_SecOC_SyncMsg_TripCnt |= ICBVC_SecOC_SyncMsg[0] << 16;
-    ICBVC_SecOC_SyncMsg_TripCnt |= ICBVC_SecOC_SyncMsg[1] << 8;
+    ICBVC_SecOC_SyncMsg_TripCnt |= ICBVC_SecOC_SyncMsg[4] << 16;
+    ICBVC_SecOC_SyncMsg_TripCnt |= ICBVC_SecOC_SyncMsg[3] << 8;
     ICBVC_SecOC_SyncMsg_TripCnt |= ICBVC_SecOC_SyncMsg[2] ;
     
-    ICBVC_SecOC_SyncMsg_ResetCnt |= ICBVC_SecOC_SyncMsg[3] << 8;
-    ICBVC_SecOC_SyncMsg_ResetCnt |= ICBVC_SecOC_SyncMsg[4] ;
+    ICBVC_SecOC_SyncMsg_ResetCnt |= ICBVC_SecOC_SyncMsg[1] << 8;
+    ICBVC_SecOC_SyncMsg_ResetCnt |= ICBVC_SecOC_SyncMsg[0] ;
 
     Fvm_UpdateSynCounters(ICBVC_SecOC_SyncMsg_TripCnt, ICBVC_SecOC_SyncMsg_ResetCnt);
 
-    static uint8 Rx_SyncMsgCnt = 0;
+    TBOX_PRINT("TripCnt: 0x%x, ResetCnt: 0x%x\n", ICBVC_SecOC_SyncMsg_TripCnt, ICBVC_SecOC_SyncMsg_ResetCnt);
 
-    if (Rx_SyncMsgCnt++ >= 6) /**1s 发三帧 */
+    if(GetSyncMsgLossAndIccEnable()==1)
     {
-        /* code */
-        Rx_SyncMsgCnt = 0;
-        Dem_SetEventStatus(EventParameter_0xD60087,DEM_EVENT_STATUS_PASSED); /***Continuous receive for 2s*/
+        if (Rx_SyncMsgCnt++ >= 6) /**1s 发三帧 */
+        {
+            /* code */
+            Rx_SyncMsgCnt = 0;
+            Dem_SetEventStatus(EventParameter_0xD60087,DEM_EVENT_STATUS_PASSED); /***Continuous receive for 2s*/
+        }
     }
     /* ComNotification Rte_COMCbk_SecuredIPdu_ICC_SecOC_SyncMsg_CO_synthesized_ICBVC_SecOC_SyncMsg__CONTROLLER_0_IAM_Rx code defined by User */
     /** DO NOT CHANGE THIS COMMENT!
@@ -10452,7 +10467,11 @@ void Rte_COMCbkRxTOut_SecuredIPdu_ICC_SecOC_SyncMsg_CO_synthesized_ICBVC_SecOC_S
      * <USERBLOCK Rte_COMCbkRxTOut_SecuredIPdu_ICC_SecOC_SyncMsg_CO_synthesized_ICBVC_SecOC_SyncMsg__CONTROLLER_0_IAM_Rx>
      */
     /* ComTimeoutNotification Rte_COMCbkRxTOut_SecuredIPdu_ICC_SecOC_SyncMsg_CO_synthesized_ICBVC_SecOC_SyncMsg__CONTROLLER_0_IAM_Rx code defined by User */
-    Dem_SetEventStatus(EventParameter_0xD60087,DEM_EVENT_STATUS_FAILED);/**TimeOut is 5.0s*/
+    if(GetSyncMsgLossAndIccEnable()==1)
+    {
+        Rx_SyncMsgCnt = 0;
+        Dem_SetEventStatus(EventParameter_0xD60087,DEM_EVENT_STATUS_FAILED);/**TimeOut is 5.0s*/
+    }
     /** DO NOT CHANGE THIS COMMENT!
      * </USERBLOCK>
      */
@@ -11548,21 +11567,23 @@ void Rte_COMCbk_IIBS_20ms_Group11_IBS_CHCANFD_20ms_FrP11_CONTROLLER_0_IAM_Rx(voi
 }
 uint8 Rx_0x1F1_100msTimeoutFlag = FALSE;
 uint16 Rx_0x1F1_100msTimeoutCnt = 0 ;
-
 void Rte_COMCbk_IICBVC_20ms_Group03_ICBVC_RZCUCANFD_20ms_FrP03_CONTROLLER_0_IAM_Rx(void)
 {
     /** DO NOT CHANGE THIS COMMENT!
      * <USERBLOCK Rte_COMCbk_IICBVC_20ms_Group03_ICBVC_RZCUCANFD_20ms_FrP03_CONTROLLER_0_IAM_Rx>
      */
-    static uint8 Rx_0x1F1_MsgCnt = 0;
-    if (Rx_0x1F1_MsgCnt ++ >= 20) /**Cycle is 20ms */
+    if(GetSyncMsgLossAndIccEnable())
     {
-        /* code */
-        Rx_0x1F1_MsgCnt = 0;
-        Dem_SetEventStatus(EventParameter_0xD60087,DEM_EVENT_STATUS_PASSED); /***Continuous receive for 40ms*/
+        static uint8 Rx_0x1F1_MsgCnt = 0;
+        if (Rx_0x1F1_MsgCnt ++ >= 20) /**Cycle is 20ms */
+        {
+            /* code */
+            Rx_0x1F1_MsgCnt = 0;
+            Dem_SetEventStatus(EventParameter_0xC14687,DEM_EVENT_STATUS_PASSED); /***Continuous receive for 40ms*/
+        }
+        Rx_0x1F1_100msTimeoutFlag = FALSE ;
+        Rx_0x1F1_100msTimeoutCnt = 0;
     }
-    Rx_0x1F1_100msTimeoutFlag = FALSE ;
-    Rx_0x1F1_100msTimeoutCnt = 0;
     /* ComNotification Rte_COMCbk_IICBVC_20ms_Group03_ICBVC_RZCUCANFD_20ms_FrP03_CONTROLLER_0_IAM_Rx code defined by User */
     /** DO NOT CHANGE THIS COMMENT!
      * </USERBLOCK>
@@ -11575,24 +11596,27 @@ void Rte_COMCbkRxTOut_IICBVC_20ms_Group03_ICBVC_RZCUCANFD_20ms_FrP03_CONTROLLER_
      * <USERBLOCK Rte_COMCbkRxTOut_IICBVC_20ms_Group03_ICBVC_RZCUCANFD_20ms_FrP03_CONTROLLER_0_IAM_Rx>
      */
     /**timeout is 5 帧 ，Timeout is 5* 20 = 100ms**/
-    Rx_0x1F1_100msTimeoutFlag = TRUE ;
-    Rx_0x1F1_100msTimeoutCnt++;
-    /****/
-    if(Rx_0x1F1_100msTimeoutCnt % 2 == 0) /**10帧 */
+    if(GetSyncMsgLossAndIccEnable())
     {
+        Rx_0x1F1_100msTimeoutFlag = TRUE ;
+        Rx_0x1F1_100msTimeoutCnt++;
+        /****/
+        if(Rx_0x1F1_100msTimeoutCnt % 2 == 0) /**10帧 */
+        {
+            
+        }
+        if(Rx_0x1F1_100msTimeoutCnt % 4 == 0) /**20帧 */
+        {
+    
+        }
+        if(Rx_0x1F1_100msTimeoutCnt % 5 == 0) /**25帧 */
+        {
 
-    }
-    else if(Rx_0x1F1_100msTimeoutCnt % 4 == 0) /**20帧 */
-    {
-
-    }
-    else if(Rx_0x1F1_100msTimeoutCnt % 5 == 0) /**25帧 */
-    {
-
-    }
-    else if(Rx_0x1F1_100msTimeoutCnt % 20 == 0) /**100帧 2s DTC */
-    {
-        Dem_SetEventStatus(EventParameter_0xD60087,DEM_EVENT_STATUS_FAILED); /***Continuous receive for 40ms*/
+        }
+        if(Rx_0x1F1_100msTimeoutCnt % 20 == 0) /**100帧 2s DTC */
+        {
+            Dem_SetEventStatus(EventParameter_0xC14687,DEM_EVENT_STATUS_FAILED); /***Continuous receive for 40ms*/
+        }
     }
     
     /* ComTimeoutNotification Rte_COMCbkRxTOut_IICBVC_20ms_Group03_ICBVC_RZCUCANFD_20ms_FrP03_CONTROLLER_0_IAM_Rx code defined by User */

@@ -1514,14 +1514,6 @@ extern FUNC(Std_ReturnType, DCM_CODE) Dcm_UDS0x22(
     P2VAR(Dcm_NegativeResponseCodeType, AUTOMATIC, DCM_VAR) ErrorCode);
 #endif /* STD_ON == DCM_UDS_SERVICE0X22_ENABLED */
 
-#if (STD_ON == DCM_UDS_SERVICE0XBB_22_ENABLED)
-extern FUNC(Std_ReturnType, DCM_CODE) Dcm_UDS0xBB(
-    Dcm_OpStatusType OpStatus,
-    uint8 ProtocolCtrlId,
-    P2VAR(Dcm_NegativeResponseCodeType, AUTOMATIC, DCM_VAR) ErrorCode);
-#endif /* STD_ON == DCM_UDS_SERVICE0XBB_22_ENABLED */
-
-
 #if (STD_ON == DCM_UDS_SERVICE0X23_ENABLED)
 FUNC(Std_ReturnType, DCM_CODE)
 Dcm_UDS0x23(

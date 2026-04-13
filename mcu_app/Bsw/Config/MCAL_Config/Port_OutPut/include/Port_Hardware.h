@@ -144,7 +144,7 @@ extern volatile  APortReg* const
 extern volatile  DNFAReg* const
                  Port_GaaDnfaReg_BaseAddress[PORT_NUM_OF_DNFA_REG];
 
-/*extern volatile  FCLAReg* const Port_GpFclaReg_BaseAddress;*/
+extern volatile  FCLAReg* const Port_GpFclaReg_BaseAddress;
 
 #define PORT_STOP_SEC_CONST_UNSPECIFIED
 #include PORT_MEMMAP_FILE

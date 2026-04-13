@@ -34,12 +34,9 @@ const FlashParamMap_t FlashParamMap[E_PARAMETER_INFO_MAX_NUM] = {
     {E_PARAMETER_INFO_IMEI,                 24,     NvMBlock_DIDF130,   NULL},
     {E_PARAMETER_INFO_SN,                   16,     NvMBlock_DIDF18C,   NvMBlockRamBuffer6},
     {E_PARAMETER_INFO_VIN,                  17,     NvMBlock_DIDF190,   NvMBlockRamBuffer7},
-    {E_PARAMETER_INFO_TSPAddr,              32,     NvMBlock_DIDC007,   NvMBlockRamBuffer17},
-    {E_PARAMETER_INFO_TSPPort,              6,      NvMBlock_DIDC009,   NvMBlockRamBuffer19},
-    {E_PARAMETER_INFO_ECallNumber,          15,     NvMBlock_DIDF130,   NULL},
+    {E_PARAMETER_INFO_ECallNumber,          15,     NvMBlock_DIDCA02,   NvMBlockRamBuffer33},
     {E_PARAMETER_INFO_ManufactureData,      3,      NvMBlock_DIDF18B,   NvMBlockRamBuffer5},
     {E_PARAMETER_INFO_ParatNumber,          5,      NvMBlock_DIDF130,   NULL},
-    {E_PARAMETER_INFO_SupIdentifier,        5,      NvMBlock_DIDF130,    NULL},
 
 };
 

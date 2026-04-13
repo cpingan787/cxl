@@ -141,7 +141,7 @@
  *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\Config\ECUC\test_Port_Port0_ecuc.arxml
  *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\modules\port\R422_PORT_F1x_BSWMDT.arxml
  *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\stubs\4.2.2\Dem\xml\Dem_Port.arxml
- * GENERATED ON:  19 Mar 2026 - 17:19:40
+ * GENERATED ON:   2 Apr 2026 - 19:42:59
  */
 
 /*******************************************************************************
@@ -226,6 +226,9 @@ CONST(Port_ConfigType, PORT_CONST)
     /* pPortDNFARegs */
     &Port_GstDNFARegs[0],
 
+    /* pPortANFRegs */
+    &Port_GstFCLARegs[0],
+
     /* ucNoOfPortNumRegs */
     0x09U,
 
@@ -239,10 +242,13 @@ CONST(Port_ConfigType, PORT_CONST)
     0x01U,
 
     /* ucNoOfPinChangeableDetails */
-    0x07U,
+    0x1CU,
 
     /* ucNoOfDNFARegs */
-    0x01U
+    0x01U,
+
+    /* ucNoOfFCLARegs */
+    0x06U
   }
 };
 
@@ -266,7 +272,7 @@ CONST(Port_NumRegs, PORT_CONST)
     0x00008AD6UL,
 
     /* ulMaskConfigPMSRRegVal */
-    0xFFDF8AD6UL,
+    0x80008AD6UL,
 
     /* ulInitModePMCSRRegVal */
     0x000009CFUL,
@@ -284,7 +290,7 @@ CONST(Port_NumRegs, PORT_CONST)
     0x0000U,
 
     /* usInitModePIBCRegVal */
-    0x0250U,
+    0x0050U,
 
     /* usInitModePIPCRegVal */
     0x0000U,
@@ -311,7 +317,7 @@ CONST(Port_NumRegs, PORT_CONST)
     0x00U,
 
     /* ucDeepStopSupp */
-    0x10U
+    0x00U
   },
 
   /* Index: 1 - PortConfigSet_0_Port_Group_1 */
@@ -326,7 +332,7 @@ CONST(Port_NumRegs, PORT_CONST)
     0x0000F314UL,
 
     /* ulMaskConfigPMSRRegVal */
-    0xFFFFF314UL,
+    0xFFCFF314UL,
 
     /* ulInitModePMCSRRegVal */
     0x00000130UL,
@@ -371,7 +377,7 @@ CONST(Port_NumRegs, PORT_CONST)
     0x01U,
 
     /* ucDeepStopSupp */
-    0x10U
+    0x00U
   },
 
   /* Index: 2 - PortConfigSet_0_Port_Group_8 */
@@ -386,7 +392,7 @@ CONST(Port_NumRegs, PORT_CONST)
     0x0000EF3EUL,
 
     /* ulMaskConfigPMSRRegVal */
-    0xFFFFEF3EUL,
+    0xFF3FEF3EUL,
 
     /* ulInitModePMCSRRegVal */
     0x000000AEUL,
@@ -410,7 +416,7 @@ CONST(Port_NumRegs, PORT_CONST)
     0x0000U,
 
     /* usInitModePURegVal */
-    0x0025U,
+    0x0005U,
 
     /* usInitModePDRegVal */
     0x0002U,
@@ -431,7 +437,7 @@ CONST(Port_NumRegs, PORT_CONST)
     0x02U,
 
     /* ucDeepStopSupp */
-    0x10U
+    0x00U
   },
 
   /* Index: 3 - PortConfigSet_0_Port_Group_9 */
@@ -446,7 +452,7 @@ CONST(Port_NumRegs, PORT_CONST)
     0x0000FFB8UL,
 
     /* ulMaskConfigPMSRRegVal */
-    0xFFFFFFB8UL,
+    0xFFFBFFB8UL,
 
     /* ulInitModePMCSRRegVal */
     0x00000004UL,
@@ -491,7 +497,7 @@ CONST(Port_NumRegs, PORT_CONST)
     0x03U,
 
     /* ucDeepStopSupp */
-    0x11U
+    0x01U
   },
 
   /* Index: 4 - PortConfigSet_0_Port_Group_10 */
@@ -506,7 +512,7 @@ CONST(Port_NumRegs, PORT_CONST)
     0x00002BC2UL,
 
     /* ulMaskConfigPMSRRegVal */
-    0xFFF32BC2UL,
+    0xE5F32BC2UL,
 
     /* ulInitModePMCSRRegVal */
     0x00001A0CUL,
@@ -563,13 +569,13 @@ CONST(Port_NumRegs, PORT_CONST)
     0x00000000UL,
 
     /* ulInitModePMSRRegVal */
-    0x00002D30UL,
+    0x0000ED30UL,
 
     /* ulMaskConfigPMSRRegVal */
-    0xFFFF2D30UL,
+    0xFFFFED30UL,
 
     /* ulInitModePMCSRRegVal */
-    0x00006FFCUL,
+    0x00000FFCUL,
 
     /* ulInitModePODCRegVal */
     0x00000000UL,
@@ -623,13 +629,13 @@ CONST(Port_NumRegs, PORT_CONST)
     0x00000000UL,
 
     /* ulInitModePMSRRegVal */
-    0x0000FFFAUL,
+    0x0000FFFEUL,
 
     /* ulMaskConfigPMSRRegVal */
-    0xFFFFFFFAUL,
+    0xFFFFFFFEUL,
 
     /* ulInitModePMCSRRegVal */
-    0x00000006UL,
+    0x00000000UL,
 
     /* ulInitModePODCRegVal */
     0x00000000UL,
@@ -659,13 +665,13 @@ CONST(Port_NumRegs, PORT_CONST)
     0x0000U,
 
     /* usInitModePFCERegVal */
-    0x0002U,
+    0x0000U,
 
     /* usInitModePFCRegVal */
     0x0000U,
 
     /* usInitModePFCAERegVal */
-    0x0002U,
+    0x0000U,
 
     /* ucPortIndex */
     0x06U,
@@ -851,7 +857,7 @@ CONST(Port_JTAGRegs, PORT_CONST)
     0x00U,
 
     /* ucDeepStopSupp */
-    0x10U
+    0x00U
   }
 };
 
@@ -884,7 +890,7 @@ CONST(Port_AnalogRegs, PORT_CONST)
     0x00U,
 
     /* ucDeepStopSupp */
-    0x10U
+    0x00U
   },
 
   /* Index: 1 - PortConfigSet_0_Port_Group_1 */
@@ -938,7 +944,43 @@ CONST(Port_IPortRegs, PORT_CONST) Port_GstInputRegs[PORT_NUM_OF_INPUT_PORTS] =
 CONST(Port_PinChangeableDetails, PORT_CONST) 
           Port_GstPinChangeableDetailsList[PORT_NUM_OF_PINS_MODIFIABLE] =
 {
-  /* Index: 0 - PortGroup0_PortPin2 */
+  /* Index: 0 - PortGroup0_PortPin0 */
+  {
+    /* ddPinId */
+    0x0000U,
+
+    /* usPinPositionMask */
+    0x0001U,
+
+    /* usChangeableConfigVal */
+    0x0000U,
+
+    /* ucPortGroupIndex */
+    0x00U,
+
+    /* ucPortType */
+    0x70U
+  },
+
+  /* Index: 1 - PortGroup0_PortPin1 */
+  {
+    /* ddPinId */
+    0x0001U,
+
+    /* usPinPositionMask */
+    0x0002U,
+
+    /* usChangeableConfigVal */
+    0x0000U,
+
+    /* ucPortGroupIndex */
+    0x00U,
+
+    /* ucPortType */
+    0x70U
+  },
+
+  /* Index: 2 - PortGroup0_PortPin2 */
   {
     /* ddPinId */
     0x0002U,
@@ -953,10 +995,46 @@ CONST(Port_PinChangeableDetails, PORT_CONST)
     0x00U,
 
     /* ucPortType */
-    0x20U
+    0x70U
   },
 
-  /* Index: 1 - PortGroup0_PortPin5 */
+  /* Index: 3 - PortGroup0_PortPin3 */
+  {
+    /* ddPinId */
+    0x0003U,
+
+    /* usPinPositionMask */
+    0x0008U,
+
+    /* usChangeableConfigVal */
+    0x0000U,
+
+    /* ucPortGroupIndex */
+    0x00U,
+
+    /* ucPortType */
+    0x70U
+  },
+
+  /* Index: 4 - PortGroup0_PortPin4 */
+  {
+    /* ddPinId */
+    0x0004U,
+
+    /* usPinPositionMask */
+    0x0010U,
+
+    /* usChangeableConfigVal */
+    0x0000U,
+
+    /* ucPortGroupIndex */
+    0x00U,
+
+    /* ucPortType */
+    0x60U
+  },
+
+  /* Index: 5 - PortGroup0_PortPin5 */
   {
     /* ddPinId */
     0x0005U,
@@ -971,10 +1049,244 @@ CONST(Port_PinChangeableDetails, PORT_CONST)
     0x00U,
 
     /* ucPortType */
-    0x40U
+    0x60U
   },
 
-  /* Index: 2 - PortGroup8_PortPin10 */
+  /* Index: 6 - PortGroup0_PortPin6 */
+  {
+    /* ddPinId */
+    0x0006U,
+
+    /* usPinPositionMask */
+    0x0040U,
+
+    /* usChangeableConfigVal */
+    0x0000U,
+
+    /* ucPortGroupIndex */
+    0x00U,
+
+    /* ucPortType */
+    0x70U
+  },
+
+  /* Index: 7 - PortGroup0_PortPin7 */
+  {
+    /* ddPinId */
+    0x0007U,
+
+    /* usPinPositionMask */
+    0x0080U,
+
+    /* usChangeableConfigVal */
+    0x0000U,
+
+    /* ucPortGroupIndex */
+    0x00U,
+
+    /* ucPortType */
+    0x70U
+  },
+
+  /* Index: 8 - PortGroup0_PortPin8 */
+  {
+    /* ddPinId */
+    0x0008U,
+
+    /* usPinPositionMask */
+    0x0100U,
+
+    /* usChangeableConfigVal */
+    0x0000U,
+
+    /* ucPortGroupIndex */
+    0x00U,
+
+    /* ucPortType */
+    0x70U
+  },
+
+  /* Index: 9 - PortGroup0_PortPin9 */
+  {
+    /* ddPinId */
+    0x0009U,
+
+    /* usPinPositionMask */
+    0x0200U,
+
+    /* usChangeableConfigVal */
+    0x0000U,
+
+    /* ucPortGroupIndex */
+    0x00U,
+
+    /* ucPortType */
+    0x60U
+  },
+
+  /* Index: 10 - PortGroup0_PortPin10 */
+  {
+    /* ddPinId */
+    0x000AU,
+
+    /* usPinPositionMask */
+    0x0400U,
+
+    /* usChangeableConfigVal */
+    0x0000U,
+
+    /* ucPortGroupIndex */
+    0x00U,
+
+    /* ucPortType */
+    0x60U
+  },
+
+  /* Index: 11 - PortGroup0_PortPin11 */
+  {
+    /* ddPinId */
+    0x000BU,
+
+    /* usPinPositionMask */
+    0x0800U,
+
+    /* usChangeableConfigVal */
+    0x0000U,
+
+    /* ucPortGroupIndex */
+    0x00U,
+
+    /* ucPortType */
+    0x70U
+  },
+
+  /* Index: 12 - PortGroup0_PortPin12 */
+  {
+    /* ddPinId */
+    0x000CU,
+
+    /* usPinPositionMask */
+    0x1000U,
+
+    /* usChangeableConfigVal */
+    0x0000U,
+
+    /* ucPortGroupIndex */
+    0x00U,
+
+    /* ucPortType */
+    0x60U
+  },
+
+  /* Index: 13 - PortGroup0_PortPin13 */
+  {
+    /* ddPinId */
+    0x000DU,
+
+    /* usPinPositionMask */
+    0x2000U,
+
+    /* usChangeableConfigVal */
+    0x0000U,
+
+    /* ucPortGroupIndex */
+    0x00U,
+
+    /* ucPortType */
+    0x60U
+  },
+
+  /* Index: 14 - PortGroup0_PortPin14 */
+  {
+    /* ddPinId */
+    0x000EU,
+
+    /* usPinPositionMask */
+    0x4000U,
+
+    /* usChangeableConfigVal */
+    0x0000U,
+
+    /* ucPortGroupIndex */
+    0x00U,
+
+    /* ucPortType */
+    0x60U
+  },
+
+  /* Index: 15 - PortGroup1_PortPin4 */
+  {
+    /* ddPinId */
+    0x0013U,
+
+    /* usPinPositionMask */
+    0x0010U,
+
+    /* usChangeableConfigVal */
+    0x0000U,
+
+    /* ucPortGroupIndex */
+    0x01U,
+
+    /* ucPortType */
+    0x70U
+  },
+
+  /* Index: 16 - PortGroup1_PortPin5 */
+  {
+    /* ddPinId */
+    0x0014U,
+
+    /* usPinPositionMask */
+    0x0020U,
+
+    /* usChangeableConfigVal */
+    0x0000U,
+
+    /* ucPortGroupIndex */
+    0x01U,
+
+    /* ucPortType */
+    0x70U
+  },
+
+  /* Index: 17 - PortGroup8_PortPin6 */
+  {
+    /* ddPinId */
+    0x0021U,
+
+    /* usPinPositionMask */
+    0x0040U,
+
+    /* usChangeableConfigVal */
+    0x0000U,
+
+    /* ucPortGroupIndex */
+    0x02U,
+
+    /* ucPortType */
+    0x60U
+  },
+
+  /* Index: 18 - PortGroup8_PortPin7 */
+  {
+    /* ddPinId */
+    0x0022U,
+
+    /* usPinPositionMask */
+    0x0080U,
+
+    /* usChangeableConfigVal */
+    0x0000U,
+
+    /* ucPortGroupIndex */
+    0x02U,
+
+    /* ucPortType */
+    0x70U
+  },
+
+  /* Index: 19 - PortGroup8_PortPin10 */
   {
     /* ddPinId */
     0x0025U,
@@ -992,7 +1304,7 @@ CONST(Port_PinChangeableDetails, PORT_CONST)
     0x20U
   },
 
-  /* Index: 3 - PortGroup8_PortPin11 */
+  /* Index: 20 - PortGroup8_PortPin11 */
   {
     /* ddPinId */
     0x0026U,
@@ -1010,7 +1322,25 @@ CONST(Port_PinChangeableDetails, PORT_CONST)
     0x20U
   },
 
-  /* Index: 4 - PortGroup10_PortPin2 */
+  /* Index: 21 - PortGroup9_PortPin2 */
+  {
+    /* ddPinId */
+    0x002AU,
+
+    /* usPinPositionMask */
+    0x0004U,
+
+    /* usChangeableConfigVal */
+    0x0000U,
+
+    /* ucPortGroupIndex */
+    0x03U,
+
+    /* ucPortType */
+    0x70U
+  },
+
+  /* Index: 22 - PortGroup10_PortPin2 */
   {
     /* ddPinId */
     0x0031U,
@@ -1028,7 +1358,7 @@ CONST(Port_PinChangeableDetails, PORT_CONST)
     0x40U
   },
 
-  /* Index: 5 - PortGroup10_PortPin3 */
+  /* Index: 23 - PortGroup10_PortPin3 */
   {
     /* ddPinId */
     0x0032U,
@@ -1046,7 +1376,61 @@ CONST(Port_PinChangeableDetails, PORT_CONST)
     0x60U
   },
 
-  /* Index: 6 - PortGroup10_PortPin15 */
+  /* Index: 24 - PortGroup10_PortPin9 */
+  {
+    /* ddPinId */
+    0x0038U,
+
+    /* usPinPositionMask */
+    0x0200U,
+
+    /* usChangeableConfigVal */
+    0x0000U,
+
+    /* ucPortGroupIndex */
+    0x04U,
+
+    /* ucPortType */
+    0x70U
+  },
+
+  /* Index: 25 - PortGroup10_PortPin11 */
+  {
+    /* ddPinId */
+    0x003AU,
+
+    /* usPinPositionMask */
+    0x0800U,
+
+    /* usChangeableConfigVal */
+    0x0000U,
+
+    /* ucPortGroupIndex */
+    0x04U,
+
+    /* ucPortType */
+    0x70U
+  },
+
+  /* Index: 26 - PortGroup10_PortPin12 */
+  {
+    /* ddPinId */
+    0x003BU,
+
+    /* usPinPositionMask */
+    0x1000U,
+
+    /* usChangeableConfigVal */
+    0x0000U,
+
+    /* ucPortGroupIndex */
+    0x04U,
+
+    /* ucPortType */
+    0x70U
+  },
+
+  /* Index: 27 - PortGroup10_PortPin15 */
   {
     /* ddPinId */
     0x003EU,
@@ -1089,7 +1473,64 @@ CONST(Port_DNFARegs, PORT_CONST) Port_GstDNFARegs[PORT_NUM_OF_DNFA] =
 
 
 /* Array for Analog and/or Digital Filter registers */
-/* CONST(Port_FCLARegs, PORT_CONST) Port_GstFCLARegs[PORT_NUM_OF_FCLA]; */
+CONST(Port_FCLARegs, PORT_CONST) Port_GstFCLARegs[PORT_NUM_OF_FCLA] =
+{
+  /* Index: 0 - PortConfigSet_1_FilterGroup_FCLA0CTL6_INTPH */
+  {
+    /* usFCLARegOffset */
+    0x0058U,
+
+    /* ucFCLACTL */
+    0x01U
+  },
+
+  /* Index: 1 - PortConfigSet_1_FilterGroup_FCLA0CTL1_INTPL */
+  {
+    /* usFCLARegOffset */
+    0x0024U,
+
+    /* ucFCLACTL */
+    0x02U
+  },
+
+  /* Index: 2 - PortConfigSet_1_FilterGroup_FCLA0CTL2_INTPL */
+  {
+    /* usFCLARegOffset */
+    0x0028U,
+
+    /* ucFCLACTL */
+    0x02U
+  },
+
+  /* Index: 3 - PortConfigSet_1_FilterGroup_FCLA0CTL5_INTPL */
+  {
+    /* usFCLARegOffset */
+    0x0034U,
+
+    /* ucFCLACTL */
+    0x02U
+  },
+
+  /* Index: 4 - PortConfigSet_1_FilterGroup_FCLA0CTL6_INTPL */
+  {
+    /* usFCLARegOffset */
+    0x0038U,
+
+    /* ucFCLACTL */
+    0x01U
+  },
+
+  /* Index: 5 - PortConfigSet_1_FilterGroup_FCLA0CTL7_INTPL */
+  {
+    /* usFCLARegOffset */
+    0x003CU,
+
+    /* ucFCLACTL */
+    0x02U
+  }
+};
+
+
 
 #define PORT_STOP_SEC_CONFIG_DATA_UNSPECIFIED
 #include PORT_MEMMAP_FILE

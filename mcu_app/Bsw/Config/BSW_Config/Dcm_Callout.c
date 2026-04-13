@@ -194,7 +194,7 @@ Std_ReturnType Dcm_GetSpecificCauseCode(Dcm_SpecificCauseCodeType* code)
     /* custom code.... */
     /* *code: the Specific Cause Code defined by customer.the 4th data byte for neg Rx */
     /* TODO: Set *code value. default value/internal NRC22 : 0xFF */
-    *code = 0xFFu;
+    *code = 0x01u;
     return E_OK;
     /** DO NOT CHANGE THIS COMMENT!
      * </USERBLOCK>

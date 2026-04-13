@@ -47,7 +47,6 @@ typedef struct
 //void VehicleToCpuUartTxDisable(void);
 //void VehicleToCpuUartTxEnable(void);
 uint8_t GetVehicleInfor(VehicleInfor_t *vehicleInfor);
-uint8_t CheckVehicleModeIsTransport(void);
 
 void TaskVehicleDataToCpuInit(void);
 void TaskVehicleDataToCpu(void);

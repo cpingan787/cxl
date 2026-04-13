@@ -87,5 +87,7 @@ extern uint8  APP_GetWakeupHold(void);
 
 extern void APP_SetWakeupSource(uint8 WakeupSrc);
 extern void APP_GotoSleep(void);
+
+extern void Pre_LowPowerMode(void);
 #endif
 

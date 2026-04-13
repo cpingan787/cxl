@@ -31,6 +31,7 @@
 #include "NM.h"
 #include "Dem.h"
 #include "EcuM_Externals.h"
+#include "Port.h"
 
 #include "powerManageSdk.h"
 
@@ -504,4 +505,62 @@ void APP_GotoSleep(void)
 	/***for APP Close the 5G*/
 	APP_AllowedGodown();/***After APP Close the 5G invoke this*/
 }
+
 #endif
+
+void Pre_LowPowerMode(void)
+{
+	/* Close ECALL_BUTTON_PWR_EN */
+	Dio_WriteChannel(DioConf_DioChannel_DIO_Channel_CALL_BUTTON_PWR_EN_Pin1_0, STD_HIGH);
+
+	/* Can1_Txd*/
+	Port_SetToDioMode(Port_PortGroup00_PortPin00);
+	Port_SetPinDirection(Port_PortGroup00_PortPin00, PORT_PIN_IN);
+
+	/* Can2_Txd */
+	Port_SetToDioMode(Port_PortGroup00_PortPin30);
+	Port_SetPinDirection(Port_PortGroup00_PortPin30, PORT_PIN_IN);
+
+	/* Can3_Txd */
+	Port_SetToDioMode(Port_PortGroup00_PortPin80);
+	Port_SetPinDirection(Port_PortGroup00_PortPin80, PORT_PIN_IN);
+
+	/* Can3_Rxd */	
+	Port_SetToDioMode(Port_PortGroup00_PortPin70);
+	Port_SetPinDirection(Port_PortGroup00_PortPin70, PORT_PIN_IN);
+
+	/* Nad_Uart_Txd */
+	Port_SetToDioMode(Port_PortGroup1_PortPin5);
+	Port_SetPinDirection(Port_PortGroup1_PortPin5, PORT_PIN_IN);
+
+	/* Nad_Uart_Rxd */
+	Port_SetToDioMode(Port_PortGroup1_PortPin4);
+	Port_SetPinDirection(Port_PortGroup1_PortPin4, PORT_PIN_IN);
+
+	/* CAN2_STBY */
+	// Port_SetToDioMode(Port_PortGroup80_PortPin60);
+	// Port_SetPinDirection(Port_PortGroup80_PortPin60, PORT_PIN_IN);
+
+	/* MCU_HSM_SPI_CS */
+	Port_SetToDioMode(Port_PortGroup80_PortPin70);
+	Port_SetPinDirection(Port_PortGroup80_PortPin70, PORT_PIN_IN);
+
+	/* MCU_UWB_SPI_CS */
+	Port_SetToDioMode(Port_PortGroup90_PortPin20);
+	Port_SetPinDirection(Port_PortGroup90_PortPin20, PORT_PIN_IN);
+
+	/* ECALL_BUTTON_ADC */
+	/* 无法修改，默认为输入，专用引脚，模式不可变*/
+	// Port_SetToDioMode(Port_PortGroupAnalog10_PortPin60);
+	// Port_SetPinDirection(Port_PortGroupAnalog10_PortPin60, PORT_PIN_IN);
+
+	/* BT_UART_TXD */
+	Port_SetToDioMode(Port_PortGroup100_PortPin110);
+	Port_SetPinDirection(Port_PortGroup100_PortPin110, PORT_PIN_IN);
+
+	/* BT_UART_RXD */
+	Port_SetToDioMode(Port_PortGroup100_PortPin120);
+	Port_SetPinDirection(Port_PortGroup100_PortPin120, PORT_PIN_IN);
+
+}
+

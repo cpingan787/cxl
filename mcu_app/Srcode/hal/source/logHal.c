@@ -122,6 +122,7 @@ void LogHalSetMode(uint8_t mode)
     {
         if(g_debugMode == 1 || g_debugMode == 3)
         {
+            R_UART4_Create();
             R_UART4_Start();
             g_debugUartReciveCount = 0;
         }

@@ -160,27 +160,28 @@ static void SendLocationInfo(void)
     gnssSeq++;
     Com_SendSignal(IIAM_ZONE_100ms_Group35_IAM_CONNCANFD_100ms_ConFrP03_CONTROLLER_0_IAM_Tx_IGNSSUTCTime_IIAM_ZONE_100ms_Group35_IAM_CONNCANFD_100ms_ConFrP03_CONTROLLER_0_IAM_Tx, &locationInfo.svwTimestamp); // F9P的世界协调时
     uint8 gnssSignalStatus = 0;
-    if (statusLocation == 3)
+    if(statusLocation == 3||locationInfo.wireState != 0||(locationInfo.svwFlags&(~0xFFCC))!=0x33)
     {
-        gnssSignalStatus = 3;
-        Com_SendSignal(IIAM_100ms_Group56_IAM_ZONE_CONNCANFD_100ms_FrP56_CONTROLLER_0_IAM_Tx_IIAM_GNSS_Signal_Status_IIAM_100ms_Group56_IAM_ZONE_CONNCANFD_100ms_FrP56_CONTROLLER_0_IAM_Tx, &gnssSignalStatus); // GNSS数据通路状态 超时
-    }
-    else if (locationInfo.wireState != 0)
-    {
-        gnssSignalStatus = 1;
-        Com_SendSignal(IIAM_100ms_Group56_IAM_ZONE_CONNCANFD_100ms_FrP56_CONTROLLER_0_IAM_Tx_IIAM_GNSS_Signal_Status_IIAM_100ms_Group56_IAM_ZONE_CONNCANFD_100ms_FrP56_CONTROLLER_0_IAM_Tx, &gnssSignalStatus); // GNSS数据通路状态 天线异常
-    }
-    else if ((locationInfo.locationState & 0x3F) == 0)
-    {
-        gnssSignalStatus = 2;
-        Com_SendSignal(IIAM_100ms_Group56_IAM_ZONE_CONNCANFD_100ms_FrP56_CONTROLLER_0_IAM_Tx_IIAM_GNSS_Signal_Status_IIAM_100ms_Group56_IAM_ZONE_CONNCANFD_100ms_FrP56_CONTROLLER_0_IAM_Tx, &gnssSignalStatus); // GNSS数据通路状态 定位模组无法定位
+        gnssSignalStatus=1;
+        Com_SendSignal(IIAM_100ms_Group56_IAM_ZONE_CONNCANFD_100ms_FrP56_CONTROLLER_0_IAM_Tx_IIAM_GNSS_Signal_Status_IIAM_100ms_Group56_IAM_ZONE_CONNCANFD_100ms_FrP56_CONTROLLER_0_IAM_Tx, &gnssSignalStatus); // 定位数据有效标志位 1- 无效
     }
     else
     {
-        gnssSignalStatus = 0;
-        Com_SendSignal(IIAM_100ms_Group56_IAM_ZONE_CONNCANFD_100ms_FrP56_CONTROLLER_0_IAM_Tx_IIAM_GNSS_Signal_Status_IIAM_100ms_Group56_IAM_ZONE_CONNCANFD_100ms_FrP56_CONTROLLER_0_IAM_Tx, &gnssSignalStatus); // GNSS数据通路状态 正常
+        gnssSignalStatus=0;
+        Com_SendSignal(IIAM_100ms_Group56_IAM_ZONE_CONNCANFD_100ms_FrP56_CONTROLLER_0_IAM_Tx_IIAM_GNSS_Signal_Status_IIAM_100ms_Group56_IAM_ZONE_CONNCANFD_100ms_FrP56_CONTROLLER_0_IAM_Tx, &gnssSignalStatus); // 定位数据有效标志位 0- 有效
     }
     Com_SendSignal(ISatNoInPositionRTK_IAM_CONNCANFD_100ms_ConFrP02_CONTROLLER_0_IAM_Tx, &locationInfo.useSvsnum); // 主天线解算的卫星数量
+    uint8 positionAttitudeStatus = 0x17;
+    if(gnssSignalStatus!=0||locationInfo.wireState!=0)
+    {
+        positionAttitudeStatus = 0x07;
+        Com_SendSignal(IPositionAttitudeStatus_IAM_CONNCANFD_100ms_ConFrP02_CONTROLLER_0_IAM_Tx, &positionAttitudeStatus); //定位定向解状态
+    }
+    else
+    {
+        positionAttitudeStatus = 0x17;
+        Com_SendSignal(IPositionAttitudeStatus_IAM_CONNCANFD_100ms_ConFrP02_CONTROLLER_0_IAM_Tx, &positionAttitudeStatus); //定位定向解状态
+    }
     Com_SendSignal(ISatNum_IAM_BKPCANFD_1000ms_FrP65_CONTROLLER_0_IAM_Tx, &locationInfo.svsNum);                   // 可视的卫星数量
     uint16 hdop = locationInfo.svwHdop;
     Com_SendSignal(IIAM_ZONE_100ms_Group34_IAM_CONNCANFD_100ms_ConFrP03_CONTROLLER_0_IAM_Tx_IHdop_IIAM_ZONE_100ms_Group34_IAM_CONNCANFD_100ms_ConFrP03_CONTROLLER_0_IAM_Tx, &hdop); // 水平分量精度因子
@@ -262,10 +263,10 @@ static void SendSatInfo(void)
 }
 
 // 接收ZXD整车时间
-static uint8 year = 19;
-static uint8 month = 1, day = 1, hour = 0, min = 0, sec = 0;
 static void RecvZXDTimeInfo(void)
 {
+    uint8 year = 19;
+    uint8 month = 1, day = 1, hour = 0, min = 0, sec = 0;
     Com_ReceiveSignal(IVehTiPblshYear_ICBVC_RZCUCANFD_200ms_FrP50_CONTROLLER_0_IAM_Rx, &year);
     Com_ReceiveSignal(IVehTiPblshMth_ICBVC_RZCUCANFD_200ms_FrP50_CONTROLLER_0_IAM_Rx, &month);
     Com_ReceiveSignal(IVehTiPblshDay_ICBVC_RZCUCANFD_200ms_FrP50_CONTROLLER_0_IAM_Rx, &day);
@@ -278,6 +279,7 @@ static void RecvZXDTimeInfo(void)
     g_vehicleTime.hour = hour;
     g_vehicleTime.min = min;
     g_vehicleTime.sec = sec;
+    // TBOX_PRINT("year: %d, month: %d, day: %d, hour: %d, min: %d, sec: %d\r\n", year, month, day, hour, min, sec);
 }
 
 /*************************************************
@@ -289,7 +291,7 @@ static void RecvZXDTimeInfo(void)
                   -1：失败
   Others:
 *************************************************/
-uint8_t CanPeriodGetVehTime(uint8_t *year, uint8_t *month, uint8_t *day, uint8_t *hour, uint8_t *min, uint8_t *sec)
+int8_t CanPeriodGetVehTime(uint8_t *year, uint8_t *month, uint8_t *day, uint8_t *hour, uint8_t *min, uint8_t *sec)
 {
     if (year == NULL || month == NULL || day == NULL || hour == NULL || min == NULL || sec == NULL)
     {
@@ -332,6 +334,7 @@ int16_t CanPeriodCycleProcess(void)
     SendLocationInfo();
     SendSatInfo();
     RecvZXDTimeInfo();
+    return 0;
 #if (0)
     // 获取KL30电压
     uint32_t u16BAT_VOL = 0;

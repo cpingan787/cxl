@@ -251,7 +251,7 @@ uint32_t xQueueReceive(QueueHandle_t xQueue, void *pvBuffer, uint32_t xTicksToWa
     
     return pdTRUE;
 }
-#if(0)
+
 uint32_t xQueueReceiveFromISR(QueueHandle_t xQueue, void *pvBuffer, void *pxHigherPriorityTaskWoken)
 {
     my_queue_t *queue = GetQueueHandle(xQueue);
@@ -311,7 +311,7 @@ uint32_t xQueueReset(QueueHandle_t xQueue)
     
     return pdTRUE;
 }
-#endif
+
 SemaphoreHandle_t xSemaphoreCreateMutex(void)
 {
     // 查找可用的互斥锁

@@ -211,6 +211,7 @@ static FUNC(void, ECUM_CODE) EcuM_InternalInit(void)
 /**
  * Activities sequence before OS started.
  */
+extern Mcu_ResetType Mcu_ResetReason;
 static FUNC(void, ECUM_CODE) EcuM_StartPreOS(void)
 {
     Mcu_ResetType resetReason;
@@ -261,6 +262,7 @@ static FUNC(void, ECUM_CODE) EcuM_StartPreOS(void)
              *Mcu_GetResetReason and the mapping defined via the EcuMWakeupSource
              *configuration containers.*/
             resetReason = Mcu_GetResetReason();
+            Mcu_ResetReason = resetReason;
             EcuM_MapReset2WakeupSource(resetReason);
 
             /*Select default shutdown target*/

@@ -123,7 +123,7 @@
  * INPUT FILE:    E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\Config\ECUC\test_Mcu_Mcu0_ecuc.arxml
  *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\modules\mcu\R422_MCU_F1x_BSWMDT.arxml
  *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\stubs\4.2.2\Dem\xml\Dem_Mcu.arxml
- * GENERATED ON:  10 Mar 2026 - 20:09:18
+ * GENERATED ON:   2 Apr 2026 - 20:15:53
  */
 
 /*******************************************************************************
@@ -273,7 +273,7 @@ MCU_PBCFG_C_AR_RELEASE_REVISION_VERSION)
 #include "Mcu_MemMap.h"
 /* QAC Warning: START Msg(2:2022)-6 */
 /* Global RAM array for back up of Port group registers */
-VAR(uint32, MCU_CONFIG_DATA) Mcu_GaaRamPortGroup[1];
+/* VAR(uint32, MCU_CONFIG_DATA) Mcu_GaaRamPortGroup[]; */
 /* END Msg(2:2022)-6 */
 #define MCU_STOP_SEC_BURAM_VAR_NO_INIT_32
 #include "Mcu_MemMap.h"
@@ -305,22 +305,7 @@ CONST(Mcu_ConfigType, MCU_VAR) Mcu_GstConfiguration[1] =
     0x00U,
 
     /* ucModeSettingOffset */
-    0x00U,
-
-    /* pPortGroupSetting */
-    &Mcu_GaaPortGroup[0],
-
-    /* ucPortGroupSettingOffset */
-    0x00U,
-
-    /* pPortRamArea */
-    &Mcu_GaaRamPortGroup[0],
-
-    /* ucPortRamAreaOffset */
-    0x00U,
-
-    /* ucNumOfPortGroup */
-    0x01U
+    0x00U
   }
 };
 
@@ -362,7 +347,7 @@ CONST(Mcu_ClockSetting, MCU_VAR) Mcu_GstClockSetting[1] =
     0x02U,
 
     /* ucSelectedSTPMK */
-    0x01U,
+    0x00U,
 
     /* ucNoOfIsoCkscReg */
     0x03U,
@@ -411,18 +396,36 @@ CONST(Mcu_ClockSetting, MCU_VAR) Mcu_GstClockSetting[1] =
 /* QAC Warning: START Msg(2:3211)-4 */
 /* QAC Warning: START Msg(2:3132)-8 */
 /* Structure for MCU mode setting configuration */
-CONST(Mcu_ModeSetting, MCU_VAR) Mcu_GstModeSetting[1] =
+CONST(Mcu_ModeSetting, MCU_VAR) Mcu_GstModeSetting[2] =
 {
   /* Index: 0 - McuModeSettingConf0 */
   {
     /* ulPowerDownWakeupType0 */
-    0xFBCF773FUL,
+    0xFFCFF73FUL,
 
     /* ulPowerDownWakeupTypeIso0 */
     0xFFFFFFFFUL,
 
     /* ucModeType */
-    MCU_HALT_MODE,
+    MCU_DEEPSTOP_MODE,
+
+    /* blModeTransitionReq */
+    MCU_TRUE,
+
+    /* blMainOscOperation */
+    MCU_TRUE
+  },
+
+  /* Index: 1 - McuModeSettingConf_Stop */
+  {
+    /* ulPowerDownWakeupType0 */
+    0xFFFFFFBFUL,
+
+    /* ulPowerDownWakeupTypeIso0 */
+    0xFFFFFFFFUL,
+
+    /* ucModeType */
+    MCU_STOP_MODE,
 
     /* blModeTransitionReq */
     MCU_TRUE,
@@ -458,7 +461,7 @@ CONST(Mcu_CkscSetting, MCU_VAR)Mcu_GstCkscSetting[14] =
     0x01U,
 
     /* ucCkscControlval */
-    0x06U
+    0x02U
   },
 
   /* Index: 1 - McuIsoCsi0 */
@@ -521,7 +524,7 @@ CONST(Mcu_CkscSetting, MCU_VAR)Mcu_GstCkscSetting[14] =
     0x01U,
 
     /* ucCkscControlval */
-    0x07U
+    0x03U
   },
 
   /* Index: 4 - McuAwoFout0 */
@@ -542,7 +545,7 @@ CONST(Mcu_CkscSetting, MCU_VAR)Mcu_GstCkscSetting[14] =
     0x00U,
 
     /* ucCkscControlval */
-    0x05U
+    0x01U
   },
 
   /* Index: 5 - McuAwoTauj0 */
@@ -563,7 +566,7 @@ CONST(Mcu_CkscSetting, MCU_VAR)Mcu_GstCkscSetting[14] =
     0x01U,
 
     /* ucCkscControlval */
-    0x07U
+    0x03U
   },
 
   /* Index: 6 - McuAwoWdta0 */
@@ -584,7 +587,7 @@ CONST(Mcu_CkscSetting, MCU_VAR)Mcu_GstCkscSetting[14] =
     0x01U,
 
     /* ucCkscControlval */
-    0x06U
+    0x02U
   },
 
   /* Index: 7 - CPUCLK */
@@ -647,7 +650,7 @@ CONST(Mcu_CkscSetting, MCU_VAR)Mcu_GstCkscSetting[14] =
     0x00U,
 
     /* ucCkscControlval */
-    0x05U
+    0x01U
   },
 
   /* Index: 10 - McuIsoLin0 */
@@ -668,7 +671,7 @@ CONST(Mcu_CkscSetting, MCU_VAR)Mcu_GstCkscSetting[14] =
     0x01U,
 
     /* ucCkscControlval */
-    0x07U
+    0x03U
   },
 
   /* Index: 11 - McuIsoPeri10 */
@@ -740,16 +743,7 @@ CONST(Mcu_CkscSetting, MCU_VAR)Mcu_GstCkscSetting[14] =
 /* END Msg(2:3892)-7 */
 /* MISRA Violation: START Msg(4:0303)-3 */
 /* Array of Port Group Configuration */
-CONST(Mcu_PortGroupAddress, MCU_VAR) Mcu_GaaPortGroup[1] =
-{
-  /* Index: 0 - McuPortGroupConf0 */
-  {
-    /* pPortAddress */
-    (volatile uint32 *) &PORTREG9PSR
-  }
-};
-
-
+/* CONST(Mcu_PortGroupAddress, MCU_VAR) Mcu_GaaPortGroup[0]; */
 
 /* END Msg(4:0303)-3 */
 /* QAC Warning: START Msg(2:3211)-4 */
