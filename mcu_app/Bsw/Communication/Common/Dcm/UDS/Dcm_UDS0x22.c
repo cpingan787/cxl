@@ -25,7 +25,10 @@
 **                                                                           **
 **************************************************************************** */
 #include "Dcm_Internal.h"
-
+extern FUNC(Std_ReturnType, DCM_CODE) Dcm_UDS0x2E(
+    Dcm_OpStatusType OpStatus,
+    uint8 ProtocolCtrlId,
+    P2VAR(Dcm_NegativeResponseCodeType, AUTOMATIC, DCM_VAR) ErrorCode);
 /****************************************************************
          UDS:ReadDataByIdentifier (22 hex) service
  ***************************************************************/
@@ -1763,7 +1766,7 @@ Dcm_UDS0x22(
 /* 定义工厂下线0xBB 04 服务                            */
 /* ========================================================================= */
 FUNC(Std_ReturnType, DCM_CODE)
-Dcm_UDS0xBB_22(
+Dcm_Internal_BB_04_Read(
     Dcm_OpStatusType OpStatus,
     uint8 ProtocolCtrlId,
     P2VAR(Dcm_NegativeResponseCodeType, AUTOMATIC, DCM_VAR) ErrorCode)
@@ -1880,6 +1883,99 @@ Dcm_UDS0xBB_22(
 
     return ret;
 #endif
+}
+FUNC(Std_ReturnType, DCM_CODE) Dcm_Internal_BB_05_Write(
+    Dcm_OpStatusType OpStatus,
+    uint8 ProtocolCtrlId,
+    P2VAR(Dcm_NegativeResponseCodeType, AUTOMATIC, DCM_VAR) ErrorCode)
+{
+    uint8 MsgCtrlId;
+    Std_ReturnType ret = E_OK;
+    Dcm_MsgContextType* pMsgContext;
+    uint8 TxChannelCtrlIndex;
+    uint8 TxChannelCfgIndex;
+    uint32 Offset;
+
+#if (STD_OFF == DCM_DSP_DID_FUNC_ENABLED)
+    *ErrorCode = DCM_E_REQUESTOUTOFRANGE;
+    return E_NOT_OK;
+#else
+    MsgCtrlId = Dcm_ProtocolCtrl[ProtocolCtrlId].MsgCtrlIndex;
+    pMsgContext = &Dcm_MsgCtrl[MsgCtrlId].MsgContext;
+    TxChannelCtrlIndex = Dcm_MsgCtrl[MsgCtrlId].Dcm_TxCtrlChannelIndex;
+    TxChannelCfgIndex = Dcm_ChannelCtrl[TxChannelCtrlIndex].Dcm_ChannelCfgIndex;
+    Offset = (DcmPbCfgPtr->pDcmDslCfg->pDcmChannelCfg)[TxChannelCfgIndex].offset;
+
+    if ((pMsgContext->ReqDataLen < 5u) || (pMsgContext->pReqData[1] != 0x05u))
+    {
+        *ErrorCode = DCM_E_SUBFUNCTIONNOTSUPPORTED;
+        return E_NOT_OK;
+    }
+
+    uint8* originalReqData = pMsgContext->pReqData;
+    Dcm_MsgLenType originalReqDataLen = pMsgContext->ReqDataLen;
+    uint8 originalSubFunc = pMsgContext->pReqData[1];
+
+    /* 指针偏移，伪装成标准 2E */
+    pMsgContext->pReqData = &originalReqData[1];
+    pMsgContext->pReqData[0] = 0x2Eu; 
+    pMsgContext->ReqDataLen = originalReqDataLen - 1u;
+
+    /* 调用外部的 Dcm_UDS0x2E 进行处理 */
+    ret = Dcm_UDS0x2E(OpStatus, ProtocolCtrlId, ErrorCode);
+
+    /* 恢复指针，应对 Pending */
+    pMsgContext->pReqData = originalReqData;
+    pMsgContext->ReqDataLen = originalReqDataLen;
+    pMsgContext->pReqData[1] = originalSubFunc; 
+
+    if (E_OK == ret)
+    {
+        Dcm_Channel[Offset + 3u] = Dcm_Channel[Offset + 2u]; 
+        Dcm_Channel[Offset + 2u] = Dcm_Channel[Offset + 1u]; 
+        Dcm_Channel[Offset + 1u] = originalSubFunc;          
+        Dcm_Channel[Offset]      = 0xFBu;                    
+        
+        pMsgContext->ResMaxDataLen = 4u;
+        pMsgContext->ResDataLen = 4u;
+        pMsgContext->pResData = &Dcm_Channel[Offset];
+        
+        DsdInternal_ProcessingDone(ProtocolCtrlId);
+    }
+
+    return ret;
+#endif
+}
+FUNC(Std_ReturnType, DCM_CODE) Dcm_UDS0xBB(
+    Dcm_OpStatusType OpStatus,
+    uint8 ProtocolCtrlId,
+    P2VAR(Dcm_NegativeResponseCodeType, AUTOMATIC, DCM_VAR) ErrorCode)
+{
+    uint8 MsgCtrlId = Dcm_ProtocolCtrl[ProtocolCtrlId].MsgCtrlIndex;
+    Dcm_MsgContextType* pMsgContext = &Dcm_MsgCtrl[MsgCtrlId].MsgContext;
+
+    if (pMsgContext->ReqDataLen < 2u)
+    {
+        *ErrorCode = DCM_E_INCORRECTMESSAGELENGTHORINVALIDFORMAT;
+        return E_NOT_OK;
+    }
+
+    /* 根据 SubFunc 分发 */
+    if (pMsgContext->pReqData[1] == 0x04u)
+    {
+        /* 走你原来的读服务 */
+        return Dcm_Internal_BB_04_Read(OpStatus, ProtocolCtrlId, ErrorCode);
+    }
+    else if (pMsgContext->pReqData[1] == 0x05u)
+    {
+        /* 走新加的写服务 */
+        return Dcm_Internal_BB_05_Write(OpStatus, ProtocolCtrlId, ErrorCode);
+    }
+    else
+    {
+        *ErrorCode = DCM_E_SUBFUNCTIONNOTSUPPORTED;
+        return E_NOT_OK;
+    }
 }
 #define DCM_STOP_SEC_CODE
 #include "Dcm_MemMap.h"

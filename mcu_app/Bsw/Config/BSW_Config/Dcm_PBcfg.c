@@ -7490,7 +7490,7 @@ static  CONST(Dcm_DsdServiceCfgType,DCM_CONST)SRVTABLE_UDS_CAN_FD_Service[13] =
         1u,    /*DcmDsdSubService_Num*/
         &Dcm_SRVTABLE_UDS_CAN_FD_DsdSubService_UDS0x3E[0],    /*DcmDsdSubService*/
         NULL_PTR,    /*DcmDsdServiceRoleRefs*/
-        0u    /*DcmDsdServiceRoleRef_Num*/
+        0u    /*DcmDsdServiceRoleRef_Num*2/
     },
     { /*InputOutputControlByIdentifier*/
         TRUE,    /*DcmDsdServiceUsed*/
@@ -7511,7 +7511,7 @@ static  CONST(Dcm_DsdServiceCfgType,DCM_CONST)SRVTABLE_UDS_CAN_FD_Service[13] =
     },
     { /* 0xBB_22 */
         TRUE,            /*DcmDsdServiceUsed*/
-        Dcm_UDS0xBB_22,     /*DcmDsdSidTabFnc*/
+        Dcm_UDS0xBB,     /*DcmDsdSidTabFnc*/
         0xBBu,           /*DcmDsdServiceId*/
         FALSE,           /*DcmDsdSubfuncAvial*/
         FALSE,           /*DcmDsdSuppressPosRsp*/

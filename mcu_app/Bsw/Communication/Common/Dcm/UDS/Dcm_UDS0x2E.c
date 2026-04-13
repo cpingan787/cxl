@@ -463,7 +463,7 @@ static FUNC(Std_ReturnType, DCM_CODE) Dcm_Uds0x2EServiceConditionCheck(
     /*get the required DID from request message*/
     if (E_OK == ret)
     {
-        RecDid = (uint16)((uint16)((uint16)pMsgContext->pReqData[1]) << 8u) | ((uint16)pMsgContext->pReqData[2]);
+        RecDid = (uint16)( ((uint16)pMsgContext->pReqData[1] << 8u) | ((uint16)pMsgContext->pReqData[2]) );
         /*Determine if the DID is configured*/
         ret = DspInternalUDS0x2E_DidCheck(OpStatus, RecDid, Dcm_0x2EType, ErrorCode);
         if (DCM_E_PENDING == ret)
