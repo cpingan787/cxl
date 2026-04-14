@@ -115,7 +115,7 @@ static  CONST(Dcm_DspCommonAuthorizationType, DCM_CONST) Dcm_DspCommonAuthorizat
 
 #define   DCM_START_SEC_CONST_UNSPECIFIED
 #include  "Dcm_MemMap.h"
-static CONST(Dcm_DspDataType, DCM_CONST) Dcm_DspDataCfg[132] =
+static CONST(Dcm_DspDataType, DCM_CONST) Dcm_DspDataCfg[138] =
 {
     {
         Rte_Call_DataServices_Data_0xF130_DID_0xF130_ConditionCheckRead,     /*DcmDspDataConditionCheckReadFnc*/
@@ -3020,6 +3020,138 @@ static CONST(Dcm_DspDataType, DCM_CONST) Dcm_DspDataCfg[132] =
         0xffu, /*DcmDspDataInfoIndex*/
         NULL_PTR, /*DcmDspDiagnosisScaling*/
         NULL_PTR /*DcmDspExternalSRDataElementClass*/
+    },
+    {
+        Rte_Call_DataServices_Data_0x1201_DID_0x1201_ConditionCheckRead, /*DcmDspDataConditionCheckReadFnc*/
+        TRUE,                                       /*DcmConditionCheckReadFncUsed*/
+        NULL_PTR,                                   /*DcmDspDataEcuSignalFnc*/
+        NULL_PTR,                                   /*DcmDspDataReadEcuSignalFnc*/
+        DCM_OPAQUE,                                 /*DcmDspDataEndianness*/
+        NULL_PTR,                                   /*DcmDspDataFreezeCurrentsStateFnc*/
+        NULL_PTR,                                   /*DcmDspDataGetScalingInfoFnc*/
+        NULL_PTR,                                   /*DcmDspDataReadDataLengthFnc*/
+        Rte_Call_DataServices_Data_0x1201_DID_0x1201_ReadData, /*DcmDspDataReadFnc*/
+        NULL_PTR,                                   /*DcmDspDataResetToDefaultFnc*/
+        NULL_PTR,                                   /*DcmDspDataReturnControlToECUFnc*/
+        NULL_PTR,                                   /*DcmDspDataShortTermAdjustmentFnc*/
+        NULL_PTR,                                   /*DcmDspDataWriteFnc*/
+        8u,                                         /*DcmDspDataByteSize*/
+        DCM_UINT8_N,                                /*DcmDspDataType*/
+        USE_DATA_ASYNCH_CLIENT_SERVER,              /*DcmDspDataUsePort*/
+        0u,                                         /*DcmDspDataBlockId*/
+        0xffu,                                      /*DcmDspDataInfoIndex*/
+        NULL_PTR,                                   /*DcmDspDiagnosisScaling*/
+        NULL_PTR                                    /*DcmDspExternalSRDataElementClass*/
+    },
+    {
+        Rte_Call_DataServices_Data_0x1202_DID_0x1202_ConditionCheckRead, /*DcmDspDataConditionCheckReadFnc*/
+        TRUE,                                       /*DcmConditionCheckReadFncUsed*/
+        NULL_PTR,                                   /*DcmDspDataEcuSignalFnc*/
+        NULL_PTR,                                   /*DcmDspDataReadEcuSignalFnc*/
+        DCM_OPAQUE,                                 /*DcmDspDataEndianness*/
+        NULL_PTR,                                   /*DcmDspDataFreezeCurrentsStateFnc*/
+        NULL_PTR,                                   /*DcmDspDataGetScalingInfoFnc*/
+        NULL_PTR,                                   /*DcmDspDataReadDataLengthFnc*/
+        Rte_Call_DataServices_Data_0x1202_DID_0x1202_ReadData, /*DcmDspDataReadFnc*/
+        NULL_PTR,                                   /*DcmDspDataResetToDefaultFnc*/
+        NULL_PTR,                                   /*DcmDspDataReturnControlToECUFnc*/
+        NULL_PTR,                                   /*DcmDspDataShortTermAdjustmentFnc*/
+        NULL_PTR,                                   /*DcmDspDataWriteFnc*/
+        10u,                                         /*DcmDspDataByteSize*/
+        DCM_UINT8_N,                                /*DcmDspDataType*/
+        USE_DATA_ASYNCH_CLIENT_SERVER,              /*DcmDspDataUsePort*/
+        0u,                                         /*DcmDspDataBlockId*/
+        0xffu,                                      /*DcmDspDataInfoIndex*/
+        NULL_PTR,                                   /*DcmDspDiagnosisScaling*/
+        NULL_PTR                                    /*DcmDspExternalSRDataElementClass*/
+    },
+    {
+        Rte_Call_DataServices_Data_0x1203_DID_0x1203_ConditionCheckRead, /*DcmDspDataConditionCheckReadFnc*/
+        TRUE,                                       /*DcmConditionCheckReadFncUsed*/
+        NULL_PTR,                                   /*DcmDspDataEcuSignalFnc*/
+        NULL_PTR,                                   /*DcmDspDataReadEcuSignalFnc*/
+        DCM_OPAQUE,                                 /*DcmDspDataEndianness*/
+        NULL_PTR,                                   /*DcmDspDataFreezeCurrentsStateFnc*/
+        NULL_PTR,                                   /*DcmDspDataGetScalingInfoFnc*/
+        NULL_PTR,                                   /*DcmDspDataReadDataLengthFnc*/
+        Rte_Call_DataServices_Data_0x1203_DID_0x1203_ReadData, /*DcmDspDataReadFnc*/
+        NULL_PTR,                                   /*DcmDspDataResetToDefaultFnc*/
+        NULL_PTR,                                   /*DcmDspDataReturnControlToECUFnc*/
+        NULL_PTR,                                   /*DcmDspDataShortTermAdjustmentFnc*/
+        NULL_PTR,                                   /*DcmDspDataWriteFnc*/
+        10u,                                         /*DcmDspDataByteSize*/
+        DCM_UINT8_N,                                /*DcmDspDataType*/
+        USE_DATA_ASYNCH_CLIENT_SERVER,              /*DcmDspDataUsePort*/
+        0u,                                         /*DcmDspDataBlockId*/
+        0xffu,                                      /*DcmDspDataInfoIndex*/
+        NULL_PTR,                                   /*DcmDspDiagnosisScaling*/
+        NULL_PTR                                    /*DcmDspExternalSRDataElementClass*/
+    },
+    {
+        Rte_Call_DataServices_Data_0x1204_DID_0x1204_ConditionCheckRead, /*DcmDspDataConditionCheckReadFnc*/
+        TRUE,                                       /*DcmConditionCheckReadFncUsed*/
+        NULL_PTR,                                   /*DcmDspDataEcuSignalFnc*/
+        NULL_PTR,                                   /*DcmDspDataReadEcuSignalFnc*/
+        DCM_OPAQUE,                                 /*DcmDspDataEndianness*/
+        NULL_PTR,                                   /*DcmDspDataFreezeCurrentsStateFnc*/
+        NULL_PTR,                                   /*DcmDspDataGetScalingInfoFnc*/
+        NULL_PTR,                                   /*DcmDspDataReadDataLengthFnc*/
+        Rte_Call_DataServices_Data_0x1204_DID_0x1204_ReadData, /*DcmDspDataReadFnc*/
+        NULL_PTR,                                   /*DcmDspDataResetToDefaultFnc*/
+        NULL_PTR,                                   /*DcmDspDataReturnControlToECUFnc*/
+        NULL_PTR,                                   /*DcmDspDataShortTermAdjustmentFnc*/
+        NULL_PTR,                                   /*DcmDspDataWriteFnc*/
+        10u,                                         /*DcmDspDataByteSize*/
+        DCM_UINT8_N,                                /*DcmDspDataType*/
+        USE_DATA_ASYNCH_CLIENT_SERVER,              /*DcmDspDataUsePort*/
+        0u,                                         /*DcmDspDataBlockId*/
+        0xffu,                                      /*DcmDspDataInfoIndex*/
+        NULL_PTR,                                   /*DcmDspDiagnosisScaling*/
+        NULL_PTR                                    /*DcmDspExternalSRDataElementClass*/
+    },
+    {
+        Rte_Call_DataServices_Data_0x1205_DID_0x1205_ConditionCheckRead, /*DcmDspDataConditionCheckReadFnc*/
+        TRUE,                                       /*DcmConditionCheckReadFncUsed*/
+        NULL_PTR,                                   /*DcmDspDataEcuSignalFnc*/
+        NULL_PTR,                                   /*DcmDspDataReadEcuSignalFnc*/
+        DCM_OPAQUE,                                 /*DcmDspDataEndianness*/
+        NULL_PTR,                                   /*DcmDspDataFreezeCurrentsStateFnc*/
+        NULL_PTR,                                   /*DcmDspDataGetScalingInfoFnc*/
+        NULL_PTR,                                   /*DcmDspDataReadDataLengthFnc*/
+        Rte_Call_DataServices_Data_0x1205_DID_0x1205_ReadData, /*DcmDspDataReadFnc*/
+        NULL_PTR,                                   /*DcmDspDataResetToDefaultFnc*/
+        NULL_PTR,                                   /*DcmDspDataReturnControlToECUFnc*/
+        NULL_PTR,                                   /*DcmDspDataShortTermAdjustmentFnc*/
+        NULL_PTR,                                   /*DcmDspDataWriteFnc*/
+        10u,                                         /*DcmDspDataByteSize*/
+        DCM_UINT8_N,                                /*DcmDspDataType*/
+        USE_DATA_ASYNCH_CLIENT_SERVER,              /*DcmDspDataUsePort*/
+        0u,                                         /*DcmDspDataBlockId*/
+        0xffu,                                      /*DcmDspDataInfoIndex*/
+        NULL_PTR,                                   /*DcmDspDiagnosisScaling*/
+        NULL_PTR                                    /*DcmDspExternalSRDataElementClass*/
+    },
+    {
+        Rte_Call_DataServices_Data_0x1206_DID_0x1206_ConditionCheckRead, /*DcmDspDataConditionCheckReadFnc*/
+        TRUE,                                       /*DcmConditionCheckReadFncUsed*/
+        NULL_PTR,                                   /*DcmDspDataEcuSignalFnc*/
+        NULL_PTR,                                   /*DcmDspDataReadEcuSignalFnc*/
+        DCM_OPAQUE,                                 /*DcmDspDataEndianness*/
+        NULL_PTR,                                   /*DcmDspDataFreezeCurrentsStateFnc*/
+        NULL_PTR,                                   /*DcmDspDataGetScalingInfoFnc*/
+        NULL_PTR,                                   /*DcmDspDataReadDataLengthFnc*/
+        Rte_Call_DataServices_Data_0x1206_DID_0x1206_ReadData, /*DcmDspDataReadFnc*/
+        NULL_PTR,                                   /*DcmDspDataResetToDefaultFnc*/
+        NULL_PTR,                                   /*DcmDspDataReturnControlToECUFnc*/
+        NULL_PTR,                                   /*DcmDspDataShortTermAdjustmentFnc*/
+        NULL_PTR,                                   /*DcmDspDataWriteFnc*/
+        10u,                                         /*DcmDspDataByteSize*/
+        DCM_UINT8_N,                                /*DcmDspDataType*/
+        USE_DATA_ASYNCH_CLIENT_SERVER,              /*DcmDspDataUsePort*/
+        0u,                                         /*DcmDspDataBlockId*/
+        0xffu,                                      /*DcmDspDataInfoIndex*/
+        NULL_PTR,                                   /*DcmDspDiagnosisScaling*/
+        NULL_PTR                                    /*DcmDspExternalSRDataElementClass*/
     }
 };
 #define  DCM_STOP_SEC_CONST_UNSPECIFIED
@@ -4705,12 +4837,84 @@ static CONST(Dcm_DspDidSignalType,DCM_CONST)Dcm_Did_100_SignalCfg[1] =
 #define  DCM_STOP_SEC_CONST_UNSPECIFIED
 #include "Dcm_MemMap.h"
 
+#define DCM_START_SEC_CONST_UNSPECIFIED
+#include "Dcm_MemMap.h"
+static CONST(Dcm_DspDidSignalType,DCM_CONST) Dcm_Did_1201_SignalCfg[1] = 
+{
+    {
+        0u,                                 /*DcmDspDidByteOffset*/
+        &Dcm_DspDataCfg[132],               /*pDcmDspDidData*/
+    }
+};
+#define DCM_STOP_SEC_CONST_UNSPECIFIED
+#include "Dcm_MemMap.h"
+
+#define DCM_START_SEC_CONST_UNSPECIFIED
+#include "Dcm_MemMap.h"
+static CONST(Dcm_DspDidSignalType,DCM_CONST) Dcm_Did_1202_SignalCfg[1] = 
+{
+    {
+        0u,                                 /*DcmDspDidByteOffset*/
+        &Dcm_DspDataCfg[133],               /*pDcmDspDidData*/
+    }
+};
+#define DCM_STOP_SEC_CONST_UNSPECIFIED
+#include "Dcm_MemMap.h"
+
+#define DCM_START_SEC_CONST_UNSPECIFIED
+#include "Dcm_MemMap.h"
+static CONST(Dcm_DspDidSignalType,DCM_CONST) Dcm_Did_1203_SignalCfg[1] = 
+{
+    {
+        0u,                                 /*DcmDspDidByteOffset*/
+        &Dcm_DspDataCfg[134],               /*pDcmDspDidData*/
+    }
+};
+#define DCM_STOP_SEC_CONST_UNSPECIFIED
+#include "Dcm_MemMap.h"
+
+#define DCM_START_SEC_CONST_UNSPECIFIED
+#include "Dcm_MemMap.h"
+static CONST(Dcm_DspDidSignalType,DCM_CONST) Dcm_Did_1204_SignalCfg[1] = 
+{
+    {
+        0u,                                 /*DcmDspDidByteOffset*/
+        &Dcm_DspDataCfg[135],               /*pDcmDspDidData*/
+    }
+};
+#define DCM_STOP_SEC_CONST_UNSPECIFIED
+#include "Dcm_MemMap.h"
+
+#define DCM_START_SEC_CONST_UNSPECIFIED
+#include "Dcm_MemMap.h"
+static CONST(Dcm_DspDidSignalType,DCM_CONST) Dcm_Did_1205_SignalCfg[1] = 
+{
+    {
+        0u,                                 /*DcmDspDidByteOffset*/
+        &Dcm_DspDataCfg[136],               /*pDcmDspDidData*/
+    }
+};
+#define DCM_STOP_SEC_CONST_UNSPECIFIED
+#include "Dcm_MemMap.h"
+
+#define DCM_START_SEC_CONST_UNSPECIFIED
+#include "Dcm_MemMap.h"
+static CONST(Dcm_DspDidSignalType,DCM_CONST) Dcm_Did_1206_SignalCfg[1] = 
+{
+    {
+        0u,                                 /*DcmDspDidByteOffset*/
+        &Dcm_DspDataCfg[137],               /*pDcmDspDidData*/
+    }
+};
+#define DCM_STOP_SEC_CONST_UNSPECIFIED
+#include "Dcm_MemMap.h"
+
 /**********************************************
  *DcmDspDid container configration*************
  **********************************************/
 #define   DCM_START_SEC_CONST_UNSPECIFIED
 #include  "Dcm_MemMap.h"
-static CONST(Dcm_DspDidType,DCM_CONST)Dcm_DspDidCfg[129] =
+static CONST(Dcm_DspDidType,DCM_CONST)Dcm_DspDidCfg[135] =
 {
     { /* Did_0xF130 */
         0xF130u,     /*DcmDspDidId*/
@@ -5872,7 +6076,64 @@ static CONST(Dcm_DspDidType,DCM_CONST)Dcm_DspDidCfg[129] =
         NULL_PTR,     /*pDcmDspRefDidIdArray*/
         1u, /*DcmDspDidSignalNum*/
         &Dcm_Did_100_SignalCfg[0],     /*pDcmDspDidSignal*/
-    }
+    },
+    {
+        /* Did_0x1201 */
+        0x1201u,                            /*DcmDspDidId*/
+        TRUE,                               /*DcmDspDidUsed*/
+        0u,                                 /*DcmDspDidInfoIndex*/
+        0u,                                 /*DcmDspRefDidNum*/
+        NULL_PTR,                           /*pDcmDspRefDidIdArray*/
+        1u,                                 /*DcmDspDidSignalNum*/
+        &Dcm_Did_1201_SignalCfg[0],         /*pDcmDspDidSignal*/
+    },
+    {
+        /* Did_0x1202 */
+        0x1202u,                            /*DcmDspDidId*/
+        TRUE,                               /*DcmDspDidUsed*/
+        0u,                                 /*DcmDspDidInfoIndex*/
+        0u,                                 /*DcmDspRefDidNum*/
+        NULL_PTR,                           /*pDcmDspRefDidIdArray*/
+        1u,                                 /*DcmDspDidSignalNum*/
+        &Dcm_Did_1202_SignalCfg[0],         /*pDcmDspDidSignal*/
+    },
+    { /* Did_0x1203 */
+        0x1203u,                            /*DcmDspDidId*/
+        TRUE,                               /*DcmDspDidUsed*/
+        0u,                                 /*DcmDspDidInfoIndex*/
+        0u,                                 /*DcmDspRefDidNum*/
+        NULL_PTR,                           /*pDcmDspRefDidIdArray*/
+        1u,                                 /*DcmDspDidSignalNum*/
+        &Dcm_Did_1203_SignalCfg[0],         /*pDcmDspDidSignal*/
+    },
+    { /* Did_0x1204 */
+        0x1204u,                            /*DcmDspDidId*/
+        TRUE,                               /*DcmDspDidUsed*/
+        0u,                                 /*DcmDspDidInfoIndex*/
+        0u,                                 /*DcmDspRefDidNum*/
+        NULL_PTR,                           /*pDcmDspRefDidIdArray*/
+        1u,                                 /*DcmDspDidSignalNum*/
+        &Dcm_Did_1204_SignalCfg[0],         /*pDcmDspDidSignal*/
+    },
+    { /* Did_0x1205 */
+        0x1205u,                            /*DcmDspDidId*/
+        TRUE,                               /*DcmDspDidUsed*/
+        0u,                                 /*DcmDspDidInfoIndex*/
+        0u,                                 /*DcmDspRefDidNum*/
+        NULL_PTR,                           /*pDcmDspRefDidIdArray*/
+        1u,                                 /*DcmDspDidSignalNum*/
+        &Dcm_Did_1205_SignalCfg[0],         /*pDcmDspDidSignal*/
+    },
+    { /* Did_0x1206 */
+        0x1206u,                            /*DcmDspDidId*/
+        TRUE,                               /*DcmDspDidUsed*/
+        0u,                                 /*DcmDspDidInfoIndex*/
+        0u,                                 /*DcmDspRefDidNum*/
+        NULL_PTR,                           /*pDcmDspRefDidIdArray*/
+        1u,                                 /*DcmDspDidSignalNum*/
+        &Dcm_Did_1206_SignalCfg[0],         /*pDcmDspDidSignal*/
+    },
+
 };
 #define  DCM_STOP_SEC_CONST_UNSPECIFIED
 #include "Dcm_MemMap.h"
@@ -6758,7 +7019,7 @@ static CONST(Dcm_DspCfgType,DCM_CONST) Dcm_DspCfg =
     &Dcm_DspCommonAuthorizationCfg[0],        /*pDcmDspCommonAuthorization*/
     &Dcm_DspControlDTCSettingCfg,    /*pDcmDspControlDTCSetting*/
     &Dcm_DspDataCfg[0],    /*pDcmDspData*/    NULL_PTR,    /*pDcmDspDataInfo*/
-    129u,    /*DcmDspDidNum*/
+    135u,    /*DcmDspDidNum*/
     &Dcm_DspDidCfg[0],        /*pDcmDspDid*/
     3u,    /*DcmDspDidInfoNum*/
     &Dcm_DspDidInfoCfg[0],        /*pDcmDspDidInfo*/
