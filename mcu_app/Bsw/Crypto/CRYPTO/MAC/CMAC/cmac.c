@@ -36,6 +36,7 @@
 #include "cmac.h"
 #include "Crypto_internal.h"
 #include "aes.h"
+#include "Fvm.h"
 
 #define CRYPTO_ISOFT_START_SEC_CODE
 #include "Crypto_ISoft_MemMap.h"
@@ -199,6 +200,13 @@ Crypto_GernerateMAC(uint8 MAC[16], uint8 Key[16], uint8 IVKey[16], uint8* add, u
     // ret = LoadMacKey(&aes, Key, IVKey, k1, k2);
     // internal_GenerateMAC(&aes, inputlength, add, MAC, Key, IVKey, k1, k2);
     ret = VssSecocCmacGen(add, inputlength,MAC);
+    if (ret != E_OK)
+    {
+        uint32 canId = add[0] << 8 | add[1];
+        uint32 messageCounter = 0;
+        Fvm_GetmessageCounter(canId, FVM_INDEX_CFG_TX, &messageCounter);
+        Fvm_SetmessageCounter(canId, FVM_INDEX_CFG_TX, (messageCounter - 1));
+    }
     return ret;
 }
 

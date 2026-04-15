@@ -166,9 +166,8 @@ TASK(OsTask_Init)
     Csm_Init(NULL_PTR);
     SecOC_Init(&SecOC_ConfigData);
     Csm_KeySetValid(CsmKey_SecOC_Key);
-    Vss_InitConfig();
-   
     Fvm_InitConfig();
+    Vss_InitConfig();
     //Gpt_EnableNotification(GptConf_GptChannelConfiguration_GptChannelConfiguration0);
     Gpt_StartTimer(GptConf_GptChannelConfiguration_GptChannelConfiguration3, 2147483647); //1ms
     queue_init(&SecOC_ErrorLogQueue,"SecOC_ErrorLogQueue",NULL_PTR);
@@ -311,8 +310,9 @@ TASK(OsTask_10ms)
 #if(CanTSyn_SlaveTestMODE == STD_ON)
     CanTSyn_SlaveTest();
 #endif
+    LogManager_MainFunction();
 
-    Uds_Test();
+    // Uds_Test();
     /** DO NOT CHANGE THIS COMMENT!
     * </USERBLOCK>
     */

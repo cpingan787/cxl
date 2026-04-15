@@ -1,4 +1,4 @@
-/*************************************************
+﻿/*************************************************
  Copyright © 2026 SiRun (Beijing) . All rights reserved.
  File Name: Vss.c
  Author:
@@ -95,9 +95,7 @@ uint32_t VssGetCtxData(uint8_t* pData, uint32_t pLength)
     memcpy(&gVssCtx.sm4KeyActiveFlg[VSS_SECOC_KEY], &pData[VSS_NVM_BLOCK_SM4_KEY0_ACTIVE_ADDR], VSS_NVM_BLOCK_SM4_KEY_ACTIVE_LEN);
     memcpy(&gVssCtx.sm4KeyActiveFlg[VSS_AUTH_KEY], &pData[VSS_NVM_BLOCK_SM4_KEY1_ACTIVE_ADDR], VSS_NVM_BLOCK_SM4_KEY_ACTIVE_LEN);
 
-
-
-    TBOX_PRINT("vsnActiveFlg = %d\n", gVssCtx.vsnActiveFlg);
+    VSS_LOG_SEND(LOG_LEVEL_DEBUG, LOG_EVT_INIT_START, &gVssCtx.vsnActiveFlg, 1);
 
     return VSS_RET_SUCCESS;
 }
@@ -126,6 +124,8 @@ uint32_t VssSecocCmacGen(uint8_t* inData, uint32_t inLen, uint8_t* out16)
     {
         const uint8_t defaultKey[VSS_NVM_BLOCK_SM4_KEY_LEN] = {0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 0x10}; // 使用默认密钥
         ret = VssAdapter_Sm4CMac(defaultKey, inData, inLen, out16);
+        // TBOX_PRINT("inData: 0x%02X, 0x%02X, 0x%02X, 0x%02X, 0x%02X, 0x%02X, 0x%02X, 0x%02X,0x%02X, 0x%02X, 0x%02X, 0x%02X \r\n",
+        //     inData[0], inData[1], inData[2], inData[9], inData[10],inData[11], inData[12], inData[13], inData[14], inData[15], inData[16], inData[17]);
     }
     else
     {

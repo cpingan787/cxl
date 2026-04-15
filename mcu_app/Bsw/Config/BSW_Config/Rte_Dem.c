@@ -73,14 +73,14 @@ Std_ReturnType  Rte_ReadData_E101( uint8* Buffer )
     }
      uint32 odometer = 0;
 
-    static uint32 lastOdometer = 0;    //�������ԭʼֵ
-    uint8 odometerValid = 0;          //���������Ч��־
-    Std_ReturnType ret1 = E_NOT_OK;    //������̶�ȡ���
-    Std_ReturnType ret2 = E_NOT_OK;    //������Чλ��ȡ���
-    ret1 = Com_ReceiveSignal(                                          /* ��ȡ�������ֵ�ź� */
+    static uint32 lastOdometer = 0;    //保存里程原始值
+    uint8 odometerValid = 0;          //保存里程有效标志
+    Std_ReturnType ret1 = E_NOT_OK;    //保存里程读取结果
+    Std_ReturnType ret2 = E_NOT_OK;    //保存有效位读取结果
+    ret1 = Com_ReceiveSignal(                                          /* 读取整车里程值信号 */
         IICBVC_100ms_Group80_ICBVC_RZCUCANFD_100ms_FrP80_CONTROLLER_0_IAM_Rx_IVehOdo_IICBVC_100ms_Group80_ICBVC_RZCUCANFD_100ms_FrP80_CONTROLLER_0_IAM_Rx,
         &odometer);
-    ret2 = Com_ReceiveSignal(                                          /* ��ȡ�����Чλ�ź� */
+    ret2 = Com_ReceiveSignal(                                           /* 读取里程有效位信号 */
         IICBVC_100ms_Group80_ICBVC_RZCUCANFD_100ms_FrP80_CONTROLLER_0_IAM_Rx_IVehOdoV_IICBVC_100ms_Group80_ICBVC_RZCUCANFD_100ms_FrP80_CONTROLLER_0_IAM_Rx,
         &odometerValid);
     if (ret1 != E_OK || ret2 != E_OK)
@@ -91,9 +91,9 @@ Std_ReturnType  Rte_ReadData_E101( uint8* Buffer )
     {
         return E_NOT_OK;                                              
     }
-    Buffer[0] = (uint8)((odometer >> 16) & 0xFF);                    /* ��̸��ֽڣ�����˸�ʽ���� byte1 */
-    Buffer[1] = (uint8)((odometer >> 8) & 0xFF);                     /* ������ֽڣ�����˸�ʽ���� byte2 */
-    Buffer[2] = (uint8)(odometer & 0xFF);                            /* ��̵��ֽڣ�����˸�ʽ���� byte3 */
+    Buffer[0] = (uint8)((odometer >> 16) & 0xFF);                   /* 里程高字节，按大端格式存入 byte1 */
+    Buffer[1] = (uint8)((odometer >> 8) & 0xFF);                    /* 里程中字节，按大端格式存入 byte2 */
+    Buffer[2] = (uint8)(odometer & 0xFF);                             /* 里程低字节，按大端格式存入 byte3 */
     return E_OK;
     /* //DEM_UNUSED(Buffer);*/
     /** DO NOT CHANGE THIS COMMENT!
@@ -110,14 +110,14 @@ Std_ReturnType  Rte_ReadData_010B( uint8* Buffer )
     {
        return E_NOT_OK;
     }
-    uint8_t timeSrc = 0;    //����ʱ��Դ��0=��Ч��1=NTP��2=GNSS
+    uint8_t timeSrc = 0;   //保存时间源，0=无效，1=NTP，2=GNSS
     uint32_t year = 0; 
     uint8_t month = 0;
     uint8_t day = 0;
     uint8_t hour = 0;
     uint8_t minute = 0;
     uint8_t second = 0;
-    int16_t ret = 0;     //����ʱ���ȡ���
+    int16_t ret = 0;     //保存时间读取结果
     ret = TimeSyncSdkGetRealTime(&timeSrc, &year, &month, &day, &hour, &minute, &second);
     if (ret != 0)
     {
@@ -127,7 +127,7 @@ Std_ReturnType  Rte_ReadData_010B( uint8* Buffer )
     {
         return E_NOT_OK;
     }
-    Buffer[0] = (uint8_t)(year - 2000u);                              /* ����Year offset=2000������26��ʾ2026 */
+    Buffer[0] = (uint8_t)(year - 2000u);                              /* 表中Year offset=2000，所以26表示2026 */
     Buffer[1] = month;                                                
     Buffer[2] = day;                                                  
     Buffer[3] = hour;                                                 
@@ -149,17 +149,17 @@ Std_ReturnType  Rte_ReadData_E010( uint8* Buffer )
     {
        return E_NOT_OK;
     }
-    uint16 vehicleSpeed = 0;   //����ԭʼֵ
-    Std_ReturnType ret = E_NOT_OK;    //���泵�ٶ�ȡ���
-    ret = Com_ReceiveSignal(        //��ȡ�ٶ�                                  
+    uint16 vehicleSpeed = 0;   //车速原始值
+    Std_ReturnType ret = E_NOT_OK;    //保存车速读取结果
+    ret = Com_ReceiveSignal(        //读取速度                                   
         IIBS_20ms_Group11_IBS_CHCANFD_20ms_FrP11_CONTROLLER_0_IAM_Rx_IVehSpdAvg_IIBS_20ms_Group11_IBS_CHCANFD_20ms_FrP11_CONTROLLER_0_IAM_Rx,
         &vehicleSpeed);
     if(ret != E_OK)
     {
         return E_OK;
     }
-    Buffer[0] = (uint8)(vehicleSpeed >> 8);                          /* ��˸��ֽڷ�ǰ�� */
-    Buffer[1] = (uint8)(vehicleSpeed & 0x00FF);                      /* ��˵��ֽڷź��� */
+    Buffer[0] = (uint8)(vehicleSpeed >> 8);                          /* 大端高字节放前面 */
+    Buffer[1] = (uint8)(vehicleSpeed & 0x00FF);                      /* 大端低字节放后面 */
     return E_OK;
     /* //DEM_UNUSED(Buffer);*/
     /** DO NOT CHANGE THIS COMMEN
@@ -176,28 +176,28 @@ if (Buffer == NULL)
     {
         return E_NOT_OK;
     }
-    uint8 vehicleMode = 0;                                           //��Ӧbit7-4 
-    uint8 vehicleModeValid = 0;                                      //����Vehicle Mode��Чλ
-    uint8 usageMode = 0;                                             //��Ӧ��bit3-0 
-    uint8 usageModeValid = 0;                                        //����Usage Mode��Чλ
-    Std_ReturnType ret1 = E_NOT_OK;                                  //����vehicleMode ��ȡ���
-    Std_ReturnType ret2 = E_NOT_OK;                                  //���� vehicleMode valid ��ȡ���
-    Std_ReturnType ret3 = E_NOT_OK;                                  //���� usageMode ��ȡ���
-    Std_ReturnType ret4 = E_NOT_OK;                                  //���� usageMode valid ��ȡ���
+    uint8 vehicleMode = 0;                                           //对应bit7-4 
+    uint8 vehicleModeValid = 0;                                      //保存Vehicle Mode有效位
+    uint8 usageMode = 0;                                             //对应表bit3-0 
+    uint8 usageModeValid = 0;                                        //保存Usage Mode有效位
+    Std_ReturnType ret1 = E_NOT_OK;                                  //保存vehicleMode 读取结果
+    Std_ReturnType ret2 = E_NOT_OK;                                  //保存 vehicleMode valid 读取结果
+    Std_ReturnType ret3 = E_NOT_OK;                                  //保存 usageMode 读取结果
+    Std_ReturnType ret4 = E_NOT_OK;                                  //保存 usageMode valid 读取结果
 
-    ret1 = Com_ReceiveSignal(                                         /* ��ȡ Vehicle Mode */
+    ret1 = Com_ReceiveSignal(                                         /* 读取 Vehicle Mode */
         IICBVC_20ms_Group03_ICBVC_RZCUCANFD_20ms_FrP03_CONTROLLER_0_IAM_Rx_IVehMd_IICBVC_20ms_Group03_ICBVC_RZCUCANFD_20ms_FrP03_CONTROLLER_0_IAM_Rx,
         &vehicleMode);
 
-    ret2 = Com_ReceiveSignal(                                         /* ��ȡ Vehicle Mode ��Чλ */
+    ret2 = Com_ReceiveSignal(                                        /* 读取 Vehicle Mode 有效位 */
         IICBVC_20ms_Group03_ICBVC_RZCUCANFD_20ms_FrP03_CONTROLLER_0_IAM_Rx_IVehMdV_IICBVC_20ms_Group03_ICBVC_RZCUCANFD_20ms_FrP03_CONTROLLER_0_IAM_Rx,
         &vehicleModeValid);
 
-    ret3 = Com_ReceiveSignal(                                         /* ��ȡ Usage Mode */
+    ret3 = Com_ReceiveSignal(                                         /* 读取 Usage Mode */
         IICBVC_20ms_Group03_ICBVC_RZCUCANFD_20ms_FrP03_CONTROLLER_0_IAM_Rx_IUsgMd_IICBVC_20ms_Group03_ICBVC_RZCUCANFD_20ms_FrP03_CONTROLLER_0_IAM_Rx,
         &usageMode);
 
-    ret4 = Com_ReceiveSignal(                                         /* ��ȡ Usage Mode ��Чλ */
+    ret4 = Com_ReceiveSignal(                                           /* 读取 Usage Mode 有效位 */
         IICBVC_20ms_Group03_ICBVC_RZCUCANFD_20ms_FrP03_CONTROLLER_0_IAM_Rx_IUsgMdV_IICBVC_20ms_Group03_ICBVC_RZCUCANFD_20ms_FrP03_CONTROLLER_0_IAM_Rx,
         &usageModeValid);
 

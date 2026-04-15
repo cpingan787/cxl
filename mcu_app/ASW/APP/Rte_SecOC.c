@@ -22,6 +22,7 @@
 #include "Csm.h"
 #include "Crypto_ISoft.h"
 #include "Crypto_internal.h"
+#include "logHal.h"
 /*******************************************************************************
 **                      Private Variable Definitions                          **
 *******************************************************************************/
@@ -169,6 +170,7 @@ void App_SecOC_ErrorLogProcess(void)
             Com_SendSignal(IIAMResetCnt_IAM_SecOC_Log_CONTROLLER_0_IAM_Tx,&lSecOC_ErrLog_QueueRead->ECUResetCnt);      // 4位：重置计数器
             Com_SendSignal(IIAMKeyStatus_IAM_SecOC_Log_CONTROLLER_0_IAM_Tx,&lSecOC_ErrLog_QueueRead->ECUKeySt);        // 1位：密钥状态       
             Com_SendSignal(IIAMTripCnt_IAM_SecOC_Log_CONTROLLER_0_IAM_Tx,&lSecOC_ErrLog_QueueRead->ECUTripCnt);        // 24位：行程计数器
+            SECOC_LOG_SEND(LOG_LEVEL_WARN, LOG_EVT_AUTH_FAIL, lSecOC_ErrLog_QueueRead, sizeof(SecOC_ErrLogInfo_Fields));
          }
          else
          {

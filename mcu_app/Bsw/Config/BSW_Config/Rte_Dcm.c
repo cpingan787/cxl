@@ -3287,6 +3287,42 @@ Std_ReturnType Rte_Call_DataServices_Data_0x1206_DID_0x1206_ConditionCheckRead( 
 #define DCM_STOP_SEC_CODE
 #include "Dcm_MemMap.h"
 
+#define DCM_START_SEC_CODE
+#include "Dcm_MemMap.h"
+Std_ReturnType Rte_Call_DataServices_Data_0x1207_DID_0x1207_ConditionCheckRead( Dcm_OpStatusType OpStatus, Dcm_NegativeResponseCodeType* ErrorCode )
+{
+    /** DO NOT CHANGE THIS COMMENT!
+     * <USERBLOCK Rte_Call_DataServices_Data_0x1207_DID_0x1207_ConditionCheckRead>
+     */
+    DCM_UNUSED(OpStatus);
+    DCM_UNUSED(ErrorCode);
+    return E_OK;
+    
+    /** DO NOT CHANGE THIS COMMENT!
+     * </USERBLOCK>
+     */
+}
+#define DCM_STOP_SEC_CODE
+#include "Dcm_MemMap.h"
+
+#define DCM_START_SEC_CODE
+#include "Dcm_MemMap.h"
+Std_ReturnType Rte_Call_DataServices_Data_0x1208_DID_0x1208_ConditionCheckRead( Dcm_OpStatusType OpStatus, Dcm_NegativeResponseCodeType* ErrorCode )
+{
+    /** DO NOT CHANGE THIS COMMENT!
+     * <USERBLOCK Rte_Call_DataServices_Data_0x1208_DID_0x1208_ConditionCheckRead>
+     */
+    DCM_UNUSED(OpStatus);
+    DCM_UNUSED(ErrorCode);
+    return E_OK;
+    
+    /** DO NOT CHANGE THIS COMMENT!
+     * </USERBLOCK>
+     */
+}
+#define DCM_STOP_SEC_CODE
+#include "Dcm_MemMap.h"
+
 
 #define DCM_START_SEC_CODE
 #include "Dcm_MemMap.h"
@@ -8828,14 +8864,12 @@ Std_ReturnType Rte_Call_DataServices_Data_0x1201_DID_0x1201_ReadData( Dcm_OpStat
      */
     DCM_UNUSED(OpStatus);
     DCM_UNUSED(ErrorCode);
-    Data[0] = 0x01;
-    Data[1] = 0x02;
-    Data[2] = 0x03;
-    Data[3] = 0x04;
-    Data[4] = 0x05;
-    Data[5] = 0x06;
-    Data[6] = 0x07;
-    Data[7] = 0x08;
+    
+    uint32_t voltage = 0;
+    PeripheralHalAdGet(AD0_CHANNEL_KL30, &voltage);
+
+    Data[0] = (uint8_t)(voltage >> 8);
+    Data[1] = (uint8_t)(voltage & 0xFF);
     return E_OK;
     /** DO NOT CHANGE THIS COMMENT!
      * </USERBLOCK>
@@ -8855,15 +8889,6 @@ Std_ReturnType Rte_Call_DataServices_Data_0x1202_DID_0x1202_ReadData( Dcm_OpStat
     DCM_UNUSED(OpStatus);
     DCM_UNUSED(ErrorCode);
     Data[0] = 0x01;
-    Data[1] = 0x02;
-    Data[2] = 0x03;
-    Data[3] = 0x04;
-    Data[4] = 0x05;
-    Data[5] = 0x06;
-    Data[6] = 0x07;
-    Data[7] = 0x08;
-    Data[8] = 0x09;
-    Data[9] = 0x0A;
     return E_OK;
     /** DO NOT CHANGE THIS COMMENT!
      * </USERBLOCK>
@@ -8882,16 +8907,11 @@ Std_ReturnType Rte_Call_DataServices_Data_0x1203_DID_0x1203_ReadData( Dcm_OpStat
      */
     DCM_UNUSED(OpStatus);
     DCM_UNUSED(ErrorCode);
-    Data[0] = 0x01;
-    Data[1] = 0x02;
-    Data[2] = 0x03;
-    Data[3] = 0x04;
-    Data[4] = 0x05;
-    Data[5] = 0x06;
-    Data[6] = 0x07;
-    Data[7] = 0x08;
-    Data[8] = 0x09;
-    Data[9] = 0x0A;
+    memset(Data,0,15);
+
+    NvM_ReadBlock(NvMBlock_DIDC002,NvMBlockRamBuffer12);
+    memcpy(Data,NvMBlockRamBuffer12,15);
+
     return E_OK;
     /** DO NOT CHANGE THIS COMMENT!
      * </USERBLOCK>
@@ -8910,16 +8930,15 @@ Std_ReturnType Rte_Call_DataServices_Data_0x1204_DID_0x1204_ReadData( Dcm_OpStat
      */
     DCM_UNUSED(OpStatus);
     DCM_UNUSED(ErrorCode);
-    Data[0] = 0x01;
-    Data[1] = 0x02;
-    Data[2] = 0x03;
-    Data[3] = 0x04;
-    Data[4] = 0x05;
-    Data[5] = 0x06;
-    Data[6] = 0x07;
-    Data[7] = 0x08;
-    Data[8] = 0x09;
-    Data[9] = 0x0A;
+    
+    NetInfoSync_t netInfo;
+    
+    Data[0] = 0x00;
+    
+    if (0 == StateSyncGetNetInfo(&netInfo))
+    {
+        Data[0] = netInfo.csq;
+    }
     return E_OK;
     /** DO NOT CHANGE THIS COMMENT!
      * </USERBLOCK>
@@ -8936,22 +8955,19 @@ Std_ReturnType Rte_Call_DataServices_Data_0x1205_DID_0x1205_ReadData( Dcm_OpStat
     /** DO NOT CHANGE THIS COMMENT!
      * <USERBLOCK Rte_Call_DataServices_Data_0x1205_DID_0x1205_ReadData>
      */
-    DCM_UNUSED(OpStatus);
+   DCM_UNUSED(OpStatus);
     DCM_UNUSED(ErrorCode);
-    Data[0] = 0x01;
-    Data[1] = 0x02;
-    Data[2] = 0x03;
-    Data[3] = 0x04;
-    Data[4] = 0x05;
-    Data[5] = 0x06;
-    Data[6] = 0x07;
-    Data[7] = 0x08;
-    Data[8] = 0x09;
-    Data[9] = 0x0A;
+    
+    LocationInfoSync_t locationInfo;
+    
+    Data[0] = 0x00;
+    
+    if (0 == StateSyncGetLocationInfo(&locationInfo))
+    {
+        Data[0] = locationInfo.moduleState;
+    }
+    
     return E_OK;
-    /** DO NOT CHANGE THIS COMMENT!
-     * </USERBLOCK>
-     */
 }
 #define DCM_STOP_SEC_CODE
 #include "Dcm_MemMap.h"
@@ -8966,16 +8982,118 @@ Std_ReturnType Rte_Call_DataServices_Data_0x1206_DID_0x1206_ReadData( Dcm_OpStat
      */
     DCM_UNUSED(OpStatus);
     DCM_UNUSED(ErrorCode);
-    Data[0] = 0x01;
-    Data[1] = 0x02;
-    Data[2] = 0x03;
-    Data[3] = 0x04;
-    Data[4] = 0x05;
-    Data[5] = 0x06;
-    Data[6] = 0x07;
-    Data[7] = 0x08;
-    Data[8] = 0x09;
-    Data[9] = 0x0A;
+    CpuDtcSync_t dtcInfo;
+    
+    Data[0] = 0x00;
+    
+    if (0 == StateSyncGetDtcstate(&dtcInfo))
+    {
+        Data[0] = dtcInfo.dtcState.emmcState;
+    }
+    return E_OK;
+    /** DO NOT CHANGE THIS COMMENT!
+     * </USERBLOCK>
+     */
+}
+#define DCM_STOP_SEC_CODE
+#include "Dcm_MemMap.h"
+
+#define DCM_START_SEC_CODE
+#include "Dcm_MemMap.h"
+
+Std_ReturnType Rte_Call_DataServices_Data_0x1207_DID_0x1207_ReadData( Dcm_OpStatusType OpStatus,uint8* Data,Dcm_NegativeResponseCodeType* ErrorCode )
+{
+    /** DO NOT CHANGE THIS COMMENT!
+     * <USERBLOCK Rte_Call_DataServices_Data_0x1207_DID_0x1207_ReadData>
+     */
+    DCM_UNUSED(OpStatus);
+    DCM_UNUSED(ErrorCode);
+    
+    uint32_t ANT_Value = 0;
+    uint8_t connected = 1;
+
+    PeripheralHalAdGet(AD0_CHANNEL_MAIN_ANT_ADC, &ANT_Value);
+    if(ANT_Value < 1600) { connected = 0; }
+
+    if(connected == 1) 
+    {
+        PeripheralHalAdGet(AD0_CHANNEL_DIV_ANT_ADC, &ANT_Value);
+        if(ANT_Value < 1600) { connected = 0; }
+    }
+
+    if(connected == 1) 
+    {
+        PeripheralHalAdGet(AD0_CHANNEL_MIMO3_ANT_ADC, &ANT_Value);
+        if(ANT_Value < 1600) { connected = 0; } 
+    }
+
+    if(connected == 1) 
+    {
+        PeripheralHalAdGet(AD0_CHANNEL_MIMO4_ANT_ADC, &ANT_Value);
+        if(ANT_Value < 1600) { connected = 0; }
+    }
+
+    if(connected == 1) 
+    {
+        PeripheralHalAdGet(AD0_CHANNEL_CV2X_ANT_TRX1_ADC, &ANT_Value);
+        if(ANT_Value < 1600) { connected = 0; } 
+    }
+
+    if(connected == 1) 
+    {
+        PeripheralHalAdGet(AD0_CHANNEL_CV2X_ANT_TRX0_ADC, &ANT_Value);
+        if(ANT_Value < 1600) { connected = 0; } 
+    }
+
+    Data[0] = connected;
+    
+    return E_OK;
+    /** DO NOT CHANGE THIS COMMENT!
+     * </USERBLOCK>
+     */
+}
+#define DCM_STOP_SEC_CODE
+#include "Dcm_MemMap.h"
+
+#define DCM_START_SEC_CODE
+#include "Dcm_MemMap.h"
+
+Std_ReturnType Rte_Call_DataServices_Data_0x1208_DID_0x1208_ReadData( Dcm_OpStatusType OpStatus,uint8* Data,Dcm_NegativeResponseCodeType* ErrorCode )
+{
+    /** DO NOT CHANGE THIS COMMENT!
+     * <USERBLOCK Rte_Call_DataServices_Data_0x1208_DID_0x1208_ReadData>
+     */
+    DCM_UNUSED(OpStatus);
+    DCM_UNUSED(ErrorCode);
+    
+    uint32_t gnssAdcValue0 = 0;
+    uint32_t gnssAdcValue1 = 0;
+    
+    Data[0] = 0x00; 
+
+    PeripheralHalAdGet(AD0_CHANNEL_MCU_GPS_ANT_ADC0, &gnssAdcValue0);
+    PeripheralHalAdGet(AD0_CHANNEL_MCU_GPS_ANT_ADC1, &gnssAdcValue1);
+
+    if((gnssAdcValue0 >= 2050 && gnssAdcValue0 <= 2450) || (gnssAdcValue1 >= 2050 && gnssAdcValue1 <= 2450))
+    {
+        // 天线断开
+        Data[0] = 0x00;
+    }
+    else if((gnssAdcValue0 >= 2050 && gnssAdcValue0 <= 2450) || (gnssAdcValue1 >= 100 && gnssAdcValue1 <= 300))
+    {
+        // 天线正常
+        Data[0] = 0x01;
+    }
+    else if((gnssAdcValue0 == 0) || (gnssAdcValue1 == 0))
+    {
+        // 天线对地
+        Data[0] = 0x00;
+    }
+    else
+    {
+        Data[0] = 0x00;
+    }
+
     return E_OK;
     /** DO NOT CHANGE THIS COMMENT!
      * </USERBLOCK>
@@ -9107,7 +9225,14 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xF18C_DID_0xF18C_WriteData( const  u
     /* custom code.... */
     /* The length of this data is configured to be 16 bytes */
     DCM_UNUSED(OpStatus);
+    Std_ReturnType ret = E_NOT_OK;
 
+    if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+    {
+        *ErrorCode = DCM_E_GENERALPROGRAMMINGFAILURE;
+        return ret;
+    }
+    
     for (uint8 i = 0; i < 16; i++) 
     {
        NvMBlockRamBuffer6[i]= *(Data+i);
@@ -9115,16 +9240,19 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xF18C_DID_0xF18C_WriteData( const  u
     if(NvM_WriteBlock(NvMBlock_DIDF18C,NvMBlockRamBuffer6) == E_NOT_OK)
     {
         *ErrorCode = DCM_E_GENERALPROGRAMMINGFAILURE;
-        return E_NOT_OK;
+        return ret;
     }
 
-    if(ParameterSyncSdkGetFromCpuIsFinished() == 0)//等待参数同步完成 如果参数同步完成则无需发送请求
+    if (ParameterSyncSdkSetToCpu(E_PARAMID_SN, NvMBlockRamBuffer6, 16) == 0)
     {
-        ParameterSyncSdkSetToCpu(E_PARAMID_SN, NvMBlockRamBuffer6, 16);
+        ret = E_OK;
     }
-    
+    else
+    {
+        *ErrorCode = DCM_E_GENERALPROGRAMMINGFAILURE;
+    }
 
-    return E_OK;
+    return ret;
 
     /** DO NOT CHANGE THIS COMMENT!
      * </USERBLOCK>
@@ -9143,6 +9271,13 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xF190_DID_0xF190_WriteData( const  u
     /* custom code.... */
     /* The length of this data is configured to be 3 bytes */
     DCM_UNUSED(OpStatus);
+    Std_ReturnType ret = E_NOT_OK;
+
+    if(ParameterSyncSdkGetFromCpuIsFinished() != 0)
+    {
+        *ErrorCode = DCM_E_GENERALPROGRAMMINGFAILURE;
+        return ret;
+    }
 
     for (uint8 i = 0; i < 17; i++) 
     {
@@ -9152,15 +9287,18 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xF190_DID_0xF190_WriteData( const  u
     if(NvM_WriteBlock(NvMBlock_DIDF190,NvMBlockRamBuffer7) == E_NOT_OK)
     {
         *ErrorCode = DCM_E_GENERALPROGRAMMINGFAILURE;
-        return E_NOT_OK;
+        return ret;
     }
 
-    if(ParameterSyncSdkGetFromCpuIsFinished() == 0)//等待参数同步完成 如果参数同步完成则无需发送请求
+    if (ParameterSyncSdkSetToCpu(E_PARAMID_VIN, NvMBlockRamBuffer7, 17) == 0)
     {
-        ParameterSyncSdkSetToCpu(E_PARAMID_VIN, NvMBlockRamBuffer7, 17);
+        ret = E_OK;
     }
-
-    return E_OK;
+    else
+    {
+        *ErrorCode = DCM_E_GENERALPROGRAMMINGFAILURE;
+    }
+    return ret;
 
     /** DO NOT CHANGE THIS COMMENT!
      * </USERBLOCK>

@@ -8,6 +8,7 @@
 *************************************************/
 /****************************** include ***************************************/
 #include "crypto_lib.h"
+#include "Wdg_59_DriverB_Irq.h"
 
 /****************************** include ***************************************/
 /* SM4 相关 */
@@ -500,6 +501,7 @@ void Crypto_SM3_Init(SM3_CTX_USER *ctx)
 void Crypto_SM3_Update(SM3_CTX_USER *ctx, const uint8_t *data, uint32_t len)
 {
     uint32_t i, index, partlen;
+    uint32_t block_count = 0;
 
     index = (ctx->count[0] >> 3) & 0x3F;
     ctx->count[0] += len << 3;
@@ -513,11 +515,18 @@ void Crypto_SM3_Update(SM3_CTX_USER *ctx, const uint8_t *data, uint32_t len)
 
     if (len >= partlen)
     {
+        Wdg_59_DriverB_TriggerFunc(WDG_59_DRIVERB_INCLUDE_CRITICAL_SECTION);
         memcpy(&ctx->buffer[index], data, partlen);
         sm3_compress_blocks(ctx->state, ctx->buffer, 1);
         for (i = partlen; i + 63 < len; i += 64)
         {
             sm3_compress_blocks(ctx->state, &data[i], 1);
+            block_count++;
+            if (block_count >= 64)
+            {
+                Wdg_59_DriverB_TriggerFunc(WDG_59_DRIVERB_INCLUDE_CRITICAL_SECTION);
+                block_count = 0;
+            }
         }
         index = 0;
     }
@@ -2747,6 +2756,10 @@ static void sm2_z256_point_mul(SM2_Z256_POINT *R, const sm2_z256_t k, const SM2_
                 sm2_z256_point_sub(R, R, &T[-booth - 1]);
             }
         }
+        if ((i & 0x07) == 0) 
+        {
+            Wdg_59_DriverB_TriggerFunc(WDG_59_DRIVERB_INCLUDE_CRITICAL_SECTION);
+        }
     }
 
     // 如果k=0，R为无穷远点
@@ -3028,6 +3041,7 @@ static int sm2_do_verify(const SM2_KEY *key, const uint8_t dgst[32], const SM2_S
     }
 
     // Q(x,y) = s * G + t * P
+    Wdg_59_DriverB_TriggerFunc(WDG_59_DRIVERB_INCLUDE_CRITICAL_SECTION);
     sm2_z256_point_mul_generator(&R, s);
     sm2_z256_point_mul(&T, t, &key->public_key);
     sm2_z256_point_add(&R, &R, &T);
