@@ -43,6 +43,14 @@
 *******************************************************************************/
 #define DCM_START_SEC_CODE
 #include "Dcm_MemMap.h"
+extern FUNC(Std_ReturnType, DCM_CODE) Dcm_UDS0x22(
+    Dcm_OpStatusType OpStatus, uint8 ProtocolCtrlId, P2VAR(Dcm_NegativeResponseCodeType, AUTOMATIC, DCM_VAR) ErrorCode);
+extern FUNC(Std_ReturnType, DCM_CODE) Dcm_UDS0x2E(
+    Dcm_OpStatusType OpStatus, uint8 ProtocolCtrlId, P2VAR(Dcm_NegativeResponseCodeType, AUTOMATIC, DCM_VAR) ErrorCode);
+extern FUNC(Std_ReturnType, DCM_CODE) Dcm_UDS0x19(
+    Dcm_OpStatusType OpStatus, uint8 ProtocolCtrlId, P2VAR(Dcm_NegativeResponseCodeType, AUTOMATIC, DCM_VAR) ErrorCode);
+extern FUNC(Std_ReturnType, DCM_CODE) Dcm_UDS0x14(
+    Dcm_OpStatusType OpStatus, uint8 ProtocolCtrlId, P2VAR(Dcm_NegativeResponseCodeType, AUTOMATIC, DCM_VAR) ErrorCode);
 #if (STD_ON == DCM_SECURITY_FUNC_ENABLED)
 /*************************************************************************/
 /*
@@ -3678,6 +3686,131 @@ FUNC(Std_ReturnType, DCM_CODE) Dcm_TpRxIndication_3E80(uint8 connectionId)
         ret = E_NOT_OK;
     }
 #endif
+    return ret;
+}
+
+FUNC(Std_ReturnType, DCM_CODE) Dcm_UDS0xBB(
+    Dcm_OpStatusType OpStatus,
+    uint8 ProtocolCtrlId,
+    P2VAR(Dcm_NegativeResponseCodeType, AUTOMATIC, DCM_VAR) ErrorCode)
+{
+    Std_ReturnType ret = E_NOT_OK;
+    uint8 MsgCtrlId = Dcm_ProtocolCtrl[ProtocolCtrlId].MsgCtrlIndex;
+    Dcm_MsgContextType* pMsgContext = &Dcm_MsgCtrl[MsgCtrlId].MsgContext;
+    
+    if (pMsgContext->ReqDataLen < 2u)
+    {
+        *ErrorCode = DCM_E_INCORRECTMESSAGELENGTHORINVALIDFORMAT; 
+        return E_NOT_OK;
+    }
+
+    /* 1. 备份原始上下文 */
+    uint8 OriginalSID = Dcm_MsgCtrl[MsgCtrlId].SID;
+    Dcm_IdContextType OriginalIdContext = pMsgContext->IdContext; 
+    uint8 OriginalSubfunction = Dcm_MsgCtrl[MsgCtrlId].Subfunction;
+    uint32 OriginalReqDataLen = pMsgContext->ReqDataLen; 
+    uint8* OriginalReqData = pMsgContext->pReqData;
+    
+    uint8 BbSubFunc = 0;
+    uint8 offset = 0;
+
+    /* 确定 0xBB 子功能的位置 */
+    if (pMsgContext->pReqData[0] == 0xBB) {
+        BbSubFunc = pMsgContext->pReqData[1];
+        offset = 2;
+    } else {
+        BbSubFunc = pMsgContext->pReqData[0];
+        offset = 1;
+    }
+
+    /* 2. 智能容错：自动跳过用户误传的原始服务ID */
+    uint32 dataStartIdx = offset;
+    if (dataStartIdx < OriginalReqDataLen) {
+        if (BbSubFunc == 0x04 && pMsgContext->pReqData[dataStartIdx] == 0x22) dataStartIdx++;
+        else if (BbSubFunc == 0x05 && pMsgContext->pReqData[dataStartIdx] == 0x2E) dataStartIdx++;
+        else if (BbSubFunc == 0x06 && pMsgContext->pReqData[dataStartIdx] == 0x19) dataStartIdx++;
+        else if (BbSubFunc == 0x07 && pMsgContext->pReqData[dataStartIdx] == 0x14) dataStartIdx++;
+    }
+
+    /* 3. 构造伪装指针 */
+    uint8* pFakeReqData = &OriginalReqData[dataStartIdx - 1];
+    uint8 backupFakeSidByte = pFakeReqData[0]; 
+    uint32 realDataLen = OriginalReqDataLen - dataStartIdx;
+
+    pMsgContext->pReqData = pFakeReqData;
+    pMsgContext->ReqDataLen = realDataLen + 1u; 
+
+    switch (BbSubFunc)
+    {
+        case 0x04: 
+            Dcm_MsgCtrl[MsgCtrlId].SID = 0x22;
+            pMsgContext->IdContext = 0x22;
+            pFakeReqData[0] = 0x22; 
+            if (realDataLen >= 2u) pMsgContext->ReqDataLen = 3u; 
+            ret = Dcm_UDS0x22(OpStatus, ProtocolCtrlId, ErrorCode);
+            break;
+            
+        case 0x05: 
+            Dcm_MsgCtrl[MsgCtrlId].SID = 0x2E;
+            pMsgContext->IdContext = 0x2E;
+            pFakeReqData[0] = 0x2E;
+            ret = Dcm_UDS0x2E(OpStatus, ProtocolCtrlId, ErrorCode);
+            break;
+            
+        case 0x06: 
+            Dcm_MsgCtrl[MsgCtrlId].SID = 0x19;
+            pMsgContext->IdContext = 0x19;
+            pFakeReqData[0] = 0x19;
+            if (realDataLen > 0u) {
+                Dcm_MsgCtrl[MsgCtrlId].Subfunction = pFakeReqData[1] & 0x7Fu;
+            }
+            ret = Dcm_UDS0x19(OpStatus, ProtocolCtrlId, ErrorCode);
+            break;
+            
+        case 0x07: 
+            Dcm_MsgCtrl[MsgCtrlId].SID = 0x14;
+            pMsgContext->IdContext = 0x14;
+            pFakeReqData[0] = 0x14;
+            if (realDataLen >= 3u) pMsgContext->ReqDataLen = 4u;
+            ret = Dcm_UDS0x14(OpStatus, ProtocolCtrlId, ErrorCode);
+            break;
+
+        default:
+            *ErrorCode = 0x12; 
+            ret = E_NOT_OK;
+            break;
+    }
+
+    /* 4. 恢复基础上下文 */
+    pMsgContext->pReqData = OriginalReqData;
+    pMsgContext->ReqDataLen = OriginalReqDataLen;
+    Dcm_MsgCtrl[MsgCtrlId].SID = OriginalSID;
+    pMsgContext->IdContext = OriginalIdContext;
+    Dcm_MsgCtrl[MsgCtrlId].Subfunction = OriginalSubfunction;
+
+    if (ret == DCM_E_PENDING)
+    {
+        pFakeReqData[0] = backupFakeSidByte;
+    }
+
+    /* 5. 拼装正响应 */
+    if ((ret == E_OK) && (pMsgContext->ResDataLen > 0u))
+    {
+        uint32 i;
+        
+        /* ★★★ 突破底层安全锁：修复最后1字节被吞噬的核心代码 ★★★ */
+        pMsgContext->ResMaxDataLen++;
+
+        /* 将标准服务生成的数据统一右移1位，抛弃[0]位置的 62/6E/59/54，塞入 0xBB 的子功能 */
+        for (i = pMsgContext->ResDataLen; i >= 2u; i--)
+        {
+            pMsgContext->pResData[i] = pMsgContext->pResData[i - 1u];
+        }
+        pMsgContext->pResData[0] = 0xFB;
+        pMsgContext->pResData[1] = BbSubFunc; 
+        pMsgContext->ResDataLen++;
+    }
+
     return ret;
 }
 

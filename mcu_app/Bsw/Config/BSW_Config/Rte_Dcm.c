@@ -3326,6 +3326,146 @@ Std_ReturnType Rte_Call_DataServices_Data_0x1208_DID_0x1208_ConditionCheckRead( 
 
 #define DCM_START_SEC_CODE
 #include "Dcm_MemMap.h"
+
+Std_ReturnType Rte_Call_DataServices_Data_0x1209_DID_0x1209_ConditionCheckRead( Dcm_OpStatusType OpStatus, Dcm_NegativeResponseCodeType* ErrorCode )
+{
+    /** DO NOT CHANGE THIS COMMENT!
+     * <USERBLOCK Rte_Call_DataServices_Data_0x1209_DID_0x1209_ConditionCheckRead>
+     */
+    DCM_UNUSED(OpStatus);
+    DCM_UNUSED(ErrorCode);
+    return E_OK;
+    
+    /** DO NOT CHANGE THIS COMMENT!
+     * </USERBLOCK>
+     */
+}
+#define DCM_STOP_SEC_CODE
+#include "Dcm_MemMap.h"
+
+
+#define DCM_START_SEC_CODE
+#include "Dcm_MemMap.h"
+
+Std_ReturnType Rte_Call_DataServices_Data_0x1210_DID_0x1210_ConditionCheckRead( Dcm_OpStatusType OpStatus, Dcm_NegativeResponseCodeType* ErrorCode )
+{
+    /** DO NOT CHANGE THIS COMMENT!
+     * <USERBLOCK Rte_Call_DataServices_Data_0x1210_DID_0x1210_ConditionCheckRead>
+     */
+    DCM_UNUSED(OpStatus);
+    DCM_UNUSED(ErrorCode);
+    return E_OK;
+    
+    /** DO NOT CHANGE THIS COMMENT!
+     * </USERBLOCK>
+     */
+}
+#define DCM_STOP_SEC_CODE
+#include "Dcm_MemMap.h"
+
+
+#define DCM_START_SEC_CODE
+#include "Dcm_MemMap.h"
+
+Std_ReturnType Rte_Call_DataServices_Data_0x1211_DID_0x1211_ConditionCheckRead( Dcm_OpStatusType OpStatus, Dcm_NegativeResponseCodeType* ErrorCode )
+{
+    /** DO NOT CHANGE THIS COMMENT!
+     * <USERBLOCK Rte_Call_DataServices_Data_0x1211_DID_0x1211_ConditionCheckRead>
+     */
+    DCM_UNUSED(OpStatus);
+    DCM_UNUSED(ErrorCode);
+    return E_OK;
+    
+    /** DO NOT CHANGE THIS COMMENT!
+     * </USERBLOCK>
+     */
+}
+#define DCM_STOP_SEC_CODE
+#include "Dcm_MemMap.h"
+
+
+#define DCM_START_SEC_CODE
+#include "Dcm_MemMap.h"
+
+Std_ReturnType Rte_Call_DataServices_Data_0x1212_DID_0x1212_ConditionCheckRead( Dcm_OpStatusType OpStatus, Dcm_NegativeResponseCodeType* ErrorCode )
+{
+    /** DO NOT CHANGE THIS COMMENT!
+     * <USERBLOCK Rte_Call_DataServices_Data_0x1212_DID_0x1212_ConditionCheckRead>
+     */
+    DCM_UNUSED(OpStatus);
+    DCM_UNUSED(ErrorCode);
+    return E_OK;
+    
+    /** DO NOT CHANGE THIS COMMENT!
+     * </USERBLOCK>
+     */
+}
+#define DCM_STOP_SEC_CODE
+#include "Dcm_MemMap.h"
+
+
+#define DCM_START_SEC_CODE
+#include "Dcm_MemMap.h"
+
+Std_ReturnType Rte_Call_DataServices_Data_0x1213_DID_0x1213_ConditionCheckRead( Dcm_OpStatusType OpStatus, Dcm_NegativeResponseCodeType* ErrorCode )
+{
+    /** DO NOT CHANGE THIS COMMENT!
+     * <USERBLOCK Rte_Call_DataServices_Data_0x1213_DID_0x1213_ConditionCheckRead>
+     */
+    DCM_UNUSED(OpStatus);
+    DCM_UNUSED(ErrorCode);
+    return E_OK;
+    
+    /** DO NOT CHANGE THIS COMMENT!
+     * </USERBLOCK>
+     */
+}
+#define DCM_STOP_SEC_CODE
+#include "Dcm_MemMap.h"
+
+
+#define DCM_START_SEC_CODE
+#include "Dcm_MemMap.h"
+
+Std_ReturnType Rte_Call_DataServices_Data_0x1214_DID_0x1214_ConditionCheckRead( Dcm_OpStatusType OpStatus, Dcm_NegativeResponseCodeType* ErrorCode )
+{
+    /** DO NOT CHANGE THIS COMMENT!
+     * <USERBLOCK Rte_Call_DataServices_Data_0x1214_DID_0x1214_ConditionCheckRead>
+     */
+    DCM_UNUSED(OpStatus);
+    DCM_UNUSED(ErrorCode);
+    return E_OK;
+    
+    /** DO NOT CHANGE THIS COMMENT!
+     * </USERBLOCK>
+     */
+}
+#define DCM_STOP_SEC_CODE
+#include "Dcm_MemMap.h"
+
+
+#define DCM_START_SEC_CODE
+#include "Dcm_MemMap.h"
+
+Std_ReturnType Rte_Call_DataServices_Data_0x1215_DID_0x1215_ConditionCheckRead( Dcm_OpStatusType OpStatus, Dcm_NegativeResponseCodeType* ErrorCode )
+{
+    /** DO NOT CHANGE THIS COMMENT!
+     * <USERBLOCK Rte_Call_DataServices_Data_0x1215_DID_0x1215_ConditionCheckRead>
+     */
+    DCM_UNUSED(OpStatus);
+    DCM_UNUSED(ErrorCode);
+    return E_OK;
+    
+    /** DO NOT CHANGE THIS COMMENT!
+     * </USERBLOCK>
+     */
+}
+#define DCM_STOP_SEC_CODE
+#include "Dcm_MemMap.h"
+
+
+#define DCM_START_SEC_CODE
+#include "Dcm_MemMap.h"
 Std_ReturnType  Rte_Call_DataServices_Data_0xF130_DID_0xF130_ReadData( Dcm_OpStatusType  OpStatus,uint8*  Data,Dcm_NegativeResponseCodeType*  ErrorCode )
 {
     /** DO NOT CHANGE THIS COMMENT!
@@ -3336,34 +3476,29 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xF130_DID_0xF130_ReadData( Dcm_OpSta
     /* The length of this data is configured to be 4 bytes */
     DCM_UNUSED(OpStatus);
     memset(Data,0,32);
+    uint32_t ret = 0;
+    uint8_t valid = 0;
 
-    // VssKeyCodeFeedback();
-    // if(未写入VSN)
-    // {
-            // 全FF
-            // memset(Data,0xFF,32);
-    // }
-    // else if(已存有VSN)
-    // {
-            // 全0
-            // memset(Data,0,32);
-    // }
-    // else
-    // {
-        
-    //     *ErrorCode = DCM_E_GENERALREJECT;
-    //     return E_NOT_OK;
-    // }
-
-    if(NvM_ReadBlock(NvMBlock_DIDF130,NvMBlockRamBuffer10) == E_NOT_OK)
+    ret = VssGetKeyActive(VSS_ITEM_VSN_ACTIVE, VSS_VSN_0, &valid);
+    if (ret != VSS_RET_SUCCESS)
     {
-        *ErrorCode = DCM_E_CONDITIONSNOTCORRECT;
+        *ErrorCode = DCM_E_GENERALREJECT;
         return E_NOT_OK;
     }
 
-    for (uint8 i = 0; i < 32; i++) 
+    if(valid == 0)
     {
-        *(Data+i) = NvMBlockRamBuffer10[i];
+        // 全FF
+        memset(Data,0xFF,32);
+    }
+    else if(valid == 1)
+    {
+        // 全0
+    }
+    else
+    {
+        *ErrorCode = DCM_E_GENERALREJECT;
+        return E_NOT_OK;
     }
 
     return E_OK;
@@ -4570,19 +4705,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xF1B5_DID_0xF1B5_ReadData( Dcm_OpSta
     /* custom code.... */
     /* The length of this data is configured to be 1 bytes */
     DCM_UNUSED(OpStatus);
-    // memset(Data,0,5);
-    // 暂存DID服务  无用则删除
-
-    // uint32_t len = 0;
-    // if(ProjectConfig_GetItemData(CONFIG_ITEM_ECU_SECONDARY_APP_SW, Data, &len) != 0)
-    // {
-    //     *ErrorCode = DCM_E_CONDITIONSNOTCORRECT;
-    //     return E_NOT_OK;
-    // }
-    // else
-    // {
-
-    // }
+    memset(Data,0,5);
 
     return E_OK;
 
@@ -6220,6 +6343,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xE101_DID_0xE101_ReadData( Dcm_OpSta
 
     uint8 ret = E_OK;
     uint32 Odometer = 0;
+    Com_ReceiveSignalGroup(IICBVC_100ms_Group80_ICBVC_RZCUCANFD_100ms_FrP80_CONTROLLER_0_IAM_Rx);
     ret = Com_ReceiveSignal(IICBVC_100ms_Group80_ICBVC_RZCUCANFD_100ms_FrP80_CONTROLLER_0_IAM_Rx_IVehOdo_IICBVC_100ms_Group80_ICBVC_RZCUCANFD_100ms_FrP80_CONTROLLER_0_IAM_Rx, &Odometer);
     if (0 == ret)
     {
@@ -6304,6 +6428,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xE010_DID_0xE010_ReadData( Dcm_OpSta
 
     uint8 ret = E_OK;
     uint16 vehicleSpeed = 0u;
+    Com_ReceiveSignalGroup(IIBS_20ms_Group11_IBS_CHCANFD_20ms_FrP11_CONTROLLER_0_IAM_Rx);
     ret = Com_ReceiveSignal(IIBS_20ms_Group11_IBS_CHCANFD_20ms_FrP11_CONTROLLER_0_IAM_Rx_IVehSpdAvg_IIBS_20ms_Group11_IBS_CHCANFD_20ms_FrP11_CONTROLLER_0_IAM_Rx, &vehicleSpeed);
     if (0 == ret)
     {
@@ -6341,11 +6466,10 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xD002_DID_0xD002_ReadData( Dcm_OpSta
     /* Default values */
     uint8 vehicleMode = 0x0;
     uint8 usageMode = 0x3;
-
+    Com_ReceiveSignalGroup(IICBVC_20ms_Group03_ICBVC_RZCUCANFD_20ms_FrP03_CONTROLLER_0_IAM_Rx);
     Com_ReceiveSignal(IICBVC_20ms_Group03_ICBVC_RZCUCANFD_20ms_FrP03_CONTROLLER_0_IAM_Rx_IVehMd_IICBVC_20ms_Group03_ICBVC_RZCUCANFD_20ms_FrP03_CONTROLLER_0_IAM_Rx, &vehicleMode);
     Com_ReceiveSignal(IICBVC_20ms_Group03_ICBVC_RZCUCANFD_20ms_FrP03_CONTROLLER_0_IAM_Rx_IUsgMd_IICBVC_20ms_Group03_ICBVC_RZCUCANFD_20ms_FrP03_CONTROLLER_0_IAM_Rx, &usageMode);
     /* 7-4bit: Vehicle Mode, 3-0bit: Usage Mode */
-    Data[0] = 0;
     Data[0] = ((vehicleMode & 0x0F) << 4) | (usageMode & 0x0F);
     
     return E_OK;
@@ -6561,6 +6685,12 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xB002_DID_0xB002_ReadData( Dcm_OpSta
     DCM_UNUSED(OpStatus);
     memset(Data,0,24);
 
+    if(ParameterSyncSdkGetFromCpuIsFinished()!=0)
+    {
+        *ErrorCode = DCM_E_BUSYREPEATREQUEST;
+        return E_NOT_OK;
+    }
+
     uint32_t len = 0;
     if(ProjectConfig_GetItemData(CONFIG_ITEM_MODEM_SW_VERSION, Data, &len) != 0)
     {
@@ -6711,6 +6841,12 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xB005_DID_0xB005_ReadData( Dcm_OpSta
     DCM_UNUSED(OpStatus);
     memset(Data,0,128);
 
+    if(ParameterSyncSdkGetFromCpuIsFinished()!=0)
+    {
+        *ErrorCode = DCM_E_BUSYREPEATREQUEST;
+        return E_NOT_OK;
+    }
+
     uint32_t len = 0;
     if(ProjectConfig_GetItemData(CONFIG_ITEM_NAD_SW_VERSION, Data, &len) != 0)
     {
@@ -6741,17 +6877,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xB006_DID_0xB006_ReadData( Dcm_OpSta
     /* custom code.... */
     /* The length of this data is configured to be 16 bytes */
     DCM_UNUSED(OpStatus);
-
-    // uint32_t len = 0;
-    // if(ProjectConfig_GetItemData(CONFIG_ITEM_NAD_HW_VERSION, Data, &len) != 0)
-    // {
-    //     *ErrorCode = DCM_E_CONDITIONSNOTCORRECT;
-    //     return E_NOT_OK;
-    // }
-    // else
-    // {
-        
-    // }
+    memset(Data,0,128);
     
     return E_OK;
 
@@ -6772,17 +6898,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xB00C_DID_0xB00C_ReadData( Dcm_OpSta
     /* custom code.... */
     /* The length of this data is configured to be 4 bytes */
     DCM_UNUSED(OpStatus);
-
-    // uint32_t len = 0;
-    // if(ProjectConfig_GetItemData(CONFIG_ITEM_UbloxF9K_VERSION, Data, &len) != 0)
-    // {
-    //     *ErrorCode = DCM_E_CONDITIONSNOTCORRECT;
-    //     return E_NOT_OK;
-    // }
-    // else
-    // {
-        
-    // }
+    memset(Data,0,32);
     
     return E_OK;
 
@@ -7822,21 +7938,6 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xB202_DID_0xB202_ReadData( Dcm_OpSta
 
     /* custom code.... */
     /* The length of this data is configured to be 2 bytes */
-    // DCM_UNUSED(OpStatus);
-    // 
-
-    // uint32_t len = 0;
-    // if(ProjectConfig_GetItemData(CONFIG_ITEM_HSMID, Data, &len) != 0)
-    // {
-    //     *ErrorCode = DCM_E_CONDITIONSNOTCORRECT;
-    //     return E_NOT_OK;
-    // }
-    // else
-    // {
-        
-    // }
-
-    // return E_OK;
     Std_ReturnType ret = E_OK;
     int16_t canPassRet = 0;
     uint8_t UDSReqData[3] = {0x22, 0xB2, 0x02};
@@ -9104,6 +9205,147 @@ Std_ReturnType Rte_Call_DataServices_Data_0x1208_DID_0x1208_ReadData( Dcm_OpStat
 
 #define DCM_START_SEC_CODE
 #include "Dcm_MemMap.h"
+Std_ReturnType Rte_Call_DataServices_Data_0x1209_DID_0x1209_ReadData( Dcm_OpStatusType OpStatus,uint8* Data,Dcm_NegativeResponseCodeType* ErrorCode )
+{
+    /** DO NOT CHANGE THIS COMMENT!
+     * <USERBLOCK Rte_Call_DataServices_Data_0x1209_DID_0x1209_ReadData>
+     */
+    DCM_UNUSED(OpStatus);
+    DCM_UNUSED(ErrorCode);
+    CpuDtcSync_t dtcInfo;
+    
+    Data[0] = 0x00;
+    
+    if (0 == StateSyncGetDtcstate(&dtcInfo))
+    {
+        Data[0] = dtcInfo.dtcState.emmcState;
+    }
+    return E_OK;
+    /** DO NOT CHANGE THIS COMMENT!
+     * </USERBLOCK>
+     */
+}
+#define DCM_STOP_SEC_CODE
+#include "Dcm_MemMap.h"
+
+#define DCM_START_SEC_CODE
+#include "Dcm_MemMap.h"
+Std_ReturnType Rte_Call_DataServices_Data_0x1210_DID_0x1210_ReadData( Dcm_OpStatusType OpStatus,uint8* Data,Dcm_NegativeResponseCodeType* ErrorCode )
+{
+    /** DO NOT CHANGE THIS COMMENT!
+     * <USERBLOCK Rte_Call_DataServices_Data_0x1210_DID_0x1210_ReadData>
+     */
+    DCM_UNUSED(OpStatus);
+    DCM_UNUSED(ErrorCode);
+    
+    
+
+    return E_OK;
+    /** DO NOT CHANGE THIS COMMENT!
+     * </USERBLOCK>
+     */
+}
+#define DCM_STOP_SEC_CODE
+#include "Dcm_MemMap.h"
+
+#define DCM_START_SEC_CODE
+#include "Dcm_MemMap.h"
+Std_ReturnType Rte_Call_DataServices_Data_0x1211_DID_0x1211_ReadData( Dcm_OpStatusType OpStatus,uint8* Data,Dcm_NegativeResponseCodeType* ErrorCode )
+{
+    /** DO NOT CHANGE THIS COMMENT!
+     * <USERBLOCK Rte_Call_DataServices_Data_0x1211_DID_0x1211_ReadData>
+     */
+    DCM_UNUSED(OpStatus);
+    DCM_UNUSED(ErrorCode);
+    
+
+
+    return E_OK;
+    /** DO NOT CHANGE THIS COMMENT!
+     * </USERBLOCK>
+     */
+}
+#define DCM_STOP_SEC_CODE
+#include "Dcm_MemMap.h"
+
+#define DCM_START_SEC_CODE
+#include "Dcm_MemMap.h"
+Std_ReturnType Rte_Call_DataServices_Data_0x1212_DID_0x1212_ReadData( Dcm_OpStatusType OpStatus,uint8* Data,Dcm_NegativeResponseCodeType* ErrorCode )
+{
+    /** DO NOT CHANGE THIS COMMENT!
+     * <USERBLOCK Rte_Call_DataServices_Data_0x1212_DID_0x1212_ReadData>
+     */
+    DCM_UNUSED(OpStatus);
+    DCM_UNUSED(ErrorCode);
+    
+    
+    return E_OK;
+    /** DO NOT CHANGE THIS COMMENT!
+     * </USERBLOCK>
+     */
+}
+#define DCM_STOP_SEC_CODE
+#include "Dcm_MemMap.h"
+
+#define DCM_START_SEC_CODE
+#include "Dcm_MemMap.h"
+Std_ReturnType Rte_Call_DataServices_Data_0x1213_DID_0x1213_ReadData( Dcm_OpStatusType OpStatus,uint8* Data,Dcm_NegativeResponseCodeType* ErrorCode )
+{
+    /** DO NOT CHANGE THIS COMMENT!
+     * <USERBLOCK Rte_Call_DataServices_Data_0x1213_DID_0x1213_ReadData>
+     */
+    DCM_UNUSED(OpStatus);
+    DCM_UNUSED(ErrorCode);
+    
+  
+    return E_OK;
+    /** DO NOT CHANGE THIS COMMENT!
+     * </USERBLOCK>
+     */
+}
+#define DCM_STOP_SEC_CODE
+#include "Dcm_MemMap.h"
+
+#define DCM_START_SEC_CODE
+#include "Dcm_MemMap.h"
+Std_ReturnType Rte_Call_DataServices_Data_0x1214_DID_0x1214_ReadData( Dcm_OpStatusType OpStatus,uint8* Data,Dcm_NegativeResponseCodeType* ErrorCode )
+{
+    /** DO NOT CHANGE THIS COMMENT!
+     * <USERBLOCK Rte_Call_DataServices_Data_0x1214_DID_0x1214_ReadData>
+     */
+    DCM_UNUSED(OpStatus);
+    DCM_UNUSED(ErrorCode);
+    
+
+    return E_OK;
+    /** DO NOT CHANGE THIS COMMENT!
+     * </USERBLOCK>
+     */
+}
+#define DCM_STOP_SEC_CODE
+#include "Dcm_MemMap.h"
+
+#define DCM_START_SEC_CODE
+#include "Dcm_MemMap.h"
+Std_ReturnType Rte_Call_DataServices_Data_0x1215_DID_0x1215_ReadData( Dcm_OpStatusType OpStatus,uint8* Data,Dcm_NegativeResponseCodeType* ErrorCode )
+{
+    /** DO NOT CHANGE THIS COMMENT!
+     * <USERBLOCK Rte_Call_DataServices_Data_0x1215_DID_0x1215_ReadData>
+     */
+    DCM_UNUSED(OpStatus);
+    DCM_UNUSED(ErrorCode);
+    
+
+    return E_OK;
+    /** DO NOT CHANGE THIS COMMENT!
+     * </USERBLOCK>
+     */
+}
+#define DCM_STOP_SEC_CODE
+#include "Dcm_MemMap.h"
+
+#define DCM_START_SEC_CODE
+#include "Dcm_MemMap.h"
 Std_ReturnType  Rte_Call_DataServices_Data_0xF130_DID_0xF130_WriteData( const  uint8*  Data,uint16  DataLength,Dcm_OpStatusType  OpStatus,Dcm_NegativeResponseCodeType*  ErrorCode )
 {
     /** DO NOT CHANGE THIS COMMENT!
@@ -9113,31 +9355,32 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xF130_DID_0xF130_WriteData( const  u
     /* custom code.... */
     /* The length of this data is configured to be 4 bytes */
     DCM_UNUSED(OpStatus);
-    uint32_t len = 32;
-    uint8_t keyId = 0;
     uint8_t vsn[32] = {0};
-    uint8_t autoSetWroteFlag = 0;
     uint32_t ret = 0;
-    
-    memcpy(vsn, Data, len);
-    ret = VssGenerateKeyByCode(len, vsn, keyId, autoSetWroteFlag);
+    uint8_t valid = 0;
+    memcpy(vsn, Data, 32);
 
-    if(ret == 0)
-    {
-        //成功
-    }
-    else if(ret == 0x21)
-    {
-        //失败
-        *ErrorCode = DCM_E_CONDITIONSNOTCORRECT;
-        return E_NOT_OK;
-    }
-    if(ret == 0x21)
+    /* 检查是否已写入 */
+    ret = VssGetKeyActive(VSS_ITEM_VSN_ACTIVE, VSS_VSN_0, &valid);
+    if (ret != VSS_RET_SUCCESS)
     {
         *ErrorCode = DCM_E_GENERALREJECT;
         return E_NOT_OK;
     }
 
+    /* 已写入回复NRC 22 01 */
+    if(valid == 1)
+    {
+        *ErrorCode = DCM_E_CONDITIONSNOTCORRECT;
+        return E_NOT_OK;
+    }
+
+    ret = VssSetVSN(vsn, 32);
+    if(ret != 0)
+    {
+        *ErrorCode = DCM_E_GENERALREJECT;
+        return E_NOT_OK;
+    }
 
     return E_OK;
     /** DO NOT CHANGE THIS COMMENT!
@@ -9157,53 +9400,40 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xF18B_DID_0xF18B_WriteData( const  u
     /* custom code.... */
     /* The length of this data is configured to be 1 bytes */
     DCM_UNUSED(OpStatus);
+    uint16_t timeout = 0;
     NvM_RequestResultType blockret = 0;
 
-    switch(OpStatus)
+    /* 读取block */
+    NvM_ReadBlock(NvMBlock_DIDF18B, NvMBlockRamBuffer5);
+    /* 等待读取完成 */
+    do{
+        timeout++;
+        NvM_MainFunction();
+        Fee_MainFunction();
+        Fls_MainFunction();
+        NvM_GetErrorStatus(NvMBlock_DIDF18B, &blockret);
+        if(timeout >= 5000)break;
+    }while(blockret == NVM_REQ_PENDING);
+    /* 检查是否已写入 */
+    for(uint8 j = 0; j < 3; j++)
     {
-        case DCM_INITIAL:
-            /* 写入检测 F18B仅支持写入一次 */
-            NvM_ReadBlock(NvMBlock_DIDF18B, NvMBlockRamBuffer5);
-            return DCM_E_PENDING;
-            break;
-
-        case DCM_PENDING:
-            NvM_GetErrorStatus(NvMBlock_DIDF18B, &blockret);
-            if(blockret == NVM_REQ_PENDING)
-            {
-                return DCM_E_PENDING;
-            }
-            else if(blockret == NVM_REQ_NOT_OK)
-            {
-                *ErrorCode = DCM_E_GENERALPROGRAMMINGFAILURE;
-                return DCM_E_PENDING;
-            }
-
-            for(uint8 j = 0; j < 3; j++)
-            {
-                if(NvMBlockRamBuffer5[j] != 0x00)
-                {
-                    *ErrorCode = DCM_E_CONDITIONSNOTCORRECT;
-                    return E_NOT_OK;
-                }
-            }
-
-            /* Write data to FLASH */
-            for (uint8 i = 0; i < 3; i++) 
-            {
-                NvMBlockRamBuffer5[i]= *(Data+i);
-            }
-            if(NvM_WriteBlock(NvMBlock_DIDF18B,NvMBlockRamBuffer5) == E_NOT_OK)
-            {
-                *ErrorCode = DCM_E_GENERALPROGRAMMINGFAILURE;
-                return E_NOT_OK;
-            }
-            break;
-
-
-        default:
+        /* 已写入回复NRC 22 */
+        if(NvMBlockRamBuffer5[j] != 0x00)
+        {
             *ErrorCode = DCM_E_CONDITIONSNOTCORRECT;
             return E_NOT_OK;
+        }
+    }
+
+    /* 写入数据 */
+    for (uint8 i = 0; i < 3; i++) 
+    {
+       NvMBlockRamBuffer5[i]= *(Data+i);
+    }
+    if(NvM_WriteBlock(NvMBlock_DIDF18B,NvMBlockRamBuffer5) == E_NOT_OK)
+    {
+        *ErrorCode = DCM_E_GENERALPROGRAMMINGFAILURE;
+        return E_NOT_OK;
     }
 
     return E_OK;
@@ -9225,14 +9455,32 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xF18C_DID_0xF18C_WriteData( const  u
     /* custom code.... */
     /* The length of this data is configured to be 16 bytes */
     DCM_UNUSED(OpStatus);
-    Std_ReturnType ret = E_NOT_OK;
+    uint16_t timeout = 0;
+    NvM_RequestResultType blockret = 0;
 
-    if (ParameterSyncSdkGetFromCpuIsFinished() != 0)
+    /* 读取block */
+    NvM_ReadBlock(NvMBlock_DIDF18C, NvMBlockRamBuffer6);
+    /* 等待读取完成 */
+    do{
+        timeout++;
+        NvM_MainFunction();
+        Fee_MainFunction();
+        Fls_MainFunction();
+        NvM_GetErrorStatus(NvMBlock_DIDF18C, &blockret);
+        if(timeout >= 5000)break;
+    }while(blockret == NVM_REQ_PENDING);
+    /* 检查是否已写入 */
+    for(uint8 j = 0; j < 16; j++)
     {
-        *ErrorCode = DCM_E_GENERALPROGRAMMINGFAILURE;
-        return ret;
+        /* 已写入回复NRC 22 */
+        if(NvMBlockRamBuffer6[j] != 0x00)
+        {
+            *ErrorCode = DCM_E_CONDITIONSNOTCORRECT;
+            return E_NOT_OK;
+        }
     }
-    
+
+    /* 写入数据 */
     for (uint8 i = 0; i < 16; i++) 
     {
        NvMBlockRamBuffer6[i]= *(Data+i);
@@ -9240,19 +9488,15 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xF18C_DID_0xF18C_WriteData( const  u
     if(NvM_WriteBlock(NvMBlock_DIDF18C,NvMBlockRamBuffer6) == E_NOT_OK)
     {
         *ErrorCode = DCM_E_GENERALPROGRAMMINGFAILURE;
-        return ret;
+        return E_NOT_OK;
     }
 
-    if (ParameterSyncSdkSetToCpu(E_PARAMID_SN, NvMBlockRamBuffer6, 16) == 0)
+    if(ParameterSyncSdkGetFromCpuIsFinished() == 0)//等待参数同步完成 如果参数同步完成则无需发送请求
     {
-        ret = E_OK;
-    }
-    else
-    {
-        *ErrorCode = DCM_E_GENERALPROGRAMMINGFAILURE;
+        ParameterSyncSdkSetToCpu(E_PARAMID_SN, NvMBlockRamBuffer6, 16);
     }
 
-    return ret;
+    return E_OK;
 
     /** DO NOT CHANGE THIS COMMENT!
      * </USERBLOCK>
@@ -9271,14 +9515,32 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xF190_DID_0xF190_WriteData( const  u
     /* custom code.... */
     /* The length of this data is configured to be 3 bytes */
     DCM_UNUSED(OpStatus);
-    Std_ReturnType ret = E_NOT_OK;
+    uint16_t timeout = 0;
+    NvM_RequestResultType blockret = 0;
 
-    if(ParameterSyncSdkGetFromCpuIsFinished() != 0)
+    /* 读取block */
+    NvM_ReadBlock(NvMBlock_DIDF190, NvMBlockRamBuffer7);
+    /* 等待读取完成 */
+    do{
+        timeout++;
+        NvM_MainFunction();
+        Fee_MainFunction();
+        Fls_MainFunction();
+        NvM_GetErrorStatus(NvMBlock_DIDF190, &blockret);
+        if(timeout >= 5000)break;
+    }while(blockret == NVM_REQ_PENDING);
+    /* 检查是否已写入 */
+    for(uint8 j = 0; j < 17; j++)
     {
-        *ErrorCode = DCM_E_GENERALPROGRAMMINGFAILURE;
-        return ret;
+        /* 已写入回复NRC 22 */
+        if(NvMBlockRamBuffer7[j] != 0x00)
+        {
+            *ErrorCode = DCM_E_CONDITIONSNOTCORRECT;
+            return E_NOT_OK;
+        }
     }
 
+    /* 写入数据 */
     for (uint8 i = 0; i < 17; i++) 
     {
        NvMBlockRamBuffer7[i]= *(Data+i);
@@ -9287,18 +9549,15 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xF190_DID_0xF190_WriteData( const  u
     if(NvM_WriteBlock(NvMBlock_DIDF190,NvMBlockRamBuffer7) == E_NOT_OK)
     {
         *ErrorCode = DCM_E_GENERALPROGRAMMINGFAILURE;
-        return ret;
+        return E_NOT_OK;
     }
 
-    if (ParameterSyncSdkSetToCpu(E_PARAMID_VIN, NvMBlockRamBuffer7, 17) == 0)
+    if(ParameterSyncSdkGetFromCpuIsFinished() == 0)//等待参数同步完成 如果参数同步完成则无需发送请求
     {
-        ret = E_OK;
+        ParameterSyncSdkSetToCpu(E_PARAMID_VIN, NvMBlockRamBuffer7, 17);
     }
-    else
-    {
-        *ErrorCode = DCM_E_GENERALPROGRAMMINGFAILURE;
-    }
-    return ret;
+
+    return E_OK;
 
     /** DO NOT CHANGE THIS COMMENT!
      * </USERBLOCK>
@@ -11130,6 +11389,43 @@ Std_ReturnType  Rte_Call_DataServices_Data_0x0100_DID_0x0100_WriteData( const  u
 #define DCM_STOP_SEC_CODE
 #include "Dcm_MemMap.h"
 
+#define DCM_START_SEC_CODE
+#include "Dcm_MemMap.h"
+Std_ReturnType  Rte_Call_DataServices_Data_0x1215_DID_0x1215_WriteData( const  uint8*  Data,uint16  DataLength,Dcm_OpStatusType  OpStatus,Dcm_NegativeResponseCodeType*  ErrorCode )
+{
+    /** DO NOT CHANGE THIS COMMENT!
+     * <USERBLOCK Rte_Call_DataServices_Data_0x1215_DID_0x1215_WriteData>
+     */
+    DCM_UNUSED(OpStatus);
+
+    /* Copy data to NvM RAM buffer */
+    for (uint8 i = 0; i < 16; i++)
+    {
+        NvMBlockRamBuffer6[i] = Data[i];
+    }
+
+    /* Write to NvM */
+    if (NvM_WriteBlock(NvMBlock_DIDF18C, NvMBlockRamBuffer6) == E_NOT_OK)
+    {
+        *ErrorCode = DCM_E_GENERALPROGRAMMINGFAILURE;
+        return E_NOT_OK;
+    }
+
+    /* Sync to CPU if condition is met */
+    if (ParameterSyncSdkGetFromCpuIsFinished() == 0)
+    {
+        ParameterSyncSdkSetToCpu(E_PARAMID_SN, NvMBlockRamBuffer6, 16);
+    }
+
+    return E_OK;
+
+    /** DO NOT CHANGE THIS COMMENT!
+     * </USERBLOCK>
+     */
+}
+#define DCM_STOP_SEC_CODE
+#include "Dcm_MemMap.h"
+
 void DIDs_DTC_Configuation_Init(void)
 {
     uint8_t Data[16] = {0};
@@ -11176,9 +11472,8 @@ Std_ReturnType  Rte_Call_RoutineServices_Routine_0xAF09_RequestResults(
     /* custom code.... */
     Std_ReturnType ret = E_OK;
     int16_t canPassRet = 0;
-    uint8_t UDSReqData[5] = {0x31, 0x03, 0xAF, 0x09};
+    uint8_t UDSReqData[4] = {0x31, 0x03, 0xAF, 0x09};
     uint16_t UDSReqDataLen = 4;
-    uint8_t UDSRespData[10] = {0};
 
     if(ParameterSyncSdkGetFromCpuIsFinished()!=0)
     {
@@ -11203,8 +11498,7 @@ Std_ReturnType  Rte_Call_RoutineServices_Routine_0xAF09_RequestResults(
             break;
 
         case DCM_PENDING://后续调用，检查是否有响应
-            canPassRet = CanPassthroughRoutine_PENDING(UDSReqData, UDSReqDataLen, UDSRespData, currentDataLength);
-            memcpy(OutBuffer,UDSRespData,*currentDataLength);
+            canPassRet = CanPassthroughRoutine_PENDING(UDSReqData, UDSReqDataLen, OutBuffer, currentDataLength);
             if(canPassRet == 0)
             {
                 ret = E_OK;
@@ -11253,297 +11547,11 @@ Std_ReturnType  Rte_Call_RoutineServices_Routine_0xAF0A_RequestResults(
     /* custom code.... */
     Std_ReturnType ret = E_OK;
     int16_t canPassRet = 0;
-    uint8_t UDSReqData[5] = {0x31, 0x03, 0xAF, 0x0A};
+    uint8_t UDSReqData[4+1] = {0x31, 0x03, 0xAF, 0x0A};
     uint16_t UDSReqDataLen = 4;
-    uint8_t UDSRespData[10] = {0};
 
     memcpy(UDSReqData + 4,InBuffer,1);
     UDSReqDataLen += 1;
-
-    if(ParameterSyncSdkGetFromCpuIsFinished()!=0)
-    {
-        ret = E_NOT_OK;
-        *ErrorCode = DCM_E_BUSYREPEATREQUEST;
-        return ret;
-    }
-    
-    switch(OpStatus)
-    {
-        case DCM_INITIAL://首次调用，发起异步请求
-            canPassRet = CanPassthrough_SendRequest(UDSReqData, UDSReqDataLen);
-            if(canPassRet == 0)
-            {
-                ret = DCM_E_PENDING;
-            }
-            else
-            {
-                ret = E_NOT_OK;
-                *ErrorCode = DCM_E_CONDITIONSNOTCORRECT;
-            }
-            break;
-
-        case DCM_PENDING://后续调用，检查是否有响应
-            canPassRet = CanPassthroughRoutine_PENDING(UDSReqData, UDSReqDataLen, UDSRespData, currentDataLength);
-            memcpy(OutBuffer,UDSRespData,*currentDataLength);
-            if(canPassRet == 0)
-            {
-                ret = E_OK;
-            }
-            else if(canPassRet == 1)//DCM_E_PENDING
-            {
-                ret = DCM_E_PENDING;
-            }
-            else if(canPassRet == -1)//timeout
-            {
-                ret = E_NOT_OK;
-                *ErrorCode = DCM_E_REQUESTOUTOFRANGE;
-            }
-            else
-            {
-                ret = E_NOT_OK;
-                *ErrorCode = canPassRet;
-            }
-            break;
-    }
-    return ret;
-    /** DO NOT CHANGE THIS COMMENT!
-     * </USERBLOCK>
-     */
-}
-#define DCM_STOP_SEC_CODE
-#include "Dcm_MemMap.h"
-#define DCM_START_SEC_CODE
-#include "Dcm_MemMap.h"
-Std_ReturnType  Rte_Call_RoutineServices_Routine_0xAFF7_RequestResults(
-    /* PRQA S 3432++ */ /* MISRA Rule 20.7 */
-    P2CONST(uint8,AUTOMATIC,DCM_VAR)InBuffer,
-    Dcm_OpStatusType OpStatus,
-    P2VAR(uint8,AUTOMATIC,DCM_VAR)OutBuffer,
-    P2VAR(uint16,AUTOMATIC,DCM_VAR) currentDataLength,
-    P2VAR(Dcm_NegativeResponseCodeType,AUTOMATIC,DCM_VAR)ErrorCode)
-/* PRQA S 3432-- */     /* MISRA Rule 20.7 */
-{
-    /** DO NOT CHANGE THIS COMMENT!
-     * <USERBLOCK Rte_Call_RoutineServices_Routine_0xAFF7_RequestResults>
-     */
-
-    /* custom code.... */
-    Std_ReturnType ret = E_OK;
-    int16_t canPassRet = 0;
-    uint8_t UDSReqData[5] = {0x31, 0x03, 0xAF, 0xF7};
-    uint16_t UDSReqDataLen = 4;
-    uint8_t UDSRespData[10] = {0};
-
-    if(ParameterSyncSdkGetFromCpuIsFinished()!=0)
-    {
-        ret = E_NOT_OK;
-        *ErrorCode = DCM_E_BUSYREPEATREQUEST;
-        return ret;
-    }
-    
-    switch(OpStatus)
-    {
-        case DCM_INITIAL://首次调用，发起异步请求
-            canPassRet = CanPassthrough_SendRequest(UDSReqData, UDSReqDataLen);
-            if(canPassRet == 0)
-            {
-                ret = DCM_E_PENDING;
-            }
-            else
-            {
-                ret = E_NOT_OK;
-                *ErrorCode = DCM_E_CONDITIONSNOTCORRECT;
-            }
-            break;
-
-        case DCM_PENDING://后续调用，检查是否有响应
-            canPassRet = CanPassthroughRoutine_PENDING(UDSReqData, UDSReqDataLen, UDSRespData, currentDataLength);
-            memcpy(OutBuffer,UDSRespData,*currentDataLength);
-            if(canPassRet == 0)
-            {
-                ret = E_OK;
-            }
-            else if(canPassRet == 1)//DCM_E_PENDING
-            {
-                ret = DCM_E_PENDING;
-            }
-            else if(canPassRet == -1)//timeout
-            {
-                ret = E_NOT_OK;
-                *ErrorCode = DCM_E_REQUESTOUTOFRANGE;
-            }
-            else
-            {
-                ret = E_NOT_OK;
-                *ErrorCode = canPassRet;
-            }
-            break;
-    }
-    return ret;
-
-    /** DO NOT CHANGE THIS COMMENT!
-     * </USERBLOCK>
-     */
-}
-#define DCM_STOP_SEC_CODE
-#include "Dcm_MemMap.h"
-#define DCM_START_SEC_CODE
-#include "Dcm_MemMap.h"
-Std_ReturnType  Rte_Call_RoutineServices_Routine_0xFE02_RequestResults(
-    /* PRQA S 3432++ */ /* MISRA Rule 20.7 */
-    P2CONST(uint8,AUTOMATIC,DCM_VAR)InBuffer,
-    Dcm_OpStatusType OpStatus,
-    P2VAR(uint8,AUTOMATIC,DCM_VAR)OutBuffer,
-    P2VAR(uint16,AUTOMATIC,DCM_VAR) currentDataLength,
-    P2VAR(Dcm_NegativeResponseCodeType,AUTOMATIC,DCM_VAR)ErrorCode)
-/* PRQA S 3432-- */     /* MISRA Rule 20.7 */
-{
-    /** DO NOT CHANGE THIS COMMENT!
-     * <USERBLOCK Rte_Call_RoutineServices_Routine_0xFE02_RequestResults>
-     */
-
-    /* custom code.... */
-    Std_ReturnType ret = E_OK;
-    int16_t canPassRet = 0;
-    uint8_t UDSReqData[5] = {0x31, 0x03, 0xFE, 0x02};
-    uint16_t UDSReqDataLen = 4;
-    uint8_t UDSRespData[10] = {0};
-
-    if(ParameterSyncSdkGetFromCpuIsFinished()!=0)
-    {
-        ret = E_NOT_OK;
-        *ErrorCode = DCM_E_BUSYREPEATREQUEST;
-        return ret;
-    }
-    
-    switch(OpStatus)
-    {
-        case DCM_INITIAL://首次调用，发起异步请求
-            canPassRet = CanPassthrough_SendRequest(UDSReqData, UDSReqDataLen);
-            if(canPassRet == 0)
-            {
-                ret = DCM_E_PENDING;
-            }
-            else
-            {
-                ret = E_NOT_OK;
-                *ErrorCode = DCM_E_CONDITIONSNOTCORRECT;
-            }
-            break;
-
-        case DCM_PENDING://后续调用，检查是否有响应
-            canPassRet = CanPassthroughRoutine_PENDING(UDSReqData, UDSReqDataLen, UDSRespData, currentDataLength);
-            memcpy(OutBuffer,UDSRespData,*currentDataLength);
-            if(canPassRet == 0)
-            {
-                ret = E_OK;
-            }
-            else if(canPassRet == 1)//DCM_E_PENDING
-            {
-                ret = DCM_E_PENDING;
-            }
-            else if(canPassRet == -1)//timeout
-            {
-                ret = E_NOT_OK;
-                *ErrorCode = DCM_E_REQUESTOUTOFRANGE;
-            }
-            else
-            {
-                ret = E_NOT_OK;
-                *ErrorCode = canPassRet;
-            }
-            break;
-    }
-    return ret;
-
-    /** DO NOT CHANGE THIS COMMENT!
-     * </USERBLOCK>
-     */
-}
-#define DCM_STOP_SEC_CODE
-#include "Dcm_MemMap.h"
-#define DCM_START_SEC_CODE
-#include "Dcm_MemMap.h"
-Std_ReturnType  Rte_Call_RoutineServices_Routine_0xFE0A_RequestResults(
-    /* PRQA S 3432++ */ /* MISRA Rule 20.7 */
-    P2CONST(uint8,AUTOMATIC,DCM_VAR)InBuffer,
-    Dcm_OpStatusType OpStatus,
-    P2VAR(uint8,AUTOMATIC,DCM_VAR)OutBuffer,
-    P2VAR(uint16,AUTOMATIC,DCM_VAR) currentDataLength,
-    P2VAR(Dcm_NegativeResponseCodeType,AUTOMATIC,DCM_VAR)ErrorCode)
-/* PRQA S 3432-- */     /* MISRA Rule 20.7 */
-{
-    /** DO NOT CHANGE THIS COMMENT!
-     * <USERBLOCK Rte_Call_RoutineServices_Routine_0xFE0A_RequestResults>
-     */
-
-    /* custom code.... */
-    DCM_UNUSED(InBuffer);
-    DCM_UNUSED(OutBuffer);
-    DCM_UNUSED(currentDataLength);
-    DCM_UNUSED(ErrorCode);
-    DCM_UNUSED(OpStatus);
-    return E_OK;
-
-    /** DO NOT CHANGE THIS COMMENT!
-     * </USERBLOCK>
-     */
-}
-#define DCM_STOP_SEC_CODE
-#include "Dcm_MemMap.h"
-#define DCM_START_SEC_CODE
-#include "Dcm_MemMap.h"
-Std_ReturnType  Rte_Call_RoutineServices_Routine_0xFE0B_RequestResults(
-    /* PRQA S 3432++ */ /* MISRA Rule 20.7 */
-    P2CONST(uint8,AUTOMATIC,DCM_VAR)InBuffer,
-    Dcm_OpStatusType OpStatus,
-    P2VAR(uint8,AUTOMATIC,DCM_VAR)OutBuffer,
-    P2VAR(uint16,AUTOMATIC,DCM_VAR) currentDataLength,
-    P2VAR(Dcm_NegativeResponseCodeType,AUTOMATIC,DCM_VAR)ErrorCode)
-/* PRQA S 3432-- */     /* MISRA Rule 20.7 */
-{
-    /** DO NOT CHANGE THIS COMMENT!
-     * <USERBLOCK Rte_Call_RoutineServices_Routine_0xFE0B_RequestResults>
-     */
-
-    /* custom code.... */
-    DCM_UNUSED(InBuffer);
-    DCM_UNUSED(OutBuffer);
-    DCM_UNUSED(currentDataLength);
-    DCM_UNUSED(ErrorCode);
-    DCM_UNUSED(OpStatus);
-    return E_OK;
-
-    /** DO NOT CHANGE THIS COMMENT!
-     * </USERBLOCK>
-     */
-}
-#define DCM_STOP_SEC_CODE
-#include "Dcm_MemMap.h"
-
-#define DCM_START_SEC_CODE
-#include "Dcm_MemMap.h"
-Std_ReturnType  Rte_Call_RoutineServices_Routine_0xAF08_Start(
-    /* PRQA S 3432++ */ /* MISRA Rule 20.7 */
-    P2CONST(uint8,AUTOMATIC,DCM_VAR)InBuffer,
-    Dcm_OpStatusType OpStatus,
-    P2VAR(uint8,AUTOMATIC,DCM_VAR)OutBuffer,
-    P2VAR(uint16,AUTOMATIC,DCM_VAR) currentDataLength,
-    P2VAR(Dcm_NegativeResponseCodeType,AUTOMATIC,DCM_VAR)ErrorCode)
-/* PRQA S 3432-- */     /* MISRA Rule 20.7 */
-{
-    /** DO NOT CHANGE THIS COMMENT!
-     * <USERBLOCK Rte_Call_RoutineServices_Routine_0xAF08_Start>
-     */
-
-    /* custom code.... */
-    Std_ReturnType ret = E_OK;
-    int16_t canPassRet = 0;
-    uint8_t UDSReqData[4] = {0x31, 0x01, 0xAF, 0x08};
-    uint16_t UDSReqDataLen = 4;
-
-    memcpy(UDSReqData + 4,InBuffer,*currentDataLength);
-    UDSReqDataLen += *currentDataLength;
 
     if(ParameterSyncSdkGetFromCpuIsFinished()!=0)
     {
@@ -11598,6 +11606,324 @@ Std_ReturnType  Rte_Call_RoutineServices_Routine_0xAF08_Start(
 #include "Dcm_MemMap.h"
 #define DCM_START_SEC_CODE
 #include "Dcm_MemMap.h"
+Std_ReturnType  Rte_Call_RoutineServices_Routine_0xAFF7_RequestResults(
+    /* PRQA S 3432++ */ /* MISRA Rule 20.7 */
+    P2CONST(uint8,AUTOMATIC,DCM_VAR)InBuffer,
+    Dcm_OpStatusType OpStatus,
+    P2VAR(uint8,AUTOMATIC,DCM_VAR)OutBuffer,
+    P2VAR(uint16,AUTOMATIC,DCM_VAR) currentDataLength,
+    P2VAR(Dcm_NegativeResponseCodeType,AUTOMATIC,DCM_VAR)ErrorCode)
+/* PRQA S 3432-- */     /* MISRA Rule 20.7 */
+{
+    /** DO NOT CHANGE THIS COMMENT!
+     * <USERBLOCK Rte_Call_RoutineServices_Routine_0xAFF7_RequestResults>
+     */
+
+    /* custom code.... */
+    Std_ReturnType ret = E_OK;
+    int16_t canPassRet = 0;
+    uint8_t UDSReqData[4] = {0x31, 0x03, 0xAF, 0xF7};
+    uint16_t UDSReqDataLen = 4;
+
+    if(ParameterSyncSdkGetFromCpuIsFinished()!=0)
+    {
+        ret = E_NOT_OK;
+        *ErrorCode = DCM_E_BUSYREPEATREQUEST;
+        return ret;
+    }
+    
+    switch(OpStatus)
+    {
+        case DCM_INITIAL://首次调用，发起异步请求
+            canPassRet = CanPassthrough_SendRequest(UDSReqData, UDSReqDataLen);
+            if(canPassRet == 0)
+            {
+                ret = DCM_E_PENDING;
+            }
+            else
+            {
+                ret = E_NOT_OK;
+                *ErrorCode = DCM_E_CONDITIONSNOTCORRECT;
+            }
+            break;
+
+        case DCM_PENDING://后续调用，检查是否有响应
+            canPassRet = CanPassthroughRoutine_PENDING(UDSReqData, UDSReqDataLen, OutBuffer, currentDataLength);
+            if(canPassRet == 0)
+            {
+                ret = E_OK;
+            }
+            else if(canPassRet == 1)//DCM_E_PENDING
+            {
+                ret = DCM_E_PENDING;
+            }
+            else if(canPassRet == -1)//timeout
+            {
+                ret = E_NOT_OK;
+                *ErrorCode = DCM_E_REQUESTOUTOFRANGE;
+            }
+            else
+            {
+                ret = E_NOT_OK;
+                *ErrorCode = canPassRet;
+            }
+            break;
+    }
+    return ret;
+
+    /** DO NOT CHANGE THIS COMMENT!
+     * </USERBLOCK>
+     */
+}
+#define DCM_STOP_SEC_CODE
+#include "Dcm_MemMap.h"
+#define DCM_START_SEC_CODE
+#include "Dcm_MemMap.h"
+Std_ReturnType  Rte_Call_RoutineServices_Routine_0xFE02_RequestResults(
+    /* PRQA S 3432++ */ /* MISRA Rule 20.7 */
+    P2CONST(uint8,AUTOMATIC,DCM_VAR)InBuffer,
+    Dcm_OpStatusType OpStatus,
+    P2VAR(uint8,AUTOMATIC,DCM_VAR)OutBuffer,
+    P2VAR(uint16,AUTOMATIC,DCM_VAR) currentDataLength,
+    P2VAR(Dcm_NegativeResponseCodeType,AUTOMATIC,DCM_VAR)ErrorCode)
+/* PRQA S 3432-- */     /* MISRA Rule 20.7 */
+{
+    /** DO NOT CHANGE THIS COMMENT!
+     * <USERBLOCK Rte_Call_RoutineServices_Routine_0xFE02_RequestResults>
+     */
+
+    /* custom code.... */
+    Std_ReturnType ret = E_OK;
+    int16_t canPassRet = 0;
+    uint8_t UDSReqData[4] = {0x31, 0x03, 0xFE, 0x02};
+    uint16_t UDSReqDataLen = 4;
+
+    if(ParameterSyncSdkGetFromCpuIsFinished()!=0)
+    {
+        ret = E_NOT_OK;
+        *ErrorCode = DCM_E_BUSYREPEATREQUEST;
+        return ret;
+    }
+    
+    switch(OpStatus)
+    {
+        case DCM_INITIAL://首次调用，发起异步请求
+            canPassRet = CanPassthrough_SendRequest(UDSReqData, UDSReqDataLen);
+            if(canPassRet == 0)
+            {
+                ret = DCM_E_PENDING;
+            }
+            else
+            {
+                ret = E_NOT_OK;
+                *ErrorCode = DCM_E_CONDITIONSNOTCORRECT;
+            }
+            break;
+
+        case DCM_PENDING://后续调用，检查是否有响应
+            canPassRet = CanPassthroughRoutine_PENDING(UDSReqData, UDSReqDataLen, OutBuffer, currentDataLength);
+
+            if(canPassRet == 0)
+            {
+                ret = E_OK;
+            }
+            else if(canPassRet == 1)//DCM_E_PENDING
+            {
+                ret = DCM_E_PENDING;
+            }
+            else if(canPassRet == -1)//timeout
+            {
+                ret = E_NOT_OK;
+                *ErrorCode = DCM_E_REQUESTOUTOFRANGE;
+            }
+            else
+            {
+                ret = E_NOT_OK;
+                *ErrorCode = canPassRet;
+            }
+            break;
+    }
+    return ret;
+
+    /** DO NOT CHANGE THIS COMMENT!
+     * </USERBLOCK>
+     */
+}
+#define DCM_STOP_SEC_CODE
+#include "Dcm_MemMap.h"
+#define DCM_START_SEC_CODE
+#include "Dcm_MemMap.h"
+Std_ReturnType  Rte_Call_RoutineServices_Routine_0xFE0A_RequestResults(
+    /* PRQA S 3432++ */ /* MISRA Rule 20.7 */
+    P2CONST(uint8,AUTOMATIC,DCM_VAR)InBuffer,
+    Dcm_OpStatusType OpStatus,
+    P2VAR(uint8,AUTOMATIC,DCM_VAR)OutBuffer,
+    P2VAR(uint16,AUTOMATIC,DCM_VAR) currentDataLength,
+    P2VAR(Dcm_NegativeResponseCodeType,AUTOMATIC,DCM_VAR)ErrorCode)
+/* PRQA S 3432-- */     /* MISRA Rule 20.7 */
+{
+    /** DO NOT CHANGE THIS COMMENT!
+     * <USERBLOCK Rte_Call_RoutineServices_Routine_0xFE0A_RequestResults>
+     */
+
+    /* custom code.... */
+    Std_ReturnType ret = E_OK;
+    int16_t canPassRet = 0;
+    uint8_t UDSReqData[4] = {0x31, 0x03, 0xFE, 0x0A};
+    uint16_t UDSReqDataLen = 4;
+
+    if(ParameterSyncSdkGetFromCpuIsFinished()!=0)
+    {
+        ret = E_NOT_OK;
+        *ErrorCode = DCM_E_BUSYREPEATREQUEST;
+        return ret;
+    }
+    
+    switch(OpStatus)
+    {
+        case DCM_INITIAL://首次调用，发起异步请求
+            canPassRet = CanPassthrough_SendRequest(UDSReqData, UDSReqDataLen);
+            if(canPassRet == 0)
+            {
+                ret = DCM_E_PENDING;
+            }
+            else
+            {
+                ret = E_NOT_OK;
+                *ErrorCode = DCM_E_CONDITIONSNOTCORRECT;
+            }
+            break;
+
+        case DCM_PENDING://后续调用，检查是否有响应
+            canPassRet = CanPassthroughRoutine_PENDING(UDSReqData, UDSReqDataLen, OutBuffer, currentDataLength);
+
+            if(canPassRet == 0)
+            {
+                ret = E_OK;
+            }
+            else if(canPassRet == 1)//DCM_E_PENDING
+            {
+                ret = DCM_E_PENDING;
+            }
+            else if(canPassRet == -1)//timeout
+            {
+                ret = E_NOT_OK;
+                *ErrorCode = DCM_E_REQUESTOUTOFRANGE;
+            }
+            else
+            {
+                ret = E_NOT_OK;
+                *ErrorCode = canPassRet;
+            }
+            break;
+    }
+    return ret;
+    /** DO NOT CHANGE THIS COMMENT!
+     * </USERBLOCK>
+     */
+}
+#define DCM_STOP_SEC_CODE
+#include "Dcm_MemMap.h"
+#define DCM_START_SEC_CODE
+#include "Dcm_MemMap.h"
+Std_ReturnType  Rte_Call_RoutineServices_Routine_0xFE0B_RequestResults(
+    /* PRQA S 3432++ */ /* MISRA Rule 20.7 */
+    P2CONST(uint8,AUTOMATIC,DCM_VAR)InBuffer,
+    Dcm_OpStatusType OpStatus,
+    P2VAR(uint8,AUTOMATIC,DCM_VAR)OutBuffer,
+    P2VAR(uint16,AUTOMATIC,DCM_VAR) currentDataLength,
+    P2VAR(Dcm_NegativeResponseCodeType,AUTOMATIC,DCM_VAR)ErrorCode)
+/* PRQA S 3432-- */     /* MISRA Rule 20.7 */
+{
+    /** DO NOT CHANGE THIS COMMENT!
+     * <USERBLOCK Rte_Call_RoutineServices_Routine_0xFE0B_RequestResults>
+     */
+
+    /* custom code.... */
+    Std_ReturnType ret = E_OK;
+    int16_t canPassRet = 0;
+    uint8_t UDSReqData[4] = {0x31, 0x03, 0xFE, 0x0B};
+    uint16_t UDSReqDataLen = 4;
+
+    if(ParameterSyncSdkGetFromCpuIsFinished()!=0)
+    {
+        ret = E_NOT_OK;
+        *ErrorCode = DCM_E_BUSYREPEATREQUEST;
+        return ret;
+    }
+    
+    switch(OpStatus)
+    {
+        case DCM_INITIAL://首次调用，发起异步请求
+            canPassRet = CanPassthrough_SendRequest(UDSReqData, UDSReqDataLen);
+            if(canPassRet == 0)
+            {
+                ret = DCM_E_PENDING;
+            }
+            else
+            {
+                ret = E_NOT_OK;
+                *ErrorCode = DCM_E_CONDITIONSNOTCORRECT;
+            }
+            break;
+
+        case DCM_PENDING://后续调用，检查是否有响应
+            canPassRet = CanPassthroughRoutine_PENDING(UDSReqData, UDSReqDataLen, OutBuffer, currentDataLength);
+
+            if(canPassRet == 0)
+            {
+                ret = E_OK;
+            }
+            else if(canPassRet == 1)//DCM_E_PENDING
+            {
+                ret = DCM_E_PENDING;
+            }
+            else if(canPassRet == -1)//timeout
+            {
+                ret = E_NOT_OK;
+                *ErrorCode = DCM_E_REQUESTOUTOFRANGE;
+            }
+            else
+            {
+                ret = E_NOT_OK;
+                *ErrorCode = canPassRet;
+            }
+            break;
+    }
+    return ret;
+    /** DO NOT CHANGE THIS COMMENT!
+     * </USERBLOCK>
+     */
+}
+#define DCM_STOP_SEC_CODE
+#include "Dcm_MemMap.h"
+
+#define DCM_START_SEC_CODE
+#include "Dcm_MemMap.h"
+Std_ReturnType  Rte_Call_RoutineServices_Routine_0xAF08_Start(
+    /* PRQA S 3432++ */ /* MISRA Rule 20.7 */
+    P2CONST(uint8,AUTOMATIC,DCM_VAR)InBuffer,
+    Dcm_OpStatusType OpStatus,
+    P2VAR(uint8,AUTOMATIC,DCM_VAR)OutBuffer,
+    P2VAR(uint16,AUTOMATIC,DCM_VAR) currentDataLength,
+    P2VAR(Dcm_NegativeResponseCodeType,AUTOMATIC,DCM_VAR)ErrorCode)
+/* PRQA S 3432-- */     /* MISRA Rule 20.7 */
+{
+    /** DO NOT CHANGE THIS COMMENT!
+     * <USERBLOCK Rte_Call_RoutineServices_Routine_0xAF08_Start>
+     */
+
+    /* custom code.... */
+
+    return E_OK;
+    /** DO NOT CHANGE THIS COMMENT!
+     * </USERBLOCK>
+     */
+}
+#define DCM_STOP_SEC_CODE
+#include "Dcm_MemMap.h"
+#define DCM_START_SEC_CODE
+#include "Dcm_MemMap.h"
 Std_ReturnType  Rte_Call_RoutineServices_Routine_0xAF09_Start(
     /* PRQA S 3432++ */ /* MISRA Rule 20.7 */
     P2CONST(uint8,AUTOMATIC,DCM_VAR)InBuffer,
@@ -11614,9 +11940,9 @@ Std_ReturnType  Rte_Call_RoutineServices_Routine_0xAF09_Start(
     /* custom code.... */
     Std_ReturnType ret = E_OK;
     int16_t canPassRet = 0;
-    uint8_t UDSReqData[5] = {0x31, 0x01, 0xAF, 0x09};
+    uint8_t UDSReqData[4] = {0x31, 0x01, 0xAF, 0x09};
     uint16_t UDSReqDataLen = 4;
-    uint8_t UDSRespData[10] = {0};
+    uint8_t UDSRespData[5] = {0};/*该RID无响应，OutBuffer为NULL，此数组为占位符*/
 
     if(ParameterSyncSdkGetFromCpuIsFinished()!=0)
     {
@@ -11642,7 +11968,12 @@ Std_ReturnType  Rte_Call_RoutineServices_Routine_0xAF09_Start(
 
         case DCM_PENDING://后续调用，检查是否有响应
             canPassRet = CanPassthroughRoutine_PENDING(UDSReqData, UDSReqDataLen, UDSRespData, currentDataLength);
-            memcpy(OutBuffer,UDSRespData,*currentDataLength);
+            if(OutBuffer != NULL)
+            {
+                /* 不会执行到此处，因为OutBuffer为NULL */
+                memcpy(OutBuffer,UDSRespData,*currentDataLength);
+                TBOX_PRINT("UDS31 OutBuffer error !\r\n");
+            }
             if(canPassRet == 0)
             {
                 ret = E_OK;
@@ -11690,9 +12021,9 @@ Std_ReturnType  Rte_Call_RoutineServices_Routine_0xAF0A_Start(
     /* custom code.... */
     Std_ReturnType ret = E_OK;
     int16_t canPassRet = 0;
-    uint8_t UDSReqData[5] = {0x31, 0x01, 0xAF, 0x0A};
+    uint8_t UDSReqData[4+1] = {0x31, 0x01, 0xAF, 0x0A};// +1 附带1字节传参
     uint16_t UDSReqDataLen = 4;
-    uint8_t UDSRespData[10] = {0};
+    uint8_t UDSRespData[5] = {0};/*该RID无响应，OutBuffer为NULL，此数组为占位符*/
 
     memcpy(UDSReqData + 4,InBuffer,1);
     UDSReqDataLen += 1;
@@ -11721,7 +12052,13 @@ Std_ReturnType  Rte_Call_RoutineServices_Routine_0xAF0A_Start(
 
         case DCM_PENDING://后续调用，检查是否有响应
             canPassRet = CanPassthroughRoutine_PENDING(UDSReqData, UDSReqDataLen, UDSRespData, currentDataLength);
-            memcpy(OutBuffer,UDSRespData,*currentDataLength);
+            if(OutBuffer != NULL)
+            {
+                /* 不会执行到此处，因为OutBuffer为NULL */
+                memcpy(OutBuffer,UDSRespData,*currentDataLength);
+                TBOX_PRINT("UDS31 OutBuffer error !\r\n");
+            }
+
             if(canPassRet == 0)
             {
                 ret = E_OK;
@@ -11742,7 +12079,7 @@ Std_ReturnType  Rte_Call_RoutineServices_Routine_0xAF0A_Start(
             }
             break;
     }
-    return ret;
+    return E_OK;
     /** DO NOT CHANGE THIS COMMENT!
      * </USERBLOCK>
      */
@@ -11767,9 +12104,9 @@ Std_ReturnType  Rte_Call_RoutineServices_Routine_0xAFF7_Start(
     /* custom code.... */
     Std_ReturnType ret = E_OK;
     int16_t canPassRet = 0;
-    uint8_t UDSReqData[5] = {0x31, 0x01, 0xAF, 0xF7};
+    uint8_t UDSReqData[4] = {0x31, 0x01, 0xAF, 0xF7};
     uint16_t UDSReqDataLen = 4;
-    uint8_t UDSRespData[10] = {0};
+    uint8_t UDSRespData[5] = {0};/*该RID无响应，OutBuffer为NULL，此数组为占位符*/
 
     if(ParameterSyncSdkGetFromCpuIsFinished()!=0)
     {
@@ -11795,7 +12132,12 @@ Std_ReturnType  Rte_Call_RoutineServices_Routine_0xAFF7_Start(
 
         case DCM_PENDING://后续调用，检查是否有响应
             canPassRet = CanPassthroughRoutine_PENDING(UDSReqData, UDSReqDataLen, UDSRespData, currentDataLength);
-            memcpy(OutBuffer,UDSRespData,*currentDataLength);
+            if(OutBuffer != NULL)
+            {
+                /* 不会执行到此处，因为OutBuffer为NULL */
+                memcpy(OutBuffer,UDSRespData,*currentDataLength);
+                TBOX_PRINT("UDS31 OutBuffer error !\r\n");
+            }
             if(canPassRet == 0)
             {
                 ret = E_OK;
@@ -11841,9 +12183,8 @@ Std_ReturnType  Rte_Call_RoutineServices_Routine_0xFE02_Start(
     /* custom code.... */
     Std_ReturnType ret = E_OK;
     int16_t canPassRet = 0;
-    uint8_t UDSReqData[5] = {0x31, 0x01, 0xFE, 0x02};
+    uint8_t UDSReqData[4+6] = {0x31, 0x01, 0xFE, 0x02};//附带6字节传参
     uint16_t UDSReqDataLen = 4;
-    uint8_t UDSRespData[10] = {0};
 
     memcpy(UDSReqData + 4,InBuffer,6);
     UDSReqDataLen += 6;
@@ -11871,8 +12212,7 @@ Std_ReturnType  Rte_Call_RoutineServices_Routine_0xFE02_Start(
             break;
 
         case DCM_PENDING://后续调用，检查是否有响应
-            canPassRet = CanPassthroughRoutine_PENDING(UDSReqData, UDSReqDataLen, UDSRespData, currentDataLength);
-            memcpy(OutBuffer,UDSRespData,*currentDataLength);
+            canPassRet = CanPassthroughRoutine_PENDING(UDSReqData, UDSReqDataLen, OutBuffer, currentDataLength);
             if(canPassRet == 0)
             {
                 ret = E_OK;
@@ -11919,9 +12259,8 @@ Std_ReturnType  Rte_Call_RoutineServices_Routine_0xFE80_Start(
     /* custom code.... */
     Std_ReturnType ret = E_OK;
     int16_t canPassRet = 0;
-    uint8_t UDSReqData[6] = {0x31, 0x01, 0xFE, 0x80};
+    uint8_t UDSReqData[4+2] = {0x31, 0x01, 0xFE, 0x80};
     uint16_t UDSReqDataLen = 4;
-    uint8_t UDSRespData[10] = {0};
 
     memcpy(UDSReqData + 4,InBuffer,2);
     UDSReqDataLen += 2;
@@ -11949,9 +12288,8 @@ Std_ReturnType  Rte_Call_RoutineServices_Routine_0xFE80_Start(
             break;
 
         case DCM_PENDING://后续调用，检查是否有响应
-            canPassRet = CanPassthroughRoutine_PENDING(UDSReqData, UDSReqDataLen, UDSRespData, currentDataLength);
-            TBOX_PRINT("%d %d %d %d %d %d \r\n",UDSRespData[0],UDSRespData[1],UDSRespData[2],UDSRespData[3],UDSRespData[4],UDSRespData[5]);
-            memcpy(OutBuffer,UDSRespData,*currentDataLength);
+            canPassRet = CanPassthroughRoutine_PENDING(UDSReqData, UDSReqDataLen, OutBuffer, currentDataLength);
+
             if(canPassRet == 0)
             {
                 ret = E_OK;
@@ -11995,12 +12333,67 @@ Std_ReturnType  Rte_Call_RoutineServices_Routine_0xFE0A_Start(
      */
 
     /* custom code.... */
-    DCM_UNUSED(InBuffer);
-    DCM_UNUSED(OutBuffer);
-    DCM_UNUSED(currentDataLength);
-    DCM_UNUSED(ErrorCode);
-    DCM_UNUSED(OpStatus);
-    return E_OK;
+    Std_ReturnType ret = E_OK;
+    int16_t canPassRet = 0;
+    uint8_t UDSReqData[4+3] = {0x31, 0x01, 0xFE, 0x0A};
+    uint16_t UDSReqDataLen = 4;
+    uint8_t UDSRespData[5] = {0};/*该RID无响应，OutBuffer为NULL，此数组为占位符*/
+
+    memcpy(UDSReqData + 4,InBuffer,3);
+    UDSReqDataLen += 3;
+
+    if(ParameterSyncSdkGetFromCpuIsFinished()!=0)
+    {
+        ret = E_NOT_OK;
+        *ErrorCode = DCM_E_BUSYREPEATREQUEST;
+        return ret;
+    }
+    
+    switch(OpStatus)
+    {
+        case DCM_INITIAL://首次调用，发起异步请求
+            canPassRet = CanPassthrough_SendRequest(UDSReqData, UDSReqDataLen);
+            if(canPassRet == 0)
+            {
+                ret = DCM_E_PENDING;
+            }
+            else
+            {
+                ret = E_NOT_OK;
+                *ErrorCode = DCM_E_CONDITIONSNOTCORRECT;
+            }
+            break;
+
+        case DCM_PENDING://后续调用，检查是否有响应
+            canPassRet = CanPassthroughRoutine_PENDING(UDSReqData, UDSReqDataLen, UDSRespData, currentDataLength);
+            if(OutBuffer != NULL)
+            {
+                /* 不会执行到此处，因为OutBuffer为NULL */
+                memcpy(OutBuffer,UDSRespData,*currentDataLength);
+                TBOX_PRINT("UDS31 OutBuffer error !\r\n");
+            }
+
+            if(canPassRet == 0)
+            {
+                ret = E_OK;
+            }
+            else if(canPassRet == 1)//DCM_E_PENDING
+            {
+                ret = DCM_E_PENDING;
+            }
+            else if(canPassRet == -1)//timeout
+            {
+                ret = E_NOT_OK;
+                *ErrorCode = DCM_E_REQUESTOUTOFRANGE;
+            }
+            else
+            {
+                ret = E_NOT_OK;
+                *ErrorCode = canPassRet;
+            }
+            break;
+    }
+    return ret;
 
     /** DO NOT CHANGE THIS COMMENT!
      * </USERBLOCK>
@@ -12024,13 +12417,60 @@ Std_ReturnType  Rte_Call_RoutineServices_Routine_0xFE0B_Start(
      */
 
     /* custom code.... */
-    DCM_UNUSED(InBuffer);
-    DCM_UNUSED(OutBuffer);
-    DCM_UNUSED(currentDataLength);
-    DCM_UNUSED(ErrorCode);
-    DCM_UNUSED(OpStatus);
-    return E_OK;
+    Std_ReturnType ret = E_OK;
+    int16_t canPassRet = 0;
+    uint8_t UDSReqData[4+1] = {0x31, 0x01, 0xFE, 0x0B};
+    uint16_t UDSReqDataLen = 4;
 
+    memcpy(UDSReqData + 4,InBuffer,1);
+    UDSReqDataLen += 1;
+
+    if(ParameterSyncSdkGetFromCpuIsFinished()!=0)
+    {
+        ret = E_NOT_OK;
+        *ErrorCode = DCM_E_BUSYREPEATREQUEST;
+        return ret;
+    }
+    
+    switch(OpStatus)
+    {
+        case DCM_INITIAL://首次调用，发起异步请求
+            canPassRet = CanPassthrough_SendRequest(UDSReqData, UDSReqDataLen);
+            if(canPassRet == 0)
+            {
+                ret = DCM_E_PENDING;
+            }
+            else
+            {
+                ret = E_NOT_OK;
+                *ErrorCode = DCM_E_CONDITIONSNOTCORRECT;
+            }
+            break;
+
+        case DCM_PENDING://后续调用，检查是否有响应
+            canPassRet = CanPassthroughRoutine_PENDING(UDSReqData, UDSReqDataLen, OutBuffer, currentDataLength);
+
+            if(canPassRet == 0)
+            {
+                ret = E_OK;
+            }
+            else if(canPassRet == 1)//DCM_E_PENDING
+            {
+                ret = DCM_E_PENDING;
+            }
+            else if(canPassRet == -1)//timeout
+            {
+                ret = E_NOT_OK;
+                *ErrorCode = DCM_E_REQUESTOUTOFRANGE;
+            }
+            else
+            {
+                ret = E_NOT_OK;
+                *ErrorCode = canPassRet;
+            }
+            break;
+    }
+    return ret;
     /** DO NOT CHANGE THIS COMMENT!
      * </USERBLOCK>
      */
@@ -12057,9 +12497,6 @@ Std_ReturnType  Rte_Call_RoutineServices_Routine_0xAF05_Start(
     int16_t canPassRet = 0;
     uint8_t UDSReqData[4] = {0x31, 0x01, 0xAF, 0x05};
     uint16_t UDSReqDataLen = 4;
-
-    memcpy(UDSReqData + 4,InBuffer,*currentDataLength);
-    UDSReqDataLen += *currentDataLength;
 
     if(ParameterSyncSdkGetFromCpuIsFinished()!=0)
     {
@@ -12134,14 +12571,26 @@ Std_ReturnType  Rte_Call_RoutineServices_Routine_0xAF06_Start(
     DCM_UNUSED(ErrorCode);
     DCM_UNUSED(OpStatus);
 
+    Std_ReturnType ret = E_OK;
     SosLledState_e ecallStatus = 0;
     ecallStatus = GetSosLedState();
     if(ecallStatus == E_SOS_LED_STATE_NO_ECALL)
     {
-        AlarmSdkEcallTriger(E_ECALL_TRIGGER_TEST_MODE);
+        if(AlarmSdkEcallTriger(E_ECALL_TRIGGER_TEST_MODE) != 0)
+        {
+            ret = E_NOT_OK;
+            *ErrorCode = DCM_E_REQUESTOUTOFRANGE;
+        }
+        else;
+    }
+    else
+    {
+        ret = E_NOT_OK;
+        *ErrorCode = DCM_E_REQUESTOUTOFRANGE;
+        TBOX_PRINT("ECALL is running !\r\n");
     }
 
-    return E_OK;
+    return ret;
 
     /** DO NOT CHANGE THIS COMMENT!
      * </USERBLOCK>
@@ -12170,15 +12619,27 @@ Std_ReturnType  Rte_Call_RoutineServices_Routine_0xAF07_Start(
     DCM_UNUSED(currentDataLength);
     DCM_UNUSED(ErrorCode);
     DCM_UNUSED(OpStatus);
-
+        
+    Std_ReturnType ret = E_OK;
     SosLledState_e ecallStatus = 0;
     ecallStatus = GetSosLedState();
     if(ecallStatus == E_SOS_LED_STATE_NO_ECALL)
     {
-        AlarmSdkEcallTriger(E_ECALL_TRIGGER_TEST_MODE);
+        if(AlarmSdkEcallTriger(E_ECALL_TRIGGER_TEST_MODE) != 0)
+        {
+            ret = E_NOT_OK;
+            *ErrorCode = DCM_E_REQUESTOUTOFRANGE;
+        }
+        else;
     }
-    
-    return E_OK;
+    else
+    {
+        ret = E_NOT_OK;
+        *ErrorCode = DCM_E_REQUESTOUTOFRANGE;
+        TBOX_PRINT("ECALL is running !\r\n");
+    }
+
+    return ret;
 
     /** DO NOT CHANGE THIS COMMENT!
      * </USERBLOCK>
@@ -12203,59 +12664,8 @@ Std_ReturnType  Rte_Call_RoutineServices_Routine_0xAF08_Stop(
      */
 
     /* custom code.... */
-    Std_ReturnType ret = E_OK;
-    int16_t canPassRet = 0;
-    uint8_t UDSReqData[4] = {0x31, 0x02, 0xAF, 0x08};
-    uint16_t UDSReqDataLen = 4;
 
-    memcpy(UDSReqData + 4,InBuffer,*currentDataLength);
-    UDSReqDataLen += *currentDataLength;
-
-    if(ParameterSyncSdkGetFromCpuIsFinished()!=0)
-    {
-        ret = E_NOT_OK;
-        *ErrorCode = DCM_E_BUSYREPEATREQUEST;
-        return ret;
-    }
-    
-    switch(OpStatus)
-    {
-        case DCM_INITIAL://首次调用，发起异步请求
-            canPassRet = CanPassthrough_SendRequest(UDSReqData, UDSReqDataLen);
-            if(canPassRet == 0)
-            {
-                ret = DCM_E_PENDING;
-            }
-            else
-            {
-                ret = E_NOT_OK;
-                *ErrorCode = DCM_E_CONDITIONSNOTCORRECT;
-            }
-            break;
-
-        case DCM_PENDING://后续调用，检查是否有响应
-            canPassRet = CanPassthroughRoutine_PENDING(UDSReqData, UDSReqDataLen, OutBuffer, currentDataLength);
-            if(canPassRet == 0)
-            {
-                ret = E_OK;
-            }
-            else if(canPassRet == 1)//DCM_E_PENDING
-            {
-                ret = DCM_E_PENDING;
-            }
-            else if(canPassRet == -1)//timeout
-            {
-                ret = E_NOT_OK;
-                *ErrorCode = DCM_E_REQUESTOUTOFRANGE;
-            }
-            else
-            {
-                ret = E_NOT_OK;
-                *ErrorCode = canPassRet;
-            }
-            break;
-    }
-    return ret;
+    return E_OK;
     /** DO NOT CHANGE THIS COMMENT!
      * </USERBLOCK>
      */
@@ -12307,13 +12717,64 @@ Std_ReturnType  Rte_Call_RoutineServices_Routine_0xFE0A_Stop(
      */
 
     /* custom code.... */
-    DCM_UNUSED(InBuffer);
-    DCM_UNUSED(OutBuffer);
-    DCM_UNUSED(currentDataLength);
-    DCM_UNUSED(ErrorCode);
-    DCM_UNUSED(OpStatus);
-    return E_OK;
+    Std_ReturnType ret = E_OK;
+    int16_t canPassRet = 0;
+    uint8_t UDSReqData[4] = {0x31, 0x02, 0xFE, 0x0A};
+    uint16_t UDSReqDataLen = 4;
+    uint8_t UDSRespData[5] = {0};/*该RID无响应，OutBuffer为NULL，此数组为占位符*/
 
+    if(ParameterSyncSdkGetFromCpuIsFinished()!=0)
+    {
+        ret = E_NOT_OK;
+        *ErrorCode = DCM_E_BUSYREPEATREQUEST;
+        return ret;
+    }
+    
+    switch(OpStatus)
+    {
+        case DCM_INITIAL://首次调用，发起异步请求
+            canPassRet = CanPassthrough_SendRequest(UDSReqData, UDSReqDataLen);
+            if(canPassRet == 0)
+            {
+                ret = DCM_E_PENDING;
+            }
+            else
+            {
+                ret = E_NOT_OK;
+                *ErrorCode = DCM_E_CONDITIONSNOTCORRECT;
+            }
+            break;
+
+        case DCM_PENDING://后续调用，检查是否有响应
+            canPassRet = CanPassthroughRoutine_PENDING(UDSReqData, UDSReqDataLen, UDSRespData, currentDataLength);
+            if(OutBuffer != NULL)
+            {
+                /* 不会执行到此处，因为OutBuffer为NULL */
+                memcpy(OutBuffer,UDSRespData,*currentDataLength);
+                TBOX_PRINT("UDS31 OutBuffer error !\r\n");
+            }
+
+            if(canPassRet == 0)
+            {
+                ret = E_OK;
+            }
+            else if(canPassRet == 1)//DCM_E_PENDING
+            {
+                ret = DCM_E_PENDING;
+            }
+            else if(canPassRet == -1)//timeout
+            {
+                ret = E_NOT_OK;
+                *ErrorCode = DCM_E_REQUESTOUTOFRANGE;
+            }
+            else
+            {
+                ret = E_NOT_OK;
+                *ErrorCode = canPassRet;
+            }
+            break;
+    }
+    return ret;
     /** DO NOT CHANGE THIS COMMENT!
      * </USERBLOCK>
      */

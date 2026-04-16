@@ -196,6 +196,14 @@ extern  Std_ReturnType  Rte_Call_DataServices_Data_0x1205_DID_0x1205_ConditionCh
 extern  Std_ReturnType  Rte_Call_DataServices_Data_0x1206_DID_0x1206_ConditionCheckRead( Dcm_OpStatusType  OpStatus,  Dcm_NegativeResponseCodeType*  ErrorCode );
 extern  Std_ReturnType  Rte_Call_DataServices_Data_0x1207_DID_0x1207_ConditionCheckRead( Dcm_OpStatusType  OpStatus,  Dcm_NegativeResponseCodeType*  ErrorCode );
 extern  Std_ReturnType  Rte_Call_DataServices_Data_0x1208_DID_0x1208_ConditionCheckRead( Dcm_OpStatusType  OpStatus,  Dcm_NegativeResponseCodeType*  ErrorCode );
+extern  Std_ReturnType  Rte_Call_DataServices_Data_0x1209_DID_0x1209_ConditionCheckRead( Dcm_OpStatusType  OpStatus,  Dcm_NegativeResponseCodeType*  ErrorCode );
+extern  Std_ReturnType  Rte_Call_DataServices_Data_0x1210_DID_0x1210_ConditionCheckRead( Dcm_OpStatusType  OpStatus,  Dcm_NegativeResponseCodeType*  ErrorCode );
+extern  Std_ReturnType  Rte_Call_DataServices_Data_0x1211_DID_0x1211_ConditionCheckRead( Dcm_OpStatusType  OpStatus,  Dcm_NegativeResponseCodeType*  ErrorCode );
+extern  Std_ReturnType  Rte_Call_DataServices_Data_0x1212_DID_0x1212_ConditionCheckRead( Dcm_OpStatusType  OpStatus,  Dcm_NegativeResponseCodeType*  ErrorCode );
+extern  Std_ReturnType  Rte_Call_DataServices_Data_0x1213_DID_0x1213_ConditionCheckRead( Dcm_OpStatusType  OpStatus,  Dcm_NegativeResponseCodeType*  ErrorCode );
+extern  Std_ReturnType  Rte_Call_DataServices_Data_0x1214_DID_0x1214_ConditionCheckRead( Dcm_OpStatusType  OpStatus,  Dcm_NegativeResponseCodeType*  ErrorCode );
+extern  Std_ReturnType  Rte_Call_DataServices_Data_0x1215_DID_0x1215_ConditionCheckRead( Dcm_OpStatusType  OpStatus,  Dcm_NegativeResponseCodeType*  ErrorCode );
+
 
 extern  Std_ReturnType  Rte_Call_DataServices_Data_0xF130_DID_0xF130_ReadData( Dcm_OpStatusType  OpStatus,uint8*  Data,Dcm_NegativeResponseCodeType*  ErrorCode );
 extern  Std_ReturnType  Rte_Call_DataServices_Data_0xF18B_DID_0xF18B_ReadData( Dcm_OpStatusType  OpStatus,uint8*  Data,Dcm_NegativeResponseCodeType*  ErrorCode );
@@ -329,14 +337,21 @@ extern  Std_ReturnType  Rte_Call_DataServices_Data_0xBE06_DID_0xBE06_ReadData( D
 extern  Std_ReturnType  Rte_Call_DataServices_Data_0xBE0A_DID_0xBE0A_ReadData( Dcm_OpStatusType  OpStatus,uint8*  Data,Dcm_NegativeResponseCodeType*  ErrorCode );
 extern  Std_ReturnType  Rte_Call_DataServices_Data_0xD004_DID_0xD004_ReadData( Dcm_OpStatusType  OpStatus,uint8*  Data,Dcm_NegativeResponseCodeType*  ErrorCode );
 extern  Std_ReturnType  Rte_Call_DataServices_Data_0x0100_DID_0x0100_ReadData( Dcm_OpStatusType  OpStatus,uint8*  Data,Dcm_NegativeResponseCodeType*  ErrorCode );
-extern  Std_ReturnType  Rte_Call_DataServices_Data_0x1201_DID_0x1201_ReadData( Dcm_OpStatusType  OpStatus,uint8* Data,Dcm_NegativeResponseCodeType* ErrorCode );
-extern  Std_ReturnType  Rte_Call_DataServices_Data_0x1202_DID_0x1202_ReadData( Dcm_OpStatusType  OpStatus,uint8* Data,Dcm_NegativeResponseCodeType* ErrorCode );
-extern  Std_ReturnType  Rte_Call_DataServices_Data_0x1203_DID_0x1203_ReadData( Dcm_OpStatusType  OpStatus,uint8* Data,Dcm_NegativeResponseCodeType* ErrorCode );
-extern  Std_ReturnType  Rte_Call_DataServices_Data_0x1204_DID_0x1204_ReadData( Dcm_OpStatusType  OpStatus,uint8* Data,Dcm_NegativeResponseCodeType* ErrorCode );
-extern  Std_ReturnType  Rte_Call_DataServices_Data_0x1205_DID_0x1205_ReadData( Dcm_OpStatusType  OpStatus,uint8* Data,Dcm_NegativeResponseCodeType* ErrorCode );
-extern  Std_ReturnType  Rte_Call_DataServices_Data_0x1206_DID_0x1206_ReadData( Dcm_OpStatusType  OpStatus,uint8* Data,Dcm_NegativeResponseCodeType* ErrorCode );
-extern  Std_ReturnType  Rte_Call_DataServices_Data_0x1207_DID_0x1207_ReadData( Dcm_OpStatusType  OpStatus,uint8* Data,Dcm_NegativeResponseCodeType* ErrorCode );
-extern  Std_ReturnType  Rte_Call_DataServices_Data_0x1208_DID_0x1208_ReadData( Dcm_OpStatusType  OpStatus,uint8* Data,Dcm_NegativeResponseCodeType* ErrorCode );
+extern  Std_ReturnType  Rte_Call_DataServices_Data_0x1201_DID_0x1201_ReadData( Dcm_OpStatusType  OpStatus,uint8*  Data,Dcm_NegativeResponseCodeType*  ErrorCode );
+extern  Std_ReturnType  Rte_Call_DataServices_Data_0x1202_DID_0x1202_ReadData( Dcm_OpStatusType  OpStatus,uint8*  Data,Dcm_NegativeResponseCodeType*  ErrorCode );
+extern  Std_ReturnType  Rte_Call_DataServices_Data_0x1203_DID_0x1203_ReadData( Dcm_OpStatusType  OpStatus,uint8*  Data,Dcm_NegativeResponseCodeType*  ErrorCode );
+extern  Std_ReturnType  Rte_Call_DataServices_Data_0x1204_DID_0x1204_ReadData( Dcm_OpStatusType  OpStatus,uint8*  Data,Dcm_NegativeResponseCodeType*  ErrorCode );
+extern  Std_ReturnType  Rte_Call_DataServices_Data_0x1205_DID_0x1205_ReadData( Dcm_OpStatusType  OpStatus,uint8*  Data,Dcm_NegativeResponseCodeType*  ErrorCode );
+extern  Std_ReturnType  Rte_Call_DataServices_Data_0x1206_DID_0x1206_ReadData( Dcm_OpStatusType  OpStatus,uint8*  Data,Dcm_NegativeResponseCodeType*  ErrorCode );
+extern  Std_ReturnType  Rte_Call_DataServices_Data_0x1207_DID_0x1207_ReadData( Dcm_OpStatusType  OpStatus,uint8*  Data,Dcm_NegativeResponseCodeType*  ErrorCode );
+extern  Std_ReturnType  Rte_Call_DataServices_Data_0x1208_DID_0x1208_ReadData( Dcm_OpStatusType  OpStatus,uint8*  Data,Dcm_NegativeResponseCodeType*  ErrorCode );
+extern  Std_ReturnType  Rte_Call_DataServices_Data_0x1209_DID_0x1209_ReadData( Dcm_OpStatusType  OpStatus,uint8*  Data,Dcm_NegativeResponseCodeType*  ErrorCode );
+extern  Std_ReturnType  Rte_Call_DataServices_Data_0x1210_DID_0x1210_ReadData( Dcm_OpStatusType  OpStatus,uint8*  Data,Dcm_NegativeResponseCodeType*  ErrorCode );
+extern  Std_ReturnType  Rte_Call_DataServices_Data_0x1211_DID_0x1211_ReadData( Dcm_OpStatusType  OpStatus,uint8*  Data,Dcm_NegativeResponseCodeType*  ErrorCode );
+extern  Std_ReturnType  Rte_Call_DataServices_Data_0x1212_DID_0x1212_ReadData( Dcm_OpStatusType  OpStatus,uint8*  Data,Dcm_NegativeResponseCodeType*  ErrorCode );
+extern  Std_ReturnType  Rte_Call_DataServices_Data_0x1213_DID_0x1213_ReadData( Dcm_OpStatusType  OpStatus,uint8*  Data,Dcm_NegativeResponseCodeType*  ErrorCode );
+extern  Std_ReturnType  Rte_Call_DataServices_Data_0x1214_DID_0x1214_ReadData( Dcm_OpStatusType  OpStatus,uint8*  Data,Dcm_NegativeResponseCodeType*  ErrorCode );
+extern  Std_ReturnType  Rte_Call_DataServices_Data_0x1215_DID_0x1215_ReadData( Dcm_OpStatusType  OpStatus,uint8*  Data,Dcm_NegativeResponseCodeType*  ErrorCode );
 
 extern  Std_ReturnType  Rte_Call_DataServices_Data_0xF130_DID_0xF130_WriteData( const  uint8*  Data,uint16  DataLength,Dcm_OpStatusType  OpStatus,Dcm_NegativeResponseCodeType*  ErrorCode );
 extern  Std_ReturnType  Rte_Call_DataServices_Data_0xF18B_DID_0xF18B_WriteData( const  uint8*  Data,uint16  DataLength,Dcm_OpStatusType  OpStatus,Dcm_NegativeResponseCodeType*  ErrorCode );
@@ -387,6 +402,7 @@ extern  Std_ReturnType  Rte_Call_DataServices_Data_0xF021_DID_0xF021_WriteData( 
 extern  Std_ReturnType  Rte_Call_DataServices_Data_0xF022_DID_0xF022_WriteData( const  uint8*  Data,uint16  DataLength,Dcm_OpStatusType  OpStatus,Dcm_NegativeResponseCodeType*  ErrorCode );
 extern  Std_ReturnType  Rte_Call_DataServices_Data_0xF023_DID_0xF023_WriteData( const  uint8*  Data,uint16  DataLength,Dcm_OpStatusType  OpStatus,Dcm_NegativeResponseCodeType*  ErrorCode );
 extern  Std_ReturnType  Rte_Call_DataServices_Data_0x0100_DID_0x0100_WriteData( const  uint8*  Data,uint16  DataLength,Dcm_OpStatusType  OpStatus,Dcm_NegativeResponseCodeType*  ErrorCode );
+extern  Std_ReturnType  Rte_Call_DataServices_Data_0x1215_DID_0x1215_WriteData( const  uint8*  Data,uint16  DataLength,Dcm_OpStatusType  OpStatus,Dcm_NegativeResponseCodeType*  ErrorCode );
 /* PRQA S 0777,0779-- */ /* MISRA Rule 1.3,5.1,5.2 */
 /***************************Routine Part****************************************/
 extern  Std_ReturnType  Rte_Call_RoutineServices_Routine_0xAF09_RequestResults(

@@ -80,7 +80,7 @@
 #define NvMBlock_DIDF1A8               9U
 #define NvMBlock_DIDF130               10U
 #define NvMBlock_DIDC001               11U
-#define NvMBlock_DIDC002               12U
+#define NvMBlock_DIDC002               12U // used in ParamSync IMSI
 #define NvMBlock_DIDC003               13U
 #define NvMBlock_DIDC004               14U
 #define NvMBlock_DIDC005               15U
@@ -148,7 +148,7 @@ extern VAR(uint8, NVM_VAR_NOINIT) NvMBlockRamBuffer8[11];
 extern VAR(uint8, NVM_VAR_NOINIT) NvMBlockRamBuffer9[20];
 extern VAR(uint8, NVM_VAR_NOINIT) NvMBlockRamBuffer10[32];
 extern VAR(uint8, NVM_VAR_NOINIT) NvMBlockRamBuffer11[64];
-extern VAR(uint8, NVM_VAR_NOINIT) NvMBlockRamBuffer12[32];
+extern VAR(uint8, NVM_VAR_NOINIT) NvMBlockRamBuffer12[32]; // used in ParamSync IMSI to ouchenyang
 extern VAR(uint8, NVM_VAR_NOINIT) NvMBlockRamBuffer13[32];
 extern VAR(uint8, NVM_VAR_NOINIT) NvMBlockRamBuffer14[64];
 extern VAR(uint8, NVM_VAR_NOINIT) NvMBlockRamBuffer15[32];
