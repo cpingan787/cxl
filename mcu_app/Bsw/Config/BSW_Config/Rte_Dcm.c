@@ -9210,16 +9210,37 @@ Std_ReturnType Rte_Call_DataServices_Data_0x1209_DID_0x1209_ReadData( Dcm_OpStat
     /** DO NOT CHANGE THIS COMMENT!
      * <USERBLOCK Rte_Call_DataServices_Data_0x1209_DID_0x1209_ReadData>
      */
-    DCM_UNUSED(OpStatus);
+   DCM_UNUSED(OpStatus);
     DCM_UNUSED(ErrorCode);
-    CpuDtcSync_t dtcInfo;
     
-    Data[0] = 0x00;
+    uint32_t gnssAdcValue0 = 0;
+    uint32_t gnssAdcValue1 = 0;
     
-    if (0 == StateSyncGetDtcstate(&dtcInfo))
+    Data[0] = 0x00; 
+
+    PeripheralHalAdGet(AD0_CHANNEL_MCU_GPS_ANT_ADC0, &gnssAdcValue0);
+    PeripheralHalAdGet(AD0_CHANNEL_MCU_GPS_ANT_ADC1, &gnssAdcValue1);
+
+    if((gnssAdcValue0 >= 2050 && gnssAdcValue0 <= 2450) || (gnssAdcValue1 >= 2050 && gnssAdcValue1 <= 2450))
     {
-        Data[0] = dtcInfo.dtcState.emmcState;
+        // 天线断开
+        Data[0] = 0x00;
     }
+    else if((gnssAdcValue0 >= 2050 && gnssAdcValue0 <= 2450) || (gnssAdcValue1 >= 100 && gnssAdcValue1 <= 300))
+    {
+        // 天线正常
+        Data[0] = 0x01;
+    }
+    else if((gnssAdcValue0 == 0) || (gnssAdcValue1 == 0))
+    {
+        // 天线对地
+        Data[0] = 0x00;
+    }
+    else
+    {
+        Data[0] = 0x00;
+    }
+
     return E_OK;
     /** DO NOT CHANGE THIS COMMENT!
      * </USERBLOCK>

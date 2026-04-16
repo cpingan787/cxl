@@ -3205,7 +3205,7 @@ static CONST(Dcm_DspDataType, DCM_CONST) Dcm_DspDataCfg[147] =
         TRUE,                                       /*DcmConditionCheckReadFncUsed*/
         NULL_PTR,                                   /*DcmDspDataEcuSignalFnc*/
         NULL_PTR,                                   /*DcmDspDataReadEcuSignalFnc*/
-        DCM_OPAQUE,                                 /*DcmDspDataEndianness*/
+        DCM_OPAQUE,                                /*DcmDspDataEndianness*/
         NULL_PTR,                                   /*DcmDspDataFreezeCurrentsStateFnc*/
         NULL_PTR,                                   /*DcmDspDataGetScalingInfoFnc*/
         NULL_PTR,                                   /*DcmDspDataReadDataLengthFnc*/
@@ -7406,7 +7406,7 @@ static CONST(Dcm_DspCfgType,DCM_CONST) Dcm_DspCfg =
     &Dcm_DspCommonAuthorizationCfg[0],        /*pDcmDspCommonAuthorization*/
     &Dcm_DspControlDTCSettingCfg,    /*pDcmDspControlDTCSetting*/
     &Dcm_DspDataCfg[0],    /*pDcmDspData*/    NULL_PTR,    /*pDcmDspDataInfo*/
-    137u,    /*DcmDspDidNum*/
+    144u,    /*DcmDspDidNum*/
     &Dcm_DspDidCfg[0],        /*pDcmDspDid*/
     3u,    /*DcmDspDidInfoNum*/
     &Dcm_DspDidInfoCfg[0],        /*pDcmDspDidInfo*/

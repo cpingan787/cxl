@@ -25,7 +25,7 @@
 **                                                                           **
 **************************************************************************** */
 #include "Dcm_Internal.h"
-
+#include "Dem_Dcm.h"
 /****************************************************************
          UDS:ReadDataByIdentifier (22 hex) service
  ***************************************************************/
@@ -1757,6 +1757,346 @@ Dcm_UDS0x22(
         }
     }
 #endif
+    return ret;
+}
+
+#include "Dem_Dcm.h" 
+
+FUNC(Std_ReturnType, DCM_CODE)
+Dcm_UDS0xBB(
+    Dcm_OpStatusType OpStatus,
+    uint8 ProtocolCtrlId,
+    P2VAR(Dcm_NegativeResponseCodeType, AUTOMATIC, DCM_VAR) ErrorCode)
+{
+    uint8 MsgCtrlId = Dcm_ProtocolCtrl[ProtocolCtrlId].MsgCtrlIndex;
+    Dcm_MsgContextType* pMsgContext = &Dcm_MsgCtrl[MsgCtrlId].MsgContext;
+    uint8 TxChannelCtrlIndex = Dcm_MsgCtrl[MsgCtrlId].Dcm_TxCtrlChannelIndex;
+    uint8 TxChannelCfgIndex = Dcm_ChannelCtrl[TxChannelCtrlIndex].Dcm_ChannelCfgIndex;
+    uint32 Offset = (DcmPbCfgPtr->pDcmDslCfg->pDcmChannelCfg)[TxChannelCfgIndex].offset;
+    uint32 MaxBuffer = (DcmPbCfgPtr->pDcmDslCfg->pDcmChannelCfg)[TxChannelCfgIndex].Dcm_DslBufferSize;
+    Dcm_MsgLenType ReqDataLen = pMsgContext->ReqDataLen;
+
+    uint8 BbSubFunc;
+    uint32 ReqOffset;
+    Std_ReturnType ret = E_OK;
+
+    if (ReqDataLen < 2u)
+    {
+        *ErrorCode = DCM_E_INCORRECTMESSAGELENGTHORINVALIDFORMAT;
+        return E_NOT_OK;
+    }
+
+    /* 兼容不同的底层偏移量，自动寻找子功能和数据起点 */
+    if (pMsgContext->pReqData[0] == 0xBB) {
+        BbSubFunc = pMsgContext->pReqData[1];
+        ReqOffset = 2u;
+    } else {
+        BbSubFunc = pMsgContext->pReqData[0];
+        ReqOffset = 1u;
+    }
+
+    switch (BbSubFunc)
+    {
+        /*===========================================================================*/
+        /* BB 04 (模拟 0x22 ReadDataByIdentifier) */
+        /*===========================================================================*/
+        case 0x04: 
+        {
+#if (STD_ON == DCM_DSP_DID_FUNC_ENABLED)
+            uint16 RecDid;
+            uint32 ResOffset = Offset + 2u;
+            uint16 DidNum = (uint16)((ReqDataLen - ReqOffset) >> 1u);
+            uint16 Index0;
+            uint8 DidSessionSupportNum = 0;
+            uint8 NoFindDidNum = 0;
+            uint8 NoFindDidReadNum = 0;
+            uint8 RangeDidCfgIndex;
+            boolean RangeDidFlag;
+            uint16 DidCfgIndex;
+            boolean readDidSignalFlag;
+            uint8 MixPid = 0; /* NONE_PID */
+            uint8 noFindPidNum = 0;
+            Dcm_0x22Types Dcm_0x22Type;
+
+            ret = DspInternalUDS0x22_DidNumbercheck(DidNum, ReqDataLen - ReqOffset + 1u);
+            if (E_NOT_OK == ret)
+            {
+                *ErrorCode = DCM_E_INCORRECTMESSAGELENGTHORINVALIDFORMAT;
+                return E_NOT_OK;
+            }
+
+            Dcm_Channel[Offset] = 0xFBu;       
+            Dcm_Channel[Offset + 1u] = 0x04u;
+
+            for (Index0 = 0u; (Index0 < DidNum) && ((E_OK == ret) || (DCM_E_PENDING == ret)); Index0++)
+            {
+                RecDid = (uint16)(((uint16)pMsgContext->pReqData[ReqOffset]) << 8u) | ((uint16)(pMsgContext->pReqData[ReqOffset + 1u]));
+                ReqOffset += 2u;
+
+                if ((MixPid == 0) && ((E_OK == ret) || (DCM_E_PENDING == ret)))
+                {
+                    Dcm_0x22Type.RecDid = RecDid;
+                    Dcm_0x22Type.NoFindDidReadNum = &NoFindDidReadNum;
+                    Dcm_0x22Type.DidSessionSupportNum = &DidSessionSupportNum;
+                    Dcm_0x22Type.NoFindDidNum = &NoFindDidNum;
+                    Dcm_0x22Type.ResOffset = &ResOffset;
+                    Dcm_0x22Type.pRangeDidCfgIndex = &RangeDidCfgIndex;
+                    Dcm_0x22Type.pDidCfgIndex = &DidCfgIndex;
+                    Dcm_0x22Type.pRangeDidFlag = &RangeDidFlag;
+                    Dcm_0x22Type.readDidSignalFlag = &readDidSignalFlag;
+                    
+                    ret = DspInternalUDS0x22_NonObdDidDeal(OpStatus, ProtocolCtrlId, &Dcm_0x22Type, ErrorCode);
+                }
+                if ((OpStatus == DCM_PENDING) && (DCM_E_PENDING == ret)) { break; }
+            }
+
+            if (((NoFindDidNum == DidNum) || (NoFindDidReadNum == DidNum) || (noFindPidNum == DidNum) || (DidSessionSupportNum == 0u)) && (E_OK == ret))
+            {
+                *ErrorCode = DCM_E_REQUESTOUTOFRANGE;
+                ret = E_NOT_OK;
+            }
+
+            /* 如果你们的版本没开放 Dcm_0x22DidReadNvmFlag 的访问权限，可以把下面这个 if 块注释掉 */
+            if ((Dcm_0x22DidReadNvmFlag == DCM_PENDING) || ((OpStatus != DCM_PENDING) && (Dcm_0x22DidReadNvmFlag == E_OK)))
+            {
+                if (ret != E_NOT_OK) { ret = DCM_E_PENDING; }
+                Dcm_0x22DidReadNvmFlag = 0xFF;
+            }
+
+            if (E_OK == ret)
+            {
+                pMsgContext->ResMaxDataLen = (Dcm_MsgLenType)(ResOffset - Offset);
+                pMsgContext->ResDataLen = (Dcm_MsgLenType)(ResOffset - Offset);
+                pMsgContext->pResData = &Dcm_Channel[Offset];
+                DsdInternal_ProcessingDone(ProtocolCtrlId);
+            }
+#else
+            *ErrorCode = DCM_E_REQUESTOUTOFRANGE;
+            ret = E_NOT_OK;
+#endif
+            break;
+        }
+
+        /*===========================================================================*/
+        /* BB 05 (模拟 0x2E WriteDataByIdentifier) */
+        /*===========================================================================*/
+        case 0x05: 
+        {
+#if (STD_ON == DCM_DSP_DID_FUNC_ENABLED)
+            uint16 RecDid;
+            const Dcm_DspCfgType* pDcmDspCfg = DcmPbCfgPtr->pDcmDspCfg;
+            const Dcm_DspDidType* pDcmDspDid = pDcmDspCfg->pDcmDspDid;
+            uint16 i, sig;
+            boolean didFound = FALSE;
+            
+            if (ReqDataLen < (ReqOffset + 2u)) {
+                *ErrorCode = DCM_E_INCORRECTMESSAGELENGTHORINVALIDFORMAT;
+                ret = E_NOT_OK;
+                break;
+            }
+            RecDid = (((uint16)pMsgContext->pReqData[ReqOffset]) << 8u) | pMsgContext->pReqData[ReqOffset + 1u];
+
+            /* 手动寻址并调用 DID 的底层写函数，完全不依赖 0x2E 外壳代码 */
+            for(i = 0; i < pDcmDspCfg->DcmDspDidNum; i++)
+            {
+                if((pDcmDspDid[i].DcmDspDidId == RecDid) && (pDcmDspDid[i].DcmDspDidUsed == TRUE))
+                {
+                    didFound = TRUE;
+                    for(sig = 0; sig < pDcmDspDid[i].DcmDspDidSignalNum; sig++)
+                    {
+                        const Dcm_DspDataType* pData = pDcmDspDid[i].pDcmDspDidSignal[sig].pDcmDspDidData;
+                        if(pData->DcmDspDataWriteFnc != NULL_PTR)
+                        {
+                            ret = pData->DcmDspDataWriteFnc(&pMsgContext->pReqData[ReqOffset + 2u + pDcmDspDid[i].pDcmDspDidSignal[sig].DcmDspDidDataPos], pData->DcmDspDataSize, OpStatus, ErrorCode);
+                            if (ret != E_OK && ret != DCM_E_PENDING) { break; } /* 发生错误则中断 */
+                        }
+                        else
+                        {
+                            *ErrorCode = DCM_E_CONDITIONSNOTCORRECT;
+                            ret = E_NOT_OK;
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
+            
+            if (!didFound) {
+                *ErrorCode = DCM_E_REQUESTOUTOFRANGE;
+                ret = E_NOT_OK;
+            } else if (ret == E_OK) {
+                Dcm_Channel[Offset] = 0xFBu;
+                Dcm_Channel[Offset + 1u] = 0x05u;
+                Dcm_Channel[Offset + 2u] = (uint8)(RecDid >> 8u);
+                Dcm_Channel[Offset + 3u] = (uint8)(RecDid);
+                
+                pMsgContext->ResMaxDataLen = 4u;
+                pMsgContext->ResDataLen = 4u;
+                pMsgContext->pResData = &Dcm_Channel[Offset];
+                DsdInternal_ProcessingDone(ProtocolCtrlId);
+            } else if (ret == DCM_E_PENDING) {
+                Dcm_MsgCtrl[MsgCtrlId].Dcm_OpStatus = DCM_PENDING;
+            }
+#else
+            *ErrorCode = DCM_E_REQUESTOUTOFRANGE;
+            ret = E_NOT_OK;
+#endif
+            break;
+        }
+
+        /*===========================================================================*/
+        /* BB 06 (模拟 0x19 02 读取故障码) */
+        /*===========================================================================*/
+        case 0x06: 
+        {
+#if (STD_ON == DCM_UDS_SERVICE0X19_ENABLED)
+            uint8 reqSubFunc;
+            uint8 reqMask;
+            uint8 availMask = 0xFF;
+            uint32 currentLen = 4u; /* 预留 4 个字节：FB 06 02 FF */
+            uint32 dtc;
+            uint8 status;
+            uint16 dtcCount = 0;
+            Dem_ReturnGetNextFilteredElementType demRet;
+            Dem_ReturnGetNumberOfFilteredDTCType numRet;
+
+            if (ReqDataLen < (ReqOffset + 2u)) {
+                *ErrorCode = DCM_E_INCORRECTMESSAGELENGTHORINVALIDFORMAT;
+                ret = E_NOT_OK;
+                break;
+            }
+
+            reqSubFunc = pMsgContext->pReqData[ReqOffset];     /* 获取原本的 0x02 */
+            reqMask = pMsgContext->pReqData[ReqOffset + 1u];   /* 获取掩码，如 0x0C */
+
+            if (OpStatus == DCM_INITIAL)
+            {
+                /* 调用 Dem 模块 API 设置过滤 */
+                if (DEM_FILTER_ACCEPTED != Dem_DcmSetDTCFilter(reqMask, DEM_DTC_KIND_ALL_DTCS, DEM_DTC_FORMAT_UDS, DEM_DTC_ORIGIN_PRIMARY_MEMORY, FALSE, DEM_SEVERITY_NO_SEVERITY, FALSE)) {
+                    *ErrorCode = DCM_E_REQUESTOUTOFRANGE;
+                    ret = E_NOT_OK;
+                    break;
+                }
+            }
+
+            /* 【关键修复点】：必须先调用 GetNumberOf 初始化 Dem 底层迭代器 */
+            numRet = Dem_DcmGetNumberOfFilteredDTC(&dtcCount);
+            if (numRet == DEM_NUMBER_PENDING) {
+                Dcm_MsgCtrl[MsgCtrlId].Dcm_OpStatus = DCM_PENDING;
+                return DCM_E_PENDING;
+            } else if (numRet != DEM_NUMBER_OK) {
+                *ErrorCode = DCM_E_CONDITIONSNOTCORRECT;
+                ret = E_NOT_OK;
+                break;
+            }
+
+            /* 拼装头部，补全丢失的 0x02 字节以对齐 19 服务标准格式 */
+            Dcm_Channel[Offset] = 0xFBu;
+            Dcm_Channel[Offset + 1u] = 0x06u;
+            Dcm_Channel[Offset + 2u] = reqSubFunc;
+            Dem_DcmGetDTCStatusAvailabilityMask(&availMask);
+            Dcm_Channel[Offset + 3u] = availMask;
+
+            for (uint16 index = 0; index < dtcCount; index++)
+            {
+                demRet = Dem_DcmGetNextFilteredDTC(&dtc, &status);
+                if (demRet == DEM_FILTERED_OK)
+                {
+                    if ((currentLen + 4u) > MaxBuffer) {
+                        break; /* 缓冲区满，跳出循环防溢出 */
+                    }
+                    Dcm_Channel[Offset + currentLen++] = (uint8)(dtc >> 16u);
+                    Dcm_Channel[Offset + currentLen++] = (uint8)(dtc >> 8u);
+                    Dcm_Channel[Offset + currentLen++] = (uint8)(dtc);
+                    Dcm_Channel[Offset + currentLen++] = status;
+                }
+                else if (demRet == DEM_FILTERED_PENDING)
+                {
+                    Dcm_MsgCtrl[MsgCtrlId].Dcm_OpStatus = DCM_PENDING;
+                    return DCM_E_PENDING;
+                }
+                else
+                {
+                    break; /* 没有更多匹配的 DTC */
+                }
+            }
+
+            pMsgContext->ResMaxDataLen = currentLen;
+            pMsgContext->ResDataLen = currentLen;
+            pMsgContext->pResData = &Dcm_Channel[Offset];
+            DsdInternal_ProcessingDone(ProtocolCtrlId);
+            ret = E_OK;
+#else
+            *ErrorCode = DCM_E_SUBFUNCTIONNOTSUPPORTED;
+            ret = E_NOT_OK;
+#endif
+            break;
+        }
+
+        /*===========================================================================*/
+        /* BB 07 (模拟 0x14 清除故障码) */
+        /*===========================================================================*/
+        case 0x07: 
+        {
+#if (STD_ON == DCM_UDS_SERVICE0X14_ENABLED)
+            uint32 DtcGroup;
+            Dem_ReturnClearDTCType returnClearDTC;
+
+            if (ReqDataLen < (ReqOffset + 3u)) {
+                *ErrorCode = DCM_E_INCORRECTMESSAGELENGTHORINVALIDFORMAT;
+                ret = E_NOT_OK;
+                break;
+            }
+
+            DtcGroup = (((uint32)pMsgContext->pReqData[ReqOffset]) << 16u) |
+                       (((uint32)pMsgContext->pReqData[ReqOffset + 1u]) << 8u) |
+                       ((uint32)pMsgContext->pReqData[ReqOffset + 2u]);
+
+            /* 首次调用先检查清除参数 */
+            if (OpStatus == DCM_INITIAL) {
+                returnClearDTC = Dem_DcmCheckClearParameter(DtcGroup, DEM_DTC_FORMAT_UDS, DEM_DTC_ORIGIN_PRIMARY_MEMORY);
+                if (returnClearDTC != DEM_CLEAR_OK && returnClearDTC != DEM_CLEAR_PENDING) {
+                     *ErrorCode = DCM_E_REQUESTOUTOFRANGE;
+                     return E_NOT_OK;
+                }
+            }
+            
+            /* 执行底层清除 */
+            returnClearDTC = Dem_DcmClearDTC(DtcGroup, DEM_DTC_FORMAT_UDS, DEM_DTC_ORIGIN_PRIMARY_MEMORY);
+
+            if (returnClearDTC == DEM_CLEAR_PENDING)
+            {
+                Dcm_MsgCtrl[MsgCtrlId].Dcm_OpStatus = DCM_PENDING;
+                ret = DCM_E_PENDING;
+            }
+            else if (returnClearDTC == DEM_CLEAR_OK)
+            {
+                Dcm_Channel[Offset] = 0xFBu;
+                Dcm_Channel[Offset + 1u] = 0x07u;
+                pMsgContext->ResMaxDataLen = 2u;
+                pMsgContext->ResDataLen = 2u;
+                pMsgContext->pResData = &Dcm_Channel[Offset];
+                DsdInternal_ProcessingDone(ProtocolCtrlId);
+                ret = E_OK;
+            }
+            else
+            {
+                *ErrorCode = DCM_E_CONDITIONSNOTCORRECT;
+                ret = E_NOT_OK;
+            }
+#else
+            *ErrorCode = DCM_E_SUBFUNCTIONNOTSUPPORTED;
+            ret = E_NOT_OK;
+#endif
+            break;
+        }
+
+        default:
+            *ErrorCode = DCM_E_SUBFUNCTIONNOTSUPPORTED;
+            ret = E_NOT_OK;
+            break;
+    }
+
     return ret;
 }
 #define DCM_STOP_SEC_CODE
