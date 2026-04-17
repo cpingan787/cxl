@@ -208,8 +208,8 @@ const PmSdkConfig_t g_pmCondg =
         .kl30OffWakeDelay = (60 * 10),
         .deepSleepConfig =
             {
-                .mpuDeepSleep = 1,
-                .gSensorDeepSleep = 1,
+                .mpuDeepSleep = 0,
+                .gSensorDeepSleep = 0,
             },
         .customSleepConfig =
             {

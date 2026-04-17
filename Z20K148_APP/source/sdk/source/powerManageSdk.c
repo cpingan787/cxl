@@ -1339,7 +1339,7 @@ static void PmStatePreSleepNoticeProcess(uint32_t cycleTime)
         if(PowerManageSdkGetFastSleep() != 0)
         {
             /*快速休眠模式*/
-            MpuPowerSyncSdkSetSleep(3);
+            MpuPowerSyncSdkSetSleep(2);
         }
         else
         {
