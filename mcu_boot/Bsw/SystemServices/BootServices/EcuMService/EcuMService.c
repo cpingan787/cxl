@@ -1,4 +1,4 @@
-/*  BEGIN_FILE_HDR
+﻿/*  BEGIN_FILE_HDR
 ******************************************Copyright(C)*****************************************
 *
 *                                       YKXH  Technology
@@ -138,10 +138,12 @@ static void Service_Init(void)
     uint8 flag = 0;
     /* Initializing memory storage driver */
     EEIf_Init();
+    /* 初始化安全启动模块 */
+    SecureBoot_Init();
     /* Get flag */
     flag = BootM_GetFlag();
     /* Initializing Security Module */
-    SecM_Init();
+    //SecM_Init();
     /* Initialize canTp */
     CanTp_Init(NULL_PTR);
     /* Initialize dcm */

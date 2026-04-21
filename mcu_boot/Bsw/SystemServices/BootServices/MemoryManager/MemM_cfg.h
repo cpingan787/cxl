@@ -33,31 +33,17 @@
 *                                         INCLUDE FILES
 ***************************************************************************************************/
 #include "MemM.h"
-/***************************************************************************************************
-*                                  DATA TYPES AND STRUCTURES
-***************************************************************************************************/
-enum USERDATA_BLOCK0
-{
-    BLOCK_ID_IDX = 0,
-    REPROGRAM_ADDR_IDX = 2,
-    RESET_ADDR_IDX = 6,
-    SECURITY_ADDR_IDX = 10,
-    NEGATIVERES_ADDR_IDX = 14,
-    DID_F198_ADDR_IDX = 22,
-    DID_F187_ADDR_IDX = 32,
-    DID_F18A_ADDR_IDX = 45,
-    DID_F199_ADDR_IDX = 55
-};
+#include "DIDReadWrite.h"
 
 /***************************************************************************************************
 *                                      DEFINES AND MACROS
 ***************************************************************************************************/
 /*g_FlagsInfo info*/
-#define MEMM_APPA_FLAG_ADDR                      0x00050000U
-#define MEMM_APPB_FLAG_ADDR                      0x00120000U
+#define MEMM_APPA_FLAG_ADDR                      0x00080000U
+//#define MEMM_APPB_FLAG_ADDR                      0x00150000U //不需要Application B
 #define MEMM_CAL_FLAG_ADDR                       0x001F0000U
 
-#define MEMM_FLAG_NUM                            0x09U
+#define MEMM_FLAG_NUM                            0x0AU
 
 #define MEMM_FLAG_REPROGRAM_ID                   0x00u
 #define MEMM_FLAG_REPROGRAM_SIZE                 0x04u
@@ -90,13 +76,20 @@ enum USERDATA_BLOCK0
 #define MEMM_FLAG_FAC_ID                         0x07u
 #define MEMM_FLAG_FAC_SIZE                       0x04u
 
-#define MEMM_FLAG_MPU_REPROGRAM_ID               0x08u
-#define MEMM_FLAG_MPU_REPROGRAM_SIZE             0x04u
-#define MEMM_FLAG_MPU_REPROGRAM_DATA             0xC5u
-
 
 #define MEMM_FLAG_APPAddr_ID                   	 0x08u
 #define MEMM_FLAG_APPAddr_SIZE                   0x04u
+
+#define MEMM_FLAG_MPU_REPROGRAM_ID               0x09u
+#define MEMM_FLAG_MPU_REPROGRAM_SIZE             0x04u
+#define MEMM_FLAG_MPU_REPROGRAM_DATA             0xC5u
+
+#define VSN_ACTIVE_FLAG_ID                       0x09u
+#define VSN_ACTIVE_FLAG_SIZE                     0x01u
+
+#define SM4_KEY_ACTIVE_FLAG_ID                   0x0au
+#define SM4_KEY_ACTIVE_FLAG_SIZE                 0x01u
+
 
 
 
@@ -120,17 +113,83 @@ enum USERDATA_BLOCK0
 
 /*The address range for application A*/
 #define MEMM_APPA_START_ADDR          (MEMM_APPA_FLAG_ADDR + MEMM_ADDR_OFFSET)
-#define MEMM_APPA_LIMIT_ADDR          (0x0011FFFFU)
+#define MEMM_APPA_LIMIT_ADDR          (0x0014FFFFU)
 #define MEMM_APPA_SIZE                (MEMM_APPA_LIMIT_ADDR - MEMM_APPA_START_ADDR)
 
-/*The address range for application B*/
-#define MEMM_APPB_START_ADDR          (MEMM_APPB_FLAG_ADDR + MEMM_ADDR_OFFSET)
-#define MEMM_APPB_LIMIT_ADDR          (0x001EFFFFU)
-#define MEMM_APPB_SIZE                (MEMM_APPB_LIMIT_ADDR - MEMM_APPB_START_ADDR)
+//不需要Application B
+// /*The address range for application B*/
+// #define MEMM_APPB_START_ADDR          (MEMM_APPB_FLAG_ADDR + MEMM_ADDR_OFFSET)
+// #define MEMM_APPB_LIMIT_ADDR          (0x001EFFFFU)
+// #define MEMM_APPB_SIZE                (MEMM_APPB_LIMIT_ADDR - MEMM_APPB_START_ADDR)
 /*The address range for calibration data*/
 #define MEMM_CAL_START_ADDR           (MEMM_CAL_FLAG_ADDR + MEMM_ADDR_OFFSET)
 #define MEMM_CAL_LIMIT_ADDR           (0x001FFFFFU)
 #define MEMM_CAL_SIZE                 (MEMM_CAL_LIMIT_ADDR - MEMM_CAL_START_ADDR)
+
+/***************************************************************************************************
+*                                  DATA TYPES AND STRUCTURES
+***************************************************************************************************/
+enum USERDATA_BLOCK0
+{
+    BLOCK_ID_IDX = 0,
+    REPROGRAM_ADDR_IDX = BLOCK_ID_IDX + 2,
+    RESET_ADDR_IDX = REPROGRAM_ADDR_IDX + MEMM_FLAG_REPROGRAM_SIZE,
+    SECURITY_ADDR_IDX = RESET_ADDR_IDX + MEMM_FLAG_RESET_SESSION_SIZE,
+    NEGATIVERES_ADDR_IDX = SECURITY_ADDR_IDX + MEMM_FLAG_NORESPONSE_SIZE,
+    DID_F100_ADDR_IDX = NEGATIVERES_ADDR_IDX + MEMM_FLAG_NORESPONSE_SIZE,
+    DID_F110_ADDR_IDX = DID_F100_ADDR_IDX + DID_F100_LEN,
+    DID_F111_ADDR_IDX = DID_F110_ADDR_IDX + DID_F110_LEN,
+    DID_F112_ADDR_IDX = DID_F111_ADDR_IDX + DID_F111_LEN,
+    DID_F113_ADDR_IDX = DID_F112_ADDR_IDX + DID_F112_LEN,
+    DID_F114_ADDR_IDX = DID_F113_ADDR_IDX + DID_F113_LEN,   
+    DID_F115_ADDR_IDX = DID_F114_ADDR_IDX + DID_F114_LEN,
+    DID_F116_ADDR_IDX = DID_F115_ADDR_IDX + DID_F115_LEN,
+    DID_F117_ADDR_IDX = DID_F116_ADDR_IDX + DID_F116_LEN,
+    DID_F118_ADDR_IDX = DID_F117_ADDR_IDX + DID_F117_LEN,
+    DID_F119_ADDR_IDX = DID_F118_ADDR_IDX + DID_F118_LEN,
+    DID_F11A_ADDR_IDX = DID_F119_ADDR_IDX + DID_F119_LEN,
+    DID_F11B_ADDR_IDX = DID_F11A_ADDR_IDX + DID_F11A_LEN,
+    DID_F11C_ADDR_IDX = DID_F11B_ADDR_IDX + DID_F11B_LEN,
+    DID_F11D_ADDR_IDX = DID_F11C_ADDR_IDX + DID_F11C_LEN,
+    DID_F11E_ADDR_IDX = DID_F11D_ADDR_IDX + DID_F11D_LEN, 
+    DID_F11F_ADDR_IDX = DID_F11E_ADDR_IDX + DID_F11E_LEN,
+    DID_F120_ADDR_IDX = DID_F11F_ADDR_IDX + DID_F11F_LEN,
+    DID_F121_ADDR_IDX = DID_F120_ADDR_IDX + DID_F120_LEN,
+    DID_F183_ADDR_IDX = DID_F121_ADDR_IDX + DID_F121_LEN,
+    DID_F187_ADDR_IDX = DID_F183_ADDR_IDX + DID_F183_LEN,
+    DID_F18A_ADDR_IDX = DID_F187_ADDR_IDX + DID_F187_LEN,
+    DID_F18B_ADDR_IDX = DID_F18A_ADDR_IDX + DID_F18A_LEN,
+    DID_F18C_ADDR_IDX = DID_F18B_ADDR_IDX + DID_F18B_LEN,
+    DID_F190_ADDR_IDX = DID_F18C_ADDR_IDX + DID_F18C_LEN,
+    DID_F191_ADDR_IDX = DID_F190_ADDR_IDX + DID_F190_LEN,
+    DID_F192_ADDR_IDX = DID_F191_ADDR_IDX + DID_F191_LEN,
+    DID_F194_ADDR_IDX = DID_F192_ADDR_IDX + DID_F192_LEN,
+    DID_F198_ADDR_IDX = DID_F194_ADDR_IDX + DID_F194_LEN,
+    DID_F1A0_ADDR_IDX = DID_F198_ADDR_IDX + DID_F198_LEN,
+    DID_F1A1_ADDR_IDX = DID_F1A0_ADDR_IDX + DID_F1A0_LEN,
+    DID_F1A2_ADDR_IDX = DID_F1A1_ADDR_IDX + DID_F1A1_LEN,
+    DID_F1A5_ADDR_IDX = DID_F1A2_ADDR_IDX + DID_F1A2_LEN,
+    DID_F1A8_ADDR_IDX = DID_F1A5_ADDR_IDX + DID_F1A5_LEN,
+    DID_F1A9_ADDR_IDX = DID_F1A8_ADDR_IDX + DID_F1A8_LEN,
+    DID_F1AA_ADDR_IDX = DID_F1A9_ADDR_IDX + DID_F1A9_LEN,
+    DID_F130_ADDR_IDX = DID_F1AA_ADDR_IDX + DID_F1AA_LEN,
+    DID_F1B5_ADDR_IDX = DID_F130_ADDR_IDX + DID_F130_LEN,
+    DID_F1B6_ADDR_IDX = DID_F1B5_ADDR_IDX + DID_F1B5_LEN,
+    DID_AFF1_ADDR_IDX = DID_F1B6_ADDR_IDX + DID_F1B6_LEN,
+    DID_AFF2_ADDR_IDX = DID_AFF1_ADDR_IDX + DID_AFF1_LEN,
+    DID_AFF5_ADDR_IDX = DID_AFF2_ADDR_IDX + DID_AFF2_LEN,
+    DID_AFFC_ADDR_IDX = DID_AFF5_ADDR_IDX + DID_AFF5_LEN,
+    DID_AFFD_ADDR_IDX = DID_AFFC_ADDR_IDX + DID_AFFC_LEN,
+    DID_AFFE_ADDR_IDX = DID_AFFD_ADDR_IDX + DID_AFFD_LEN,
+    DID_AFFF_ADDR_IDX = DID_AFFE_ADDR_IDX + DID_AFFE_LEN,
+    VSN_ADDR_IDX = DID_AFFF_ADDR_IDX + DID_AFFF_LEN,
+    VSN_ACTIVE_FLAG_IDX = VSN_ADDR_IDX + 32U,
+    ALG_FLAG_IDX = VSN_ACTIVE_FLAG_IDX + 1U,
+    SM4_KEY_IDX = ALG_FLAG_IDX + 1U,
+    SM4_KEY_ACTIVE_FLAG_IDX = SM4_KEY_IDX + 32U,
+    SM2_KEY_IDX = SM4_KEY_ACTIVE_FLAG_IDX + 1U,
+    ECC256_KEY_IDX = SM2_KEY_IDX + 65U,
+};
 
 /***************************************************************************************************
 *                                 GLOBAL VARIABLE DECLARATIONS

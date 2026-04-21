@@ -48,6 +48,7 @@
 ***************************************************************************************************/
 extern uint8 g_BootM_SIBTimeout;
 extern uint8 g_BootM_SIBData[BOOTM_SIB_REQUEST_LEN];
+extern uint8 g_BootM_StayInBoot;
 /***************************************************************************************************
 *                                     FUNCTION PROTOTYPES
 ***************************************************************************************************/
@@ -55,5 +56,6 @@ extern uint8 BootM_GetFlag(void);
 extern uint8 BootM_FlagHandle(uint8 Flag);
 extern uint8 BootM_IsAllLBA_Valid(void);
 extern uint8 BootM_IsAllLBB_Valid(void);
+extern void BootM_ReprogramRespond(void);
 #endif    /*BOOTM_H*/
 

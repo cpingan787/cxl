@@ -1,4 +1,4 @@
-/**
+﻿/**
  * COPYRIGHT
  * ---------------------------------------------------------------------------------------------------------------------
  * Copyright (c) iSOFT INFRASTRUCTURE SOFTWARE CO., LTD. This software is proprietary to
@@ -28,17 +28,24 @@
 /* =================================================== inclusions =================================================== */
 #include "Os.h"
 #include "Os_Arch_Processor.h"
-
+#include "Wdg_59_DriverB.h"
+#include "Wdg_59_DriverB_PBTypes.h"
 #include "Can.h"
+#include "BootM.h"
 #include "logHal.h"
 #include "mpuHal.h"
 #include "mcuMpuSyncTask.h"
 #include "firmwareUpdateSdk.h"
-
+#include "SecureBoot.h"
+#ifdef TIME_TEST
+#include "SignatureHeader.h"
+#endif
 /** DO NOT CHANGE THIS COMMENT!
 * <USERBLOCK User Includes>
 */
 /* custom code.... */
+uint8 InitFlag = 0;
+
 /** DO NOT CHANGE THIS COMMENT!
 * </USERBLOCK>
 */
@@ -69,27 +76,80 @@ TASK(OsTask_0)
    static uint32 sys_cnt = 201;
    static uint32 run_time = 0;
    static uint32 dataRead = 0;
-   if (sys_cnt == 201) 
+    if(InitFlag == 0)
+    {
+        InitFlag = 1;
+        if(g_BootM_StayInBoot == TRUE)
+        {
+            BootM_ReprogramRespond();
+        }
+    }
+    if (sys_cnt == 201) 
    {
         LogHalInit(1);
-
-        FlsIf_Read(0x50000, 4, (uint8*)&dataRead);
+        FlsIf_Read(0x80000, 4, (uint8*)&dataRead);
+        MpuHalInit();
         if(dataRead != 0xfe)
         {
-            
-        } else {
-            MpuHalInit();
+          MpuHal_TriggerPowerOnSequence();
         }
 
-
         McuMpuSyncTaskInit();
-        uint8 flag = BootM_GetFlag();
+        DID_Init();
+        // uint8 flag = BootM_GetFlag();
         FirmwareUpdate_UnlockMcuFlashAck();
-        TBOX_PRINT("boot start: %d\n", flag);
+        TBOX_PRINT("boot start  SecBoot: %d\n",SecureBootCurrentStatus);
         sys_cnt = 0;
     }
-#if 1
+
+#ifdef TIME_TEST
+    /* 测试时间接口准确度 */
+#if 0
+    static uint32_t lastTick = 0;
+    uint32_t current_time = 0;
+    (void)GetCounterValue(0, &current_time);
+    uint32_t elapsed_time = current_time - lastTick;
+    lastTick = current_time;
+    static uint32_t ulastTick = 0;
+    uint32_t ucurrent_time = OSTM_GetUs();
+    uint32_t uelapsed_time = OSTM_GetElapsedUs(ulastTick);
+    ulastTick = ucurrent_time;
+    TBOX_PRINT("etime: %d ms, uetime: %d us\r\n", elapsed_time, uelapsed_time);
+#endif
+    /* 测试SM3摘要耗时 */
+    uint8_t sm3Digest[32] = {0};
+    uint32_t startAddress = 0x80600;
+    uint32_t dataLength = g_pSignatureHeader.pModuleAddressInfo->length;
+    TBOX_PRINT("dataLength: %ld\n", dataLength);
+    VssSM3Calc((const uint8_t*)startAddress, dataLength, sm3Digest);
+    int ret1 = memcmp(g_pSignatureHeader.pSuffix->MessageDigestNational, sm3Digest, 32);
+    TBOX_PRINT("SM3 ret = %d\n", ret1);
+    /* 测试SM2签名耗时 */
+#if 0
+    uint32_t sm2DataLength = sizeof(SignatureHeaderPrefixType) + 
+                            ModuleAddressInfoSize + 
+                            sizeof(g_pSignatureHeader.pSuffix->SignerInfoNational) + 
+                            sizeof(g_pSignatureHeader.pSuffix->MessageDigestNational); // 210字节
+    static uint8_t sm2VerifyData[300] = {0};
+    uint32_t copyOffset = 0;
+    memcpy(sm2VerifyData, g_pSignatureHeader.pPrefix, sizeof(SignatureHeaderPrefixType));
+    copyOffset += sizeof(SignatureHeaderPrefixType);
+    memcpy(sm2VerifyData + copyOffset, g_pSignatureHeader.pModuleAddressInfo, ModuleAddressInfoSize);
+    copyOffset += ModuleAddressInfoSize;
+    memcpy(sm2VerifyData + copyOffset, &g_pSignatureHeader.pSuffix->SignerInfoNational, 
+            sizeof(g_pSignatureHeader.pSuffix->SignerInfoNational));
+    copyOffset += sizeof(g_pSignatureHeader.pSuffix->SignerInfoNational);
+    memcpy(sm2VerifyData + copyOffset, &g_pSignatureHeader.pSuffix->MessageDigestNational, 
+            sizeof(g_pSignatureHeader.pSuffix->MessageDigestNational));
+    /* 使用SM2验证签名 */
+    uint32_t ret = VssSM2_Verify(sm2VerifyData, sm2DataLength, g_pSignatureHeader.pSuffix->SignatureNational, 64, VSS_OTA_SM2_KEY);
+    TBOX_PRINT("SM2 verify ret: %d\n", ret);
+#endif
+#endif
+
+
     sys_cnt++;
+    MpuHalCycleProcess(5);
     if (sys_cnt == 5) // 1s
     {
         MpuHalTxTask();
@@ -97,7 +157,6 @@ TASK(OsTask_0)
         sys_cnt = 0;
         run_time++;
     }
-#endif
 
     CanTp_MainFunction();
     Dcm_TimerFunction();
@@ -116,6 +175,7 @@ TASK(OsTask_0)
   		//Can_MainFunction_BusOff();
   		//Can_MainFunction_Wakeup();
  	 	//Can_MainFunction_Mode();
+        Wdg_59_DriverB_TriggerFunc(WDG_59_DRIVERB_INCLUDE_CRITICAL_SECTION);    //100ms trigger一次
 	}
     /** DO NOT CHANGE THIS COMMENT!
     * </USERBLOCK>
@@ -215,7 +275,7 @@ ISR(ISR_RCANGRECC0_IRQ_Handler)
     * <USERBLOCK RCANGRECC0_IRQ>
     */
     /* custom code.... */
-	CAN_RSCAN0_RXFIFO_CAT2_ISR();
+    CAN_RSCAN0_RXFIFO_CAT2_ISR();
 
     /** DO NOT CHANGE THIS COMMENT!
     * </USERBLOCK>
@@ -301,7 +361,7 @@ ISR(ISR_TAUD0I9_IRQ_Handler)
     //     WDG_59_DRIVERA_TRIGGERFUNCTION_ISR();
     //     ret = 1;
     // }
-    
+
     /** DO NOT CHANGE THIS COMMENT!
     * </USERBLOCK>
     */

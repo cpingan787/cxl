@@ -20,17 +20,66 @@ typedef struct
     uint32             Addr;            /* Storage address */
 }DIDInfo_t;
 
+typedef struct
+{
+    uint8              NumBlocks;
+    uint32             Addr;
+}DID_F110_t;
+
+typedef struct
+{
+    uint32             Addr;
+    uint8              Size;
+    uint8*             InitData;
+}DID_InitCfg_t;
+
 /*==================================================================================================
 *                                      GLOBAL CONSTANTS
 ==================================================================================================*/
 
-#define Dcm_NUMBER_OF_DIDS                             0x09U
-#define DID_F198_LEN                            ((uint32)0x0AU)
-#define DID_F187_LEN                            ((uint32)0x0CU)
-#define DID_F18A_LEN                            ((uint32)0x0AU)
-#define DID_F199_LEN                            ((uint32)0x04U)
-
-#define DID_AFFB_LEN                            ((uint32)0x02U)
+#define Dcm_NUMBER_OF_DIDS                               0x2EU
+#define DID_F100_LEN                            ((uint32)0x10U)
+#define DID_F110_LEN                            ((uint32)0x10U)
+#define DID_F111_LEN                            ((uint32)0x10U)
+#define DID_F112_LEN                            ((uint32)0x10U)
+#define DID_F113_LEN                            ((uint32)0x10U)
+#define DID_F114_LEN                            ((uint32)0x10U)
+#define DID_F115_LEN                            ((uint32)0x10U)
+#define DID_F116_LEN                            ((uint32)0x10U)
+#define DID_F117_LEN                            ((uint32)0x10U)
+#define DID_F118_LEN                            ((uint32)0x10U)
+#define DID_F119_LEN                            ((uint32)0x10U)
+#define DID_F11A_LEN                            ((uint32)0x10U)
+#define DID_F11B_LEN                            ((uint32)0x10U)
+#define DID_F11C_LEN                            ((uint32)0x10U)
+#define DID_F11D_LEN                            ((uint32)0x10U)
+#define DID_F11E_LEN                            ((uint32)0x10U)
+#define DID_F11F_LEN                            ((uint32)0x10U)
+#define DID_F120_LEN                            ((uint32)0x10U)
+#define DID_F121_LEN                            ((uint32)0x10U)
+#define DID_F183_LEN                            ((uint32)0x0AU)
+#define DID_F187_LEN                            ((uint32)0x05U)
+#define DID_F18A_LEN                            ((uint32)0x05U)
+#define DID_F18B_LEN                            ((uint32)0x03U)
+#define DID_F18C_LEN                            ((uint32)0x10U)
+#define DID_F190_LEN                            ((uint32)0x11U)
+#define DID_F191_LEN                            ((uint32)0x05U)
+#define DID_F192_LEN                            ((uint32)0x0AU)
+#define DID_F194_LEN                            ((uint32)0x0AU)
+#define DID_F198_LEN                            ((uint32)0x0BU)
+#define DID_F1A0_LEN                            ((uint32)0x05U)
+#define DID_F1A1_LEN                            ((uint32)0x05U)
+#define DID_F1A2_LEN                            ((uint32)0x08U)
+#define DID_F1A5_LEN                            ((uint32)0x03U)
+#define DID_F1A8_LEN                            ((uint32)0x14U)
+#define DID_F1A9_LEN                            ((uint32)0x05U)
+#define DID_F1AA_LEN                            ((uint32)0x05U)
+#define DID_F130_LEN                            ((uint32)0x20U)
+#define DID_F1B5_LEN                            ((uint32)0x05U)
+#define DID_F1B6_LEN                            ((uint32)0x05U)
+#define DID_AFF1_LEN                            ((uint32)0x1CAU)
+#define DID_AFF2_LEN                            ((uint32)0x01U)
+#define DID_AFF5_LEN                            ((uint32)0x01U)
 #define DID_AFFC_LEN                            ((uint32)0x02U)
 #define DID_AFFD_LEN                            ((uint32)0x01U)
 #define DID_AFFE_LEN                            ((uint32)0x01U)
@@ -54,5 +103,6 @@ extern const DIDInfo_t DID_Infos[Dcm_NUMBER_OF_DIDS];
 extern void DID_Init(void);
 extern Std_ReturnType DID_Write(uint8 * buf, const DIDInfo_t * ProdInfo);
 extern Std_ReturnType DID_Read(uint8 * buf, const DIDInfo_t *  ProdInfo);
+Std_ReturnType IsEEIfNeedInit(void* buff, uint32 len);
 
 #endif /* BOOTSERVICES_DIAG_CALLOUT_DIDREADWRITE_H_ */

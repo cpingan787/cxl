@@ -1,4 +1,4 @@
-/*  BEGIN_FILE_HDR
+﻿/*  BEGIN_FILE_HDR
 ******************************************Copyright(C)*****************************************
 *
 *                                       YKXH  Technology
@@ -38,8 +38,7 @@
 #include "Diag_Callout.h"
 #include "CanIf.h"
 #include "CanTp_Cfg.h"
-#include "firmwareUpdateSdk.h"
-
+#include "SecureBoot.h"
 /***************************************************************************************************
 *                                  DATA TYPES AND STRUCTURES
 ***************************************************************************************************/
@@ -47,9 +46,9 @@ typedef void (* theApp)(void);
 /***************************************************************************************************
 *                                      DEFINES AND MACROS
 ***************************************************************************************************/
-#define BOOTM_APPAJUMP_ADDR                           (0x00050202UL)
-#define BOOTM_OFFSET_ADDR                             (0x00050200UL)
-#define BOOTM_APPBJUMP_ADDR                           (0x00050202UL)
+#define BOOTM_APPAJUMP_ADDR                           (0x00080602UL)
+#define BOOTM_OFFSET_ADDR                             (0x00080600UL)
+//#define BOOTM_APPBJUMP_ADDR                           (0x00080602UL)
 #define BOOTM_VALID_REPROGRAM                         (0x00u)
 #define BOOTM_VALID_10RESET                           (0x01u)
 #define BOOTM_VALID_11RESET                           (0x02u)
@@ -61,6 +60,7 @@ typedef void (* theApp)(void);
 ***************************************************************************************************/
 uint8 g_BootM_SIBTimeout = FALSE;
 uint8 g_BootM_SIBData[BOOTM_SIB_REQUEST_LEN];
+uint8 g_BootM_StayInBoot = FALSE;
 static const uint8 gs_StayInBootFrame[BOOTM_SIB_REQUEST_LEN] =
 {
     0x04,0x31,0x01,0xFD,0x06
@@ -75,7 +75,7 @@ static void BootM_AppGo(void);
 static void BootM_ResetRespond(uint8 reason);
 static void BootM_ReprogramStateSet(void);
 #if(DCM_RESET_PROGRAMMING_RESPONSE_TYPE == DCM_RESET_BEFORE_RESPONSE)
-static void BootM_ReprogramRespond(void);
+void BootM_ReprogramRespond(void);
 static void BootM_MCUResetRespond(uint8 reason);
 #endif
 static Std_ReturnType BooM_IsSIBValid(void);
@@ -183,7 +183,7 @@ uint8 BootM_GetFlag(void)
     {
          flag = BOOTM_VALID_MPU_REPROGRAM;
     }
-    else if(BootM_IsAllLBA_Valid() == E_OK)
+    else if((BootM_IsAllLBA_Valid() == E_OK) && (SecureBootCurrentStatus == SECURE_BOOT_SUCCESS))
     {
          BootM_AppGo();
          flag = BOOTM_VALID_SIB;
@@ -250,7 +250,8 @@ uint8 BootM_FlagHandle(uint8 Flag)
             /*Clear reprogram flag*/
             retValue = Diag_FlagClear(MEMM_FLAG_REPROGRAM_ID);
 #if(DCM_RESET_PROGRAMMING_RESPONSE_TYPE == DCM_RESET_BEFORE_RESPONSE)
-            BootM_ReprogramRespond();
+            //BootM_ReprogramRespond();
+            g_BootM_StayInBoot = TRUE;
 #endif/*#if(DCM_RESET_RESPONSE_TYPE == DCM_RESET_BEFORE_RESPONSE)*/
             BootM_ReprogramStateSet();
             break;
@@ -452,7 +453,7 @@ static void BootM_ReprogramStateSet(void)
 *
 ************************************************************************************************
 END_FUNCTION_HDR */
-static void BootM_ReprogramRespond(void)
+void BootM_ReprogramRespond(void)
 {
     if(Diag_FlagCompare(MEMM_FLAG_NORESPONSE_ID) == E_OK)
     {

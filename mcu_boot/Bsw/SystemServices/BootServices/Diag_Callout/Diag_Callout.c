@@ -38,6 +38,8 @@
 //#include "Wdg_43_Instance0.h"
 #include "FlsIf.h"
 #include "EEIf.h"
+#include "Wdg_59_DriverB.h"
+#include "Wdg_59_DriverB_PBTypes.h"
 /***************************************************************************************************
 *                                  DATA TYPES AND STRUCTURES
 ***************************************************************************************************/
@@ -100,7 +102,7 @@ void ADC_Update_Value(void)
 END_FUNCTION_HDR */
 void Diag_WdgFeed(void)
 {
-  //  Wdg_43_Instance0_SetTriggerCondition(2000);
+    Wdg_59_DriverB_TriggerFunc(WDG_59_DRIVERB_INCLUDE_CRITICAL_SECTION);
 }
 
 /* BEGIN_FUNCTION_HDR

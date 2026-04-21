@@ -39,18 +39,7 @@
 #define MPU_TX_FRAME_QUEUE_SIZE         16 /* 最多允许排队 16 帧 */
 
 /****************************** Type Definitions ******************************/
-typedef enum
-{
-    E_MPU_HAL_START_STATE_IDLE = 0,
-    E_MPU_HAL_START_STATE_POWER_OFF,
-    E_MPU_HAL_START_STATE_OFF_DELAY,
-    E_MPU_HAL_START_STATE_POWER_ON,
-    E_MPU_HAL_START_STATE_POWER_DELAY,
-    E_MPU_HAL_START_STATE_KEY_ON,
-    E_MPU_HAL_START_STATE_KEY_ON_DELAY,
-    E_MPU_HAL_START_STATE_KEY_OFF,
-    E_MPU_HAL_START_STATE_FINISH,
-} MpuHalStartState_e;
+
 
 typedef struct 
 {
@@ -643,7 +632,7 @@ void MpuHalInit(void)
     memset(&g_mpuManage, 0, sizeof(g_mpuManage));
     g_mpuManage.wakeoutTimeCount = 10;
     g_mpuManage.wakeMode = 1;
-    MpuHalGpioInit();
+    //MpuHalGpioInit();
     MpuHalMainUartInit(); // 115200 * 4
 }
 
@@ -681,4 +670,110 @@ void MpuHalTxTask(void)
         }
         g_MpuEndFlag = 1;
     }
+}
+
+static void MpuHalSetPowerkey(uint8_t flag)
+{
+    if(0==flag)
+    {
+        Dio_WriteChannel(DioConf_DioChannel_DIO_Channel_AG591_POWERKEY_EN_Pin18_1, STD_LOW);
+    }
+    else
+    {
+        Dio_WriteChannel(DioConf_DioChannel_DIO_Channel_AG591_POWERKEY_EN_Pin18_1, STD_HIGH);
+    }
+}
+
+static void MpuHalSetPower(uint8_t flag)
+{
+    if(0==flag)
+    {
+        Dio_WriteChannel(DioConf_DioChannel_DIO_Channel_NAD_V2X_5V0__EN_Pin1_7, STD_LOW);
+        Dio_WriteChannel(DioConf_DioChannel_DIO_Channel_NAD_V2X_3V8_EN_Pin18_3, STD_LOW);
+    }
+    else
+    {
+        Dio_WriteChannel(DioConf_DioChannel_DIO_Channel_NAD_V2X_5V0__EN_Pin1_7, STD_HIGH);
+        Dio_WriteChannel(DioConf_DioChannel_DIO_Channel_NAD_V2X_3V8_EN_Pin18_3, STD_HIGH);
+    }
+}
+
+static void MpuHalSetWakeOut(uint8_t flag)
+{
+    if(0==flag)
+    {
+        Dio_WriteChannel(DioConf_DioChannel_DIO_Channel_MCU_WAKEUP_NAD_Pin12_0, STD_LOW);
+    }
+    else
+    {
+        Dio_WriteChannel(DioConf_DioChannel_DIO_Channel_MCU_WAKEUP_NAD_Pin12_0, STD_HIGH);
+    }
+}
+
+void MpuHalCycleProcess(uint32_t cycleTime)
+{
+    static uint32_t timeCount = 0;
+
+    if (E_MPU_HAL_START_STATE_IDLE == g_mpuManage.startState)
+    {
+    }
+    else if (E_MPU_HAL_START_STATE_POWER_OFF == g_mpuManage.startState)
+    {
+        timeCount = 0;
+        g_mpuManage.startState = E_MPU_HAL_START_STATE_OFF_DELAY;
+    }
+    else if (E_MPU_HAL_START_STATE_OFF_DELAY == g_mpuManage.startState)
+    {
+        timeCount += cycleTime;
+        if (timeCount >= 500)
+        {
+            g_mpuManage.startState = E_MPU_HAL_START_STATE_POWER_ON;
+            MpuHalSetPower(1);
+        }
+    }
+    else if (E_MPU_HAL_START_STATE_POWER_ON == g_mpuManage.startState)
+    {
+        timeCount = 0;
+        g_mpuManage.startState = E_MPU_HAL_START_STATE_POWER_DELAY;
+    }
+    else if (E_MPU_HAL_START_STATE_POWER_DELAY == g_mpuManage.startState)
+    {
+        timeCount += cycleTime;
+        if (timeCount >= (400 - cycleTime))
+        {
+            g_mpuManage.startState = E_MPU_HAL_START_STATE_KEY_ON;
+        }
+    }
+    else if (E_MPU_HAL_START_STATE_KEY_ON == g_mpuManage.startState)
+    {
+        g_mpuManage.startState = E_MPU_HAL_START_STATE_KEY_ON_DELAY;
+        MpuHalSetPowerkey(1);
+        timeCount = 0;
+    }
+    else if (E_MPU_HAL_START_STATE_KEY_ON_DELAY == g_mpuManage.startState)
+    {
+        timeCount += cycleTime;
+        if (timeCount > (500 - cycleTime))
+        {
+            g_mpuManage.startState = E_MPU_HAL_START_STATE_KEY_OFF;
+            MpuHalSetPowerkey(0);
+        }
+    }
+    else if (E_MPU_HAL_START_STATE_KEY_OFF == g_mpuManage.startState)
+    {
+        g_mpuManage.startState = E_MPU_HAL_START_STATE_FINISH;
+    }
+    if (g_mpuManage.wakeoutTimeCount < 2)
+    {
+        g_mpuManage.wakeoutTimeCount++;
+        if (2 == g_mpuManage.wakeoutTimeCount)
+        {
+            MpuHalSetWakeOut(0);
+        }
+    }
+}
+
+void MpuHal_TriggerPowerOnSequence(void)
+{
+    g_mpuManage.startState = E_MPU_HAL_START_STATE_OFF_DELAY;
 }

@@ -204,7 +204,7 @@
 #define DIO_PORT_GROUP_ARRAY_SIZE           7U
 
 /* Array size for the channel structure */
-#define DIO_CHANNEL_ARRAY_SIZE              17U
+#define DIO_CHANNEL_ARRAY_SIZE              18U
 
 /* Array size for the channel group structure */
 #define DIO_CHANNEL_GROUP_ARRAY_SIZE        4U
@@ -241,6 +241,7 @@
 #define DioConf_DioChannel_DIO_Channel_AG591_RST_EN_Pin18_0 (Dio_ChannelType)14
 #define DioConf_DioChannel_DIO_Channel_NAD_TO_MCU_Pin10_13 (Dio_ChannelType)15
 #define DioConf_DioChannel_DIO_Channel_MCU_TO_NAD_EN_Pin10_14 (Dio_ChannelType)16
+#define DioConf_DioChannel_DIO_Channel_MCU_WAKEUP_NAD_Pin12_0 (Dio_ChannelType)17
 
 /* Channel Mapping for DioChannelBitPosition */
 #define DioConfig0_UserConfigCh1_bit        (uint8)0x00

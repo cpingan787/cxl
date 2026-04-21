@@ -19,6 +19,19 @@
 #define PROTOCOL_AID_FWUPD                (0x03U)
 
 /****************************** Type Definitions ******************************/
+
+typedef enum
+{
+    E_MPU_HAL_START_STATE_IDLE = 0,
+    E_MPU_HAL_START_STATE_POWER_OFF,
+    E_MPU_HAL_START_STATE_OFF_DELAY,
+    E_MPU_HAL_START_STATE_POWER_ON,
+    E_MPU_HAL_START_STATE_POWER_DELAY,
+    E_MPU_HAL_START_STATE_KEY_ON,
+    E_MPU_HAL_START_STATE_KEY_ON_DELAY,
+    E_MPU_HAL_START_STATE_KEY_OFF,
+    E_MPU_HAL_START_STATE_FINISH,
+} MpuHalStartState_e;
 typedef struct
 {
     uint8_t aid;
@@ -134,4 +147,26 @@ void MpuHalUartInterruptCallback(uint8_t data);
 void MpuHalUartTimerCallback(void);
 
 
+static void MpuHalSetPower(uint8_t flag);
+static void MpuHalSetPowerkey(uint8_t flag);
+static void MpuHalSetWakeOut(uint8_t flag);
+/*************************************************
+ Function: MpuHalCycleProcess
+ Description: MPU 模块的周期处理函数
+ Input: cycleTime - 周期时间
+ Output: None
+ Return: None
+ Others:
+*************************************************/
+void MpuHalCycleProcess(uint32_t cycleTime);
+
+/*************************************************
+ Function: MpuHal_TriggerPowerOnSequence
+ Description: 触发 MPU 模块的上电时序
+ Input: None
+ Output: None
+ Return: None
+ Others:
+*************************************************/
+void MpuHal_TriggerPowerOnSequence(void);
 #endif

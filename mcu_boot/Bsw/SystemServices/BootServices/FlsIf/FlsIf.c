@@ -49,6 +49,7 @@ static   FlsIf_StateType  FlsIf_State;
 
 static uint8 FlsIf_GetBlockNum(uint32 phyaddr,uint8* blocknum);
 static uint8 FlsIf_ConvertAddress(uint32 logicaddr,uint32* phyaddr);
+static uint8 FlsIf_GetSectorIdx(uint32 phyaddr, uint32* sectorIdx);
 /* BEGIN_FUNCTION_HDR
 ************************************************************************************************
 * Function Name : FlsIf_GetBlockNum
@@ -264,7 +265,7 @@ uint8 FlsIf_Write(uint32 sAddr, uint32 size, uint8* buf)
             p->write(&temParamDrv);
             #endif
             SuspendAllInterrupts();
-            FCL_Handel(R_FCL_CMD_WRITE, FlsIf_PageBuffer, addr, 1);
+            tem = FCL_Handel(R_FCL_CMD_WRITE, FlsIf_PageBuffer, addr, 1);
             ResumeAllInterrupts();
             /***Mcal_EnableAllInterrupts();*/
             /* get error code */
@@ -322,7 +323,7 @@ uint8 FlsIf_Erase(uint32 sAddr, uint32 size)
     uint8  blocknum = 0;
     uint32 addr = 0;
     uint32 len = size;
-    uint32 sectorIdx = 16;
+    uint32 sectorIdx = 0;
     /*
     1- get physical addr;2-get blocknum;3-if the physical addr algin to sector
     step 1&2 will check the address range
@@ -336,7 +337,8 @@ uint8 FlsIf_Erase(uint32 sAddr, uint32 size)
     {
         if((E_OK == FlsIf_ConvertAddress(sAddr,&addr))&&
            (E_OK == FlsIf_GetBlockNum(addr,&blocknum))&&
-           (0 == ((addr-FlsIf_Block[blocknum].startaddress)%FlsIf_Block[blocknum].sectorsize)))
+           (0 == ((addr-FlsIf_Block[blocknum].startaddress)%FlsIf_Block[blocknum].sectorsize))&&
+           (E_OK == FlsIf_GetSectorIdx(addr, &sectorIdx)))
         {
             /*OK*/
         }
@@ -376,28 +378,40 @@ uint8 FlsIf_Erase(uint32 sAddr, uint32 size)
                 if(len >= FlsIf_Block[blocknum].sectorsize)
                 {
                     len  = len - FlsIf_Block[blocknum].sectorsize;
-                    sectorIdx ++;
                 }
                 else
                 { 
                     len  = 0;
-                    sectorIdx ++;
                 }
-                if((len>0) && (addr >= FlsIf_Block[blocknum].startaddress + FlsIf_Block[blocknum].length))
+                
+                /* Get sector info for the next address */
+                if (len > 0)
                 {
-                     /* the last block has been erased */
-                     blocknum++;
+                    if (E_OK != FlsIf_GetSectorIdx(addr, &sectorIdx))
+                    {
+                        tem = E_NOT_OK;
+                    }
+                    else if((addr >= FlsIf_Block[blocknum].startaddress + FlsIf_Block[blocknum].length))
+                    {
+                         /* the last block has been erased */
+                         blocknum++;
 
-                     if(blocknum >= FLSIF_BLOCK_NUM)
-                     {
-                      /* all blocks has been erased */
-                       tem = E_NOT_OK;
-                     }
-                     else
-                     {
-                         /* start next block  */
-                         addr = FlsIf_Block[blocknum].startaddress;
-                     }
+                         if(blocknum >= FLSIF_BLOCK_NUM)
+                         {
+                          /* all blocks has been erased */
+                           tem = E_NOT_OK;
+                         }
+                         else
+                         {
+                             /* start next block  */
+                             addr = FlsIf_Block[blocknum].startaddress;
+                             /* Get sector info for the new block start address */
+                             if (E_OK != FlsIf_GetSectorIdx(addr, &sectorIdx))
+                             {
+                                 tem = E_NOT_OK;
+                             }
+                         }
+                    }
                 }
             }
             else
@@ -451,6 +465,54 @@ uint8 FlsIf_Read(uint32 sAddr, uint32 size, uint8* buf)
 
     #endif
 
+    return tem;
+}
+
+/* BEGIN_FUNCTION_HDR
+************************************************************************************************
+* Function Name : FlsIf_GetSectorIdx
+* 
+* Description   : this function will calculate the sector index for the given physical address
+*                 - For address range 0x00000000-0x0000FFFF, sector size is 8KB (8192 bytes)
+*                 - For address range 0x00010000-0x1FFFFFFF, sector size is 32KB (32768 bytes)
+* 
+* Inputs        : phyaddr - physical address
+*                 *sectorIdx - pointer to store the sector index
+* 
+* Outputs       : E_OK if the address is valid, E_NOT_OK otherwise
+* 
+* Limitations   : Only for HiBoot
+*                 Address must be within 0x00000000-0x1FFFFFFF
+************************************************************************************************
+END_FUNCTION_HDR */
+static uint8 FlsIf_GetSectorIdx(uint32 phyaddr, uint32* sectorIdx)
+{
+    uint8 tem = E_NOT_OK;
+    const uint32 SECTOR_SIZE_8KB = 0x2000U;
+    const uint32 SECTOR_SIZE_32KB = 0x8000U;
+    const uint32 ADDRESS_BOUNDARY = 0x0000FFFFU;
+    
+    /* Check if input pointer is valid */
+    if (sectorIdx != NULL)
+    {
+        /* Check if address is within valid range */
+        if (phyaddr <= 0x1FFFFFFFU)
+        {
+            if (phyaddr <= ADDRESS_BOUNDARY)
+            {
+                /* Address is in 0x00000000-0x0000FFFF range, use 8KB sector size */
+                *sectorIdx = (uint32)(phyaddr / SECTOR_SIZE_8KB);
+            }
+            else
+            {
+                /* Address is in 0x00010000-0x1FFFFFFF range, use 32KB sector size */
+                /* Calculate sector index: 0x00000000-0x0000FFFF has 8 sectors (8KB each) */
+                *sectorIdx = 8U + (uint32)((phyaddr - 0x00010000U) / SECTOR_SIZE_32KB);
+            }
+            tem = E_OK;
+        }
+    }
+    
     return tem;
 }
 

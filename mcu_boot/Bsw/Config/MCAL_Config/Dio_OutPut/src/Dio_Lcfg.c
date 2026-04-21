@@ -411,6 +411,14 @@ CONST(Dio_PortChannel, DIO_CONST)
 
     /* ucPortIndex */
     0x06U
+  },
+  /* Index: 17 - DIO_Channel_MCU_WAKEUP_NAD_Pin12_0 */
+  {
+    /* usMask */
+    0x0001U,
+
+    /* ucPortIndex */
+    0x07U
   }
 };
 

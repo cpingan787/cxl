@@ -42,8 +42,8 @@
 #define SA_FAC                                  (3U)
 #define SA_DELAYTIME                            (10000U)/*10s*/
 
-#define DCM_SubFun_RequestSeed                 ((uint8)0x3U)
-#define DCM_SubFun_SendKey                     ((uint8)0x4U)
+#define DCM_SubFun_RequestSeed                 ((uint8)0x5U)
+#define DCM_SubFun_SendKey                     ((uint8)0x6U)
 /***************************************************************************************************
 *                                 GLOBAL VARIABLE DECLARATIONS
 ***************************************************************************************************/

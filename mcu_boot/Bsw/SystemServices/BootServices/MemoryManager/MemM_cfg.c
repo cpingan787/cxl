@@ -51,13 +51,13 @@ MemM_LBInfo_t g_logicalBlocks[MEMM_LOGICALBLOCK_NUM] =
         MEMM_APPA_LIMIT_ADDR,
         MEMM_APPA_SIZE
     },
-    {
-        MEMM_APPB,
-        MEMM_APPB_START_ADDR,
-        MEMM_APPB_LIMIT_ADDR,
-        MEMM_APPB_SIZE
+    // {
+    //     MEMM_APPB,
+    //     MEMM_APPB_START_ADDR,
+    //     MEMM_APPB_LIMIT_ADDR,
+    //     MEMM_APPB_SIZE
 
-    },
+    // },
     {
         MEMM_CAL,
         MEMM_CAL_START_ADDR,
@@ -98,12 +98,13 @@ MemM_FlagInfo_t g_FlagsInfo[MEMM_FLAG_NUM] =
         MEMM_FLAG_APPA_SIZE,
         MEMM_FLAG_APPA_DATA
     },
-    {
-        MEMM_DRV_FLASH,
-        MEMM_APPB_FLAG_ADDR,
-        MEMM_FLAG_APPB_SIZE,
-        MEMM_FLAG_APPB_DATA
-    },
+    //不需要Application B
+    // {
+    //     MEMM_DRV_FLASH,
+    //     MEMM_APPB_FLAG_ADDR,
+    //     MEMM_FLAG_APPB_SIZE,
+    //     MEMM_FLAG_APPB_DATA
+    // },
     {
         MEMM_DRV_FLASH,
         MEMM_CAL_FLAG_ADDR,
@@ -115,6 +116,18 @@ MemM_FlagInfo_t g_FlagsInfo[MEMM_FLAG_NUM] =
         SECURITY_ADDR_IDX,
         MEMM_FLAG_FAC_SIZE,
         COMMF_INVALID_U8 /*true value is not constant*/
+    },
+    {
+        MEMM_DRV_EE,
+        VSN_ACTIVE_FLAG_IDX,
+        VSN_ACTIVE_FLAG_SIZE,
+        COMMF_INVALID_U8    //真值待定
+    },
+    {
+        MEMM_DRV_EE,
+        SM4_KEY_ACTIVE_FLAG_IDX,
+        SM4_KEY_ACTIVE_FLAG_SIZE,
+        COMMF_INVALID_U8    //真值待定
     },
     {
         MEMM_DRV_EE,

@@ -61,6 +61,61 @@ static void delay_us(unsigned int xus)
     }
 }
 
+#ifdef TIME_TEST
+#define OSTM_PCLK_MHZ          40
+#define OSTM_MAX_TICKS         0xFFFFFFFFUL
+static uint32_t g_ostm_start_value = OSTM_MAX_TICKS;
+/*************************************************
+  Function:     OSTM_Init
+  Description:  OSTM init
+  Input:        None
+  Output:       None
+  Return:       None
+  Others:       None
+*************************************************/
+void OSTM_Init(void)
+{
+    OSTM0.TT = 0x01; 
+    OSTM0.CMP = OSTM_MAX_TICKS;
+    OSTM0.CTL = 0x01;
+    OSTM0.TS = 0x01; 
+}
+/*************************************************
+  Function:     OSTM_GetUs
+  Description:  OSTM get us
+  Input:        None
+  Output:       None
+  Return:       None
+  Others:       None
+*************************************************/
+uint32_t OSTM_GetUs(void)
+{
+    uint32_t current_cnt = OSTM0.CNT;
+    uint32_t elapsed_ticks = OSTM_MAX_TICKS - current_cnt;
+    return (elapsed_ticks / OSTM_PCLK_MHZ);
+}
+/*************************************************
+  Function:     OSTM_GetElapsedUs
+  Description:  OSTM get elapsed us
+  Input:        last_timestamp: last timestamp
+  Output:       None
+  Return:       None
+  Others:       None
+*************************************************/
+uint32_t OSTM_GetElapsedUs(uint32_t last_timestamp)
+{
+    uint32_t current_time = OSTM_GetUs();
+    
+    if (current_time >= last_timestamp)
+    {
+        return (current_time - last_timestamp);
+    } else {
+        /* 处理 32 位微秒计数器溢出的情况 (虽然要跑 71 分钟才会溢出) */
+        return ((0xFFFFFFFFUL - last_timestamp) + current_time + 1);
+    }
+}
+#endif
+
 /*************************************************
   Function:     LogHalInit
   Description:  MPU uart and debug uart init
@@ -78,11 +133,9 @@ void LogHalInit(uint8_t mode)
         g_debugUartReciveCount = 0;
         R_UART4_Receive(g_debugUartReciveData, 1);
     }
-    
-    if(mode == 2 || mode ==3)
-    {
-        //MPU debug uart init
-    }
+#ifdef TIME_TEST
+    OSTM_Init();
+#endif
     g_debugMode = mode;
 }
 
@@ -111,82 +164,4 @@ void LogHalPrint(const char *format, ...)
         }
         g_debugPrintEndFlag = 0;
     }
-
-    if(g_debugMode == 2 || g_debugMode == 3)
-    {
-        // TODO: MPU debug uart print
-    }
-    
 }
-
-void LogHalSetMode(uint8_t mode)
-{
-    if(0 == mode)
-    {
-        if(g_debugMode == 1 || g_debugMode == 3)
-        {
-            R_UART4_Stop();
-        }
-
-        if(g_debugMode == 2 || g_debugMode == 3)
-        {
-            // TODO: MPU debug uart stop
-        }
-    }
-    else if(1 == mode)
-    {
-        if(g_debugMode == 1 || g_debugMode == 3)
-        {
-            R_UART4_Start();
-            g_debugUartReciveCount = 0;
-            R_UART4_Receive(g_debugUartReciveData, 1);
-        }
-
-        if(g_debugMode == 2 || g_debugMode == 3)
-        {
-            // TODO: MPU debug uart init
-        }
-    }  
-}
-
-void LogHalTestMain(uint16_t cycleTime)
-{
-    static uint16_t count = 0;
-
-    if(g_debugUartReciveCount > 0)
-    {
-        TBOX_PRINT("%s \r\n", g_debugUartReciveData);
-        g_debugUartReciveCount = 0;
-        memset(g_debugUartReciveData, 0, 100);
-        // R_UART4_Receive(g_debugUartReciveData, 1);
-    }
-
-    // if(g_debugUartErrorFlag == 1)
-    // {
-    //     TBOX_PRINT("debug uart error type: %d \r\n", g_debugUartErrorType);
-    //     g_debugUartErrorFlag = 0;
-    //     g_debugUartReciveCount = 0;
-    //     R_UART4_Receive(g_debugUartReciveData, 1);
-    // }
-
-    if(count++ < (1000 / cycleTime))
-    {
-        return;
-    }
-    count = 0;
-
-    // while (1)
-    {
-        // TBOX_PRINT("Task running! \r\n");
-        // delay_ms(1);
-        if(g_debugUartErrorFlag == 1)
-        {
-            TBOX_PRINT("debug uart error type: %d \r\n", g_debugUartErrorType);
-            g_debugUartErrorFlag = 0;
-            g_debugUartReciveCount = 0;
-            memset(g_debugUartReciveData, 0, 100);
-            R_UART4_Receive(g_debugUartReciveData, 1);
-        }
-    }
-}
-

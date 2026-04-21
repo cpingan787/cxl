@@ -20,17 +20,13 @@
 #include "MemM_cfg.h"
 
 /****************************** Macro Definitions ******************************/
-#define FLASH_APP_BANKA_ACTIVE_ADDRESS           0x00050000 
-#define FLASH_APP_BANKA_ABSTRACT_ADDRESS         0x00050200 
-#define FLASH_APP_BANKA_BASE_ADDRESS             0x00050200  // A区代码起始
-#define FLASH_APP_BANKA_END_ADDRESS              0x0011FFFF  // A区代码结束
-#define FLASH_APP_BANKA_VALID_FLAG_ADDR          0x00050000  // 大小 0x200
-#define APP_BANK_SIZE                            0x000CFE00
+#define FLASH_APP_BANKA_ACTIVE_ADDRESS           0x00080000 
+#define FLASH_APP_BANKA_ABSTRACT_ADDRESS         0x00080200  // 签名区
+#define FLASH_APP_BANKA_END_ADDRESS              0x00150000  // A区代码结束
+#define APP_BANK_SIZE                            0x000D0000
 #define FLASH_APP_DEFALT_BANK_ID                 0x00
 #define FLASH_APP_BANKA_ID                       0x01
-#define FLASH_BANK_APP_INTEGRITY_DISABLE         0x00 
-#define FLASH_BANK_APP_INTEGRITY_ENABLE          0x01 
-#define FLASH_APP_BANKA_ACTIVE_FLAG              0x01
+
 
 /****************************** Type Definitions ******************************/
 /****************************** Global Variables ******************************/
@@ -81,7 +77,7 @@ static uint8_t FirmwareUpdateSdkEraseFlash(volatile uint8_t *dataPack)
             TBOX_PRINT("05 address error\r\n");
             return 1;
         }
-        address = 0x50000;
+        address = FLASH_APP_BANKA_ACTIVE_ADDRESS;
         uint32_t eraseLength = APP_BANK_SIZE;
         
         // 1. 发起擦除请求
@@ -135,7 +131,7 @@ static uint8_t FirmwareUpdateSdkLoadCode(volatile uint8_t *dataPack, uint16_t da
                       
             // 边界检查
             if((len <= 0 || len > (1024*1024)) || 
-               (addr < FLASH_APP_BANKA_BASE_ADDRESS) || 
+               (addr < FLASH_APP_BANKA_ABSTRACT_ADDRESS) || 
                (addr > FLASH_APP_BANKA_END_ADDRESS) ||  
                ((addr + len) > FLASH_APP_BANKA_END_ADDRESS)) 
             {
@@ -143,7 +139,7 @@ static uint8_t FirmwareUpdateSdkLoadCode(volatile uint8_t *dataPack, uint16_t da
                 {
                     TBOX_PRINT("06 invalid data length: %d\r\n", len);
                 }
-                else if((addr < FLASH_APP_BANKA_BASE_ADDRESS) || (addr > FLASH_APP_BANKA_END_ADDRESS))
+                else if((addr < FLASH_APP_BANKA_ABSTRACT_ADDRESS) || (addr > FLASH_APP_BANKA_END_ADDRESS))
                 {
                     TBOX_PRINT("06 address out of range: %08x\r\n", addr);
                 }
@@ -386,6 +382,13 @@ void FirmwareUpdateSdkCycleProcess(int16_t handle, MpuHalDataPack_t *pRxMsg)
                 break;
         }
 
+        if (s_UpdateMid == E_FirmwareUpdateSdkCmd_SoftwareResetMcu)
+        {
+            Mcu_PerformReset();
+            Mcu_PerformReset();
+            Mcu_PerformReset();
+            TBOX_PRINT("---Reset ERROR---\r\n");
+        }
 
         MpuHalDataPack_t TxPack;
         TxPack.aid = curAid;
@@ -396,13 +399,6 @@ void FirmwareUpdateSdkCycleProcess(int16_t handle, MpuHalDataPack_t *pRxMsg)
         TxPack.dataLength = dataTxLen;
         MpuHalTransmit(handle, &TxPack);
         lastCmdCounter = newCmdCounter;
-
-        if (s_UpdateMid == E_FirmwareUpdateSdkCmd_SoftwareResetMcu)
-        {
-            delay_us(50000);
-            // reset
-            Mcu_PerformReset();
-        }
 
     }
 }
