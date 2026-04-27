@@ -1786,7 +1786,6 @@ Dcm_UDS0xBB(
         return E_NOT_OK;
     }
 
-    /* 兼容不同的底层偏移量，自动寻找子功能和数据起点 */
     if (pMsgContext->pReqData[0] == 0xBB) {
         BbSubFunc = pMsgContext->pReqData[1];
         ReqOffset = 2u;
@@ -1814,7 +1813,7 @@ Dcm_UDS0xBB(
             boolean RangeDidFlag;
             uint16 DidCfgIndex;
             boolean readDidSignalFlag;
-            uint8 MixPid = 0; /* NONE_PID */
+            uint8 MixPid = 0;
             uint8 noFindPidNum = 0;
             Dcm_0x22Types Dcm_0x22Type;
 
@@ -1856,7 +1855,6 @@ Dcm_UDS0xBB(
                 ret = E_NOT_OK;
             }
 
-            /* 如果你们的版本没开放 Dcm_0x22DidReadNvmFlag 的访问权限，可以把下面这个 if 块注释掉 */
             if ((Dcm_0x22DidReadNvmFlag == DCM_PENDING) || ((OpStatus != DCM_PENDING) && (Dcm_0x22DidReadNvmFlag == E_OK)))
             {
                 if (ret != E_NOT_OK) { ret = DCM_E_PENDING; }
@@ -1896,7 +1894,6 @@ Dcm_UDS0xBB(
             }
             RecDid = (((uint16)pMsgContext->pReqData[ReqOffset]) << 8u) | pMsgContext->pReqData[ReqOffset + 1u];
 
-            /* 手动寻址并调用 DID 的底层写函数，完全不依赖 0x2E 外壳代码 */
             for(i = 0; i < pDcmDspCfg->DcmDspDidNum; i++)
             {
                 if((pDcmDspDid[i].DcmDspDidId == RecDid) && (pDcmDspDid[i].DcmDspDidUsed == TRUE))
@@ -1908,7 +1905,7 @@ Dcm_UDS0xBB(
                         if(pData->DcmDspDataWriteFnc != NULL_PTR)
                         {
                             ret = pData->DcmDspDataWriteFnc(&pMsgContext->pReqData[ReqOffset + 2u + pDcmDspDid[i].pDcmDspDidSignal[sig].DcmDspDidDataPos], pData->DcmDspDataSize, OpStatus, ErrorCode);
-                            if (ret != E_OK && ret != DCM_E_PENDING) { break; } /* 发生错误则中断 */
+                            if (ret != E_OK && ret != DCM_E_PENDING) { break; }
                         }
                         else
                         {
@@ -1953,7 +1950,7 @@ Dcm_UDS0xBB(
             uint8 reqSubFunc;
             uint8 reqMask;
             uint8 availMask = 0xFF;
-            uint32 currentLen = 4u; /* 预留 4 个字节：FB 06 02 FF */
+            uint32 currentLen = 4u;
             uint32 dtc;
             uint8 status;
             uint16 dtcCount = 0;
@@ -1966,12 +1963,11 @@ Dcm_UDS0xBB(
                 break;
             }
 
-            reqSubFunc = pMsgContext->pReqData[ReqOffset];     /* 获取原本的 0x02 */
-            reqMask = pMsgContext->pReqData[ReqOffset + 1u];   /* 获取掩码，如 0x0C */
+            reqSubFunc = pMsgContext->pReqData[ReqOffset];
+            reqMask = pMsgContext->pReqData[ReqOffset + 1u];
 
             if (OpStatus == DCM_INITIAL)
             {
-                /* 调用 Dem 模块 API 设置过滤 */
                 if (DEM_FILTER_ACCEPTED != Dem_DcmSetDTCFilter(reqMask, DEM_DTC_KIND_ALL_DTCS, DEM_DTC_FORMAT_UDS, DEM_DTC_ORIGIN_PRIMARY_MEMORY, FALSE, DEM_SEVERITY_NO_SEVERITY, FALSE)) {
                     *ErrorCode = DCM_E_REQUESTOUTOFRANGE;
                     ret = E_NOT_OK;
@@ -1979,7 +1975,6 @@ Dcm_UDS0xBB(
                 }
             }
 
-            /* 【关键修复点】：必须先调用 GetNumberOf 初始化 Dem 底层迭代器 */
             numRet = Dem_DcmGetNumberOfFilteredDTC(&dtcCount);
             if (numRet == DEM_NUMBER_PENDING) {
                 Dcm_MsgCtrl[MsgCtrlId].Dcm_OpStatus = DCM_PENDING;
@@ -1990,7 +1985,6 @@ Dcm_UDS0xBB(
                 break;
             }
 
-            /* 拼装头部，补全丢失的 0x02 字节以对齐 19 服务标准格式 */
             Dcm_Channel[Offset] = 0xFBu;
             Dcm_Channel[Offset + 1u] = 0x06u;
             Dcm_Channel[Offset + 2u] = reqSubFunc;
@@ -2003,7 +1997,7 @@ Dcm_UDS0xBB(
                 if (demRet == DEM_FILTERED_OK)
                 {
                     if ((currentLen + 4u) > MaxBuffer) {
-                        break; /* 缓冲区满，跳出循环防溢出 */
+                        break;
                     }
                     Dcm_Channel[Offset + currentLen++] = (uint8)(dtc >> 16u);
                     Dcm_Channel[Offset + currentLen++] = (uint8)(dtc >> 8u);
@@ -2017,7 +2011,7 @@ Dcm_UDS0xBB(
                 }
                 else
                 {
-                    break; /* 没有更多匹配的 DTC */
+                    break;
                 }
             }
 
@@ -2051,8 +2045,6 @@ Dcm_UDS0xBB(
             DtcGroup = (((uint32)pMsgContext->pReqData[ReqOffset]) << 16u) |
                        (((uint32)pMsgContext->pReqData[ReqOffset + 1u]) << 8u) |
                        ((uint32)pMsgContext->pReqData[ReqOffset + 2u]);
-
-            /* 首次调用先检查清除参数 */
             if (OpStatus == DCM_INITIAL) {
                 returnClearDTC = Dem_DcmCheckClearParameter(DtcGroup, DEM_DTC_FORMAT_UDS, DEM_DTC_ORIGIN_PRIMARY_MEMORY);
                 if (returnClearDTC != DEM_CLEAR_OK && returnClearDTC != DEM_CLEAR_PENDING) {
@@ -2061,7 +2053,6 @@ Dcm_UDS0xBB(
                 }
             }
             
-            /* 执行底层清除 */
             returnClearDTC = Dem_DcmClearDTC(DtcGroup, DEM_DTC_FORMAT_UDS, DEM_DTC_ORIGIN_PRIMARY_MEMORY);
 
             if (returnClearDTC == DEM_CLEAR_PENDING)

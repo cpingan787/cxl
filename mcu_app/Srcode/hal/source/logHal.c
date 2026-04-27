@@ -84,6 +84,49 @@ static void delay_us(uint32_t xus)
     }
 }
 
+#ifdef TIME_TEST
+#define OSTM_PCLK_MHZ          60
+#define OSTM_MAX_TICKS         0xFFFFFFFFUL
+static uint32_t g_ostm_start_value = OSTM_MAX_TICKS;
+/*************************************************
+  Function:     OSTM_Init
+  Description:  
+  Input:        None
+  Output:       None
+  Return:       None
+  Others:       None
+*************************************************/
+void OSTM_Init(void)
+{
+    OSTM0.TT = 0x01; 
+    OSTM0.CMP = OSTM_MAX_TICKS;
+    OSTM0.CTL = 0x01;
+    OSTM0.TS = 0x01; 
+}
+
+uint32_t OSTM_GetUs(void)
+{
+    uint32_t current_cnt = OSTM0.CNT;
+    uint32_t elapsed_ticks = OSTM_MAX_TICKS - current_cnt;
+    return (elapsed_ticks / OSTM_PCLK_MHZ);
+}
+
+uint32_t OSTM_GetElapsedUs(uint32_t last_timestamp)
+{
+    uint32_t current_time = OSTM_GetUs();
+    
+    if (current_time >= last_timestamp)
+    {
+        return (current_time - last_timestamp);
+    }
+    else
+    {
+        /* 处理 32 位微秒计数器溢出的情况 (虽然要跑 71 分钟才会溢出) */
+        return ((0xFFFFFFFFUL - last_timestamp) + current_time + 1);
+    }
+}
+#endif
+
 /*************************************************
   Function:     LogHalInit
   Description:  MPU uart and debug uart init
@@ -100,6 +143,10 @@ void LogHalInit(uint8_t mode)
         R_UART4_Start();
         g_debugUartReciveCount = 0;
     }
+
+#ifdef TIME_TEST
+    OSTM_Init();
+#endif
 
     g_mpulogHandle = MpuHalOpen();
     g_QueueHead = 0;

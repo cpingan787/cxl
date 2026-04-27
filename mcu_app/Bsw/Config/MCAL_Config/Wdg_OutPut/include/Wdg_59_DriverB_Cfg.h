@@ -179,7 +179,7 @@
 #define WDG_59_DRIVERB_VER_CHECK_EXT                       STD_ON
 
 /* Pre-compile option for critical section protection */
-#define WDG_59_DRIVERB_CRITICAL_SECTION_PROTECTION         STD_ON
+#define WDG_59_DRIVERB_CRITICAL_SECTION_PROTECTION         STD_OFF
 
 /* Watchdog Driver Id */
 #define WDG_59_DRIVERB_INDEX                               (uint8)1

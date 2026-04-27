@@ -53,11 +53,11 @@ CONST(StbMTimeCorrectionCfgType, STBM_CONST) StbMTimeCorrection[1U] =
 static CONST(StbM_LocalTimeClockCfgType, STBM_CONST) StbM_LocalTimeClockCfg[1U] =
 {
     {
-        16000000U, /* StbMClockFrequency */
+        16000064U, /* StbMClockFrequency */
         1U,  /* StbMClockPrescaler */
         3U,  /* StbMLocalTimeHardware */
         GPT_CHANNEL_CONFIGURATION,  /* StbMLocalTimeHardwareType */
-        0x0000U  /* LocalTimeMax */
+        0xFFFFFFFFU  /* LocalTimeMax */
     },
 };
 #define STBM_STOP_SEC_CONST_UNSPECIFIED

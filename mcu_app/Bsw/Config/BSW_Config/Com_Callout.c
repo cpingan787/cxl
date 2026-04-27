@@ -11362,6 +11362,7 @@ void Rte_COMCbkTAck_IIAM_ZONE_100ms_Group13_IAM_CONNCANFD_100ms_ConFrP03_CONTROL
     /** DO NOT CHANGE THIS COMMENT!
      * <USERBLOCK Rte_COMCbkTAck_IIAM_ZONE_100ms_Group13_IAM_CONNCANFD_100ms_ConFrP03_CONTROLLER_0_IAM_Tx>
      */
+    Com_IncreaseFrpo3Count();
     /* ComNotification Rte_COMCbkTAck_IIAM_ZONE_100ms_Group13_IAM_CONNCANFD_100ms_ConFrP03_CONTROLLER_0_IAM_Tx code defined by User */
     /** DO NOT CHANGE THIS COMMENT!
      * </USERBLOCK>

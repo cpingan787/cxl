@@ -779,6 +779,8 @@ extern void Com_MainFunctionTx(Com_MainFunctionType mainFunctionId);
 extern void Com_MainFunctionRouteSignals(Com_MainFunctionType mainFunctionId);
 END_C_DECLS
 
+uint32 Com_GetFrpo3Count(void);
+void Com_IncreaseFrpo3Count(void);
 #endif /*end of COM_H*/
 /*******************************************************************************
 **                      End of file                                           **

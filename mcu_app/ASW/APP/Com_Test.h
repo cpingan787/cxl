@@ -20,7 +20,7 @@
 /*******************************************************************************
 **                      Private Variable Definitions                          **
 *******************************************************************************/
-#define  COM_TESTMODE  TRUE
+#define  COM_TESTMODE  FALSE
 #define  COM_SECOC_TESTMODE  TRUE
 #define  CanTSyn_SlaveTestMODE       STD_OFF
 /*******************************************************************************

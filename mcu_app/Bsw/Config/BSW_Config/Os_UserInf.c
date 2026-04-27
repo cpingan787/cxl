@@ -75,6 +75,7 @@
 #include "peripheralHal.h"
 #include "logHal.h"
 #include "mpuHal.h"
+#include "batteryHal.h"
 
 #include "mcuMpuSyncTask.h"
 #include "taskPowerManage.h"
@@ -158,7 +159,7 @@ TASK(OsTask_Init)
 	StbM_Init(&StbM_Config);
     CanTSyn_Init(&CanTSyn_config);
 
-    Wdg_59_DriverA_Init(WdgSettingsConfig);
+    Wdg_59_DriverB_Init(WdgSettingsConfig);
     WdgM_Init(&WdgMConfigRoot);
 	
     Crypto_ISoft_Init(NULL_PTR);
@@ -169,7 +170,7 @@ TASK(OsTask_Init)
     Fvm_InitConfig();
     Vss_InitConfig();
     //Gpt_EnableNotification(GptConf_GptChannelConfiguration_GptChannelConfiguration0);
-    Gpt_StartTimer(GptConf_GptChannelConfiguration_GptChannelConfiguration3, 2147483647); //1ms
+    Gpt_StartTimer(GptConf_GptChannelConfiguration_GptChannelConfiguration3, 4294967295); //1ms
     queue_init(&SecOC_ErrorLogQueue,"SecOC_ErrorLogQueue",NULL_PTR);
     SetRelAlarm(OsAlarm_1ms, 1, 1);
     SetRelAlarm(OsAlarm_5ms, 2, 5);
@@ -180,7 +181,7 @@ TASK(OsTask_Init)
     PeripheralHalInit();
     MpuHalInit();
     TimerHalInit();
-    
+    BatteryHalInit();
 
     // C3��������ĳ�ʼ�����֣����ΪxxxInit�������ڴ˴�����
     MpuHalTxTaskInit();
@@ -333,7 +334,7 @@ TASK(OsTask_50ms)
     * <USERBLOCK OsTask_50ms>
     */
     test50++;
-    SystemTimeMs();
+    //SystemTimeMs();
 
 #if(Mem_testMODE == STD_ON)
     NvM_test();
@@ -351,7 +352,6 @@ TASK(OsTask_50ms)
     }
 }
 
-extern uint8 gIOHwAbDI_IG1_St;
 /*OsTask_100ms: Core0(CPU),Type = BASIC, Priority = 2*/
 TASK(OsTask_100ms)
 {
@@ -359,6 +359,22 @@ TASK(OsTask_100ms)
     /** DO NOT CHANGE THIS COMMENT!
     * <USERBLOCK OsTask_100ms>
     */
+
+#ifdef TIME_TEST
+#if 0
+    static uint32_t lastTick = 0;
+    uint32_t current_time = EcuM_CurrentTimestampMS();
+    uint32_t elapsed_time = EcuM_CalculateElapsedMS(lastTick);
+    lastTick = current_time;
+
+    static uint32_t ulastTick = 0;
+    uint32_t ucurrent_time = OSTM_GetUs();
+    uint32_t uelapsed_time = OSTM_GetElapsedUs(ulastTick);
+    ulastTick = ucurrent_time;
+
+    TBOX_PRINT("etime: %d ms, uetime: %d us\r\n", elapsed_time, uelapsed_time);
+#endif
+#endif
 
     if(wdgtest0 == 0)
     {
@@ -381,14 +397,10 @@ TASK(OsTask_100ms)
 
     if(test100 % 10 == 0)
     {
-        CrashTimeElapsed = Icu_GetTimeElapsed(IcuConf_IcuChannel_IcuChannel_0_Crash);
+        // CrashTimeElapsed = Icu_GetTimeElapsed(IcuConf_IcuChannel_IcuChannel_0_Crash);
         R_PORT_ToggleGpioOutput(APort1, 1);
         // Dv_Test();
     }
-	if(test100 % 200 == 0)
-	{
-		gIOHwAbDI_IG1_St = STD_HIGH;
-	}
     //TimerHalTestMain(100);
     TaskDtcDetect100ms();
     // LogHalTestMain(100);
@@ -437,7 +449,7 @@ void ShutdownHook(StatusType Error)
     */
     /* custom code.... */
     //EcuM_Shutdown();
-    Mcu_SetMode(McuConf_McuModeSettingConf_McuModeSettingConf0);
+    // Mcu_SetMode(McuConf_McuModeSettingConf_McuModeSettingConf0);
 
     /** DO NOT CHANGE THIS COMMENT!
     * </USERBLOCK>
@@ -472,6 +484,7 @@ ISR(ISR_RCAN1ERR_IRQ_Handler)
     */
     /* custom code.... */
     CAN_CONTROLLER1_BUSOFF_CAT2_ISR();
+    EcuM_SetWakeupEvent(EcuMWakeupSource_CAN);
     /** DO NOT CHANGE THIS COMMENT!
     * </USERBLOCK>
     */
@@ -510,6 +523,8 @@ ISR(ISR_RCANGRECC0_IRQ_Handler)
     */
     /* custom code.... */
 	CAN_RSCAN0_RXFIFO_CAT2_ISR();
+
+    EcuM_SetWakeupEvent(EcuMWakeupSource_CAN);
 
     /** DO NOT CHANGE THIS COMMENT!
     * </USERBLOCK>
@@ -592,7 +607,7 @@ ISR(ISR_TAUD0I9_IRQ_Handler)
     }
     else
     {
-        WDG_59_DRIVERA_TRIGGERFUNCTION_ISR();
+        WDG_59_DRIVERB_TRIGGERFUNCTION_ISR();
         ret = 1;
     }
     

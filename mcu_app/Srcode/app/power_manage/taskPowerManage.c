@@ -219,249 +219,350 @@ void kl30VoltageDTCProcess(uint16_t powerVoltage)
 #define DEM_EVT_BACKUP_BAT_LOW    ((Dem_EventIdType)EventParameter_0x955016) /*18u - B1550 FTB:16 */
 
 #define BACKUP_BAT_ADC_CHANNEL    AD0_CHANNEL_BUB_VOLTAGE_ADC
+#define BACKUP_BAT_KL30_CHANNEL   AD0_CHANNEL_KL30
  
-#define BACKUP_BAT_DTC_LOW_TH_MV                  1600   
-#define BACKUP_BAT_DTC_HIGH_TH_MV                 3000   
-#define BACKUP_BAT_DTC_NORMAL_HIGH_TH_MV          2300   
-#define BACKUP_BAT_DTC_NORMAL_LOW_TH_MV           1600
+#define BACKUP_BAT_DTC_LOW_VALID_MIN_TH_MV        100
+#define BACKUP_BAT_DTC_LOW_TH_MV                  1800
+#define BACKUP_BAT_DTC_HIGH_TH_MV                 2800
+#define BACKUP_BAT_DTC_HIGH_RECOVER_TH_MV         2800
+#define BACKUP_BAT_DTC_LOW_RECOVER_TH_MV          1800
 
-#define BACKUP_BAT_DTC_HIGH_CONFIRM_CNT           25    /* 过压故障连续 5s 成熟，200ms调一次时25次约等于 5s */
-#define BACKUP_BAT_DTC_LOW_CONFIRM_CNT            1200   
-#define BACKUP_BAT_DTC_RECOVER_CNT                25 
-#define BACKUP_BAT_DTC_CAN_CONFIRM_CNT            5   //can网络正常计数
+#define BACKUP_BAT_KL30_LOW_TH_MV                 9000
+#define BACKUP_BAT_KL30_HIGH_TH_MV                16000
 
-static uint8_t BackupBat_HighEnable_Cnt = 0;      //高压DTC使能计数
-static uint8_t BackupBat_LowEnable_Cnt = 0;       //低压DTC使能计数
+#define BACKUP_BAT_DTC_HIGH_CONFIRM_CNT           25
+#define BACKUP_BAT_DTC_LOW_CONFIRM_CNT            1200
+#define BACKUP_BAT_DTC_RECOVER_CNT                25
+#define BACKUP_BAT_DTC_PRECOND_CONFIRM_CNT        5
+
+static uint8_t BackupBat_StartDelay_Cnt = 0;      
+static uint8_t BackupBat_UsgMd_Cnt = 0;           
+static uint8_t BackupBat_VoltageCan_Cnt = 0;      
+static uint8_t BackupBat_EptOff_Cnt = 0;          
+
 static boolean BackupBat_HighEnable = FALSE;
 static boolean BackupBat_LowEnable = FALSE;
 
-static uint16_t BackupBat_High_Cnt = 0;                                   
-static uint16_t BackupBat_Low_Cnt = 0;                                   
-static uint8_t BackupBat_High_Ok_Cnt = 0;        //恢复计数
-static uint8_t BackupBat_Low_Ok_Cnt = 0;
+static uint16_t BackupBat_High_Cnt = 0;
+static uint16_t BackupBat_Low_Cnt = 0;
+static uint8_t BackupBat_High_Ok_Cnt = 0;         
+static uint8_t BackupBat_Low_Ok_Cnt = 0;         
 
+static boolean BackupBat_High_Flag = FALSE;
+static boolean BackupBat_Low_Flag = FALSE;
 
-static boolean BackupBat_High_Flag = FALSE;                               
-static boolean BackupBat_Low_Flag = FALSE;  
-
-static boolean BackupBat_IsCharging(void)               /* 判断当前备用电池是否处于充电状态 */   //功能未验证
-{                                                       
-    if (BatteryHalGetState() == 1)                      
-    {                                                   
-        return TRUE;                                   
-    }                                                  
-    return FALSE;                                       
-} 
-
-static void BackupBat_VoltageHighAndLowEnableDetectProcess(void)                                    /* 备用电池高低压DTC使能条件处理函数 */
+static boolean BackupBat_IsCharging(void)         /* 判断当前备用电池是否处于充电状态 */
 {
-    if ((Dtc_IsCommonMonitorEnable() == TRUE) &&                                  
-        (IsCanNetworkNormal() == TRUE))                                            
+    if (BatteryHalGetState() == 1)
     {
-        if (BackupBat_HighEnable_Cnt < BACKUP_BAT_DTC_CAN_CONFIRM_CNT)             
+        return TRUE;
+    }
+    return FALSE;
+}
+
+static boolean BackupBat_IsEptStCmdOff(void)      /* 判断EPTStCmdOn != TRUE */
+{
+    boolean eptStCmdOn = FALSE;
+    Std_ReturnType ret = E_NOT_OK;
+
+    ret = Com_ReceiveSignal(
+        IRZCU_10ms_Group01_RZCU_PTCANFD_10ms_FrP01_CONTROLLER_0_IAM_Rx_IEPTStCmdOn_IRZCU_10ms_Group01_RZCU_PTCANFD_10ms_FrP01_CONTROLLER_0_IAM_Rx,
+        &eptStCmdOn);
+
+    if ((ret == E_OK) && (eptStCmdOn != TRUE))
+    {
+        return TRUE;
+    }
+    return FALSE;
+}
+
+static boolean BackupBat_IsKl30RangeOk(void)      /* 判断 KL30 是否在 9V~16V 之间 */
+{
+    uint32_t kl30Voltage = 0;
+
+    if (PeripheralHalAdGet(BACKUP_BAT_KL30_CHANNEL, &kl30Voltage) != 0)
+    {
+        return FALSE;
+    }
+
+    if ((kl30Voltage >= BACKUP_BAT_KL30_LOW_TH_MV) &&
+        (kl30Voltage <= BACKUP_BAT_KL30_HIGH_TH_MV))
+    {
+        return TRUE;
+    }
+    return FALSE;
+}
+
+static boolean BackupBat_CheckPrecondition1s(boolean condition, uint8_t *pCnt) /* 判断使能条件是否连续满足1s */
+{
+    if (pCnt == NULL_PTR)
+    {
+        return FALSE;
+    }
+
+    if (condition == TRUE)
+    {
+        if (*pCnt < BACKUP_BAT_DTC_PRECOND_CONFIRM_CNT)
         {
-            BackupBat_HighEnable_Cnt++;                                           
+            (*pCnt)++;
         }
     }
     else
     {
-        BackupBat_HighEnable_Cnt = 0;                                              
+        *pCnt = 0;
     }
 
-    if ((Dtc_IsCommonMonitorEnable() == TRUE) &&                                   
-        (IsCanNetworkNormal() == TRUE) /*&&                                          
-        (BackupBat_IsCharging() == TRUE)*/)                                          
+    if (*pCnt >= BACKUP_BAT_DTC_PRECOND_CONFIRM_CNT)
     {
-        if (BackupBat_LowEnable_Cnt < BACKUP_BAT_DTC_CAN_CONFIRM_CNT)              
-        {
-            BackupBat_LowEnable_Cnt++;                                             
-        }
+        return TRUE;
+    }
+    return FALSE;
+}
+
+static void BackupBat_VoltageHighAndLowEnableDetectProcess(void)              /* 备用电池高低压DTC使能条件处理函数 */
+{
+    boolean startDelayReady = FALSE;
+    boolean usgMdReady = FALSE;
+    boolean canReady = FALSE;
+    boolean eptReady = FALSE;
+    boolean kl30Ready = FALSE;
+    boolean commonReady = FALSE;
+
+    startDelayReady = BackupBat_CheckPrecondition1s(TRUE, &BackupBat_StartDelay_Cnt);
+    usgMdReady = Diag_CheckUsgMdPrecondition1s(&BackupBat_UsgMd_Cnt);
+    canReady = BackupBat_CheckPrecondition1s(IsCanNetworkNormal(), &BackupBat_VoltageCan_Cnt);
+    eptReady = BackupBat_CheckPrecondition1s(BackupBat_IsEptStCmdOff(), &BackupBat_EptOff_Cnt);
+    kl30Ready = BackupBat_IsKl30RangeOk();
+
+    if ((startDelayReady == TRUE) &&
+        (usgMdReady == TRUE) &&
+        (canReady == TRUE) &&
+        (eptReady == TRUE) &&
+        (kl30Ready == TRUE))
+    {
+        commonReady = TRUE;
     }
     else
     {
-        BackupBat_LowEnable_Cnt = 0;                                               
+        commonReady = FALSE;
     }
 
-    if (BackupBat_HighEnable_Cnt >= BACKUP_BAT_DTC_CAN_CONFIRM_CNT)                
+    BackupBat_HighEnable = commonReady;
+
+    if ((commonReady == TRUE) /*&&
+        (BackupBat_IsCharging() == TRUE)*/)
     {
-        BackupBat_HighEnable = TRUE;                                               
+        BackupBat_LowEnable = TRUE;
     }
     else
     {
-        BackupBat_HighEnable = FALSE;                                              
-    }
-
-    if (BackupBat_LowEnable_Cnt >= BACKUP_BAT_DTC_CAN_CONFIRM_CNT)                 
-    {
-        BackupBat_LowEnable = TRUE;                                               
-    }
-    else
-    {
-        BackupBat_LowEnable = FALSE;                                               
+        BackupBat_LowEnable = FALSE;
     }
 }
 
-static void BackupBat_SyncMonitorStateWithDem(void)                        
+static void BackupBat_SyncMonitorStateWithDem(void)
 {
-    Dem_UdsStatusByteType eventStatus = 0;                                
+    Dem_UdsStatusByteType eventStatus = 0;
 
-    if (BackupBat_High_Flag == TRUE)                                       
+    if (BackupBat_High_Flag == TRUE)
     {
-        if (Dem_GetEventStatus(DEM_EVT_BACKUP_BAT_HIGH, &eventStatus) == E_OK) /* 读取备用电池高电压事件当前的Dem状态 */
+        if (Dem_GetEventStatus(DEM_EVT_BACKUP_BAT_HIGH, &eventStatus) == E_OK)
         {
-            if ((eventStatus & (DEM_UDS_STATUS_TF | DEM_UDS_STATUS_PDTC | DEM_UDS_STATUS_CDTC | DEM_UDS_STATUS_TFSLC)) == 0u) 
+            if ((eventStatus & DEM_UDS_STATUS_TF) == 0)
             {
-                BackupBat_High_Cnt = 0;                                   
-                BackupBat_High_Ok_Cnt = 0;                                     
-                BackupBat_High_Flag = FALSE;                              
+                BackupBat_High_Cnt = 0;
+                BackupBat_High_Ok_Cnt = 0;
+                BackupBat_High_Flag = FALSE;
             }
         }
     }
-    if (BackupBat_Low_Flag == TRUE)                                        
+
+    if (BackupBat_Low_Flag == TRUE)
     {
-        if (Dem_GetEventStatus(DEM_EVT_BACKUP_BAT_LOW, &eventStatus) == E_OK) /* 读取备用电池低电压事件当前的 Dem 状态 */
+        if (Dem_GetEventStatus(DEM_EVT_BACKUP_BAT_LOW, &eventStatus) == E_OK)
         {
-            if ((eventStatus & (DEM_UDS_STATUS_TF | DEM_UDS_STATUS_PDTC | DEM_UDS_STATUS_CDTC | DEM_UDS_STATUS_TFSLC)) == 0u) 
+            if ((eventStatus & DEM_UDS_STATUS_TF) == 0)
             {
-                BackupBat_Low_Cnt = 0;                                    
-                BackupBat_Low_Ok_Cnt = 0;                                     
-                BackupBat_Low_Flag = FALSE;                                
+                BackupBat_Low_Cnt = 0;
+                BackupBat_Low_Ok_Cnt = 0;
+                BackupBat_Low_Flag = FALSE;
             }
         }
     }
 }
 
-void BackupBat_DtcInit(void)                                               
+void BackupBat_DtcInit(void)
 {
-    BackupBat_HighEnable_Cnt = 0;                                                  
-    BackupBat_LowEnable_Cnt = 0;                                                  
-    BackupBat_HighEnable = FALSE;                                                  
-    BackupBat_LowEnable = FALSE;                                                   
+    BackupBat_StartDelay_Cnt = 0;
+    BackupBat_UsgMd_Cnt = 0;
+    BackupBat_VoltageCan_Cnt = 0;
+    BackupBat_EptOff_Cnt = 0;
 
-    BackupBat_High_Cnt = 0;                                                        
-    BackupBat_Low_Cnt = 0;                                                         
-    BackupBat_High_Ok_Cnt = 0;                                                     
-    BackupBat_Low_Ok_Cnt = 0;                                                      
+    BackupBat_HighEnable = FALSE;
+    BackupBat_LowEnable = FALSE;
 
-    BackupBat_High_Flag = FALSE;                                                   
-    BackupBat_Low_Flag = FALSE;                                            
+    BackupBat_High_Cnt = 0;
+    BackupBat_Low_Cnt = 0;
+    BackupBat_High_Ok_Cnt = 0;
+    BackupBat_Low_Ok_Cnt = 0;
+
+    BackupBat_High_Flag = FALSE;
+    BackupBat_Low_Flag = FALSE;
 }
 
-void BackupBat_DetectProcess_200ms(void)                                          
+void BackupBat_DetectProcess_200ms(void)
 {
-    uint32_t backupBatVoltage = 0;                                                 
+    uint32_t backupBatVoltage = 0;
 
-    BackupBat_SyncMonitorStateWithDem();                                           
-    BackupBat_VoltageHighAndLowEnableDetectProcess();                                               
-    PeripheralHalAdGet(BACKUP_BAT_ADC_CHANNEL, &backupBatVoltage);  
-    //TBOX_PRINT("backupBatVoltage = %d\n", backupBatVoltage); 
-                
-    if (BackupBat_HighEnable == TRUE)                                              
+    BackupBat_SyncMonitorStateWithDem();
+    BackupBat_VoltageHighAndLowEnableDetectProcess();
+    PeripheralHalAdGet(BACKUP_BAT_ADC_CHANNEL, &backupBatVoltage);
+    //TBOX_PRINT("backupBatVoltage_gaodi = %d\n", backupBatVoltage);
+
+    if (BackupBat_HighEnable == TRUE)
     {
-        if (backupBatVoltage > BACKUP_BAT_DTC_HIGH_TH_MV)                          
+        if (backupBatVoltage > BACKUP_BAT_DTC_HIGH_TH_MV)
         {
-            if (BackupBat_High_Cnt < BACKUP_BAT_DTC_HIGH_CONFIRM_CNT)              
+            if (BackupBat_High_Cnt < BACKUP_BAT_DTC_HIGH_CONFIRM_CNT)
             {
-                BackupBat_High_Cnt++;                                             
+                BackupBat_High_Cnt++;
             }
-
-            BackupBat_High_Ok_Cnt = 0;                                             
+            BackupBat_High_Ok_Cnt = 0;
         }
-        else if ((backupBatVoltage >= BACKUP_BAT_DTC_NORMAL_LOW_TH_MV) &&         
-                 (backupBatVoltage <= BACKUP_BAT_DTC_NORMAL_HIGH_TH_MV))           
+        else if (backupBatVoltage <= BACKUP_BAT_DTC_HIGH_RECOVER_TH_MV)
         {
-            if (BackupBat_High_Ok_Cnt < BACKUP_BAT_DTC_RECOVER_CNT)               
-            {
-                BackupBat_High_Ok_Cnt++;                                           
-            }
+            BackupBat_High_Cnt = 0;
 
-            BackupBat_High_Cnt = 0;                                                
+            if (BackupBat_High_Flag == TRUE)
+            {
+                if (BackupBat_High_Ok_Cnt < BACKUP_BAT_DTC_RECOVER_CNT)
+                {
+                    BackupBat_High_Ok_Cnt++;
+                }
+            }
+            else
+            {
+                BackupBat_High_Ok_Cnt = 0;
+            }
         }
         else
         {
-            BackupBat_High_Cnt = 0;                                                
-            BackupBat_High_Ok_Cnt = 0;                                             
+            BackupBat_High_Cnt = 0;
+            BackupBat_High_Ok_Cnt = 0;
         }
     }
     else
     {
-        BackupBat_High_Cnt = 0;                                                    
-        BackupBat_High_Ok_Cnt = 0;                                                
+        BackupBat_High_Cnt = 0;
+        BackupBat_High_Ok_Cnt = 0;
     }
 
-    if (BackupBat_LowEnable == TRUE)                                               
+    if (BackupBat_LowEnable == TRUE)
     {
-        if (backupBatVoltage < BACKUP_BAT_DTC_LOW_TH_MV)                           
+        if ((backupBatVoltage >= BACKUP_BAT_DTC_LOW_VALID_MIN_TH_MV) &&
+            (backupBatVoltage < BACKUP_BAT_DTC_LOW_TH_MV))
         {
-            if (BackupBat_Low_Cnt < BACKUP_BAT_DTC_LOW_CONFIRM_CNT)               
+            if (BackupBat_Low_Cnt < BACKUP_BAT_DTC_LOW_CONFIRM_CNT)
             {
-                BackupBat_Low_Cnt++;                                              
+                BackupBat_Low_Cnt++;
             }
-
-            BackupBat_Low_Ok_Cnt = 0;                                             
+            BackupBat_Low_Ok_Cnt = 0;
         }
-        else if ((backupBatVoltage >= BACKUP_BAT_DTC_NORMAL_LOW_TH_MV) &&          
-                 (backupBatVoltage <= BACKUP_BAT_DTC_NORMAL_HIGH_TH_MV))          
+        else if (backupBatVoltage >= BACKUP_BAT_DTC_LOW_RECOVER_TH_MV)
         {
-            if (BackupBat_Low_Ok_Cnt < BACKUP_BAT_DTC_RECOVER_CNT)                 
-            {
-                BackupBat_Low_Ok_Cnt++;                                           
-            }
+            BackupBat_Low_Cnt = 0;
 
-            BackupBat_Low_Cnt = 0;                                                 
+            if (BackupBat_Low_Flag == TRUE)
+            {
+                if (BackupBat_Low_Ok_Cnt < BACKUP_BAT_DTC_RECOVER_CNT)
+                {
+                    BackupBat_Low_Ok_Cnt++;
+                }
+            }
+            else
+            {
+                BackupBat_Low_Ok_Cnt = 0;
+            }
         }
         else
         {
-            BackupBat_Low_Cnt = 0;                                                 
-            BackupBat_Low_Ok_Cnt = 0;                                             
+            BackupBat_Low_Cnt = 0;
+            BackupBat_Low_Ok_Cnt = 0;
         }
     }
     else
     {
-        BackupBat_Low_Cnt = 0;                                                     
-        BackupBat_Low_Ok_Cnt = 0;                                                 
+        BackupBat_Low_Cnt = 0;
+        BackupBat_Low_Ok_Cnt = 0;
     }
 
-    if ((BackupBat_High_Cnt >= BACKUP_BAT_DTC_HIGH_CONFIRM_CNT) &&                 
-        (BackupBat_High_Flag == FALSE))                                            
+    if ((BackupBat_High_Cnt >= BACKUP_BAT_DTC_HIGH_CONFIRM_CNT) &&
+        (BackupBat_High_Flag == FALSE))
     {
-        BackupBat_High_Flag = TRUE;                                                
-        Dem_SetEventStatus(DEM_EVT_BACKUP_BAT_HIGH, DEM_EVENT_STATUS_FAILED);      
+        BackupBat_Low_Cnt = 0;
+        BackupBat_Low_Ok_Cnt = 0;
+
+        if (BackupBat_Low_Flag == TRUE)
+        {
+            BackupBat_Low_Flag = FALSE;
+            Dem_SetEventStatus(DEM_EVT_BACKUP_BAT_LOW, DEM_EVENT_STATUS_PASSED);
+        }
+
+        BackupBat_High_Cnt = 0;
+        BackupBat_High_Ok_Cnt = 0;
+        BackupBat_High_Flag = TRUE;
+        Dem_SetEventStatus(DEM_EVT_BACKUP_BAT_HIGH, DEM_EVENT_STATUS_FAILED);
     }
 
-    if ((BackupBat_Low_Cnt >= BACKUP_BAT_DTC_LOW_CONFIRM_CNT) &&                   
-        (BackupBat_Low_Flag == FALSE))                                             
+    if ((BackupBat_Low_Cnt >= BACKUP_BAT_DTC_LOW_CONFIRM_CNT) &&
+        (BackupBat_Low_Flag == FALSE))
     {
-        BackupBat_Low_Flag = TRUE;                                                 
-        Dem_SetEventStatus(DEM_EVT_BACKUP_BAT_LOW, DEM_EVENT_STATUS_FAILED);       
+        BackupBat_High_Cnt = 0;
+        BackupBat_High_Ok_Cnt = 0;
+
+        if (BackupBat_High_Flag == TRUE)
+        {
+            BackupBat_High_Flag = FALSE;
+            Dem_SetEventStatus(DEM_EVT_BACKUP_BAT_HIGH, DEM_EVENT_STATUS_PASSED);
+        }
+
+        BackupBat_Low_Cnt = 0;
+        BackupBat_Low_Ok_Cnt = 0;
+        BackupBat_Low_Flag = TRUE;
+        Dem_SetEventStatus(DEM_EVT_BACKUP_BAT_LOW, DEM_EVENT_STATUS_FAILED);
     }
 
-    if ((BackupBat_High_Ok_Cnt >= BACKUP_BAT_DTC_RECOVER_CNT) &&                  
-        (BackupBat_High_Flag == TRUE))                                            
+    if ((BackupBat_High_Ok_Cnt >= BACKUP_BAT_DTC_RECOVER_CNT) &&
+        (BackupBat_High_Flag == TRUE))
     {
-        BackupBat_High_Flag = FALSE;                                               
-        Dem_SetEventStatus(DEM_EVT_BACKUP_BAT_HIGH, DEM_EVENT_STATUS_PASSED);     
+        BackupBat_High_Cnt = 0;
+        BackupBat_High_Ok_Cnt = 0;
+        BackupBat_High_Flag = FALSE;
+        Dem_SetEventStatus(DEM_EVT_BACKUP_BAT_HIGH, DEM_EVENT_STATUS_PASSED);
     }
 
-    if ((BackupBat_Low_Ok_Cnt >= BACKUP_BAT_DTC_RECOVER_CNT) &&                    
-        (BackupBat_Low_Flag == TRUE))                                              
+    if ((BackupBat_Low_Ok_Cnt >= BACKUP_BAT_DTC_RECOVER_CNT) &&
+        (BackupBat_Low_Flag == TRUE))
     {
-        BackupBat_Low_Flag = FALSE;                                                
-        Dem_SetEventStatus(DEM_EVT_BACKUP_BAT_LOW, DEM_EVENT_STATUS_PASSED);       
+        BackupBat_Low_Cnt = 0;
+        BackupBat_Low_Ok_Cnt = 0;
+        BackupBat_Low_Flag = FALSE;
+        Dem_SetEventStatus(DEM_EVT_BACKUP_BAT_LOW, DEM_EVENT_STATUS_PASSED);
     }
 }
 
 
 
-//备用电池对电源开路、对地短路检测
+//备用电池电源开路、对地短路检测
 #define DEM_EVT_BACKUP_BAT_SHORT_GND   ((Dem_EventIdType)EventParameter_0x955011)  //对地短路
 #define DEM_EVT_BACKUP_BAT_OPEN        ((Dem_EventIdType)EventParameter_0x955013)  //对电源开路
-#define BACKUP_BAT_ADC_CHANNEL                    AD0_CHANNEL_BUB_VOLTAGE_ADC
+#define BACKUP_BAT_VOLTAGE_ADC_CHANNEL                    AD0_CHANNEL_BUB_VOLTAGE_ADC
+#define BACKUP_BAT_OPEN_ADC_CHANNEL                       AD0_CHANNEL_BUB_TEMP_ADC
 
-#define BACKUP_BAT_SHORT_GND_TH_MV               500
-#define BACKUP_BAT_OPEN_TH_MV                    3200  
-#define BACKUP_BAT_NORMAL_LOW_TH_MV              1000
-#define BACKUP_BAT_NORMAL_HIGH_TH_MV             3100
+#define BACKUP_BAT_SHORT_GND_TH_MV               100    
+#define BACKUP_BAT_OPEN_TH_MV                    3200
+#define BACKUP_BAT_NORMAL_LOW_TH_MV              100
+#define BACKUP_BAT_NORMAL_HIGH_TH_MV             2800
 
 #define BACKUP_BAT_OPEN_CONFIRM_CNT              300    //开路确认时间
 #define BACKUP_BAT_SHORT_GND_CONFIRM_CNT         1200   //对地短路确认时间
@@ -478,20 +579,11 @@ static boolean BackupBat_ShortGnd_Flag = FALSE;
 static boolean BackupBat_Open_Flag = FALSE;
 static boolean BackupBat_Enable = FALSE;      //监测使能标志
 
-// static boolean BackupBat_IsCharging(void)                                          /* 判断备用电池是否处于充电状态 */
-// {
-//     if (BatteryHalGetState() == 1)                                                 /* BatteryHalGetState返回1表示充电状态 */
-//     {
-//         return TRUE;                                                               
-//     }
-//     return FALSE;                                                                  
-// }
-
 static void BackupBat_EnableDetectProcess(void)                                    /* 备用电池开路/短路DTC使能条件检测 */
 {
     if ((Dtc_IsCommonMonitorEnable() == TRUE) &&                                   
-        (IsCanNetworkNormal() == TRUE) &&                                          
-        (BackupBat_IsCharging() == TRUE))                                          
+        (IsCanNetworkNormal() == TRUE) /*&&                                          
+        (BackupBat_IsCharging() == TRUE)*/)                                          
     {
         if (BackupBat_Can_Cnt < BACKUP_BAT_CAN_CONFIRM_CNT)                        
         {
@@ -568,86 +660,130 @@ void BackupBatOpenShort_DtcInit(void)
 
 void BackupBatOpenShort_DetectProcess_200ms(void)                                  
 {
-    uint32_t backupBatVoltage = 0;                                                 
+    uint32_t backupBatVoltage = 0;                                                  
+    uint32_t backupBatOpenVoltage = 0;                                              //用于开路判断
 
-    BackupBat_SyncOpenShortMonitorStateWithDem();                                 
-    BackupBat_EnableDetectProcess();                                               
-    PeripheralHalAdGet(BACKUP_BAT_ADC_CHANNEL, &backupBatVoltage);                 
+    BackupBat_SyncOpenShortMonitorStateWithDem();                                  
+    BackupBat_EnableDetectProcess();                                                
 
-    if (BackupBat_Enable == TRUE)                                                  
+    PeripheralHalAdGet(BACKUP_BAT_VOLTAGE_ADC_CHANNEL, &backupBatVoltage);          
+    PeripheralHalAdGet(BACKUP_BAT_OPEN_ADC_CHANNEL, &backupBatOpenVoltage);
+    TBOX_PRINT("[BACKUP_BAT_VOLTAGE_ADC] %d\r\n", backupBatVoltage);
+    TBOX_PRINT("[BACKUP_BAT_OPEN_ADC_temp] %d\r\n", backupBatOpenVoltage);
+
+
+    if (BackupBat_Enable == TRUE)
     {
-        if (backupBatVoltage < BACKUP_BAT_SHORT_GND_TH_MV)                         
+        if (backupBatOpenVoltage > BACKUP_BAT_OPEN_TH_MV)
         {
-            if (BackupBat_ShortGnd_Cnt < BACKUP_BAT_SHORT_GND_CONFIRM_CNT)         
+            if (BackupBat_Open_Cnt < BACKUP_BAT_OPEN_CONFIRM_CNT)
             {
-                BackupBat_ShortGnd_Cnt++;                                          
+                BackupBat_Open_Cnt++;
             }
 
-            BackupBat_Open_Cnt = 0;                                                
-            BackupBat_Normal_Cnt = 0;                                                  
+            BackupBat_ShortGnd_Cnt = 0;
+            BackupBat_Normal_Cnt = 0;
         }
-        else if (backupBatVoltage > BACKUP_BAT_OPEN_TH_MV)                 
+        else if (backupBatVoltage < BACKUP_BAT_SHORT_GND_TH_MV)
         {
-            if (BackupBat_Open_Cnt < BACKUP_BAT_OPEN_CONFIRM_CNT)                  
+            if (BackupBat_ShortGnd_Cnt < BACKUP_BAT_SHORT_GND_CONFIRM_CNT)
             {
-                BackupBat_Open_Cnt++;                                              
+                BackupBat_ShortGnd_Cnt++;
             }
 
-            BackupBat_ShortGnd_Cnt = 0;                                            
-            BackupBat_Normal_Cnt = 0;                                                  
+            BackupBat_Open_Cnt = 0;
+            BackupBat_Normal_Cnt = 0;
         }
-        else if ((backupBatVoltage >= BACKUP_BAT_NORMAL_LOW_TH_MV) &&              
-                 (backupBatVoltage <= BACKUP_BAT_NORMAL_HIGH_TH_MV))               
+        else if ((BackupBat_Open_Flag == TRUE) &&
+                 (backupBatOpenVoltage < BACKUP_BAT_OPEN_TH_MV))
         {
-            if (BackupBat_Normal_Cnt < BACKUP_BAT_RECOVER_CNT)                         
+            if (BackupBat_Normal_Cnt < BACKUP_BAT_RECOVER_CNT)
             {
-                BackupBat_Normal_Cnt++;                                                
+                BackupBat_Normal_Cnt++;
             }
 
-            BackupBat_ShortGnd_Cnt = 0;                                            
-            BackupBat_Open_Cnt = 0;                                                
+            BackupBat_ShortGnd_Cnt = 0;
+            BackupBat_Open_Cnt = 0;
+        }
+        else if ((BackupBat_ShortGnd_Flag == TRUE) &&
+                 (backupBatVoltage >= BACKUP_BAT_NORMAL_LOW_TH_MV) &&
+                 (backupBatVoltage <= BACKUP_BAT_NORMAL_HIGH_TH_MV))
+        {
+            if (BackupBat_Normal_Cnt < BACKUP_BAT_RECOVER_CNT)
+            {
+                BackupBat_Normal_Cnt++;
+            }
+
+            BackupBat_ShortGnd_Cnt = 0;
+            BackupBat_Open_Cnt = 0;
         }
         else
         {
-            BackupBat_ShortGnd_Cnt = 0;                                            
-            BackupBat_Open_Cnt = 0;                                                
-            BackupBat_Normal_Cnt = 0;                                                  
+            BackupBat_ShortGnd_Cnt = 0;
+            BackupBat_Open_Cnt = 0;
+            BackupBat_Normal_Cnt = 0;
         }
 
-        if ((BackupBat_ShortGnd_Cnt >= BACKUP_BAT_SHORT_GND_CONFIRM_CNT) &&        
-            (BackupBat_ShortGnd_Flag == FALSE))                                   
+        if ((BackupBat_Open_Cnt >= BACKUP_BAT_OPEN_CONFIRM_CNT) &&
+            (BackupBat_Open_Flag == FALSE))
         {
-            BackupBat_ShortGnd_Flag = TRUE;                                       
-            Dem_SetEventStatus(DEM_EVT_BACKUP_BAT_SHORT_GND, DEM_EVENT_STATUS_FAILED); 
-        }
+            BackupBat_Open_Flag = TRUE;
+            BackupBat_Open_Cnt = 0;
+            BackupBat_Normal_Cnt = 0;
 
-        if ((BackupBat_Open_Cnt >= BACKUP_BAT_OPEN_CONFIRM_CNT) &&                 
-            (BackupBat_Open_Flag == FALSE))                                       
-        {
-            BackupBat_Open_Flag = TRUE;                                            
-            Dem_SetEventStatus(DEM_EVT_BACKUP_BAT_OPEN, DEM_EVENT_STATUS_FAILED);  
-        }
+            Dem_SetEventStatus(DEM_EVT_BACKUP_BAT_OPEN, DEM_EVENT_STATUS_FAILED);
 
-        if (BackupBat_Normal_Cnt >= BACKUP_BAT_RECOVER_CNT)                            
-        {
-            if (BackupBat_ShortGnd_Flag == TRUE)                                   
+            if (BackupBat_ShortGnd_Flag == TRUE)
             {
-                BackupBat_ShortGnd_Flag = FALSE;                                  
-                Dem_SetEventStatus(DEM_EVT_BACKUP_BAT_SHORT_GND, DEM_EVENT_STATUS_PASSED); 
+                BackupBat_ShortGnd_Flag = FALSE;
+                BackupBat_ShortGnd_Cnt = 0;
+                BackupBat_Normal_Cnt = 0;
+                Dem_SetEventStatus(DEM_EVT_BACKUP_BAT_SHORT_GND, DEM_EVENT_STATUS_PASSED);
+            }
+        }
+
+        if ((BackupBat_ShortGnd_Cnt >= BACKUP_BAT_SHORT_GND_CONFIRM_CNT) &&
+            (BackupBat_ShortGnd_Flag == FALSE))
+        {
+            BackupBat_ShortGnd_Flag = TRUE;
+            BackupBat_ShortGnd_Cnt = 0;
+            BackupBat_Normal_Cnt = 0;
+
+            Dem_SetEventStatus(DEM_EVT_BACKUP_BAT_SHORT_GND, DEM_EVENT_STATUS_FAILED);
+
+            if (BackupBat_Open_Flag == TRUE)
+            {
+                BackupBat_Open_Flag = FALSE;
+                BackupBat_Open_Cnt = 0;
+                BackupBat_Normal_Cnt = 0;
+                Dem_SetEventStatus(DEM_EVT_BACKUP_BAT_OPEN, DEM_EVENT_STATUS_PASSED);
+            }
+        }
+
+        if (BackupBat_Normal_Cnt >= BACKUP_BAT_RECOVER_CNT)
+        {
+            if (BackupBat_ShortGnd_Flag == TRUE)
+            {
+                BackupBat_ShortGnd_Flag = FALSE;
+                Dem_SetEventStatus(DEM_EVT_BACKUP_BAT_SHORT_GND, DEM_EVENT_STATUS_PASSED);
             }
 
-            if (BackupBat_Open_Flag == TRUE)                                       
+            if (BackupBat_Open_Flag == TRUE)
             {
-                BackupBat_Open_Flag = FALSE;                                       
-                Dem_SetEventStatus(DEM_EVT_BACKUP_BAT_OPEN, DEM_EVENT_STATUS_PASSED); 
+                BackupBat_Open_Flag = FALSE;
+                Dem_SetEventStatus(DEM_EVT_BACKUP_BAT_OPEN, DEM_EVENT_STATUS_PASSED);
             }
+
+            BackupBat_ShortGnd_Cnt = 0;
+            BackupBat_Open_Cnt = 0;
+            BackupBat_Normal_Cnt = 0;
         }
     }
     else
     {
-        BackupBat_ShortGnd_Cnt = 0;                                                
-        BackupBat_Open_Cnt = 0;                                                   
-        BackupBat_Normal_Cnt = 0;                                                     
+        BackupBat_ShortGnd_Cnt = 0;
+        BackupBat_Open_Cnt = 0;
+        BackupBat_Normal_Cnt = 0;
     }
 }
 
@@ -681,8 +817,8 @@ void BackupBatAging_DetectProcess(void)
     //TBOX_PRINT("BackupBatAging_DetectProcess enter\r\n");
 
      if(/*(BackupBat_Aging_WakeupFlag == 1) && */                                
-       (BackupBat_Aging_ReqDoneFlag == 0) /*&&                                 
-       (Dtc_IsCommonMonitorEnable())*/)                                 
+       (BackupBat_Aging_ReqDoneFlag == 0) &&                                 
+       (Dtc_IsCommonMonitorEnable()))                                 
     {
         //TBOX_PRINT("BackupBatAging_DetectProcess, request age check\r\n");
         BatterySdkRequestAgeCheck();                                          // 真正发起一次备用电池老化检测请求
@@ -1151,7 +1287,7 @@ void PmDebugPrint(void)
     PowerManageSdkGetPowerInfo(&pmState,&wakeupSource,&wakeCount);
     if(pmState != lastPmState)
     {
-        //TBOX_PRINT("powerstate is %d,wakesoure is %d,wakecount is %d\r\n",pmState,wakeupSource,wakeCount);
+        TBOX_PRINT("powerstate is %d,wakesoure is %d,wakecount is %d\r\n",pmState,wakeupSource,wakeCount);
         lastPmState = pmState;
     }
     if(count < 1000)
@@ -1159,7 +1295,7 @@ void PmDebugPrint(void)
         return;
     }
     count = 0;
-    //TBOX_PRINT("powerstate is %d,wakesoure is %d,wakecount is %d\r\n",pmState,wakeupSource,wakeCount);
+    TBOX_PRINT("powerstate is %d,wakesoure is %d,wakecount is %d\r\n",pmState,wakeupSource,wakeCount);
     
     uint32_t voltage = 0;
     BatterySdkGetVoltage(&voltage);
@@ -1194,7 +1330,10 @@ void TaskPowerManageInit(void)
     PowerManageSdkInit(&g_pmCondg);
     BatterySdkInit(&g_batterConfig,10,E_BATTERY_FDK);
     PowerManageSdkPowerOn();
-    MpuHalStart();
+    if(PowerManageSdkShouldStartMpuOnPowerOn() != 0)
+    {
+        MpuHalStart();
+    }
 }
 
 void TaskPowerManage(uint32_t cycleTime)

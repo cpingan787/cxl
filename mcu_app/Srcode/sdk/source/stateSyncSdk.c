@@ -26,6 +26,7 @@ static CpuTspStateSync_t g_cpuTspState;       // MPU平台连接信息
 // static GsensorStateSync_t g_gsensorState;          //G-Sensor状态
 static CpuDtcSync_t g_cpuMpuDtcInfo;                // MPU故障码信息存储
 static MpuFaultExtStatusSync_t g_mpuFaultExtStatus; // 保存 MPU 故障同步扩展状态
+static Be80SnapshotInfoSync_t g_be80SnapshotInfo;     // 保存 BE80 快照信息
 
 static uint16_t FloatToUint16Trunc(float f)
 {
@@ -109,6 +110,14 @@ int16_t StateSyncSdkInit(int16_t mpuHandle, uint16_t cycleTime)
     g_mpuFaultExtStatus.failureTime = CPU_INFO_FAILURE_TIME * 1000;
     g_mpuFaultExtStatus.timeCount = 0;
     g_mpuFaultExtStatus.validity = 0;
+
+    g_be80SnapshotInfo.snapshotInfo.serviceId = 0xFFFF;
+    g_be80SnapshotInfo.snapshotInfo.serviceInstanceId = 0xFFFF;
+    g_be80SnapshotInfo.snapshotInfo.methodEventId = 0xFFFF;
+    g_be80SnapshotInfo.snapshotInfo.serviceStatus = 0xFF;
+    g_be80SnapshotInfo.failureTime = CPU_INFO_FAILURE_TIME * 1000;
+    g_be80SnapshotInfo.timeCount = 0;
+    g_be80SnapshotInfo.validity = 0;
 
     // g_gsensorState.state = 1;
     // g_gsensorState.failureTime = CPU_INFO_FAILURE_TIME*1000;
@@ -213,7 +222,7 @@ static void StateSyncParseGnssData(MpuHalDataPack_t *msgData)
     g_cpuLocationInfo.locationInfo.locationState = msgData->pDataBuffer[2];
     g_cpuLocationInfo.locationInfo.longitude = msgData->pDataBuffer[3] << 24 | msgData->pDataBuffer[4] << 16 | msgData->pDataBuffer[5] << 8 | msgData->pDataBuffer[6];
     g_cpuLocationInfo.locationInfo.latitude = msgData->pDataBuffer[7] << 24 | msgData->pDataBuffer[8] << 16 | msgData->pDataBuffer[9] << 8 | msgData->pDataBuffer[10];
-    //TBOX_PRINT("moduleState: %d, wireState: %d, locationState: %d, longitude: %d, latitude: %d\r\n", g_cpuLocationInfo.locationInfo.moduleState, g_cpuLocationInfo.locationInfo.wireState, g_cpuLocationInfo.locationInfo.locationState, g_cpuLocationInfo.locationInfo.longitude, g_cpuLocationInfo.locationInfo.latitude);
+    TBOX_PRINT("moduleState: %d, wireState: %d, locationState: %d, longitude: %d, latitude: %d\r\n", g_cpuLocationInfo.locationInfo.moduleState, g_cpuLocationInfo.locationInfo.wireState, g_cpuLocationInfo.locationInfo.locationState, g_cpuLocationInfo.locationInfo.longitude, g_cpuLocationInfo.locationInfo.latitude);
     uint8_t dlob[8];
     uint8_t dlat[8];
     for (uint8_t i = 0; i < 8; i++)
@@ -223,22 +232,22 @@ static void StateSyncParseGnssData(MpuHalDataPack_t *msgData)
     }
     g_cpuLocationInfo.locationInfo.flongitude = Uint8ArrayToDouble(dlob, 0);
     g_cpuLocationInfo.locationInfo.flatitude = Uint8ArrayToDouble(dlat, 0);
-    //TBOX_PRINT("flongitude: %f, flatitude: %f\r\n", g_cpuLocationInfo.locationInfo.flongitude, g_cpuLocationInfo.locationInfo.flatitude);
+    // TBOX_PRINT("flongitude: %f, flatitude: %f\r\n", g_cpuLocationInfo.locationInfo.flongitude, g_cpuLocationInfo.locationInfo.flatitude);
     g_cpuLocationInfo.locationInfo.altitude = msgData->pDataBuffer[27] << 8 | msgData->pDataBuffer[28];
     g_cpuLocationInfo.locationInfo.speed = msgData->pDataBuffer[29] << 8 | msgData->pDataBuffer[30];
     g_cpuLocationInfo.locationInfo.heading = msgData->pDataBuffer[31] << 8 | msgData->pDataBuffer[32];
-    //TBOX_PRINT("altitude: %d, speed: %d, heading: %d\r\n", g_cpuLocationInfo.locationInfo.altitude, g_cpuLocationInfo.locationInfo.speed, g_cpuLocationInfo.locationInfo.heading);
+    // TBOX_PRINT("altitude: %d, speed: %d, heading: %d\r\n", g_cpuLocationInfo.locationInfo.altitude, g_cpuLocationInfo.locationInfo.speed, g_cpuLocationInfo.locationInfo.heading);
     g_cpuLocationInfo.locationInfo.accuracy = msgData->pDataBuffer[33] << 8 | msgData->pDataBuffer[34];
     g_cpuLocationInfo.locationInfo.svsNum = msgData->pDataBuffer[35];
     g_cpuLocationInfo.locationInfo.useSvsnum = msgData->pDataBuffer[36];
     g_cpuLocationInfo.locationInfo.timeStamp = msgData->pDataBuffer[37] << 24 | msgData->pDataBuffer[38] << 16 | msgData->pDataBuffer[39] << 8 | msgData->pDataBuffer[40];
     g_cpuLocationInfo.locationInfo.svwFlags = msgData->pDataBuffer[41] << 8 | msgData->pDataBuffer[42];
-    //TBOX_PRINT("accuracy: %d, svsNum: %d, useSvsnum: %d, timeStamp: %d, svwFlags: %d\r\n", g_cpuLocationInfo.locationInfo.accuracy, g_cpuLocationInfo.locationInfo.svsNum, g_cpuLocationInfo.locationInfo.useSvsnum, g_cpuLocationInfo.locationInfo.timeStamp, g_cpuLocationInfo.locationInfo.svwFlags);
+    // TBOX_PRINT("accuracy: %d, svsNum: %d, useSvsnum: %d, timeStamp: %d, svwFlags: %d\r\n", g_cpuLocationInfo.locationInfo.accuracy, g_cpuLocationInfo.locationInfo.svsNum, g_cpuLocationInfo.locationInfo.useSvsnum, g_cpuLocationInfo.locationInfo.timeStamp, g_cpuLocationInfo.locationInfo.svwFlags);
     memcpy(temp, msgData->pDataBuffer + 43, 4);
     g_cpuLocationInfo.locationInfo.svwBearing = Uint8ArrayToFloat(temp, 0);
     memcpy(temp, msgData->pDataBuffer + 47, 4);
     g_cpuLocationInfo.locationInfo.svwSpeed = Uint8ArrayToFloat(temp, 0);
-    //TBOX_PRINT("svwBearing: %f, svwSpeed: %f\r\n", g_cpuLocationInfo.locationInfo.svwBearing, g_cpuLocationInfo.locationInfo.svwSpeed);
+    // TBOX_PRINT("svwBearing: %f, svwSpeed: %f\r\n", g_cpuLocationInfo.locationInfo.svwBearing, g_cpuLocationInfo.locationInfo.svwSpeed);
     memcpy(temp, msgData->pDataBuffer + 51, 4);
     float fpdop = Uint8ArrayToFloat(temp, 0) * 100.0;
     uint16_t pdop = FloatToUint16Trunc(fpdop);
@@ -251,32 +260,32 @@ static void StateSyncParseGnssData(MpuHalDataPack_t *msgData)
     float fvdop = Uint8ArrayToFloat(temp, 0) * 100.0;
     uint16_t vdop = FloatToUint16Trunc(fvdop);
     g_cpuLocationInfo.locationInfo.svwVdop = vdop;
-    //TBOX_PRINT("fpdop: %f, fhdop: %f, fvdop: %f\r\n", fpdop, fhdop, fvdop);
-    //TBOX_PRINT("svwPdop: %d, svwHdop: %d, svwVdop: %d\r\n", g_cpuLocationInfo.locationInfo.svwPdop, g_cpuLocationInfo.locationInfo.svwHdop, g_cpuLocationInfo.locationInfo.svwVdop);
+    // TBOX_PRINT("fpdop: %f, fhdop: %f, fvdop: %f\r\n", fpdop, fhdop, fvdop);
+    // TBOX_PRINT("svwPdop: %d, svwHdop: %d, svwVdop: %d\r\n", g_cpuLocationInfo.locationInfo.svwPdop, g_cpuLocationInfo.locationInfo.svwHdop, g_cpuLocationInfo.locationInfo.svwVdop);
     uint8_t dAlt[8];
     memcpy(dAlt, msgData->pDataBuffer + 63, 8);
     g_cpuLocationInfo.locationInfo.svwAltitude = Uint8ArrayToDouble(dAlt, 0);
-    //TBOX_PRINT("svwAltitude: %f\r\n", g_cpuLocationInfo.locationInfo.svwAltitude);
+    // TBOX_PRINT("svwAltitude: %f\r\n", g_cpuLocationInfo.locationInfo.svwAltitude);
     memcpy(temp, msgData->pDataBuffer + 71, 4);
     g_cpuLocationInfo.locationInfo.svwEastVelocity = Uint8ArrayToFloat(temp, 0);
     memcpy(temp, msgData->pDataBuffer + 75, 4);
     g_cpuLocationInfo.locationInfo.svwNorthVelocity = Uint8ArrayToFloat(temp, 0);
     memcpy(temp, msgData->pDataBuffer + 79, 4);
     g_cpuLocationInfo.locationInfo.svwUpVelocity = Uint8ArrayToFloat(temp, 0);
-    //TBOX_PRINT("svwEastVelocity: %f, svwNorthVelocity: %f, svwUpVelocity: %f\r\n", g_cpuLocationInfo.locationInfo.svwEastVelocity, g_cpuLocationInfo.locationInfo.svwNorthVelocity, g_cpuLocationInfo.locationInfo.svwUpVelocity);
+    // TBOX_PRINT("svwEastVelocity: %f, svwNorthVelocity: %f, svwUpVelocity: %f\r\n", g_cpuLocationInfo.locationInfo.svwEastVelocity, g_cpuLocationInfo.locationInfo.svwNorthVelocity, g_cpuLocationInfo.locationInfo.svwUpVelocity);
     memcpy(temp, msgData->pDataBuffer + 83, 4);
     g_cpuLocationInfo.locationInfo.svwEastVelocityStdDeviation = Uint8ArrayToFloat(temp, 0);
     memcpy(temp, msgData->pDataBuffer + 87, 4);
     g_cpuLocationInfo.locationInfo.svwNorthVelocityStdDeviation = Uint8ArrayToFloat(temp, 0);
     memcpy(temp, msgData->pDataBuffer + 91, 4);
     g_cpuLocationInfo.locationInfo.svwUpVelocityStdDeviation = Uint8ArrayToFloat(temp, 0);
-    //TBOX_PRINT("svwEastVelocityStdDeviation: %f, svwNorthVelocityStdDeviation: %f, svwUpVelocityStdDeviation: %f\r\n", g_cpuLocationInfo.locationInfo.svwEastVelocityStdDeviation, g_cpuLocationInfo.locationInfo.svwNorthVelocityStdDeviation, g_cpuLocationInfo.locationInfo.svwUpVelocityStdDeviation);
+    // TBOX_PRINT("svwEastVelocityStdDeviation: %f, svwNorthVelocityStdDeviation: %f, svwUpVelocityStdDeviation: %f\r\n", g_cpuLocationInfo.locationInfo.svwEastVelocityStdDeviation, g_cpuLocationInfo.locationInfo.svwNorthVelocityStdDeviation, g_cpuLocationInfo.locationInfo.svwUpVelocityStdDeviation);
     g_cpuLocationInfo.locationInfo.svwTimestamp = ((uint64_t)msgData->pDataBuffer[95] << 56) | ((uint64_t)msgData->pDataBuffer[96] << 48) | ((uint64_t)msgData->pDataBuffer[97] << 40) | ((uint64_t)msgData->pDataBuffer[98] << 32) | ((uint64_t)msgData->pDataBuffer[99] << 24) | ((uint64_t)msgData->pDataBuffer[100] << 16) | ((uint64_t)msgData->pDataBuffer[101] << 8) | ((uint64_t)msgData->pDataBuffer[102]);
     memcpy(temp, msgData->pDataBuffer + 103, 4);
     g_cpuLocationInfo.locationInfo.svwHorizontalAccuracy = Uint8ArrayToFloat(temp, 0);
     memcpy(temp, msgData->pDataBuffer + 107, 4);
     g_cpuLocationInfo.locationInfo.svwMagneticDeviation = Uint8ArrayToFloat(temp, 0);
-    //TBOX_PRINT("svwTimestamp: %lld, svwHorizontalAccuracy: %f, svwMagneticDeviation: %f\r\n", g_cpuLocationInfo.locationInfo.svwTimestamp, g_cpuLocationInfo.locationInfo.svwHorizontalAccuracy, g_cpuLocationInfo.locationInfo.svwMagneticDeviation);
+    // TBOX_PRINT("svwTimestamp: %lld, svwHorizontalAccuracy: %f, svwMagneticDeviation: %f\r\n", g_cpuLocationInfo.locationInfo.svwTimestamp, g_cpuLocationInfo.locationInfo.svwHorizontalAccuracy, g_cpuLocationInfo.locationInfo.svwMagneticDeviation);
     g_cpuLocationInfo.timeCount = 0;
     g_cpuLocationInfo.validity = 1;
 }
@@ -426,6 +435,12 @@ void StateSyncSdkCycleProcess(MpuHalDataPack_t *msgData)
          (g_mpuFaultExtStatus.failureTime / g_processCycleTime)))
     {
         g_mpuFaultExtStatus.validity = 0;
+    }
+
+    if ((g_be80SnapshotInfo.validity == 1) &&
+        (g_be80SnapshotInfo.timeCount++ > (g_be80SnapshotInfo.failureTime / g_processCycleTime)))
+    {
+        g_be80SnapshotInfo.validity = 0; 
     }
     return;
 }
@@ -789,7 +804,8 @@ void McuSendCpuFaultSyncCycleProcess(void)
 
 #define MCU_RECV_MPU_FAULT_BITMAP_LEN           4   //DTC诊断固定长度为4字节
 #define MCU_RECV_MPU_FAULT_EXT_STATUS_LEN       8   //扩展状态固定长度为8字节
-#define MCU_RECV_MPU_FAULT_TOTAL_LEN            12  //总长度为12字节
+#define MCU_RECV_MPU_FAULT_BE80_SNAPSHOT_LEN    7   //BE80快照固定长度为7字节
+#define MCU_RECV_MPU_FAULT_TOTAL_LEN            19  //总长度为19字节
 #define MCU_RECV_MPU_FAULT_BIT_COUNT            32  //dtc位数32位  
 
 typedef struct                // 协议位号->Dem事件ID的映射结构体
@@ -840,6 +856,58 @@ static uint32_t McuRecvMpuFaultBitmapToU32(const uint8_t *pData) // 把mcu接收
     value |= ((uint32_t)pData[2] << 8);  // 第 3 个字节放到次低 8 位
     value |= ((uint32_t)pData[3] << 0);  // 第 4 个字节放到最低 8 位
     return value;
+}
+
+static uint16_t StateSyncReadBeUint16(const uint8_t *pData) // 把协议里的2字节大端数据转成uint16
+{
+    if (pData == NULL)                                      
+    {
+        return 0xFFFF;                                     
+    }
+
+    return (uint16_t)(((uint16_t)pData[0] << 8) | pData[1]); // 按大端格式拼成16位整数，高字节在前低字节在后
+}
+
+static void StateSyncUpdateBe80SnapshotInfo(const uint8_t *pData) // 从AID0x30报文中提取BE80快照7字节信息
+{
+    if (pData == NULL)                                        
+    {
+        return;                                               
+    }
+
+    g_be80SnapshotInfo.snapshotInfo.serviceId = StateSyncReadBeUint16(&pData[12]);         // 读取Byte12~13，保存ServiceID
+    g_be80SnapshotInfo.snapshotInfo.serviceInstanceId = StateSyncReadBeUint16(&pData[14]); // 读取Byte14~15，保存ServiceInstanceID
+    g_be80SnapshotInfo.snapshotInfo.methodEventId = StateSyncReadBeUint16(&pData[16]);     // 读取Byte16~17，保存MethodEventID
+    g_be80SnapshotInfo.snapshotInfo.serviceStatus = pData[18];                              // 读取Byte18，保存ServiceStatus
+    g_be80SnapshotInfo.timeCount = 0;                                                       // 收到新数据后清零超时计数
+    g_be80SnapshotInfo.validity = 1;                                                        // 标记当前BE80快照缓存有效
+}
+
+int16_t StateSyncGetBe80SnapshotInfo(Be80SnapshotInfo_t *snapshotInfo) // Rte_ReadData_BE80调用的读取接口
+{
+    uint8_t *pSrc = NULL;                                              
+    uint8_t *pDst = NULL;                                              
+    uint16_t i = 0;                                                    
+
+    if (snapshotInfo == NULL)                                          
+    {
+        return -1;                                                     
+    }
+
+    if (g_be80SnapshotInfo.validity == 0)                              
+    {
+        return -1;                                                     
+    }
+
+    pSrc = (uint8_t *)&g_be80SnapshotInfo.snapshotInfo;                
+    pDst = (uint8_t *)snapshotInfo;                                    
+
+    for (i = 0; i < sizeof(Be80SnapshotInfo_t); i++)                   // 按字节拷贝整个7字节结构
+    {
+        pDst[i] = pSrc[i];                                             
+    }
+
+    return 0;                                                         
 }
 
 static void StateSyncUpdateDtcInfo(const uint8_t *pData)
@@ -923,6 +991,7 @@ void MpuDtcSyncSdkCycleProcess(MpuHalDataPack_t *msgData)
 
     faultBitmap = McuRecvMpuFaultBitmapToU32(msgData->pDataBuffer);   //DTC故障4字节
     StateSyncUpdateDtcInfo(msgData->pDataBuffer);      //其他8字节状态缓存到g_cpuMpuDtcInfo中
+    StateSyncUpdateBe80SnapshotInfo(msgData->pDataBuffer);   //解析BE80快照信息
 
     // TBOX_PRINT("RX MPU FAULT PARSE: bitmap=0x%08X mobileNet=%d netType=%d csq=%d emmc=%d phy=%d hsm=%d nad=%d gps=%d\r\n",
     //            (unsigned int)faultBitmap,

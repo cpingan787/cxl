@@ -92,7 +92,7 @@
  * INPUT FILE:    E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\Config\ECUC\test_Mcu_Mcu0_ecuc.arxml
  *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\modules\mcu\R422_MCU_F1x_BSWMDT.arxml
  *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\stubs\4.2.2\Dem\xml\Dem_Mcu.arxml
- * GENERATED ON:  10 Mar 2026 - 20:09:18
+ * GENERATED ON:   8 Apr 2026 - 09:55:36
  */
 
 
@@ -350,8 +350,8 @@
 #define McuConf_McuClockSettingConfig_McuClockSettingConfig0 (Mcu_ClockType)0x00
 
 /* Mode Setting Handles */
-#define McuConf_McuModeSettingConf_McuModeSettingConf0 (Mcu_ModeType)0x00
-#define McuConf_McuModeSettingConf_McuModeSettingConf_Stop (Mcu_ModeType)0x01
+#define McuConf_McuModeSettingConf_McuModeSettingConf_Listen (Mcu_ModeType)0x00
+#define McuConf_McuModeSettingConf_McuModeSettingConf_Sleep (Mcu_ModeType)0x01
 
 /* Reset Reason Handles */
 #define McuConf_McuResetReasonConf_McuResetReasonConf0 (Mcu_ResetType)0x00

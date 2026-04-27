@@ -120,6 +120,9 @@ uint32_t VssSecocCmacGen(uint8_t* inData, uint32_t inLen, uint8_t* out16)
         return VSS_ERR_KEY_INVALID;
     }
 
+#ifdef TIME_TEST
+    uint32_t current_time = OSTM_GetUs();
+#endif
     if (gVssCtx.sm4KeyActiveFlg[VSS_SECOC_KEY] == 0)
     {
         const uint8_t defaultKey[VSS_NVM_BLOCK_SM4_KEY_LEN] = {0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 0x10}; // 使用默认密钥
@@ -131,7 +134,10 @@ uint32_t VssSecocCmacGen(uint8_t* inData, uint32_t inLen, uint8_t* out16)
     {
         ret = VssSM4CMacByKeyId(VSS_SECOC_KEY, inData, inLen, out16);
     }
-
+#ifdef TIME_TEST
+    uint32_t elapsed_time = OSTM_GetElapsedUs(current_time);
+    TBOX_PRINT("SM4CMAC id %x etime: %d us\r\n", ((inData[0] << 8) | inData[1]), elapsed_time);
+#endif
     return ret;
 }
 
@@ -163,8 +169,14 @@ uint32_t Vss_Challenge_Response(uint8_t *outChallenge, uint8_t *outResponse)
     {
         return VSS_ERR_KEY_INVALID;
     }
-
+#ifdef TIME_TEST
+    uint32_t current_time = OSTM_GetUs();
+#endif
     ret = VssAdapter_SM4_Challenge_Response(key, outChallenge, outResponse);
+#ifdef TIME_TEST
+    uint32_t elapsed_time = OSTM_GetElapsedUs(current_time);
+    TBOX_PRINT("SM4 etime: %d us\r\n", elapsed_time);
+#endif
     if (ret != VSS_RET_SUCCESS)
     {
         return VSS_ERR_CRYPTO_FAILED;

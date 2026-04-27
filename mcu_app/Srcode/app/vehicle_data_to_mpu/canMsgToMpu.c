@@ -2,7 +2,9 @@
 #include "logHal.h"
 #include "mpuHal.h"
 #include "canMsgToMpu.h"
+#include "powerManageSdk.h"
 #include "Os.h"
+#include "Can.h"
 
 #define TX_BUFFER_CAN_MSG_NUM_MAX       100
 #define CPU_CAN_RX_QUEUE_NUM            10
@@ -52,6 +54,41 @@ uint16_t g_txByteOffset = 2;
 
 #define CAN_MSG_TO_CPU_ENTER_CRITICAL() SuspendAllInterrupts()
 #define CAN_MSG_TO_CPU_EXIT_CRITICAL()  ResumeAllInterrupts()
+
+#if (DV_TEST_ENABLE == 1)
+#define CAN_361_ACK_CAN_ID     (0x361u)
+#define CAN_361_ACK_CAN_LEN    (8u)
+#define CAN_361_ACK_CAN_HTH    (CanConf_CanHardwareObject_CanHardwareObject_Tx0)
+static uint8_t g_can361AckData[CAN_361_ACK_CAN_LEN] = {0x03, 0x61, 0x0B, 0x00, 0x00, 0x00, 0x00, 0x00};
+static Can_PduType g_can361AckPduInfo = {&g_can361AckData[0], CAN_361_ACK_CAN_ID, 0u, CAN_361_ACK_CAN_LEN};
+
+static void SendCan361AckMsg(const CanHalMsg_t *rxMsg)
+{
+    // uint8_t copyLen = 0u;
+
+    // (void)memset(g_can361AckData, 0, sizeof(g_can361AckData));
+
+    // if (rxMsg != NULL)
+    // {
+    //     copyLen = (rxMsg->dlc < CAN_361_ACK_CAN_LEN) ? rxMsg->dlc : CAN_361_ACK_CAN_LEN;
+    //     if (copyLen > 0u)
+    //     {
+    //         (void)memcpy(g_can361AckData, rxMsg->canData, copyLen);
+    //     }
+    // }
+
+    if(rxMsg->canData[4] == 0x01)
+    {
+        g_can361AckData[2] = 0x0Bu;
+    }
+    else if(rxMsg->canData[4] == 0x02)
+    {
+        g_can361AckData[2] = 0x0Cu;
+    }
+
+    (void)Can_Write(CAN_361_ACK_CAN_HTH, &g_can361AckPduInfo);
+}
+#endif
 
 static uint8_t CpuCanRxQueueIsEmpty(void)
 {
@@ -421,6 +458,7 @@ int16_t CanMsgTransmitToCpu(int16_t mpuHandle)
             }
             TBOX_PRINT("\n");
             PowerManageSdkSetTestMode(canMsg.canData[4]);
+            SendCan361AckMsg(&canMsg);
         }
         return 0;
 #endif

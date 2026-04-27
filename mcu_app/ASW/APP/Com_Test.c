@@ -20,7 +20,9 @@
 #include "StbM.h"
 #include "Can.h"
 #include "Mcu.h"
+#include "PowManager.h"
 #include "stateSyncSdk.h"
+#include "taskDtcProcess.h"
 
 #define	StbM_SlaveTimeBaseId	0		/*  StbM Slave time domain ID */
 
@@ -86,6 +88,7 @@ void Com_Test(void)
     Com_ReceiveSignalGroup(IESS_100ms_Group32_ESS_PTCANFD_100ms_FrP32_CONTROLLER_0_IAM_Rx);
     Com_ReceiveSignal(IESS_100ms_Group32_ESS_PTCANFD_100ms_FrP32_CONTROLLER_0_IAM_Rx_IBMSBatPrsSnsrVal_IESS_100ms_Group32_ESS_PTCANFD_100ms_FrP32_CONTROLLER_0_IAM_Rx,&E2E_R_TEST[0]);
     Com_ReceiveSignal(IESS_100ms_Group32_ESS_PTCANFD_100ms_FrP32_CONTROLLER_0_IAM_Rx_IBMSBatPrsSnsrV_IESS_100ms_Group32_ESS_PTCANFD_100ms_FrP32_CONTROLLER_0_IAM_Rx,&E2E_R_TEST[1]);
+    
     /*Event Test*/
     if(Event_Test == 1)
     {
@@ -93,6 +96,7 @@ void Com_Test(void)
         Com_SendSignal(IIAMIdentityResp_IAM_CONNCAN_Event_FrS20_CONTROLLER_0_IAM_Tx,&Event_TestSig0);
 	    Event_Test = 0;
     }
+    Com_SendSignal(IDTCInfomationIAM_DIAG_DTCInfo_IAM_CONTROLLER_0_IAM_Tx,&Event_TestSig0);
 
     // Com_SendSignal(IIAM_NM_RMSSta_CONNCANFD_IAM_CONNCANFD_NM_CONTROLLER_0_IAM_Tx, &testcom[0]);
     // Com_SendSignal(IIAM_NM_NOSSta_CONNCANFD_IAM_CONNCANFD_NM_CONTROLLER_0_IAM_Tx, &testcom[1]);
@@ -134,7 +138,10 @@ void CanTSyn_SlaveTest(void)
     PduInfo.sdu[5] = (uint8)((timestamp.nanoseconds & 0x00ff0000) >> 16);
     PduInfo.sdu[6] = (uint8)((timestamp.nanoseconds & 0x0000ff00) >> 8);
     PduInfo.sdu[7] = (uint8)((timestamp.nanoseconds & 0x000000ff));
-    PduInfo.sdu[7] = (uint8)(Mcu_ResetReason);
+
+    /* Test For Sleep/Wake Mode */
+    PduInfo.sdu[0] = (uint8)(Mcu_ResetReason);
+    PduInfo.sdu[1] = (uint8)(APP_ReqSleepMode);
 
     Can_Write(SlaveTestCanHth, &PduInfo);
 }
@@ -286,6 +293,8 @@ void SendSystemInfoMsg(void)
     uint8 cpuUsage = 0;   /*  默认CPU占用率 */
     uint8 cpuWorkState = 0x00; /*  默认Normal */
     uint8 keepAliveStatus = 0;
+    uint8_t dtcStatus = 0;
+    uint8_t micInStatus = 2;
 
     /*  从SDK获取硬件状态 */
     sint16 statusHal = StateSyncGetHalstate(&halState);
@@ -302,6 +311,20 @@ void SendSystemInfoMsg(void)
     /*  Byte6: CPU工作状态 - 心跳丢失为Fault，心跳未丢失为Normal */
     cpuWorkState = (keepAliveStatus == 1) ? 0x01 : 0x00;
 
+    dtcStatus = DtcGetObjState(E_DTC_QUERY_MIC_IN);
+    if(dtcStatus == E_DTC_QUERY_STATE_UNKNOWN)
+    {
+        micInStatus = 2;
+    }
+    else if(dtcStatus == E_DTC_QUERY_STATE_NORMAL)
+    {
+        micInStatus = 0;
+    }
+    else
+    {
+        micInStatus = 1;
+    }
+
     /*  报文格式: 04 62 0B XX XX XX XX XX */
     SystemInfoPduInfo.sdu[0] = 0x04;
     SystemInfoPduInfo.sdu[1] = 0x62;
@@ -314,7 +337,7 @@ void SendSystemInfoMsg(void)
     SystemInfoPduInfo.sdu[5] = cpuUsage;
     /*  Byte7-8: 保留 */
     SystemInfoPduInfo.sdu[6] = cpuWorkState;
-    SystemInfoPduInfo.sdu[7] = 0x00;
+    SystemInfoPduInfo.sdu[7] = micInStatus;
 
     Can_Write(SystemInfoCanHth, &SystemInfoPduInfo);
 }

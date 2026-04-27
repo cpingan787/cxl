@@ -43,8 +43,10 @@
 #include "BswM.h"
 #include "NVM.h"
 #include "Dem.h"
-#include "Wdg_59_DriverA.h"
-#include "Wdg_59_DriverA_PBTypes.h"
+//#include "Wdg_59_DriverA.h"
+//#include "Wdg_59_DriverA_PBTypes.h"
+#include "Wdg_59_DriverB.h"
+#include "Wdg_59_DriverB_PBTypes.h"
 #include "PowManager.h"
 #include "Adc.h"
 #include "Gpt.h"
@@ -133,6 +135,7 @@ FUNC(void, ECUM_ERRORHOOK_CODE) EcuM_ErrorHook
  * Parameters(OUT):  NA
  * Return value: NA
  */
+uint8 TestWkStatus = 0;
 FUNC(void, ECUM_MCUSETMODE_CODE) EcuM_McuSetMode(Mcu_ModeType mode)
 {
     /** DO NOT CHANGE THIS COMMENT!
@@ -144,19 +147,28 @@ FUNC(void, ECUM_MCUSETMODE_CODE) EcuM_McuSetMode(Mcu_ModeType mode)
      * </USERBLOCK>
      */
     
-    Adc_StopGroupConversion(AdcConf_AdcGroup_AdcGroup0);
-    Adc_StopGroupConversion(AdcConf_AdcGroup_AdcGroup1);
-    Adc_DeInit();
+    if(APP_ReqSleepMode == APP_LISTEN_MODE)
+    {
 
-    Gpt_StopTimer(GptConf_GptChannelConfiguration_GptChannelConfiguration0);
-    Gpt_StopTimer(GptConf_GptChannelConfiguration_GptChannelConfiguration3);
-    Gpt_DeInit();
+        Mcu_WakeUpFactor_Preparation(McuConf_McuModeSettingConf_McuModeSettingConf_Listen);
+        Mcu_SetMode(McuConf_McuModeSettingConf_McuModeSettingConf_Listen);
+        EcuM_SetWakeupEvent(EcuMWakeupSource_CAN);
+    }
+    else
+    {
+        Adc_StopGroupConversion(AdcConf_AdcGroup_AdcGroup0);
+        Adc_StopGroupConversion(AdcConf_AdcGroup_AdcGroup1);
+        Adc_DeInit();
 
-    Pre_LowPowerMode();
-    
-	Mcu_WakeUpFactor_Preparation(0);
-    Mcu_SetMode(0);
-    // Can_Init(CanConfigSet0);
+        Gpt_StopTimer(GptConf_GptChannelConfiguration_GptChannelConfiguration0);
+        Gpt_StopTimer(GptConf_GptChannelConfiguration_GptChannelConfiguration3);
+        Gpt_DeInit();
+
+        Pre_LowPowerMode();
+        
+	    Mcu_WakeUpFactor_Preparation(McuConf_McuModeSettingConf_McuModeSettingConf_Sleep);
+        Mcu_SetMode(McuConf_McuModeSettingConf_McuModeSettingConf_Sleep);
+    }
 }
 
 #if (ECUM_SET_PROGRAMMABLE_INTERRUPTS == STD_ON)
@@ -381,7 +393,8 @@ FUNC(void, ECUM_ONGOOFFONE_CODE) EcuM_OnGoOffOne
 	NvM_WriteAll();
 	do
     	  {
-		  Wdg_59_DriverA_TriggerFunc(WDG_59_DRIVERA_INCLUDE_CRITICAL_SECTION);
+            //Wdg_59_DriverB_TriggerFunc(WDG_59_DRIVERA_INCLUDE_CRITICAL_SECTION);
+		    Wdg_59_DriverB_TriggerFunc(WDG_59_DRIVERB_INCLUDE_CRITICAL_SECTION);
     	  	init_expired_time++;
               NvM_MainFunction();
               Fee_MainFunction();
@@ -458,8 +471,8 @@ FUNC(void, ECUM_AL_SWITCHOFF_CODE) EcuM_AL_SwitchOff
      * <USERBLOCK EcuM_AL_SwitchOff>
      */
     /* custom code.... */
-    Mcu_WakeUpFactor_Preparation(0);
-    Mcu_SetMode(McuConf_McuModeSettingConf_McuModeSettingConf0);
+    // Mcu_WakeUpFactor_Preparation(0);
+    // Mcu_SetMode(McuConf_McuModeSettingConf_McuModeSettingConf0);
     /** DO NOT CHANGE THIS COMMENT!
      * </USERBLOCK>
      */

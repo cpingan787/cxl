@@ -32,6 +32,7 @@
 #include "Dem.h"
 #include "EcuM_Externals.h"
 #include "Port.h"
+#include "logHal.h"
 
 #include "powerManageSdk.h"
 
@@ -43,6 +44,9 @@
 uint8 APP_WakeupHold = 	TRUE;
 uint8 APP_WakeupNotified = FALSE;
 uint16 APP_WakeupHoldCnt = 	1000;
+
+uint8 APP_ReqSleepMode = APP_SLEEP_MODE;
+
 Mcu_WakeSourceType Mcu_WakeSource = {
 	.Can_WakeFlag = FALSE,
 	.KL30_WakeFlag = FALSE,
@@ -55,14 +59,15 @@ Mcu_WakeSourceType Mcu_WakeSource = {
 };
 uint8 NmSleepMode = 0;
 uint8 gIOHwAbDI_KL30_St = 0;
-uint8 gIOHwAbDI_ACC_St = 0;
-uint8 gIOHwAbDI_IG1_St = 0;
+uint8 gIOHwAbDI_KL30_DET_St = 0;
+// uint8 gIOHwAbDI_ACC_St = 0;
+// uint8 gIOHwAbDI_IG1_St = 0;
 uint8 gIOHwAbDI_CanRx_St = 0;
 uint8 gIOHwAbDI_NAD_WAKEUP_MCU_St = 0;
-uint8 gIOHwAbDI_CDS_St = 0;
+// uint8 gIOHwAbDI_CDS_St = 0;
 uint8 gIOHwAbDI_ECALL_BUTTON_St = 0;
-uint8 gIOHwAbDI_IMU_INT1_St = 0;
-uint8 gIOHwAbDI_IMU_INT2_St = 0;
+// uint8 gIOHwAbDI_IMU_INT1_St = 0;
+// uint8 gIOHwAbDI_IMU_INT2_St = 0;
 uint8 gIOHwAbDI_RTC_St = 0;
 
 // uint8 CAN_WK_FLG=0;
@@ -75,7 +80,7 @@ extern uint8 validNmMsgFlag;
 // extern uint32 delay_count;
  uint8 CAN_STATUS=9;
 
-Icu_ValueType CrashTimeElapsed;
+// Icu_ValueType CrashTimeElapsed;
 
 /*******************************************************************************
  **                        Private Function                                    **
@@ -98,7 +103,7 @@ uint8 Power_WakeUpSrcIsValid(void)
     if( //Mcu_WakeSource.KL30_WakeFlag || 
 		//Mcu_WakeSource.NAD_WakeFlag ||
 		Mcu_WakeSource.Crash_WakeFlag ||
-		Mcu_WakeSource.Ecall_WakeFlag ||
+		//Mcu_WakeSource.Ecall_WakeFlag ||
 		//Mcu_WakeSource.Imu_Int1_WakeFlag ||
 		//Mcu_WakeSource.Imu_Int2_WakeFlag ||
 		//Mcu_WakeSource.Rtc_WakeFlag||
@@ -281,12 +286,13 @@ void Power_Init(void)
 	APP_WakeupNotified = FALSE;
 	NmSleepMode = 0;
 	gIOHwAbDI_KL30_St = 0;
+	gIOHwAbDI_KL30_DET_St = 0;
 	gIOHwAbDI_CanRx_St = 0;
 	gIOHwAbDI_NAD_WAKEUP_MCU_St = 0;
-	gIOHwAbDI_CDS_St = 0;
+	// gIOHwAbDI_CDS_St = 0;
 	gIOHwAbDI_ECALL_BUTTON_St = 0;
-	gIOHwAbDI_IMU_INT1_St = 0;
-	gIOHwAbDI_IMU_INT2_St = 0;
+	// gIOHwAbDI_IMU_INT1_St = 0;
+	// gIOHwAbDI_IMU_INT2_St = 0;
 	gIOHwAbDI_RTC_St = 0;
 
 	CAN_STATUS=9;
@@ -316,19 +322,48 @@ void Power_Detect(void)
 {
     Nm_StateType nmStatePtr = 0;
     Nm_ModeType nmModePtr = 0;
+	static uint8 kl30LastSt = 0xFFu;
+    uint8 wakeupSource = 0;
 
-    // gIOHwAbDI_KL30_St = Dio_ReadChannel(DioConf_DioChannel_DIO_Channel_KL30_Voltage_DET_INT_Pin0_9);
-	// gIOHwAbDI_ACC_St = Dio_ReadChannel(DioConf_DioChannel_DIO_Channel_ACC_INT_Pin8_5);
-	// gIOHwAbDI_IG1_St = Dio_ReadChannel(DioConf_DioChannel_DIO_Channel_IG1_INT_Pin1_8);
     gIOHwAbDI_KL30_St = Dio_ReadChannel(DioConf_DioChannel_DIO_Channel_IG1_INT_Pin1_8);
+    gIOHwAbDI_KL30_DET_St = Dio_ReadChannel(DioConf_DioChannel_DIO_Channel_KL30_DOWEN_DET_EN_Pin1_6);
+    if ((gIOHwAbDI_KL30_DET_St == STD_HIGH) && (kl30LastSt != 0xFFu) && (gIOHwAbDI_KL30_St != kl30LastSt))
+    {
+        if (gIOHwAbDI_KL30_St == STD_LOW)
+        {
+            TBOX_PRINT("KL30 ON\r\n");
+        }
+        else
+        {
+            TBOX_PRINT("KL30 OFF\r\n");
+        }
+    }
+    kl30LastSt = gIOHwAbDI_KL30_St;
 
     gIOHwAbDI_CanRx_St = Dio_ReadChannel(DioConf_DioChannel_DIO_Channel_CanRx_DET_INT_Pin0_2);
     gIOHwAbDI_NAD_WAKEUP_MCU_St = Dio_ReadChannel(DioConf_DioChannel_DIO_Channel_NAD_WAKEUP_MCU_Pin8_2);
-    gIOHwAbDI_CDS_St = Dio_ReadChannel(DioConf_DioChannel_DIO_Channel_CDS_STATE_Pin0_11);
     gIOHwAbDI_ECALL_BUTTON_St = Dio_ReadChannel(DioConf_DioChannel_DIO_Channel_ECALL_BUTTON_DET_Pin9_5);
-    gIOHwAbDI_IMU_INT1_St = Dio_ReadChannel(DioConf_DioChannel_DIO_Channel_IMU_INT1_Pin8_1);
-    gIOHwAbDI_IMU_INT2_St = Dio_ReadChannel(DioConf_DioChannel_DIO_Channel_IMU_INT2_Pin8_3);
     gIOHwAbDI_RTC_St = Dio_ReadChannel(DioConf_DioChannel_DIO_Channel_RTC_INT_Pin0_6);
+    PowerManageSdkGetPowerInfo(NULL, &wakeupSource,NULL);
+    if(wakeupSource == 0)
+    {
+        // if(gIOHwAbDI_CanRx_St == STD_LOW)
+        // {
+        //     APP_SetWakeupSource(PM_HAL_WAKEUP_SOURCE_CAN1);
+        // }
+        // if(gIOHwAbDI_NAD_WAKEUP_MCU_St == STD_LOW)
+        // {
+        //     APP_SetWakeupSource(PM_HAL_WAKEUP_SOURCE_MPU);
+        // }
+        if(gIOHwAbDI_ECALL_BUTTON_St == STD_HIGH)
+        {
+            APP_SetWakeupSource(PM_HAL_WAKEUP_SOURCE_ECALL);
+        }
+        if(gIOHwAbDI_RTC_St == STD_LOW)
+        {
+            APP_SetWakeupSource(PM_HAL_WAKEUP_SOURCE_MCURTC);
+        }
+    }
 
 	CanNm_GetState(0,&nmStatePtr,&nmModePtr);
 	CAN_STATUS = BswM_GetEcuMWakeSrcStatus(0);
@@ -357,7 +392,10 @@ void Power_Detect(void)
 	}
 	else
 	{
-
+        if(wakeupSource == 0)
+        {
+            APP_SetWakeupSource(PM_HAL_WAKEUP_SOURCE_CAN1);
+        }
 	}
 
 #ifndef APP_UDSED  /**for No APP test*/ 
@@ -479,6 +517,11 @@ void  APP_ClearWakeupHold(void)
 uint8  APP_GetWakeupHold(void)
 {
 	return APP_WakeupHold;
+}
+
+void APP_SetSleepMode(uint8 mode)
+{
+	APP_ReqSleepMode = mode;
 }
 
 #ifndef APP_UDSED  /**for No APP test*/ 

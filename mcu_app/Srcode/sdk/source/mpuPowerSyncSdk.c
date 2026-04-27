@@ -569,6 +569,17 @@ int16_t MpuPowerSyncSdkGetSleepDisableState(void)
     return effectiveSleepDisable;
 }
 
+int16_t MpuPowerSyncSdkGetRawSleepDisableEvent(void)
+{
+    uint8_t sleepDisableEvent = 0;
+
+    xSemaphoreTake(g_mutexHandle, portMAX_DELAY);
+    sleepDisableEvent = g_sleepDisableEvent;
+    xSemaphoreGive(g_mutexHandle);
+
+    return sleepDisableEvent;
+}
+
 /*************************************************
   Function:       MpuPowerSyncSdkSetRkMode
   Description:    设置上报给MPU的rkmode

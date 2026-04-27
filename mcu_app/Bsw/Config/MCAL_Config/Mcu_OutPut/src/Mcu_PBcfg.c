@@ -123,7 +123,7 @@
  * INPUT FILE:    E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\Config\ECUC\test_Mcu_Mcu0_ecuc.arxml
  *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\modules\mcu\R422_MCU_F1x_BSWMDT.arxml
  *                E:\PuHua_Tbox\PuHua_SRTL\02_ProjectCode\SIRUN_R7F701583_MCAL_ASR422_V421400_ConfigProject\stubs\4.2.2\Dem\xml\Dem_Mcu.arxml
- * GENERATED ON:   2 Apr 2026 - 20:15:53
+ * GENERATED ON:   8 Apr 2026 - 10:25:22
  */
 
 /*******************************************************************************
@@ -398,16 +398,16 @@ CONST(Mcu_ClockSetting, MCU_VAR) Mcu_GstClockSetting[1] =
 /* Structure for MCU mode setting configuration */
 CONST(Mcu_ModeSetting, MCU_VAR) Mcu_GstModeSetting[2] =
 {
-  /* Index: 0 - McuModeSettingConf0 */
+  /* Index: 0 - McuModeSettingConf_Listen */
   {
     /* ulPowerDownWakeupType0 */
-    0xFFCFF73FUL,
+    0xFEEFFF3FUL,
 
     /* ulPowerDownWakeupTypeIso0 */
-    0xFFFFFFFFUL,
+    0xFFFFFFFBUL,
 
     /* ucModeType */
-    MCU_DEEPSTOP_MODE,
+    MCU_STOP_MODE,
 
     /* blModeTransitionReq */
     MCU_TRUE,
@@ -416,16 +416,16 @@ CONST(Mcu_ModeSetting, MCU_VAR) Mcu_GstModeSetting[2] =
     MCU_TRUE
   },
 
-  /* Index: 1 - McuModeSettingConf_Stop */
+  /* Index: 1 - McuModeSettingConf_Sleep */
   {
     /* ulPowerDownWakeupType0 */
-    0xFFFFFFBFUL,
+    0xFEEFFF3FUL,
 
     /* ulPowerDownWakeupTypeIso0 */
     0xFFFFFFFFUL,
 
     /* ucModeType */
-    MCU_STOP_MODE,
+    MCU_DEEPSTOP_MODE,
 
     /* blModeTransitionReq */
     MCU_TRUE,

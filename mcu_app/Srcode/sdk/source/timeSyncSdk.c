@@ -41,11 +41,12 @@ static int16_t TimeSyncGetLocalTimeFromRtc(uint32_t rtc, uint8_t timeZone, uint3
     uint64_t temp = 0;
     uint32_t temp1 = 0;
 
-    // if (rtc < 946684800)
-    // {
-    //     return -1;
-    // }
-    // 减去UTC的2000年基准时间
+    // 当时间戳小于2000年utc时间时, 可能是GNSS/NTP未同步, 直接返回错误
+    if (rtc < UTC_2000_BASE_TIME)
+    {
+        return -1;
+    }
+    // 加上时区偏移量
     rtc = rtc + (timeZone * 60 * 60);
     // rtc = rtc - 946684800 + (timeZone * 60 * 60);
     temp = rtc / 86400; // 得到天数(秒钟数对应的)
@@ -129,7 +130,7 @@ static void TimeSyncSdkSendGnssTimeSignal()
     uint8_t min = 0;
     uint8_t sec = 0;
     uint8_t status = g_gnssData.timeValidity;
-    int16_t ret = TimeSyncGetLocalTimeFromRtc(g_gnssData.timestamp, g_gnssData.timeZone, &year32, &month, &day, &hour, &min, &sec);
+    int16_t ret = TimeSyncGetLocalTimeFromRtc(g_gnssData.timestamp, BEIJING_TIME_ZONE, &year32, &month, &day, &hour, &min, &sec);
     if (ret != 0)
     {
         status = 0;
@@ -163,7 +164,7 @@ static void TimeSyncSdkSendNtpTimeSignal()
     uint8_t min = 0;
     uint8_t sec = 0;
     uint8_t status = g_ntpData.timeValidity;
-    int16_t ret = TimeSyncGetLocalTimeFromRtc(g_ntpData.timestamp, g_ntpData.timeZone, &year32, &month, &day, &hour, &min, &sec);
+    int16_t ret = TimeSyncGetLocalTimeFromRtc(g_ntpData.timestamp, BEIJING_TIME_ZONE, &year32, &month, &day, &hour, &min, &sec);
     if (ret != 0)
     {
         status = 0;
@@ -240,7 +241,7 @@ void TimeSyncSdkCycleProcess(MpuHalDataPack_t *msgData)
             **************/
             if ((pRxData[5] & 0xF0) == 0x20)
             {
-                //TBOX_PRINT("timeSyncStat: %d, timeSrc: %d\r\n", g_gnssData.timeSyncStat, g_gnssData.timeSrc);
+                // TBOX_PRINT("timeSyncStat: %d, timeSrc: %d\r\n", g_gnssData.timeSyncStat, g_gnssData.timeSrc);
                 g_gnssData.timeSyncStat = pRxData[5] & 0x0F;
                 g_gnssData.timeSrc = (pRxData[5] >> 4) & 0x0F;
                 if (g_gnssData.timeSyncStat == 0)
@@ -252,7 +253,7 @@ void TimeSyncSdkCycleProcess(MpuHalDataPack_t *msgData)
                 {
                     g_gnssData.timeValidity = 1;
                     g_gnssData.timestamp = (pRxData[0] << 24) + (pRxData[1] << 16) + (pRxData[2] << 8) + pRxData[3];
-                    //TBOX_PRINT("set gnss to rtc\r\n");
+                    // TBOX_PRINT("set gnss to rtc\r\n");
                     TimerHalSetRtcTime(g_gnssData.timestamp);
                 }
                 g_gnssData.timeZone = pRxData[4];
@@ -273,7 +274,7 @@ void TimeSyncSdkCycleProcess(MpuHalDataPack_t *msgData)
                     g_ntpData.timestamp = (pRxData[0] << 24) + (pRxData[1] << 16) + (pRxData[2] << 8) + pRxData[3];
                     if (g_gnssData.timeValidity == 0)
                     {
-                        //TBOX_PRINT("set ntp to rtc\r\n");
+                        // TBOX_PRINT("set ntp to rtc\r\n");
                         TimerHalSetRtcTime(g_ntpData.timestamp);
                     }
                 }
@@ -437,6 +438,6 @@ int16_t TimeSyncSdkGetUtcTime(uint32_t *pTime)
     // 减去UTC的2000年基准时间
     time = time - UTC_2000_BASE_TIME;
     *pTime = time;
-    TBOX_PRINT("time: %d\r\n", time);
+    // TBOX_PRINT("time: %d\r\n", time);
     return 0;
 }

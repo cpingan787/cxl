@@ -148,6 +148,12 @@ SecOC_GetRxFreshness(
         }
     }
 
+    if (Fvm_ModelCanID == 0x56f)
+    {
+        return E_OK;
+    }
+
+
     result = Fvm_VerifyFreshnessValue(Fvm_ModelCanID,SecOCTruncatedFreshness_MsgCntOut,SecOCTruncatedFreshness_RstCntL,&RxFreshnessValue[0]);
     
     (void)ILib_memcpy(SecOCFreshnessValue, RxFreshnessValue, (*SecOCFreshnessValueLength)/8);

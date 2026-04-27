@@ -80,14 +80,16 @@ void PowerManageSdkForceWakeupMpu(uint16_t cycleTime);
 
 /* 运行期间计时器递减接口，供定时器中断调用 */
 void PowerManageSdkTimerDecrement(void);
+uint8_t PowerManageSdkCheckDeepstopReset(void);
 
+void PowerManageSdkSyncListenTimer(uint8_t timerValue, uint8_t timerUnit);
 /* 清零listen唤醒计时器 */
 void ResetListenTimer(void);
 
 /* 获取存储的用户模式 */
 uint8_t GetStoredUserMode(void);
 
-
+uint8_t PowerManageSdkShouldStartMpuOnPowerOn(void);
 
 
 

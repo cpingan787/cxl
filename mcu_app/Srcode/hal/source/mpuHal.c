@@ -489,7 +489,7 @@ void MpuHalCycleProcess(uint32_t cycleTime)
         g_mpuManage.wakeoutTimeCount++;
         if (2 == g_mpuManage.wakeoutTimeCount)
         {
-            MpuHalSetWakeOut(1);
+            // MpuHalSetWakeOut(1);
         }
     }
 }

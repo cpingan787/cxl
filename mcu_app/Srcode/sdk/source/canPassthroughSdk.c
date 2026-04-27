@@ -239,7 +239,6 @@ int16_t CanPassthroughRoutine_PENDING(uint8_t *UDSReqData, uint16_t UDSReqDataLe
     respRet = CanPassthrough_ReceiveResponse(UDSRespData, &RespDataLen);
     cnt++;
 
-    TBOX_PRINT("respRet: %d, RespDataLen: %d\r\n", respRet, RespDataLen);
     if((respRet == 0) && (RespDataLen > 0))//接收到响应
     {
         TBOX_PRINT("UDS31RespSuc\n");

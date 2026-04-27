@@ -34,7 +34,11 @@
 /*******************************************************************************
  **                        Macro Definitions                                  **
 ******************************************************************************/
-extern Icu_ValueType CrashTimeElapsed;
+#define APP_LISTEN_MODE 0x00
+#define APP_SLEEP_MODE 0x01
+
+// extern Icu_ValueType CrashTimeElapsed;
+extern uint8 APP_ReqSleepMode;
 
 /** API mappings */
 
@@ -80,6 +84,8 @@ extern void APP_AllowedGodown(void);
 extern void APP_SetWakeupHold(void) ;
 extern void APP_ClearWakeupHold(void);
 extern uint8  APP_GetWakeupHold(void);
+
+extern void APP_SetSleepMode(uint8 mode);
 
 /*******************************************************************************
  APP 实现

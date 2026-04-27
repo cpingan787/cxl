@@ -38,6 +38,12 @@ struct aes_key_st
     unsigned int rounds;
 };
 
+typedef struct
+{
+    uint8              NumBlocks;
+    uint32             Addr;
+}DID_F110_t;
+
 typedef struct aes_key_st AES_KEY; 
 
 /* add end test  */

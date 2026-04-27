@@ -112,6 +112,7 @@ int16_t MpuPowerSyncSdkGetWakeStatus(uint8_t *pWakeSource);
   Others:         
 *************************************************/
 int16_t MpuPowerSyncSdkGetSleepDisableState(void);
+int16_t MpuPowerSyncSdkGetRawSleepDisableEvent(void);
 
 /*************************************************
   Function:       MpuPowerSyncSdkSetRkMode

@@ -1,7 +1,8 @@
 #include <string.h>
 #include "powerManageSdk.h"
 #include "peripheralHal.h"
-#include "PowerManageHal.h"
+// #include "PowerManageHal.h"
+#include "powManager.h"
 #include "mpuHal.h"
 #include "logHal.h"
 #include "timerHal.h"
@@ -17,8 +18,10 @@
 
 #include "CanNm.h"
 #include "Dio.h"
+#include "iodefine.h"
 
 #include "BswM_EcuM.h"
+#include "BswM.h"
 #include "BswM_Ext.h"
 
 #include "NVM.h"
@@ -34,6 +37,13 @@
 #define PM_NM_RESET_WAKE_MPU            2
 #define PM_NM_RESET_WAKE_BLE            3
 #define PM_NM_RESET_WAKE_BLE_PARK       4
+#define PM_BACKUP_MODE_FORCE_TIME       (2UL * 60UL * 1000UL)
+#define PM_KL30_OVERVOLTAGE_MV          18500UL
+#define PM_KL30_OVERVOLTAGE_RECOVER_MV  18000UL
+#define PM_KL30_OVERVOLTAGE_WAKE_ADC_WAIT_MS 20UL
+#define PM_RESF_DEEPSTOP_RESET_MASK     (1UL << 10)
+#define PM_CAN_WAKEUP_WUF0_MASK         (1UL << 6)
+#define PM_CAN_WAKEUP_WUF_ISO0_MASK     0x00000010UL
 
 #define PM_SDK_24H_RESTART_TIME         (24 * 3600)  // (24 * 3600) 单位：秒
 
@@ -67,6 +77,7 @@ typedef enum
     E_PM_STATE_PRE_CHECK_CAN,
     E_PM_STATE_GET_MPU_WAKE_SOURCE,
     E_PM_STATE_GET_MPU_SLEEP_FINISH,
+    E_PM_STATE_BACKUP_MODE,
 }PmSdkState_e;
 
 
@@ -91,6 +102,9 @@ typedef struct
     uint8_t kl30OffFlag;
     uint32_t kl30WakeCount;
     uint32_t kl30WakeDelay;
+    uint32_t backupModeDelayCount;
+    uint8_t kl30OverVoltageFlag;
+    uint8_t listenTimerSavePending;
     volatile uint32_t restart24hTimer;       // 24小时重启计时器
     volatile uint32_t listenWakeupTimer;     // listen休眠唤醒计时器
     uint8_t mpuPowerOffFlag;        // MPU关机标志（1：关机，0：休眠）
@@ -98,9 +112,29 @@ typedef struct
 }PmSdkManage_t;
 
 static PmSdkManage_t g_pmManage;
+static uint8_t g_pmResetReasonValid = 0;
+static uint32_t g_pmResetReason = 0;
+static uint8_t g_pmWakeFactorValid = 0;
+static uint32_t g_pmWakeFactor0 = 0;
+static uint32_t g_pmWakeFactor20 = 0;
+static uint32_t g_pmWakeFactorIso0 = 0;
+static uint8_t g_pmDeepstopCanOnlyWakeDetected = 0;
+static uint8_t g_pmDeepstopCanPreCheckNoMpu = 0;
 
 /* 运行期间计时器累计毫秒数（1ms中断累计） */
 static volatile uint32_t g_timerMsAccumulator = 0;
+static volatile uint8_t g_listenTimerClearReqFlag = 0;
+
+static int16_t SaveListenTimerParam(void);
+static int16_t ClearListenTimerParam(void);
+static void PmProcessListenTimerFlashRequest(void);
+static uint8_t PmBackupModeProcess(uint32_t cycleTime);
+static uint8_t PmKl30OverVoltageSleepProcess(void);
+static uint8_t PmDetectWakeupSourceByIo(void);
+static void PmReadWakeFactorOnce(void);
+static uint8_t PmDeepstopWakeupSourceIsCan(void);
+static void PmDeepstopCanNonNmPrepareSleep(void);
+uint8_t PowerManageSdkShouldKeepMpuOffBeforeInit(void);
 
 static uint32_t GetListenTimerSeconds(uint8_t listenTimer, uint8_t timerUnit)
 {
@@ -122,32 +156,14 @@ static uint32_t GetListenTimerSeconds(uint8_t listenTimer, uint8_t timerUnit)
     return PM_LISTEN_DEFAULT_SECONDS;
 }
 
-static uint8_t ReadListenTimerFromDIDC016(uint32_t* pListenTimer)
+static uint8_t ReadListenTimerFromDIDC106(uint32_t* pListenTimer)
 {
+    uint8_t timerUnit = 0;
+
     if(pListenTimer == NULL)
     {
         return PM_SDK_STATUS_ERR;
     }
-
-    // for (uint8 i = 0; i < 8; i++)
-    // {
-    //    NvMBlockRamBuffer31[i] = 0;
-    // }
-    // NvMBlockRamBuffer31[0] = 0x03;
-    // NvMBlockRamBuffer31[5] = 0x02;
-    // if(NvM_WriteBlock(NvMBlock_DIDC106, NvMBlockRamBuffer31) == E_NOT_OK)
-    // {
-    //     return E_NOT_OK;
-    // }
-
-    // for (uint8_t i = 0; i < 17; i++)
-    // {
-    //    NvMBlockRamBuffer7[i] = i;
-    // }
-    // if(NvM_WriteBlock(NvMBlock_DIDF190, NvMBlockRamBuffer7) == E_NOT_OK)
-    // {
-    //     return E_NOT_OK;
-    // }
 
     if(NvM_ReadBlock(NvMBlock_DIDC106, NvMBlockRamBuffer31) == E_NOT_OK)
     {
@@ -160,15 +176,16 @@ static uint8_t ReadListenTimerFromDIDC016(uint32_t* pListenTimer)
         return PM_SDK_STATUS_OK;
     }
 
-    if(NvMBlockRamBuffer31[5] == 0) // 天
+    timerUnit = NvMBlockRamBuffer31[4] & 0x03;
+    if(timerUnit == 0) // 天
     {
         *pListenTimer = ((uint32_t)NvMBlockRamBuffer31[0] * 24UL * 3600UL);
     }
-    else if(NvMBlockRamBuffer31[5] == 1) // 小时
+    else if(timerUnit == 1) // 小时
     {
         *pListenTimer = ((uint32_t)NvMBlockRamBuffer31[0] * 3600UL);
     }
-    else if(NvMBlockRamBuffer31[5] == 2) // 分钟
+    else if(timerUnit == 2) // 分钟
     {
         *pListenTimer = ((uint32_t)NvMBlockRamBuffer31[0] * 60UL);
     }
@@ -202,9 +219,6 @@ static uint8_t ReadListenTimerFromReservedBlock(uint32_t* pListenTimer)
                     ((uint32_t)NvMBlockRamBuffer49[2] << 8) |
                     NvMBlockRamBuffer49[3];
 
-    NvMBlockRamBuffer49[PM_FLASH_DATA_VALID_INDEX] = 0;
-    (void)NvM_WriteBlock(NvMBlock_Reserved_block2, NvMBlockRamBuffer49);
-
     TBOX_PRINT("Get listen timer from flash: %u seconds\n", *pListenTimer);
     return PM_SDK_STATUS_OK;
 }
@@ -214,20 +228,54 @@ void SetListenTimer(uint8_t listenTimer, uint8_t timerUnit)
 {
     g_pmManage.listenWakeupTimer = GetListenTimerSeconds(listenTimer, timerUnit);
     TBOX_PRINT("set listen timer: %u seconds\n", g_pmManage.listenWakeupTimer);
+    (void)SaveListenTimerParam();
 }
 
 // Listen 持续时长重新计时
+void PowerManageSdkSyncListenTimer(uint8_t timerValue, uint8_t timerUnit)
+{
+    uint32_t listenTimer = PM_LISTEN_DEFAULT_SECONDS;  // 默认14天
+
+    if(timerValue == 0)
+    {
+        (void)SaveListenTimerParam();
+        return;
+    }
+
+    if(timerUnit == 0) // 天
+    {
+        listenTimer = ((uint32_t)timerValue * 24UL * 3600UL);
+    }
+    else if(timerUnit == 1) // 小时
+    {
+        listenTimer = ((uint32_t)timerValue * 3600UL);
+    }
+    else if(timerUnit == 2) // 分钟
+    {
+        listenTimer = ((uint32_t)timerValue * 60UL);
+    }
+    else
+    {
+        return;
+    }
+
+    g_pmManage.listenWakeupTimer = listenTimer;
+    TBOX_PRINT("diag sync listen timer: %u seconds\n", g_pmManage.listenWakeupTimer);
+    (void)SaveListenTimerParam();
+}
+
 void ResetListenTimer(void)
 {
     uint32_t listenTimer = PM_LISTEN_DEFAULT_SECONDS;  // 默认14天
 
-    if(ReadListenTimerFromDIDC016(&listenTimer) != PM_SDK_STATUS_OK)
+    if(ReadListenTimerFromDIDC106(&listenTimer) != PM_SDK_STATUS_OK)
     {
         listenTimer = PM_LISTEN_DEFAULT_SECONDS;
     }
 
     g_pmManage.listenWakeupTimer = listenTimer;
     TBOX_PRINT("Reset listen timer: %u seconds\n", g_pmManage.listenWakeupTimer);
+    (void)SaveListenTimerParam();
 }
 
 // 上电复位，获取存储的listen唤醒持续时长，继续计时
@@ -240,7 +288,7 @@ static uint32_t GetListenTimerParam(void)
         return listenTimer;
     }
 
-    if(ReadListenTimerFromDIDC016(&listenTimer) == PM_SDK_STATUS_OK)
+    if(ReadListenTimerFromDIDC106(&listenTimer) == PM_SDK_STATUS_OK)
     {
         return listenTimer;
     }
@@ -248,7 +296,7 @@ static uint32_t GetListenTimerParam(void)
     return PM_LISTEN_DEFAULT_SECONDS;
 }
 
-static uint32_t SaveListenTimerParam(void)
+static int16_t SaveListenTimerParam(void)
 {
     VehicleInfor_t vehicleInfor;
 
@@ -274,6 +322,8 @@ static uint32_t SaveListenTimerParam(void)
     {
         return E_NOT_OK;
     }
+
+    return PM_SDK_STATUS_OK;
 }
 
 /* 获取存储的用户模式 */
@@ -302,6 +352,32 @@ uint8_t GetStoredUserMode(void)
     return userMode;
 }
 
+static int16_t ClearListenTimerParam(void)
+{
+    /* 直接基于当前RAM镜像清空剩余计时，不再先读flash */
+    NvMBlockRamBuffer49[0] = 0;
+    NvMBlockRamBuffer49[1] = 0;
+    NvMBlockRamBuffer49[2] = 0;
+    NvMBlockRamBuffer49[3] = 0;
+    NvMBlockRamBuffer49[PM_FLASH_DATA_VALID_INDEX] = PM_FLASH_DATA_VALID_FLAG;
+
+    if(NvM_WriteBlock(NvMBlock_Reserved_block2, NvMBlockRamBuffer49) == E_NOT_OK)
+    {
+        return PM_SDK_STATUS_ERR;
+    }
+
+    return PM_SDK_STATUS_OK;
+}
+
+static void PmProcessListenTimerFlashRequest(void)
+{
+    if((g_listenTimerClearReqFlag != 0) && (g_pmManage.listenTimerSavePending == 0))
+    {
+        g_listenTimerClearReqFlag = 0;
+        (void)ClearListenTimerParam();
+    }
+}
+
 void PowerManageSdkSetWakeupSource(uint8_t wakeupSource)
 {
     g_pmManage.wakeupSource = wakeupSource;
@@ -309,6 +385,9 @@ void PowerManageSdkSetWakeupSource(uint8_t wakeupSource)
 
 int16_t PowerManageSdkInit(const PmSdkConfig_t* pmConfig)
 {
+    uint8_t deepstopReset;
+    uint8_t noLocalWake;
+
     if(pmConfig!=NULL)
     {
         /*g_pmManage.degInfo = pmConfig->degInfo;
@@ -326,12 +405,33 @@ int16_t PowerManageSdkInit(const PmSdkConfig_t* pmConfig)
         g_pmManage.forceSleepFlag = 0;
         g_pmManage.sleepOpenCount = 0;
         g_pmManage.kl30OffFlag = 0;
+        g_pmManage.backupModeDelayCount = 0;
+        g_pmManage.kl30OverVoltageFlag = 0;
+        g_pmManage.listenTimerSavePending = 0;
         g_pmManage.sleepState = 1;
         g_pmManage.mpuWakeSource = 0;
         g_pmManage.restart24hTimer = PM_SDK_24H_RESTART_TIME;
         g_pmManage.listenWakeupTimer = GetListenTimerParam();
         TBOX_PRINT("listenWakeupTimer: %u\n", g_pmManage.listenWakeupTimer);
         g_pmManage.mpuPowerOffFlag = 0;
+        g_pmDeepstopCanPreCheckNoMpu = 0;
+        deepstopReset = PowerManageSdkCheckDeepstopReset();
+        PmReadWakeFactorOnce();
+        noLocalWake = PmDeepstopWakeupSourceIsCan();
+        TBOX_PRINT("deepstop wake check: resf=0x%X deepstop=%d wuf0=0x%X wuf20=0x%X wufIso0=0x%X canWake=%d\r\n",
+                   g_pmResetReason,
+                   deepstopReset,
+                   g_pmWakeFactor0,
+                   g_pmWakeFactor20,
+                   g_pmWakeFactorIso0,
+                   noLocalWake);
+        if(PowerManageSdkShouldKeepMpuOffBeforeInit() != 0U)
+        {
+            g_pmManage.wakeupSource = PM_HAL_WAKEUP_SOURCE_CAN1;
+            g_pmManage.mpuPowerOffFlag = 1;
+            g_pmDeepstopCanPreCheckNoMpu = 1;
+            TBOX_PRINT("deepstop CAN wakeup, delay MPU start for NM check\r\n");
+        }
 
         return PM_SDK_STATUS_OK;
     }
@@ -403,6 +503,34 @@ static uint8_t PmDetectWakeupSourceByIo(void)
     return 0;
 }
 
+static void PmReadWakeFactorOnce(void)
+{
+    if(g_pmWakeFactorValid == 0U)
+    {
+        g_pmWakeFactor0 = STBC_WUF0.WUF0;
+        g_pmWakeFactor20 = STBC_WUF20.WUF20;
+        g_pmWakeFactorIso0 = STBC_WUFISO.WUF_ISO0;
+        g_pmWakeFactorValid = 1U;
+    }
+}
+
+static uint8_t PmDeepstopWakeupSourceIsCan(void)
+{
+    PmReadWakeFactorOnce();
+
+    if((g_pmWakeFactor0 & PM_CAN_WAKEUP_WUF0_MASK) != 0U)
+    {
+        return 1U;
+    }
+
+    if((g_pmWakeFactorIso0 & PM_CAN_WAKEUP_WUF_ISO0_MASK) != 0U)
+    {
+        return 1U;
+    }
+
+    return 0U;
+}
+
 static void PmNmAllStart(void)
 {
     APP_RequestNetWork();
@@ -412,6 +540,19 @@ static void PmNmGotoSleepMode(void)
 {
     APP_ClearWakeupHold();
     APP_ReleaseNetWork();
+}
+
+static void PmDeepstopCanNonNmPrepareSleep(void)
+{
+    APP_ClearWakeupHold();
+    APP_ReleaseNetWork();
+    User_EcuM_ClearWakeUpSource_EcuMWakeupSource_CAN();
+    BswM_RequestMode(RPort_CanNMIndi_1, COND_NM_ALLOWED_SLEEP);
+    APP_SetSleepMode(APP_SLEEP_MODE);
+
+    g_pmManage.sleepState = 0;
+    g_pmManage.mpuPowerOffFlag = 1;
+    g_pmManage.wakeDelayCount = 0;
 }
 #if(0)
 static void PmNmGetWakeMsgReceiveState(uint8_t* pWakeMsgRxFlag,uint8_t* pWakeChannel )
@@ -495,6 +636,7 @@ static int16_t PmMpuStartIsFinished(void)
     return 1;
 #endif
 }
+
 #if(0)
 static uint8_t PmGetCanWakeupSourceByChannel(uint8_t canChannel)
 {
@@ -578,6 +720,14 @@ static void PmStatePowerOnProcess(uint32_t cycleTime)
     MpuPowerSyncSdkSetWake(g_pmManage.wakeupSource);
 #endif
     g_pmManage.wakeDelayCount = 0;
+    if(g_pmDeepstopCanPreCheckNoMpu != 0)
+    {
+        APP_SetWakeupHold();
+        g_pmManage.pmState = E_PM_STATE_PRE_CHECK_CAN;
+        TBOX_PRINT("deepstop CAN wakeup, pre-check NM before MPU start\r\n");
+        return;
+    }
+
     if(PmMpuStartIsFinished()==0)
     {
         // PmNmAllStart();
@@ -720,6 +870,11 @@ static void PmStateWakeProcess(uint32_t cycleTime)
     return;
 #endif
 
+    if(PmBackupModeProcess(cycleTime) != 0)
+    {
+        return;
+    }
+
     CanNm_GetState(0,&nmStatePtr,&nmModePtr);
     if(g_pmManage.testMode!=0) 
     {
@@ -751,6 +906,11 @@ static void PmStateWakeDelayProcess(uint32_t cycleTime)
     Nm_StateType nmStatePtr = 0;
     Nm_ModeType nmModePtr = 0;
 
+    if(PmBackupModeProcess(cycleTime) != 0)
+    {
+        return;
+    }
+
     CanNm_GetState(0,&nmStatePtr,&nmModePtr);
     if(MpuPowerSyncSdkGetSleepDisableState() != 0)
     {
@@ -776,17 +936,17 @@ static void PmStateWakeDelayProcess(uint32_t cycleTime)
     //     g_pmManage.wakeDelayCount = 0;
     //     g_pmManage.wakeResetFlag = 0;
     // }
-    else if(PeripheralHalGetKl30Status()==0)
-    {
-        g_pmManage.kl30WakeCount++;
-        if(g_pmManage.kl30WakeCount >= g_pmManage.pPmConfig->kl30OffWakeDelay)//g_pmManage.kl30WakeDelay)
-        {
-            PmNmGotoSleepMode();
-            g_pmManage.wakeDelayCount = 0;
-            g_pmManage.kl30WakeCount = 0;
-            g_pmManage.pmState = E_PM_STATE_CHECK_NM_STATUS;            
-        }
-    }
+    // else if(PeripheralHalGetKl30Status()==0)
+    // {
+    //     g_pmManage.kl30WakeCount++;
+    //     if(g_pmManage.kl30WakeCount >= g_pmManage.pPmConfig->kl30OffWakeDelay)//g_pmManage.kl30WakeDelay)
+    //     {
+    //         PmNmGotoSleepMode();
+    //         g_pmManage.wakeDelayCount = 0;
+    //         g_pmManage.kl30WakeCount = 0;
+    //         g_pmManage.pmState = E_PM_STATE_CHECK_NM_STATUS;
+    //     }
+    // }
     else if(NM_STATE_BUS_SLEEP == nmStatePtr)
     {
         PmNmGotoSleepMode();
@@ -812,6 +972,11 @@ static void PmStateCheckNmStatusProcess(uint32_t cycleTime)
     uint8_t wakeChannel;
     Nm_StateType nmStatePtr = 0;
     Nm_ModeType nmModePtr = 0;
+
+    if(PmBackupModeProcess(cycleTime) != 0)
+    {
+        return;
+    }
 
     CanNm_GetState(0,&nmStatePtr,&nmModePtr);
     if(NM_STATE_BUS_SLEEP == nmStatePtr)
@@ -930,6 +1095,136 @@ static uint8_t CheckVehicleModeIsTransport(void)
     return 0;
 }
 
+static uint8_t PmBackupModeProcess(uint32_t cycleTime)
+{
+    int16_t sleepDisableEvent;
+
+    if(PeripheralHalGetKl30Status() != 0)
+    {
+        g_pmManage.backupModeDelayCount = 0;
+        return 0;
+    }
+
+    sleepDisableEvent = MpuPowerSyncSdkGetRawSleepDisableEvent();
+    if(DisableSleepEventIsOTA((uint8_t)sleepDisableEvent) != 0)
+    {
+        g_pmManage.backupModeDelayCount = 0;
+        return 0;
+    }
+
+    if(CheckVinIsInvalid() != 0)
+    {
+        g_pmManage.backupModeDelayCount = 0;
+        return 0;
+    }
+
+    if(sleepDisableEvent == 0)
+    {
+        g_pmManage.backupModeDelayCount = 0;
+        g_pmManage.pmState = E_PM_STATE_BACKUP_MODE;
+        MpuPowerSyncSdkSetRkMode(4);
+        TBOX_PRINT("enter backup mode\r\n");
+        return 1;
+    }
+
+    if(g_pmManage.backupModeDelayCount >= PM_BACKUP_MODE_FORCE_TIME)
+    {
+        g_pmManage.backupModeDelayCount = 0;
+        g_pmManage.pmState = E_PM_STATE_BACKUP_MODE;
+        MpuPowerSyncSdkSetRkMode(4);
+        TBOX_PRINT("enter backup mode after timeout\r\n");
+        return 1;
+    }
+
+    g_pmManage.backupModeDelayCount += cycleTime;
+    return 0;
+}
+
+static uint8_t PmBackupModeCanIsSleepReady(void)
+{
+    Nm_StateType nmStatePtr = 0;
+    Nm_ModeType nmModePtr = 0;
+
+    if(Dio_ReadChannel(DioConf_DioChannel_DIO_Channel_CanRx_DET_INT_Pin0_2) == STD_LOW)
+    {
+        return 0;
+    }
+
+    if(APP_GetWakeupHold() != FALSE)
+    {
+        return 0;
+    }
+
+    CanNm_GetState(0, &nmStatePtr, &nmModePtr);
+    if(nmStatePtr != NM_STATE_BUS_SLEEP)
+    {
+        return 0;
+    }
+
+    return 1;
+}
+
+static uint8_t PmKl30OverVoltageSleepProcess(void)
+{
+    uint32_t kl30Voltage = 0;
+    Com_IpduGroupVector ipduGroupVector;
+
+    if(PeripheralHalAdGet(AD0_CHANNEL_KL30, &kl30Voltage) != 0)
+    {
+        return 0;
+    }
+
+    if(kl30Voltage < PM_KL30_OVERVOLTAGE_RECOVER_MV)
+    {
+        if(g_pmManage.kl30OverVoltageFlag != 0)
+        {
+            Com_ClearIpduGroupVector(ipduGroupVector);
+            Com_SetIpduGroup(ipduGroupVector, Com_RxPduGroup_CONTROLLER_0_IAM, TRUE);
+            Com_SetIpduGroup(ipduGroupVector, Com_TxPduGroup_CONTROLLER_0_IAM, TRUE);
+            Com_IpduGroupControl(ipduGroupVector, TRUE);
+            (void)Nm_EnableCommunication(0);
+            TBOX_PRINT("KL30 over voltage recovered: %u mV\r\n", kl30Voltage);
+        }
+        g_pmManage.kl30OverVoltageFlag = 0;
+        return 0;
+    }
+
+    if(kl30Voltage > PM_KL30_OVERVOLTAGE_MV)
+    {
+        if(g_pmManage.kl30OverVoltageFlag == 0)
+        {
+            TBOX_PRINT("KL30 over voltage: %u mV, force bus sleep\r\n", kl30Voltage);
+        }
+        g_pmManage.kl30OverVoltageFlag = 1;
+    }
+
+    if(g_pmManage.kl30OverVoltageFlag == 0)
+    {
+        return 0;
+    }
+
+    APP_ClearWakeupHold();
+    APP_ReleaseNetWork();
+    User_EcuM_ClearWakeUpSource_EcuMWakeupSource_CAN();
+    BswM_RequestMode(RPort_CanNMIndi_1, COND_NM_ALLOWED_SLEEP);
+    (void)Nm_DisableCommunication(0);
+    Com_ClearIpduGroupVector(ipduGroupVector);
+    Com_SetIpduGroup(ipduGroupVector, Com_RxPduGroup_CONTROLLER_0_IAM, TRUE);
+    Com_SetIpduGroup(ipduGroupVector, Com_TxPduGroup_CONTROLLER_0_IAM, FALSE);
+    Com_IpduGroupControl(ipduGroupVector, FALSE);
+    g_pmManage.sleepState = 0;
+    g_pmManage.wakeDelayCount = 0;
+    g_pmManage.backupModeDelayCount = 0;
+    g_pmManage.mpuPowerOffFlag = 1;
+    g_pmManage.wakeupSource = 0;
+    MpuPowerSyncSdkSetSleepMode(2);
+    MpuHalPowerOff();
+    APP_SetSleepMode(APP_SLEEP_MODE);
+    g_pmManage.pmState = E_PM_STATE_MCU_SLEEP;
+    // TBOX_PRINT("KL30 over voltage, set NAD shutdown\r\n");
+    return 1;
+}
+
 static void PmStatePreSleepNoticeProcess(uint32_t cycleTime)
 {
     Nm_StateType nmStatePtr = 0;
@@ -941,6 +1236,7 @@ static void PmStatePreSleepNoticeProcess(uint32_t cycleTime)
         g_pmManage.mpuPowerOffFlag = 1;  // 标记MPU关机
         MpuHalPowerOff();
         g_pmManage.pmState = E_PM_STATE_MCU_SLEEP;
+        APP_SetSleepMode(APP_SLEEP_MODE);
         TBOX_PRINT("set NAD shutdown\r\n");
     }
     else
@@ -949,10 +1245,16 @@ static void PmStatePreSleepNoticeProcess(uint32_t cycleTime)
         /*通知MPU休眠*/
         MpuPowerSyncSdkSetSleep(0);
         g_pmManage.pmState = E_PM_STATE_PRE_SLEEP_WAIT;
+        APP_SetSleepMode(APP_LISTEN_MODE);
         TBOX_PRINT("set NAD sleep\r\n");
     }
     return;
 #endif
+
+    if(PmBackupModeProcess(cycleTime) != 0)
+    {
+        return;
+    }
 
     CanNm_GetState(0,&nmStatePtr,&nmModePtr);
     if(MpuPowerSyncSdkGetSleepDisableState() != 0)
@@ -984,6 +1286,7 @@ static void PmStatePreSleepNoticeProcess(uint32_t cycleTime)
         MpuPowerSyncSdkSetSleepMode(2);
         MpuHalPowerOff();
         g_pmManage.pmState = E_PM_STATE_MCU_SLEEP;
+        APP_SetSleepMode(APP_SLEEP_MODE);
         TBOX_PRINT("set NAD shutdown\r\n");
     }
     else
@@ -993,6 +1296,7 @@ static void PmStatePreSleepNoticeProcess(uint32_t cycleTime)
         /*通知MPU休眠*/
         MpuPowerSyncSdkSetSleep(0);
         g_pmManage.pmState = E_PM_STATE_PRE_SLEEP_WAIT;
+        APP_SetSleepMode(APP_LISTEN_MODE);
         TBOX_PRINT("set NAD sleep\r\n");
     }
 }
@@ -1000,13 +1304,9 @@ static void PmStatePreSleepNoticeProcess(uint32_t cycleTime)
 static void PmStatePreSleepWaitProcess(uint32_t cycleTime)
 {
     uint8_t mpuSleepStatus = 0;
-    uint8_t noAckHandle = 0;
-    uint8_t ret;
-    uint8_t rxFlag = 0;
-    uint8_t wakeChannel = 0;
-    //uint8_t wakeSource = 0;
     Nm_StateType nmStatePtr = 0;
     Nm_ModeType nmModePtr = 0;
+    NvM_RequestResultType saveResult = NVM_REQ_PENDING;
 
 #if(PM_SDK_DEBUG_NO_MPU)    
     mpuSleepStatus = 0;
@@ -1017,19 +1317,30 @@ static void PmStatePreSleepWaitProcess(uint32_t cycleTime)
     g_pmManage.wakeDelayCount += cycleTime;
     if(mpuSleepStatus==0)
     {
-        // ret = PmGetNoAckHandle(&noAckHandle); 
-        // if(ret!=0)
-        // {
-        //     if(g_pmManage.wakeDelayCount >=1000)
-        //     {
-        //         PrintNoAckName(noAckHandle);
-        //         g_pmManage.pmState = E_PM_STATE_MCU_SLEEP;
-        //     }
-        // } 
-        // else
+        if(g_pmManage.listenTimerSavePending == 0)
         {
+            if(SaveListenTimerParam() == PM_SDK_STATUS_OK)
+            {
+                g_pmManage.listenTimerSavePending = 1;
+            }
+            return;
+        }
+
+        if(NvM_GetErrorStatus(NvMBlock_Reserved_block2, &saveResult) != E_OK)
+        {
+            return;
+        }
+
+        if(saveResult == NVM_REQ_OK)
+        {
+            g_pmManage.listenTimerSavePending = 0;
             g_pmManage.pmState = E_PM_STATE_MCU_SLEEP;
         }
+        else if(saveResult != NVM_REQ_PENDING)
+        {
+            g_pmManage.listenTimerSavePending = 0;
+        }
+        return;
     }
 
     if(MpuPowerSyncSdkGetSleepDisableState()!=0)
@@ -1089,6 +1400,13 @@ static void PmStatePreSleepWaitProcess(uint32_t cycleTime)
 
 static void PmStateMcuSleepProcess(uint32_t cycleTime)
 {
+    VehicleInfor_t vehicleInfor = {0};
+
+    if(GetVehicleInfor(&vehicleInfor) == 0)
+    {
+        TBOX_PRINT("userMode before sleep: %u\r\n", vehicleInfor.userMode);
+    }
+
     /*MPU进入低功耗*/
     MpuHalSetMode(0);
     /*设置peripheral模块进入低功耗*/
@@ -1119,22 +1437,29 @@ static void PmStateCheckWakeupSourceProcess(uint32_t cycleTime)
     uint8_t wakeupSource = 0;
     uint32_t sleepTime;
 
-    if(g_pmManage.wakeupSource == 0)
-    {
-        g_pmManage.wakeupSource = PmDetectWakeupSourceByIo();
-    }
-
-#if(DV_TEST_ENABLE == 1)
-    if(g_pmManage.testMode == 0)
-    {
-        g_pmManage.wakeupSource = PM_HAL_WAKEUP_SOURCE_CAN1;
-    }
-#endif
+    // if(g_pmManage.wakeupSource == 0)
+    // {
+    //     g_pmManage.wakeupSource = PmDetectWakeupSourceByIo();
+    // }
 
     if(g_pmManage.wakeupSource == 0)
     {
         return;
     }
+
+    PeripheralHalSetMode(1);
+    if(g_pmManage.wakeDelayCount < PM_KL30_OVERVOLTAGE_WAKE_ADC_WAIT_MS)
+    {
+        g_pmManage.wakeDelayCount += cycleTime;
+        return;
+    }
+
+    if(PmKl30OverVoltageSleepProcess() != 0)
+    {
+        return;
+    }
+    g_pmManage.wakeDelayCount = 0;
+
     APP_SetWakeupHold();
     
     LogHalSetMode(1);
@@ -1146,13 +1471,17 @@ static void PmStateCheckWakeupSourceProcess(uint32_t cycleTime)
     /*设置peripheral模块进入正常模式*/
     PeripheralHalSetMode(1);
     EcallHalSetMode(1);
+    if(PeripheralHalGetKl30Status() != 0)
+    {
+        MpuPowerSyncSdkSetRkMode(1);
+    }
     /*进行一次备用电池老化检测*/
     BackupBatAging_RequestCheckOnWakeup();
-    #if(DV_TEST_ENABLE == 1)
+#if(DV_TEST_ENABLE == 1)
     g_pmManage.testMode = 0;
     PmAwakeInitProcess(g_pmManage.wakeupSource);
     MpuPowerSyncSdkSetWake(g_pmManage.wakeupSource);
-    APP_RequestNetWork();
+    PmNmAllStart();
     g_pmManage.pmState = E_PM_STATE_WAKE;
     if(g_pmManage.mpuPowerOffFlag == 1)
     {
@@ -1183,7 +1512,7 @@ static void PmStateCheckWakeupSourceProcess(uint32_t cycleTime)
         g_pmManage.wakeDelayCount = 0;
         if(g_pmManage.wakeupSource != PM_HAL_WAKEUP_SOURCE_MCURTC)
         {
-            APP_RequestNetWork();
+            PmNmAllStart();
             g_pmManage.pmState = E_PM_STATE_WAKE;
         }
     }
@@ -1212,6 +1541,11 @@ static void PmStateCheckWakeupSourceProcess(uint32_t cycleTime)
         {
             g_pmManage.listenWakeupTimer -= sleepTime;
         }
+
+    if(g_pmManage.listenWakeupTimer == 0)
+    {
+        g_listenTimerClearReqFlag = 1;
+    }
     }
 }
 
@@ -1233,7 +1567,7 @@ static void PmStatePreCheckCanProcess(uint32_t cycleTime)
     // allCanRxChannel = 0;
     // PmNmGetMsgReceiveState(&allCanReceiveFlag,&allCanRxChannel);
     CanNm_GetState(0, &nmStatePtr, &nmModePtr);
-    if(MpuPowerSyncSdkGetSleepDisableState() != 0)
+    if((g_pmDeepstopCanPreCheckNoMpu == 0) && (MpuPowerSyncSdkGetSleepDisableState() != 0))
     {
         // g_pmManage.wakeupSource =PM_HAL_WAKEUP_SOURCE_KL15;
         // PmNmGotoAwakeMode(g_pmManage.wakeupSource);
@@ -1245,6 +1579,17 @@ static void PmStatePreCheckCanProcess(uint32_t cycleTime)
     }
     else if((nmStatePtr != NM_STATE_BUS_SLEEP))
     {
+        if(g_pmDeepstopCanPreCheckNoMpu != 0)
+        {
+            g_pmDeepstopCanPreCheckNoMpu = 0;
+            g_pmManage.mpuPowerOffFlag = 0;
+            MpuHalStart();
+            PmNmAllStart();
+            g_pmManage.pmState = E_PM_STATE_POWER_ON;
+            g_pmManage.wakeDelayCount = 0;
+            TBOX_PRINT("deepstop CAN NM wakeup, start MPU\r\n");
+            return;
+        }
         /*can唤醒 处理*/
         // g_pmManage.wakeupSource = PmGetCanWakeupSourceByChannel(wakeChannel );
         // PmNmGotoAwakeMode(g_pmManage.wakeupSource);
@@ -1267,6 +1612,14 @@ static void PmStatePreCheckCanProcess(uint32_t cycleTime)
     else 
     {
         /*报文接收超时休眠*/
+        if(g_pmDeepstopCanPreCheckNoMpu != 0)
+        {
+            g_pmDeepstopCanPreCheckNoMpu = 0;
+            PmDeepstopCanNonNmPrepareSleep();
+            g_pmManage.pmState = E_PM_STATE_MCU_SLEEP;
+            TBOX_PRINT("deepstop CAN non-NM wakeup, go sleep without MPU\r\n");
+            return;
+        }
         APP_ClearWakeupHold();
         g_pmManage.pmState = E_PM_STATE_MCU_SLEEP;;
     }
@@ -1289,7 +1642,7 @@ static void PmStateGetMpuWakeSourceProcess(uint32_t cycleTime)
         g_pmManage.mpuWakeSource = cpuWakeSource;
         // if(g_pmManage.mpuWakeSource != PM_HAL_WAKEUP_SOURCE_MPU)    // TODO guanyuan
         {
-            APP_RequestNetWork();
+            PmNmAllStart();
         }
         // PmNmGotoAwakeMode(g_pmManage.wakeupSource);  // TODO guanyuan
         PmAwakeInitProcess(g_pmManage.wakeupSource);
@@ -1299,8 +1652,62 @@ static void PmStateGetMpuWakeSourceProcess(uint32_t cycleTime)
     }
 }
 
+static void PmStateBackupModeProcess(uint32_t cycleTime)
+{
+    int16_t sleepDisableEvent;
+
+    (void)cycleTime;
+
+    if(PeripheralHalGetKl30Status() != 0)
+    {
+        g_pmManage.backupModeDelayCount = 0;
+        g_pmManage.wakeDelayCount = 0;
+        MpuPowerSyncSdkSetRkMode(1);
+        g_pmManage.pmState = E_PM_STATE_WAKE;
+        TBOX_PRINT("exit backup mode\r\n");
+        return;
+    }
+
+    sleepDisableEvent = MpuPowerSyncSdkGetRawSleepDisableEvent();
+    if(DisableSleepEventIsEcall((uint8_t)sleepDisableEvent) != 0)
+    {
+        return;
+    }
+
+    if(sleepDisableEvent != 0)
+    {
+        return;
+    }
+
+    if(PmBackupModeCanIsSleepReady() == 0)
+    {
+        return;
+    }
+
+    g_pmManage.sleepState = 0;
+    g_pmManage.wakeDelayCount = 0;
+    g_pmManage.mpuPowerOffFlag = 0;
+    MpuPowerSyncSdkSetSleepMode(1);
+    MpuPowerSyncSdkSetSleep(0);
+    APP_SetSleepMode(APP_LISTEN_MODE);
+    g_pmManage.pmState = E_PM_STATE_PRE_SLEEP_WAIT;
+    TBOX_PRINT("backup mode set NAD sleep\r\n");
+}
+
 void PowerManageSdkCycleProcess(uint32_t cycleTime)
 {
+    PmProcessListenTimerFlashRequest();
+
+    if((E_PM_STATE_UNPOWED != g_pmManage.pmState) &&
+       (E_PM_STATE_MCU_SLEEP != g_pmManage.pmState) &&
+       (E_PM_STATE_CHECK_WAKEUP_SOURCE != g_pmManage.pmState))
+    {
+        if(PmKl30OverVoltageSleepProcess() != 0)
+        {
+            return;
+        }
+    }
+
     if(E_PM_STATE_UNPOWED==g_pmManage.pmState)
     {
         
@@ -1364,6 +1771,10 @@ void PowerManageSdkCycleProcess(uint32_t cycleTime)
     else if(E_PM_STATE_GET_MPU_WAKE_SOURCE==g_pmManage.pmState)
     {
         PmStateGetMpuWakeSourceProcess(cycleTime);
+    }
+    else if(E_PM_STATE_BACKUP_MODE==g_pmManage.pmState)
+    {
+        PmStateBackupModeProcess(cycleTime);
     }
     else 
     {
@@ -1551,6 +1962,42 @@ void PowerManageSdkTimerDecrement(void)
         if(g_pmManage.listenWakeupTimer > 0)
         {
             g_pmManage.listenWakeupTimer--;
+        if(g_pmManage.listenWakeupTimer == 0)
+        {
+            g_listenTimerClearReqFlag = 1;
+        }
         }
     }
+}
+
+uint8_t PowerManageSdkCheckDeepstopReset(void)
+{
+    if(g_pmResetReasonValid == 0U)
+    {
+        g_pmResetReason = RESCTL.RESF;
+        g_pmResetReasonValid = 1U;
+    }
+
+    return ((g_pmResetReason & PM_RESF_DEEPSTOP_RESET_MASK) != 0U) ? 1U : 0U;
+}
+
+uint8_t PowerManageSdkShouldStartMpuOnPowerOn(void)
+{
+    if(PmKl30OverVoltageSleepProcess() != 0)
+    {
+        return 0U;
+    }
+
+    return (g_pmDeepstopCanPreCheckNoMpu == 0U) ? 1U : 0U;
+}
+
+uint8_t PowerManageSdkShouldKeepMpuOffBeforeInit(void)
+{
+    if((PowerManageSdkCheckDeepstopReset() != 0U) &&
+       (PmDeepstopWakeupSourceIsCan() != 0U))
+    {
+        g_pmDeepstopCanOnlyWakeDetected = 1U;
+    }
+
+    return g_pmDeepstopCanOnlyWakeDetected;
 }

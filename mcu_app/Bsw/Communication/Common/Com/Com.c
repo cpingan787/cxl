@@ -110,6 +110,9 @@ static FUNC(void, COM_CODE) Com_OneEveryNCntInit(void);
 *******************************************************************************/
 #define COM_START_SEC_CODE
 #include "Com_MemMap.h"
+
+static uint32 frpo3Count = 0;
+
 /******************************************************************************/
 /*
  * Brief               This service initializes internal and external interfaces and
@@ -1985,6 +1988,21 @@ static Com_OneEveryNCntInit(void)
 #endif
 #define COM_STOP_SEC_CODE
 #include "Com_MemMap.h"
+
+uint32 Com_GetFrpo3Count(void)
+{
+    uint32 count;
+    SchM_Enter_Com_Context();
+    count = frpo3Count;
+    SchM_Exit_Com_Context();
+    return count;
+}
+void Com_IncreaseFrpo3Count(void)
+{
+    SchM_Enter_Com_Context();
+    frpo3Count++;
+    SchM_Exit_Com_Context();
+}
 /*******************************************************************************
 **                      End of file                                           **
 *******************************************************************************/

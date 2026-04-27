@@ -15,6 +15,7 @@
 /****************************** Macro Definitions ******************************/
 #define TBOX_PRINT(...)         LogHalPrint(__VA_ARGS__)
 #define PRINT_MAX_LEN           200
+// #define TIME_TEST
 
 #define SECOC_LOG_SEND(level, type, data, len)            LogHal_LogSend(level, LOG_SRC_SECOC, type, data, len)
 #define VSS_LOG_SEND(level, type, data, len)              LogHal_LogSend(level, LOG_SRC_APP_VSS, type, data, len)
@@ -75,6 +76,9 @@ typedef enum {
     LOG_EVT_RX_MSG        = 0x21,  // 接收消息/报文
     LOG_EVT_LINK_UP       = 0x22,  // 通信链路建立
     LOG_EVT_LINK_DOWN     = 0x23,  // 通信链路断开
+    LOG_EVT_SET_TRIPCNT   = 0x24,  // 设置行程计数器
+    LOG_EVT_SET_RESTCNT   = 0x25,  // 设置重置计数器
+    LOG_EVT_FV_RST_FAIL   = 0x44,  // 新鲜度值重置计数器验证失败
 
     /* 0x40 - 0x5F: 数据处理与安全事件 */
     LOG_EVT_AUTH_SUCCESS  = 0x40,  // 认证/校验成功
@@ -159,5 +163,27 @@ void LogHal_LogSend(LogLevel_t level, LogSource_t event_source, LogEventType_t e
  Others: None
 *************************************************/
 void LogManager_MainFunction(void);
+
+#ifdef TIME_TEST
+/*************************************************
+ Function: OSTM_GetUs
+ Description: 获取当前时间戳（单位：微秒）
+ Input: None
+ Output: None
+ Return: 当前时间戳（单位：微秒）
+ Others: None
+*************************************************/
+uint32_t OSTM_GetUs(void);
+
+/*************************************************
+ Function: OSTM_GetElapsedUs
+ Description: 获取自上次时间戳以来的微秒数
+ Input: last_timestamp 上次时间戳（单位：微秒）
+ Output: None
+ Return: 自上次时间戳以来的微秒数（单位：微秒）
+ Others: None
+*************************************************/
+uint32_t OSTM_GetElapsedUs(uint32_t last_timestamp);
+#endif
 
 #endif    //_LOGHAL_H

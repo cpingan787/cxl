@@ -149,5 +149,6 @@ void SecocTripCntDtcMonitor_200ms(void)                                         
 *************************************************/
 static void SecocErrorNotificationCallBack(Fvm_ErrorType error)
 {
-    // 错误后处理
+    SECOC_LOG_SEND(LOG_LEVEL_ERROR, LOG_EVT_FV_RST_FAIL, &error, 1);
+
 }

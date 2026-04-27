@@ -4,6 +4,8 @@
 #include <stdint.h>
 
 int16_t BatteryHalInit(void);
+void BatteryHalBoostEnable(void);
+void BatteryHalBoostDisable(void);
 void BatteryHalEnableOut(void);
 void BatteryHalDisableOut(void);
 void BatteryHalEnableCharge(void);

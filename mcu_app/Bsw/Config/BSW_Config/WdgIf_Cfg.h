@@ -34,7 +34,7 @@
 #define WDGIF_CFG_H_SW_PATCH_VERSION  (3U)
 
 /*===========================[I N C L U D E S]====================================================*/
-#include "Wdg_59_DriverA.h"
+#include "Wdg_59_DriverB.h"
 
 /*===========================[M A C R O S]========================================================*/
 /*
@@ -60,8 +60,8 @@
 */
 #define     WdgIfInternalDevice_0            0
 
-#define WdgIf_SetTriggerCondition_Map(timeout)          Wdg_59_DriverA_SetTriggerCondition(timeout)
-#define WdgIf_SetMode_Map(mode)                         Wdg_59_DriverA_SetMode(mode)
+#define WdgIf_SetTriggerCondition_Map(timeout)          Wdg_59_DriverB_SetTriggerCondition(timeout)
+#define WdgIf_SetMode_Map(mode)                         Wdg_59_DriverB_SetMode(mode)
 
 /*===========================[T Y P E   D E F I N I T I O N S]====================================*/
 /*===========================[C O N F I G  T Y P E   D E F I N I T I O N S]=======================*/

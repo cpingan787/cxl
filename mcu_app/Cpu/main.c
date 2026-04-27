@@ -162,6 +162,7 @@ void main(void)
 {
     Std_ReturnType GenReturnValue;
     
+    PowerManageSdkCheckDeepstopReset();
     /* Initialise MCU Driver */
     Mcu_Init(McuModuleConfiguration0);
     /* Set the CPU Clock to the PLL */

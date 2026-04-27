@@ -18,6 +18,7 @@
 #include "SchM_NVM.h"
 #include "Fls.h"
 #include "NvM_Cfg.h"
+#include "EEIf.h"
 
 /****************************** Macro Definitions ******************************/
 /****************************** Type Definitions ******************************/
@@ -36,7 +37,7 @@ const FlashParamMap_t FlashParamMap[E_PARAMETER_INFO_MAX_NUM] = {
     {E_PARAMETER_INFO_IMSI,                 15,     NvMBlock_DIDC002,   NvMBlockRamBuffer12},
     {E_PARAMETER_INFO_SN,                   16,     NvMBlock_DIDF18C,   NvMBlockRamBuffer6},
     {E_PARAMETER_INFO_VIN,                  17,     NvMBlock_DIDF190,   NvMBlockRamBuffer7},
-    {E_PARAMETER_INFO_ECallNumber,          15,     NvMBlock_DIDCA02,   NvMBlockRamBuffer33},
+    {E_PARAMETER_INFO_ECallNumber,          37,     NvMBlock_DIDCA02,   NvMBlockRamBuffer33},
     {E_PARAMETER_INFO_ParatNumber,          5,      NvMBlock_DIDF130,   NULL},
 
 };
@@ -153,6 +154,13 @@ int16_t WorkFlashVehicleInforRead(FlashParaId_e parameterId, uint8_t *data, uint
     if (data == NULL) 
     {
         ret = ERR_CODE_NULL_POINTER;
+        return ret;
+    }
+
+    if(parameterId == E_PARAMETER_INFO_ParatNumber)
+    {
+        ret = EEIf_Read(DID_F187_ADDR_IDX, 5, data);
+        *dataLength = 5;
         return ret;
     }
 

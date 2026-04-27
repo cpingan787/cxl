@@ -23,6 +23,24 @@ static MpuHalDataPack_t g_dataPack;
 static uint8_t g_mpuRxDataBuffer[100];
 static VehicleInfor_t g_vehicleInfor;
 static uint8_t g_lastUserMode = 0;  /* 用于跟踪用户模式变化 */
+static uint16_t g_vehicleInforPrintCnt = 0;
+
+static void TboxVehicleInforPrintPeriodic(void)
+{
+    if (++g_vehicleInforPrintCnt < (1000u / VEHICLE_TO_CPU_TASK_CYCLE_TIME))
+    {
+        return;
+    }
+
+    g_vehicleInforPrintCnt = 0;
+    TBOX_PRINT(
+        "vehicleInfor: iccLost=%u userModeValid=%u userMode=%u vehicleModeValid=%u vehicleMode=%u\r\n",
+        g_vehicleInfor.iccLost,
+        g_vehicleInfor.userModeValid,
+        g_vehicleInfor.userMode,
+        g_vehicleInfor.vehicleModeValid,
+        g_vehicleInfor.vehicleMode);
+}
 
 static void TboxCanRxCycleProcess(void)
 {
@@ -44,6 +62,7 @@ static void TboxCanRxCycleProcess(void)
         g_vehicleInfor.vehicleMode = VehMd_0_NORMAL;
         nkiState = 0;
         Com_SendSignal(IIAM_NKI_CONNCANFD_IAM_CONNCANFD_NM_CONTROLLER_0_IAM_Tx, &nkiState);
+        TboxVehicleInforPrintPeriodic();
         return;
     }
 
@@ -103,6 +122,7 @@ static void TboxCanRxCycleProcess(void)
         }
     }
     Com_SendSignal(IIAM_NKI_CONNCANFD_IAM_CONNCANFD_NM_CONTROLLER_0_IAM_Tx, &nkiState);
+    TboxVehicleInforPrintPeriodic();
  /* if(rxCount<(1000/VEHICLE_TO_CPU_TASK_CYCLE_TIME))
   {
     return;
@@ -148,6 +168,7 @@ void TaskVehicleDataToCpuInit(void)
     g_vehicleInfor.vehicleModeValid = 0;
     g_vehicleInfor.vehicleMode = 0;
     g_vehicleInfor.iccLost = 1;
+    g_vehicleInforPrintCnt = 0;
 }
 
 void TaskVehicleDataToCpu(void)
