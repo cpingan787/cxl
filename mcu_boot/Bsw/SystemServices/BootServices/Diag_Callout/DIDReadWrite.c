@@ -378,9 +378,11 @@ static uint8 InitDataF194[DID_F194_LEN] = {0xFF};//待补充
 /* DID(F1A0) Init data*/
 static uint8 InitDataF1A0[DID_F1A0_LEN] = {0xFF};//待补充
 /* DID(F1A1) Init data*/
-static uint8 InitDataF1A1[DID_F1A1_LEN] = {0xFF};//待补充
+static uint8 InitDataF1A1[DID_F1A1_LEN] = {0x00, 0x00, 0x00, 0x00, 0x00};
+/* DID(F1A2) Init data*/
+static uint8 InitDataF1A2[DID_F1A2_LEN] = {0xB8, 0x01, 0x17, 0x00, 0x00, 0x00, 0x00, 0x04};
 /* DID(F1A5) Init data*/
-static uint8 InitDataF1A5[DID_F1A5_LEN] = {0xFF};//待补充
+static uint8 InitDataF1A5[DID_F1A5_LEN] = {0x00, 0x00, 0x00};
 /* DID(F1B6) Init data*/
 static uint8 InitDataF1B6[DID_F1B6_LEN] = {0xFF};//待补充
 /* DID(AFF2) Init data*/
@@ -396,6 +398,7 @@ DID_InitCfg_t DIDInitCfg[] = {
     {DID_F194_ADDR_IDX, DID_F194_LEN, InitDataF194},
     {DID_F1A0_ADDR_IDX, DID_F1A0_LEN, InitDataF1A0},
     {DID_F1A1_ADDR_IDX, DID_F1A1_LEN, InitDataF1A1},
+    {DID_F1A2_ADDR_IDX, DID_F1A2_LEN, InitDataF1A2},
     {DID_F1A5_ADDR_IDX, DID_F1A5_LEN, InitDataF1A5},
     {DID_F1B6_ADDR_IDX, DID_F1B6_LEN, InitDataF1B6},
     {DID_AFF2_ADDR_IDX, DID_AFF2_LEN, InitDataAFF2},

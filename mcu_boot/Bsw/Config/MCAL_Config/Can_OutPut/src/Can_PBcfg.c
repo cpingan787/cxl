@@ -307,7 +307,7 @@ static CONST(Can_HohConfigType, CAN_RSCAN_CONFIG_DATA) Can_GaaHohConfig0[] =
     /* ulXXCCRegValue */
     CAN_RSCAN_RFIM | CAN_RSCAN_RFIE | CAN_RSCAN_RFDC_64 | CAN_RSCAN_RFPLS_64
   },
-  /* Index: 2 - CanHardwareObject_Tx0 -> TxBuffer[16] */
+  /* Index: 2 - CanHardwareObject_Tx0 -> TxRxFIFO(Tx)[3] linked to TxBuffer[16] */
   {
     /* enHoh */
     CAN_HOH_HTH,
@@ -316,19 +316,19 @@ static CONST(Can_HohConfigType, CAN_RSCAN_CONFIG_DATA) Can_GaaHohConfig0[] =
     /* ucController */
     0x00U,
     /* ucTMDLC */
-    0x14U,
+    0x40U,
     /* usHohId */
     0x0002U,
     /* enBufferType */
-    CAN_BUFFERTYPE_BUFFER,
+    CAN_BUFFERTYPE_TXRXFIFO,
     /* ucBufferIndex */
-    0x10U,
+    0x03U,
     /* ucPaddingValue */
     0x00U,
     /* ulXXCCRegValue */
-    0UL
+    CAN_RSCAN_CFITT(0) | CAN_RSCAN_CFTML(0) | CAN_RSCAN_CFM_TX | CAN_RSCAN_CFIM | CAN_RSCAN_CFTXIE | CAN_RSCAN_CFDC_16 | CAN_RSCAN_CFPLS_64
   },
-  /* Index: 3 - CanHardwareObject_Tx1 -> TxBuffer[17] */
+  /* Index: 3 - CanHardwareObject_Tx1 -> TxRxFIFO(Tx)[4] linked to TxBuffer[17] */
   {
     /* enHoh */
     CAN_HOH_HTH,
@@ -337,17 +337,17 @@ static CONST(Can_HohConfigType, CAN_RSCAN_CONFIG_DATA) Can_GaaHohConfig0[] =
     /* ucController */
     0x00U,
     /* ucTMDLC */
-    0x14U,
+    0x40U,
     /* usHohId */
     0x0003U,
     /* enBufferType */
-    CAN_BUFFERTYPE_BUFFER,
+    CAN_BUFFERTYPE_TXRXFIFO,
     /* ucBufferIndex */
-    0x11U,
+    0x04U,
     /* ucPaddingValue */
     0x00U,
     /* ulXXCCRegValue */
-    0UL
+    CAN_RSCAN_CFITT(0) | CAN_RSCAN_CFTML(1) | CAN_RSCAN_CFM_TX | CAN_RSCAN_CFIM | CAN_RSCAN_CFTXIE | CAN_RSCAN_CFDC_16 | CAN_RSCAN_CFPLS_64
   }
 };
 

@@ -199,7 +199,7 @@
 #define CAN_RX_BUFFER                                   STD_OFF
 
 /* Pre-compile option for Transmit BUFFER is configured */
-#define CAN_TX_BUFFER                                   STD_ON
+#define CAN_TX_BUFFER                                   STD_OFF
 
 /* Pre-compile option for Receive FIFO is configured */
 #define CAN_RX_FIFO                                     STD_ON
@@ -208,7 +208,7 @@
 #define CAN_RX_COMFIFO                                  STD_OFF
 
 /* Pre-compile option for Transmit FIFO is configured in Tx/RX FIFO */
-#define CAN_TX_COMFIFO                                  STD_OFF
+#define CAN_TX_COMFIFO                                  STD_ON
 
 /* Pre-compile option for GATEWAY is configured in Tx/RX FIFO */
 #define CAN_GATEWAY_COMFIFO                             STD_OFF
