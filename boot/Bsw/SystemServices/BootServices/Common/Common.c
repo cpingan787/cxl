@@ -108,8 +108,6 @@ uint8 CommF_DataCompare(void * buf1, void * buf2,uint32 length)
             break;
         }
     }
-    // YJP add CRC pass
-    ReturnVal = E_OK ;
     return ReturnVal;
 }
 

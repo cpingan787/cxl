@@ -32,6 +32,7 @@
 #include "Wdg_59_DriverB_PBTypes.h"
 #include "Can.h"
 #include "BootM.h"
+#include "Common.h"
 #include "logHal.h"
 #include "mpuHal.h"
 #include "mcuMpuSyncTask.h"
@@ -96,6 +97,8 @@ TASK(OsTask_0)
     /** DO NOT CHANGE THIS COMMENT!
     * <USERBLOCK OsTask_0>
     */
+    /* custom code.... */
+    Comm_MainTick++;
    static uint32 sys_cnt = 201;
    static uint32 run_time = 0;
    static uint32 dataRead = 0;

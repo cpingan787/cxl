@@ -3,6 +3,7 @@
 #include "MemM_cfg.h"
 #include "FlsIf.h"
 #include "EEIf.h"
+#include "Dcm.h"
 #include "logHal.h"
 
 /**********************************************************************************************************************
@@ -19,6 +20,7 @@
  * RW_Permission:     Read or Write attributes config
  * Addr:            the address
  *********************************************************************************************/
+uint8 DcmSessionValue = 0U;
 const DIDInfo_t DID_Infos[Dcm_NUMBER_OF_DIDS] =
 {
     {
@@ -160,6 +162,13 @@ const DIDInfo_t DID_Infos[Dcm_NUMBER_OF_DIDS] =
         DID_F183_LEN, //Size
         DID_INFO_READ_ONLY, //RW_Permission
         DID_F183_ADDR_IDX, //Addr
+    },
+    {
+        MEMM_DRV_RAM, //DrvType
+        0xF186, //Did
+        1, //Size
+        DID_INFO_READ_ONLY, //RW_Permission
+        (uint32)&DcmSessionValue, //Addr
     },
     {
         MEMM_DRV_EE, //DrvType
@@ -615,6 +624,10 @@ Std_ReturnType DID_Read(uint8 * buf, const DIDInfo_t * ProdInfo)
     {
         case MEMM_DRV_RAM:
         {
+            if(ProdInfo->Addr == (uint32)&DcmSessionValue)
+            {
+                DcmSessionValue = GetDcmState_Session();
+            }
             CommF_DataCopy((void *)buf, (void *)ProdInfo->Addr, ProdInfo->Size);
             retValue = E_OK;
             break;

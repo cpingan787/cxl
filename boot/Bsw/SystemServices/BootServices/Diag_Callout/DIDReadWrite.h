@@ -37,8 +37,8 @@ typedef struct
 *                                      GLOBAL CONSTANTS
 ==================================================================================================*/
 
-#define Dcm_NUMBER_OF_DIDS                               0x2EU
-#define DID_F100_LEN                            ((uint32)0x10U)
+#define Dcm_NUMBER_OF_DIDS                               0x2FU
+#define DID_F100_LEN                            ((uint32)0x06U)
 #define DID_F110_LEN                            ((uint32)0x10U)
 #define DID_F111_LEN                            ((uint32)0x10U)
 #define DID_F112_LEN                            ((uint32)0x10U)
