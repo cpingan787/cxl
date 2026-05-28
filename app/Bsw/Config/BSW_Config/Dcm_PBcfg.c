@@ -118,7 +118,7 @@ static  CONST(Dcm_DspCommonAuthorizationType, DCM_CONST) Dcm_DspCommonAuthorizat
 
 #define   DCM_START_SEC_CONST_UNSPECIFIED
 #include  "Dcm_MemMap.h"
-static CONST(Dcm_DspDataType, DCM_CONST) Dcm_DspDataCfg[148] =
+static CONST(Dcm_DspDataType, DCM_CONST) Dcm_DspDataCfg[149] =
 {
     {
         Rte_Call_DataServices_Data_0xF130_DID_0xF130_ConditionCheckRead,     /*DcmDspDataConditionCheckReadFnc*/
@@ -3367,14 +3367,36 @@ static CONST(Dcm_DspDataType, DCM_CONST) Dcm_DspDataCfg[148] =
         NULL_PTR, /*DcmDspDataResetToDefaultFnc*/
         NULL_PTR, /*DcmDspDataReturnControlToECUFnc*/
         NULL_PTR, /*DcmDspDataShortTermAdjustmentFnc*/
-        Rte_Call_DataServices_Data_0x1216_DID_0x1216_WriteData, /*DcmDspDataWriteFnc*/
-        8u, /*DcmDspDataByteSize*/
+        NULL_PTR, /*DcmDspDataWriteFnc*/
+        1, /*DcmDspDataByteSize*/
         DCM_UINT8_N, /*DcmDspDataType*/
         USE_DATA_ASYNCH_CLIENT_SERVER, /*DcmDspDataUsePort*/
         0u, /*DcmDspDataBlockId*/
         0xffu, /*DcmDspDataInfoIndex*/
         NULL_PTR, /*DcmDspDiagnosisScaling*/
         NULL_PTR /*DcmDspExternalSRDataElementClass*/
+    },
+    {
+        Rte_Call_DataServices_Data_0x1217_DID_0x1217_ConditionCheckRead, /*DcmDspDataConditionCheckReadFnc*/
+        TRUE,                                       /*DcmConditionCheckReadFncUsed*/
+        NULL_PTR,                                   /*DcmDspDataEcuSignalFnc*/
+        NULL_PTR,                                   /*DcmDspDataReadEcuSignalFnc*/
+        DCM_OPAQUE,                                 /*DcmDspDataEndianness*/
+        NULL_PTR,                                   /*DcmDspDataFreezeCurrentsStateFnc*/
+        NULL_PTR,                                   /*DcmDspDataGetScalingInfoFnc*/
+        NULL_PTR,                                   /*DcmDspDataReadDataLengthFnc*/
+        Rte_Call_DataServices_Data_0x1217_DID_0x1217_ReadData, /*DcmDspDataReadFnc*/
+        NULL_PTR,                                   /*DcmDspDataResetToDefaultFnc*/
+        NULL_PTR,                                   /*DcmDspDataReturnControlToECUFnc*/
+        NULL_PTR,                                   /*DcmDspDataShortTermAdjustmentFnc*/
+        NULL_PTR,                                   /*DcmDspDataWriteFnc*/
+        1u,                                         /*DcmDspDataByteSize*/
+        DCM_UINT8_N,                                /*DcmDspDataType*/
+        USE_DATA_ASYNCH_CLIENT_SERVER,              /*DcmDspDataUsePort*/
+        0u,                                         /*DcmDspDataBlockId*/
+        0xffu,                                      /*DcmDspDataInfoIndex*/
+        NULL_PTR,                                   /*DcmDspDiagnosisScaling*/
+        NULL_PTR                                    /*DcmDspExternalSRDataElementClass*/
     },
 };
 #define  DCM_STOP_SEC_CONST_UNSPECIFIED
@@ -5250,12 +5272,24 @@ static CONST(Dcm_DspDidSignalType,DCM_CONST)Dcm_Did_1216_SignalCfg[1] =
 };
 #define DCM_STOP_SEC_CONST_UNSPECIFIED
 #include "Dcm_MemMap.h"
+
+#define DCM_START_SEC_CONST_UNSPECIFIED
+#include "Dcm_MemMap.h"
+static CONST(Dcm_DspDidSignalType,DCM_CONST)Dcm_Did_1217_SignalCfg[1] =
+{
+    {
+        0u,                   /*DcmDspDidByteOffset*/
+        &Dcm_DspDataCfg[148],     /*pDcmDspDidData*/
+    }
+};
+#define DCM_STOP_SEC_CONST_UNSPECIFIED
+#include "Dcm_MemMap.h"
 /**********************************************
  *DcmDspDid container configration*************
  **********************************************/
 #define   DCM_START_SEC_CONST_UNSPECIFIED
 #include  "Dcm_MemMap.h"
-static CONST(Dcm_DspDidType,DCM_CONST)Dcm_DspDidCfg[145] =
+static CONST(Dcm_DspDidType,DCM_CONST)Dcm_DspDidCfg[146] =
 {
     { /* Did_0xF130 */
         0xF130u,     /*DcmDspDidId*/
@@ -5512,7 +5546,7 @@ static CONST(Dcm_DspDidType,DCM_CONST)Dcm_DspDidCfg[145] =
     { /* Did_0xF187 */
         0xF187u,     /*DcmDspDidId*/
         TRUE,     /*DcmDspDidUsed*/
-        0u,     /*DcmDspDidInfoIndex*/
+        2u,     /*DcmDspDidInfoIndex*/
         0u,     /*DcmDspRefDidNum*/
         NULL_PTR,     /*pDcmDspRefDidIdArray*/
         1u, /*DcmDspDidSignalNum*/
@@ -5728,7 +5762,7 @@ static CONST(Dcm_DspDidType,DCM_CONST)Dcm_DspDidCfg[145] =
     { /* Did_0xC00D */
         0xC00Du,     /*DcmDspDidId*/
         TRUE,     /*DcmDspDidUsed*/
-        0u,     /*DcmDspDidInfoIndex*/
+        2u,     /*DcmDspDidInfoIndex*/
         0u,     /*DcmDspRefDidNum*/
         NULL_PTR,     /*pDcmDspRefDidIdArray*/
         1u, /*DcmDspDidSignalNum*/
@@ -6558,11 +6592,20 @@ static CONST(Dcm_DspDidType,DCM_CONST)Dcm_DspDidCfg[145] =
     { /* Did_0x1216 */
         0x1216u,     /*DcmDspDidId*/
         TRUE,     /*DcmDspDidUsed*/
-        2u,     /*DcmDspDidInfoIndex*/
+        0u,     /*DcmDspDidInfoIndex*/
         0u,     /*DcmDspRefDidNum*/
         NULL_PTR,     /*pDcmDspRefDidIdArray*/
         1u, /*DcmDspDidSignalNum*/
         &Dcm_Did_1216_SignalCfg[0],     /*pDcmDspDidSignal*/
+    },
+    { /* Did_0x1217 */
+        0x1217u,     /*DcmDspDidId*/
+        TRUE,     /*DcmDspDidUsed*/
+        0u,     /*DcmDspDidInfoIndex*/
+        0u,     /*DcmDspRefDidNum*/
+        NULL_PTR,     /*pDcmDspRefDidIdArray*/
+        1u, /*DcmDspDidSignalNum*/
+        &Dcm_Did_1217_SignalCfg[0],     /*pDcmDspDidSignal*/
     },
 };
 #define  DCM_STOP_SEC_CONST_UNSPECIFIED
@@ -6959,6 +7002,16 @@ static CONST(Dcm_DspRequestRoutineResultsType,DCM_CONST)Dcm_RoutineInfo_0xAF0C_R
 
 #define   DCM_START_SEC_CONST_UNSPECIFIED
 #include  "Dcm_MemMap.h"
+static CONST(Dcm_DspRoutineInOutType,DCM_CONST)Dcm_Routine_0xAF0B_RequestRoutineOutCfg =
+{
+    1u,                                  /*RoutineInOutSignalNum*/
+    &Dcm_Routine_0xAF0B_SignalCfg[0],    /*DcmDspRoutineInOutSignal*/
+};
+#define  DCM_STOP_SEC_CONST_UNSPECIFIED
+#include "Dcm_MemMap.h"
+
+#define   DCM_START_SEC_CONST_UNSPECIFIED
+#include  "Dcm_MemMap.h"
 static CONST(Dcm_DspRequestRoutineResultsType,DCM_CONST)Dcm_RoutineInfo_0xAF0B_ResultsCfg =
 {
     Rte_Call_RoutineServices_Routine_0xAF0B_RequestResults, /*DcmDspRequestRoutineResultsFnc*/
@@ -6966,7 +7019,7 @@ static CONST(Dcm_DspRequestRoutineResultsType,DCM_CONST)Dcm_RoutineInfo_0xAF0B_R
     0u,
     NULL_PTR,
     NULL_PTR, /*DcmDspRequestRoutineResultsIn*/
-    NULL_PTR, /*DcmDspRequestRoutineResultsOut*/
+    &Dcm_Routine_0xAF0B_RequestRoutineOutCfg, /*DcmDspRequestRoutineResultsOut*/
 };
 #define  DCM_STOP_SEC_CONST_UNSPECIFIED
 #include "Dcm_MemMap.h"
@@ -7246,15 +7299,6 @@ static CONST(Dcm_DspStartRoutineType,DCM_CONST)Dcm_RoutineInfo_0xAF0C_StartCfg =
 };
 #define  DCM_STOP_SEC_CONST_UNSPECIFIED
 #include "Dcm_MemMap.h"
-#define   DCM_START_SEC_CONST_UNSPECIFIED
-#include  "Dcm_MemMap.h"
-static CONST(Dcm_DspRoutineInOutType,DCM_CONST)Dcm_Routine_0xAF0B_StartRoutineOutCfg =
-{
-    1u,                                  /*RoutineInOutSignalNum*/
-    &Dcm_Routine_0xAF0B_SignalCfg[0],    /*DcmDspRoutineInOutSignal*/
-};
-#define  DCM_STOP_SEC_CONST_UNSPECIFIED
-#include "Dcm_MemMap.h"
 
 #define   DCM_START_SEC_CONST_UNSPECIFIED
 #include  "Dcm_MemMap.h"
@@ -7266,7 +7310,7 @@ static CONST(Dcm_DspStartRoutineType,DCM_CONST)Dcm_RoutineInfo_0xAF0B_StartCfg =
      0u,
      NULL_PTR,
      NULL_PTR, /*DcmDspStartRoutineIn*/
-     &Dcm_Routine_0xAF0B_StartRoutineOutCfg, /*DcmDspStartRoutineOut*/
+     NULL_PTR, /*DcmDspStartRoutineOut*/
 };
 #define  DCM_STOP_SEC_CONST_UNSPECIFIED
 #include "Dcm_MemMap.h"
@@ -7380,8 +7424,8 @@ static CONST(Dcm_DspRoutineType,DCM_CONST)Dcm_DspRoutineCfg[13] =
         0u, /*DcmDspRoutineInfoByte*/
         TRUE, /*DcmDspRoutineUsePort*/
         TRUE,     /*DcmDspRoutineUsed*/
-        &Dcm_DspCommonAuthorizationCfg[1],     /*DcmDspCommonAuthorizationRef*/
         &Dcm_RoutineInfo_0xAF0A_ResultsCfg, /*DcmDspStopRoutineIn*/
+        &Dcm_DspCommonAuthorizationCfg[1],     /*DcmDspCommonAuthorizationRef*/
         &Dcm_RoutineInfo_0xAF0A_StartCfg, /*DcmDspRequestRoutineResults*/
         NULL_PTR, /*DcmDspStopRoutine*/
     },
@@ -7470,7 +7514,7 @@ static CONST(Dcm_DspRoutineType,DCM_CONST)Dcm_DspRoutineCfg[13] =
         0u, /*DcmDspRoutineInfoByte*/
         TRUE, /*DcmDspRoutineUsePort*/
         TRUE,     /*DcmDspRoutineUsed*/
-        &Dcm_DspCommonAuthorizationCfg[1],     /*DcmDspCommonAuthorizationRef*/
+        &Dcm_DspCommonAuthorizationCfg[0],     /*DcmDspCommonAuthorizationRef*/
         &Dcm_RoutineInfo_0xAF0C_ResultsCfg, /*DcmDspStopRoutineIn*/
         &Dcm_RoutineInfo_0xAF0C_StartCfg, /*DcmDspRequestRoutineResults*/
         NULL_PTR, /*DcmDspStopRoutine*/
@@ -7480,7 +7524,7 @@ static CONST(Dcm_DspRoutineType,DCM_CONST)Dcm_DspRoutineCfg[13] =
         0u, /*DcmDspRoutineInfoByte*/
         TRUE, /*DcmDspRoutineUsePort*/
         TRUE,     /*DcmDspRoutineUsed*/
-        &Dcm_DspCommonAuthorizationCfg[1],     /*DcmDspCommonAuthorizationRef*/
+        &Dcm_DspCommonAuthorizationCfg[0],     /*DcmDspCommonAuthorizationRef*/
         &Dcm_RoutineInfo_0xAF0B_ResultsCfg, /*DcmDspStopRoutineIn*/
         &Dcm_RoutineInfo_0xAF0B_StartCfg, /*DcmDspRequestRoutineResults*/
         NULL_PTR, /*DcmDspStopRoutine*/
@@ -7589,7 +7633,7 @@ static CONST(Dcm_DspCfgType,DCM_CONST) Dcm_DspCfg =
     &Dcm_DspCommonAuthorizationCfg[0],        /*pDcmDspCommonAuthorization*/
     &Dcm_DspControlDTCSettingCfg,    /*pDcmDspControlDTCSetting*/
     &Dcm_DspDataCfg[0],    /*pDcmDspData*/    NULL_PTR,    /*pDcmDspDataInfo*/
-    145u,    /*DcmDspDidNum*/
+    146u,    /*DcmDspDidNum*/
     &Dcm_DspDidCfg[0],        /*pDcmDspDid*/
     3u,    /*DcmDspDidInfoNum*/
     &Dcm_DspDidInfoCfg[0],        /*pDcmDspDidInfo*/

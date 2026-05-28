@@ -443,6 +443,38 @@ static const uint16 Os_ResourceAccessMask_RIIC0TEI_IRQ[1] =
 #define OS_STOP_SEC_CONFIG_DATA_UNSPECIFIED
 #include "Os_MemMap.h"
 
+#define OS_START_SEC_CONFIG_DATA_UNSPECIFIED
+#include "Os_MemMap.h"
+/* PRQA S 4152, 3132 ++ */ /* VL_Os_4152, VL_Os_3132 */
+static const uint16 Os_ResourceAccessMask_SPI1S_IRQ[1] =
+/* PRQA S 4152, 3132 -- */
+{
+    0U,
+};
+#define OS_STOP_SEC_CONFIG_DATA_UNSPECIFIED
+#include "Os_MemMap.h"
+
+#define OS_START_SEC_CONFIG_DATA_UNSPECIFIED
+#include "Os_MemMap.h"
+/* PRQA S 4152, 3132 ++ */ /* VL_Os_4152, VL_Os_3132 */
+static const uint16 Os_ResourceAccessMask_SPI1R_IRQ[1] =
+/* PRQA S 4152, 3132 -- */
+{
+    0U,
+};
+#define OS_STOP_SEC_CONFIG_DATA_UNSPECIFIED
+#include "Os_MemMap.h"
+
+#define OS_START_SEC_CONFIG_DATA_UNSPECIFIED
+#include "Os_MemMap.h"
+/* PRQA S 4152, 3132 ++ */ /* VL_Os_4152, VL_Os_3132 */
+static const uint16 Os_ResourceAccessMask_SPI1E_IRQ[1] =
+/* PRQA S 4152, 3132 -- */
+{
+    0U,
+};
+#define OS_STOP_SEC_CONFIG_DATA_UNSPECIFIED
+#include "Os_MemMap.h"
 
 #define OS_START_SEC_CONFIG_DATA_UNSPECIFIED
 #include "Os_MemMap.h"
@@ -478,6 +510,9 @@ const uint16* const Os_IsrResourceAccessMask[CFG_ISR_MAX] =
     Os_ResourceAccessMask_RIIC0EE_IRQ,
     Os_ResourceAccessMask_RIIC0RI_IRQ,
     Os_ResourceAccessMask_RIIC0TEI_IRQ,
+    Os_ResourceAccessMask_SPI1S_IRQ,
+    Os_ResourceAccessMask_SPI1R_IRQ,
+    Os_ResourceAccessMask_SPI1E_IRQ,
 };
 #define OS_STOP_SEC_CONFIG_DATA_UNSPECIFIED
 #include "Os_MemMap.h"

@@ -20,7 +20,11 @@ typedef struct
 const static uint8_t g_monTable[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 #define RTC_TIME_START_YEAR (1970)
 #define UTC_2000_BASE_TIME (946684800)
+
+#define DEFAULT_TIME_ZONE (0)
 #define BEIJING_TIME_ZONE (8)
+
+#define TIME_ZONE DEFAULT_TIME_ZONE // 时区配置
 
 // static int16_t g_mpuHandle = -1;  //MPU通信句柄
 // static int16_t g_sleepStateHandle = -1; // 休眠状态获取句柄
@@ -130,7 +134,7 @@ static void TimeSyncSdkSendGnssTimeSignal()
     uint8_t min = 0;
     uint8_t sec = 0;
     uint8_t status = g_gnssData.timeValidity;
-    int16_t ret = TimeSyncGetLocalTimeFromRtc(g_gnssData.timestamp, BEIJING_TIME_ZONE, &year32, &month, &day, &hour, &min, &sec);
+    int16_t ret = TimeSyncGetLocalTimeFromRtc(g_gnssData.timestamp, TIME_ZONE, &year32, &month, &day, &hour, &min, &sec);
     if (ret != 0)
     {
         status = 0;
@@ -164,7 +168,7 @@ static void TimeSyncSdkSendNtpTimeSignal()
     uint8_t min = 0;
     uint8_t sec = 0;
     uint8_t status = g_ntpData.timeValidity;
-    int16_t ret = TimeSyncGetLocalTimeFromRtc(g_ntpData.timestamp, BEIJING_TIME_ZONE, &year32, &month, &day, &hour, &min, &sec);
+    int16_t ret = TimeSyncGetLocalTimeFromRtc(g_ntpData.timestamp, TIME_ZONE, &year32, &month, &day, &hour, &min, &sec);
     if (ret != 0)
     {
         status = 0;
@@ -355,7 +359,7 @@ int16_t TimeSyncSdkGetRealTime(uint8_t *timeSrc, uint32_t *pYear, uint8_t *pMont
     {
         return -1;
     }
-    ret = TimeSyncGetLocalTimeFromRtc(time, BEIJING_TIME_ZONE, pYear, pMonth, pDay, pHour, pMin, pSecond);
+    ret = TimeSyncGetLocalTimeFromRtc(time, TIME_ZONE, pYear, pMonth, pDay, pHour, pMin, pSecond);
     if (ret == 0)
     {
         if (g_ntpData.timeValidity == 0 && g_gnssData.timeValidity == 0)

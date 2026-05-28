@@ -216,6 +216,24 @@ const Os_IntInstallType Os_IntInstall[CFG_ISR_MAX] =
         OS_ID_RIIC0TEI_IRQ,/*IntNumber*/
         INVALID_SELECTION_BIT, /*intc2SelectionBit*/
     },
+    {
+        1U,  /*IntPrio*/
+        Os_ISR_SPI1S_IRQ_Handler,  /*cat2 ISR*/
+        OS_ID_CSIG1IC_IRQ,/*IntNumber*/
+        INVALID_SELECTION_BIT, /*intc2SelectionBit*/
+    },
+    {
+        1U,  /*IntPrio*/
+        Os_ISR_SPI1R_IRQ_Handler,  /*cat2 ISR*/
+        OS_ID_CSIG1IR_IRQ,/*IntNumber*/
+        INVALID_SELECTION_BIT, /*intc2SelectionBit*/
+    },
+    {
+        1U,  /*IntPrio*/
+        Os_ISR_SPI1E_IRQ_Handler,  /*cat2 ISR*/
+        OS_ID_CSIG1IRE_IRQ,/*IntNumber*/
+        INVALID_SELECTION_BIT, /*intc2SelectionBit*/
+    },
 };
 #define OS_STOP_SEC_CONST_UNSPECIFIED
 #include "Os_MemMap.h"

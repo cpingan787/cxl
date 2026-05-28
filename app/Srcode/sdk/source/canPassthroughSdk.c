@@ -179,6 +179,7 @@ int16_t CanPassthroughRead_PENDING(uint8_t *pUDSReqData, uint16_t udsReqDataLen,
 
     if(respRet == 0 && udsRespDataLen > 0)//接收到响应
     {
+        TBOX_PRINT("UDS22RespSuc\n");
         if(pUDSRespData[0] != 0x7F)
         {
             if(udsRespDataLen >= udsReqDataLen)
@@ -208,6 +209,7 @@ int16_t CanPassthroughRead_PENDING(uint8_t *pUDSReqData, uint16_t udsReqDataLen,
         {
             uds22Cnt = 0;
             ret = -1;//timeout
+            TBOX_PRINT("UDS22RespTimeout\n");
         }
     }   
 
@@ -244,6 +246,7 @@ int16_t CanPassthroughWrite_PENDING(uint8_t *pUDSReqData, uint16_t udsReqDataLen
 
     if(respRet == 0 && udsRespDataLen > 0)//接收到响应
     {
+        TBOX_PRINT("UDS2ERespSuc\n");
         if(udsRespData[0] != 0x7F)
         {
             /* 正响应 写入成功*/
@@ -269,6 +272,7 @@ int16_t CanPassthroughWrite_PENDING(uint8_t *pUDSReqData, uint16_t udsReqDataLen
         {
             uds2ECnt = 0;
             ret = -1;//timeout
+            TBOX_PRINT("UDS2ERespTimeout\n");
         }
     }   
     return ret;
@@ -335,6 +339,7 @@ int16_t CanPassthroughRoutine_PENDING(uint8_t *pUDSReqData, uint16_t UDSReqDataL
         {
             uds31Cnt = 0;
             ret = -1;//timeout
+            TBOX_PRINT("UDS31RespTimeout\n");
         }
     }   
 

@@ -22,6 +22,7 @@
 #define SYSTEM_LOG_SEND(level, type, ...)           LogHal_LogSend(level, LOG_SRC_SYSTEM, type, ##__VA_ARGS__)
 #define POWER_LOG_SEND(level, type, ...)            LogHal_LogSend(level, LOG_SRC_POWER, type, ##__VA_ARGS__)
 #define SYNC_LOG_SEND(level, type, ...)             LogHal_LogSend(level, LOG_SRC_APP_SYNC, type, ##__VA_ARGS__)
+#define DIAG_LOG_SEND(level, type, ...)             LogHal_LogSend(level, LOG_SRC_DIAG_UDS, type, ##__VA_ARGS__)
 
 /****************************** Type Definitions ******************************/
 typedef enum {

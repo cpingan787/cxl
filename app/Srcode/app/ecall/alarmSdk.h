@@ -19,7 +19,12 @@ typedef enum
     ECALL_TRIGGER_RESULT_FAIL = 0,
     ECALL_TRIGGER_RESULT_SUCC,		
 }EcallTriggerResult_e;
-
+// MPU触发源标识（在ACK数据第3字节）
+typedef enum
+{
+    ECALL_TRIGGER_SOURCE_MCU = 0,       // MCU触发
+    ECALL_TRIGGER_SOURCE_MPU = 0x03,    // MPU主动触发
+}EcallTriggerSource_e;
 typedef enum
 {
     E_ECALL_STATE_NO_ECALL = 0,
@@ -142,7 +147,8 @@ typedef enum {
     ECALL_CORE_IDLE = 0,
     ECALL_CORE_TRIGGERING,      // 已发送触发，等待ACK
     ECALL_CORE_AWAIT_STATE,     // 已收到ACK，等待状态
-    ECALL_CORE_IN_CALL,         // 通话进行中
+    ECALL_CORE_IN_CALL,         // 通话进行中（MCU触发）
+    ECALL_CORE_MPU_ACTIVE,      // MPU主动触发，进行超时监控
     ECALL_CORE_FAILED           // 触发失败（短暂停留）
 } EcallCoreState_e;
 

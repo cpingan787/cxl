@@ -32,13 +32,13 @@ typedef struct {
 /****************************** Global Variables ******************************/
 /* 根据项目要求改变规定长度 */
 const FlashParamMap_t FlashParamMap[E_PARAMETER_INFO_MAX_NUM] = {
-    {E_PARAMETER_INFO_ICCID,                20,     NvMBlock_DIDF130,   NULL},
-    {E_PARAMETER_INFO_IMEI,                 15,     NvMBlock_DIDF130,   NULL},
+    {E_PARAMETER_INFO_ICCID,                20,     NvMBlock_DIDB001,   NvMBlockRamBuffer54},
+    {E_PARAMETER_INFO_IMEI,                 15,     NvMBlock_DIDB004,   NvMBlockRamBuffer55},
     {E_PARAMETER_INFO_IMSI,                 15,     NvMBlock_DIDC002,   NvMBlockRamBuffer12},
     {E_PARAMETER_INFO_SN,                   16,     NvMBlock_DIDF18C,   NvMBlockRamBuffer6},
     {E_PARAMETER_INFO_VIN,                  17,     NvMBlock_DIDF190,   NvMBlockRamBuffer7},
     {E_PARAMETER_INFO_ECallNumber,          37,     NvMBlock_DIDCA02,   NvMBlockRamBuffer33},
-    {E_PARAMETER_INFO_ParatNumber,          5,      NvMBlock_DIDF130,   NULL},
+    {E_PARAMETER_INFO_ParatNumber,          5,      NvMBlock_DIDF130,   NULL},//通过EEIf读取
 
 };
 
@@ -157,6 +157,7 @@ int16_t WorkFlashVehicleInforRead(FlashParaId_e parameterId, uint8_t *data, uint
         return ret;
     }
 
+    /* F187特殊处理  通过EEIf读取ParatNumber */
     if(parameterId == E_PARAMETER_INFO_ParatNumber)
     {
         ret = EEIf_Read(DID_F187_ADDR_IDX, 5, data);

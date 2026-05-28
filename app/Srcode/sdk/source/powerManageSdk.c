@@ -120,6 +120,7 @@ static uint32_t g_pmWakeFactor20 = 0;
 static uint32_t g_pmWakeFactorIso0 = 0;
 static uint8_t g_pmDeepstopCanOnlyWakeDetected = 0;
 static uint8_t g_pmDeepstopCanPreCheckNoMpu = 0;
+static uint8_t g_backupBatAgingReqOnceFlag = 0;
 
 /* 运行期间计时器累计毫秒数（1ms中断累计） */
 static volatile uint32_t g_timerMsAccumulator = 0;
@@ -204,20 +205,20 @@ static uint8_t ReadListenTimerFromReservedBlock(uint32_t* pListenTimer)
         return PM_SDK_STATUS_ERR;
     }
 
-    if(NvM_ReadBlock(NvMBlock_Reserved_block2, NvMBlockRamBuffer49) == E_NOT_OK)
+    if(NvM_ReadBlock(NvMBlock_listentiming, NvMBlockRamBuffer56) == E_NOT_OK)
     {
         return PM_SDK_STATUS_ERR;
     }
 
-    if(NvMBlockRamBuffer49[PM_FLASH_DATA_VALID_INDEX] != PM_FLASH_DATA_VALID_FLAG)
+    if(NvMBlockRamBuffer56[PM_FLASH_DATA_VALID_INDEX] != PM_FLASH_DATA_VALID_FLAG)
     {
         return PM_SDK_STATUS_ERR;
     }
 
-    *pListenTimer = ((uint32_t)NvMBlockRamBuffer49[0] << 24) |
-                    ((uint32_t)NvMBlockRamBuffer49[1] << 16) |
-                    ((uint32_t)NvMBlockRamBuffer49[2] << 8) |
-                    NvMBlockRamBuffer49[3];
+    *pListenTimer = ((uint32_t)NvMBlockRamBuffer56[0] << 24) |
+                    ((uint32_t)NvMBlockRamBuffer56[1] << 16) |
+                    ((uint32_t)NvMBlockRamBuffer56[2] << 8) |
+                    NvMBlockRamBuffer56[3];
 
     TBOX_PRINT("Get listen timer from flash: %u seconds\n", *pListenTimer);
     return PM_SDK_STATUS_OK;
@@ -301,24 +302,24 @@ static int16_t SaveListenTimerParam(void)
     VehicleInfor_t vehicleInfor;
 
     /* 复位前将listenWakeupTimer和用户模式存储到flash */
-    /* 存储listenWakeupTimer值到NvMBlockRamBuffer49[0-3] (4字节) */
-    NvMBlockRamBuffer49[0] = (g_pmManage.listenWakeupTimer >> 24) & 0xFF;
-    NvMBlockRamBuffer49[1] = (g_pmManage.listenWakeupTimer >> 16) & 0xFF;
-    NvMBlockRamBuffer49[2] = (g_pmManage.listenWakeupTimer >> 8) & 0xFF;
-    NvMBlockRamBuffer49[3] = g_pmManage.listenWakeupTimer & 0xFF;
-    /* 读取并存储用户模式到NvMBlockRamBuffer49[4] */
+    /* 存储listenWakeupTimer值到NvMBlockRamBuffer56[0-3] (4字节) */
+    NvMBlockRamBuffer56[0] = (g_pmManage.listenWakeupTimer >> 24) & 0xFF;
+    NvMBlockRamBuffer56[1] = (g_pmManage.listenWakeupTimer >> 16) & 0xFF;
+    NvMBlockRamBuffer56[2] = (g_pmManage.listenWakeupTimer >> 8) & 0xFF;
+    NvMBlockRamBuffer56[3] = g_pmManage.listenWakeupTimer & 0xFF;
+    /* 读取并存储用户模式到NvMBlockRamBuffer56[4] */
     if(GetVehicleInfor(&vehicleInfor) == 0)
     {
-        NvMBlockRamBuffer49[4] = vehicleInfor.userMode;
+        NvMBlockRamBuffer56[4] = vehicleInfor.userMode;
     }
     else
     {
-        NvMBlockRamBuffer49[4] = UsgMd_1_Standby;  /* 默认standby模式 */
+        NvMBlockRamBuffer56[4] = UsgMd_1_Standby;  /* 默认standby模式 */
     }
-    /* 设置存储有效性标志到NvMBlockRamBuffer49[5] */
-    NvMBlockRamBuffer49[PM_FLASH_DATA_VALID_INDEX] = PM_FLASH_DATA_VALID_FLAG;
+    /* 设置存储有效性标志到NvMBlockRamBuffer56[5] */
+    NvMBlockRamBuffer56[PM_FLASH_DATA_VALID_INDEX] = PM_FLASH_DATA_VALID_FLAG;
 
-    if(NvM_WriteBlock(NvMBlock_Reserved_block2, NvMBlockRamBuffer49) == E_NOT_OK)
+    if(NvM_WriteBlock(NvMBlock_listentiming, NvMBlockRamBuffer56) == E_NOT_OK)
     {
         return E_NOT_OK;
     }
@@ -331,17 +332,17 @@ uint8_t GetStoredUserMode(void)
 {
     uint8_t userMode = UsgMd_1_Standby;  /* 默认standby模式 */
 
-    if(NvM_ReadBlock(NvMBlock_Reserved_block2, NvMBlockRamBuffer49) == E_OK)
+    if(NvM_ReadBlock(NvMBlock_listentiming, NvMBlockRamBuffer56) == E_OK)
     {
         /* 检查存储的数据是否有效 */
-        if(NvMBlockRamBuffer49[PM_FLASH_DATA_VALID_INDEX] != PM_FLASH_DATA_VALID_FLAG)
+        if(NvMBlockRamBuffer56[PM_FLASH_DATA_VALID_INDEX] != PM_FLASH_DATA_VALID_FLAG)
         {
             /* 数据无效，使用默认值（新设备） */
             TBOX_PRINT("User mode data is invalid, use default value\n");
             return userMode;
         }
 
-        userMode = NvMBlockRamBuffer49[4];
+        userMode = NvMBlockRamBuffer56[4];
         /* 检查用户模式是否有效 */
         if(userMode > UsgMd_6_XOTA)
         {
@@ -355,13 +356,13 @@ uint8_t GetStoredUserMode(void)
 static int16_t ClearListenTimerParam(void)
 {
     /* 直接基于当前RAM镜像清空剩余计时，不再先读flash */
-    NvMBlockRamBuffer49[0] = 0;
-    NvMBlockRamBuffer49[1] = 0;
-    NvMBlockRamBuffer49[2] = 0;
-    NvMBlockRamBuffer49[3] = 0;
-    NvMBlockRamBuffer49[PM_FLASH_DATA_VALID_INDEX] = PM_FLASH_DATA_VALID_FLAG;
+    NvMBlockRamBuffer56[0] = 0;
+    NvMBlockRamBuffer56[1] = 0;
+    NvMBlockRamBuffer56[2] = 0;
+    NvMBlockRamBuffer56[3] = 0;
+    NvMBlockRamBuffer56[PM_FLASH_DATA_VALID_INDEX] = PM_FLASH_DATA_VALID_FLAG;
 
-    if(NvM_WriteBlock(NvMBlock_Reserved_block2, NvMBlockRamBuffer49) == E_NOT_OK)
+    if(NvM_WriteBlock(NvMBlock_listentiming, NvMBlockRamBuffer56) == E_NOT_OK)
     {
         return PM_SDK_STATUS_ERR;
     }
@@ -456,6 +457,15 @@ static void WakeDelayProcess(uint8_t mcuWakeSource,uint8_t mpuWakeSource,uint32_
 static void PmAwakeInitProcess(uint8_t wakeupSource)
 {
     g_pmManage.sleepState = 1;
+}
+
+static void PmRequestBackupBatAgingCheckOnce(void)
+{
+    if (g_backupBatAgingReqOnceFlag == 0)
+    {
+        BackupBatAging_RequestCheckOnWakeup();
+        g_backupBatAgingReqOnceFlag = 1;
+    }
 }
 
 static void PmPreSleepProcess(void)
@@ -705,6 +715,7 @@ static void PmStatePowerOnProcess(uint32_t cycleTime)
     MpuPowerSyncSdkSetWake(g_pmManage.wakeupSource);
 #endif
     g_pmManage.wakeDelayCount = 0;
+    PmRequestBackupBatAgingCheckOnce();
     if(g_pmDeepstopCanPreCheckNoMpu != 0)
     {
         APP_SetWakeupHold();
@@ -1311,7 +1322,7 @@ static void PmStatePreSleepWaitProcess(uint32_t cycleTime)
             return;
         }
 
-        if(NvM_GetErrorStatus(NvMBlock_Reserved_block2, &saveResult) != E_OK)
+        if(NvM_GetErrorStatus(NvMBlock_listentiming, &saveResult) != E_OK)
         {
             return;
         }
@@ -1400,13 +1411,15 @@ static void PmStateMcuSleepProcess(uint32_t cycleTime)
     g_pmManage.wakeDelayCount = 0;
     g_pmManage.kl30WakeCount = 0;
 	g_pmManage.wakeupSource = 0;
+    g_backupBatAgingReqOnceFlag = 0;
     if(g_pmManage.mpuPowerOffFlag == 0)
     {
         TimerHalPrepareSleep(g_pmManage.listenWakeupTimer);
     }
     TimerHalSetMode(0);
-    LogHalSetMode(0);
     EcallHalSetMode(0);
+    LogHalSetMode(0);
+    
 
     // /*进入低功耗函数*/
     // PowerManageHalSleep();
@@ -1461,7 +1474,7 @@ static void PmStateCheckWakeupSourceProcess(uint32_t cycleTime)
         MpuPowerSyncSdkSetRkMode(1);
     }
     /*进行一次备用电池老化检测*/
-    BackupBatAging_RequestCheckOnWakeup();
+    PmRequestBackupBatAgingCheckOnce();
 #if(DV_TEST_ENABLE == 1)
     g_pmManage.testMode = 0;
     PmAwakeInitProcess(g_pmManage.wakeupSource);
@@ -1773,6 +1786,9 @@ void PowerManageSdkPowerOn(void)
     taskENTER_CRITICAL();
     /*电源管理状态初始化*/
     g_pmManage.pmState = E_PM_STATE_POWER_ON;
+
+    g_backupBatAgingReqOnceFlag = 0;
+
     /*进入临界区保护*/
     taskEXIT_CRITICAL();   
 }

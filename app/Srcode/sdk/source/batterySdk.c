@@ -13,7 +13,7 @@ static const uint32_t g_cellNumber                = 2;                   //备�
 static const uint32_t g_cellMaxVoltage            = 1340;                //单体电池最大电压单位：mv
 static const uint32_t g_cellMinVoltage            = 1240;                //单体电池最小电压单位：mv
 //static const uint32_t g_lowVoltageChargeTime      = 6*60*60*1000;        //检测到电压过低后备用电池放电时长，单位ms
-static const uint32_t g_middleVoltageChargeTime   = 8*60*60*1000;        //备用电池充电时长，单位ms
+static const uint32_t g_middleVoltageChargeTime   = 8*60*60*1000;        //备用电池充电时长，单位ms    
 static const uint32_t g_temperatureRMap[]         = {                    //温度--电压对应值，单位°C
     195650,    //-40 单位：°C
     184920,    // -39
@@ -749,6 +749,15 @@ static void HandleIntVoltageCheckState(uint32_t *volValueSoc, uint32_t *Electric
     }
     *volValueSoc = voltage;                                                   // 保存空载电压
     // TBOX_PRINT("voltage_kongzai = %d\n", voltage);
+     if(voltage <= BATTERY_AGE_CHECK_MIN_OCV_MV)                     // 空载电压小于2.4V，不进行老化检测
+    {
+        g_batteryAgeResult = E_BatteryAgeResult_Invalid;
+        g_batteryAgeCheckFinishFlag = 1;
+        g_batteryAgeCheckReqFlag = 0;
+        g_batteryResisState = E_BatteryResisState_Init;
+        BatteryHalDisableOut();
+        return;
+    }
     BatteryHalDisableCharge();                                                // 放电前先关闭充电，避免影响测量
     BatteryHalEnableOut();                                                    // 打开放电开关
     *ElectricDischargeTime = 0;                                               // 放电计时清零
@@ -770,7 +779,7 @@ static void HandleDischargeState(uint32_t *volValueSoc, uint32_t *ElectricDischa
         g_batteryDischargeVoltageFiltered = 0;                               
     }
 
-    if(*ElectricDischargeTime >= (uint32_t)DISCHARGE_SAMPLE_START_400MS)
+    if(*ElectricDischargeTime >= (uint32_t)DISCHARGE_SAMPLE_START_500MS)
     {
         if(BatterySdkGetVoltageAverage(&voltage) == 0)
         {
@@ -780,7 +789,7 @@ static void HandleDischargeState(uint32_t *volValueSoc, uint32_t *ElectricDischa
         }
     }
 
-    if(*ElectricDischargeTime >=(uint32_t)DISCHARGE_DELAY_500MS)                // 如果放电时间达到500ms
+    if(*ElectricDischargeTime >=(uint32_t)DISCHARGE_DELAY_600MS)                // 如果放电时间达到600ms
     {
         BatteryHalDisableOut();    //关闭放电开关
         if(dischargeSampleCount == 0)
@@ -819,17 +828,24 @@ static void HandleResistanceCalculationState(uint32_t volValueSoc, uint32_t Disc
     int32_t batteryTemp = 2500;     //默认温度25℃
     int32_t tempC = 25;             //转换成整数值
     uint8_t index = 0;              //查表索引
-    uint32_t g_batteryAgeResistance = 0;    //内阻
+    uint32_t batteryAgeResistance = 0;    //内阻
 
     (void)ElectricDischargeTime;
-    g_batteryAgeResistance = BatterySdkCalculateResistance(volValueSoc, DischargevolValue);
-    // TBOX_PRINT("resistance = %d\n", g_batteryAgeResistance);  //内阻调试打印
+    batteryAgeResistance = BatterySdkCalculateResistance(volValueSoc, DischargevolValue);
+    if(batteryAgeResistance > BATTERY_AGE_RESISTANCE_OFFSET)
+    {
+        batteryAgeResistance -= BATTERY_AGE_RESISTANCE_OFFSET;
+    }
+    else
+    {
+        batteryAgeResistance = 0;
+    }
+    // TBOX_PRINT("resistance = %d\n", batteryAgeResistance);  //内阻调试打印
     // TBOX_PRINT("volBefore = %d, volAfter = %d, resistance = %d\r\n",
     //            volValueSoc,
     //            DischargevolValue,
-    //            g_batteryAgeResistance);
-
-    if(g_batteryAgeResistance == 0)                                           
+    //            batteryAgeResistance);
+    if(batteryAgeResistance == 0)                                           
     {
         g_batteryAgeResult = E_BatteryAgeResult_Invalid;                                                                     
     }
@@ -841,7 +857,7 @@ static void HandleResistanceCalculationState(uint32_t volValueSoc, uint32_t Disc
             // TBOX_PRINT("batteryTemp = %d, tempC = %d\n", batteryTemp, tempC);
         }
         index = BatterySdkFindAgeMapIndex(tempC);
-        if(g_batteryAgeResistance >= g_batteryAgeMap[index].eolResistance)    //内阻大于限定值即为老化
+        if(batteryAgeResistance >= g_batteryAgeMap[index].eolResistance)    //内阻大于限定值即为老化
         {
             g_batteryAgeResult = E_BatteryAgeResult_Aging;
         }

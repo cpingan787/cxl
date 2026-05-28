@@ -22,6 +22,7 @@
 #include "peripheralHal.h"
 #include "taskPowerManage.h"
 #include "taskVehicleDataToMpu.h"
+#include "parameterSyncSdk.h"
 
 #if (0)
 #define DTC_STATUS_BIT0_ENABLE 1 // test failed
@@ -37,26 +38,32 @@
 
 #endif
 
-#define DTC_EVT_5G4G_MAIN_SHORT_GND ((Dem_EventIdType)EventParameter_0x95A011) /*B15A0 FTB:11 */
-#define DTC_EVT_5G4G_MAIN_OPEN ((Dem_EventIdType)EventParameter_0x95A013)      /*B15A0 FTB:13 */
-#define DTC_EVT_5G_DIV2_SHORT_GND ((Dem_EventIdType)EventParameter_0x95A111)   /*B15A1 FTB:11 */
-#define DTC_EVT_5G_DIV2_OPEN ((Dem_EventIdType)EventParameter_0x95A113)        /*B15A1 FTB:13 */
-#define DTC_EVT_5G_DIV1_SHORT_GND ((Dem_EventIdType)EventParameter_0x95A311)   /*B15A3 FTB:11 */
-#define DTC_EVT_5G_DIV1_OPEN ((Dem_EventIdType)EventParameter_0x95A313)        /*B15A3 FTB:13 */
-#define DTC_EVT_5G_DIV3_SHORT_GND ((Dem_EventIdType)EventParameter_0x95A411)   /*B15A4 FTB:11 */
-#define DTC_EVT_5G_DIV3_OPEN ((Dem_EventIdType)EventParameter_0x95A413)        /*B15A4 FTB:13 */
-#define DTC_EVT_MICIN_SHORT_GND ((Dem_EventIdType)EventParameter_0x953311)     /*B1533 FTB:11 */
-#define DTC_EVT_MICIN_SHORT_BAT ((Dem_EventIdType)EventParameter_0x953312)     /*B1533 FTB:12 */
-#define DTC_EVT_MICIN_OPEN ((Dem_EventIdType)EventParameter_0x953313)          /*B1533 FTB:13 */
-#define DTC_EVT_GPS_SHORT_GND ((Dem_EventIdType)EventParameter_0x95A711)       /*B15A7 FTB:11 */
-#define DTC_EVT_GPS_OPEN ((Dem_EventIdType)EventParameter_0x95A713)            /*B15A7 FTB:13 */
-#define DTC_EVT_SIM_NOT_ONLINE ((Dem_EventIdType)EventParameter_0x954100)      /*B1541 FTB:00 */
-#define DTC_EVT_SIM_INVALID ((Dem_EventIdType)EventParameter_0x954200)         /*B1542 FTB:00 */
-#define DTC_EVT_SPEAKER_SHORT_GND ((Dem_EventIdType)EventParameter_0x953111)   /*B1513 FTB:11 */
-#define DTC_EVT_SPEAKER_OPEN ((Dem_EventIdType)EventParameter_0x953113)        /*B1513 FTB:13 */
-#define DTC_EVT_SPEAKER_SHORT_BAT ((Dem_EventIdType)EventParameter_0x953512)   /*B1535 FTB:12 */
-#define DTC_EVT_LED_SHORT_GND ((Dem_EventIdType)EventParameter_0x951511)       /*B1515 FTB:11 */
-#define DTC_EVT_LED_SHORT_BAT ((Dem_EventIdType)EventParameter_0x951512)       /*B1515 FTB:12 */
+#define DTC_EVT_5G4G_MAIN_SHORT_GND       ((Dem_EventIdType)EventParameter_0x95A011) /*B15A0 FTB:11 */
+#define DTC_EVT_5G4G_MAIN_OPEN            ((Dem_EventIdType)EventParameter_0x95A013) /*B15A0 FTB:13 */
+#define DTC_EVT_5G_DIV2_SHORT_GND         ((Dem_EventIdType)EventParameter_0x95A111) /*B15A1 FTB:11 */
+#define DTC_EVT_5G_DIV2_OPEN              ((Dem_EventIdType)EventParameter_0x95A113) /*B15A1 FTB:13 */
+#define DTC_EVT_5G_DIV1_SHORT_GND         ((Dem_EventIdType)EventParameter_0x95A311) /*B15A3 FTB:11 */
+#define DTC_EVT_5G_DIV1_OPEN              ((Dem_EventIdType)EventParameter_0x95A313) /*B15A3 FTB:13 */
+#define DTC_EVT_5G_DIV3_SHORT_GND         ((Dem_EventIdType)EventParameter_0x95A411) /*B15A4 FTB:11 */
+#define DTC_EVT_5G_DIV3_OPEN              ((Dem_EventIdType)EventParameter_0x95A413) /*B15A4 FTB:13 */
+#define DTC_EVT_MICIN_SHORT_GND           ((Dem_EventIdType)EventParameter_0x953311) /*B1533 FTB:11 */
+#define DTC_EVT_MICIN_SHORT_BAT           ((Dem_EventIdType)EventParameter_0x953312) /*B1533 FTB:12 */
+#define DTC_EVT_MICIN_OPEN                ((Dem_EventIdType)EventParameter_0x953313) /*B1533 FTB:13 */
+#define DTC_EVT_GPS_SHORT_GND             ((Dem_EventIdType)EventParameter_0x95A711) /*B15A7 FTB:11 */
+#define DTC_EVT_GPS_OPEN                  ((Dem_EventIdType)EventParameter_0x95A713) /*B15A7 FTB:13 */
+#define DTC_EVT_SIM_NOT_ONLINE            ((Dem_EventIdType)EventParameter_0x954100) /*B1541 FTB:00 */
+#define DTC_EVT_SIM_INVALID               ((Dem_EventIdType)EventParameter_0x954200) /*B1542 FTB:00 */
+#define DTC_EVT_SPEAKER_SHORT_GND         ((Dem_EventIdType)EventParameter_0x953111) /*B1513 FTB:11 */
+#define DTC_EVT_SPEAKER_OPEN              ((Dem_EventIdType)EventParameter_0x953113) /*B1513 FTB:13 */
+#define DTC_EVT_SPEAKER_SHORT_BAT         ((Dem_EventIdType)EventParameter_0x953512) /*B1535 FTB:12 */
+#define DTC_EVT_LED_SHORT_GND             ((Dem_EventIdType)EventParameter_0x951511) /*B1515 FTB:11 */
+#define DTC_EVT_LED_SHORT_BAT             ((Dem_EventIdType)EventParameter_0x951512) /*B1515 FTB:12 */
+#define DTC_EVT_BACKUP_BAT_HIGH           ((Dem_EventIdType)EventParameter_0x955017) /*B1550 FTB:17 */
+#define DTC_EVT_BACKUP_BAT_LOW            ((Dem_EventIdType)EventParameter_0x955016) /*B1550 FTB:16 */
+#define DTC_EVT_BACKUP_BAT_SHORT_GND      ((Dem_EventIdType)EventParameter_0x955011) /*B1550 FTB:11 */
+#define DTC_EVT_BACKUP_BAT_OPEN           ((Dem_EventIdType)EventParameter_0x955013) /*B1550 FTB:13 */
+#define DTC_EVT_BACKUP_BAT_AGING          ((Dem_EventIdType)EventParameter_0x955201) /*B1552 FTB:01 */
+
 
 #define SIZE_OF_ARRAY(arrayName) (sizeof(arrayName) / sizeof(arrayName)[0])
 
@@ -912,11 +919,11 @@ void GPS_DetectProcess_200ms(void)
 #define MICIN_ADC_CHANNEL AD1_CHANNEL_MIC_IN_ADC_DET
 
 #define MICIN_DTC_SHORT_GND_TH_MV     100 
-#define MICIN_DTC_OPEN_LOW_TH_MV      1300  
-#define MICIN_DTC_OPEN_HIGH_TH_MV     1900 
+#define MICIN_DTC_OPEN_LOW_TH_MV      1450  
+#define MICIN_DTC_OPEN_HIGH_TH_MV     2000 
 #define MICIN_DTC_SHORT_BAT_TH_MV     3200 
 #define MICIN_DTC_NORMAL_LOW_TH_MV    500  
-#define MICIN_DTC_NORMAL_HIGH_TH_MV   1200 
+#define MICIN_DTC_NORMAL_HIGH_TH_MV   1450 
 
 #define MICIN_DTC_CONFIRM_CNT 3
 #define MICIN_DTC_RECOVER_CNT 3
@@ -991,7 +998,7 @@ void MICIN_DetectProcess_2s(void)
     PeripheralHalAdGet(MICIN_ADC_CHANNEL, &micInVoltage); 
     //TBOX_PRINT("MICIN_Voltage: %d\n", micInVoltage); 
 
-    if (Dtc_IsCommonMonitorEnable()) 
+    if ((Dtc_IsCommonMonitorEnable())&&(ParameterSyncSdkGetFromCpuIsFinished()==0)) //满足监测使能条件以及mpu上电完成
     {
         if (micInVoltage < MICIN_DTC_SHORT_GND_TH_MV) 
         {
@@ -3681,6 +3688,9 @@ DtcQueryState_e DtcGetObjState(DtcQueryObj_e obj) /* 统一查询接口*/
     uint8_t openFlag = 0;
     uint8_t simNotOnlineFlag = 0;
     uint8_t simInvalidFlag = 0;
+    uint8_t highFlag = 0;
+    uint8_t lowFlag = 0;
+    uint8_t agingFlag = 0;
 
     if ((uint32_t)obj >= (uint32_t)E_DTC_QUERY_MAX) /* 检查对象是否越界 */
     {
@@ -3882,6 +3892,50 @@ DtcQueryState_e DtcGetObjState(DtcQueryObj_e obj) /* 统一查询接口*/
         if (shortBatFlag != 0)
         {
             return E_DTC_QUERY_STATE_SHORT_BAT;
+        }
+        return E_DTC_QUERY_STATE_NORMAL;
+    }
+    case E_DTC_QUERY_BACKUP_BAT:
+    {
+        if (DtcGetEventFailedFlag(DTC_EVT_BACKUP_BAT_SHORT_GND, &shortGndFlag) != 0)
+        {
+            return E_DTC_QUERY_STATE_UNKNOWN;
+        }
+        if (DtcGetEventFailedFlag(DTC_EVT_BACKUP_BAT_OPEN, &openFlag) != 0)
+        {
+            return E_DTC_QUERY_STATE_UNKNOWN;
+        }
+        if (DtcGetEventFailedFlag(DTC_EVT_BACKUP_BAT_HIGH, &highFlag) != 0)
+        {
+            return E_DTC_QUERY_STATE_UNKNOWN;
+        }
+        if (DtcGetEventFailedFlag(DTC_EVT_BACKUP_BAT_LOW, &lowFlag) != 0)
+        {
+            return E_DTC_QUERY_STATE_UNKNOWN;
+        }
+        if (DtcGetEventFailedFlag(DTC_EVT_BACKUP_BAT_AGING, &agingFlag) != 0)
+        {
+            return E_DTC_QUERY_STATE_UNKNOWN;
+        }
+        if (shortGndFlag != 0)
+        {
+            return E_DTC_QUERY_STATE_SHORT_GND;
+        }
+        if (openFlag != 0)
+        {
+            return E_DTC_QUERY_STATE_OPEN;
+        }
+        if (highFlag != 0)
+        {
+            return E_DTC_QUERY_STATE_BACKUP_BAT_HIGH;
+        }
+        if (lowFlag != 0)
+        {
+            return E_DTC_QUERY_STATE_BACKUP_BAT_LOW;
+        }
+        if (agingFlag != 0)
+        {
+            return E_DTC_QUERY_STATE_BACKUP_BAT_AGING;
         }
         return E_DTC_QUERY_STATE_NORMAL;
     }

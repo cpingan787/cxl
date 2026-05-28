@@ -132,7 +132,8 @@ void EcallGpioInit(void)
     PORT.PM1 &= (uint16_t) ~_PORT_PMn0_MODE_UNUSED;
     PORT.PM1 |= _PORT_PMn0_MODE_OUTPUT; // 设置为输出模式
 
-/*****************************  P9_5    *******************************************/
+/*****************************  A1：P9_5   B0：P8_5 *******************************************/
+#if ISUSEA1    
     // 1. 解除端口写保护（单次解锁即可）
     PORT.PPCMD9 = _WRITE_PROTECT_COMMAND;
 
@@ -146,6 +147,20 @@ void EcallGpioInit(void)
     // 4. 将P9_5设置为输入模式
     PORT.PM9 &= (uint16_t) ~_PORT_PMn5_MODE_UNUSED;
     PORT.PM9 |= _PORT_PMn5_MODE_INPUT; 
+#else
+    // 1. 解除端口写保护（单次解锁即可）
+    PORT.PPCMD8 = _WRITE_PROTECT_COMMAND;
+
+    // 2. 设置为INTP9模式（不会影响IO功能，配置为仅IO模式时无法触发中断）
+    PORT.PMC8 |= _PORT_PMn5_MODE_UNUSED;
+
+    // 3. 使能输入缓冲器
+    PORT.PIBC8 |= _PORT_PIBCn5_INPUT_BUFFER_ENABLE;
+
+    // 4. 将P8_5设置为输入模式
+    PORT.PM8 &= (uint16_t) ~_PORT_PMn5_MODE_UNUSED;
+    PORT.PM8 |= _PORT_PMn5_MODE_INPUT; 
+#endif
 
 /*******************************************************************************/
     // AMP_FAULT P1_9 pull-down input 
@@ -317,7 +332,11 @@ void EcallHalSetSosLedState(uint8_t index, uint8_t state)
 uint8_t EcallHalGetSosButtonStatus(void)
 {
 	uint32_t PortLevel;
+#if ISUSEA1
     PortLevel = R_PORT_GetLevel(Port9,5);
+#else
+    PortLevel = R_PORT_GetLevel(Port8, 5);
+#endif
 
     if(PortLevel == 0)
     {

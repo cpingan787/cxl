@@ -1270,6 +1270,7 @@ int16_t PeripheralHalAdGet(uint8_t adChannel,uint32_t *pValue)
                 temData = adValue*AD_REF_VOLTAGE;
                 temData = temData/4096;
                 temData = temData*AD_CHANNEL_KL30_FACTOR;
+                temData += 260;// 0515 硬件降压补偿
                 *pValue = temData;
                 return 0;
             }

@@ -84,6 +84,9 @@ DeclareISR(ISR_RIIC0TI_IRQ_Handler);
 DeclareISR(ISR_RIIC0EE_IRQ_Handler);
 DeclareISR(ISR_RIIC0RI_IRQ_Handler);
 DeclareISR(ISR_RIIC0TEI_IRQ_Handler);
+DeclareISR(ISR_SPI1S_IRQ_Handler);
+DeclareISR(ISR_SPI1R_IRQ_Handler);
+DeclareISR(ISR_SPI1E_IRQ_Handler);
 /* PRQA S 1753 -- */
 
 #endif /* OS_INTERRUPT_CFGDATA_H */

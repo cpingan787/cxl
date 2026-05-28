@@ -3,6 +3,8 @@
 
 #include <stdint.h>
 
+
+#define ISUSEA1 0
 typedef enum
 {
     E_ECALL_LED_RED = 0x00,

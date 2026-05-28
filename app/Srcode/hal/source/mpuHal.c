@@ -1,22 +1,24 @@
-﻿#include "mpuHal.h"
+﻿/*************************************************
+ Copyright © 2026 SiRun (AnHui) . All rights reserved.
+ File Name: mpuHal.c
+ Author: 
+ Created Time: 
+ Description:
+ Others:
+*************************************************/
+/****************************** include ***************************************/
+#include "mpuHal.h"
 #include "logHal.h"
 #include "osHal.h"
 #include "crc8_16_32.h"
-
 #include "r_cg_macrodriver.h"
 #include "r_cg_uart.h"
-
 #include "stdio.h"
 #include "Dio.h"
+#include "r_cg_csig.h"
 
+/****************************** Macro Definitions ******************************/
 #define MPU_COMMUNICATION_USE_SPI 0
-
-// #define MPU_HAL_PDMA_DW_TX                      DW1
-// #define MPU_HAL_PDMA_DW_CHANNEL_TX              14
-// #define MPU_HAL_PDMA_DW_RX    DW1
-// #define MPU_HAL_PDMA_DW_CHANNEL_RX              15
-// #define MPU_HAL_SPI_CHANNEL                    SCB3
-// #define SCB_SPI_OVERSAMPLING                  8
 #define MPU_HAL_HANDLE_INSTANSE_MAX 15
 #define MPU_PROTOCAL_HEADER_LEN 8
 #define MPU_HAL_TX_BUFFER 1048 // 4096
@@ -24,6 +26,7 @@
 #define MPU_HAL_RX_BUFFER 2048
 #define MPU_HAL_UART_INT_RX_BUF_LEN 200
 
+/****************************** Type Definitions ******************************/
 typedef struct 
 {
     uint8_t data[1200];
@@ -110,42 +113,37 @@ typedef struct
     MpuRxBuffer_t rxBuffer;
 } MpuHalManage_t;
 
-static MpuHalManage_t g_mpuManage;
+typedef enum
+{
+    E_SPI_IDLE = 0,
+    E_SPI_BUSY,
+    E_SPI_DENINT,
+} SpiState_e;
 
+/****************************** Global Variables ******************************/
+
+static MpuHalManage_t g_mpuManage;
+static uint8_t g_mpuSpiTxBuffer[MPU_HAL_TX_BUFFER];
+static SpiState_e g_spiSendStatus = E_SPI_DENINT;
+volatile uint8_t g_SpiReceiveData[MPU_HAL_UART_INT_RX_BUF_LEN];
+
+/****************************** Function Declarations *************************/
+static void MpuHalResetSpiRuntimeState(void);
+static void MpuHal_SpiInit(void);
+
+/****************************** Public Function Implementations ******************************/
 static void MpuHalGpioInit(void)
 {
     Dio_WriteChannel(DioConf_DioChannel_DIO_Channel_NAD_V2X_5V0__EN_Pin1_7, STD_HIGH);
     Dio_WriteChannel(DioConf_DioChannel_DIO_Channel_NAD_V2X_3V8_EN_Pin18_3, STD_HIGH);
     Dio_WriteChannel(DioConf_DioChannel_DIO_Channel_AG591_POWERKEY_EN_Pin18_1, STD_LOW);
     Dio_WriteChannel(DioConf_DioChannel_DIO_Channel_MCU_WAKEUP_NAD_Pin12_0, STD_LOW);
-
-#if(MPU_COMMUNICATION_USE_SPI)    
-    /********request  out************************/
-    portPinCfg.hsiom = P13_3_GPIO;
-    Cy_GPIO_Pin_Init(GPIO_PRT13, 3, &portPinCfg);
-    /********spi miso***********************/
-    portPinCfg.hsiom = P13_0_SCB3_SPI_MISO;
-    Cy_GPIO_Pin_Init(GPIO_PRT13, 0, &portPinCfg);
-    /********spi mosi***********************/
-    portPinCfg.hsiom = P13_1_SCB3_SPI_MOSI;
-    Cy_GPIO_Pin_Init(GPIO_PRT13, 1, &portPinCfg);
-    /********spi clk***********************/
-    portPinCfg.driveMode = CY_GPIO_DM_HIGHZ;
-    portPinCfg.hsiom = P13_2_SCB3_SPI_CLK;
-    Cy_GPIO_Pin_Init(GPIO_PRT13, 2, &portPinCfg);
-#else /**** *use uart commnication**************/
-
-    // /********spi miso***********************/    // TODO guanyuan
-    // portPinCfg.driveMode = CY_GPIO_DM_HIGHZ;
-    // portPinCfg.hsiom  = P13_0_SCB3_UART_RX;
-    // Cy_GPIO_Pin_Init(GPIO_PRT13,0,&portPinCfg);
-    // /********spi mosi***********************/
-    // portPinCfg.driveMode = CY_GPIO_DM_STRONG_IN_OFF;
-    // portPinCfg.hsiom  = P13_1_SCB3_UART_TX;
-    // Cy_GPIO_Pin_Init(GPIO_PRT13,1,&portPinCfg);
-#endif
     Dio_WriteChannel(DioConf_DioChannel_DIO_Channel_AG591_RST_EN_Pin18_0, STD_LOW);
     Dio_WriteChannel(DioConf_DioChannel_DIO_Channel_LEVEL_SHIFT_EN_Pin11_15, STD_HIGH);
+
+    Dio_WriteChannel(DioConf_DioChannel_DIO_Channel_NAD_TO_MCU_Pin10_13, STD_LOW);
+    Dio_WriteChannel(DioConf_DioChannel_DIO_Channel_MCU_TO_NAD_EN_Pin10_14, STD_HIGH);
+
 }
 
 static void MpuHalSetPower(uint8_t flag)
@@ -642,11 +640,14 @@ int16_t MpuHalTransmit(int16_t handle, const MpuHalDataPack_t *pTxMsg)
                 index++;
                 sTxBuffer[index] = crc & 0xFF;
                 index++;
+                if (pTxMsg->aid == 0)
+                {
+                    Mpuspi_Transmit(sTxBuffer, index);
+                }
                 if (MpuUartTransmit(sTxBuffer, index) != MPU_HAL_STATUS_OK)
                 {
                     ret = MPU_HAL_STATUS_ERR;
                 }
-                // taskEXIT_CRITICAL();
                 __enable_irq();
             }
             else
@@ -805,6 +806,8 @@ void MpuHalSetMode(uint8_t wakeMode)
     {
         MpuHalSetWakeOut(1);
         R_UART5_Stop();
+        g_spiSendStatus = E_SPI_DENINT;
+        R_CSIG1_Stop();
         MpuHalResetUartRuntimeState();
         g_mpuManage.wakeMode = wakeMode;
         Dio_WriteChannel(DioConf_DioChannel_DIO_Channel_NAD_V2X_5V0__EN_Pin1_7, STD_LOW);
@@ -814,6 +817,10 @@ void MpuHalSetMode(uint8_t wakeMode)
         R_UART5_Create();
         MpuHalResetUartRuntimeState();
         R_UART5_Start();
+        R_CSIG1_Create();
+        MpuHalResetSpiRuntimeState();
+        R_CSIG1_Start();
+        g_spiSendStatus = E_SPI_IDLE;
         /*wake up mpu*/
         g_mpuManage.wakeoutTimeCount = 0;
         MpuHalSetWakeOut(0);
@@ -986,12 +993,8 @@ void MpuHalInit(void)
     g_mpuManage.wakeoutTimeCount = 10;
     g_mpuManage.wakeMode = 1;
     MpuHalGpioInit();
-#if (MPU_COMMUNICATION_USE_SPI)
-    // MpuSpiDeviceClockInit();
-    R_CSIG1_Start();
-#else
+    MpuHal_SpiInit();
     MpuHalMainUartInit(115200 * 4);
-#endif
 }
 
 void MpuHalTxTaskInit(void)
@@ -1103,3 +1106,87 @@ void MpuHalUartPrintErrState(uint16_t cycleTime)
         g_mpuUartErrorType = 0;
     }
 }
+
+static void MpuHalResetSpiRuntimeState(void)
+{
+    memset(g_mpuSpiTxBuffer, 0, sizeof(g_mpuSpiTxBuffer));
+}
+
+static void MpuHal_SpiInit(void)
+{
+    uint8_t dummyData = 0xFF;
+    R_CSIG1_Create();
+    MpuHalResetSpiRuntimeState();
+    R_CSIG1_Start();
+    R_CSIG1_Send(&dummyData, 1);
+    g_spiSendStatus = E_SPI_IDLE;
+}
+
+/*************************************************
+  Function:       MpuHal_SpiDmaTxCallback
+  Description:    SPI DMA transmit callback function
+  Input:          None
+  Output:         None
+  Return:         None
+  Others:         Called when SPI DMA transmit operation is complete
+*************************************************/
+void MpuHal_SpiTxCallback(void)
+{
+    Dio_WriteChannel(DioConf_DioChannel_DIO_Channel_MCU_TO_NAD_EN_Pin10_14, STD_HIGH); // 拉低片选，MCU结束发送数据
+    g_spiSendStatus = E_SPI_IDLE;
+}
+static uint16_t len = 0;
+void MpuHal_SpiRevice(uint16_t data)
+{
+    if (len > 100)
+    {
+        len = 0;
+        // return;
+    }
+    g_SpiReceiveData[len++] = data;
+    // UartSpiProtocalProcess(data, 1);
+}
+
+int16_t Mpuspi_Transmit(const uint8_t *pTxData, uint16_t txLength)
+{
+    uint16_t startAddress;
+    uint16_t firstCopyLength;
+    uint16_t alltxLength = 6 + txLength;
+    uint16_t crc = 0;
+    uint32_t data;
+    if (g_spiSendStatus != E_SPI_IDLE)
+    {
+        return MPU_HAL_STATUS_ERR;
+    }
+
+#if 0
+    if (Dio_ReadChannel(DioConf_DioChannel_DIO_Channel_NAD_TO_MCU_Pin10_13) == STD_LOW)
+    {
+        return MPU_HAL_STATUS_ERR;
+    }
+#endif
+
+    if (MpuPowerSyncSdkGetNadModuleStatus() == 1)
+    {
+        return MPU_HAL_STATUS_ERR;
+    }
+
+    if ((pTxData == NULL) || (txLength == 0) || (alltxLength > MPU_HAL_TX_BUFFER))
+    {
+        return MPU_HAL_STATUS_ERR;
+    }
+
+    g_mpuSpiTxBuffer[0] = 0x55u;
+    g_mpuSpiTxBuffer[1] = 0xBBu;
+    g_mpuSpiTxBuffer[2] = (uint8_t)(txLength >> 8);
+    g_mpuSpiTxBuffer[3] = (uint8_t)(txLength & 0xFF);
+    crc = CcittCrc16(crc, pTxData, txLength);
+    g_mpuSpiTxBuffer[4] = (uint8_t)(crc >> 8);
+    g_mpuSpiTxBuffer[5] = (uint8_t)(crc & 0xFF);
+    memcpy(&g_mpuSpiTxBuffer[6], pTxData, txLength);
+    R_CSIG1_Send(g_mpuSpiTxBuffer, alltxLength);
+    g_spiSendStatus = E_SPI_BUSY;
+    Dio_WriteChannel(DioConf_DioChannel_DIO_Channel_MCU_TO_NAD_EN_Pin10_14, STD_LOW); // 拉高片选，请求发送数据
+    return MPU_HAL_STATUS_OK;
+}
+

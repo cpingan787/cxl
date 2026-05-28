@@ -560,7 +560,7 @@ void APP_GotoSleep(void)
 void Pre_LowPowerMode(void)
 {
 	/* Close ECALL_BUTTON_PWR_EN */
-	Dio_WriteChannel(DioConf_DioChannel_DIO_Channel_CALL_BUTTON_PWR_EN_Pin1_0, STD_HIGH);
+	// Dio_WriteChannel(DioConf_DioChannel_DIO_Channel_CALL_BUTTON_PWR_EN_Pin1_0, STD_HIGH);
 
 	/* Can1_Txd*/
 	Port_SetToDioMode(Port_PortGroup00_PortPin00);

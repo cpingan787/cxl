@@ -804,8 +804,12 @@ static uint8_t BackupBat_Aging_ReqDoneFlag = 0;
 void BackupBatAging_DtcInit(void)                                             
 {
     BackupBat_Aging_Flag = FALSE;
-    BackupBat_Aging_WakeupFlag = 0;                                             // 初始化时清除已上报标志
-    BackupBat_Aging_ReqDoneFlag = 0;
+    // BackupBat_Aging_WakeupFlag = 0;                                             // 初始化时清除已上报标志
+    // BackupBat_Aging_ReqDoneFlag = 0;
+    if (BackupBat_Aging_WakeupFlag == 0)
+    {
+        BackupBat_Aging_ReqDoneFlag = 0;
+    }
 }
 
 void BackupBatAging_RequestCheckOnWakeup(void)                                        // 唤醒时执行一次老化检测
@@ -817,13 +821,13 @@ void BackupBatAging_RequestCheckOnWakeup(void)                                  
 void BackupBatAging_DetectProcess(void)
 {
     uint8_t ageResult = E_BatteryAgeResult_Invalid;
-    //TBOX_PRINT("BackupBatAging_DetectProcess enter\r\n");
+    // TBOX_PRINT("BackupBatAging_DetectProcess enter\r\n");
 
-     if((BackupBat_Aging_WakeupFlag == 1) &&                                
+     if((BackupBat_Aging_WakeupFlag == 1) &&                               
        (BackupBat_Aging_ReqDoneFlag == 0) &&                                 
        (Dtc_IsCommonMonitorEnable()))                                 
     {
-        //TBOX_PRINT("BackupBatAging_DetectProcess, request age check\r\n");
+        // TBOX_PRINT("BackupBatAging_DetectProcess, request age check\r\n");
         BatterySdkRequestAgeCheck();                                          // 真正发起一次备用电池老化检测请求
         BackupBat_Aging_ReqDoneFlag = 1;                                     // 标记本次唤醒已经发起过检测
     }
@@ -1345,7 +1349,7 @@ void TaskPowerManage(uint32_t cycleTime)
 {   
     static uint8_t timeCount;
 
-    //PowerManageSdkCycleProcess(5);
+    PowerManageSdkCycleProcess(5);
     // NetManageAutosarCycleProcess();             
     // WatchDogCycleProcess();
 

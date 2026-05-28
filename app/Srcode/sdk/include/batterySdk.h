@@ -21,8 +21,10 @@ typedef enum
 }BatteryType_E;
 
 #define BATTERY_CHECK_TIMEOUT    2000          // 检测超时阈值（20秒）
-#define DISCHARGE_DELAY_500MS    50            // 放电500ms计时（500ms）
-#define DISCHARGE_SAMPLE_START_400MS  40      // 放电400ms计时（400ms）
+#define DISCHARGE_DELAY_600MS    60            // 放电600ms计时（600ms）
+#define DISCHARGE_SAMPLE_START_500MS  50       // 放电500ms计时（500ms）
+#define BATTERY_AGE_CHECK_MIN_OCV_MV    2400   //空载电压大于2.4V后才允许进行检测
+#define BATTERY_AGE_RESISTANCE_OFFSET   40     //电池老化内阻偏移值
 
 typedef enum
 {

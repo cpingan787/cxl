@@ -444,7 +444,7 @@ CONST(Icu_ChannelConfigType, ICU_CONST) Icu_GstChannelConfig[] =
     (uint8)ICU_MODE_SIGNAL_EDGE_DETECT,
 
     /* uiIcuDefaultStartEdge */
-    (uint8)ICU_FALLING_EDGE,
+    (uint8)ICU_RISING_EDGE,
 
     /* uiIcuChannelType */
     ICU_HW_EXT_INTP,

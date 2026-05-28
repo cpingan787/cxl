@@ -1,12 +1,23 @@
+/*************************************************
+ Copyright © 2026 SiRun (AnHui) . All rights reserved.
+ File Name: mpuHal.h
+ Author: 
+ Created Time: 
+ Description:
+ Others:
+*************************************************/
 #ifndef _MPU_HAL_IF_H
 #define _MPU_HAL_IF_H
 
+/****************************** include ***************************************/
 #include <stdint.h>
 #include "r_cg_macrodriver.h"
 
-#define MPU_HAL_STATUS_OK       0
+/****************************** Macro Definitions ******************************/
+#define MPU_HAL_STATUS_OK         0
 #define MPU_HAL_STATUS_ERR       -1
 
+/****************************** Type Definitions ******************************/
 typedef struct
 {
   uint8_t aid;
@@ -29,7 +40,7 @@ typedef struct
 
 
 
-
+/****************************** Function Declarations *************************/
 
 void MpuHalInit(void);
 void MpuHalCycleProcess(uint32_t cycleTime);
@@ -54,5 +65,19 @@ void UartProtocalProcess(uint8_t *pData,uint16_t dataLength,uint8_t IsrFlag);
 void MpuHalUartPrintErrState(uint16_t cycleTime);
 void MpuHalUartInterruptCallback(uint8_t data);
 void MpuHalUartTimerCallback(void);
+
+/*************************************************
+  Function:       MpuHal_SpiDmaTxCallback
+  Description:    SPI DMA transmit callback function
+  Input:          None
+  Output:         None
+  Return:         None
+  Others:         Called when SPI DMA transmit operation is complete
+*************************************************/
+void MpuHal_SpiTxCallback(void);
+
+void MpuHal_SpiRevice(uint16_t data);
+
+int16_t Mpuspi_Transmit(const uint8_t *pTxData, uint16_t txLength);
 
 #endif

@@ -19,7 +19,8 @@ typedef enum                                          /*对外可查询的对象
     E_DTC_QUERY_GPS_ANT,
     E_DTC_QUERY_SIM_CARD,
     E_DTC_QUERY_SPEAKER, 
-    E_DTC_QUERY_LED,                                         
+    E_DTC_QUERY_LED,
+    E_DTC_QUERY_BACKUP_BAT,                                         
     E_DTC_QUERY_MAX                                              
 } DtcQueryObj_e;
 
@@ -30,7 +31,10 @@ typedef enum                                                      /*定义统一
     E_DTC_QUERY_STATE_SHORT_GND,                                  
     E_DTC_QUERY_STATE_SHORT_BAT, 
     E_DTC_QUERY_STATE_SIM_NOT_ONLINE, 
-     E_DTC_QUERY_STATE_SIM_INVALID,                                
+    E_DTC_QUERY_STATE_SIM_INVALID,
+    E_DTC_QUERY_STATE_BACKUP_BAT_HIGH,
+    E_DTC_QUERY_STATE_BACKUP_BAT_LOW,
+    E_DTC_QUERY_STATE_BACKUP_BAT_AGING,                            
     E_DTC_QUERY_STATE_UNKNOWN = 0xFF                             /*非法状态/查询失败*/
 } DtcQueryState_e; 
 

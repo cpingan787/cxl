@@ -85,6 +85,7 @@
 #include "taskEcallProcess.h"
 #include "remoteControlTask.h"
 #include "canPeriodTask.h"
+#include "r_cg_csig.h"
 
 /** DO NOT CHANGE THIS COMMENT!
 * <USERBLOCK User Includes>
@@ -267,7 +268,7 @@ TASK(OsTask_5ms)
     {
         uint32_t rtcTime=0;
         TimerHalGetRtcTime(&rtcTime);
-        // TBOX_PRINT("rtcTime: %d\r\n", rtcTime);
+        TBOX_PRINT("rtcTime: %d\r\n", rtcTime);
         SYSTEM_LOG_SEND(LOG_LEVEL_INFO, LOG_EVT_RTC_TIME, "rtcTime: %d\r\n", rtcTime);
     }
     MpuHalTxTask();
@@ -1028,6 +1029,57 @@ ISR(ISR_RIIC0TEI_IRQ_Handler)
     */
     /* custom code.... */
     r_riic0_transmitend_interrupt();
+    /** DO NOT CHANGE THIS COMMENT!
+    * </USERBLOCK>
+    */
+}
+#define OS_STOP_SEC_CODE
+#include "Os_MemMap.h"
+
+#define OS_START_SEC_CODE
+#include "Os_MemMap.h"
+ISR(ISR_SPI1S_IRQ_Handler)
+{
+    /* please insert your code here ... */
+    /** DO NOT CHANGE THIS COMMENT!
+    * <USERBLOCK RIIC0TEI_IRQ>
+    */
+    /* custom code.... */
+    r_csig1_interrupt_send();
+    /** DO NOT CHANGE THIS COMMENT!
+    * </USERBLOCK>
+    */
+}
+#define OS_STOP_SEC_CODE
+#include "Os_MemMap.h"
+
+#define OS_START_SEC_CODE
+#include "Os_MemMap.h"
+ISR(ISR_SPI1R_IRQ_Handler)
+{
+    /* please insert your code here ... */
+    /** DO NOT CHANGE THIS COMMENT!
+    * <USERBLOCK RIIC0TEI_IRQ>
+    */
+    /* custom code.... */
+    r_csig1_interrupt_receive();
+    /** DO NOT CHANGE THIS COMMENT!
+    * </USERBLOCK>
+    */
+}
+#define OS_STOP_SEC_CODE
+#include "Os_MemMap.h"
+
+#define OS_START_SEC_CODE
+#include "Os_MemMap.h"
+ISR(ISR_SPI1E_IRQ_Handler)
+{
+    /* please insert your code here ... */
+    /** DO NOT CHANGE THIS COMMENT!
+    * <USERBLOCK RIIC0TEI_IRQ>
+    */
+    /* custom code.... */
+    r_csig1_interrupt_error();
     /** DO NOT CHANGE THIS COMMENT!
     * </USERBLOCK>
     */

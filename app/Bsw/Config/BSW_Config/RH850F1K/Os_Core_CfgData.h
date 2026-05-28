@@ -73,6 +73,9 @@ extern void Os_ISR_RIIC0TI_IRQ_Handler(void);
 extern void Os_ISR_RIIC0EE_IRQ_Handler(void);
 extern void Os_ISR_RIIC0RI_IRQ_Handler(void);
 extern void Os_ISR_RIIC0TEI_IRQ_Handler(void);
+extern void Os_ISR_SPI1S_IRQ_Handler(void);
+extern void Os_ISR_SPI1R_IRQ_Handler(void);
+extern void Os_ISR_SPI1E_IRQ_Handler(void);
 extern const Os_IntInstallType Os_IntInstall[CFG_ISR_MAX];
 
 #endif /* OS_CORECFG_H */

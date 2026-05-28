@@ -184,7 +184,7 @@ int16_t AlarmSdkInit(uint16_t cycleTime)
     memset(core, 0, sizeof(EcallCore_t));
     core->state = ECALL_CORE_IDLE;
     core->cfg.timeoutTriggerMs    = 120000;
-    core->cfg.timeoutAwaitStateMs = 30000;
+    core->cfg.timeoutAwaitStateMs = 90000;
     core->cfg.timeoutGlobalMs     = (90*60*1000);// 90分钟
     core->cfg.retryIntervalMs     = ECALL_DEFAULT_RETRY_INTERVAL_MS;
     core->cfg.cooldownMs          = ECALL_DEFAULT_COOLDOWN_MS;
@@ -261,7 +261,18 @@ static void EcallCore_ProcessEvent(EcallCore_t *core, const EcallEvent_t *evt)
         // 因为 MPU 重启后会发送 NO_ECALL，此时应继续重发等待 MPU 恢复
         // 重发机制会持续发送直到超时(timeoutTriggerMs)或收到 ACK
         break;
-
+    case ECALL_CORE_MPU_ACTIVE:
+        // MPU主动触发后，等待ACK确认（ACK先于状态更新到达，时序固定）
+        if (evt->event == ECALL_EVT_MPU_ACK_SUCCESS) {
+            // 收到成功ACK，进入等待状态阶段（与MCU触发流程一致）
+            EcallCore_TransitionTo(core, ECALL_CORE_AWAIT_STATE);
+        }
+        else if (evt->event == ECALL_EVT_MPU_ACK_FAIL ||
+                   evt->event == ECALL_EVT_TIMEOUT) {
+            // ACK失败或90秒超时，进入失败状态
+            EcallCore_TransitionTo(core, ECALL_CORE_FAILED);
+        }
+        break;
     case ECALL_CORE_AWAIT_STATE:
         if (evt->event == ECALL_EVT_MPU_STATE_UPDATE) {
             if (evt->param == E_ECALL_STATE_NO_ECALL || IsEndState(evt->param)) {
@@ -321,6 +332,12 @@ static void EcallCore_CheckTimeout(EcallCore_t *core)
         break;
     case ECALL_CORE_AWAIT_STATE:
         if (elapsed >= core->cfg.timeoutAwaitStateMs) {
+            EcallEvent_t evt = { .event = ECALL_EVT_TIMEOUT };
+            EcallCore_ProcessEvent(core, &evt);
+        }
+        break;
+    case ECALL_CORE_MPU_ACTIVE:
+        if (osElapsedTimeGet(now, core->globalStartTick) >= core->cfg.timeoutAwaitStateMs) {
             EcallEvent_t evt = { .event = ECALL_EVT_TIMEOUT };
             EcallCore_ProcessEvent(core, &evt);
         }
@@ -415,6 +432,21 @@ static void EcallCore_ParseMpuMsg(EcallCore_t *core, MpuHalDataPack_t *pack)
         {
             if (pack->pDataBuffer[0] == 1) 
             {   // ACK
+                // 先检查MPU主动触发标识：pDataBuffer[1]==1(SUCCESS)且pDataBuffer[2]==0x03
+                // 需要确保数据长度足够（至少3字节）
+                if (pack->pDataBuffer[1] == ECALL_TRIGGER_RESULT_SUCC &&
+                    pack->dataLength >= 3 &&
+                    pack->pDataBuffer[2] == ECALL_TRIGGER_SOURCE_MPU) {
+                    // MPU主动触发ECALL，先进入MPU_ACTIVE状态
+                    if (core->state == ECALL_CORE_IDLE) {
+                        core->globalStartTick = xTaskGetTickCount();
+                        core->triggerType = 0;  // 标记为MPU触发
+                        EcallCore_TransitionTo(core, ECALL_CORE_MPU_ACTIVE);
+                        TBOX_PRINT("MPU active ECALL detected, enter MPU_ACTIVE state\r\n");
+                    }
+                }
+                
+                // 然后发送ACK事件，让状态机处理（MPU_ACTIVE状态下会跳转到AWAIT_STATE）
                 EcallEvent_t evt;
                 evt.event = (pack->pDataBuffer[1] == ECALL_TRIGGER_RESULT_SUCC) ?
                              ECALL_EVT_MPU_ACK_SUCCESS : ECALL_EVT_MPU_ACK_FAIL;

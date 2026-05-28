@@ -243,9 +243,9 @@ static uint8_t SosButtonPressAction( uint32_t presstime, uint8_t* saveBtnState, 
 
     if( presstime >= SOS_KEY_HARD_FAULT_TIME )
     {
-        if(btnState == 2)
+        if(btnState == 1)
         {
-            btnState = 3;
+            //btnState = 2;
             //ledState = GetSosLedState();
             // EcallHalSosLedControlSend( E_SOS_LED_STATE_WARNING );
             g_SosButtonClickMsg.hardFault = 1;
@@ -254,9 +254,9 @@ static uint8_t SosButtonPressAction( uint32_t presstime, uint8_t* saveBtnState, 
     }
     else if( presstime >= SOS_KEY_RESET_TBOX_TIME )
     {
-        if(btnState == 1)
+        if(btnState == 2)
         {
-            btnState = 2;
+            btnState = 3;
             //ledStateDebug = GetSosLedState();
             //EcallHalSosLedControlSend( ledState );
         }
@@ -977,7 +977,7 @@ uint8_t EcallHalGetStableAirbagStatus(void)
     }
     else
     {
-        current_status = 0xFF;
+        current_status = 0x00;
     }
 
     // 如果是有效状态且与上次返回值不同
