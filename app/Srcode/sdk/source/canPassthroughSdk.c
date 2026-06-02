@@ -12,12 +12,14 @@
 #include "mpuHal.h"
 #include "logHal.h"
 #include "Rte_Dcm_Type.h"
-
+#include "Com_Cfg.h"
 /****************************** Macro Definitions ******************************/
 #define PASSTHROUGH_AID 0x05
 #define PASSTHROUGH_MID 0x10
 #define PASSTHROUGH_SUB_MCU_TO_MPU 0x22
 #define PASSTHROUGH_SUB_MPU_TO_MCU 0x23
+#define PASSTHROUGH_SUB_RESTART_REQ 0x24
+#define PASSTHROUGH_SUB_RESTART_ACK 0x25
 #define PASSTHROUGH_RESEND_MS  200//重发间隔为200ms
 #define PASSTHROUGH_TIMEOUT_MS 500//最大超时时间为500ms
 
@@ -29,6 +31,8 @@ static uint8_t g_recvDataBuffer[550] = {0}; //底层缓存buffer
 static uint8_t g_canThroughDataBuffer[810] = {0} ; //透传数据缓冲区  发送/接收共用同一个缓冲区以节省RAM
 static MpuHalDataPack_t g_canThroughPack ;         //透传数据打包结构体
 
+static uint16_t g_passthroughRestartDelayCnt = 0; //重启计数器 
+static uint8_t  g_passthroughRestartPending = 0; //重启状态标志位
 
 /****************************** Public Function Implementations ******************************/
 /*************************************************
@@ -464,12 +468,72 @@ int16_t AF0C_PENDING(uint8_t *pUDSSID, const uint8_t *pUdsRequest, uint16_t reqL
     return ret;
 }
 
+/*************************************************
+  Function:       CanPassthrough_CheckRestartCmd
+  Description:    检查MPU 0x24 重启命令
+  Input:          None               
+  Output:         None                
+  Return:         void
+  Others:         None
+*************************************************/
+void CanPassthrough_CheckRestartCmd(void)
+{
+    MpuHalDataPack_t rxPack;
+    uint8_t          rxBuf[128];
+    MpuHalDataPack_t ackPack;
+    uint8_t          ackData;
+    uint8_t          iamReststs = 0x01;
+    Std_ReturnType   comRet;
 
+    if (g_mpuHandle < 0) 
+    {
+        return;
+    }
 
+    rxPack.pDataBuffer = rxBuf;
+    rxPack.dataBufferSize = sizeof(rxBuf);
+    rxPack.dataLength = 0;
 
+    if (MpuHalReceive(g_mpuHandle, &rxPack, 0) == 0 && rxPack.dataLength > 0)
+    {
+        if ((rxPack.aid == PASSTHROUGH_AID) && (rxPack.mid == PASSTHROUGH_MID))
+        {
+            if ((rxPack.subcommand & 0x7F) == PASSTHROUGH_SUB_RESTART_REQ) 
+            {
+                if ((rxPack.dataLength >= 1) && (rxPack.pDataBuffer[0] == 0x01)) 
+                {
+                    comRet = Com_SendSignal(IIAMReststs_IAM_CONNCANFD_Event_FrS04_CONTROLLER_0_IAM_Tx, &iamReststs);
 
+                    ackData = (comRet == E_OK) ? 0x01 : 0x02;
+                    
+                    ackPack.aid = PASSTHROUGH_AID;
+                    ackPack.mid = PASSTHROUGH_MID;
+                    ackPack.subcommand = PASSTHROUGH_SUB_RESTART_ACK;
+                    ackPack.dataLength = 1;
+                    ackPack.pDataBuffer = &ackData;
+                    
+                    MpuHalTransmit(g_mpuHandle, &ackPack);
 
+                    g_passthroughRestartDelayCnt = 200;
+                    g_passthroughRestartPending = 1;
+                }
+            }
+        }
+    }
 
+    if (g_passthroughRestartPending == 1) 
+    {
+        if (g_passthroughRestartDelayCnt > 0) 
+        {
+            g_passthroughRestartDelayCnt--;
+            if (g_passthroughRestartDelayCnt == 0) 
+            {
+                TBOX_PRINT("TBOX Reset\r\n");
+                Mcu_PerformReset();
+            }
+        }
+    }
+}
 
 
 

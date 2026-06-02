@@ -25,6 +25,8 @@
 **                                                                           **
 **************************************************************************** */
 #include "Dcm_Internal.h"
+#include "Com.h"
+#include "Com_Cfg.h"
 
 /****************************************************************
          UDS:WriteDataByIdentifier (2E hex) service
@@ -41,6 +43,43 @@ typedef struct
 
 #define DCM_START_SEC_CODE
 #include "Dcm_MemMap.h"
+
+#define DCM_APP_0X2E_VEHSPD_VALID_VALUE       ((uint8)0u)
+#define DCM_APP_0X2E_VEHSPD_THRESHOLD_RAW     ((uint16)256u)
+
+static FUNC(Std_ReturnType, DCM_CODE) Dcm_App_0x2E_PreconditionCheck(        
+    P2VAR(Dcm_NegativeResponseCodeType, AUTOMATIC, DCM_VAR) ErrorCode)       
+{                                                                             
+    Std_ReturnType comRet = E_NOT_OK;                                         
+    uint8 VehSpdAvgV = 0u;                                                    
+    uint16 VehSpdAvg = 0u;                                                    
+
+    (void)Com_ReceiveSignalGroup(                                             
+        IIBS_20ms_Group11_IBS_CHCANFD_20ms_FrP11_CONTROLLER_0_IAM_Rx);       
+
+    comRet = Com_ReceiveSignal(                                               
+        IIBS_20ms_Group11_IBS_CHCANFD_20ms_FrP11_CONTROLLER_0_IAM_Rx_IVehSpdAvgV_IIBS_20ms_Group11_IBS_CHCANFD_20ms_FrP11_CONTROLLER_0_IAM_Rx,
+        &VehSpdAvgV);                                                         
+
+    if ((comRet != E_OK) || (VehSpdAvgV != DCM_APP_0X2E_VEHSPD_VALID_VALUE)) 
+    {                                                                         
+        *ErrorCode = (Dcm_NegativeResponseCodeType)0x88u;                     
+        return E_NOT_OK;                                                      
+    }                                                                         
+
+    comRet = Com_ReceiveSignal(                                               
+        IIBS_20ms_Group11_IBS_CHCANFD_20ms_FrP11_CONTROLLER_0_IAM_Rx_IVehSpdAvg_IIBS_20ms_Group11_IBS_CHCANFD_20ms_FrP11_CONTROLLER_0_IAM_Rx,
+        &VehSpdAvg);                                                          
+
+    if ((comRet != E_OK) || (VehSpdAvg >= DCM_APP_0X2E_VEHSPD_THRESHOLD_RAW))
+    {                                                                         
+        *ErrorCode = (Dcm_NegativeResponseCodeType)0x88u;                     
+        return E_NOT_OK;                                                      
+    }                                                                         
+
+    return E_OK;                                                              
+}                
+
 #if (STD_ON == DCM_DSP_DID_FUNC_ENABLED)
 /**********************************************************************/
 /*
@@ -509,6 +548,11 @@ static FUNC(Std_ReturnType, DCM_CODE) Dcm_Uds0x2EServiceConditionCheck(
         }
     }
 #endif /* STD_ON == DCM_SESSION_FUNC_ENABLED */
+
+if (E_OK == ret)
+{
+    ret = Dcm_App_0x2E_PreconditionCheck(ErrorCode);
+}
     return ret;
 }
 

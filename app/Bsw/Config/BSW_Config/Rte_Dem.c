@@ -212,7 +212,7 @@ Std_ReturnType  Rte_ReadData_E010( uint8* Buffer )
 
     if ((retSpeed == E_OK) &&                                                        
         (retValid == E_OK) &&                                                        
-        (vehicleSpeedValid != 0))                                                   /* 判断该车速当前是否有效，非 0 表示有效 */
+        (vehicleSpeedValid == 0))                                                   /* 判断该车速当前是否有效，非 0 表示有效 */
     {                                                                                
         s_lastValidVehicleSpeed = vehicleSpeed;                                      
         s_hasLastValidVehicleSpeed = TRUE;                                           

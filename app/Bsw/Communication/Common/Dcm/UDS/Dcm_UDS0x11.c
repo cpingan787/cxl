@@ -25,6 +25,8 @@
 **                                                                           **
 **************************************************************************** */
 #include "Dcm_Internal.h"
+#include "Com.h"
+#include "Com_Cfg.h"
 
 #if (STD_ON == DCM_UDS_SERVICE0X11_ENABLED)
 /****************************************************************
@@ -32,6 +34,70 @@
  ***************************************************************/
 #define DCM_START_SEC_CODE
 #include "Dcm_MemMap.h"
+
+#define DCM_APP_0X11_EPTRDYV_VALID_VALUE    ((uint8)0u)   //0:有效
+#define DCM_APP_0X11_EPTRDY_NOT_READY_VALUE ((uint8)0u)   //0:未就绪
+#define DCM_APP_0X11_VEHSPD_VALID_VALUE     ((uint8)0u)   //0:有效
+#define DCM_APP_0X11_VEHSPD_THRESHOLD_RAW   ((uint16)256u)   //车速小于4km/h，4 / 0.015625 = 256，物理车速4对应256
+
+static FUNC(Std_ReturnType, DCM_CODE) Dcm_App_0x11_PreconditionCheck(        
+    P2VAR(Dcm_NegativeResponseCodeType, AUTOMATIC, DCM_VAR) ErrorCode)       
+{                                                                             
+    Std_ReturnType comRet = E_NOT_OK;                                         
+    uint8 EPTRdyV = 0u;                                                       
+    uint8 EPTRdy = 0u;                                                        
+    uint8 VehSpdAvgV = 0u;                                                    
+    uint16 VehSpdAvg = 0u;                                                    
+
+    (void)Com_ReceiveSignalGroup(                                             
+        IRZCU_20ms_Group06_RZCU_PTCANFD_20ms_FrP06_CONTROLLER_0_IAM_Rx);      
+
+    comRet = Com_ReceiveSignal(                                               
+        IRZCU_20ms_Group06_RZCU_PTCANFD_20ms_FrP06_CONTROLLER_0_IAM_Rx_IEPTRdyV_IRZCU_20ms_Group06_RZCU_PTCANFD_20ms_FrP06_CONTROLLER_0_IAM_Rx, 
+        &EPTRdyV);                                                            
+
+    if ((comRet != E_OK) || (EPTRdyV != DCM_APP_0X11_EPTRDYV_VALID_VALUE))   
+    {                                                                         
+        *ErrorCode = (Dcm_NegativeResponseCodeType)0x83u;                     
+        return E_NOT_OK;                                                      
+    }                                                                         
+
+    comRet = Com_ReceiveSignal(                                               
+        IRZCU_20ms_Group06_RZCU_PTCANFD_20ms_FrP06_CONTROLLER_0_IAM_Rx_IEPTRdy_IRZCU_20ms_Group06_RZCU_PTCANFD_20ms_FrP06_CONTROLLER_0_IAM_Rx,
+        &EPTRdy);                                                             
+
+    if ((comRet != E_OK) || (EPTRdy != DCM_APP_0X11_EPTRDY_NOT_READY_VALUE)) 
+    {                                                                         
+        *ErrorCode = (Dcm_NegativeResponseCodeType)0x83u;                     
+        return E_NOT_OK;                                                      
+    }                                                                         
+
+    (void)Com_ReceiveSignalGroup(                                             
+        IIBS_20ms_Group11_IBS_CHCANFD_20ms_FrP11_CONTROLLER_0_IAM_Rx);       
+
+    comRet = Com_ReceiveSignal(                                               
+        IIBS_20ms_Group11_IBS_CHCANFD_20ms_FrP11_CONTROLLER_0_IAM_Rx_IVehSpdAvgV_IIBS_20ms_Group11_IBS_CHCANFD_20ms_FrP11_CONTROLLER_0_IAM_Rx, 
+        &VehSpdAvgV);                                                         
+
+    if ((comRet != E_OK) || (VehSpdAvgV != DCM_APP_0X11_VEHSPD_VALID_VALUE)) 
+    {                                                                         
+        *ErrorCode = (Dcm_NegativeResponseCodeType)0x88u;                     
+        return E_NOT_OK;                                                      
+    }                                                                         
+
+    comRet = Com_ReceiveSignal(                                               
+        IIBS_20ms_Group11_IBS_CHCANFD_20ms_FrP11_CONTROLLER_0_IAM_Rx_IVehSpdAvg_IIBS_20ms_Group11_IBS_CHCANFD_20ms_FrP11_CONTROLLER_0_IAM_Rx,
+        &VehSpdAvg);                                                          
+
+    if ((comRet != E_OK) || (VehSpdAvg >= DCM_APP_0X11_VEHSPD_THRESHOLD_RAW))
+    {                                                                         
+        *ErrorCode = (Dcm_NegativeResponseCodeType)0x88u;                     
+        return E_NOT_OK;                                                      
+    }                                                                         
+
+    return E_OK;                                                              
+}                           
+
 static FUNC(Std_ReturnType, DCM_CODE)
     Dcm_UDS0x11_ConditionCheck(uint8 ProtocolCtrlId, P2VAR(Dcm_NegativeResponseCodeType, AUTOMATIC, DCM_VAR) ErrorCode)
 {
@@ -72,6 +138,11 @@ static FUNC(Std_ReturnType, DCM_CODE)
         /*the length of massage is not correct,send NRC 0x13*/
         *ErrorCode = DCM_E_INCORRECTMESSAGELENGTHORINVALIDFORMAT;
         ret = E_NOT_OK;
+    }
+
+    if (E_OK == ret)
+    {
+       ret = Dcm_App_0x11_PreconditionCheck(ErrorCode); 
     }
     return ret;
 }

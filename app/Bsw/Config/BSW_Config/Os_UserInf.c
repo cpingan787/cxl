@@ -315,6 +315,7 @@ TASK(OsTask_10ms)
 
     CanTSyn_MainFunction();
     StbM_MainFunction();
+    CanPassthrough_CheckRestartCmd();
 #if(CanTSyn_SlaveTestMODE == STD_ON)
     CanTSyn_SlaveTest();
 #endif

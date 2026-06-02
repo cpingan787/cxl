@@ -107,4 +107,13 @@ int8_t AF0C_SendRequest(uint8_t *pUDSSID, const uint8_t *pUdsRequest, uint16_t r
 *************************************************/
 int16_t AF0C_PENDING(uint8_t *pUDSSID, const uint8_t *pUdsRequest, uint16_t reqLength, uint8_t *pUDSRespData, uint16_t *pUDSRespDataLen);
 
+/*************************************************
+  Function:       CanPassthrough_CheckRestartCmd
+  Description:    检查MPU 0x24 重启命令
+  Input:          None               
+  Output:         None                
+  Return:         void
+  Others:         None
+*************************************************/
+void CanPassthrough_CheckRestartCmd(void);
 #endif
