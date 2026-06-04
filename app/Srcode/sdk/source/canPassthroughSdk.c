@@ -31,8 +31,8 @@ static uint8_t g_recvDataBuffer[550] = {0}; //底层缓存buffer
 static uint8_t g_canThroughDataBuffer[810] = {0} ; //透传数据缓冲区  发送/接收共用同一个缓冲区以节省RAM
 static MpuHalDataPack_t g_canThroughPack ;         //透传数据打包结构体
 
-static uint16_t g_passthroughRestartDelayCnt = 0; //重启计数器 
-static uint8_t  g_passthroughRestartPending = 0; //重启状态标志位
+static uint8_t g_passthroughRestartState = 0; //重启标志位
+static uint16_t g_passthroughRestartDelayCnt = 0;//重启延时计数器
 
 /****************************** Public Function Implementations ******************************/
 /*************************************************
@@ -57,12 +57,14 @@ void CanPassthroughWithMpuInit(void)
     if(ret != 0)
     {
         TBOX_PRINT("Set Rx Filter failed, ret:%d\r\n",ret);
+        DIAG_LOG_SEND(LOG_LEVEL_ERROR, LOG_EVT_INIT_START, "Set Rx Filter failed, ret:%d", ret);
         return;
     }
     ret = MpuHalSetRxBuffer(g_mpuHandle, g_recvDataBuffer, sizeof(g_recvDataBuffer));
     if(ret != 0)
     {
         TBOX_PRINT("Set Rx Buffer failed, ret:%d\r\n",ret);
+        DIAG_LOG_SEND(LOG_LEVEL_ERROR, LOG_EVT_INIT_START, "Set Rx Buffer failed, ret:%d", ret);
         return;
     }
 
@@ -103,10 +105,12 @@ int8_t CanPassthrough_SendRequest(const uint8_t *pUdsRequest, uint16_t reqLength
     if(ret == 0)
     {
         TBOX_PRINT("Send Passthrough Request success: %02X %02X %02X\r\n", g_canThroughDataBuffer[0], g_canThroughDataBuffer[1], g_canThroughDataBuffer[2]);
+        DIAG_LOG_SEND(LOG_LEVEL_INFO, LOG_EVT_TX_MSG, "Send Passthrough Request success: %02X %02X %02X", g_canThroughDataBuffer[0], g_canThroughDataBuffer[1], g_canThroughDataBuffer[2]);
     }
     else
     {
         TBOX_PRINT("Send Passthrough Request failed, ret:%d\r\n",ret);
+        DIAG_LOG_SEND(LOG_LEVEL_ERROR, LOG_EVT_TX_MSG, "Send Passthrough Request failed, ret:%d", ret);
     }
     
     return 0;
@@ -184,6 +188,7 @@ int16_t CanPassthroughRead_PENDING(uint8_t *pUDSReqData, uint16_t udsReqDataLen,
     if(respRet == 0 && udsRespDataLen > 0)//接收到响应
     {
         TBOX_PRINT("UDS22RespSuc\n");
+        DIAG_LOG_SEND(LOG_LEVEL_INFO, LOG_EVT_RX_MSG, "UDS22RespSuc");
         if(pUDSRespData[0] != 0x7F)
         {
             if(udsRespDataLen >= udsReqDataLen)
@@ -214,6 +219,7 @@ int16_t CanPassthroughRead_PENDING(uint8_t *pUDSReqData, uint16_t udsReqDataLen,
             uds22Cnt = 0;
             ret = -1;//timeout
             TBOX_PRINT("UDS22RespTimeout\n");
+            DIAG_LOG_SEND(LOG_LEVEL_ERROR, LOG_EVT_RX_MSG, "UDS22RespTimeout");
         }
     }   
 
@@ -251,6 +257,7 @@ int16_t CanPassthroughWrite_PENDING(uint8_t *pUDSReqData, uint16_t udsReqDataLen
     if(respRet == 0 && udsRespDataLen > 0)//接收到响应
     {
         TBOX_PRINT("UDS2ERespSuc\n");
+        DIAG_LOG_SEND(LOG_LEVEL_INFO, LOG_EVT_RX_MSG, "UDS2ERespSuc");
         if(udsRespData[0] != 0x7F)
         {
             /* 正响应 写入成功*/
@@ -277,6 +284,7 @@ int16_t CanPassthroughWrite_PENDING(uint8_t *pUDSReqData, uint16_t udsReqDataLen
             uds2ECnt = 0;
             ret = -1;//timeout
             TBOX_PRINT("UDS2ERespTimeout\n");
+            DIAG_LOG_SEND(LOG_LEVEL_ERROR, LOG_EVT_RX_MSG, "UDS2ERespTimeout");
         }
     }   
     return ret;
@@ -313,6 +321,7 @@ int16_t CanPassthroughRoutine_PENDING(uint8_t *pUDSReqData, uint16_t UDSReqDataL
     if((respRet == 0) && (respDataLen > 0))//接收到响应
     {
         TBOX_PRINT("UDS31RespSuc\n");
+        DIAG_LOG_SEND(LOG_LEVEL_INFO, LOG_EVT_RX_MSG, "UDS31RespSuc");
         if(pUDSRespData[0] != 0x7F)
         {
             /* 正响应 写入成功*/
@@ -344,124 +353,7 @@ int16_t CanPassthroughRoutine_PENDING(uint8_t *pUDSReqData, uint16_t UDSReqDataL
             uds31Cnt = 0;
             ret = -1;//timeout
             TBOX_PRINT("UDS31RespTimeout\n");
-        }
-    }   
-
-    return ret;
-}
-
-//31 01 AF0C 需附带800字节请求数据，单独处理
-/*************************************************
-  Function:       CanPassthrough_SendRequest
-  Description:    发送31 01 AF0C 透传请求
-  Input:          
-  Output:         pUDSSID：UDS请求指针（UDS请求）
-                  pUdsRequest：UDS请求数据指针（请求数据）
-                  reqLength：请求数据长度（请求数据长度）
-  Return:         0:执行成功
-                  -1：执行失败
-  Others:         需附带800byte请求数据，直接传递到g_canThroughDataBuffer，不再提前组包
-*************************************************/
-int8_t AF0C_SendRequest(uint8_t *pUDSSID, const uint8_t *pUdsRequest, uint16_t reqLength)
-{
-    if (pUDSSID == NULL) 
-    {
-        return -1;
-    }
-
-    // 清空接收缓冲区
-    while (MpuHalReceive(g_mpuHandle, &g_canThroughPack, 0) == 0) 
-    {
-    }
-
-    // 组包发送
-    g_canThroughPack.aid = PASSTHROUGH_AID;
-    g_canThroughPack.mid = PASSTHROUGH_MID;
-    g_canThroughPack.subcommand = PASSTHROUGH_SUB_MCU_TO_MPU;
-    memcpy(g_canThroughDataBuffer, pUDSSID, 4);
-    if(pUdsRequest != NULL && reqLength != 0)
-    {
-        memcpy(g_canThroughDataBuffer + 4, pUdsRequest, reqLength);
-    }
-
-    g_canThroughPack.pDataBuffer = g_canThroughDataBuffer;
-    g_canThroughPack.dataLength = reqLength + 4;
-
-    int16_t ret = MpuHalTransmit(g_mpuHandle, &g_canThroughPack);
-    if(ret == 0)
-    {
-        TBOX_PRINT("Send Passthrough Request success: %02X %02X %02X %02X\r\n", g_canThroughDataBuffer[0], g_canThroughDataBuffer[1], g_canThroughDataBuffer[2], g_canThroughDataBuffer[3]);
-    }
-    else
-    {
-        TBOX_PRINT("Send Passthrough Request failed, ret:%d\r\n",ret);
-    }
-    
-    return 0;
-}
-
-/*************************************************
-  Function:       AF0C_PENDING
-  Description:    接收31 01 AF0C 透传响应
-  Input:          pUDSSID：UDS请求指针（UDS请求，仅用于重发请求）
-                  pUdsRequest：UDS请求数据指针（请求数据，仅用于重发请求）
-                  reqLength：请求数据长度（请求数据长度，仅用于重发请求）
-  Output:         pUDSRespData：UDS响应数据指针（响应数据，不包含UDS请求）
-                  pUDSRespDataLen：UDS响应数据长度（响应数据长度，不包含UDS请求）
-  Return:         0:执行成功
-                  1:等待MPU响应
-                  -1：超时未收到MPU响应 或 传参错误
-                  其他：NRC错误 直接传递
-  Others:         超时时间为50ms，期间最多重发两次
-*************************************************/
-int16_t AF0C_PENDING(uint8_t *pUDSSID, const uint8_t *pUdsRequest, uint16_t reqLength, uint8_t *pUDSRespData, uint16_t *pUDSRespDataLen)
-{
-    int16_t ret = 0;
-    int8_t respRet = 0;
-    static uint8_t uds31Cnt = 0;
-    uint16_t respDataLen = 0;
-
-    if (pUDSSID == NULL || pUDSRespData == NULL ||pUDSRespDataLen == NULL) 
-    {
-        return -1;
-    }
-
-    respRet = CanPassthrough_ReceiveResponse(pUDSRespData, &respDataLen);
-    uds31Cnt++;
-
-    if((respRet == 0) && (respDataLen > 0))//接收到响应
-    {
-        TBOX_PRINT("UDS31RespSuc\n");
-        if(pUDSRespData[0] != 0x7F)
-        {
-            /* 正响应 写入成功*/
-            if(respDataLen >= 4)
-            {
-                memmove(pUDSRespData,pUDSRespData + 4,(respDataLen - 4));
-                *pUDSRespDataLen = respDataLen - 4;
-            }
-            ret = 0;
-            uds31Cnt = 0;
-        }
-        else
-        {
-            /* 负响应 回复NRC*/
-            ret = pUDSRespData[2];
-            uds31Cnt = 0;
-        }
-    }
-    else
-    {
-        ret = 1;//DCM_E_PENDING
-        if((uds31Cnt % (PASSTHROUGH_RESEND_MS / 10)) == 0)
-        {
-            AF0C_SendRequest(pUDSSID, pUdsRequest, reqLength);
-        }
-
-        if(uds31Cnt >= (PASSTHROUGH_TIMEOUT_MS / 10))
-        {
-            uds31Cnt = 0;
-            ret = -1;//timeout
+            DIAG_LOG_SEND(LOG_LEVEL_ERROR, LOG_EVT_RX_MSG, "UDS31RespTimeout");
         }
     }   
 
@@ -503,6 +395,7 @@ void CanPassthrough_CheckRestartCmd(void)
                 if ((rxPack.dataLength >= 1) && (rxPack.pDataBuffer[0] == 0x01)) 
                 {
                     comRet = Com_SendSignal(IIAMReststs_IAM_CONNCANFD_Event_FrS04_CONTROLLER_0_IAM_Tx, &iamReststs);
+                    TBOX_PRINT("comRet: %d\r\n", comRet);
 
                     ackData = (comRet == E_OK) ? 0x01 : 0x02;
                     
@@ -513,28 +406,38 @@ void CanPassthrough_CheckRestartCmd(void)
                     ackPack.pDataBuffer = &ackData;
                     
                     MpuHalTransmit(g_mpuHandle, &ackPack);
-
+                    
                     g_passthroughRestartDelayCnt = 200;
-                    g_passthroughRestartPending = 1;
+                    g_passthroughRestartState = 1; 
                 }
             }
         }
     }
 
-    if (g_passthroughRestartPending == 1) 
+    if (g_passthroughRestartState > 0) 
     {
         if (g_passthroughRestartDelayCnt > 0) 
         {
             g_passthroughRestartDelayCnt--;
             if (g_passthroughRestartDelayCnt == 0) 
             {
-                TBOX_PRINT("TBOX Reset\r\n");
-                Mcu_PerformReset();
+                if (g_passthroughRestartState == 1)
+                {
+                    MpuHalPowerOff();
+                    TBOX_PRINT("MPU Power Off\r\n");
+
+                    g_passthroughRestartDelayCnt = 200;
+                    g_passthroughRestartState = 2; 
+                }
+                else if (g_passthroughRestartState == 2)
+                {
+                    TBOX_PRINT("TBOX Reset\r\n");
+                    
+                    Mcu_PerformReset(); 
+                }
             }
         }
     }
 }
-
-
 
 

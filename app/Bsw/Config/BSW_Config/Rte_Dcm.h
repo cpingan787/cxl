@@ -484,6 +484,16 @@ extern  Std_ReturnType  Rte_Call_RoutineServices_Routine_0xAF0B_RequestResults(
     P2VAR(Dcm_NegativeResponseCodeType,AUTOMATIC,DCM_VAR)ErrorCode);
 /* PRQA S 3432-- */     /* MISRA Rule 20.7 */
 
+/* 31 03 12 18 03- Request Routine Results eol音频回环 */
+extern Std_ReturnType Rte_Call_RoutineServices_Routine_0x1218_RequestResults(
+    /* PRQA S 3432++ */ /* MISRA Rule 20.7 */
+    P2CONST(uint8,AUTOMATIC,DCM_VAR)InBuffer, 
+    Dcm_OpStatusType OpStatus,
+    P2VAR(uint8,AUTOMATIC,DCM_VAR)OutBuffer,
+    P2VAR(uint16,AUTOMATIC,DCM_VAR) currentDataLength,
+    P2VAR(Dcm_NegativeResponseCodeType,AUTOMATIC,DCM_VAR)ErrorCode);
+    /* PRQA S 3432-- */ /* MISRA Rule 20.7 */
+
 extern  Std_ReturnType  Rte_Call_RoutineServices_Routine_0xAF08_Start(
     /* PRQA S 3432++ */ /* MISRA Rule 20.7 */
     P2CONST(uint8,AUTOMATIC,DCM_VAR)InBuffer,
@@ -588,6 +598,16 @@ extern  Std_ReturnType  Rte_Call_RoutineServices_Routine_0xAF0B_Start(
     P2VAR(uint16,AUTOMATIC,DCM_VAR) currentDataLength,
     P2VAR(Dcm_NegativeResponseCodeType,AUTOMATIC,DCM_VAR)ErrorCode);
 /* PRQA S 3432-- */     /* MISRA Rule 20.7 */
+
+/* 31 01 12 18 - Start Routine eol音频回环*/
+extern Std_ReturnType Rte_Call_RoutineServices_Routine_0x1218_Start(
+    /* PRQA S 3432++ */ /* MISRA Rule 20.7 */
+    P2CONST(uint8,AUTOMATIC,DCM_VAR)InBuffer,
+    Dcm_OpStatusType OpStatus,
+    P2VAR(uint8,AUTOMATIC,DCM_VAR)OutBuffer,
+    P2VAR(uint16,AUTOMATIC,DCM_VAR) currentDataLength,
+    P2VAR(Dcm_NegativeResponseCodeType,AUTOMATIC,DCM_VAR)ErrorCode);
+    /* PRQA S 3432-- */ /* MISRA Rule 20.7 */
 
 extern  Std_ReturnType  Rte_Call_RoutineServices_Routine_0xAF08_Stop(
     /* PRQA S 3432++ */ /* MISRA Rule 20.7 */

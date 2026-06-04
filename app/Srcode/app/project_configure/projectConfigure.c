@@ -13,7 +13,7 @@
 
 /****************************** Macro Definitions ******************************/
 #define MPU_SYSN_VERSION "000000000"
-#define MCU_SYSN_VERSION "004" // mcu内部版本号
+#define MCU_SYSN_VERSION "005" // mcu内部版本号
 #define MCU_MPU_ALL_VERSION MPU_SYSN_VERSION MCU_SYSN_VERSION
 #define SOFTWARE_NUMBERSIZE       4
 /****************************** Type Definitions ******************************/

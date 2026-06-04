@@ -367,17 +367,17 @@ void StateSyncSdkCycleProcess(MpuHalDataPack_t *msgData)
         }
         else if (msgData->mid == E_STATE_SYNC_NET_INFO_MID)
         {
-            if (msgData->dataLength == 5)
+            if (msgData->dataLength == 6)
             {
                 g_cpuNetInfo.netInfo.creg = msgData->pDataBuffer[0];
                 g_cpuNetInfo.netInfo.csq = msgData->pDataBuffer[1];
                 g_cpuNetInfo.netInfo.netType = msgData->pDataBuffer[2];
                 g_cpuNetInfo.netInfo.apnCounter = msgData->pDataBuffer[3];
                 g_cpuNetInfo.netInfo.apnStatus = msgData->pDataBuffer[4];
+                g_cpuNetInfo.netInfo.antennaStatus = msgData->pDataBuffer[5];
 
                 g_cpuNetInfo.timeCount = 0;
                 g_cpuNetInfo.validity = 1;
-                TBOX_PRINT("netInfo: %d, %d, %d, %d, %d\r\n", g_cpuNetInfo.netInfo.creg, g_cpuNetInfo.netInfo.csq, g_cpuNetInfo.netInfo.netType, g_cpuNetInfo.netInfo.apnCounter, g_cpuNetInfo.netInfo.apnStatus);
             }
         }
         else if (msgData->mid == E_STATE_SYNC_HAL_STATE_MID)

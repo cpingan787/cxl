@@ -112,7 +112,7 @@
 #define NvMBlock_DIDC30C               41U
 #define NvMBlock_DIDCE01               42U
 #define NvMBlock_DIDCE05               43U
-#define NvMBlock_DIDCE06               44U
+#define NvMBlock_DIDCE06               44U // used in C106 listen timer valid flag
 #define NvMBlock_DIDCF00               45U
 #define NvMBlock_DIDC30D               46U
 #define NvMBlock_Reserved_block0               47U
@@ -185,7 +185,7 @@ extern VAR(uint8, NVM_VAR_NOINIT) NvMBlockRamBuffer40[2];
 extern VAR(uint8, NVM_VAR_NOINIT) NvMBlockRamBuffer41[8];
 extern VAR(uint8, NVM_VAR_NOINIT) NvMBlockRamBuffer42[2];
 extern VAR(uint8, NVM_VAR_NOINIT) NvMBlockRamBuffer43[1];
-extern VAR(uint8, NVM_VAR_NOINIT) NvMBlockRamBuffer44[1];
+extern VAR(uint8, NVM_VAR_NOINIT) NvMBlockRamBuffer44[1]; // used in C106 listen timer valid flag
 extern VAR(uint8, NVM_VAR_NOINIT) NvMBlockRamBuffer45[24];
 extern VAR(uint8, NVM_VAR_NOINIT) NvMBlockRamBuffer46[2];
 extern VAR(uint8, NVM_VAR_NOINIT) NvMBlockRamBuffer47[254];

@@ -308,6 +308,7 @@ void ParameterSyncSdkCycleProcess(MpuHalDataPack_t *recvDataPack)
                         else
                         {
                             TBOX_PRINT("ParameterSync paramID %d change failed\r\n",currentParamId);
+                            SYNC_LOG_SEND(LOG_LEVEL_ERROR, LOG_EVT_DATA_UPDATE, "ParameterSync paramID %d change failed", currentParamId);
                         }
                         offsetLen = offsetLen + 2 + mpuDataLen;
                         continue;
@@ -326,19 +327,22 @@ void ParameterSyncSdkCycleProcess(MpuHalDataPack_t *recvDataPack)
                         }
                         else
                         {
-                            TBOX_PRINT("ParameterSync paramID %d change failed\r\n",currentParamId);
+                            TBOX_PRINT("ParameterSync paramID %d change failed %d\r\n",currentParamId,isWriteOK);
+                            SYNC_LOG_SEND(LOG_LEVEL_ERROR, LOG_EVT_DATA_UPDATE, "ParameterSync paramID %d change failed %d", currentParamId, isWriteOK);
                         }
                     }
                     else
                     {
                         //本地flash中有值，不写入
                         TBOX_PRINT("ParameterSync paramID %d already valid values\r\n",currentParamId);
+                        SYNC_LOG_SEND(LOG_LEVEL_INFO, LOG_EVT_DATA_UPDATE, "ParameterSync paramID %d already valid values", currentParamId);
                     }
                 }
                 else
                 {
                     //参数数据错误，不写入
                     TBOX_PRINT("ParameterSync paramID %d data error\r\n",currentParamId);
+                    SYNC_LOG_SEND(LOG_LEVEL_ERROR, LOG_EVT_DATA_UPDATE, "ParameterSync paramID %d data error", currentParamId);
                 }
 
                 offsetLen = offsetLen + 2 + mpuDataLen;

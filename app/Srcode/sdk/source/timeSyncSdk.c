@@ -239,7 +239,7 @@ void TimeSyncSdkCycleProcess(MpuHalDataPack_t *msgData)
             **************/
             if ((pRxData[5] & 0xF0) == 0x20)
             {
-                TBOX_PRINT("timeSyncStat: %d, timeSrc: %d\r\n", g_gnssData.timeSyncStat, g_gnssData.timeSrc);
+                // TBOX_PRINT("timeSyncStat: %d, timeSrc: %d\r\n", g_gnssData.timeSyncStat, g_gnssData.timeSrc);
                 SYNC_LOG_SEND(LOG_LEVEL_INFO, LOG_EVT_RX_MSG, "timeSyncStat: %d, timeSrc: %d\r\n", g_gnssData.timeSyncStat, g_gnssData.timeSrc);
                 g_gnssData.timeSyncStat = pRxData[5] & 0x0F;
                 g_gnssData.timeSrc = (pRxData[5] >> 4) & 0x0F;
@@ -252,7 +252,7 @@ void TimeSyncSdkCycleProcess(MpuHalDataPack_t *msgData)
                 {
                     g_gnssData.timeValidity = 1;
                     g_gnssData.timestamp = (pRxData[0] << 24) + (pRxData[1] << 16) + (pRxData[2] << 8) + pRxData[3];
-                    TBOX_PRINT("set gnss to rtc\r\n");
+                    // TBOX_PRINT("set gnss to rtc\r\n");
                     SYNC_LOG_SEND(LOG_LEVEL_INFO, LOG_EVT_RX_MSG, "set gnss to rtc\r\n");
                     TimerHalSetRtcTime(g_gnssData.timestamp);
                 }
@@ -261,7 +261,7 @@ void TimeSyncSdkCycleProcess(MpuHalDataPack_t *msgData)
             }
             else if ((pRxData[5] & 0xF0) == 0x10)
             {
-                TBOX_PRINT("timeSyncStat: %d, timeSrc: %d\r\n", g_ntpData.timeSyncStat, g_ntpData.timeSrc);
+                // TBOX_PRINT("timeSyncStat: %d, timeSrc: %d\r\n", g_ntpData.timeSyncStat, g_ntpData.timeSrc);
                 SYNC_LOG_SEND(LOG_LEVEL_INFO, LOG_EVT_RX_MSG, "timeSyncStat: %d, timeSrc: %d\r\n", g_ntpData.timeSyncStat, g_ntpData.timeSrc);
                 g_ntpData.timeSyncStat = pRxData[5] & 0x0F;
                 g_ntpData.timeSrc = (pRxData[5] >> 4) & 0x0F;
@@ -276,7 +276,7 @@ void TimeSyncSdkCycleProcess(MpuHalDataPack_t *msgData)
                     g_ntpData.timestamp = (pRxData[0] << 24) + (pRxData[1] << 16) + (pRxData[2] << 8) + pRxData[3];
                     if (g_gnssData.timeValidity == 0)
                     {
-                        TBOX_PRINT("set ntp to rtc\r\n");
+                        // TBOX_PRINT("set ntp to rtc\r\n");
                         SYNC_LOG_SEND(LOG_LEVEL_INFO, LOG_EVT_RX_MSG, "set ntp to rtc\r\n");
                         TimerHalSetRtcTime(g_ntpData.timestamp);
                     }

@@ -6825,6 +6825,112 @@ static CONST(Dcm_DspRoutineInOutSignalType,DCM_CONST)Dcm_Routine_0xAF0B_SignalCf
 };
 #define  DCM_STOP_SEC_CONST_UNSPECIFIED
 #include "Dcm_MemMap.h"
+#define DCM_START_SEC_CONST_UNSPECIFIED
+#include "Dcm_MemMap.h"
+static CONST(Dcm_DspRoutineInOutSignalType,DCM_CONST) Dcm_Routine_0x1218_SignalCfg[1] =
+{
+    {
+        DCM_OPAQUE,  /*DcmDspRoutineSignalEndianness*/
+        1u,          /*DcmDspRoutineSignalLength*/
+        0u,          /*DcmDspRoutineSignalPos*/
+        DCM_UINT8_N, /*DcmDspRoutineSignalType*/
+        NULL_PTR,    /*DcmDspArgumentScaling*/
+    },
+};
+#define DCM_STOP_SEC_CONST_UNSPECIFIED
+#include "Dcm_MemMap.h"
+#define DCM_START_SEC_CONST_UNSPECIFIED
+#include "Dcm_MemMap.h"
+/* 2. 定义 Start Routine 的 In 结构体 */
+static CONST(Dcm_DspRoutineInOutType,DCM_CONST) Dcm_Routine_0x1218_StartRoutineInCfg =
+{
+    1u, /*RoutineInOutSignalNum*/
+    &Dcm_Routine_0x1218_SignalCfg[0], /*DcmDspRoutineInOutSignal*/
+};
+#define DCM_STOP_SEC_CONST_UNSPECIFIED
+#include "Dcm_MemMap.h"
+
+#define DCM_START_SEC_CONST_UNSPECIFIED
+#include "Dcm_MemMap.h"
+
+/* 1. 为 Start 定义一个 1 Byte 的输出信号 */
+static CONST(Dcm_DspRoutineInOutSignalType,DCM_CONST) Dcm_Routine_0x1218_StartOutSignalCfg[1] =
+{
+    {
+        DCM_OPAQUE,  
+        1u,          /* 8 bits = 1 byte，用于接住 MPU 返回的 01 */
+        0u,          
+        DCM_UINT8_N, 
+        NULL_PTR,    
+    },
+};
+
+/* 2. 为 Start 绑定 Out 结构体 */
+static CONST(Dcm_DspRoutineInOutType,DCM_CONST) Dcm_Routine_0x1218_StartRoutineOutCfg =
+{
+    1u, 
+    &Dcm_Routine_0x1218_StartOutSignalCfg[0], 
+};
+#define DCM_STOP_SEC_CONST_UNSPECIFIED
+#include "Dcm_MemMap.h"
+
+#define DCM_START_SEC_CONST_UNSPECIFIED
+#include "Dcm_MemMap.h"
+/* 3. 配置 StartRoutine 的触发函数与权限 */
+static CONST(Dcm_DspStartRoutineType,DCM_CONST) Dcm_RoutineInfo_0x1218_StartCfg =
+{
+    Rte_Call_RoutineServices_Routine_0x1218_Start, /*DcmDspStartRoutineFnc*/
+    &Dcm_DspCommonAuthorizationCfg[0], /*复用系统默认的权限 (不需要过安全等级)*/
+    1u,
+    NULL_PTR,
+    &Dcm_Routine_0x1218_StartRoutineInCfg, /*DcmDspStartRoutineIn - 绑定输入参数*/
+    &Dcm_Routine_0x1218_StartRoutineOutCfg, /*DcmDspStartRoutineOut (无返回数据)*/
+};
+#define DCM_STOP_SEC_CONST_UNSPECIFIED
+#include "Dcm_MemMap.h"
+
+#define DCM_START_SEC_CONST_UNSPECIFIED
+#include "Dcm_MemMap.h"
+
+/* 定义返回 1 Byte 结果的 OutSignal (用于回传 01) */
+static CONST(Dcm_DspRoutineInOutSignalType,DCM_CONST) Dcm_Routine_0x1218_OutSignalCfg[1] =
+{
+    {
+        DCM_OPAQUE,  
+        1u,
+        0u,          
+        DCM_UINT8_N, 
+        NULL_PTR,    
+    },
+};
+
+/* 定义 Results 的 Out 结构体 */
+static CONST(Dcm_DspRoutineInOutType,DCM_CONST) Dcm_Routine_0x1218_ResultsRoutineOutCfg =
+{
+    1u, 
+    &Dcm_Routine_0x1218_OutSignalCfg[0], 
+};
+
+#define DCM_STOP_SEC_CONST_UNSPECIFIED
+#include "Dcm_MemMap.h"
+
+#define DCM_START_SEC_CONST_UNSPECIFIED
+#include "Dcm_MemMap.h"
+/* 4. 配置 RequestResults 的触发函数与权限 */
+static CONST(Dcm_DspRequestRoutineResultsType,DCM_CONST) Dcm_RoutineInfo_0x1218_ResultsCfg =
+{
+    Rte_Call_RoutineServices_Routine_0x1218_RequestResults, /*DcmDspRequestRoutineResultsFnc*/
+    &Dcm_DspCommonAuthorizationCfg[0], /*DcmDspRequestRoutineResultsCommonAuthorizationRef*/
+    0u,
+    NULL_PTR,
+    NULL_PTR, /*DcmDspRequestRoutineResultsIn*/
+    &Dcm_Routine_0x1218_ResultsRoutineOutCfg, /*DcmDspRequestRoutineResultsOut (目前我们不回传多余数据，填NULL)*/
+};
+#define DCM_STOP_SEC_CONST_UNSPECIFIED
+#include "Dcm_MemMap.h"
+
+
+
 /***********************************
  *DcmDspRequestRoutineResults container
  **********************************/
@@ -7397,7 +7503,7 @@ static CONST(Dcm_DspStopRoutineType,DCM_CONST)Dcm_RoutineInfo_0xAF07_StopCfg =
  **********************************/
 #define   DCM_START_SEC_CONST_UNSPECIFIED
 #include  "Dcm_MemMap.h"
-static CONST(Dcm_DspRoutineType,DCM_CONST)Dcm_DspRoutineCfg[13] =
+static CONST(Dcm_DspRoutineType,DCM_CONST)Dcm_DspRoutineCfg[14] =
 {
     { /* Routine_0xAF08 */
         0xAF08u, /*DcmDspRoutineId*/
@@ -7528,7 +7634,18 @@ static CONST(Dcm_DspRoutineType,DCM_CONST)Dcm_DspRoutineCfg[13] =
         &Dcm_RoutineInfo_0xAF0B_ResultsCfg, /*DcmDspStopRoutineIn*/
         &Dcm_RoutineInfo_0xAF0B_StartCfg, /*DcmDspRequestRoutineResults*/
         NULL_PTR, /*DcmDspStopRoutine*/
-    }
+    },
+    {
+        /* Routine_0x1218 */
+        0x1218u,     /*DcmDspRoutineId*/
+        0u,          /*DcmDspRoutineInfoByte*/
+        TRUE,        /*DcmDspRoutineUsePort*/
+        TRUE,        /*DcmDspRoutineUsed*/
+        &Dcm_DspCommonAuthorizationCfg[0], /*DcmDspCommonAuthorizationRef*/
+        &Dcm_RoutineInfo_0x1218_ResultsCfg, /*DcmDspRequestRoutineResults 配置 (对应31 03)*/
+        &Dcm_RoutineInfo_0x1218_StartCfg,   /*DcmDspStartRoutine 配置 (对应31 01)*/
+        NULL_PTR,    /*DcmDspStopRoutine (没有31 02，填NULL)*/
+    },
 };
 #define  DCM_STOP_SEC_CONST_UNSPECIFIED
 #include "Dcm_MemMap.h"
@@ -7643,7 +7760,7 @@ static CONST(Dcm_DspCfgType,DCM_CONST) Dcm_DspCfg =
 
     NULL_PTR,    /*DcmDspRequestFileTransfer*/
 
-    13u,        /*DcmDspRoutineNum*/
+    14u,        /*DcmDspRoutineNum*/
     &Dcm_DspRoutineCfg[0],    /*pDcmDspRoutine*/
 
     &Dcm_DspSecurity,  /* pDcm_DspSecurity */

@@ -99,6 +99,7 @@ typedef struct
 	uint8_t     netType;        //网络类型：0：GSM1：LTE
 	uint8_t     apnCounter;     //APN数量。最大6路APN
 	uint8_t     apnStatus;      //0: 未连接，1：已连接 Bit0：第1路APN bit5：第6路APN
+  uint8_t     antennaStatus;  //bit0-3:4G主天线状态 1正常 2短路 3断路 bit4-7:4G副天线状态 1正常 2短路 3断路
 }NetInfoSync_t;
 
 typedef struct

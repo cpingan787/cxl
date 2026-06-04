@@ -4882,14 +4882,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xC002_DID_0xC002_ReadData( Dcm_OpSta
     DCM_UNUSED(Data);
     DCM_UNUSED(ErrorCode);
 
-    uint8_t IEPTRdyV = 0;//动力总成
-    Com_ReceiveSignalGroup(IRZCU_20ms_Group06_RZCU_PTCANFD_20ms_FrP06_CONTROLLER_0_IAM_Rx);
-    Com_ReceiveSignal(IRZCU_20ms_Group06_RZCU_PTCANFD_20ms_FrP06_CONTROLLER_0_IAM_Rx_IEPTRdyV_IRZCU_20ms_Group06_RZCU_PTCANFD_20ms_FrP06_CONTROLLER_0_IAM_Rx,IEPTRdyV);
-    // TBOX_Print("IEPTRdyV = %d\n",IEPTRdyV);
-
-    uint8_t vehicleSpeed = 0u;//车速
-    Com_ReceiveSignalGroup(IIBS_20ms_Group11_IBS_CHCANFD_20ms_FrP11_CONTROLLER_0_IAM_Rx);
-    Com_ReceiveSignal(IIBS_20ms_Group11_IBS_CHCANFD_20ms_FrP11_CONTROLLER_0_IAM_Rx_IVehSpdAvgDrvn_IIBS_20ms_Group11_IBS_CHCANFD_20ms_FrP11_CONTROLLER_0_IAM_Rx, &vehicleSpeed);
+    TimerHalPrepareSleep(60);
 
     return E_OK;
 
@@ -6370,6 +6363,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0x0112_DID_0x0112_ReadData( Dcm_OpSta
 
     PeripheralHalAdGet(AD0_CHANNEL_KL30, &supplyVoltage);
     TBOX_PRINT("KL30_Voltage = %d\n",supplyVoltage);
+    DIAG_LOG_SEND(LOG_LEVEL_INFO, LOG_EVT_DATA_UPDATE, "KL30_Voltage = %d", supplyVoltage);
 
     KL30_Voltage0_1V = supplyVoltage / 100;
 
@@ -6965,7 +6959,7 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xB083_DID_0xB083_ReadData( Dcm_OpSta
             Data[0] |= (0x01 << 3);
             break;
 
-        case PM_HAL_WAKEUP_SOURCE_RTC:
+        case PM_HAL_WAKEUP_SOURCE_MCURTC:
             Data[1] |= (0x01 << 0);
             break;
 
@@ -7570,7 +7564,8 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xB185_DID_0xB185_ReadData( Dcm_OpSta
 
     /* 5G ANT MAIN bit1-0 */
     PeripheralHalAdGet(AD0_CHANNEL_MAIN_ANT_ADC, &ANT_Value);
-    TBOX_PRINT("5G_ANT0_Value: %d\r\n",ANT_Value);
+    TBOX_PRINT("5G_ANT0_Value: %d\n", ANT_Value);
+    DIAG_LOG_SEND(LOG_LEVEL_INFO, LOG_EVT_DATA_UPDATE, "5G_ANT0_Value = %d", ANT_Value);
     if(ANT_Value <= 200)
     {
         ANT_Status[0] = ANT_Status[0] | 0x02;
@@ -7586,55 +7581,59 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xB185_DID_0xB185_ReadData( Dcm_OpSta
 
     /* 5G ANT DIV bit3-2 */
     PeripheralHalAdGet(AD0_CHANNEL_DIV_ANT_ADC, &ANT_Value);
-    TBOX_PRINT("5G_ANT1_Value: %d\r\n",ANT_Value);
+    TBOX_PRINT("5G_ANT1_Value: %d\n", ANT_Value);
+    DIAG_LOG_SEND(LOG_LEVEL_INFO, LOG_EVT_DATA_UPDATE, "5G_ANT1_Value = %d", ANT_Value);
     if(ANT_Value <= 200)
     {
-        ANT_Status[0] = ANT_Status[0] | 0x08;
+        ANT_Status[0] = ANT_Status[0] | (0x02 << 2);
     }
     else if(ANT_Value >= 1600)
     {
-        ANT_Status[0] = ANT_Status[0] | 0x00;
+        ANT_Status[0] = ANT_Status[0] | (0x00 << 2);
     }
     else
     {
-        ANT_Status[0] = ANT_Status[0] | 0x04;
+        ANT_Status[0] = ANT_Status[0] | (0x01 << 2);
     }
 
     /* 5G ANT MIMO3 bit5-4 */
     PeripheralHalAdGet(AD0_CHANNEL_MIMO3_ANT_ADC, &ANT_Value);
-    TBOX_PRINT("5G_ANT3_Value: %d\r\n",ANT_Value);
+    TBOX_PRINT("5G_ANT3_Value: %d\n", ANT_Value);
+    DIAG_LOG_SEND(LOG_LEVEL_INFO, LOG_EVT_DATA_UPDATE, "5G_ANT3_Value = %d", ANT_Value);
     if(ANT_Value <= 200)
     {
-        ANT_Status[0] = ANT_Status[0] | 0x20;
+        ANT_Status[0] = ANT_Status[0] | (0x02 << 4);
     }
     else if(ANT_Value >= 1600)
     {
-        ANT_Status[0] = ANT_Status[0] | 0x00;
+        ANT_Status[0] = ANT_Status[0] | (0x00 << 4);
     }
     else
     {
-        ANT_Status[0] = ANT_Status[0] | 0x10;
+        ANT_Status[0] = ANT_Status[0] | (0x01 << 4);
     }
 
     /* 5G ANT MIMO4 bit7-6 */
     PeripheralHalAdGet(AD0_CHANNEL_MIMO4_ANT_ADC, &ANT_Value);
-    TBOX_PRINT("5G_ANT4_Value: %d\r\n",ANT_Value);
+    TBOX_PRINT("5G_ANT4_Value: %d\n", ANT_Value);
+    DIAG_LOG_SEND(LOG_LEVEL_INFO, LOG_EVT_DATA_UPDATE, "5G_ANT4_Value = %d", ANT_Value);
     if(ANT_Value <= 200)
     {
-        ANT_Status[0] = ANT_Status[0] | 0x80;
+        ANT_Status[0] = ANT_Status[0] | (0x02 << 6);
     }
     else if(ANT_Value >= 1600)
     {
-        ANT_Status[0] = ANT_Status[0] | 0x00;
+        ANT_Status[0] = ANT_Status[0] | (0x00 << 6);
     }
     else
     {
-        ANT_Status[0] = ANT_Status[0] | 0x40;
+        ANT_Status[0] = ANT_Status[0] | (0x01 << 6);
     }
 
     /* CV2X ANT TRX0 bit1-0 (Byte2) */
     PeripheralHalAdGet(AD0_CHANNEL_CV2X_ANT_TRX1_ADC, &ANT_Value);
-    TBOX_PRINT("CV2X_ANT_TRX1_Value: %d\r\n",ANT_Value);
+    TBOX_PRINT("CV2X_ANT_TRX1_Value: %d\n", ANT_Value);
+    DIAG_LOG_SEND(LOG_LEVEL_INFO, LOG_EVT_DATA_UPDATE, "CV2X_ANT_TRX1_Value = %d", ANT_Value);
     if(ANT_Value <= 200)
     {
         ANT_Status[1] = ANT_Status[1] | 0x02;
@@ -7650,18 +7649,19 @@ Std_ReturnType  Rte_Call_DataServices_Data_0xB185_DID_0xB185_ReadData( Dcm_OpSta
 
     /* CV2X ANT TRX1 bit3-2 (Byte2) */
     PeripheralHalAdGet(AD0_CHANNEL_CV2X_ANT_TRX0_ADC, &ANT_Value);
-    TBOX_PRINT("CV2X_ANT_TRX0_Value: %d\r\n",ANT_Value);
+    TBOX_PRINT("CV2X_ANT_TRX0_Value: %d\n", ANT_Value);
+    DIAG_LOG_SEND(LOG_LEVEL_INFO, LOG_EVT_DATA_UPDATE, "CV2X_ANT_TRX0_Value = %d", ANT_Value);
     if(ANT_Value <= 200)
     {
-        ANT_Status[1] = ANT_Status[1] | 0x08;
+        ANT_Status[1] = ANT_Status[1] | (0x02 << 2);
     }
     else if(ANT_Value >= 1600)
     {
-        ANT_Status[1] = ANT_Status[1] | 0x00;
+        ANT_Status[1] = ANT_Status[1] | (0x00 << 2);
     }
     else
     {
-        ANT_Status[1] = ANT_Status[1] | 0x04;
+        ANT_Status[1] = ANT_Status[1] | (0x01 << 2);
     }
 
     Data[0] = ANT_Status[0];
@@ -12247,6 +12247,100 @@ Std_ReturnType  Rte_Call_RoutineServices_Routine_0xAF0B_RequestResults(
 
 #define DCM_START_SEC_CODE
 #include "Dcm_MemMap.h"
+Std_ReturnType Rte_Call_RoutineServices_Routine_0x1218_RequestResults(
+    /* PRQA S 3432++ */ /* MISRA Rule 20.7 */
+    P2CONST(uint8,AUTOMATIC,DCM_VAR)InBuffer,
+    Dcm_OpStatusType OpStatus,
+    P2VAR(uint8,AUTOMATIC,DCM_VAR)OutBuffer,
+    P2VAR(uint16,AUTOMATIC,DCM_VAR) currentDataLength,
+    P2VAR(Dcm_NegativeResponseCodeType,AUTOMATIC,DCM_VAR)ErrorCode)
+    /* PRQA S 3432-- */ /* MISRA Rule 20.7 */
+{
+    /** DO NOT CHANGE THIS COMMENT!
+     * <USERBLOCK Rte_Call_RoutineServices_Routine_0x1218_RequestResults>
+     */
+    Std_ReturnType ret = E_OK;
+    int16_t canPassRet = 0;
+    
+    uint8_t UDSReqData[4] = {0x31, 0x03, 0x12, 0x18}; 
+    uint16_t UDSReqDataLen = 4;
+    uint8_t UDSRespData[32] = {0}; 
+    
+    if(InBuffer != NULL_PTR)
+    {
+        UDSReqData[4] = InBuffer[0];
+    }
+
+    // if ((NvMBlockRamBuffer23[1] & 0x10) == 0x00)
+    // {
+    //     *ErrorCode = DCM_E_REQUESTOUTOFRANGE; 
+    //     return E_NOT_OK;
+    // }
+
+    if(ParameterSyncSdkGetFromCpuIsFinished() != 0)
+    {
+        *ErrorCode = DCM_E_BUSYREPEATREQUEST;
+        return E_NOT_OK;
+    }
+    
+    /* 2. 异步透传状态机 */
+    switch(OpStatus)
+    {
+        case DCM_INITIAL: 
+            canPassRet = CanPassthrough_SendRequest(UDSReqData, UDSReqDataLen);
+            if(canPassRet == 0)
+            {
+                ret = DCM_E_PENDING;
+            }
+            else
+            {
+                ret = E_NOT_OK;
+                *ErrorCode = DCM_E_CONDITIONSNOTCORRECT;
+            }
+            break;
+
+        case DCM_PENDING:
+            canPassRet = CanPassthroughRoutine_PENDING(UDSReqData, UDSReqDataLen, UDSRespData, currentDataLength);
+            
+            if(canPassRet == 0)
+            {
+                if((OutBuffer != NULL) && (*currentDataLength > 0))
+                {
+                    memcpy(OutBuffer, UDSRespData, *currentDataLength);
+                }
+                ret = E_OK;
+            }
+            else if(canPassRet == 1) // DCM_E_PENDING
+            {
+                ret = DCM_E_PENDING;
+            }
+            else if(canPassRet == -1) // timeout
+            {
+                ret = E_NOT_OK;
+                *ErrorCode = DCM_E_GENERALPROGRAMMINGFAILURE;
+            }
+            else
+            {
+                ret = E_NOT_OK;
+                *ErrorCode = canPassRet;
+            }
+            break;
+            
+        default:
+            ret = E_NOT_OK;
+            break;
+    }
+    return ret;
+
+    /** DO NOT CHANGE THIS COMMENT!
+     * </USERBLOCK>
+     */
+}
+#define DCM_STOP_SEC_CODE
+#include "Dcm_MemMap.h"
+
+#define DCM_START_SEC_CODE
+#include "Dcm_MemMap.h"
 Std_ReturnType  Rte_Call_RoutineServices_Routine_0xAF08_Start(
     /* PRQA S 3432++ */ /* MISRA Rule 20.7 */
     P2CONST(uint8,AUTOMATIC,DCM_VAR)InBuffer,
@@ -13105,6 +13199,99 @@ Std_ReturnType  Rte_Call_RoutineServices_Routine_0xAF0B_Start(
      * </USERBLOCK>
      */
 }
+#define DCM_STOP_SEC_CODE
+#include "Dcm_MemMap.h"
+
+#define DCM_START_SEC_CODE
+#include "Dcm_MemMap.h"
+Std_ReturnType Rte_Call_RoutineServices_Routine_0x1218_Start(
+    /* PRQA S 3432++ */ /* MISRA Rule 20.7 */
+    P2CONST(uint8,AUTOMATIC,DCM_VAR)InBuffer,
+    Dcm_OpStatusType OpStatus,
+    P2VAR(uint8,AUTOMATIC,DCM_VAR)OutBuffer,
+    P2VAR(uint16,AUTOMATIC,DCM_VAR) currentDataLength,
+    P2VAR(Dcm_NegativeResponseCodeType,AUTOMATIC,DCM_VAR)ErrorCode)
+    /* PRQA S 3432-- */ /* MISRA Rule 20.7 */
+{
+    Std_ReturnType ret = E_OK;
+    int16_t canPassRet = 0;
+    
+    /* 🔥 1. 定义一个静态变量来缓存参数，保护它不被 78 报文覆盖！ */
+    static uint8_t savedParam = 0x00; 
+    
+    uint8_t UDSReqData[5] = {0x31, 0x01, 0x12, 0x18, 0x00};
+    uint16_t UDSReqDataLen = 5;
+
+    /* 🔥 2. 只在首次进入 (INITIAL) 时，从 InBuffer 提取真实参数并缓存 */
+    if(OpStatus == DCM_INITIAL)
+    {
+        if(InBuffer != NULL_PTR)
+        {
+            savedParam = InBuffer[0];
+        }
+        else
+        {
+            savedParam = 0x00; // 容错机制
+        }
+    }
+
+    /* 3. 无论 INITIAL 还是 PENDING，都用安全缓存的参数组装报文 */
+    UDSReqData[4] = savedParam;
+
+    /* 前置条件校验 */
+    if(ParameterSyncSdkGetFromCpuIsFinished() != 0)
+    {
+        ret = E_NOT_OK;
+        *ErrorCode = DCM_E_BUSYREPEATREQUEST;
+        return ret;
+    }
+    
+    switch(OpStatus)
+    {
+        case DCM_INITIAL:
+            canPassRet = CanPassthrough_SendRequest(UDSReqData, UDSReqDataLen);
+            if(canPassRet == 0)
+            {
+                ret = DCM_E_PENDING;
+            }
+            else
+            {
+                ret = E_NOT_OK;
+                *ErrorCode = DCM_E_CONDITIONSNOTCORRECT;
+            }
+            break;
+
+        case DCM_PENDING:
+            /* 直接调原版函数，由于 UDSReqData 里存的是正确的 01，绝对能匹配上！ */
+            canPassRet = CanPassthroughRoutine_PENDING(UDSReqData, UDSReqDataLen, OutBuffer, currentDataLength);
+
+            if(canPassRet == 0)
+            {
+                ret = E_OK;
+            }
+            else if(canPassRet == 1)// 还在等
+            {
+                ret = DCM_E_PENDING;
+            }
+            else if(canPassRet == -1)// 超时
+            {
+                ret = E_NOT_OK;
+                *ErrorCode = DCM_E_GENERALPROGRAMMINGFAILURE;
+            }
+            else
+            {
+                ret = E_NOT_OK;
+                *ErrorCode = canPassRet;
+            }
+            break;
+            
+        default:
+            ret = E_NOT_OK;
+            break;
+    }
+    return ret;
+}
+
 #define DCM_STOP_SEC_CODE
 #include "Dcm_MemMap.h"
 

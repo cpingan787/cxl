@@ -83,31 +83,6 @@ int16_t CanPassthroughWrite_PENDING(uint8_t *UDSReqData, uint16_t UDSReqDataLen)
 int16_t CanPassthroughRoutine_PENDING(uint8_t *UDSReqData, uint16_t UDSReqDataLen, uint8_t *UDSRespData, uint16_t *UDSRespDataLen);
 
 /*************************************************
-  Function:       AF0C_SendRequest
-  Description:    发送AF0C透传请求
-  Input:          pUDSSID：UDS请求数据指针（UDS请求）
-                   pUdsRequest：UDS请求数据指针（请求数据）
-                   reqLength：请求数据长度（请求数据长度）
-  Output:         无
-  Return:         无
-  Others:         
-*************************************************/
-int8_t AF0C_SendRequest(uint8_t *pUDSSID, const uint8_t *pUdsRequest, uint16_t reqLength);
-
-/*************************************************
-  Function:       AF0C_PENDING
-  Description:    接收 AF0C透传响应
-  Input:          pUDSSID：UDS请求数据指针（UDS请求）
-                  pUdsRequest：UDS请求数据指针（请求数据）
-                  reqLength：请求数据长度（请求数据长度）
-  Output:         pUDSRespData：UDS响应数据指针（UDS响应数据）
-                  pUDSRespDataLen：UDS响应数据长度指针（UDS响应数据长度）
-  Return:         无
-  Others:         
-*************************************************/
-int16_t AF0C_PENDING(uint8_t *pUDSSID, const uint8_t *pUdsRequest, uint16_t reqLength, uint8_t *pUDSRespData, uint16_t *pUDSRespDataLen);
-
-/*************************************************
   Function:       CanPassthrough_CheckRestartCmd
   Description:    检查MPU 0x24 重启命令
   Input:          None               

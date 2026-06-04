@@ -1,4 +1,4 @@
-#include <string.h>
+﻿#include <string.h>
 #include "powerManageSdk.h"
 #include "peripheralHal.h"
 // #include "PowerManageHal.h"
@@ -51,6 +51,7 @@
 #define PM_FLASH_DATA_VALID_FLAG        0xA5  /* 数据有效标志 */
 #define PM_FLASH_DATA_VALID_INDEX       5     /* 标志位在缓冲区中的索引 */
 #define PM_LISTEN_DEFAULT_SECONDS       (14UL * 24UL * 3600UL)  // 单位：秒
+#define PM_LISTEN_C106_VALID            1
 
 typedef struct 
 {
@@ -111,6 +112,13 @@ typedef struct
     const PmSdkConfig_t *pPmConfig;
 }PmSdkManage_t;
 
+typedef enum
+{
+    E_PM_LISTEN_MODE_CLOSE = 0,
+    E_PM_LISTEN_MODE_PERMANENT,
+    E_PM_LISTEN_MODE_NORMAL,
+}PmSdkListenMode_e;
+
 static PmSdkManage_t g_pmManage;
 static uint8_t g_pmResetReasonValid = 0;
 static uint32_t g_pmResetReason = 0;
@@ -125,6 +133,9 @@ static uint8_t g_backupBatAgingReqOnceFlag = 0;
 /* 运行期间计时器累计毫秒数（1ms中断累计） */
 static volatile uint32_t g_timerMsAccumulator = 0;
 static volatile uint8_t g_listenTimerClearReqFlag = 0;
+
+/* listen模式 0 关闭listen模式 0xFF永久listen模式 */
+static uint8_t g_listenMode = E_PM_LISTEN_MODE_NORMAL;
 
 static int16_t SaveListenTimerParam(void);
 static int16_t ClearListenTimerParam(void);
@@ -195,6 +206,7 @@ static uint8_t ReadListenTimerFromDIDC106(uint32_t* pListenTimer)
         return PM_SDK_STATUS_ERR;
     }
 
+    TBOX_PRINT("Get listen timer from DIDC106: %u seconds\n", *pListenTimer);
     return PM_SDK_STATUS_OK;
 }
 
@@ -220,27 +232,35 @@ static uint8_t ReadListenTimerFromReservedBlock(uint32_t* pListenTimer)
                     ((uint32_t)NvMBlockRamBuffer56[2] << 8) |
                     NvMBlockRamBuffer56[3];
 
-    TBOX_PRINT("Get listen timer from flash: %u seconds\n", *pListenTimer);
+    TBOX_PRINT("Get listen timer from listen flash: %u seconds\n", *pListenTimer);
     return PM_SDK_STATUS_OK;
 }
 
-// 诊断配置时，同步更新当前计时。实际应用中，诊断配置完，应该会重启。可能不需要
-void SetListenTimer(uint8_t listenTimer, uint8_t timerUnit)
-{
-    g_pmManage.listenWakeupTimer = GetListenTimerSeconds(listenTimer, timerUnit);
-    TBOX_PRINT("set listen timer: %u seconds\n", g_pmManage.listenWakeupTimer);
-    (void)SaveListenTimerParam();
-}
-
-// Listen 持续时长重新计时
+/* 诊断更新listen唤醒持续时长 */
 void PowerManageSdkSyncListenTimer(uint8_t timerValue, uint8_t timerUnit)
 {
     uint32_t listenTimer = PM_LISTEN_DEFAULT_SECONDS;  // 默认14天
 
+    /* 已通过C106配置listen timer */
+    NvMBlockRamBuffer44[0] = PM_LISTEN_C106_VALID;
+    NvM_WriteBlock(NvMBlock_DIDCE06, NvMBlockRamBuffer44); 
+
     if(timerValue == 0)
     {
         (void)SaveListenTimerParam();
+        g_listenMode = E_PM_LISTEN_MODE_CLOSE;
+        TBOX_PRINT("diag set listen timer: close\n");
         return;
+    }
+    else if(timerValue == 0xFF)
+    {
+        g_listenMode = E_PM_LISTEN_MODE_PERMANENT;
+        TBOX_PRINT("diag set listen timer: permanent\n");
+        return;
+    }
+    else
+    {
+        g_listenMode = E_PM_LISTEN_MODE_NORMAL;
     }
 
     if(timerUnit == 0) // 天
@@ -279,21 +299,35 @@ void ResetListenTimer(void)
     (void)SaveListenTimerParam();
 }
 
+static void SetListenTimerC106BlockDefault(void)
+{
+    NvMBlockRamBuffer31[0] = 0x0E;
+    NvMBlockRamBuffer31[1] = 0x00;
+    NvMBlockRamBuffer31[2] = 0x00;
+    NvMBlockRamBuffer31[3] = 0x00;
+    NvMBlockRamBuffer31[4] = 0x00;
+    NvMBlockRamBuffer31[5] = 0x00;
+    NvMBlockRamBuffer31[6] = 0x00;
+    NvMBlockRamBuffer31[7] = 0x00;
+    NvM_WriteBlock(NvMBlock_DIDC106, NvMBlockRamBuffer31); 
+}
+
 // 上电复位，获取存储的listen唤醒持续时长，继续计时
 static uint32_t GetListenTimerParam(void)
 {
     uint32_t listenTimer = PM_LISTEN_DEFAULT_SECONDS;  // 默认14天
 
-    if(ReadListenTimerFromReservedBlock(&listenTimer) == PM_SDK_STATUS_OK)
+    /* 先判断是否通过诊断改变了listentimer */
+    NvM_ReadBlock(NvMBlock_DIDCE06, NvMBlockRamBuffer44);
+    if(NvMBlockRamBuffer44[0] == PM_LISTEN_C106_VALID)
     {
-        return listenTimer;
+        if(ReadListenTimerFromDIDC106(&listenTimer) == PM_SDK_STATUS_OK)
+        {
+            return listenTimer;
+        }
     }
 
-    if(ReadListenTimerFromDIDC106(&listenTimer) == PM_SDK_STATUS_OK)
-    {
-        return listenTimer;
-    }
-
+    SetListenTimerC106BlockDefault();
     return PM_LISTEN_DEFAULT_SECONDS;
 }
 
@@ -301,12 +335,7 @@ static int16_t SaveListenTimerParam(void)
 {
     VehicleInfor_t vehicleInfor;
 
-    /* 复位前将listenWakeupTimer和用户模式存储到flash */
-    /* 存储listenWakeupTimer值到NvMBlockRamBuffer56[0-3] (4字节) */
-    NvMBlockRamBuffer56[0] = (g_pmManage.listenWakeupTimer >> 24) & 0xFF;
-    NvMBlockRamBuffer56[1] = (g_pmManage.listenWakeupTimer >> 16) & 0xFF;
-    NvMBlockRamBuffer56[2] = (g_pmManage.listenWakeupTimer >> 8) & 0xFF;
-    NvMBlockRamBuffer56[3] = g_pmManage.listenWakeupTimer & 0xFF;
+    /* 复位前将用户模式存储到flash */
     /* 读取并存储用户模式到NvMBlockRamBuffer56[4] */
     if(GetVehicleInfor(&vehicleInfor) == 0)
     {
@@ -375,7 +404,7 @@ static void PmProcessListenTimerFlashRequest(void)
     if((g_listenTimerClearReqFlag != 0) && (g_pmManage.listenTimerSavePending == 0))
     {
         g_listenTimerClearReqFlag = 0;
-        (void)ClearListenTimerParam();
+        // (void)ClearListenTimerParam();
     }
 }
 
@@ -485,10 +514,10 @@ static uint8_t PmDetectWakeupSourceByIo(void)
         return PM_HAL_WAKEUP_SOURCE_MPU;
     }
 
-    // if(Dio_ReadChannel(DioConf_DioChannel_DIO_Channel_ECALL_BUTTON_DET_Pin9_5) == STD_HIGH)
-    // {
-    //     return PM_HAL_WAKEUP_SOURCE_ECALL;
-    // }
+    if(Dio_ReadChannel(DioConf_DioChannel_DIO_Channel_ECALL_BUTTON_DET_Pin9_5) == STD_HIGH)
+    {
+        return PM_HAL_WAKEUP_SOURCE_ECALL;
+    }
 
     if(Dio_ReadChannel(DioConf_DioChannel_DIO_Channel_RTC_INT_Pin0_6) == STD_LOW)
     {
@@ -1052,11 +1081,7 @@ static uint8_t CheckVinIsInvalid(void)
         vinFF[i] = 0xFF;
     }
 
-    if(NvM_ReadBlock(NvMBlock_DIDF190, NvMBlockRamBuffer7) == E_NOT_OK) // may need to change
-    {
-        TBOX_PRINT("read vin error\r\n");
-        return 1;
-    }
+    NvM_ReadBlock(NvMBlock_DIDF190, NvMBlockRamBuffer7);
 
     if ((memcmp(NvMBlockRamBuffer7, vinZero, VIN_LEN) == 0) ||
         (memcmp(NvMBlockRamBuffer7, vinFF, VIN_LEN) == 0))
@@ -1068,11 +1093,11 @@ static uint8_t CheckVinIsInvalid(void)
     return 0;
 }
 
-static uint8_t CheckListenTimerIsExpired(void)
+static uint8_t CheckListenMode(void)
 {
-    if(g_pmManage.listenWakeupTimer == 0)
+    if(g_listenMode == E_PM_LISTEN_MODE_CLOSE)
     {
-        TBOX_PRINT("CheckListenTimerIsExpired\r\n");
+        TBOX_PRINT("ListenModeClose\r\n");
         return 1;
     }
 
@@ -1276,14 +1301,14 @@ static void PmStatePreSleepNoticeProcess(uint32_t cycleTime)
         return;
     }
 
-    if((CheckVinIsInvalid() == 1) || (CheckListenTimerIsExpired() == 1) || (CheckVehicleModeIsTransport() == 1))
+    if((CheckVinIsInvalid() == 1) || (CheckListenMode() == 1) || (CheckVehicleModeIsTransport() == 1))
     {
         g_pmManage.mpuPowerOffFlag = 1;  // 标记MPU关机
         MpuPowerSyncSdkSetSleepMode(2);
         MpuHalPowerOff();
         g_pmManage.pmState = E_PM_STATE_MCU_SLEEP;
         APP_SetSleepMode(APP_SLEEP_MODE);
-        TBOX_PRINT("set NAD shutdown\r\n");
+        TBOX_PRINT("set NAD shutdown, MCU DeepStop\r\n");
     }
     else
     {
@@ -1293,7 +1318,7 @@ static void PmStatePreSleepNoticeProcess(uint32_t cycleTime)
         MpuPowerSyncSdkSetSleep(0);
         g_pmManage.pmState = E_PM_STATE_PRE_SLEEP_WAIT;
         APP_SetSleepMode(APP_LISTEN_MODE);
-        TBOX_PRINT("set NAD sleep\r\n");
+        TBOX_PRINT("set NAD sleep, MCU listen\r\n");
     }
 }
 
@@ -1414,7 +1439,14 @@ static void PmStateMcuSleepProcess(uint32_t cycleTime)
     g_backupBatAgingReqOnceFlag = 0;
     if(g_pmManage.mpuPowerOffFlag == 0)
     {
-        TimerHalPrepareSleep(g_pmManage.listenWakeupTimer);
+        if(g_listenMode == E_PM_LISTEN_MODE_NORMAL)
+        {
+            TimerHalPrepareSleep(g_pmManage.listenWakeupTimer);
+        }
+        else
+        {
+            TBOX_PRINT("listen mode is permanent, no RTC wake up\r\n");
+        }
     }
     TimerHalSetMode(0);
     EcallHalSetMode(0);
@@ -1512,39 +1544,11 @@ static void PmStateCheckWakeupSourceProcess(uint32_t cycleTime)
         {
             PmNmAllStart();
             g_pmManage.pmState = E_PM_STATE_WAKE;
+            return;
         }
+        g_listenMode = E_PM_LISTEN_MODE_CLOSE;//RTC唤醒后，关闭listen模式以进入DeepStop。从DeepStop唤醒时会初始化为E_PM_LISTEN_MODE_NORMAL
     }
 
-    if(g_pmManage.mpuPowerOffFlag == 0) // listen唤醒才更新计时，sleep唤醒不更新计时
-    {
-        // source = TimerHalGetWakeupSource();
-        sleepTime = TimerHalGetSleepDuration();
-        TBOX_PRINT("sleep time = %d sec\r\n", sleepTime);
-        
-        // 唤醒后更新计时，如果休眠时间大于休眠前计时，则计时清零
-        if(sleepTime > g_pmManage.restart24hTimer)
-        {
-            g_pmManage.restart24hTimer = 0;
-        }
-        else
-        {
-            g_pmManage.restart24hTimer -= sleepTime;
-        }
-        
-        if(sleepTime > g_pmManage.listenWakeupTimer)
-        {
-            g_pmManage.listenWakeupTimer = 0;
-        }
-        else
-        {
-            g_pmManage.listenWakeupTimer -= sleepTime;
-        }
-
-    if(g_pmManage.listenWakeupTimer == 0)
-    {
-        g_listenTimerClearReqFlag = 1;
-    }
-    }
 }
 
 static void PmStatePreCheckCanProcess(uint32_t cycleTime)
@@ -1959,15 +1963,6 @@ void PowerManageSdkTimerDecrement(void)
             g_pmManage.restart24hTimer--;
         }
         
-        /* 递减listen唤醒计时器 */
-        if(g_pmManage.listenWakeupTimer > 0)
-        {
-            g_pmManage.listenWakeupTimer--;
-        if(g_pmManage.listenWakeupTimer == 0)
-        {
-            g_listenTimerClearReqFlag = 1;
-        }
-        }
     }
 }
 
