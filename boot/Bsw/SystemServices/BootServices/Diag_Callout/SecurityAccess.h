@@ -39,7 +39,7 @@
 ***************************************************************************************************/
 #define SA_L1_SEEDLEN                           (0x04U)
 #define SA_L1_KEYLEN                            (0x04U)
-#define SA_FAC                                  (2U)
+#define SA_FAC                                  (3U)
 #define SA_DELAYTIME                            (10000U)/*10s*/
 
 #define DCM_SubFun_RequestSeed                 ((uint8)0x5U)

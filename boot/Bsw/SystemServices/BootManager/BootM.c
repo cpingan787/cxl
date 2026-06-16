@@ -320,19 +320,19 @@ uint8 BootM_IsAllLBA_Valid(void)
 *
 ************************************************************************************************
 END_FUNCTION_HDR */
-// uint8 BootM_IsAllLBB_Valid(void)
-// {
-//     uint8 retValue = E_NOT_OK;
+uint8 BootM_IsAllLBB_Valid(void)
+{
+    uint8 retValue = E_NOT_OK;
 
-//     retValue = Diag_FlagCompare(MEMM_FLAG_APPB_ID);
+    retValue = Diag_FlagCompare(MEMM_FLAG_APPB_ID);
 
-// //    if(E_OK == retValue)
-// //    {
-// //        retValue = Diag_FlagCompare(MEMM_FLAG_CAL_ID);
-// //    }
+//    if(E_OK == retValue)
+//    {
+//        retValue = Diag_FlagCompare(MEMM_FLAG_CAL_ID);
+//    }
 
-//     return retValue;
-// }
+    return retValue;
+}
 /* BEGIN_FUNCTION_HDR
 ************************************************************************************************
 * Function Name : BootM_ResetRespond

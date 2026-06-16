@@ -39,6 +39,7 @@
 #include "Std_Types.h"
 #include "SecureBoot.h"
 #include "Wdg_59_DriverB.h"
+#include "McuMpuSyncTask.h"
 
 uint8 ReadAppBuffer[32] = {0};
 uint8 WriteAppBuffer[32] = {0};
@@ -150,14 +151,18 @@ void Fls_test(void)
 
 }
 
-void TstCanSendMessage(void)
+void TstCanSendMessage(uint32 canId, uint32 data)
 {
     Can_PduType tPduInfo;
     uint8       aData[12] = { 0x01U, 0x02U, 0x05U, 0x04U, 0x03U, 0x32U, 0x07U, 0x76U , 0x09, 0x10,0x11,0x12};
+    aData[0] = (uint8)(data & 0xFF);
+    aData[1] = (uint8)(data >> 8);
+    aData[2] = (uint8)(data >> 16);
+    aData[3] = (uint8)(data >> 24);
     tPduInfo.swPduHandle = 0U;
-    tPduInfo.length      = 12U;
+    tPduInfo.length      = 12;
     tPduInfo.sdu         = aData;
-    tPduInfo.id          = 0x40000000 | 0x100U;
+    tPduInfo.id          = 0x40000000 | canId;
 
     Std_ReturnType tRet = Can_Write(CanConf_CanHardwareObject_CanHardwareObject_Tx0, &tPduInfo);
 }

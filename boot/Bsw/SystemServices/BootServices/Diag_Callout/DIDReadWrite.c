@@ -486,7 +486,7 @@ Std_ReturnType DID_Write(uint8 * buf, const DIDInfo_t* ProdInfo)
                 }
             }
             /* 写入数据 */
-                retValue = EEIf_Write(ProdInfo->Addr, ProdInfo->Size, buf);
+            retValue = EEIf_Write(ProdInfo->Addr, ProdInfo->Size, buf);
             break;
         }
 
