@@ -84,6 +84,7 @@ uint16            Dcm_P2Timer;
 DcmState_t       DcmState;
 uint8        	 ServerIdPost ;
 uint8        	 ServerPostCount;
+uint16           CurrentProgramCnt;
 /***************************************************************************************************
 *                                 INTERNAL FUNCTION PROTOTYPES
 ***************************************************************************************************/
@@ -185,6 +186,7 @@ void Dcm_Init(void)
     g_DownBlockIdx = 0;
     ServerIdPost = 0xFF ;
     ServerPostCount = 0 ;
+    EEIf_Read(PROGRAM_CNT_ADDR_IDX, PROGRAM_CNT_LEN, &CurrentProgramCnt);
 #if(DCM_SERVICE_27_ENABLED==STD_ON)
     (void)Diag_FlagRead(MEMM_FLAG_FAC_ID,(uint8*)&g_SA_FAC_Last);
     g_SA_FAC = g_SA_FAC_Last;
@@ -915,9 +917,18 @@ static void Dsp_DiagnosticSessionControl(void)
     {
         DCM_SET_NRC(DCM_NRC_incorrectMessageLengthOrInvalidFormat); 
     }
+    else if(Dcm_SduBuffer[DCM_SubFun_Idx] != DCM_SubFun_DefaultSession &&
+            Dcm_SduBuffer[DCM_SubFun_Idx] != DCM_SubFun_ProgrammingSession &&
+            Dcm_SduBuffer[DCM_SubFun_Idx] != DCM_SubFun_ExtendedDiagnosticSession)
+    {
+        DCM_SET_NRC(DCM_NRC_SubFunctionNotSupported);
+    }
+    else if(Dcm_ReqDataLength > DCM_RqLen_DiagnosticSessionControl)
+    {
+        DCM_SET_NRC(DCM_NRC_incorrectMessageLengthOrInvalidFormat); 
+    }
     else
     {
-        /* The sub services of the requested service */
         switch(Dcm_SduBuffer[DCM_SubFun_Idx])
         {
             /* DefaultSession */
@@ -994,11 +1005,6 @@ static void Dsp_DiagnosticSessionControl(void)
                 }
             }
             break;
-            default:
-            {
-                DCM_SET_NRC(DCM_NRC_SubFunctionNotSupported);
-            }
-            break;
         }
 
         /* Determine response flag*/
@@ -1053,6 +1059,14 @@ static void Dsp_EcuReset(void)
         /* Response negative response 13 */
         DCM_SET_NRC(DCM_NRC_incorrectMessageLengthOrInvalidFormat);
     }
+        else if(Dcm_SduBuffer[DCM_SubFun_Idx] != DCM_SubFun_HardReset)
+    {
+        DCM_SET_NRC(DCM_NRC_SubFunctionNotSupported);
+    }
+    else if(Dcm_ReqDataLength > DCM_RqLen_EcuReset)
+    {
+        DCM_SET_NRC(DCM_NRC_incorrectMessageLengthOrInvalidFormat); 
+    }
     else
     {
         switch(Dcm_SduBuffer[DCM_SubFun_Idx])
@@ -1068,12 +1082,6 @@ static void Dsp_EcuReset(void)
                 #endif/*#if(DCM_RESET_RESPONSE_TYPE == DCM_RESET_BEFORE_RESPONSE)*/
                 break;
             }
-            
-            default:
-            {
-                DCM_SET_NRC(DCM_NRC_SubFunctionNotSupported);
-            }
-            break;
         }  
 
         /* Determine response flag*/
@@ -1313,6 +1321,15 @@ static void Dsp_CommunicationControl(void)
     else if(Dcm_ReqDataLength < DCM_RqLen_CommunicationControl)
     {
         DCM_SET_NRC(DCM_NRC_incorrectMessageLengthOrInvalidFormat);
+    }
+    else if((Dcm_SduBuffer[DCM_SubFun_Idx] != DCM_SubFun_EnableRxAndTx) &&
+            (Dcm_SduBuffer[DCM_SubFun_Idx] != DCM_SubFun_DisableRxAndTx))
+    {
+        DCM_SET_NRC(DCM_NRC_SubFunctionNotSupported);
+    }
+    else if(Dcm_ReqDataLength > DCM_RqLen_CommunicationControl)
+    {
+        DCM_SET_NRC(DCM_NRC_incorrectMessageLengthOrInvalidFormat); 
     }
     else
     {
@@ -1606,8 +1623,7 @@ static void Dsp_RC_CheckProgrammingIntegrity(void)
     }
     else
     {
-        if((RC_ChecksumVerify(&Dcm_SduBuffer[DCM_RoutineParam_Idx]) != E_OK) && \
-           (SecureProgram_CheckProgrammingIntegrity() != SECURE_PROGRAM_SUCCESS))
+        if(RC_ChecksumVerify(&Dcm_SduBuffer[DCM_RoutineParam_Idx]) != E_OK)
         {
             Dcm_SduBuffer[DCM_RoutineParam_Idx] = DCM_Routine_IncorrectResult;
         }
@@ -1676,13 +1692,19 @@ static void Dsp_RC_CheckProgrammingDependencies(void)
     }
     else
     {
-        if(RC_CheckDependency()!= E_OK)
+        if((RC_CheckDependency()!= E_OK) || \
+           (SecureProgram_CheckProgrammingIntegrity() != SECURE_PROGRAM_SUCCESS))
         {
              Dcm_SduBuffer[DCM_RoutineParam_Idx] = DCM_Routine_IncorrectResult;
         }
         else
         {
              Dcm_SduBuffer[DCM_RoutineParam_Idx] = DCM_Routine_CorrectResult;
+             uint8 AllowWrite = 0x01;
+             Diag_FlagWrite(ALLOW_F187_WRITE_ID, &AllowWrite);
+             Diag_FlagWrite(ALLOW_F190_WRITE_ID, &AllowWrite);
+             CurrentProgramCnt++;
+             EEIf_Write(PROGRAM_CNT_ADDR_IDX, PROGRAM_CNT_LEN, &CurrentProgramCnt);
         }
     }
 }
@@ -1714,6 +1736,10 @@ static void Dsp_RequestDownload(void)
     DataFormat = Dcm_SduBuffer[DCM_34_DataFormat_Idx];
     AddressFormat = (uint8)(Dcm_SduBuffer[DCM_34_AddrLenFormat_Idx]&LOW_NIBBLE_MASK);
     SizeFormat = (uint8)((uint8)Dcm_SduBuffer[DCM_34_AddrLenFormat_Idx]>>BIT_NUM_OF_NIBBLE);
+    /*Calculate flash program start address*/
+    ProgramStartAddr=CommF_GetUint32DataValue(&Dcm_SduBuffer[DCM_34_MemAddr_Idx],DCM_34_ADDR_FORMAT);
+    /*Calculate flash program size*/
+    ProgramMemorySize=CommF_GetUint32DataValue(&Dcm_SduBuffer[DCM_34_MemSize_Idx],DCM_34_SIZE_FORMAT);
 
     if(GetDcmState_FunctionalRequest())
     {
@@ -1737,7 +1763,12 @@ static void Dsp_RequestDownload(void)
     }
     else if((DataFormat != DCM_34_DATA_FORMAT)||       /*compression method & the encryption method.*/
             (AddressFormat != DCM_34_ADDR_FORMAT)|| /*bytes of address */
-            (SizeFormat != DCM_34_SIZE_FORMAT))        /*bytes of size */
+            (SizeFormat != DCM_34_SIZE_FORMAT)||        /*bytes of size */
+            (ProgramStartAddr < MEMM_APPA_START_ADDR)|| /*program start address must be in APPA memory */
+            (ProgramStartAddr > MEMM_APPA_LIMIT_ADDR)|| /*program start address must be in APPA memory */
+            (ProgramMemorySize > MEMM_APPA_SIZE)|| /*program size must be in APPA memory */
+            (CurrentProgramCnt >= PROGRAM_CNT_MAX) /*program count must be less than max */
+    )
     {
         DCM_SET_NRC(DCM_NRC_requestOutOfRange);
     }
@@ -1747,10 +1778,6 @@ static void Dsp_RequestDownload(void)
     }
     else
     {
-        /*Calculate flash program start address*/
-        ProgramStartAddr=CommF_GetUint32DataValue(&Dcm_SduBuffer[DCM_34_MemAddr_Idx],DCM_34_ADDR_FORMAT);
-        /*Calculate flash program size*/
-        ProgramMemorySize=CommF_GetUint32DataValue(&Dcm_SduBuffer[DCM_34_MemSize_Idx],DCM_34_SIZE_FORMAT);
 
         if (RequestDownload(ProgramStartAddr,ProgramMemorySize) == E_OK)
         {
@@ -1780,12 +1807,6 @@ static void Dsp_RequestDownload(void)
                 {
                     TransDataTotalNumofBlock = (uint16)(ProgramMemorySize/(uint16)(TRANSDATA_BLOCKSIZE_MAX-2U));
                     TransDataLastBlockSize = TRANSDATA_BLOCKSIZE_MAX;
-                }
-
-                //请求擦除 擦除整个APP
-                if(FlsIf_Erase(MEMM_APPA_FLAG_ADDR, MEMM_APPA_LIMIT_ADDR - MEMM_APPA_FLAG_ADDR) != E_OK)
-                {
-                    DCM_SET_NRC(DCM_NRC_uploadDownloadNotAccepted);
                 }
 
                 Dsd_ProcessingDone(DCM_RsLen_RequestDownload);
@@ -1835,14 +1856,8 @@ static uint8 Dsp_RD_SequenceCheck(void)
     {
         if(g_CurLogicalBlockId == MEMM_APPA)
         {
-            if(!GetDcmState_EraseMemoryAppA())
-            {
-                DCM_SET_NRC(DCM_NRC_uploadDownloadNotAccepted);
-            }
-        }
-        else if(g_CurLogicalBlockId == MEMM_CAL)
-        {
-            if(!GetDcmState_EraseMemoryCal())
+            //请求擦除 擦除整个APP
+            if(FlsIf_Erase(MEMM_APPA_FLAG_ADDR, MEMM_APPA_LIMIT_ADDR - MEMM_APPA_FLAG_ADDR) != E_OK)
             {
                 DCM_SET_NRC(DCM_NRC_uploadDownloadNotAccepted);
             }
@@ -1963,20 +1978,16 @@ static uint8 Dsp_TD_BlockSequenceProsess(void)
     TransDataNumofTransmittedData += (uint16)(Dcm_ReqDataLength-2U);
     if((uint8)(TransDataBlockSeqCounter & BYTE_MASK) != Dcm_SduBuffer[DCM_36_BSC_Idx]) /*count error*/
     {
-        if(GetDcmState_SID36_1stBlock())
+        if(((uint8)(TransDataBlockSeqCounter & BYTE_MASK) == (Dcm_SduBuffer[DCM_36_BSC_Idx] + 1))/*this TransferData request is repeated.*/
+                && (TransData_CheckSequenceBuffer(&Dcm_SduBuffer[DCM_36_Data_Idx]) == E_OK)) /*transfer data is consist*/
         {
-            if( (Dcm_SduBuffer[DCM_36_BSC_Idx]) == 0)
+            if(GetDcmState_SID36_1stBlock() && ((Dcm_SduBuffer[DCM_36_BSC_Idx]) == 0))
             {
                 DCM_SET_NRC(DCM_NRC_wrongBlockSequenceCounter);
                 ClrDcmState_SID36_1stBlock();
             }
-        }
-        else if(((uint8)(TransDataBlockSeqCounter & BYTE_MASK) == (Dcm_SduBuffer[DCM_36_BSC_Idx] + 1))/*this TransferData request is repeated.*/
-                && (TransData_CheckSequenceBuffer(&Dcm_SduBuffer[DCM_36_Data_Idx]) == E_OK)) /*transfer data is consist*/
-        {
             TransDataBlockSeqCounter-=1;
             TransDataNumofTransmittedData -= (uint16)(Dcm_ReqDataLength-2U);
-            Dsd_ProcessingDone(DCM_RsLen_TransferData);
             ret = E_NOT_OK; /*special request: the same block is received, there is no need to write memory again*/
         }
         else
@@ -2016,7 +2027,10 @@ static uint8 Dsp_TD_BlockSequenceProsess(void)
             DCM_SET_NRC(DCM_NRC_requestSequenceError);
         }
     }
-
+    if((GetDcmState_SID36_1stBlock()) && ((Dcm_SduBuffer[DCM_36_BSC_Idx]) != 1))
+    {
+        ClrDcmState_SID36_1stBlock();
+    }
     if(DCM_GET_NRC() != DCM_NRC_positiveResponse)
     {
         ClrDcmState_AllowTransferData();
@@ -2055,9 +2069,14 @@ static void Dsp_RequestTransferExit(void)
         DCM_SET_NRC(DCM_NRC_authenticationRequired);
     }
 #endif
-    else if(Dcm_ReqDataLength!=DCM_RqLen_RequestTransferExit)
+    else if(Dcm_ReqDataLength < DCM_RqLen_RequestTransferExit)
     {
         DCM_SET_NRC(DCM_NRC_incorrectMessageLengthOrInvalidFormat);
+    }
+    else if((Dcm_SduBuffer[DCM_SubFun_Idx] != 0x00)&&
+            (Dcm_SduBuffer[DCM_SubFun_Idx] != 0x01))
+    {
+        DCM_SET_NRC(DCM_NRC_SubFunctionNotSupported);
     }
     else if(!GetDcmState_TransferDataOver()) /*data are not received complete.*/
     {
@@ -2098,17 +2117,19 @@ static void Dsp_TesterPresent(void)
     {
         DCM_SET_NRC(DCM_NRC_incorrectMessageLengthOrInvalidFormat);
     }
+    else if(Dcm_SduBuffer[DCM_SubFun_Idx] != DCM_SubFun_ZeroSubFunction)
+    {
+        DCM_SET_NRC(DCM_NRC_SubFunctionNotSupported);
+    }
+    else if(Dcm_ReqDataLength > DCM_RqLen_TesterPresent)
+    {
+        DCM_SET_NRC(DCM_NRC_incorrectMessageLengthOrInvalidFormat); 
+    }
     else
     {
         switch(Dcm_SduBuffer[DCM_SubFun_Idx])
         {
             case DCM_SubFun_ZeroSubFunction:
-            break;
-            
-            default:
-            {
-                DCM_SET_NRC(DCM_NRC_SubFunctionNotSupported);
-            }
             break;
         }
         if(DCM_GET_NRC()== DCM_NRC_positiveResponse)
@@ -2145,6 +2166,15 @@ static void Dsp_ControlDTCSetting(void)
     else if(Dcm_ReqDataLength < DCM_RqLen_ControlDTCSetting)
     {
         DCM_SET_NRC(DCM_NRC_incorrectMessageLengthOrInvalidFormat);
+    }
+    else if((Dcm_SduBuffer[DCM_SubFun_Idx] != DCM_SubFun_DTCSettingOn) &&
+            (Dcm_SduBuffer[DCM_SubFun_Idx] != DCM_SubFun_DTCSettingOff))
+    {
+        DCM_SET_NRC(DCM_NRC_SubFunctionNotSupported);
+    }
+    else if(Dcm_ReqDataLength > DCM_RqLen_ControlDTCSetting)
+    {
+        DCM_SET_NRC(DCM_NRC_incorrectMessageLengthOrInvalidFormat); 
     }
     else
     {
@@ -2222,7 +2252,7 @@ static void Dsp_WriteDataByIdentifier( void )
                         DCM_SET_NRC(DCM_NRC_incorrectMessageLengthOrInvalidFormat);
                     }
 #if(DCM_SERVICE_27_ENABLED == STD_ON)
-                    else if(!GetDcmState_IsSecurityUnlock() && (WriteDidTemp != 0xF187))
+                    else if(!GetDcmState_IsSecurityUnlock() && (WriteDidTemp != 0xF187) && (WriteDidTemp != 0xF121))
                     {
                         DCM_SET_NRC(DCM_NRC_securityAccessDenied);
                     }
@@ -2239,7 +2269,23 @@ static void Dsp_WriteDataByIdentifier( void )
                         }
                         else
                         {
-                            DCM_SET_NRC(DCM_NRC_generalProgrammingFailure);
+                            if(WriteDidTemp == 0xF187U)
+                            {
+                                uint8 AllowF187WriteId = 0U;
+                                Diag_FlagRead(ALLOW_F187_WRITE_ID,&AllowF187WriteId);
+                                if(AllowF187WriteId == 0U)
+                                {
+                                    DCM_SET_NRC(DCM_NRC_conditionsNotCorrect);
+                                }
+                                else
+                                {
+                                    DCM_SET_NRC(DCM_NRC_generalProgrammingFailure);
+                                }
+                            }
+                            else
+                            {
+                                DCM_SET_NRC(DCM_NRC_generalProgrammingFailure);
+                            }
                         }
                     }
                     break;

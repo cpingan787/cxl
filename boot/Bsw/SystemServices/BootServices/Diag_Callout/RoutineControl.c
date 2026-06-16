@@ -113,14 +113,7 @@ static void ChecksumCompute(uint32 sAddr, uint32 size, uint8 method, uint8 drvId
         if (E_OK == retValue)
         {
             /*compute checksum*/
-            if(method < RC_CHECKSUM_DIFF)
-            {
-                SecM_Crc32Process(dataBuf,RC_CHECKSUM_BUF_SIZE);
-            }
-            else
-            {
-                SecM_ChecksumProcess(dataBuf,RC_CHECKSUM_BUF_SIZE);
-            }
+            SecM_Crc32Process(dataBuf,RC_CHECKSUM_BUF_SIZE);
         }
         else
         {
@@ -151,14 +144,7 @@ static void ChecksumCompute(uint32 sAddr, uint32 size, uint8 method, uint8 drvId
 
             if (E_OK == retValue)
             {
-                if(method < RC_CHECKSUM_DIFF)
-                {
-                    SecM_Crc32Process(dataBuf,dataSize);
-                }
-                else
-                {
-                    SecM_ChecksumProcess(dataBuf,dataSize);
-                }
+                SecM_Crc32Process(dataBuf,dataSize);
             }
         }
     }
@@ -205,7 +191,7 @@ uint8 RC_ChecksumVerify(uint8 * checksum)
     LBType = MemM_LBTypeGet(g_CurLogicalBlockId);
 
     /*compute checksum*/
-    SecM_ChecksumPreprocess();
+    SecM_Crc32Preprocess();
 
     if(LBType == MEMM_FLASHDRV)
     {
@@ -225,7 +211,7 @@ uint8 RC_ChecksumVerify(uint8 * checksum)
         ChecksumCompute(g_DownSeg[index].sAddr, g_DownSeg[index].size, RC_CHECKSUM_DIFF, drvId);
     }
 
-    SecM_ChecksumFinish(&crc[0], RC_CHECKSUM_LEN);
+    SecM_Crc32Finish(&crc[0]);
 
     if(CommF_DataCompare(checksum, crc, RC_CHECKSUM_LEN) == E_OK)
     {

@@ -41,9 +41,9 @@
 /*g_FlagsInfo info*/
 #define MEMM_APPA_FLAG_ADDR                      0x00080000U
 //#define MEMM_APPB_FLAG_ADDR                      0x00150000U //不需要Application B
-#define MEMM_CAL_FLAG_ADDR                       0x001F0000U
-
-#define MEMM_FLAG_NUM                            0x0AU
+//#define MEMM_CAL_FLAG_ADDR                       0x001F0000U //无标定数据
+#define PROGRAM_CNT_MAX                          0x3E8U //程序最大刷写次数
+#define MEMM_FLAG_NUM                            0x0BU
 
 #define MEMM_FLAG_REPROGRAM_ID                   0x00u
 #define MEMM_FLAG_REPROGRAM_SIZE                 0x04u
@@ -65,35 +65,29 @@
 #define MEMM_FLAG_APPA_SIZE                      0x04u
 #define MEMM_FLAG_APPA_DATA                      0xFEu
 
-#define MEMM_FLAG_APPB_ID                        0x05u
-#define MEMM_FLAG_APPB_SIZE                      0x04u
-#define MEMM_FLAG_APPB_DATA                      0xFBu
-
-#define MEMM_FLAG_CAL_ID                         0x06u
-#define MEMM_FLAG_CAL_SIZE                       0x04u
-#define MEMM_FLAG_CAL_DATA                       0xFCu
-
-#define MEMM_FLAG_FAC_ID                         0x07u
+#define MEMM_FLAG_FAC_ID                         0x05u
 #define MEMM_FLAG_FAC_SIZE                       0x04u
 
-
-#define MEMM_FLAG_APPAddr_ID                   	 0x08u
-#define MEMM_FLAG_APPAddr_SIZE                   0x04u
-
-#define MEMM_FLAG_MPU_REPROGRAM_ID               0x09u
-#define MEMM_FLAG_MPU_REPROGRAM_SIZE             0x04u
-#define MEMM_FLAG_MPU_REPROGRAM_DATA             0xC5u
-
-#define VSN_ACTIVE_FLAG_ID                       0x09u
+#define VSN_ACTIVE_FLAG_ID                       0x06u
 #define VSN_ACTIVE_FLAG_SIZE                     0x01u
 
-#define SM4_KEY_ACTIVE_FLAG_ID                   0x0au
+#define SM4_KEY_ACTIVE_FLAG_ID                   0x07u
 #define SM4_KEY_ACTIVE_FLAG_SIZE                 0x01u
+
+#define ALLOW_F187_WRITE_ID                      0x08u
+#define ALLOW_F187_WRITE_SIZE                    0x01u
+
+#define ALLOW_F190_WRITE_ID                      0x09u
+#define ALLOW_F190_WRITE_SIZE                    0x01u
+
+#define MEMM_FLAG_MPU_REPROGRAM_ID                 10u
+#define MEMM_FLAG_MPU_REPROGRAM_SIZE             0x04u
+#define MEMM_FLAG_MPU_REPROGRAM_DATA             0xC5u
 
 
 
 /*g_logicalBlocks info*/
-#define MEMM_LOGICALBLOCK_NUM          0x04u
+#define MEMM_LOGICALBLOCK_NUM          0x02u
 
 #define MEMM_DRV_RAM                      0U
 #define MEMM_DRV_FLASH                    1U
@@ -113,7 +107,7 @@
 /*The address range for application A*/
 #define MEMM_APPA_START_ADDR          (MEMM_APPA_FLAG_ADDR + MEMM_ADDR_OFFSET)
 #define MEMM_APPA_LIMIT_ADDR          (0x0014FFFFU)
-#define MEMM_APPA_SIZE                (MEMM_APPA_LIMIT_ADDR - MEMM_APPA_START_ADDR)
+#define MEMM_APPA_SIZE                (MEMM_APPA_LIMIT_ADDR - MEMM_APPA_START_ADDR + 1)
 
 //不需要Application B
 // /*The address range for application B*/
@@ -128,6 +122,15 @@
 /***************************************************************************************************
 *                                  DATA TYPES AND STRUCTURES
 ***************************************************************************************************/
+#define PROGRAM_CNT_LEN                         0x02U
+#define VSN_LEN                                 0x20U
+#define VSN_ACTIVE_FLAG_LEN                     0x01U
+#define ALG_FLAG_LEN                            0x01U
+#define SM4_KEY_LEN                             0x20U
+#define SM4_KEY_ACTIVE_FLAG_LEN                 0x01U
+#define SM2_KEY_LEN                             0x41U
+#define ECC256_KEY_LEN                          0x41U
+
 enum USERDATA_BLOCK0
 {
     BLOCK_ID_IDX = 0,
@@ -135,7 +138,10 @@ enum USERDATA_BLOCK0
     RESET_ADDR_IDX = REPROGRAM_ADDR_IDX + MEMM_FLAG_REPROGRAM_SIZE,
     SECURITY_ADDR_IDX = RESET_ADDR_IDX + MEMM_FLAG_RESET_SESSION_SIZE,
     NEGATIVERES_ADDR_IDX = SECURITY_ADDR_IDX + MEMM_FLAG_NORESPONSE_SIZE,
-    DID_F100_ADDR_IDX = NEGATIVERES_ADDR_IDX + MEMM_FLAG_NORESPONSE_SIZE,
+    ALLOW_F187_WRITE_IDX = NEGATIVERES_ADDR_IDX + MEMM_FLAG_NORESPONSE_SIZE,
+    ALLOW_F190_WRITE_IDX = ALLOW_F187_WRITE_IDX + ALLOW_F187_WRITE_SIZE,
+    PROGRAM_CNT_ADDR_IDX = ALLOW_F190_WRITE_IDX + ALLOW_F190_WRITE_SIZE,
+    DID_F100_ADDR_IDX = PROGRAM_CNT_ADDR_IDX + PROGRAM_CNT_LEN,
     DID_F110_ADDR_IDX = DID_F100_ADDR_IDX + DID_F100_LEN,
     DID_F111_ADDR_IDX = DID_F110_ADDR_IDX + DID_F110_LEN,
     DID_F112_ADDR_IDX = DID_F111_ADDR_IDX + DID_F111_LEN,
@@ -182,12 +188,12 @@ enum USERDATA_BLOCK0
     DID_AFFE_ADDR_IDX = DID_AFFD_ADDR_IDX + DID_AFFD_LEN,
     DID_AFFF_ADDR_IDX = DID_AFFE_ADDR_IDX + DID_AFFE_LEN,
     VSN_ADDR_IDX = DID_AFFF_ADDR_IDX + DID_AFFF_LEN,
-    VSN_ACTIVE_FLAG_IDX = VSN_ADDR_IDX + 32U,
-    ALG_FLAG_IDX = VSN_ACTIVE_FLAG_IDX + 1U,
-    SM4_KEY_IDX = ALG_FLAG_IDX + 1U,
-    SM4_KEY_ACTIVE_FLAG_IDX = SM4_KEY_IDX + 32U,
-    SM2_KEY_IDX = SM4_KEY_ACTIVE_FLAG_IDX + 1U,
-    ECC256_KEY_IDX = SM2_KEY_IDX + 65U,
+    VSN_ACTIVE_FLAG_IDX = VSN_ADDR_IDX + VSN_LEN,
+    ALG_FLAG_IDX = VSN_ACTIVE_FLAG_IDX + VSN_ACTIVE_FLAG_LEN,
+    SM4_KEY_IDX = ALG_FLAG_IDX + ALG_FLAG_LEN,
+    SM4_KEY_ACTIVE_FLAG_IDX = SM4_KEY_IDX + SM4_KEY_LEN,
+    SM2_KEY_IDX = SM4_KEY_ACTIVE_FLAG_IDX + SM4_KEY_ACTIVE_FLAG_LEN,
+    ECC256_KEY_IDX = SM2_KEY_IDX + SM2_KEY_LEN,
 };
 
 /***************************************************************************************************

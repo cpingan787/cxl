@@ -177,8 +177,9 @@ void CanIf_RxIndication(const Can_HwType * Mailbox, const PduInfoType * PduInfoP
 END_FUNCTION_HDR */
 void CanIf_ControllerBusOff(uint8 ControllerId)
 {
-    COMMF_UNUSED_PARAM(ControllerId);
-    /*do nothing*/
+    /* Initialize CAN Driver */
+    Can_Init(CanConfigSet0);
+    Can_SetControllerMode(CanConf_CanController_CanController, CAN_T_START);
 }
 /* BEGIN_FUNCTION_HDR
 ************************************************************************************************

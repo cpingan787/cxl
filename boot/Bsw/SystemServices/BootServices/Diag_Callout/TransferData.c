@@ -87,7 +87,7 @@ uint8 TransData_WriteMemory(uint32 addr, uint32 size, uint8 * buf)
         g_CurLogicalBlockId = COMMF_INVALID_U8;
         g_DownSegIdx = COMMF_INVALID_U8;
     }
-      SecM_Crc16Process(buf,size);
+    //SecM_Crc16Process(buf,size);
     return retValue;
 }
 /* BEGIN_FUNCTION_HDR

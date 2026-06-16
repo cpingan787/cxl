@@ -49,7 +49,7 @@ static const struct CanTp_TimeOutStructType CanTp_TimeOut[2u] =
 
 static const struct CanTp_ParamStructType CanTp_Param[1u] =
 {
-    {{ 0x01,     0x8,      },     0x0       }
+    {{ 0x00,     0x0,      },     0x0       }
 };
 
 const struct CanTp_ConfigStructType CanTp_Config = 

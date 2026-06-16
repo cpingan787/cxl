@@ -90,7 +90,7 @@ TASK(OsTask_Init)
 }
 /*OsTask_0: Core0(CPU),Type = BASIC, Priority = 1*/
 uint32 task_cnt = 0;
-extern void TstCanSendMessage(uint32 canId, uint32 data);
+extern void TstCanSendMessage(void);
 TASK(OsTask_0)
 {
     /* please insert your code here ... */
