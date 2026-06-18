@@ -106,7 +106,7 @@
 
 /*The address range for application A*/
 #define MEMM_APPA_START_ADDR          (MEMM_APPA_FLAG_ADDR + MEMM_ADDR_OFFSET)
-#define MEMM_APPA_LIMIT_ADDR          (0x0014FFFFU)
+#define MEMM_APPA_LIMIT_ADDR          (0x00190000U)
 #define MEMM_APPA_SIZE                (MEMM_APPA_LIMIT_ADDR - MEMM_APPA_START_ADDR + 1)
 
 //不需要Application B

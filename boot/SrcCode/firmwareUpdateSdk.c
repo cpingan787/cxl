@@ -22,8 +22,8 @@
 /****************************** Macro Definitions ******************************/
 #define FLASH_APP_BANKA_ACTIVE_ADDRESS           0x00080000 
 #define FLASH_APP_BANKA_ABSTRACT_ADDRESS         0x00080200  // 签名区
-#define FLASH_APP_BANKA_END_ADDRESS              0x00150000  // A区代码结束
-#define APP_BANK_SIZE                            0x000D0000
+#define FLASH_APP_BANKA_END_ADDRESS              0x00190000U  // A区代码结束
+#define APP_BANK_SIZE                            0x00110000
 #define FLASH_APP_DEFALT_BANK_ID                 0x00
 #define FLASH_APP_BANKA_ID                       0x01
 
