@@ -821,10 +821,10 @@ static void Dsd_ProcessingDone( PduLengthType dataLength )
             Dcm_TxSduInfo.SduDataPtr=Dcm_SduBuffer;
             Dcm_TxSduInfo.SduLength=dataLength;
             // TBOX_PRINT("Dcm_ProcessingDone dataLength = %d\n",dataLength);
-            // for(uint8 i = 0; i < dataLength; i++)
-            // {
-            //     TBOX_PRINT("data %d = 0x%02X \r\n",i,Dcm_TxSduInfo.SduDataPtr[i]);
-            // }
+            for(uint8 i = 0; i < dataLength; i++)
+            {
+                TBOX_PRINT("data %d = 0x%02X \r\n",i,Dcm_TxSduInfo.SduDataPtr[i]);
+            }
             (void)CanTp_Transmit(0, &Dcm_TxSduInfo);
         }
     }

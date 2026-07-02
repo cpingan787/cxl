@@ -187,7 +187,7 @@ TASK(OsTask_0)
 	{
 		task_cnt = 0;
     	//TstCanSendMessage();
-		
+		//TstSendRestartCanMsg();
 		//Can_MainFunction_Read();
   		//Can_MainFunction_Write();
   		//Can_MainFunction_BusOff();

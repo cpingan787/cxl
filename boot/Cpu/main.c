@@ -174,6 +174,18 @@ void TstCanSendMessageRx(void)
     Std_ReturnType tRet = Can_Write(CanConf_CanHardwareObject_CanHardwareObject_Tx1, &tPduInfo);
 }
 
+void TstSendRestartCanMsg(void)
+{
+    Can_PduType tPduInfo;
+    uint8 aData[16] = {0}; 
+    aData[4] = 0x01U;
+    tPduInfo.swPduHandle = 0U;
+    tPduInfo.length      = 16U;
+    tPduInfo.id          = 0x40000000 | 0x59U;
+    tPduInfo.sdu         = aData;
+
+    Std_ReturnType tRet = Can_Write(CanConf_CanHardwareObject_CanHardwareObject_Tx1, &tPduInfo);
+}
 
 void main(void)
 {
