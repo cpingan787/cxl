@@ -405,7 +405,7 @@ and Fls_UseFlashControllerEndHook function. */
 #define FLS_BLANKCHECK_TIMEOUT_COUNT      213U
 
 /* Flash Programming HW frequency in MHz */
-#define FLS_CPU_FREQUENCY_MHZ             80U
+#define FLS_CPU_FREQUENCY_MHZ             120U
 
 /* fPCLK clock devider */
 #define FLS_CPUCLK_UL_DIV                 4U

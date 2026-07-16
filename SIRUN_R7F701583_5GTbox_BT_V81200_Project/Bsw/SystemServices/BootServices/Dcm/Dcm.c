@@ -1140,6 +1140,12 @@ static void Dsp_SecurityAccess(void)
                 Dsp_SA_KeyProcess();
             }    
             break;
+            case 0x01:
+            case 0x02:
+            {
+                DCM_SET_NRC(DCM_NRC_SubFunctionNotSupportedInActiveSession);
+            }
+            break;
             
             default:
             { 
