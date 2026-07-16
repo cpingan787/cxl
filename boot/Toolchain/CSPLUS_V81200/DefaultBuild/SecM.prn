@@ -1,0 +1,2216 @@
+RH850 Family Assembler V2.07.00.03 Assemble Source List
+
+OFFSET   CODE                  NO  SOURCE STATEMENT
+
+00000000                        1  #CC-RH Compiler RH850 Assembler Source
+00000000                        2  #@	CC-RH Version : V2.07.00  [06 Dec 2024]
+00000000                        3  #@	Command : ..\..\Bsw\SystemServices\BootServices\SecurityManager\SecM.c -oDefaultBuild\SecM.obj -Xcpu=g3kh -Xreg_mode=22 -Xreserve_r2 -Xno_warning=20188,20111 -g -g_line -I..\..\Cpu\uart -I..\..\SrcCode -I..\..\Bsw\SystemServices\vss -I..\..\Bsw\SystemServices\FCL\user -I..\..\Bsw\SystemServices\FCL\lib -I..\..\Bsw\SystemServices\FCL -I..\..\Bsw\SystemServices\WdgM -I..\..\Bsw\SystemServices\WdgIf -I..\..\Bsw\Mcal\wdg\include -I..\..\Bsw\Config\MCAL_Config\Wdg_OutPut\include -I..\..\Bsw\SystemServices\SecureProgram -I..\..\Bsw\SystemServices\SecureBoot -I..\..\Bsw\Mcal\vss -I..\..\Bsw\SystemServices\BootServices\Crc -I..\..\FCL\user -I..\..\FCL\lib -I..\..\FCL -I..\..\Bsw\SystemServices\BootServices -I..\..\Bsw\Config\MCAL_Config\Gpt_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Fls_OutPut\include -I..\..\Bsw\Mcal\gpt\include -I..\..\Bsw\Mcal\fls\include -I..\..\Bsw\SystemServices\BootServices\SecurityManager -I..\..\Bsw\SystemServices\BootServices\MemoryManager -I..\..\Bsw\SystemServices\BootServices\FlsIf -I..\..\Bsw\SystemServices\BootServices\EEIf -I..\..\Bsw\SystemServices\BootServices\EcuMService -I..\..\Bsw\SystemServices\BootServices\Diag_Callout -I..\..\Bsw\SystemServices\BootServices\Dcm -I..\..\Bsw\SystemServices\BootServices\Common -I..\..\Bsw\SystemServices\BootServices\CanTp -I..\..\Bsw\SystemServices\BootServices\CanIf -I..\..\Bsw\SystemServices\BootManager -I..\..\Cpu -I..\..\Bsw\CommonInclude -I..\..\Bsw\Config\BSW_Config -I..\..\Bsw\Config\BSW_Config\RH850F1K -I..\..\Bsw\SystemServices\Os\Extend\inc -I..\..\Bsw\SystemServices\Os\Kernel\inc -I..\..\Bsw\SystemServices\Os\Portable\Mcu -I..\..\Bsw\SystemServices\Os\Portable\Processor -I..\..\Bsw\Config\MCAL_Config\Adc_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Can_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Dio_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Mcu_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Port_OutPut\include -I..\..\Bsw\Mcal\adc\include -I..\..\Bsw\Mcal\can\include -I..\..\Bsw\Mcal\dio\include -I..\..\Bsw\Mcal\general -I..\..\Bsw\Mcal\mcu\include -I..\..\Bsw\Mcal\port\include -I..\..\Bsw\Mcal\stubs\CanGeneral\include -I..\..\Bsw\Mcal\stubs\CanIf\include -I..\..\Bsw\Mcal\stubs\Dem\include -I..\..\Bsw\Mcal\stubs\Det\include -I..\..\Bsw\Mcal\stubs\EcuM\include -I..\..\Bsw\Mcal\stubs\MemIf\include -I..\..\Bsw\Mcal\stubs\SchM\include -DRH850_F1KM_S1_2MB -lang=c99 -Xdbl_size=4 -Xcall_jump=32 -Xasm_path=DefaultBuild -Xasm_option=-Xprn_path=DefaultBuild -c -MAKEUD=DefaultBuild -Xexec_time=C:\Users\xlchen\AppData\Local\Temp\CSPlusBuildTool_9b224290511b4d359a880fc95ec38989lsuyb5yw.4lc
+00000000                        4  #@	compiled at Thu Jul 16 13:41:29 2026
+00000000                        5  
+00000000                        6  	.file "..\..\Bsw\SystemServices\BootServices\SecurityManager\SecM.c"
+00000000                        7  
+00000000                        8  	$reg_mode 22
+00000000                        9  	.dbl_size 4
+00000000                       10  
+00000000                       11  	.public _AES_Te2, 1024
+00000000                       12  	.public _AES_Te3, 1024
+00000000                       13  	.public _AES_Te0, 1024
+00000000                       14  	.public _AES_Te1, 1024
+00000000                       15  	.public _AES_rcon, 40
+00000000                       16  	.public _SecM_Init
+00000000                       17  	.public _SecM_RandomSeedGet
+00000000                       18  	.public _SecM_AccessKeyGet
+00000000                       19  	.public _SecM_ChecksumPreprocess
+00000000                       20  	.public _SecM_ChecksumProcess
+00000000                       21  	.public _SecM_ChecksumFinish
+00000000                       22  	.public _SecM_Crc32Preprocess
+00000000                       23  	.extern _SecM_ReverseBit_32
+00000000                       24  	.public _SecM_Crc32Process
+00000000                       25  	.public _SecM_Crc32Finish
+00000000                       26  	.public _SecM_HSE_Process
+00000000                       27  	.public _genKeyByCode
+00000000                       28  	.extern _memset
+00000000                       29  	.public _SecM_Crc16Preprocess
+00000000                       30  	.public _SecM_Crc16Process
+00000000                       31  	.public _SecM_Crc16Finish
+00000000                       32  
+00000000                       33  	.section .text, text
+00000000                       34  _SecM_Init:
+00000000                       35  	.stack _SecM_Init = 4
+00000000                       36  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 70
+00000000 80072100              37  	prepare 0x00000001, 0x00000000
+00000004                       38  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 73
+00000004 80FF0000              39  	jarl _SecM_Crc32TableInit.1, r31
+00000008                       40  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 77
+00000008 80FF0000              41  	jarl _SecM_RandomSeedInit.1, r31
+0000000C 40063F00              42  	dispose 0x00000000, 0x00000001, [r31]
+00000010                       43  _SecM_RandomSeedGet:
+00000010                       44  	.stack _SecM_RandomSeedGet = 0
+00000010                       45  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 96
+00000010 402E0000              46  	movhi HIGHW1(#_gs_RandomSeed.5), r0, r5
+00000014                       47  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 100
+00000014 25470100              48  	ld.w LOWW(#_gs_RandomSeed.5)[r5], r8
+00000018 204EA741              49  	movea 0x000041A7, r0, r9
+0000001C E9472002              50  	mul r9, r8, r0
+00000020 65470100              51  	st.w r8, LOWW(#_gs_RandomSeed.5)[r5]
+00000024 002A                  52  	mov 0x00000000, r5
+00000026 8505                  53  	br9 .BB.LABEL.2_2
+00000028                       54  .BB.LABEL.2_1:	; bb
+00000028                       55  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 103
+00000028 0740                  56  	mov r7, r8
+0000002A A541                  57  	sub r5, r8
+0000002C                       58  	mov 0x1FFFFFFF, r9
+0000002C 2906FFFFFF1F            -- mov         0x1fffffff,r9
+00000032 C941                  59  	add r9, r8
+00000034 C342                  60  	shl 0x00000003, r8
+00000036 404E0000              61  	movhi HIGHW1(#_gs_RandomSeed.5), r0, r9
+0000003A 294F0100              62  	ld.w LOWW(#_gs_RandomSeed.5)[r9], r9
+0000003E E84F8000              63  	shr r8, r9
+00000042 0640                  64  	mov r6, r8
+00000044 C541                  65  	add r5, r8
+00000046 484F0000              66  	st.b r9, 0x00000000[r8]
+0000004A 412A                  67  	add 0x00000001, r5
+0000004C                       68  .BB.LABEL.2_2:	; bb20
+0000004C                       69  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 101
+0000004C E729                  70  	cmp r7, r5
+0000004E 8105                  71  	bl9 .BB.LABEL.2_1
+00000050                       72  .BB.LABEL.2_3:	; return
+00000050                       73  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 105
+00000050 7F00                  74  	jmp [r31]
+00000052                       75  _SecM_AccessKeyGet:
+00000052                       76  	.stack _SecM_AccessKeyGet = 0
+00000052                       77  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 125
+00000052 002A                  78  	mov 0x00000000, r5
+00000054 23470100              79  	ld.w 0x00000000[r3], r8
+00000058 0550                  80  	mov r5, r10
+0000005A 8505                  81  	br9 .BB.LABEL.3_2
+0000005C                       82  .BB.LABEL.3_1:	; bb
+0000005C                       83  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 140
+0000005C 0758                  84  	mov r7, r11
+0000005E C559                  85  	add r5, r11
+00000060 8B5F0100              86  	ld.bu 0x00000000[r11], r11
+00000064 412A                  87  	add 0x00000001, r5
+00000066 0660                  88  	mov r6, r12
+00000068 A561                  89  	sub r5, r12
+0000006A C362                  90  	shl 0x00000003, r12
+0000006C EC5FC000              91  	shl r12, r11
+00000070 0B51                  92  	or r11, r10
+00000072                       93  .BB.LABEL.3_2:	; bb37
+00000072                       94  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 138
+00000072 E629                  95  	cmp r6, r5
+00000074 8105                  96  	bl9 .BB.LABEL.3_1
+00000076                       97  .BB.LABEL.3_3:	; if_else_bb83
+00000076                       98  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 160
+00000076 CA2ED200              99  	andi 0x000000D2, r10, r5
+0000007A A52E1000             100  	xori 0x00000010, r5, r5
+0000007E                      101  	mov 0x000221F9, r6
+0000007E 2606F9210200            -- mov         0x221f9,r6
+00000084 C629                 102  	add r6, r5
+00000086 0032                 103  	mov 0x00000000, r6
+00000088 8505                 104  	br9 .BB.LABEL.3_5
+0000008A                      105  .BB.LABEL.3_4:	; bb107
+0000008A                      106  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 173
+0000008A C739                 107  	add r7, r7
+0000008C 1E5A                 108  	mov 0xFFFFFFFE, r11
+0000008E                      109  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 174
+0000008E 2B39                 110  	xor r11, r7
+00000090                      111  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 169
+00000090 0A58                 112  	mov r10, r11
+00000092 985A                 113  	shr 0x00000018, r11
+00000094 CB5E0100             114  	andi 0x00000001, r11, r11
+00000098 0A60                 115  	mov r10, r12
+0000009A 9E62                 116  	shr 0x0000001E, r12
+0000009C 2B61                 117  	xor r11, r12
+0000009E 0A58                 118  	mov r10, r11
+000000A0 8C5A                 119  	shr 0x0000000C, r11
+000000A2 CB5E0100             120  	andi 0x00000001, r11, r11
+000000A6 2B61                 121  	xor r11, r12
+000000A8 8252                 122  	shr 0x00000002, r10
+000000AA CA560100             123  	andi 0x00000001, r10, r10
+000000AE 2A61                 124  	xor r10, r12
+000000B0 AC560100             125  	xori 0x00000001, r12, r10
+000000B4                      126  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 175
+000000B4 0751                 127  	or r7, r10
+000000B6 AA560100             128  	xori 0x00000001, r10, r10
+000000BA 4132                 129  	add 0x00000001, r6
+000000BC                      130  .BB.LABEL.3_5:	; bb134
+000000BC                      131  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 0
+000000BC 0A38                 132  	mov r10, r7
+000000BE                      133  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 167
+000000BE E531                 134  	cmp r5, r6
+000000C0 8105                 135  	bl9 .BB.LABEL.3_4
+000000C2                      136  .BB.LABEL.3_6:	; if_then_bb146
+000000C2                      137  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 179
+000000C2 0A28                 138  	mov r10, r5
+000000C4 D02A                 139  	shl 0x00000010, r5
+000000C6 403600FF             140  	movhi 0x0000FF00, r0, r6
+000000CA 2629                 141  	xor r6, r5
+000000CC 0A30                 142  	mov r10, r6
+000000CE 9032                 143  	shr 0x00000010, r6
+000000D0 8600                 144  	zxb r6
+000000D2 883A                 145  	shr 0x00000008, r7
+000000D4 0639                 146  	or r6, r7
+000000D6 4036FF00             147  	movhi 0x000000FF, r0, r6
+000000DA 2639                 148  	xor r6, r7
+000000DC C852                 149  	shl 0x00000008, r10
+000000DE AA3600FF             150  	xori 0x0000FF00, r10, r6
+000000E2 0639                 151  	or r6, r7
+000000E4 0539                 152  	or r5, r7
+000000E6 002A                 153  	mov 0x00000000, r5
+000000E8 8505                 154  	br9 .BB.LABEL.3_8
+000000EA                      155  .BB.LABEL.3_7:	; bb168
+000000EA                      156  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 0
+000000EA                      157  	mov 0x1FFFFFFF, r6
+000000EA 2606FFFFFF1F            -- mov         0x1fffffff,r6
+000000F0                      158  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 192
+000000F0 C931                 159  	add r9, r6
+000000F2 A531                 160  	sub r5, r6
+000000F4 C332                 161  	shl 0x00000003, r6
+000000F6 E63F8230             162  	shr r6, r7, r6
+000000FA 0850                 163  	mov r8, r10
+000000FC C551                 164  	add r5, r10
+000000FE 4A370000             165  	st.b r6, 0x00000000[r10]
+00000102 412A                 166  	add 0x00000001, r5
+00000104                      167  .BB.LABEL.3_8:	; bb183
+00000104                      168  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 190
+00000104 E929                 169  	cmp r9, r5
+00000106 8105                 170  	bl9 .BB.LABEL.3_7
+00000108                      171  .BB.LABEL.3_9:	; return
+00000108                      172  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 195
+00000108 7F00                 173  	jmp [r31]
+0000010A                      174  _SecM_ChecksumPreprocess:
+0000010A                      175  	.stack _SecM_ChecksumPreprocess = 0
+0000010A                      176  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 215
+0000010A 402E0000             177  	movhi HIGHW1(#_gs_Crc32User.4), r0, r5
+0000010E 1F32                 178  	mov 0xFFFFFFFF, r6
+00000110 65370100             179  	st.w r6, LOWW(#_gs_Crc32User.4)[r5]
+00000114 7F00                 180  	jmp [r31]
+00000116                      181  _SecM_ChecksumProcess:
+00000116                      182  	.stack _SecM_ChecksumProcess = 0
+00000116                      183  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 234
+00000116 002A                 184  	mov 0x00000000, r5
+00000118 8505                 185  	br9 .BB.LABEL.5_5
+0000011A                      186  .BB.LABEL.5_1:	; bb
+0000011A                      187  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 240
+0000011A 0640                 188  	mov r6, r8
+0000011C C541                 189  	add r5, r8
+0000011E 88470100             190  	ld.bu 0x00000000[r8], r8
+00000122 404E0000             191  	movhi HIGHW1(#_gs_Crc32User.4), r0, r9
+00000126 29570100             192  	ld.w LOWW(#_gs_Crc32User.4)[r9], r10
+0000012A 2851                 193  	xor r8, r10
+0000012C 0842                 194  	mov 0x00000008, r8
+0000012E 8505                 195  	br9 .BB.LABEL.5_3
+00000130                      196  .BB.LABEL.5_2:	; bb11
+00000130                      197  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 243
+00000130 404E0000             198  	movhi HIGHW1(#_gs_Crc32User.4), r0, r9
+00000134 29570100             199  	ld.w LOWW(#_gs_Crc32User.4)[r9], r10
+00000138 CA5E0100             200  	andi 0x00000001, r10, r11
+0000013C 8059                 201  	subr r0, r11
+0000013E                      202  	mov 0xC8DF352F, r12
+0000013E 2C062F35DFC8            -- mov         0xc8df352f,r12
+00000144 4C59                 203  	and r12, r11
+00000146 8152                 204  	shr 0x00000001, r10
+00000148 2B51                 205  	xor r11, r10
+0000014A 5F42                 206  	add 0xFFFFFFFF, r8
+0000014C                      207  .BB.LABEL.5_3:	; bb11
+0000014C                      208  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 0
+0000014C 69570100             209  	st.w r10, LOWW(#_gs_Crc32User.4)[r9]
+00000150                      210  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 241
+00000150 C806FF00             211  	andi 0x000000FF, r8, r0
+00000154 8A05                 212  	bnz9 .BB.LABEL.5_2
+00000156                      213  .BB.LABEL.5_4:	; bb26
+00000156                      214  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 0
+00000156 412A                 215  	add 0x00000001, r5
+00000158                      216  .BB.LABEL.5_5:	; bb29
+00000158                      217  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 238
+00000158 E729                 218  	cmp r7, r5
+0000015A 8105                 219  	bl9 .BB.LABEL.5_1
+0000015C                      220  .BB.LABEL.5_6:	; return
+0000015C                      221  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 246
+0000015C 7F00                 222  	jmp [r31]
+0000015E                      223  _SecM_ChecksumFinish:
+0000015E                      224  	.stack _SecM_ChecksumFinish = 0
+0000015E                      225  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 263
+0000015E 402E0000             226  	movhi HIGHW1(#_gs_Crc32User.4), r0, r5
+00000162                      227  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 267
+00000162 25470100             228  	ld.w LOWW(#_gs_Crc32User.4)[r5], r8
+00000166 2840                 229  	not r8, r8
+00000168 65470100             230  	st.w r8, LOWW(#_gs_Crc32User.4)[r5]
+0000016C 002A                 231  	mov 0x00000000, r5
+0000016E 8505                 232  	br9 .BB.LABEL.6_2
+00000170                      233  .BB.LABEL.6_1:	; bb
+00000170                      234  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 270
+00000170 0748                 235  	mov r7, r9
+00000172 A549                 236  	sub r5, r9
+00000174                      237  	mov 0x1FFFFFFF, r10
+00000174 2A06FFFFFF1F            -- mov         0x1fffffff,r10
+0000017A CA49                 238  	add r10, r9
+0000017C C34A                 239  	shl 0x00000003, r9
+0000017E E9478248             240  	shr r9, r8, r9
+00000182 0650                 241  	mov r6, r10
+00000184 C551                 242  	add r5, r10
+00000186 4A4F0000             243  	st.b r9, 0x00000000[r10]
+0000018A 412A                 244  	add 0x00000001, r5
+0000018C                      245  .BB.LABEL.6_2:	; bb21
+0000018C                      246  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 268
+0000018C E729                 247  	cmp r7, r5
+0000018E 8105                 248  	bl9 .BB.LABEL.6_1
+00000190                      249  .BB.LABEL.6_3:	; return
+00000190                      250  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 272
+00000190 7F00                 251  	jmp [r31]
+00000192                      252  _SecM_Crc32Preprocess:
+00000192                      253  	.stack _SecM_Crc32Preprocess = 4
+00000192                      254  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 288
+00000192 80072100             255  	prepare 0x00000001, 0x00000000
+00000196 1F32                 256  	mov 0xFFFFFFFF, r6
+00000198                      257  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 291
+00000198 FF0200000000         258  	jarl32 _SecM_ReverseBit_32, r31
+0000019E 402E0000             259  	movhi HIGHW1(#_gs_Crc32Remainder.1), r0, r5
+000001A2 65570100             260  	st.w r10, LOWW(#_gs_Crc32Remainder.1)[r5]
+000001A6 40063F00             261  	dispose 0x00000000, 0x00000001, [r31]
+000001AA                      262  _SecM_Crc32Process:
+000001AA                      263  	.stack _SecM_Crc32Process = 0
+000001AA                      264  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 313
+000001AA 002A                 265  	mov 0x00000000, r5
+000001AC 8505                 266  	br9 .BB.LABEL.8_2
+000001AE                      267  .BB.LABEL.8_1:	; bb
+000001AE                      268  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 319
+000001AE 0640                 269  	mov r6, r8
+000001B0 C541                 270  	add r5, r8
+000001B2                      271  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 321
+000001B2 88470100             272  	ld.bu 0x00000000[r8], r8
+000001B6 404E0000             273  	movhi HIGHW1(#_gs_Crc32Remainder.1), r0, r9
+000001BA 29570100             274  	ld.w LOWW(#_gs_Crc32Remainder.1)[r9], r10
+000001BE                      275  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 322
+000001BE CA5EFF00             276  	andi 0x000000FF, r10, r11
+000001C2 2859                 277  	xor r8, r11
+000001C4 C25A                 278  	shl 0x00000002, r11
+000001C6                      279  	mov #_gs_Crc32Table.3, r8
+000001C6 280600000000            -- mov         0x0,r8
+000001CC CB41                 280  	add r11, r8
+000001CE 28470100             281  	ld.w 0x00000000[r8], r8
+000001D2 8852                 282  	shr 0x00000008, r10
+000001D4 2851                 283  	xor r8, r10
+000001D6 69570100             284  	st.w r10, LOWW(#_gs_Crc32Remainder.1)[r9]
+000001DA 412A                 285  	add 0x00000001, r5
+000001DC                      286  .BB.LABEL.8_2:	; bb24
+000001DC                      287  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 317
+000001DC E729                 288  	cmp r7, r5
+000001DE 8105                 289  	bl9 .BB.LABEL.8_1
+000001E0                      290  .BB.LABEL.8_3:	; return
+000001E0                      291  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 328
+000001E0 7F00                 292  	jmp [r31]
+000001E2                      293  _SecM_Crc32Finish:
+000001E2                      294  	.stack _SecM_Crc32Finish = 0
+000001E2                      295  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 345
+000001E2 402E0000             296  	movhi HIGHW1(#_gs_Crc32Remainder.1), r0, r5
+000001E6                      297  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 352
+000001E6 253F0100             298  	ld.w LOWW(#_gs_Crc32Remainder.1)[r5], r7
+000001EA 2738                 299  	not r7, r7
+000001EC 653F0100             300  	st.w r7, LOWW(#_gs_Crc32Remainder.1)[r5]
+000001F0 002A                 301  	mov 0x00000000, r5
+000001F2 8505                 302  	br9 .BB.LABEL.9_2
+000001F4                      303  .BB.LABEL.9_1:	; bb
+000001F4                      304  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 356
+000001F4 C53EFF00             305  	andi 0x000000FF, r5, r7
+000001F8 0342                 306  	mov 0x00000003, r8
+000001FA A741                 307  	sub r7, r8
+000001FC C342                 308  	shl 0x00000003, r8
+000001FE 404E0000             309  	movhi HIGHW1(#_gs_Crc32Remainder.1), r0, r9
+00000202 294F0100             310  	ld.w LOWW(#_gs_Crc32Remainder.1)[r9], r9
+00000206 E84F8000             311  	shr r8, r9
+0000020A C639                 312  	add r6, r7
+0000020C 474F0000             313  	st.b r9, 0x00000000[r7]
+00000210 412A                 314  	add 0x00000001, r5
+00000212                      315  .BB.LABEL.9_2:	; bb18
+00000212                      316  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 354
+00000212 C53EFF00             317  	andi 0x000000FF, r5, r7
+00000216 643A                 318  	cmp 0x00000004, r7
+00000218 8105                 319  	bl9 .BB.LABEL.9_1
+0000021A                      320  .BB.LABEL.9_3:	; return
+0000021A                      321  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 358
+0000021A 7F00                 322  	jmp [r31]
+0000021C                      323  _SecM_Crc32TableInit.1:
+0000021C                      324  	.stack _SecM_Crc32TableInit.1 = 4
+0000021C                      325  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 374
+0000021C 80072100             326  	prepare 0x00000001, 0x00000000
+00000220                      327  	mov 0x04C11DB7, r6
+00000220 2606B71DC104            -- mov         0x4c11db7,r6
+00000226                      328  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 381
+00000226 FF0200000000         329  	jarl32 _SecM_ReverseBit_32, r31
+0000022C 002A                 330  	mov 0x00000000, r5
+0000022E 8505                 331  	br9 .BB.LABEL.10_4
+00000230                      332  .BB.LABEL.10_1:	; bb6
+00000230                      333  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 388
+00000230 C6060100             334  	andi 0x00000001, r6, r0
+00000234                      335  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 390
+00000234 E0570443             336  	cmov 0x00000002, 0x00000000, r10, r8
+00000238                      337  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 388
+00000238 8132                 338  	shr 0x00000001, r6
+0000023A                      339  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 390
+0000023A 2831                 340  	xor r8, r6
+0000023C 413A                 341  	add 0x00000001, r7
+0000023E                      342  .BB.LABEL.10_2:	; bb19
+0000023E                      343  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 386
+0000023E 683A                 344  	cmp 0x00000008, r7
+00000240 8105                 345  	bl9 .BB.LABEL.10_1
+00000242                      346  .BB.LABEL.10_3:	; bb24
+00000242                      347  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 398
+00000242 0538                 348  	mov r5, r7
+00000244 C23A                 349  	shl 0x00000002, r7
+00000246                      350  	mov #_gs_Crc32Table.3, r8
+00000246 280600000000            -- mov         0x0,r8
+0000024C C741                 351  	add r7, r8
+0000024E 68370100             352  	st.w r6, 0x00000000[r8]
+00000252 412A                 353  	add 0x00000001, r5
+00000254                      354  .BB.LABEL.10_4:	; bb30
+00000254                      355  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 0
+00000254 2036FF00             356  	movea 0x000000FF, r0, r6
+00000258                      357  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 383
+00000258 E629                 358  	cmp r6, r5
+0000025A 8B05                 359  	bh9 .BB.LABEL.10_6
+0000025C                      360  .BB.LABEL.10_5:	; bb30.bb19_crit_edge
+0000025C                      361  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 0
+0000025C 003A                 362  	mov 0x00000000, r7
+0000025E 0530                 363  	mov r5, r6
+00000260 8505                 364  	br9 .BB.LABEL.10_2
+00000262                      365  .BB.LABEL.10_6:	; return
+00000262                      366  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 421
+00000262 40063F00             367  	dispose 0x00000000, 0x00000001, [r31]
+00000266                      368  _SecM_RandomSeedInit.1:
+00000266                      369  	.stack _SecM_RandomSeedInit.1 = 0
+00000266                      370  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 441
+00000266 402E0000             371  	movhi HIGHW1(#_gs_RandomSeed.5), r0, r5
+0000026A                      372  	mov 0x23654789, r6
+0000026A 260689476523            -- mov         0x23654789,r6
+00000270 65370100             373  	st.w r6, LOWW(#_gs_RandomSeed.5)[r5]
+00000274 7F00                 374  	jmp [r31]
+00000276                      375  _SecM_HSE_Process:
+00000276                      376  	.stack _SecM_HSE_Process = 0
+00000276                      377  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 460
+00000276 7F00                 378  	jmp [r31]
+00000278                      379  _genKeyByCode:
+00000278                      380  	.stack _genKeyByCode = 308
+00000278                      381  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 754
+00000278 BF07E170             382  	prepare 0x00000B87, 0x0000007C
+0000027C 231E64FF             383  	movea 0xFFFFFF64, r3, r3
+00000280 06C8                 384  	mov r6, r25
+00000282 07D0                 385  	mov r7, r26
+00000284 08D8                 386  	mov r8, r27
+00000286                      387  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 757
+00000286 43071701             388  	st.b r0, 0x00000117[r3]
+0000028A 43071601             389  	st.b r0, 0x00000116[r3]
+0000028E 43071501             390  	st.b r0, 0x00000115[r3]
+00000292 43071401             391  	st.b r0, 0x00000114[r3]
+00000296 43071401             392  	st.b r0, 0x00000114[r3]
+0000029A 20461000             393  	movea 0x00000010, r0, r8
+0000029E 0C3A                 394  	mov 0x0000000C, r7
+000002A0 23360401             395  	movea 0x00000104, r3, r6
+000002A4                      396  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 760
+000002A4 FF0200000000         397  	jarl32 _memset, r31
+000002AA                      398  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 775
+000002AA 192F0000             399  	ld.b 0x00000000[r25], r5
+000002AE 432F0401             400  	st.b r5, 0x00000104[r3]
+000002B2                      401  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 776
+000002B2 192F0100             402  	ld.b 0x00000001[r25], r5
+000002B6 432F0501             403  	st.b r5, 0x00000105[r3]
+000002BA                      404  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 777
+000002BA 192F0200             405  	ld.b 0x00000002[r25], r5
+000002BE 432F0601             406  	st.b r5, 0x00000106[r3]
+000002C2                      407  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 778
+000002C2 192F0300             408  	ld.b 0x00000003[r25], r5
+000002C6 432F0701             409  	st.b r5, 0x00000107[r3]
+000002CA 0A2A                 410  	mov 0x0000000A, r5
+000002CC                      411  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 782
+000002CC 632F0101             412  	st.w r5, 0x00000100[r3]
+000002D0                      413  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 784
+000002D0 1A2F0000             414  	ld.b 0x00000000[r26], r5
+000002D4 D82A                 415  	shl 0x00000018, r5
+000002D6 BA370100             416  	ld.bu 0x00000001[r26], r6
+000002DA D032                 417  	shl 0x00000010, r6
+000002DC 0629                 418  	or r6, r5
+000002DE 9A370300             419  	ld.bu 0x00000002[r26], r6
+000002E2 C832                 420  	shl 0x00000008, r6
+000002E4 0629                 421  	or r6, r5
+000002E6 BA370300             422  	ld.bu 0x00000003[r26], r6
+000002EA 0629                 423  	or r6, r5
+000002EC 632F1100             424  	st.w r5, 0x00000010[r3]
+000002F0                      425  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 785
+000002F0 1A2F0400             426  	ld.b 0x00000004[r26], r5
+000002F4 D82A                 427  	shl 0x00000018, r5
+000002F6 BA370500             428  	ld.bu 0x00000005[r26], r6
+000002FA D032                 429  	shl 0x00000010, r6
+000002FC 0629                 430  	or r6, r5
+000002FE 9A370700             431  	ld.bu 0x00000006[r26], r6
+00000302 C832                 432  	shl 0x00000008, r6
+00000304 0629                 433  	or r6, r5
+00000306 BA370700             434  	ld.bu 0x00000007[r26], r6
+0000030A 0629                 435  	or r6, r5
+0000030C 632F1500             436  	st.w r5, 0x00000014[r3]
+00000310                      437  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 786
+00000310 1A2F0800             438  	ld.b 0x00000008[r26], r5
+00000314 D82A                 439  	shl 0x00000018, r5
+00000316 BA370900             440  	ld.bu 0x00000009[r26], r6
+0000031A D032                 441  	shl 0x00000010, r6
+0000031C 0629                 442  	or r6, r5
+0000031E 9A370B00             443  	ld.bu 0x0000000A[r26], r6
+00000322 C832                 444  	shl 0x00000008, r6
+00000324 0629                 445  	or r6, r5
+00000326 BA370B00             446  	ld.bu 0x0000000B[r26], r6
+0000032A 0629                 447  	or r6, r5
+0000032C 632F1900             448  	st.w r5, 0x00000018[r3]
+00000330                      449  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 787
+00000330 1A2F0C00             450  	ld.b 0x0000000C[r26], r5
+00000334 D82A                 451  	shl 0x00000018, r5
+00000336 BA370D00             452  	ld.bu 0x0000000D[r26], r6
+0000033A D032                 453  	shl 0x00000010, r6
+0000033C 0629                 454  	or r6, r5
+0000033E 9A370F00             455  	ld.bu 0x0000000E[r26], r6
+00000342 C832                 456  	shl 0x00000008, r6
+00000344 0629                 457  	or r6, r5
+00000346 BA370F00             458  	ld.bu 0x0000000F[r26], r6
+0000034A 0629                 459  	or r6, r5
+0000034C 632F1D00             460  	st.w r5, 0x0000001C[r3]
+00000350 002A                 461  	mov 0x00000000, r5
+00000352 23361000             462  	movea 0x00000010, r3, r6
+00000356                      463  .BB.LABEL.13_1:	; bb232
+00000356                      464  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 791
+00000356 263F0D00             465  	ld.w 0x0000000C[r6], r7
+0000035A                      466  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 792
+0000035A 0740                 467  	mov r7, r8
+0000035C 8642                 468  	shr 0x00000006, r8
+0000035E C846FC03             469  	andi 0x000003FC, r8, r8
+00000362                      470  	mov #_AES_Te3, r9
+00000362 290600000000            -- mov         0x0,r9
+00000368 C849                 471  	add r8, r9
+0000036A 29470100             472  	ld.w 0x00000000[r9], r8
+0000036E 404EFF00             473  	movhi 0x000000FF, r0, r9
+00000372 4941                 474  	and r9, r8
+00000374 0748                 475  	mov r7, r9
+00000376 8E4A                 476  	shr 0x0000000E, r9
+00000378 C94EFC03             477  	andi 0x000003FC, r9, r9
+0000037C                      478  	mov #_AES_Te2, r10
+0000037C 2A0600000000            -- mov         0x0,r10
+00000382 C951                 479  	add r9, r10
+00000384 2A4F0100             480  	ld.w 0x00000000[r10], r9
+00000388 405600FF             481  	movhi 0x0000FF00, r0, r10
+0000038C 4A49                 482  	and r10, r9
+0000038E 265F0100             483  	ld.w 0x00000000[r6], r11
+00000392 2959                 484  	xor r9, r11
+00000394 2859                 485  	xor r8, r11
+00000396 C746FF00             486  	andi 0x000000FF, r7, r8
+0000039A C242                 487  	shl 0x00000002, r8
+0000039C                      488  	mov #_AES_Te0, r9
+0000039C 290600000000            -- mov         0x0,r9
+000003A2 C849                 489  	add r8, r9
+000003A4 29470100             490  	ld.w 0x00000000[r9], r8
+000003A8 C84600FF             491  	andi 0x0000FF00, r8, r8
+000003AC 2859                 492  	xor r8, r11
+000003AE 4A39                 493  	and r10, r7
+000003B0 963A                 494  	shr 0x00000016, r7
+000003B2                      495  	mov #_AES_Te1, r8
+000003B2 280600000000            -- mov         0x0,r8
+000003B8 C741                 496  	add r7, r8
+000003BA 883F0100             497  	ld.bu 0x00000000[r8], r7
+000003BE 2759                 498  	xor r7, r11
+000003C0 0538                 499  	mov r5, r7
+000003C2 C23A                 500  	shl 0x00000002, r7
+000003C4                      501  	mov #_AES_rcon, r8
+000003C4 280600000000            -- mov         0x0,r8
+000003CA C741                 502  	add r7, r8
+000003CC 283F0100             503  	ld.w 0x00000000[r8], r7
+000003D0 2759                 504  	xor r7, r11
+000003D2 665F1100             505  	st.w r11, 0x00000010[r6]
+000003D6                      506  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 797
+000003D6 263F0500             507  	ld.w 0x00000004[r6], r7
+000003DA 2B39                 508  	xor r11, r7
+000003DC 663F1500             509  	st.w r7, 0x00000014[r6]
+000003E0                      510  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 798
+000003E0 26470900             511  	ld.w 0x00000008[r6], r8
+000003E4 2741                 512  	xor r7, r8
+000003E6 66471900             513  	st.w r8, 0x00000018[r6]
+000003EA                      514  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 799
+000003EA 263F0D00             515  	ld.w 0x0000000C[r6], r7
+000003EE 2839                 516  	xor r8, r7
+000003F0 663F1D00             517  	st.w r7, 0x0000001C[r6]
+000003F4                      518  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 800
+000003F4 412A                 519  	add 0x00000001, r5
+000003F6 6A2A                 520  	cmp 0x0000000A, r5
+000003F8                      521  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 792
+000003F8 26361000             522  	movea 0x00000010, r6, r6
+000003FC                      523  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 800
+000003FC 8A05                 524  	bnz9 .BB.LABEL.13_1
+000003FE                      525  .BB.LABEL.13_2:	; AESENC
+000003FE                      526  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 823
+000003FE A32F1101             527  	ld.bu 0x00000111[r3], r5
+00000402 D02A                 528  	shl 0x00000010, r5
+00000404 23360401             529  	movea 0x00000104, r3, r6
+00000408 063F0C00             530  	ld.b 0x0000000C[r6], r7
+0000040C D83A                 531  	shl 0x00000018, r7
+0000040E 0539                 532  	or r5, r7
+00000410 832F1301             533  	ld.bu 0x00000112[r3], r5
+00000414 C82A                 534  	shl 0x00000008, r5
+00000416 0539                 535  	or r5, r7
+00000418                      536  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 822
+00000418 A32F0D01             537  	ld.bu 0x0000010D[r3], r5
+0000041C D02A                 538  	shl 0x00000010, r5
+0000041E 06470800             539  	ld.b 0x00000008[r6], r8
+00000422 D842                 540  	shl 0x00000018, r8
+00000424 0541                 541  	or r5, r8
+00000426 832F0F01             542  	ld.bu 0x0000010E[r3], r5
+0000042A C82A                 543  	shl 0x00000008, r5
+0000042C 0541                 544  	or r5, r8
+0000042E                      545  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 821
+0000042E A32F0901             546  	ld.bu 0x00000109[r3], r5
+00000432 D02A                 547  	shl 0x00000010, r5
+00000434 064F0400             548  	ld.b 0x00000004[r6], r9
+00000438 D84A                 549  	shl 0x00000018, r9
+0000043A 0549                 550  	or r5, r9
+0000043C 832F0B01             551  	ld.bu 0x0000010A[r3], r5
+00000440 C82A                 552  	shl 0x00000008, r5
+00000442 0549                 553  	or r5, r9
+00000444                      554  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 820
+00000444 A32F0501             555  	ld.bu 0x00000105[r3], r5
+00000448 D02A                 556  	shl 0x00000010, r5
+0000044A 06370000             557  	ld.b 0x00000000[r6], r6
+0000044E D832                 558  	shl 0x00000018, r6
+00000450 0531                 559  	or r5, r6
+00000452 832F0701             560  	ld.bu 0x00000106[r3], r5
+00000456 C82A                 561  	shl 0x00000008, r5
+00000458 0531                 562  	or r5, r6
+0000045A                      563  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 828
+0000045A 232F0101             564  	ld.w 0x00000100[r3], r5
+0000045E 812A                 565  	shr 0x00000001, r5
+00000460                      566  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 823
+00000460 23561C00             567  	movea 0x0000001C, r3, r10
+00000464 A35F1301             568  	ld.bu 0x00000113[r3], r11
+00000468                      569  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 822
+00000468 23661800             570  	movea 0x00000018, r3, r12
+0000046C A36F0F01             571  	ld.bu 0x0000010F[r3], r13
+00000470                      572  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 821
+00000470 23761400             573  	movea 0x00000014, r3, r14
+00000474 A3CF0B01             574  	ld.bu 0x0000010B[r3], r25
+00000478                      575  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 820
+00000478 A3D70701             576  	ld.bu 0x00000107[r3], r26
+0000047C 23E61000             577  	movea 0x00000010, r3, r28
+00000480 8505                 578  	br9 .BB.LABEL.13_4
+00000482                      579  .BB.LABEL.13_3:	; if_break_bb578
+00000482                      580  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 0
+00000482 404600FF             581  	movhi 0x0000FF00, r0, r8
+00000486                      582  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 878
+00000486 1D38                 583  	mov r29, r7
+00000488 4839                 584  	and r8, r7
+0000048A 963A                 585  	shr 0x00000016, r7
+0000048C                      586  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 860
+0000048C                      587  	mov #_AES_Te0, r9
+0000048C 290600000000            -- mov         0x0,r9
+00000492 C931                 588  	add r9, r6
+00000494                      589  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 878
+00000494 C939                 590  	add r9, r7
+00000496 273F0100             591  	ld.w 0x00000000[r7], r7
+0000049A 0A68                 592  	mov r10, r13
+0000049C 8E6A                 593  	shr 0x0000000E, r13
+0000049E CD6EFC03             594  	andi 0x000003FC, r13, r13
+000004A2                      595  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 860
+000004A2                      596  	mov #_AES_Te1, r14
+000004A2 2E0600000000            -- mov         0x0,r14
+000004A8                      597  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 878
+000004A8 CE69                 598  	add r14, r13
+000004AA 2D6F0100             599  	ld.w 0x00000000[r13], r13
+000004AE 2D39                 600  	xor r13, r7
+000004B0                      601  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 866
+000004B0 0C68                 602  	mov r12, r13
+000004B2 4869                 603  	and r8, r13
+000004B4                      604  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 878
+000004B4 0CC8                 605  	mov r12, r25
+000004B6 86CA                 606  	shr 0x00000006, r25
+000004B8 D9CEFC03             607  	andi 0x000003FC, r25, r25
+000004BC                      608  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 860
+000004BC                      609  	mov #_AES_Te2, r26
+000004BC 3A0600000000            -- mov         0x0,r26
+000004C2                      610  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 878
+000004C2 DAC9                 611  	add r26, r25
+000004C4 39CF0100             612  	ld.w 0x00000000[r25], r25
+000004C8 3939                 613  	xor r25, r7
+000004CA                      614  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 872
+000004CA 4B41                 615  	and r11, r8
+000004CC 9642                 616  	shr 0x00000016, r8
+000004CE C941                 617  	add r9, r8
+000004D0 28470100             618  	ld.w 0x00000000[r8], r8
+000004D4 1DC8                 619  	mov r29, r25
+000004D6 8ECA                 620  	shr 0x0000000E, r25
+000004D8 D9CEFC03             621  	andi 0x000003FC, r25, r25
+000004DC CEC9                 622  	add r14, r25
+000004DE 39CF0100             623  	ld.w 0x00000000[r25], r25
+000004E2 3941                 624  	xor r25, r8
+000004E4 0AC8                 625  	mov r10, r25
+000004E6 86CA                 626  	shr 0x00000006, r25
+000004E8 D9CEFC03             627  	andi 0x000003FC, r25, r25
+000004EC DAC9                 628  	add r26, r25
+000004EE 39CF0100             629  	ld.w 0x00000000[r25], r25
+000004F2 3941                 630  	xor r25, r8
+000004F4                      631  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 866
+000004F4 966A                 632  	shr 0x00000016, r13
+000004F6 CD49                 633  	add r13, r9
+000004F8 294F0100             634  	ld.w 0x00000000[r9], r9
+000004FC 0B68                 635  	mov r11, r13
+000004FE 8E6A                 636  	shr 0x0000000E, r13
+00000500 CD6EFC03             637  	andi 0x000003FC, r13, r13
+00000504 CE69                 638  	add r14, r13
+00000506 2D6F0100             639  	ld.w 0x00000000[r13], r13
+0000050A 2D49                 640  	xor r13, r9
+0000050C 1D68                 641  	mov r29, r13
+0000050E 866A                 642  	shr 0x00000006, r13
+00000510 CD6EFC03             643  	andi 0x000003FC, r13, r13
+00000514 DA69                 644  	add r26, r13
+00000516 2D6F0100             645  	ld.w 0x00000000[r13], r13
+0000051A 2D49                 646  	xor r13, r9
+0000051C                      647  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 860
+0000051C 26370100             648  	ld.w 0x00000000[r6], r6
+00000520 0C68                 649  	mov r12, r13
+00000522 8E6A                 650  	shr 0x0000000E, r13
+00000524 CD6EFC03             651  	andi 0x000003FC, r13, r13
+00000528 CD71                 652  	add r13, r14
+0000052A 2E6F0100             653  	ld.w 0x00000000[r14], r13
+0000052E 2D31                 654  	xor r13, r6
+00000530 0B68                 655  	mov r11, r13
+00000532 866A                 656  	shr 0x00000006, r13
+00000534 CD6EFC03             657  	andi 0x000003FC, r13, r13
+00000538 CDD1                 658  	add r13, r26
+0000053A 3A6F0100             659  	ld.w 0x00000000[r26], r13
+0000053E 2D31                 660  	xor r13, r6
+00000540                      661  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 878
+00000540 8B00                 662  	zxb r11
+00000542 C25A                 663  	shl 0x00000002, r11
+00000544                      664  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 860
+00000544                      665  	mov #_AES_Te3, r14
+00000544 2E0600000000            -- mov         0x0,r14
+0000054A                      666  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 878
+0000054A CE59                 667  	add r14, r11
+0000054C 2B5F0100             668  	ld.w 0x00000000[r11], r11
+00000550                      669  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 872
+00000550 8C00                 670  	zxb r12
+00000552 C262                 671  	shl 0x00000002, r12
+00000554 CE61                 672  	add r14, r12
+00000556 2C6F0100             673  	ld.w 0x00000000[r12], r13
+0000055A                      674  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 866
+0000055A 8A00                 675  	zxb r10
+0000055C C252                 676  	shl 0x00000002, r10
+0000055E CE51                 677  	add r14, r10
+00000560 2ACF0100             678  	ld.w 0x00000000[r10], r25
+00000564                      679  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 860
+00000564 9D00                 680  	zxb r29
+00000566 C2EA                 681  	shl 0x00000002, r29
+00000568 DD71                 682  	add r29, r14
+0000056A 2ED70100             683  	ld.w 0x00000000[r14], r26
+0000056E                      684  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 878
+0000056E 3E562C00             685  	movea 0x0000002C, r30, r10
+00000572                      686  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 872
+00000572 3E662800             687  	movea 0x00000028, r30, r12
+00000576                      688  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 866
+00000576 3E762400             689  	movea 0x00000024, r30, r14
+0000057A                      690  .BB.LABEL.13_4:	; bb679
+0000057A                      691  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 0
+0000057A 1CF0                 692  	mov r28, r30
+0000057C 2B39                 693  	xor r11, r7
+0000057E 2A570100             694  	ld.w 0x00000000[r10], r10
+00000582 2A39                 695  	xor r10, r7
+00000584 405600FF             696  	movhi 0x0000FF00, r0, r10
+00000588                      697  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 848
+00000588 0758                 698  	mov r7, r11
+0000058A 4A59                 699  	and r10, r11
+0000058C 965A                 700  	shr 0x00000016, r11
+0000058E                      701  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 830
+0000058E                      702  	mov #_AES_Te0, r28
+0000058E 3C0600000000            -- mov         0x0,r28
+00000594                      703  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 848
+00000594 DC59                 704  	add r28, r11
+00000596 2BEF0100             705  	ld.w 0x00000000[r11], r29
+0000059A 3A31                 706  	xor r26, r6
+0000059C 3E5F0100             707  	ld.w 0x00000000[r30], r11
+000005A0 2B31                 708  	xor r11, r6
+000005A2                      709  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 830
+000005A2 06D0                 710  	mov r6, r26
+000005A4 4AD1                 711  	and r10, r26
+000005A6                      712  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 848
+000005A6 0658                 713  	mov r6, r11
+000005A8 8E5A                 714  	shr 0x0000000E, r11
+000005AA CB5EFC03             715  	andi 0x000003FC, r11, r11
+000005AE                      716  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 830
+000005AE                      717  	mov #_AES_Te1, r31
+000005AE 3F0600000000            -- mov         0x0,lp
+000005B4                      718  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 848
+000005B4 DF59                 719  	add r31, r11
+000005B6 2B5F0100             720  	ld.w 0x00000000[r11], r11
+000005BA 2BE9                 721  	xor r11, r29
+000005BC 3949                 722  	xor r25, r9
+000005BE 2E5F0100             723  	ld.w 0x00000000[r14], r11
+000005C2 2B49                 724  	xor r11, r9
+000005C4                      725  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 836
+000005C4 0970                 726  	mov r9, r14
+000005C6 4A71                 727  	and r10, r14
+000005C8                      728  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 848
+000005C8 0958                 729  	mov r9, r11
+000005CA 865A                 730  	shr 0x00000006, r11
+000005CC CB5EFC03             731  	andi 0x000003FC, r11, r11
+000005D0                      732  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 830
+000005D0                      733  	mov #_AES_Te2, r25
+000005D0 390600000000            -- mov         0x0,r25
+000005D6                      734  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 848
+000005D6 D959                 735  	add r25, r11
+000005D8 2B5F0100             736  	ld.w 0x00000000[r11], r11
+000005DC 2BE9                 737  	xor r11, r29
+000005DE 2D41                 738  	xor r13, r8
+000005E0 2C5F0100             739  	ld.w 0x00000000[r12], r11
+000005E4 2B41                 740  	xor r11, r8
+000005E6                      741  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 842
+000005E6 4851                 742  	and r8, r10
+000005E8                      743  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 848
+000005E8 C85EFF00             744  	andi 0x000000FF, r8, r11
+000005EC C25A                 745  	shl 0x00000002, r11
+000005EE                      746  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 830
+000005EE                      747  	mov #_AES_Te3, r13
+000005EE 2D0600000000            -- mov         0x0,r13
+000005F4                      748  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 848
+000005F4 CD59                 749  	add r13, r11
+000005F6 2B5F0100             750  	ld.w 0x00000000[r11], r11
+000005FA 2BE9                 751  	xor r11, r29
+000005FC 3E5F1D00             752  	ld.w 0x0000001C[r30], r11
+00000600 2BE9                 753  	xor r11, r29
+00000602                      754  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 842
+00000602 9652                 755  	shr 0x00000016, r10
+00000604 DC51                 756  	add r28, r10
+00000606 2A5F0100             757  	ld.w 0x00000000[r10], r11
+0000060A 0750                 758  	mov r7, r10
+0000060C 8E52                 759  	shr 0x0000000E, r10
+0000060E CA56FC03             760  	andi 0x000003FC, r10, r10
+00000612 DF51                 761  	add r31, r10
+00000614 2A570100             762  	ld.w 0x00000000[r10], r10
+00000618 2A59                 763  	xor r10, r11
+0000061A 0650                 764  	mov r6, r10
+0000061C 8652                 765  	shr 0x00000006, r10
+0000061E CA56FC03             766  	andi 0x000003FC, r10, r10
+00000622 D951                 767  	add r25, r10
+00000624 2A570100             768  	ld.w 0x00000000[r10], r10
+00000628 2A59                 769  	xor r10, r11
+0000062A C956FF00             770  	andi 0x000000FF, r9, r10
+0000062E C252                 771  	shl 0x00000002, r10
+00000630 CD51                 772  	add r13, r10
+00000632 2A570100             773  	ld.w 0x00000000[r10], r10
+00000636 2A59                 774  	xor r10, r11
+00000638 3E571900             775  	ld.w 0x00000018[r30], r10
+0000063C 2A59                 776  	xor r10, r11
+0000063E                      777  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 836
+0000063E 9672                 778  	shr 0x00000016, r14
+00000640 DC71                 779  	add r28, r14
+00000642 2E670100             780  	ld.w 0x00000000[r14], r12
+00000646 0850                 781  	mov r8, r10
+00000648 8E52                 782  	shr 0x0000000E, r10
+0000064A CA56FC03             783  	andi 0x000003FC, r10, r10
+0000064E DF51                 784  	add r31, r10
+00000650 2A570100             785  	ld.w 0x00000000[r10], r10
+00000654 2A61                 786  	xor r10, r12
+00000656 0750                 787  	mov r7, r10
+00000658 8652                 788  	shr 0x00000006, r10
+0000065A CA56FC03             789  	andi 0x000003FC, r10, r10
+0000065E D951                 790  	add r25, r10
+00000660 2A570100             791  	ld.w 0x00000000[r10], r10
+00000664 2A61                 792  	xor r10, r12
+00000666 8600                 793  	zxb r6
+00000668 C232                 794  	shl 0x00000002, r6
+0000066A CD31                 795  	add r13, r6
+0000066C 26370100             796  	ld.w 0x00000000[r6], r6
+00000670 2661                 797  	xor r6, r12
+00000672 3E371500             798  	ld.w 0x00000014[r30], r6
+00000676 2661                 799  	xor r6, r12
+00000678                      800  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 830
+00000678 96D2                 801  	shr 0x00000016, r26
+0000067A DAE1                 802  	add r26, r28
+0000067C 3C570100             803  	ld.w 0x00000000[r28], r10
+00000680 8E4A                 804  	shr 0x0000000E, r9
+00000682 C936FC03             805  	andi 0x000003FC, r9, r6
+00000686 C6F9                 806  	add r6, r31
+00000688 3F370100             807  	ld.w 0x00000000[r31], r6
+0000068C 2651                 808  	xor r6, r10
+0000068E 8642                 809  	shr 0x00000006, r8
+00000690 C836FC03             810  	andi 0x000003FC, r8, r6
+00000694 C6C9                 811  	add r6, r25
+00000696 39370100             812  	ld.w 0x00000000[r25], r6
+0000069A 2651                 813  	xor r6, r10
+0000069C 8700                 814  	zxb r7
+0000069E C23A                 815  	shl 0x00000002, r7
+000006A0 C769                 816  	add r7, r13
+000006A2 2D370100             817  	ld.w 0x00000000[r13], r6
+000006A6 2651                 818  	xor r6, r10
+000006A8 3E371100             819  	ld.w 0x00000010[r30], r6
+000006AC 2651                 820  	xor r6, r10
+000006AE                      821  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 856
+000006AE 0A30                 822  	mov r10, r6
+000006B0 9632                 823  	shr 0x00000016, r6
+000006B2 C636FC03             824  	andi 0x000003FC, r6, r6
+000006B6                      825  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 855
+000006B6 3EE62000             826  	movea 0x00000020, r30, r28
+000006BA                      827  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 856
+000006BA E5060100             828  	loop r5, .BB.LABEL.13_3
+000006BE                      829  .BB.LABEL.13_5:	; bb681
+000006BE                      830  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 885
+000006BE                      831  	mov #_AES_Te2, r5
+000006BE 250600000000            -- mov         0x0,tp
+000006C4 C531                 832  	add r5, r6
+000006C6 26370100             833  	ld.w 0x00000000[r6], r6
+000006CA 403E00FF             834  	movhi 0x0000FF00, r0, r7
+000006CE 4731                 835  	and r7, r6
+000006D0 0C40                 836  	mov r12, r8
+000006D2 8E42                 837  	shr 0x0000000E, r8
+000006D4 C846FC03             838  	andi 0x000003FC, r8, r8
+000006D8                      839  	mov #_AES_Te3, r9
+000006D8 290600000000            -- mov         0x0,r9
+000006DE C941                 840  	add r9, r8
+000006E0 28470100             841  	ld.w 0x00000000[r8], r8
+000006E4 406EFF00             842  	movhi 0x000000FF, r0, r13
+000006E8 4D41                 843  	and r13, r8
+000006EA 0831                 844  	or r8, r6
+000006EC 0B40                 845  	mov r11, r8
+000006EE 8642                 846  	shr 0x00000006, r8
+000006F0 C846FC03             847  	andi 0x000003FC, r8, r8
+000006F4                      848  	mov #_AES_Te0, r14
+000006F4 2E0600000000            -- mov         0x0,r14
+000006FA CE41                 849  	add r14, r8
+000006FC 28470100             850  	ld.w 0x00000000[r8], r8
+00000700 C84600FF             851  	andi 0x0000FF00, r8, r8
+00000704 0831                 852  	or r8, r6
+00000706 DD46FF00             853  	andi 0x000000FF, r29, r8
+0000070A C242                 854  	shl 0x00000002, r8
+0000070C                      855  	mov #_AES_Te1, r25
+0000070C 390600000000            -- mov         0x0,r25
+00000712 D941                 856  	add r25, r8
+00000714 88470100             857  	ld.bu 0x00000000[r8], r8
+00000718 0831                 858  	or r8, r6
+0000071A 3E472100             859  	ld.w 0x00000020[r30], r8
+0000071E 2831                 860  	xor r8, r6
+00000720                      861  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 891
+00000720 0640                 862  	mov r6, r8
+00000722 9842                 863  	shr 0x00000018, r8
+00000724 43470000             864  	st.b r8, 0x00000000[r3]
+00000728 0640                 865  	mov r6, r8
+0000072A 9042                 866  	shr 0x00000010, r8
+0000072C 43470100             867  	st.b r8, 0x00000001[r3]
+00000730 0640                 868  	mov r6, r8
+00000732 8842                 869  	shr 0x00000008, r8
+00000734 43470200             870  	st.b r8, 0x00000002[r3]
+00000738 43370300             871  	st.b r6, 0x00000003[r3]
+0000073C                      872  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 892
+0000073C 0C30                 873  	mov r12, r6
+0000073E 4731                 874  	and r7, r6
+00000740 9632                 875  	shr 0x00000016, r6
+00000742 C531                 876  	add r5, r6
+00000744 26370100             877  	ld.w 0x00000000[r6], r6
+00000748 4731                 878  	and r7, r6
+0000074A 0B40                 879  	mov r11, r8
+0000074C 8E42                 880  	shr 0x0000000E, r8
+0000074E C846FC03             881  	andi 0x000003FC, r8, r8
+00000752 C941                 882  	add r9, r8
+00000754 28470100             883  	ld.w 0x00000000[r8], r8
+00000758 4D41                 884  	and r13, r8
+0000075A 0831                 885  	or r8, r6
+0000075C 1D40                 886  	mov r29, r8
+0000075E 8642                 887  	shr 0x00000006, r8
+00000760 C846FC03             888  	andi 0x000003FC, r8, r8
+00000764 CE41                 889  	add r14, r8
+00000766 28470100             890  	ld.w 0x00000000[r8], r8
+0000076A C84600FF             891  	andi 0x0000FF00, r8, r8
+0000076E 0831                 892  	or r8, r6
+00000770 CA46FF00             893  	andi 0x000000FF, r10, r8
+00000774 C242                 894  	shl 0x00000002, r8
+00000776 D941                 895  	add r25, r8
+00000778 88470100             896  	ld.bu 0x00000000[r8], r8
+0000077C 0831                 897  	or r8, r6
+0000077E 3E472500             898  	ld.w 0x00000024[r30], r8
+00000782 2831                 899  	xor r8, r6
+00000784                      900  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 898
+00000784 0640                 901  	mov r6, r8
+00000786 9842                 902  	shr 0x00000018, r8
+00000788 43470400             903  	st.b r8, 0x00000004[r3]
+0000078C 0640                 904  	mov r6, r8
+0000078E 9042                 905  	shr 0x00000010, r8
+00000790 43470500             906  	st.b r8, 0x00000005[r3]
+00000794 0640                 907  	mov r6, r8
+00000796 8842                 908  	shr 0x00000008, r8
+00000798 43470600             909  	st.b r8, 0x00000006[r3]
+0000079C 43370700             910  	st.b r6, 0x00000007[r3]
+000007A0                      911  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 899
+000007A0 0B30                 912  	mov r11, r6
+000007A2 4731                 913  	and r7, r6
+000007A4 9632                 914  	shr 0x00000016, r6
+000007A6 C531                 915  	add r5, r6
+000007A8 26370100             916  	ld.w 0x00000000[r6], r6
+000007AC 4731                 917  	and r7, r6
+000007AE 1D40                 918  	mov r29, r8
+000007B0 8E42                 919  	shr 0x0000000E, r8
+000007B2 C846FC03             920  	andi 0x000003FC, r8, r8
+000007B6 C941                 921  	add r9, r8
+000007B8 28470100             922  	ld.w 0x00000000[r8], r8
+000007BC 4D41                 923  	and r13, r8
+000007BE 0831                 924  	or r8, r6
+000007C0 0A40                 925  	mov r10, r8
+000007C2 8642                 926  	shr 0x00000006, r8
+000007C4 C846FC03             927  	andi 0x000003FC, r8, r8
+000007C8 CE41                 928  	add r14, r8
+000007CA 28470100             929  	ld.w 0x00000000[r8], r8
+000007CE C84600FF             930  	andi 0x0000FF00, r8, r8
+000007D2 0831                 931  	or r8, r6
+000007D4 CC46FF00             932  	andi 0x000000FF, r12, r8
+000007D8 C242                 933  	shl 0x00000002, r8
+000007DA D941                 934  	add r25, r8
+000007DC 88470100             935  	ld.bu 0x00000000[r8], r8
+000007E0 0831                 936  	or r8, r6
+000007E2 3E472900             937  	ld.w 0x00000028[r30], r8
+000007E6 2831                 938  	xor r8, r6
+000007E8                      939  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 905
+000007E8 0640                 940  	mov r6, r8
+000007EA 9842                 941  	shr 0x00000018, r8
+000007EC 43470800             942  	st.b r8, 0x00000008[r3]
+000007F0 0640                 943  	mov r6, r8
+000007F2 9042                 944  	shr 0x00000010, r8
+000007F4 43470900             945  	st.b r8, 0x00000009[r3]
+000007F8 0640                 946  	mov r6, r8
+000007FA 8842                 947  	shr 0x00000008, r8
+000007FC 43470A00             948  	st.b r8, 0x0000000A[r3]
+00000800 43370B00             949  	st.b r6, 0x0000000B[r3]
+00000804                      950  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 906
+00000804 47E9                 951  	and r7, r29
+00000806 96EA                 952  	shr 0x00000016, r29
+00000808 DD29                 953  	add r29, r5
+0000080A 252F0100             954  	ld.w 0x00000000[r5], r5
+0000080E 4729                 955  	and r7, r5
+00000810 8E52                 956  	shr 0x0000000E, r10
+00000812 CA36FC03             957  	andi 0x000003FC, r10, r6
+00000816 C649                 958  	add r6, r9
+00000818 29370100             959  	ld.w 0x00000000[r9], r6
+0000081C 4D31                 960  	and r13, r6
+0000081E 0629                 961  	or r6, r5
+00000820 8662                 962  	shr 0x00000006, r12
+00000822 CC36FC03             963  	andi 0x000003FC, r12, r6
+00000826 C671                 964  	add r6, r14
+00000828 2E370100             965  	ld.w 0x00000000[r14], r6
+0000082C C63600FF             966  	andi 0x0000FF00, r6, r6
+00000830 0629                 967  	or r6, r5
+00000832 8B00                 968  	zxb r11
+00000834 C25A                 969  	shl 0x00000002, r11
+00000836 CBC9                 970  	add r11, r25
+00000838 99370100             971  	ld.bu 0x00000000[r25], r6
+0000083C 0629                 972  	or r6, r5
+0000083E 3E372D00             973  	ld.w 0x0000002C[r30], r6
+00000842 2629                 974  	xor r6, r5
+00000844                      975  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 912
+00000844 0530                 976  	mov r5, r6
+00000846 9832                 977  	shr 0x00000018, r6
+00000848 43370C00             978  	st.b r6, 0x0000000C[r3]
+0000084C 0530                 979  	mov r5, r6
+0000084E 9032                 980  	shr 0x00000010, r6
+00000850 43370D00             981  	st.b r6, 0x0000000D[r3]
+00000854 0530                 982  	mov r5, r6
+00000856 8832                 983  	shr 0x00000008, r6
+00000858 43370E00             984  	st.b r6, 0x0000000E[r3]
+0000085C 432F0F00             985  	st.b r5, 0x0000000F[r3]
+00000860 002A                 986  	mov 0x00000000, r5
+00000862 8505                 987  	br9 .BB.LABEL.13_7
+00000864                      988  .BB.LABEL.13_6:	; bb886
+00000864                      989  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 0
+00000864 0330                 990  	mov r3, r6
+00000866                      991  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 916
+00000866 C531                 992  	add r5, r6
+00000868 063F0000             993  	ld.b 0x00000000[r6], r7
+0000086C 06470400             994  	ld.b 0x00000004[r6], r8
+00000870 2839                 995  	xor r8, r7
+00000872 06470800             996  	ld.b 0x00000008[r6], r8
+00000876 2839                 997  	xor r8, r7
+00000878 06370C00             998  	ld.b 0x0000000C[r6], r6
+0000087C 2639                 999  	xor r6, r7
+0000087E 23361401            1000  	movea 0x00000114, r3, r6
+00000882 C531                1001  	add r5, r6
+00000884 463F0000            1002  	st.b r7, 0x00000000[r6]
+00000888 412A                1003  	add 0x00000001, r5
+0000088A                     1004  .BB.LABEL.13_7:	; bb919
+0000088A                     1005  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 915
+0000088A 642A                1006  	cmp 0x00000004, r5
+0000088C 8605                1007  	blt9 .BB.LABEL.13_6
+0000088E                     1008  .BB.LABEL.13_8:	; bb924
+0000088E                     1009  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 0
+0000088E 232E1401            1010  	movea 0x00000114, r3, r5
+00000892                     1011  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 920
+00000892 05370000            1012  	ld.b 0x00000000[r5], r6
+00000896 5B370000            1013  	st.b r6, 0x00000000[r27]
+0000089A                     1014  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 921
+0000089A 05370100            1015  	ld.b 0x00000001[r5], r6
+0000089E 5B370100            1016  	st.b r6, 0x00000001[r27]
+000008A2                     1017  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 922
+000008A2 05370200            1018  	ld.b 0x00000002[r5], r6
+000008A6 5B370200            1019  	st.b r6, 0x00000002[r27]
+000008AA                     1020  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 923
+000008AA 05370300            1021  	ld.b 0x00000003[r5], r6
+000008AE 5B370300            1022  	st.b r6, 0x00000003[r27]
+000008B2                     1023  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 925
+000008B2 05570000            1024  	ld.b 0x00000000[r5], r10
+000008B6 D852                1025  	shl 0x00000018, r10
+000008B8 A32F1501            1026  	ld.bu 0x00000115[r3], r5
+000008BC D02A                1027  	shl 0x00000010, r5
+000008BE 0551                1028  	or r5, r10
+000008C0 832F1701            1029  	ld.bu 0x00000116[r3], r5
+000008C4 C82A                1030  	shl 0x00000008, r5
+000008C6 0551                1031  	or r5, r10
+000008C8 A32F1701            1032  	ld.bu 0x00000117[r3], r5
+000008CC 0551                1033  	or r5, r10
+000008CE                     1034  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 928
+000008CE 231E9C00            1035  	movea 0x0000009C, r3, r3
+000008D2 7F06FF70            1036  	dispose 0x0000007C, 0x00000B87, [r31]
+000008D6                     1037  _SecM_Crc16Preprocess:
+000008D6                     1038  	.stack _SecM_Crc16Preprocess = 0
+000008D6                     1039  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 947
+000008D6 402E0000            1040  	movhi HIGHW1(#_gs_Crc16Remainder.2), r0, r5
+000008DA 1F32                1041  	mov 0xFFFFFFFF, r6
+000008DC 65370000            1042  	st.h r6, LOWW(#_gs_Crc16Remainder.2)[r5]
+000008E0 7F00                1043  	jmp [r31]
+000008E2                     1044  _SecM_Crc16Process:
+000008E2                     1045  	.stack _SecM_Crc16Process = 0
+000008E2                     1046  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 966
+000008E2 002A                1047  	mov 0x00000000, r5
+000008E4 8505                1048  	br9 .BB.LABEL.15_5
+000008E6                     1049  .BB.LABEL.15_1:	; bb
+000008E6                     1050  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 972
+000008E6 0640                1051  	mov r6, r8
+000008E8 C541                1052  	add r5, r8
+000008EA 08470000            1053  	ld.b 0x00000000[r8], r8
+000008EE C842                1054  	shl 0x00000008, r8
+000008F0 404E0000            1055  	movhi HIGHW1(#_gs_Crc16Remainder.2), r0, r9
+000008F4 29570000            1056  	ld.h LOWW(#_gs_Crc16Remainder.2)[r9], r10
+000008F8 2851                1057  	xor r8, r10
+000008FA 0042                1058  	mov 0x00000000, r8
+000008FC 8505                1059  	br9 .BB.LABEL.15_3
+000008FE                     1060  .BB.LABEL.15_2:	; bb17
+000008FE                     1061  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 976
+000008FE 404E0000            1062  	movhi HIGHW1(#_gs_Crc16Remainder.2), r0, r9
+00000902 E9570100            1063  	ld.hu LOWW(#_gs_Crc16Remainder.2)[r9], r10
+00000906 CA060080            1064  	andi 0x00008000, r10, r0
+0000090A 205E2110            1065  	movea 0x00001021, r0, r11
+0000090E                     1066  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 978
+0000090E E05F045B            1067  	cmov 0x00000002, 0x00000000, r11, r11
+00000912                     1068  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 976
+00000912 CA51                1069  	add r10, r10
+00000914                     1070  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 978
+00000914 2B51                1071  	xor r11, r10
+00000916                     1072  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 984
+00000916 4142                1073  	add 0x00000001, r8
+00000918                     1074  .BB.LABEL.15_3:	; bb17
+00000918                     1075  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 0
+00000918 69570000            1076  	st.h r10, LOWW(#_gs_Crc16Remainder.2)[r9]
+0000091C                     1077  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 973
+0000091C 6842                1078  	cmp 0x00000008, r8
+0000091E 8105                1079  	bl9 .BB.LABEL.15_2
+00000920                     1080  .BB.LABEL.15_4:	; bb43
+00000920                     1081  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 0
+00000920 412A                1082  	add 0x00000001, r5
+00000922                     1083  .BB.LABEL.15_5:	; bb46
+00000922                     1084  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 970
+00000922 E729                1085  	cmp r7, r5
+00000924 8105                1086  	bl9 .BB.LABEL.15_1
+00000926                     1087  .BB.LABEL.15_6:	; return
+00000926                     1088  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 987
+00000926 7F00                1089  	jmp [r31]
+00000928                     1090  _SecM_Crc16Finish:
+00000928                     1091  	.stack _SecM_Crc16Finish = 0
+00000928                     1092  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 1004
+00000928 002A                1093  	mov 0x00000000, r5
+0000092A 8505                1094  	br9 .BB.LABEL.16_2
+0000092C                     1095  .BB.LABEL.16_1:	; bb
+0000092C                     1096  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 1010
+0000092C C53EFF00            1097  	andi 0x000000FF, r5, r7
+00000930 0142                1098  	mov 0x00000001, r8
+00000932 A741                1099  	sub r7, r8
+00000934 C342                1100  	shl 0x00000003, r8
+00000936 404E0000            1101  	movhi HIGHW1(#_gs_Crc16Remainder.2), r0, r9
+0000093A E94F0100            1102  	ld.hu LOWW(#_gs_Crc16Remainder.2)[r9], r9
+0000093E E84F8000            1103  	shr r8, r9
+00000942 C639                1104  	add r6, r7
+00000944 474F0000            1105  	st.b r9, 0x00000000[r7]
+00000948 412A                1106  	add 0x00000001, r5
+0000094A                     1107  .BB.LABEL.16_2:	; bb21
+0000094A                     1108  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 1008
+0000094A C53EFF00            1109  	andi 0x000000FF, r5, r7
+0000094E 623A                1110  	cmp 0x00000002, r7
+00000950 8105                1111  	bl9 .BB.LABEL.16_1
+00000952                     1112  .BB.LABEL.16_3:	; return
+00000952                     1113  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/SecurityManager/SecM.c", 1012
+00000952 7F00                1114  	jmp [r31]
+00000000                     1115  	.section .bss, bss
+00000000                     1116  	.align 4
+00000000                     1117  _gs_Crc32Remainder.1:
+00000000                     1118  	.ds (4)
+00000004                     1119  	.align 2
+00000004                     1120  _gs_Crc16Remainder.2:
+00000004                     1121  	.ds (2)
+00000006 0000                1122  	.align 4
+00000008                     1123  _gs_Crc32Table.3:
+00000008                     1124  	.ds (1024)
+00000408                     1125  	.align 4
+00000408                     1126  _gs_Crc32User.4:
+00000408                     1127  	.ds (4)
+0000040C                     1128  	.align 4
+0000040C                     1129  _gs_RandomSeed.5:
+0000040C                     1130  	.ds (4)
+00000000                     1131  	.section .const, const
+00000000                     1132  	.align 4
+00000000                     1133  _AES_Te2:
+00000000 63C6A563            1134  	.dw 0x63A5C663,0x7C84F87C,0x7799EE77,0x7B8DF67B,0xF20DFFF2,0x6BBDD66B,0x6FB1DE6F,0xC55491C5
+00000004 7CF8847C        
+00000008 77EE9977        
+0000000C 7BF68D7B        
+00000010 F2FF0DF2        
+00000014 6BD6BD6B        
+00000018 6FDEB16F        
+0000001C C59154C5        
+00000020 30605030            1135  	.dw 0x30506030,0x01030201,0x67A9CE67,0x2B7D562B,0xFE19E7FE,0xD762B5D7,0xABE64DAB,0x769AEC76
+00000024 01020301        
+00000028 67CEA967        
+0000002C 2B567D2B        
+00000030 FEE719FE        
+00000034 D7B562D7        
+00000038 AB4DE6AB        
+0000003C 76EC9A76        
+00000040 CA8F45CA            1136  	.dw 0xCA458FCA,0x829D1F82,0xC94089C9,0x7D87FA7D,0xFA15EFFA,0x59EBB259,0x47C98E47,0xF00BFBF0
+00000044 821F9D82        
+00000048 C98940C9        
+0000004C 7DFA877D        
+00000050 FAEF15FA        
+00000054 59B2EB59        
+00000058 478EC947        
+0000005C F0FB0BF0        
+00000060 AD41ECAD            1137  	.dw 0xADEC41AD,0xD467B3D4,0xA2FD5FA2,0xAFEA45AF,0x9CBF239C,0xA4F753A4,0x7296E472,0xC05B9BC0
+00000064 D4B367D4        
+00000068 A25FFDA2        
+0000006C AF45EAAF        
+00000070 9C23BF9C        
+00000074 A453F7A4        
+00000078 72E49672        
+0000007C C09B5BC0        
+00000080 B775C2B7            1138  	.dw 0xB7C275B7,0xFD1CE1FD,0x93AE3D93,0x266A4C26,0x365A6C36,0x3F417E3F,0xF702F5F7,0xCC4F83CC
+00000084 FDE11CFD        
+00000088 933DAE93        
+0000008C 264C6A26        
+00000090 366C5A36        
+00000094 3F7E413F        
+00000098 F7F502F7        
+0000009C CC834FCC        
+000000A0 34685C34            1139  	.dw 0x345C6834,0xA5F451A5,0xE534D1E5,0xF108F9F1,0x7193E271,0xD873ABD8,0x31536231,0x153F2A15
+000000A4 A551F4A5        
+000000A8 E5D134E5        
+000000AC F1F908F1        
+000000B0 71E29371        
+000000B4 D8AB73D8        
+000000B8 31625331        
+000000BC 152A3F15        
+000000C0 04080C04            1140  	.dw 0x040C0804,0xC75295C7,0x23654623,0xC35E9DC3,0x18283018,0x96A13796,0x050F0A05,0x9AB52F9A
+000000C4 C79552C7        
+000000C8 23466523        
+000000CC C39D5EC3        
+000000D0 18302818        
+000000D4 9637A196        
+000000D8 050A0F05        
+000000DC 9A2FB59A        
+000000E0 070E0907            1141  	.dw 0x07090E07,0x12362412,0x809B1B80,0xE23DDFE2,0xEB26CDEB,0x27694E27,0xB2CD7FB2,0x759FEA75
+000000E4 12243612        
+000000E8 801B9B80        
+000000EC E2DF3DE2        
+000000F0 EBCD26EB        
+000000F4 274E6927        
+000000F8 B27FCDB2        
+000000FC 75EA9F75        
+00000100 09121B09            1142  	.dw 0x091B1209,0x839E1D83,0x2C74582C,0x1A2E341A,0x1B2D361B,0x6EB2DC6E,0x5AEEB45A,0xA0FB5BA0
+00000104 831D9E83        
+00000108 2C58742C        
+0000010C 1A342E1A        
+00000110 1B362D1B        
+00000114 6EDCB26E        
+00000118 5AB4EE5A        
+0000011C A05BFBA0        
+00000120 52A4F652            1143  	.dw 0x52F6A452,0x3B4D763B,0xD661B7D6,0xB3CE7DB3,0x297B5229,0xE33EDDE3,0x2F715E2F,0x84971384
+00000124 3B764D3B        
+00000128 D6B761D6        
+0000012C B37DCEB3        
+00000130 29527B29        
+00000134 E3DD3EE3        
+00000138 2F5E712F        
+0000013C 84139784        
+00000140 53A6F553            1144  	.dw 0x53F5A653,0xD168B9D1
+00000144 D1B968D1        
+00000148 00000000            1145  	.ds (4)
+0000014C EDC12CED            1146  	.dw 0xED2CC1ED,0x20604020,0xFC1FE3FC,0xB1C879B1,0x5BEDB65B,0x6ABED46A,0xCB468DCB,0xBED967BE
+00000150 20406020        
+00000154 FCE31FFC        
+00000158 B179C8B1        
+0000015C 5BB6ED5B        
+00000160 6AD4BE6A        
+00000164 CB8D46CB        
+00000168 BE67D9BE        
+0000016C 39724B39            1147  	.dw 0x394B7239,0x4ADE944A,0x4CD4984C,0x58E8B058,0xCF4A85CF,0xD06BBBD0,0xEF2AC5EF,0xAAE54FAA
+00000170 4A94DE4A        
+00000174 4C98D44C        
+00000178 58B0E858        
+0000017C CF854ACF        
+00000180 D0BB6BD0        
+00000184 EFC52AEF        
+00000188 AA4FE5AA        
+0000018C FBED16FB            1148  	.dw 0xFB16EDFB,0x43C58643,0x4DD79A4D,0x33556633,0x85941185,0x45CF8A45,0xF910E9F9,0x02060402
+00000190 4386C543        
+00000194 4D9AD74D        
+00000198 33665533        
+0000019C 85119485        
+000001A0 458ACF45        
+000001A4 F9E910F9        
+000001A8 02040602        
+000001AC 7FFE817F            1149  	.dw 0x7F81FE7F,0x50F0A050,0x3C44783C,0x9FBA259F,0xA8E34BA8,0x51F3A251,0xA3FE5DA3,0x40C08040
+000001B0 50A0F050        
+000001B4 3C78443C        
+000001B8 9F25BA9F        
+000001BC A84BE3A8        
+000001C0 51A2F351        
+000001C4 A35DFEA3        
+000001C8 4080C040        
+000001CC 8F058A8F            1150  	.dw 0x8F8A058F,0x92AD3F92,0x9DBC219D,0x38487038,0xF504F1F5,0xBCDF63BC,0xB6C177B6,0xDA75AFDA
+000001D0 923FAD92        
+000001D4 9D21BC9D        
+000001D8 38704838        
+000001DC F5F104F5        
+000001E0 BC63DFBC        
+000001E4 B677C1B6        
+000001E8 DAAF75DA        
+000001EC 21426321            1151  	.dw 0x21634221,0x10302010,0xFF1AE5FF,0xF30EFDF3,0xD26DBFD2,0xCD4C81CD,0x0C14180C,0x13352613
+000001F0 10203010        
+000001F4 FFE51AFF        
+000001F8 F3FD0EF3        
+000001FC D2BF6DD2        
+00000200 CD814CCD        
+00000204 0C18140C        
+00000208 13263513        
+0000020C ECC32FEC            1152  	.dw 0xEC2FC3EC,0x5FE1BE5F,0x97A23597,0x44CC8844,0x17392E17,0xC45793C4,0xA7F255A7,0x7E82FC7E
+00000210 5FBEE15F        
+00000214 9735A297        
+00000218 4488CC44        
+0000021C 172E3917        
+00000220 C49357C4        
+00000224 A755F2A7        
+00000228 7EFC827E        
+0000022C 3D7A473D            1153  	.dw 0x3D477A3D,0x64ACC864,0x5DE7BA5D,0x192B3219,0x7395E673,0x60A0C060,0x81981981,0x4FD19E4F
+00000230 64C8AC64        
+00000234 5DBAE75D        
+00000238 19322B19        
+0000023C 73E69573        
+00000240 60C0A060        
+00000244 81199881        
+00000248 4F9ED14F        
+0000024C DCA37FDC            1154  	.dw 0xDC7FA3DC,0x22664422,0x2A7E542A,0x90AB3B90,0x88830B88,0x46CA8C46,0xEE29C7EE,0xB8D36BB8
+00000250 22446622        
+00000254 2A547E2A        
+00000258 903BAB90        
+0000025C 880B8388        
+00000260 468CCA46        
+00000264 EEC729EE        
+00000268 B86BD3B8        
+0000026C 14283C14            1155  	.dw 0x143C2814,0xDE79A7DE,0x5EE2BC5E,0x0B1D160B,0xDB76ADDB,0xE03BDBE0,0x32566432,0x3A4E743A
+00000270 DEA779DE        
+00000274 5EBCE25E        
+00000278 0B161D0B        
+0000027C DBAD76DB        
+00000280 E0DB3BE0        
+00000284 32645632        
+00000288 3A744E3A        
+0000028C 0A141E0A            1156  	.dw 0x0A1E140A,0x49DB9249,0x060A0C06,0x246C4824,0x5CE4B85C,0xC25D9FC2,0xD36EBDD3,0xACEF43AC
+00000290 4992DB49        
+00000294 060C0A06        
+00000298 24486C24        
+0000029C 5CB8E45C        
+000002A0 C29F5DC2        
+000002A4 D3BD6ED3        
+000002A8 AC43EFAC        
+000002AC 62C4A662            1157  	.dw 0x62A6C462,0x91A83991,0x95A43195,0xE437D3E4,0x798BF279,0xE732D5E7,0xC8438BC8,0x37596E37
+000002B0 9139A891        
+000002B4 9531A495        
+000002B8 E4D337E4        
+000002BC 79F28B79        
+000002C0 E7D532E7        
+000002C4 C88B43C8        
+000002C8 376E5937        
+000002CC 6DDAB76D            1158  	.dw 0x6DB7DA6D,0x8D8C018D,0xD564B1D5,0x4ED29C4E,0xA9E049A9,0x6CB4D86C,0x56FAAC56,0xF407F3F4
+000002D0 8D018C8D        
+000002D4 D5B164D5        
+000002D8 4E9CD24E        
+000002DC A949E0A9        
+000002E0 6CD8B46C        
+000002E4 56ACFA56        
+000002E8 F4F307F4        
+000002EC EACF25EA            1159  	.dw 0xEA25CFEA,0x65AFCA65,0x7A8EF47A,0xAEE947AE,0x08181008,0xBAD56FBA,0x7888F078,0x256F4A25
+000002F0 65CAAF65        
+000002F4 7AF48E7A        
+000002F8 AE47E9AE        
+000002FC 08101808        
+00000300 BA6FD5BA        
+00000304 78F08878        
+00000308 254A6F25        
+0000030C 2E5C722E            1160  	.dw 0x2E725C2E,0x1C24381C,0xA6F157A6,0xB4C773B4,0xC65197C6,0xE823CBE8,0xDD7CA1DD,0x749CE874
+00000310 1C38241C        
+00000314 A657F1A6        
+00000318 B473C7B4        
+0000031C C69751C6        
+00000320 E8CB23E8        
+00000324 DDA17CDD        
+00000328 74E89C74        
+0000032C 1F3E211F            1161  	.dw 0x1F213E1F,0x4BDD964B,0xBDDC61BD,0x8B860D8B,0x8A850F8A,0x7090E070,0x3E427C3E,0xB5C471B5
+00000330 4B96DD4B        
+00000334 BD61DCBD        
+00000338 8B0D868B        
+0000033C 8A0F858A        
+00000340 70E09070        
+00000344 3E7C423E        
+00000348 B571C4B5        
+0000034C 66CCAA66            1162  	.dw 0x66AACC66,0x48D89048,0x03050603,0xF601F7F6,0x0E121C0E,0x61A3C261,0x355F6A35,0x57F9AE57
+00000350 4890D848        
+00000354 03060503        
+00000358 F6F701F6        
+0000035C 0E1C120E        
+00000360 61C2A361        
+00000364 356A5F35        
+00000368 57AEF957        
+0000036C B969D0B9            1163  	.dw 0xB9D069B9,0x86911786,0xC15899C1,0x1D273A1D,0x9EB9279E,0xE138D9E1,0xF813EBF8,0x98B32B98
+00000370 86179186        
+00000374 C19958C1        
+00000378 1D3A271D        
+0000037C 9E27B99E        
+00000380 E1D938E1        
+00000384 F8EB13F8        
+00000388 982BB398        
+0000038C 11223311            1164  	.dw 0x11332211,0x69BBD269,0xD970A9D9,0x8E89078E,0x94A73394,0x9BB62D9B,0x1E223C1E,0x87921587
+00000390 69D2BB69        
+00000394 D9A970D9        
+00000398 8E07898E        
+0000039C 9433A794        
+000003A0 9B2DB69B        
+000003A4 1E3C221E        
+000003A8 87159287        
+000003AC E9C920E9            1165  	.dw 0xE920C9E9,0xCE4987CE,0x55FFAA55,0x28785028,0xDF7AA5DF,0x8C8F038C,0xA1F859A1,0x89800989
+000003B0 CE8749CE        
+000003B4 55AAFF55        
+000003B8 28507828        
+000003BC DFA57ADF        
+000003C0 8C038F8C        
+000003C4 A159F8A1        
+000003C8 89098089        
+000003CC 0D1A170D            1166  	.dw 0x0D171A0D,0xBFDA65BF,0xE631D7E6,0x42C68442,0x68B8D068,0x41C38241,0x99B02999,0x2D775A2D
+000003D0 BF65DABF        
+000003D4 E6D731E6        
+000003D8 4284C642        
+000003DC 68D0B868        
+000003E0 4182C341        
+000003E4 9929B099        
+000003E8 2D5A772D        
+000003EC 0F1E110F            1167  	.dw 0x0F111E0F,0xB0CB7BB0,0x54FCA854,0xBBD66DBB,0x163A2C16
+000003F0 B07BCBB0        
+000003F4 54A8FC54        
+000003F8 BB6DD6BB        
+000003FC 162C3A16        
+00000400                     1168  	.align 4
+00000400                     1169  _AES_Te3:
+00000400 C6A56363            1170  	.dw 0x6363A5C6,0x7C7C84F8,0x777799EE,0x7B7B8DF6,0xF2F20DFF,0x6B6BBDD6,0x6F6FB1DE,0xC5C55491
+00000404 F8847C7C        
+00000408 EE997777        
+0000040C F68D7B7B        
+00000410 FF0DF2F2        
+00000414 D6BD6B6B        
+00000418 DEB16F6F        
+0000041C 9154C5C5        
+00000420 60503030            1171  	.dw 0x30305060,0x01010302,0x6767A9CE,0x2B2B7D56,0xFEFE19E7,0xD7D762B5,0xABABE64D,0x76769AEC
+00000424 02030101        
+00000428 CEA96767        
+0000042C 567D2B2B        
+00000430 E719FEFE        
+00000434 B562D7D7        
+00000438 4DE6ABAB        
+0000043C EC9A7676        
+00000440 8F45CACA            1172  	.dw 0xCACA458F,0x82829D1F,0xC9C94089,0x7D7D87FA,0xFAFA15EF,0x5959EBB2,0x4747C98E,0xF0F00BFB
+00000444 1F9D8282        
+00000448 8940C9C9        
+0000044C FA877D7D        
+00000450 EF15FAFA        
+00000454 B2EB5959        
+00000458 8EC94747        
+0000045C FB0BF0F0        
+00000460 41ECADAD            1173  	.dw 0xADADEC41,0xD4D467B3,0xA2A2FD5F,0xAFAFEA45,0x9C9CBF23,0xA4A4F753,0x727296E4,0xC0C05B9B
+00000464 B367D4D4        
+00000468 5FFDA2A2        
+0000046C 45EAAFAF        
+00000470 23BF9C9C        
+00000474 53F7A4A4        
+00000478 E4967272        
+0000047C 9B5BC0C0        
+00000480 75C2B7B7            1174  	.dw 0xB7B7C275,0xFDFD1CE1,0x9393AE3D,0x26266A4C,0x36365A6C,0x3F3F417E,0xF7F702F5,0xCCCC4F83
+00000484 E11CFDFD        
+00000488 3DAE9393        
+0000048C 4C6A2626        
+00000490 6C5A3636        
+00000494 7E413F3F        
+00000498 F502F7F7        
+0000049C 834FCCCC        
+000004A0 685C3434            1175  	.dw 0x34345C68,0xA5A5F451,0xE5E534D1,0xF1F108F9,0x717193E2,0xD8D873AB,0x31315362,0x15153F2A
+000004A4 51F4A5A5        
+000004A8 D134E5E5        
+000004AC F908F1F1        
+000004B0 E2937171        
+000004B4 AB73D8D8        
+000004B8 62533131        
+000004BC 2A3F1515        
+000004C0 080C0404            1176  	.dw 0x04040C08,0xC7C75295,0x23236546,0xC3C35E9D,0x18182830,0x9696A137,0x05050F0A,0x9A9AB52F
+000004C4 9552C7C7        
+000004C8 46652323        
+000004CC 9D5EC3C3        
+000004D0 30281818        
+000004D4 37A19696        
+000004D8 0A0F0505        
+000004DC 2FB59A9A        
+000004E0 0E090707            1177  	.dw 0x0707090E,0x12123624,0x80809B1B,0xE2E23DDF,0xEBEB26CD,0x2727694E,0xB2B2CD7F,0x75759FEA
+000004E4 24361212        
+000004E8 1B9B8080        
+000004EC DF3DE2E2        
+000004F0 CD26EBEB        
+000004F4 4E692727        
+000004F8 7FCDB2B2        
+000004FC EA9F7575        
+00000500 121B0909            1178  	.dw 0x09091B12,0x83839E1D,0x2C2C7458,0x1A1A2E34,0x1B1B2D36,0x6E6EB2DC,0x5A5AEEB4,0xA0A0FB5B
+00000504 1D9E8383        
+00000508 58742C2C        
+0000050C 342E1A1A        
+00000510 362D1B1B        
+00000514 DCB26E6E        
+00000518 B4EE5A5A        
+0000051C 5BFBA0A0        
+00000520 A4F65252            1179  	.dw 0x5252F6A4,0x3B3B4D76,0xD6D661B7,0xB3B3CE7D,0x29297B52,0xE3E33EDD,0x2F2F715E,0x84849713
+00000524 764D3B3B        
+00000528 B761D6D6        
+0000052C 7DCEB3B3        
+00000530 527B2929        
+00000534 DD3EE3E3        
+00000538 5E712F2F        
+0000053C 13978484        
+00000540 A6F55353            1180  	.dw 0x5353F5A6,0xD1D168B9
+00000544 B968D1D1        
+00000548 00000000            1181  	.ds (4)
+0000054C C12CEDED            1182  	.dw 0xEDED2CC1,0x20206040,0xFCFC1FE3,0xB1B1C879,0x5B5BEDB6,0x6A6ABED4,0xCBCB468D,0xBEBED967
+00000550 40602020        
+00000554 E31FFCFC        
+00000558 79C8B1B1        
+0000055C B6ED5B5B        
+00000560 D4BE6A6A        
+00000564 8D46CBCB        
+00000568 67D9BEBE        
+0000056C 724B3939            1183  	.dw 0x39394B72,0x4A4ADE94,0x4C4CD498,0x5858E8B0,0xCFCF4A85,0xD0D06BBB,0xEFEF2AC5,0xAAAAE54F
+00000570 94DE4A4A        
+00000574 98D44C4C        
+00000578 B0E85858        
+0000057C 854ACFCF        
+00000580 BB6BD0D0        
+00000584 C52AEFEF        
+00000588 4FE5AAAA        
+0000058C ED16FBFB            1184  	.dw 0xFBFB16ED,0x4343C586,0x4D4DD79A,0x33335566,0x85859411,0x4545CF8A,0xF9F910E9,0x02020604
+00000590 86C54343        
+00000594 9AD74D4D        
+00000598 66553333        
+0000059C 11948585        
+000005A0 8ACF4545        
+000005A4 E910F9F9        
+000005A8 04060202        
+000005AC FE817F7F            1185  	.dw 0x7F7F81FE,0x5050F0A0,0x3C3C4478,0x9F9FBA25,0xA8A8E34B,0x5151F3A2,0xA3A3FE5D,0x4040C080
+000005B0 A0F05050        
+000005B4 78443C3C        
+000005B8 25BA9F9F        
+000005BC 4BE3A8A8        
+000005C0 A2F35151        
+000005C4 5DFEA3A3        
+000005C8 80C04040        
+000005CC 058A8F8F            1186  	.dw 0x8F8F8A05,0x9292AD3F,0x9D9DBC21,0x38384870,0xF5F504F1,0xBCBCDF63,0xB6B6C177,0xDADA75AF
+000005D0 3FAD9292        
+000005D4 21BC9D9D        
+000005D8 70483838        
+000005DC F104F5F5        
+000005E0 63DFBCBC        
+000005E4 77C1B6B6        
+000005E8 AF75DADA        
+000005EC 42632121            1187  	.dw 0x21216342,0x10103020,0xFFFF1AE5,0xF3F30EFD,0xD2D26DBF,0xCDCD4C81,0x0C0C1418,0x13133526
+000005F0 20301010        
+000005F4 E51AFFFF        
+000005F8 FD0EF3F3        
+000005FC BF6DD2D2        
+00000600 814CCDCD        
+00000604 18140C0C        
+00000608 26351313        
+0000060C C32FECEC            1188  	.dw 0xECEC2FC3,0x5F5FE1BE,0x9797A235,0x4444CC88,0x1717392E,0xC4C45793,0xA7A7F255,0x7E7E82FC
+00000610 BEE15F5F        
+00000614 35A29797        
+00000618 88CC4444        
+0000061C 2E391717        
+00000620 9357C4C4        
+00000624 55F2A7A7        
+00000628 FC827E7E        
+0000062C 7A473D3D            1189  	.dw 0x3D3D477A,0x6464ACC8,0x5D5DE7BA,0x19192B32,0x737395E6,0x6060A0C0,0x81819819,0x4F4FD19E
+00000630 C8AC6464        
+00000634 BAE75D5D        
+00000638 322B1919        
+0000063C E6957373        
+00000640 C0A06060        
+00000644 19988181        
+00000648 9ED14F4F        
+0000064C A37FDCDC            1190  	.dw 0xDCDC7FA3,0x22226644,0x2A2A7E54,0x9090AB3B,0x8888830B,0x4646CA8C,0xEEEE29C7,0xB8B8D36B
+00000650 44662222        
+00000654 547E2A2A        
+00000658 3BAB9090        
+0000065C 0B838888        
+00000660 8CCA4646        
+00000664 C729EEEE        
+00000668 6BD3B8B8        
+0000066C 283C1414            1191  	.dw 0x14143C28,0xDEDE79A7,0x5E5EE2BC,0x0B0B1D16,0xDBDB76AD,0xE0E03BDB,0x32325664,0x3A3A4E74
+00000670 A779DEDE        
+00000674 BCE25E5E        
+00000678 161D0B0B        
+0000067C AD76DBDB        
+00000680 DB3BE0E0        
+00000684 64563232        
+00000688 744E3A3A        
+0000068C 141E0A0A            1192  	.dw 0x0A0A1E14,0x4949DB92,0x06060A0C,0x24246C48,0x5C5CE4B8,0xC2C25D9F,0xD3D36EBD,0xACACEF43
+00000690 92DB4949        
+00000694 0C0A0606        
+00000698 486C2424        
+0000069C B8E45C5C        
+000006A0 9F5DC2C2        
+000006A4 BD6ED3D3        
+000006A8 43EFACAC        
+000006AC C4A66262            1193  	.dw 0x6262A6C4,0x9191A839,0x9595A431,0xE4E437D3,0x79798BF2,0xE7E732D5,0xC8C8438B,0x3737596E
+000006B0 39A89191        
+000006B4 31A49595        
+000006B8 D337E4E4        
+000006BC F28B7979        
+000006C0 D532E7E7        
+000006C4 8B43C8C8        
+000006C8 6E593737        
+000006CC DAB76D6D            1194  	.dw 0x6D6DB7DA,0x8D8D8C01,0xD5D564B1,0x4E4ED29C,0xA9A9E049,0x6C6CB4D8,0x5656FAAC,0xF4F407F3
+000006D0 018C8D8D        
+000006D4 B164D5D5        
+000006D8 9CD24E4E        
+000006DC 49E0A9A9        
+000006E0 D8B46C6C        
+000006E4 ACFA5656        
+000006E8 F307F4F4        
+000006EC CF25EAEA            1195  	.dw 0xEAEA25CF,0x6565AFCA,0x7A7A8EF4,0xAEAEE947,0x08081810,0xBABAD56F,0x787888F0,0x25256F4A
+000006F0 CAAF6565        
+000006F4 F48E7A7A        
+000006F8 47E9AEAE        
+000006FC 10180808        
+00000700 6FD5BABA        
+00000704 F0887878        
+00000708 4A6F2525        
+0000070C 5C722E2E            1196  	.dw 0x2E2E725C,0x1C1C2438,0xA6A6F157,0xB4B4C773,0xC6C65197,0xE8E823CB,0xDDDD7CA1,0x74749CE8
+00000710 38241C1C        
+00000714 57F1A6A6        
+00000718 73C7B4B4        
+0000071C 9751C6C6        
+00000720 CB23E8E8        
+00000724 A17CDDDD        
+00000728 E89C7474        
+0000072C 3E211F1F            1197  	.dw 0x1F1F213E,0x4B4BDD96,0xBDBDDC61,0x8B8B860D,0x8A8A850F,0x707090E0,0x3E3E427C,0xB5B5C471
+00000730 96DD4B4B        
+00000734 61DCBDBD        
+00000738 0D868B8B        
+0000073C 0F858A8A        
+00000740 E0907070        
+00000744 7C423E3E        
+00000748 71C4B5B5        
+0000074C CCAA6666            1198  	.dw 0x6666AACC,0x4848D890,0x03030506,0xF6F601F7,0x0E0E121C,0x6161A3C2,0x35355F6A,0x5757F9AE
+00000750 90D84848        
+00000754 06050303        
+00000758 F701F6F6        
+0000075C 1C120E0E        
+00000760 C2A36161        
+00000764 6A5F3535        
+00000768 AEF95757        
+0000076C 69D0B9B9            1199  	.dw 0xB9B9D069,0x86869117,0xC1C15899,0x1D1D273A,0x9E9EB927,0xE1E138D9,0xF8F813EB,0x9898B32B
+00000770 17918686        
+00000774 9958C1C1        
+00000778 3A271D1D        
+0000077C 27B99E9E        
+00000780 D938E1E1        
+00000784 EB13F8F8        
+00000788 2BB39898        
+0000078C 22331111            1200  	.dw 0x11113322,0x6969BBD2,0xD9D970A9,0x8E8E8907,0x9494A733,0x9B9BB62D,0x1E1E223C,0x87879215
+00000790 D2BB6969        
+00000794 A970D9D9        
+00000798 07898E8E        
+0000079C 33A79494        
+000007A0 2DB69B9B        
+000007A4 3C221E1E        
+000007A8 15928787        
+000007AC C920E9E9            1201  	.dw 0xE9E920C9,0xCECE4987,0x5555FFAA,0x28287850,0xDFDF7AA5,0x8C8C8F03,0xA1A1F859,0x89898009
+000007B0 8749CECE        
+000007B4 AAFF5555        
+000007B8 50782828        
+000007BC A57ADFDF        
+000007C0 038F8C8C        
+000007C4 59F8A1A1        
+000007C8 09808989        
+000007CC 1A170D0D            1202  	.dw 0x0D0D171A,0xBFBFDA65,0xE6E631D7,0x4242C684,0x6868B8D0,0x4141C382,0x9999B029,0x2D2D775A
+000007D0 65DABFBF        
+000007D4 D731E6E6        
+000007D8 84C64242        
+000007DC D0B86868        
+000007E0 82C34141        
+000007E4 29B09999        
+000007E8 5A772D2D        
+000007EC 1E110F0F            1203  	.dw 0x0F0F111E,0xB0B0CB7B,0x5454FCA8,0xBBBBD66D,0x16163A2C
+000007F0 7BCBB0B0        
+000007F4 A8FC5454        
+000007F8 6DD6BBBB        
+000007FC 2C3A1616        
+00000800                     1204  	.align 4
+00000800                     1205  _AES_Te0:
+00000800 A56363C6            1206  	.dw 0xC66363A5,0xF87C7C84,0xEE777799,0xF67B7B8D,0xFFF2F20D,0xD66B6BBD,0xDE6F6FB1,0x91C5C554
+00000804 847C7CF8        
+00000808 997777EE        
+0000080C 8D7B7BF6        
+00000810 0DF2F2FF        
+00000814 BD6B6BD6        
+00000818 B16F6FDE        
+0000081C 54C5C591        
+00000820 50303060            1207  	.dw 0x60303050,0x02010103,0xCE6767A9,0x562B2B7D,0xE7FEFE19,0xB5D7D762,0x4DABABE6,0xEC76769A
+00000824 03010102        
+00000828 A96767CE        
+0000082C 7D2B2B56        
+00000830 19FEFEE7        
+00000834 62D7D7B5        
+00000838 E6ABAB4D        
+0000083C 9A7676EC        
+00000840 45CACA8F            1208  	.dw 0x8FCACA45,0x1F82829D,0x89C9C940,0xFA7D7D87,0xEFFAFA15,0xB25959EB,0x8E4747C9,0xFBF0F00B
+00000844 9D82821F        
+00000848 40C9C989        
+0000084C 877D7DFA        
+00000850 15FAFAEF        
+00000854 EB5959B2        
+00000858 C947478E        
+0000085C 0BF0F0FB        
+00000860 ECADAD41            1209  	.dw 0x41ADADEC,0xB3D4D467,0x5FA2A2FD,0x45AFAFEA,0x239C9CBF,0x53A4A4F7,0xE4727296,0x9BC0C05B
+00000864 67D4D4B3        
+00000868 FDA2A25F        
+0000086C EAAFAF45        
+00000870 BF9C9C23        
+00000874 F7A4A453        
+00000878 967272E4        
+0000087C 5BC0C09B        
+00000880 C2B7B775            1210  	.dw 0x75B7B7C2,0xE1FDFD1C,0x3D9393AE,0x4C26266A,0x6C36365A,0x7E3F3F41,0xF5F7F702,0x83CCCC4F
+00000884 1CFDFDE1        
+00000888 AE93933D        
+0000088C 6A26264C        
+00000890 5A36366C        
+00000894 413F3F7E        
+00000898 02F7F7F5        
+0000089C 4FCCCC83        
+000008A0 5C343468            1211  	.dw 0x6834345C,0x51A5A5F4,0xD1E5E534,0xF9F1F108,0xE2717193,0xABD8D873,0x62313153,0x2A15153F
+000008A4 F4A5A551        
+000008A8 34E5E5D1        
+000008AC 08F1F1F9        
+000008B0 937171E2        
+000008B4 73D8D8AB        
+000008B8 53313162        
+000008BC 3F15152A        
+000008C0 0C040408            1212  	.dw 0x0804040C,0x95C7C752,0x46232365,0x9DC3C35E,0x30181828,0x379696A1,0x0A05050F,0x2F9A9AB5
+000008C4 52C7C795        
+000008C8 65232346        
+000008CC 5EC3C39D        
+000008D0 28181830        
+000008D4 A1969637        
+000008D8 0F05050A        
+000008DC B59A9A2F        
+000008E0 0907070E            1213  	.dw 0x0E070709,0x24121236,0x1B80809B,0xDFE2E23D,0xCDEBEB26,0x4E272769,0x7FB2B2CD,0xEA75759F
+000008E4 36121224        
+000008E8 9B80801B        
+000008EC 3DE2E2DF        
+000008F0 26EBEBCD        
+000008F4 6927274E        
+000008F8 CDB2B27F        
+000008FC 9F7575EA        
+00000900 1B090912            1214  	.dw 0x1209091B,0x1D83839E,0x582C2C74,0x341A1A2E,0x361B1B2D,0xDC6E6EB2,0xB45A5AEE,0x5BA0A0FB
+00000904 9E83831D        
+00000908 742C2C58        
+0000090C 2E1A1A34        
+00000910 2D1B1B36        
+00000914 B26E6EDC        
+00000918 EE5A5AB4        
+0000091C FBA0A05B        
+00000920 F65252A4            1215  	.dw 0xA45252F6,0x763B3B4D,0xB7D6D661,0x7DB3B3CE,0x5229297B,0xDDE3E33E,0x5E2F2F71,0x13848497
+00000924 4D3B3B76        
+00000928 61D6D6B7        
+0000092C CEB3B37D        
+00000930 7B292952        
+00000934 3EE3E3DD        
+00000938 712F2F5E        
+0000093C 97848413        
+00000940 F55353A6            1216  	.dw 0xA65353F5,0xB9D1D168
+00000944 68D1D1B9        
+00000948 00000000            1217  	.ds (4)
+0000094C 2CEDEDC1            1218  	.dw 0xC1EDED2C,0x40202060,0xE3FCFC1F,0x79B1B1C8,0xB65B5BED,0xD46A6ABE,0x8DCBCB46,0x67BEBED9
+00000950 60202040        
+00000954 1FFCFCE3        
+00000958 C8B1B179        
+0000095C ED5B5BB6        
+00000960 BE6A6AD4        
+00000964 46CBCB8D        
+00000968 D9BEBE67        
+0000096C 4B393972            1219  	.dw 0x7239394B,0x944A4ADE,0x984C4CD4,0xB05858E8,0x85CFCF4A,0xBBD0D06B,0xC5EFEF2A,0x4FAAAAE5
+00000970 DE4A4A94        
+00000974 D44C4C98        
+00000978 E85858B0        
+0000097C 4ACFCF85        
+00000980 6BD0D0BB        
+00000984 2AEFEFC5        
+00000988 E5AAAA4F        
+0000098C 16FBFBED            1220  	.dw 0xEDFBFB16,0x864343C5,0x9A4D4DD7,0x66333355,0x11858594,0x8A4545CF,0xE9F9F910,0x04020206
+00000990 C5434386        
+00000994 D74D4D9A        
+00000998 55333366        
+0000099C 94858511        
+000009A0 CF45458A        
+000009A4 10F9F9E9        
+000009A8 06020204        
+000009AC 817F7FFE            1221  	.dw 0xFE7F7F81,0xA05050F0,0x783C3C44,0x259F9FBA,0x4BA8A8E3,0xA25151F3,0x5DA3A3FE,0x804040C0
+000009B0 F05050A0        
+000009B4 443C3C78        
+000009B8 BA9F9F25        
+000009BC E3A8A84B        
+000009C0 F35151A2        
+000009C4 FEA3A35D        
+000009C8 C0404080        
+000009CC 8A8F8F05            1222  	.dw 0x058F8F8A,0x3F9292AD,0x219D9DBC,0x70383848,0xF1F5F504,0x63BCBCDF,0x77B6B6C1,0xAFDADA75
+000009D0 AD92923F        
+000009D4 BC9D9D21        
+000009D8 48383870        
+000009DC 04F5F5F1        
+000009E0 DFBCBC63        
+000009E4 C1B6B677        
+000009E8 75DADAAF        
+000009EC 63212142            1223  	.dw 0x42212163,0x20101030,0xE5FFFF1A,0xFDF3F30E,0xBFD2D26D,0x81CDCD4C,0x180C0C14,0x26131335
+000009F0 30101020        
+000009F4 1AFFFFE5        
+000009F8 0EF3F3FD        
+000009FC 6DD2D2BF        
+00000A00 4CCDCD81        
+00000A04 140C0C18        
+00000A08 35131326        
+00000A0C 2FECECC3            1224  	.dw 0xC3ECEC2F,0xBE5F5FE1,0x359797A2,0x884444CC,0x2E171739,0x93C4C457,0x55A7A7F2,0xFC7E7E82
+00000A10 E15F5FBE        
+00000A14 A2979735        
+00000A18 CC444488        
+00000A1C 3917172E        
+00000A20 57C4C493        
+00000A24 F2A7A755        
+00000A28 827E7EFC        
+00000A2C 473D3D7A            1225  	.dw 0x7A3D3D47,0xC86464AC,0xBA5D5DE7,0x3219192B,0xE6737395,0xC06060A0,0x19818198,0x9E4F4FD1
+00000A30 AC6464C8        
+00000A34 E75D5DBA        
+00000A38 2B191932        
+00000A3C 957373E6        
+00000A40 A06060C0        
+00000A44 98818119        
+00000A48 D14F4F9E        
+00000A4C 7FDCDCA3            1226  	.dw 0xA3DCDC7F,0x44222266,0x542A2A7E,0x3B9090AB,0x0B888883,0x8C4646CA,0xC7EEEE29,0x6BB8B8D3
+00000A50 66222244        
+00000A54 7E2A2A54        
+00000A58 AB90903B        
+00000A5C 8388880B        
+00000A60 CA46468C        
+00000A64 29EEEEC7        
+00000A68 D3B8B86B        
+00000A6C 3C141428            1227  	.dw 0x2814143C,0xA7DEDE79,0xBC5E5EE2,0x160B0B1D,0xADDBDB76,0xDBE0E03B,0x64323256,0x743A3A4E
+00000A70 79DEDEA7        
+00000A74 E25E5EBC        
+00000A78 1D0B0B16        
+00000A7C 76DBDBAD        
+00000A80 3BE0E0DB        
+00000A84 56323264        
+00000A88 4E3A3A74        
+00000A8C 1E0A0A14            1228  	.dw 0x140A0A1E,0x924949DB,0x0C06060A,0x4824246C,0xB85C5CE4,0x9FC2C25D,0xBDD3D36E,0x43ACACEF
+00000A90 DB494992        
+00000A94 0A06060C        
+00000A98 6C242448        
+00000A9C E45C5CB8        
+00000AA0 5DC2C29F        
+00000AA4 6ED3D3BD        
+00000AA8 EFACAC43        
+00000AAC A66262C4            1229  	.dw 0xC46262A6,0x399191A8,0x319595A4,0xD3E4E437,0xF279798B,0xD5E7E732,0x8BC8C843,0x6E373759
+00000AB0 A8919139        
+00000AB4 A4959531        
+00000AB8 37E4E4D3        
+00000ABC 8B7979F2        
+00000AC0 32E7E7D5        
+00000AC4 43C8C88B        
+00000AC8 5937376E        
+00000ACC B76D6DDA            1230  	.dw 0xDA6D6DB7,0x018D8D8C,0xB1D5D564,0x9C4E4ED2,0x49A9A9E0,0xD86C6CB4,0xAC5656FA,0xF3F4F407
+00000AD0 8C8D8D01        
+00000AD4 64D5D5B1        
+00000AD8 D24E4E9C        
+00000ADC E0A9A949        
+00000AE0 B46C6CD8        
+00000AE4 FA5656AC        
+00000AE8 07F4F4F3        
+00000AEC 25EAEACF            1231  	.dw 0xCFEAEA25,0xCA6565AF,0xF47A7A8E,0x47AEAEE9,0x10080818,0x6FBABAD5,0xF0787888,0x4A25256F
+00000AF0 AF6565CA        
+00000AF4 8E7A7AF4        
+00000AF8 E9AEAE47        
+00000AFC 18080810        
+00000B00 D5BABA6F        
+00000B04 887878F0        
+00000B08 6F25254A        
+00000B0C 722E2E5C            1232  	.dw 0x5C2E2E72,0x381C1C24,0x57A6A6F1,0x73B4B4C7,0x97C6C651,0xCBE8E823,0xA1DDDD7C,0xE874749C
+00000B10 241C1C38        
+00000B14 F1A6A657        
+00000B18 C7B4B473        
+00000B1C 51C6C697        
+00000B20 23E8E8CB        
+00000B24 7CDDDDA1        
+00000B28 9C7474E8        
+00000B2C 211F1F3E            1233  	.dw 0x3E1F1F21,0x964B4BDD,0x61BDBDDC,0x0D8B8B86,0x0F8A8A85,0xE0707090,0x7C3E3E42,0x71B5B5C4
+00000B30 DD4B4B96        
+00000B34 DCBDBD61        
+00000B38 868B8B0D        
+00000B3C 858A8A0F        
+00000B40 907070E0        
+00000B44 423E3E7C        
+00000B48 C4B5B571        
+00000B4C AA6666CC            1234  	.dw 0xCC6666AA,0x904848D8,0x06030305,0xF7F6F601,0x1C0E0E12,0xC26161A3,0x6A35355F,0xAE5757F9
+00000B50 D8484890        
+00000B54 05030306        
+00000B58 01F6F6F7        
+00000B5C 120E0E1C        
+00000B60 A36161C2        
+00000B64 5F35356A        
+00000B68 F95757AE        
+00000B6C D0B9B969            1235  	.dw 0x69B9B9D0,0x17868691,0x99C1C158,0x3A1D1D27,0x279E9EB9,0xD9E1E138,0xEBF8F813,0x2B9898B3
+00000B70 91868617        
+00000B74 58C1C199        
+00000B78 271D1D3A        
+00000B7C B99E9E27        
+00000B80 38E1E1D9        
+00000B84 13F8F8EB        
+00000B88 B398982B        
+00000B8C 33111122            1236  	.dw 0x22111133,0xD26969BB,0xA9D9D970,0x078E8E89,0x339494A7,0x2D9B9BB6,0x3C1E1E22,0x15878792
+00000B90 BB6969D2        
+00000B94 70D9D9A9        
+00000B98 898E8E07        
+00000B9C A7949433        
+00000BA0 B69B9B2D        
+00000BA4 221E1E3C        
+00000BA8 92878715        
+00000BAC 20E9E9C9            1237  	.dw 0xC9E9E920,0x87CECE49,0xAA5555FF,0x50282878,0xA5DFDF7A,0x038C8C8F,0x59A1A1F8,0x09898980
+00000BB0 49CECE87        
+00000BB4 FF5555AA        
+00000BB8 78282850        
+00000BBC 7ADFDFA5        
+00000BC0 8F8C8C03        
+00000BC4 F8A1A159        
+00000BC8 80898909        
+00000BCC 170D0D1A            1238  	.dw 0x1A0D0D17,0x65BFBFDA,0xD7E6E631,0x844242C6,0xD06868B8,0x824141C3,0x299999B0,0x5A2D2D77
+00000BD0 DABFBF65        
+00000BD4 31E6E6D7        
+00000BD8 C6424284        
+00000BDC B86868D0        
+00000BE0 C3414182        
+00000BE4 B0999929        
+00000BE8 772D2D5A        
+00000BEC 110F0F1E            1239  	.dw 0x1E0F0F11,0x7BB0B0CB,0xA85454FC,0x6DBBBBD6,0x2C16163A
+00000BF0 CBB0B07B        
+00000BF4 FC5454A8        
+00000BF8 D6BBBB6D        
+00000BFC 3A16162C        
+00000C00                     1240  	.align 4
+00000C00                     1241  _AES_Te1:
+00000C00 6363C6A5            1242  	.dw 0xA5C66363,0x84F87C7C,0x99EE7777,0x8DF67B7B,0x0DFFF2F2,0xBDD66B6B,0xB1DE6F6F,0x5491C5C5
+00000C04 7C7CF884        
+00000C08 7777EE99        
+00000C0C 7B7BF68D        
+00000C10 F2F2FF0D        
+00000C14 6B6BD6BD        
+00000C18 6F6FDEB1        
+00000C1C C5C59154        
+00000C20 30306050            1243  	.dw 0x50603030,0x03020101,0xA9CE6767,0x7D562B2B,0x19E7FEFE,0x62B5D7D7,0xE64DABAB,0x9AEC7676
+00000C24 01010203        
+00000C28 6767CEA9        
+00000C2C 2B2B567D        
+00000C30 FEFEE719        
+00000C34 D7D7B562        
+00000C38 ABAB4DE6        
+00000C3C 7676EC9A        
+00000C40 CACA8F45            1244  	.dw 0x458FCACA,0x9D1F8282,0x4089C9C9,0x87FA7D7D,0x15EFFAFA,0xEBB25959,0xC98E4747,0x0BFBF0F0
+00000C44 82821F9D        
+00000C48 C9C98940        
+00000C4C 7D7DFA87        
+00000C50 FAFAEF15        
+00000C54 5959B2EB        
+00000C58 47478EC9        
+00000C5C F0F0FB0B        
+00000C60 ADAD41EC            1245  	.dw 0xEC41ADAD,0x67B3D4D4,0xFD5FA2A2,0xEA45AFAF,0xBF239C9C,0xF753A4A4,0x96E47272,0x5B9BC0C0
+00000C64 D4D4B367        
+00000C68 A2A25FFD        
+00000C6C AFAF45EA        
+00000C70 9C9C23BF        
+00000C74 A4A453F7        
+00000C78 7272E496        
+00000C7C C0C09B5B        
+00000C80 B7B775C2            1246  	.dw 0xC275B7B7,0x1CE1FDFD,0xAE3D9393,0x6A4C2626,0x5A6C3636,0x417E3F3F,0x02F5F7F7,0x4F83CCCC
+00000C84 FDFDE11C        
+00000C88 93933DAE        
+00000C8C 26264C6A        
+00000C90 36366C5A        
+00000C94 3F3F7E41        
+00000C98 F7F7F502        
+00000C9C CCCC834F        
+00000CA0 3434685C            1247  	.dw 0x5C683434,0xF451A5A5,0x34D1E5E5,0x08F9F1F1,0x93E27171,0x73ABD8D8,0x53623131,0x3F2A1515
+00000CA4 A5A551F4        
+00000CA8 E5E5D134        
+00000CAC F1F1F908        
+00000CB0 7171E293        
+00000CB4 D8D8AB73        
+00000CB8 31316253        
+00000CBC 15152A3F        
+00000CC0 0404080C            1248  	.dw 0x0C080404,0x5295C7C7,0x65462323,0x5E9DC3C3,0x28301818,0xA1379696,0x0F0A0505,0xB52F9A9A
+00000CC4 C7C79552        
+00000CC8 23234665        
+00000CCC C3C39D5E        
+00000CD0 18183028        
+00000CD4 969637A1        
+00000CD8 05050A0F        
+00000CDC 9A9A2FB5        
+00000CE0 07070E09            1249  	.dw 0x090E0707,0x36241212,0x9B1B8080,0x3DDFE2E2,0x26CDEBEB,0x694E2727,0xCD7FB2B2,0x9FEA7575
+00000CE4 12122436        
+00000CE8 80801B9B        
+00000CEC E2E2DF3D        
+00000CF0 EBEBCD26        
+00000CF4 27274E69        
+00000CF8 B2B27FCD        
+00000CFC 7575EA9F        
+00000D00 0909121B            1250  	.dw 0x1B120909,0x9E1D8383,0x74582C2C,0x2E341A1A,0x2D361B1B,0xB2DC6E6E,0xEEB45A5A,0xFB5BA0A0
+00000D04 83831D9E        
+00000D08 2C2C5874        
+00000D0C 1A1A342E        
+00000D10 1B1B362D        
+00000D14 6E6EDCB2        
+00000D18 5A5AB4EE        
+00000D1C A0A05BFB        
+00000D20 5252A4F6            1251  	.dw 0xF6A45252,0x4D763B3B,0x61B7D6D6,0xCE7DB3B3,0x7B522929,0x3EDDE3E3,0x715E2F2F,0x97138484
+00000D24 3B3B764D        
+00000D28 D6D6B761        
+00000D2C B3B37DCE        
+00000D30 2929527B        
+00000D34 E3E3DD3E        
+00000D38 2F2F5E71        
+00000D3C 84841397        
+00000D40 5353A6F5            1252  	.dw 0xF5A65353,0x68B9D1D1
+00000D44 D1D1B968        
+00000D48 00000000            1253  	.ds (4)
+00000D4C EDEDC12C            1254  	.dw 0x2CC1EDED,0x60402020,0x1FE3FCFC,0xC879B1B1,0xEDB65B5B,0xBED46A6A,0x468DCBCB,0xD967BEBE
+00000D50 20204060        
+00000D54 FCFCE31F        
+00000D58 B1B179C8        
+00000D5C 5B5BB6ED        
+00000D60 6A6AD4BE        
+00000D64 CBCB8D46        
+00000D68 BEBE67D9        
+00000D6C 3939724B            1255  	.dw 0x4B723939,0xDE944A4A,0xD4984C4C,0xE8B05858,0x4A85CFCF,0x6BBBD0D0,0x2AC5EFEF,0xE54FAAAA
+00000D70 4A4A94DE        
+00000D74 4C4C98D4        
+00000D78 5858B0E8        
+00000D7C CFCF854A        
+00000D80 D0D0BB6B        
+00000D84 EFEFC52A        
+00000D88 AAAA4FE5        
+00000D8C FBFBED16            1256  	.dw 0x16EDFBFB,0xC5864343,0xD79A4D4D,0x55663333,0x94118585,0xCF8A4545,0x10E9F9F9,0x06040202
+00000D90 434386C5        
+00000D94 4D4D9AD7        
+00000D98 33336655        
+00000D9C 85851194        
+00000DA0 45458ACF        
+00000DA4 F9F9E910        
+00000DA8 02020406        
+00000DAC 7F7FFE81            1257  	.dw 0x81FE7F7F,0xF0A05050,0x44783C3C,0xBA259F9F,0xE34BA8A8,0xF3A25151,0xFE5DA3A3,0xC0804040
+00000DB0 5050A0F0        
+00000DB4 3C3C7844        
+00000DB8 9F9F25BA        
+00000DBC A8A84BE3        
+00000DC0 5151A2F3        
+00000DC4 A3A35DFE        
+00000DC8 404080C0        
+00000DCC 8F8F058A            1258  	.dw 0x8A058F8F,0xAD3F9292,0xBC219D9D,0x48703838,0x04F1F5F5,0xDF63BCBC,0xC177B6B6,0x75AFDADA
+00000DD0 92923FAD        
+00000DD4 9D9D21BC        
+00000DD8 38387048        
+00000DDC F5F5F104        
+00000DE0 BCBC63DF        
+00000DE4 B6B677C1        
+00000DE8 DADAAF75        
+00000DEC 21214263            1259  	.dw 0x63422121,0x30201010,0x1AE5FFFF,0x0EFDF3F3,0x6DBFD2D2,0x4C81CDCD,0x14180C0C,0x35261313
+00000DF0 10102030        
+00000DF4 FFFFE51A        
+00000DF8 F3F3FD0E        
+00000DFC D2D2BF6D        
+00000E00 CDCD814C        
+00000E04 0C0C1814        
+00000E08 13132635        
+00000E0C ECECC32F            1260  	.dw 0x2FC3ECEC,0xE1BE5F5F,0xA2359797,0xCC884444,0x392E1717,0x5793C4C4,0xF255A7A7,0x82FC7E7E
+00000E10 5F5FBEE1        
+00000E14 979735A2        
+00000E18 444488CC        
+00000E1C 17172E39        
+00000E20 C4C49357        
+00000E24 A7A755F2        
+00000E28 7E7EFC82        
+00000E2C 3D3D7A47            1261  	.dw 0x477A3D3D,0xACC86464,0xE7BA5D5D,0x2B321919,0x95E67373,0xA0C06060,0x98198181,0xD19E4F4F
+00000E30 6464C8AC        
+00000E34 5D5DBAE7        
+00000E38 1919322B        
+00000E3C 7373E695        
+00000E40 6060C0A0        
+00000E44 81811998        
+00000E48 4F4F9ED1        
+00000E4C DCDCA37F            1262  	.dw 0x7FA3DCDC,0x66442222,0x7E542A2A,0xAB3B9090,0x830B8888,0xCA8C4646,0x29C7EEEE,0xD36BB8B8
+00000E50 22224466        
+00000E54 2A2A547E        
+00000E58 90903BAB        
+00000E5C 88880B83        
+00000E60 46468CCA        
+00000E64 EEEEC729        
+00000E68 B8B86BD3        
+00000E6C 1414283C            1263  	.dw 0x3C281414,0x79A7DEDE,0xE2BC5E5E,0x1D160B0B,0x76ADDBDB,0x3BDBE0E0,0x56643232,0x4E743A3A
+00000E70 DEDEA779        
+00000E74 5E5EBCE2        
+00000E78 0B0B161D        
+00000E7C DBDBAD76        
+00000E80 E0E0DB3B        
+00000E84 32326456        
+00000E88 3A3A744E        
+00000E8C 0A0A141E            1264  	.dw 0x1E140A0A,0xDB924949,0x0A0C0606,0x6C482424,0xE4B85C5C,0x5D9FC2C2,0x6EBDD3D3,0xEF43ACAC
+00000E90 494992DB        
+00000E94 06060C0A        
+00000E98 2424486C        
+00000E9C 5C5CB8E4        
+00000EA0 C2C29F5D        
+00000EA4 D3D3BD6E        
+00000EA8 ACAC43EF        
+00000EAC 6262C4A6            1265  	.dw 0xA6C46262,0xA8399191,0xA4319595,0x37D3E4E4,0x8BF27979,0x32D5E7E7,0x438BC8C8,0x596E3737
+00000EB0 919139A8        
+00000EB4 959531A4        
+00000EB8 E4E4D337        
+00000EBC 7979F28B        
+00000EC0 E7E7D532        
+00000EC4 C8C88B43        
+00000EC8 37376E59        
+00000ECC 6D6DDAB7            1266  	.dw 0xB7DA6D6D,0x8C018D8D,0x64B1D5D5,0xD29C4E4E,0xE049A9A9,0xB4D86C6C,0xFAAC5656,0x07F3F4F4
+00000ED0 8D8D018C        
+00000ED4 D5D5B164        
+00000ED8 4E4E9CD2        
+00000EDC A9A949E0        
+00000EE0 6C6CD8B4        
+00000EE4 5656ACFA        
+00000EE8 F4F4F307        
+00000EEC EAEACF25            1267  	.dw 0x25CFEAEA,0xAFCA6565,0x8EF47A7A,0xE947AEAE,0x18100808,0xD56FBABA,0x88F07878,0x6F4A2525
+00000EF0 6565CAAF        
+00000EF4 7A7AF48E        
+00000EF8 AEAE47E9        
+00000EFC 08081018        
+00000F00 BABA6FD5        
+00000F04 7878F088        
+00000F08 25254A6F        
+00000F0C 2E2E5C72            1268  	.dw 0x725C2E2E,0x24381C1C,0xF157A6A6,0xC773B4B4,0x5197C6C6,0x23CBE8E8,0x7CA1DDDD,0x9CE87474
+00000F10 1C1C3824        
+00000F14 A6A657F1        
+00000F18 B4B473C7        
+00000F1C C6C69751        
+00000F20 E8E8CB23        
+00000F24 DDDDA17C        
+00000F28 7474E89C        
+00000F2C 1F1F3E21            1269  	.dw 0x213E1F1F,0xDD964B4B,0xDC61BDBD,0x860D8B8B,0x850F8A8A,0x90E07070,0x427C3E3E,0xC471B5B5
+00000F30 4B4B96DD        
+00000F34 BDBD61DC        
+00000F38 8B8B0D86        
+00000F3C 8A8A0F85        
+00000F40 7070E090        
+00000F44 3E3E7C42        
+00000F48 B5B571C4        
+00000F4C 6666CCAA            1270  	.dw 0xAACC6666,0xD8904848,0x05060303,0x01F7F6F6,0x121C0E0E,0xA3C26161,0x5F6A3535,0xF9AE5757
+00000F50 484890D8        
+00000F54 03030605        
+00000F58 F6F6F701        
+00000F5C 0E0E1C12        
+00000F60 6161C2A3        
+00000F64 35356A5F        
+00000F68 5757AEF9        
+00000F6C B9B969D0            1271  	.dw 0xD069B9B9,0x91178686,0x5899C1C1,0x273A1D1D,0xB9279E9E,0x38D9E1E1,0x13EBF8F8,0xB32B9898
+00000F70 86861791        
+00000F74 C1C19958        
+00000F78 1D1D3A27        
+00000F7C 9E9E27B9        
+00000F80 E1E1D938        
+00000F84 F8F8EB13        
+00000F88 98982BB3        
+00000F8C 11112233            1272  	.dw 0x33221111,0xBBD26969,0x70A9D9D9,0x89078E8E,0xA7339494,0xB62D9B9B,0x223C1E1E,0x92158787
+00000F90 6969D2BB        
+00000F94 D9D9A970        
+00000F98 8E8E0789        
+00000F9C 949433A7        
+00000FA0 9B9B2DB6        
+00000FA4 1E1E3C22        
+00000FA8 87871592        
+00000FAC E9E9C920            1273  	.dw 0x20C9E9E9,0x4987CECE,0xFFAA5555,0x78502828,0x7AA5DFDF,0x8F038C8C,0xF859A1A1,0x80098989
+00000FB0 CECE8749        
+00000FB4 5555AAFF        
+00000FB8 28285078        
+00000FBC DFDFA57A        
+00000FC0 8C8C038F        
+00000FC4 A1A159F8        
+00000FC8 89890980        
+00000FCC 0D0D1A17            1274  	.dw 0x171A0D0D,0xDA65BFBF,0x31D7E6E6,0xC6844242,0xB8D06868,0xC3824141,0xB0299999,0x775A2D2D
+00000FD0 BFBF65DA        
+00000FD4 E6E6D731        
+00000FD8 424284C6        
+00000FDC 6868D0B8        
+00000FE0 414182C3        
+00000FE4 999929B0        
+00000FE8 2D2D5A77        
+00000FEC 0F0F1E11            1275  	.dw 0x111E0F0F,0xCB7BB0B0,0xFCA85454,0xD66DBBBB,0x3A2C1616
+00000FF0 B0B07BCB        
+00000FF4 5454A8FC        
+00000FF8 BBBB6DD6        
+00000FFC 16162C3A        
+00001000                     1276  	.align 4
+00001000                     1277  _AES_rcon:
+00001000 00000001            1278  	.dw 0x01000000,0x02000000,0x04000000,0x08000000,0x10000000,0x20000000,0x40000000,0x80000000
+00001004 00000002        
+00001008 00000004        
+0000100C 00000008        
+00001010 00000010        
+00001014 00000020        
+00001018 00000040        
+0000101C 00000080        
+00001020 0000001B            1279  	.dw 0x1B000000,0x36000000
+00001024 00000036        
+
+Section List
+Attr     Size                Name
+
+TEXT         2388 (00000954) .text
+BSS          1040 (00000410) .bss
+CONST        4136 (00001028) .const
+
+Command Line Parameter
+-Xcpu=g3kh -Xreg_mode=22 -Xep=callee -Xreserve_r2 -Xcharacter_set=none -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Cpu\uart -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\SrcCode -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\vss -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\FCL\user -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\FCL\lib -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\FCL -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\WdgIf -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\wdg\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Config\MCAL_Config\Wdg_OutPut\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\SecureProgram -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\SecureBoot -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootServices\Crc -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootServices -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Config\MCAL_Config\Gpt_OutPut\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Config\MCAL_Config\Fls_OutPut\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\gpt\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\fls\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootServices\SecurityManager -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootServices\MemoryManager -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootServices\FlsIf -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootServices\EEIf -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootServices\EcuMService -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootServices\Diag_Callout -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootServices\Dcm -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootServices\Common -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootServices\CanTp -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootServices\CanIf -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootManager -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Cpu -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\CommonInclude -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Config\BSW_Config -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Config\BSW_Config\RH850F1K -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\Os\Extend\inc -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\Os\Kernel\inc -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\Os\Portable\Mcu -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\Os\Portable\Processor -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Config\MCAL_Config\Adc_OutPut\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Config\MCAL_Config\Can_OutPut\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Config\MCAL_Config\Dio_OutPut\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Config\MCAL_Config\Mcu_OutPut\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Config\MCAL_Config\Port_OutPut\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\adc\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\can\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\dio\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\general -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\mcu\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\port\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\stubs\CanGeneral\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\stubs\Dem\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\stubs\Det\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\stubs\EcuM\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\stubs\MemIf\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\stubs\SchM\include -DRH850_F1KM_S1_2MB -Xprn_path=DefaultBuild -Xno_warning=50013 -oD:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Toolchain\CSPLUS_V81200\DefaultBuild\SecM.obj D:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Toolchain\CSPLUS_V81200\DefaultBuild\SecM.asm 
+

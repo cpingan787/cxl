@@ -1,0 +1,1321 @@
+RH850 Family Assembler V2.07.00.03 Assemble Source List
+
+OFFSET   CODE                  NO  SOURCE STATEMENT
+
+00000000                        1  #CC-RH Compiler RH850 Assembler Source
+00000000                        2  #@	CC-RH Version : V2.07.00  [06 Dec 2024]
+00000000                        3  #@	Command : ..\..\Bsw\SystemServices\vss\Vss.c -oDefaultBuild\Vss.obj -Xcpu=g3kh -Xreg_mode=22 -Xreserve_r2 -Xno_warning=20188,20111 -g -g_line -I..\..\Cpu\uart -I..\..\SrcCode -I..\..\Bsw\SystemServices\vss -I..\..\Bsw\SystemServices\FCL\user -I..\..\Bsw\SystemServices\FCL\lib -I..\..\Bsw\SystemServices\FCL -I..\..\Bsw\SystemServices\WdgM -I..\..\Bsw\SystemServices\WdgIf -I..\..\Bsw\Mcal\wdg\include -I..\..\Bsw\Config\MCAL_Config\Wdg_OutPut\include -I..\..\Bsw\SystemServices\SecureProgram -I..\..\Bsw\SystemServices\SecureBoot -I..\..\Bsw\Mcal\vss -I..\..\Bsw\SystemServices\BootServices\Crc -I..\..\FCL\user -I..\..\FCL\lib -I..\..\FCL -I..\..\Bsw\SystemServices\BootServices -I..\..\Bsw\Config\MCAL_Config\Gpt_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Fls_OutPut\include -I..\..\Bsw\Mcal\gpt\include -I..\..\Bsw\Mcal\fls\include -I..\..\Bsw\SystemServices\BootServices\SecurityManager -I..\..\Bsw\SystemServices\BootServices\MemoryManager -I..\..\Bsw\SystemServices\BootServices\FlsIf -I..\..\Bsw\SystemServices\BootServices\EEIf -I..\..\Bsw\SystemServices\BootServices\EcuMService -I..\..\Bsw\SystemServices\BootServices\Diag_Callout -I..\..\Bsw\SystemServices\BootServices\Dcm -I..\..\Bsw\SystemServices\BootServices\Common -I..\..\Bsw\SystemServices\BootServices\CanTp -I..\..\Bsw\SystemServices\BootServices\CanIf -I..\..\Bsw\SystemServices\BootManager -I..\..\Cpu -I..\..\Bsw\CommonInclude -I..\..\Bsw\Config\BSW_Config -I..\..\Bsw\Config\BSW_Config\RH850F1K -I..\..\Bsw\SystemServices\Os\Extend\inc -I..\..\Bsw\SystemServices\Os\Kernel\inc -I..\..\Bsw\SystemServices\Os\Portable\Mcu -I..\..\Bsw\SystemServices\Os\Portable\Processor -I..\..\Bsw\Config\MCAL_Config\Adc_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Can_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Dio_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Mcu_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Port_OutPut\include -I..\..\Bsw\Mcal\adc\include -I..\..\Bsw\Mcal\can\include -I..\..\Bsw\Mcal\dio\include -I..\..\Bsw\Mcal\general -I..\..\Bsw\Mcal\mcu\include -I..\..\Bsw\Mcal\port\include -I..\..\Bsw\Mcal\stubs\CanGeneral\include -I..\..\Bsw\Mcal\stubs\CanIf\include -I..\..\Bsw\Mcal\stubs\Dem\include -I..\..\Bsw\Mcal\stubs\Det\include -I..\..\Bsw\Mcal\stubs\EcuM\include -I..\..\Bsw\Mcal\stubs\MemIf\include -I..\..\Bsw\Mcal\stubs\SchM\include -DRH850_F1KM_S1_2MB -lang=c99 -Xdbl_size=4 -Xcall_jump=32 -Xasm_path=DefaultBuild -Xasm_option=-Xprn_path=DefaultBuild -c -MAKEUD=DefaultBuild -Xexec_time=C:\Users\xlchen\AppData\Local\Temp\CSPlusBuildTool_977561e22a934eaca7cc6dc529d86af2saa1tfsn.jey
+00000000                        4  #@	compiled at Thu Jul 16 13:41:43 2026
+00000000                        5  
+00000000                        6  	.file "..\..\Bsw\SystemServices\vss\Vss.c"
+00000000                        7  
+00000000                        8  	$reg_mode 22
+00000000                        9  	.dbl_size 4
+00000000                       10  
+00000000                       11  	.public _VssCryptoInit
+00000000                       12  	.extern _VssAdapter_InitSoft
+00000000                       13  	.public _VssSecocCmacGen
+00000000                       14  	.extern _VssAdapter_Sm4CMac
+00000000                       15  	.public _VssGenerateKeyByCode
+00000000                       16  	.public _VssGetAlgFlag
+00000000                       17  	.public _VssSetKeyActive
+00000000                       18  	.public _VssGetKeyActive
+00000000                       19  	.public _VssSetVSN
+00000000                       20  	.public _VssGetVSN
+00000000                       21  	.extern _memcmp
+00000000                       22  	.extern _memcpy
+00000000                       23  	.public _VssSM4CalcByKeyId
+00000000                       24  	.extern _VssAdapter_Sm4Calc
+00000000                       25  	.public _VssSM4CMacByKeyId
+00000000                       26  	.public _VssSM3Init
+00000000                       27  	.extern _VssAdapter_Sm3Init
+00000000                       28  	.public _VssSM3Update
+00000000                       29  	.extern _VssAdapter_Sm3Update
+00000000                       30  	.public _VssSM3Final
+00000000                       31  	.extern _Crypto_SM3_Final
+00000000                       32  	.public _VssSM3Calc
+00000000                       33  	.extern _VssAdapter_Sm3Calc
+00000000                       34  	.public _VssSHA256Calc
+00000000                       35  	.public _VssSHA256Init
+00000000                       36  	.public _VssSHA256Update
+00000000                       37  	.public _VssSHA256Final
+00000000                       38  	.extern _VssAdapter_SHA256_Init
+00000000                       39  	.extern _VssAdapter_SHA256_Update
+00000000                       40  	.extern _VssAdapter_SHA256_Final
+00000000                       41  	.public _VssSM2_Verify
+00000000                       42  	.extern _VssAdapter_SM2_Verify
+00000000                       43  	.public _VssEcc256_Verify
+00000000                       44  	.extern _VssAdapter_ECC_Verify
+00000000                       45  	.public _Vss_Crc32Init
+00000000                       46  	.extern _VssAdapter_Crc32Init
+00000000                       47  	.public _Vss_Crc32
+00000000                       48  	.extern _VssAdapter_Crc32
+00000000                       49  	.public _Vss_Crc32FinalResult
+00000000                       50  	.extern _VssAdapter_Crc32FinalResult
+00000000                       51  	.public _Vss_CRC16_CCITT_False
+00000000                       52  	.extern _VssAdapter_CRC16_CCITT_False
+00000000                       53  	.public _Vss_CRC32_CALC
+00000000                       54  	.extern _VssAdapter_CRC32_CALC
+00000000                       55  	.public _Vss_CRC8
+00000000                       56  	.extern _VssAdapter_CRC8
+00000000                       57  
+00000000                       58  	.section .text, text
+00000000                       59  _VssCryptoInit:
+00000000                       60  	.stack _VssCryptoInit = 16
+00000000                       61  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 71
+00000000 82072160              62  	prepare 0x00000301, 0x00000004
+00000004 06C8                  63  	mov r6, r25
+00000006 07D0                  64  	mov r7, r26
+00000008                       65  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 76
+00000008 FF0200000000          66  	jarl32 _VssAdapter_InitSoft, r31
+0000000E                       67  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 77
+0000000E 6052                  68  	cmp 0x00000000, r10
+00000010 8A05                  69  	bnz9 .BB.LABEL.1_2
+00000012                       70  .BB.LABEL.1_1:	; if_break_bb
+00000012                       71  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 83
+00000012                       72  	mov #_gVssCtx.1, r5
+00000012 250600000000            -- mov         0x0,tp
+00000018 0132                  73  	mov 0x00000001, r6
+0000001A 65370100              74  	st.w r6, 0x00000000[r5]
+0000001E                       75  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 85
+0000001E 65CFCD00              76  	st.w r25, 0x000000CC[r5]
+00000022                       77  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 87
+00000022 65D7D100              78  	st.w r26, 0x000000D0[r5]
+00000026                       79  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 90
+00000026 2557CD00              80  	ld.w 0x000000CC[r5], r10
+0000002A 63370100              81  	st.w r6, 0x00000000[r3]
+0000002E 254E2400              82  	movea 0x00000024, r5, r9
+00000032 00CA                  83  	mov 0x00000000, r25
+00000034 1938                  84  	mov r25, r7
+00000036 1940                  85  	mov r25, r8
+00000038 EAC760F9              86  	jarl [r10], r31
+0000003C                       87  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 92
+0000003C 1950                  88  	mov r25, r10
+0000003E                       89  .BB.LABEL.1_2:	; bb14
+0000003E                       90  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 93
+0000003E 42063F60              91  	dispose 0x00000004, 0x00000301, [r31]
+00000042                       92  _VssSecocCmacGen:
+00000042                       93  	.stack _VssSecocCmacGen = 20
+00000042                       94  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 104
+00000042 88072100              95  	prepare 0x00000001, 0x00000010
+00000046 0628                  96  	mov r6, r5
+00000048 0750                  97  	mov r7, r10
+0000004A 0848                  98  	mov r8, r9
+0000004C 0330                  99  	mov r3, r6
+0000004E 203E1000             100  	movea 0x00000010, r0, r7
+00000052                      101  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 153
+00000052                      102  	mov #.STR.1, r8
+00000052 280600000000            -- mov         0x0,r8
+00000058 C639                 103  	add r6, r7
+0000005A 0658                 104  	mov r6, r11
+0000005C 8505                 105  	br9 .BB.LABEL.2_2
+0000005E                      106  .BB.LABEL.2_1:	; entry
+0000005E 08670000             107  	ld.b 0x00000000[r8], r12
+00000062 4B670000             108  	st.b r12, 0x00000000[r11]
+00000066 4142                 109  	add 0x00000001, r8
+00000068 415A                 110  	add 0x00000001, r11
+0000006A                      111  .BB.LABEL.2_2:	; entry
+0000006A EB39                 112  	cmp r11, r7
+0000006C 8A05                 113  	bnz9 .BB.LABEL.2_1
+0000006E                      114  .BB.LABEL.2_3:	; entry
+0000006E                      115  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 154
+0000006E 0538                 116  	mov r5, r7
+00000070 0A40                 117  	mov r10, r8
+00000072 FF0200000000         118  	jarl32 _VssAdapter_Sm4CMac, r31
+00000078                      119  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 158
+00000078 48063F00             120  	dispose 0x00000010, 0x00000001, [r31]
+0000007C                      121  _VssGenerateKeyByCode:
+0000007C                      122  	.stack _VssGenerateKeyByCode = 0
+0000007C                      123  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 171
+0000007C 402E0000             124  	movhi HIGHW1(#_gVssCtx.1), r0, r5
+00000080                      125  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 174
+00000080 252F0100             126  	ld.w LOWW(#_gVssCtx.1)[r5], r5
+00000084 612A                 127  	cmp 0x00000001, r5
+00000086 8205                 128  	bz9 .BB.LABEL.3_2
+00000088                      129  .BB.LABEL.3_1:	; entry.bb38_crit_edge
+00000088                      130  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 0
+00000088 20561B00             131  	movea 0x0000001B, r0, r10
+0000008C 8505                 132  	br9 .BB.LABEL.3_7
+0000008E                      133  .BB.LABEL.3_2:	; if_break_bb
+0000008E                      134  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 180
+0000008E 614A                 135  	cmp 0x00000001, r9
+00000090 8B05                 136  	bh9 .BB.LABEL.3_5
+00000092                      137  .BB.LABEL.3_3:	; if_break_bb
+00000092                      138  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 0
+00000092 603A                 139  	cmp 0x00000000, r7
+00000094 8205                 140  	bz9 .BB.LABEL.3_5
+00000096                      141  .BB.LABEL.3_4:	; if_break_bb
+00000096 0606E0FF             142  	addi 0xFFFFFFE0, r6, r0
+0000009A 8205                 143  	bz9 .BB.LABEL.3_6
+0000009C                      144  .BB.LABEL.3_5:	; if_break_bb.bb38_crit_edge
+0000009C 0452                 145  	mov 0x00000004, r10
+0000009E 8505                 146  	br9 .BB.LABEL.3_7
+000000A0                      147  .BB.LABEL.3_6:	; if_break_bb36
+000000A0 0052                 148  	mov 0x00000000, r10
+000000A2                      149  .BB.LABEL.3_7:	; bb38
+000000A2                      150  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 189
+000000A2 7F00                 151  	jmp [r31]
+000000A4                      152  _VssGetAlgFlag:
+000000A4                      153  	.stack _VssGetAlgFlag = 44
+000000A4                      154  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 200
+000000A4 92072140             155  	prepare 0x00000201, 0x00000024
+000000A8                      156  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 203
+000000A8 43072300             157  	st.b r0, 0x00000023[r3]
+000000AC 06CE0000             158  	addi 0x00000000, r6, r25
+000000B0                      159  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 208
+000000B0 8A05                 160  	bnz9 .BB.LABEL.4_2
+000000B2                      161  .BB.LABEL.4_1:	; entry.bb62_crit_edge
+000000B2                      162  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 0
+000000B2 0452                 163  	mov 0x00000004, r10
+000000B4 8505                 164  	br9 .BB.LABEL.4_9
+000000B6                      165  .BB.LABEL.4_2:	; if_break_bb
+000000B6 23462300             166  	movea 0x00000023, r3, r8
+000000BA 003A                 167  	mov 0x00000000, r7
+000000BC 0132                 168  	mov 0x00000001, r6
+000000BE                      169  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 214
+000000BE 80FF0000             170  	jarl _VssGetKeyActive, r31
+000000C2                      171  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 215
+000000C2 6052                 172  	cmp 0x00000000, r10
+000000C4 8A05                 173  	bnz9 .BB.LABEL.4_9
+000000C6                      174  .BB.LABEL.4_3:	; if_break_bb17
+000000C6                      175  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 221
+000000C6 A32F2300             176  	ld.bu 0x00000023[r3], r5
+000000CA 602A                 177  	cmp 0x00000000, r5
+000000CC 8A05                 178  	bnz9 .BB.LABEL.4_5
+000000CE                      179  .BB.LABEL.4_4:	; if_then_bb23
+000000CE                      180  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 0
+000000CE 022A                 181  	mov 0x00000002, r5
+000000D0                      182  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 223
+000000D0 592F0000             183  	st.b r5, 0x00000000[r25]
+000000D4 0052                 184  	mov 0x00000000, r10
+000000D6                      185  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 224
+000000D6 52063F40             186  	dispose 0x00000024, 0x00000201, [r31]
+000000DA                      187  .BB.LABEL.4_5:	; if_break_bb26
+000000DA                      188  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 0
+000000DA 203E2000             189  	movea 0x00000020, r0, r7
+000000DE 23360300             190  	movea 0x00000003, r3, r6
+000000E2                      191  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 228
+000000E2 80FF0000             192  	jarl _VssGetVSN, r31
+000000E6                      193  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 229
+000000E6 6052                 194  	cmp 0x00000000, r10
+000000E8 8A05                 195  	bnz9 .BB.LABEL.4_9
+000000EA                      196  .BB.LABEL.4_6:	; if_break_bb36
+000000EA                      197  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 236
+000000EA C3C72200             198  	tst1 0x00000000, 0x00000022[r3]
+000000EE 8A05                 199  	bnz9 .BB.LABEL.4_8
+000000F0                      200  .BB.LABEL.4_7:	; if_then_bb48
+000000F0                      201  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 0
+000000F0 022A                 202  	mov 0x00000002, r5
+000000F2                      203  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 238
+000000F2 592F0000             204  	st.b r5, 0x00000000[r25]
+000000F6 52063F40             205  	dispose 0x00000024, 0x00000201, [r31]
+000000FA                      206  .BB.LABEL.4_8:	; if_then_bb55
+000000FA                      207  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 0
+000000FA 012A                 208  	mov 0x00000001, r5
+000000FC                      209  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 242
+000000FC 592F0000             210  	st.b r5, 0x00000000[r25]
+00000100                      211  .BB.LABEL.4_9:	; bb62
+00000100                      212  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 248
+00000100 52063F40             213  	dispose 0x00000024, 0x00000201, [r31]
+00000104                      214  _VssSetKeyActive:
+00000104                      215  	.stack _VssSetKeyActive = 8
+00000104                      216  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 260
+00000104 82072100             217  	prepare 0x00000001, 0x00000004
+00000108                      218  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 265
+00000108 402E0000             219  	movhi HIGHW1(#_gVssCtx.1), r0, r5
+0000010C 252F0100             220  	ld.w LOWW(#_gVssCtx.1)[r5], r5
+00000110 612A                 221  	cmp 0x00000001, r5
+00000112 0728                 222  	mov r7, r5
+00000114 8205                 223  	bz9 .BB.LABEL.5_2
+00000116                      224  .BB.LABEL.5_1:	; entry.bb93_crit_edge
+00000116                      225  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 0
+00000116 20561B00             226  	movea 0x0000001B, r0, r10
+0000011A 8505                 227  	br9 .BB.LABEL.5_15
+0000011C                      228  .BB.LABEL.5_2:	; if_break_bb
+0000011C                      229  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 271
+0000011C 403E0000             230  	movhi HIGHW1(#_gVssCtx.1+0x000000CC), r0, r7
+00000120 273F0100             231  	ld.w LOWW(#_gVssCtx.1+0x000000CC)[r7], r7
+00000124 603A                 232  	cmp 0x00000000, r7
+00000126 8205                 233  	bz9 .BB.LABEL.5_4
+00000128                      234  .BB.LABEL.5_3:	; if_break_bb
+00000128                      235  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 0
+00000128 6832                 236  	cmp 0x00000008, r6
+0000012A 8605                 237  	blt9 .BB.LABEL.5_5
+0000012C                      238  .BB.LABEL.5_4:	; if_break_bb.bb93_crit_edge
+0000012C 0452                 239  	mov 0x00000004, r10
+0000012E 8505                 240  	br9 .BB.LABEL.5_15
+00000130                      241  .BB.LABEL.5_5:	; if_break_bb24
+00000130                      242  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 277
+00000130 6132                 243  	cmp 0x00000001, r6
+00000132 8A05                 244  	bnz9 .BB.LABEL.5_10
+00000134                      245  .BB.LABEL.5_6:	; if_then_bb29
+00000134                      246  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 280
+00000134 602A                 247  	cmp 0x00000000, r5
+00000136 8A05                 248  	bnz9 .BB.LABEL.5_4
+00000138                      249  .BB.LABEL.5_7:	; if_break_bb37
+00000138                      250  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 286
+00000138 403E0000             251  	movhi HIGHW1(#_gVssCtx.1+0x00000024), r0, r7
+0000013C 873F0100             252  	ld.bu LOWW(#_gVssCtx.1+0x00000024)[r7], r7
+00000140 E741                 253  	cmp r7, r8
+00000142 8A05                 254  	bnz9 .BB.LABEL.5_9
+00000144                      255  .BB.LABEL.5_8:	; if_break_bb37.bb93_crit_edge
+00000144                      256  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 0
+00000144 0052                 257  	mov 0x00000000, r10
+00000146 8505                 258  	br9 .BB.LABEL.5_15
+00000148                      259  .BB.LABEL.5_9:	; if_then_bb45
+00000148                      260  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 288
+00000148                      261  	mov #_gVssCtx.1, r7
+00000148 270600000000            -- mov         0x0,r7
+0000014E 47472400             262  	st.b r8, 0x00000024[r7]
+00000152                      263  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 289
+00000152 2757CD00             264  	ld.w 0x000000CC[r7], r10
+00000156 0142                 265  	mov 0x00000001, r8
+00000158 63470100             266  	st.w r8, 0x00000000[r3]
+0000015C                      267  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 288
+0000015C 274E2400             268  	movea 0x00000024, r7, r9
+00000160 8505                 269  	br9 .BB.LABEL.5_14
+00000162                      270  .BB.LABEL.5_10:	; if_else_bb
+00000162                      271  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 293
+00000162 6332                 272  	cmp 0x00000003, r6
+00000164 8A05                 273  	bnz9 .BB.LABEL.5_8
+00000166                      274  .BB.LABEL.5_11:	; if_then_bb56
+00000166                      275  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 296
+00000166 612A                 276  	cmp 0x00000001, r5
+00000168 8F05                 277  	bgt9 .BB.LABEL.5_4
+0000016A                      278  .BB.LABEL.5_12:	; if_break_bb64
+0000016A                      279  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 302
+0000016A                      280  	mov #_gVssCtx.1, r7
+0000016A 270600000000            -- mov         0x0,r7
+00000170 C539                 281  	add r5, r7
+00000172 874F4700             282  	ld.bu 0x00000046[r7], r9
+00000176 E941                 283  	cmp r9, r8
+00000178 274E4600             284  	movea 0x00000046, r7, r9
+0000017C 8205                 285  	bz9 .BB.LABEL.5_8
+0000017E                      286  .BB.LABEL.5_13:	; if_then_bb75
+0000017E                      287  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 304
+0000017E 49470000             288  	st.b r8, 0x00000000[r9]
+00000182                      289  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 305
+00000182 403E0000             290  	movhi HIGHW1(#_gVssCtx.1+0x000000CC), r0, r7
+00000186 27570100             291  	ld.w LOWW(#_gVssCtx.1+0x000000CC)[r7], r10
+0000018A 013A                 292  	mov 0x00000001, r7
+0000018C 633F0100             293  	st.w r7, 0x00000000[r3]
+00000190                      294  .BB.LABEL.5_14:	; if_then_bb75
+00000190                      295  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 0
+00000190 003A                 296  	mov 0x00000000, r7
+00000192 0540                 297  	mov r5, r8
+00000194 EAC760F9             298  	jarl [r10], r31
+00000198                      299  .BB.LABEL.5_15:	; bb93
+00000198                      300  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 310
+00000198 42063F00             301  	dispose 0x00000004, 0x00000001, [r31]
+0000019C                      302  _VssGetKeyActive:
+0000019C                      303  	.stack _VssGetKeyActive = 16
+0000019C                      304  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 321
+0000019C 82072160             305  	prepare 0x00000301, 0x00000004
+000001A0                      306  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 326
+000001A0 402E0000             307  	movhi HIGHW1(#_gVssCtx.1), r0, r5
+000001A4 252F0100             308  	ld.w LOWW(#_gVssCtx.1)[r5], r5
+000001A8 612A                 309  	cmp 0x00000001, r5
+000001AA 08C8                 310  	mov r8, r25
+000001AC 0740                 311  	mov r7, r8
+000001AE 8205                 312  	bz9 .BB.LABEL.6_3
+000001B0                      313  .BB.LABEL.6_1:	; entry.bb110_crit_edge
+000001B0                      314  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 0
+000001B0 20561B00             315  	movea 0x0000001B, r0, r10
+000001B4                      316  .BB.LABEL.6_2:	; bb110
+000001B4                      317  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 376
+000001B4 42063F60             318  	dispose 0x00000004, 0x00000301, [r31]
+000001B8                      319  .BB.LABEL.6_3:	; if_break_bb
+000001B8                      320  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 332
+000001B8 402E0000             321  	movhi HIGHW1(#_gVssCtx.1+0x000000CC), r0, r5
+000001BC 252F0100             322  	ld.w LOWW(#_gVssCtx.1+0x000000CC)[r5], r5
+000001C0 602A                 323  	cmp 0x00000000, r5
+000001C2 8205                 324  	bz9 .BB.LABEL.6_6
+000001C4                      325  .BB.LABEL.6_4:	; if_break_bb
+000001C4                      326  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 0
+000001C4 60CA                 327  	cmp 0x00000000, r25
+000001C6 8205                 328  	bz9 .BB.LABEL.6_6
+000001C8                      329  .BB.LABEL.6_5:	; if_break_bb
+000001C8 6832                 330  	cmp 0x00000008, r6
+000001CA 8605                 331  	blt9 .BB.LABEL.6_7
+000001CC                      332  .BB.LABEL.6_6:	; if_break_bb.bb110_crit_edge
+000001CC 0452                 333  	mov 0x00000004, r10
+000001CE 8505                 334  	br9 .BB.LABEL.6_2
+000001D0                      335  .BB.LABEL.6_7:	; if_break_bb35
+000001D0                      336  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 338
+000001D0 6132                 337  	cmp 0x00000001, r6
+000001D2 8A05                 338  	bnz9 .BB.LABEL.6_12
+000001D4                      339  .BB.LABEL.6_8:	; if_then_bb40
+000001D4                      340  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 341
+000001D4 6042                 341  	cmp 0x00000000, r8
+000001D6 8A05                 342  	bnz9 .BB.LABEL.6_6
+000001D8                      343  .BB.LABEL.6_9:	; if_break_bb48
+000001D8                      344  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 347
+000001D8                      345  	mov #_gVssCtx.1, r5
+000001D8 250600000000            -- mov         0x0,tp
+000001DE 2557CD00             346  	ld.w 0x000000CC[r5], r10
+000001E2 013A                 347  	mov 0x00000001, r7
+000001E4 633F0100             348  	st.w r7, 0x00000000[r3]
+000001E8 254E2400             349  	movea 0x00000024, r5, r9
+000001EC EAC760F9             350  	jarl [r10], r31
+000001F0                      351  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 348
+000001F0 6052                 352  	cmp 0x00000000, r10
+000001F2 8205                 353  	bz9 .BB.LABEL.6_11
+000001F4                      354  .BB.LABEL.6_10:	; if_break_bb48.bb110_crit_edge
+000001F4                      355  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 0
+000001F4 0952                 356  	mov 0x00000009, r10
+000001F6 8505                 357  	br9 .BB.LABEL.6_2
+000001F8                      358  .BB.LABEL.6_11:	; if_break_bb59
+000001F8                      359  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 352
+000001F8 402E0000             360  	movhi HIGHW1(#_gVssCtx.1+0x00000024), r0, r5
+000001FC 052F0000             361  	ld.b LOWW(#_gVssCtx.1+0x00000024)[r5], r5
+00000200 8505                 362  	br9 .BB.LABEL.6_18
+00000202                      363  .BB.LABEL.6_12:	; if_else_bb
+00000202                      364  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 355
+00000202 6332                 365  	cmp 0x00000003, r6
+00000204 8205                 366  	bz9 .BB.LABEL.6_14
+00000206                      367  .BB.LABEL.6_13:	; if_else_bb.bb110_crit_edge
+00000206                      368  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 0
+00000206 0052                 369  	mov 0x00000000, r10
+00000208 8505                 370  	br9 .BB.LABEL.6_2
+0000020A                      371  .BB.LABEL.6_14:	; if_then_bb66
+0000020A                      372  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 358
+0000020A 6142                 373  	cmp 0x00000001, r8
+0000020C 8F05                 374  	bgt9 .BB.LABEL.6_6
+0000020E                      375  .BB.LABEL.6_15:	; if_break_bb74
+0000020E                      376  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 364
+0000020E                      377  	mov #_gVssCtx.1, r5
+0000020E 250600000000            -- mov         0x0,tp
+00000214 C829                 378  	add r8, r5
+00000216 853F4700             379  	ld.bu 0x00000046[r5], r7
+0000021A F939                 380  	cmp r25, r7
+0000021C 25D64600             381  	movea 0x00000046, r5, r26
+00000220 8205                 382  	bz9 .BB.LABEL.6_13
+00000222                      383  .BB.LABEL.6_16:	; if_then_bb85
+00000222                      384  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 366
+00000222 402E0000             385  	movhi HIGHW1(#_gVssCtx.1+0x000000CC), r0, r5
+00000226 252F0100             386  	ld.w LOWW(#_gVssCtx.1+0x000000CC)[r5], r5
+0000022A 013A                 387  	mov 0x00000001, r7
+0000022C 633F0100             388  	st.w r7, 0x00000000[r3]
+00000230 1A48                 389  	mov r26, r9
+00000232 E5C760F9             390  	jarl [r5], r31
+00000236                      391  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 367
+00000236 6052                 392  	cmp 0x00000000, r10
+00000238 8A05                 393  	bnz9 .BB.LABEL.6_10
+0000023A                      394  .BB.LABEL.6_17:	; if_break_bb99
+0000023A                      395  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 371
+0000023A 1A2F0000             396  	ld.b 0x00000000[r26], r5
+0000023E                      397  .BB.LABEL.6_18:	; if_break_bb99
+0000023E                      398  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 0
+0000023E 592F0000             399  	st.b r5, 0x00000000[r25]
+00000242 8505                 400  	br9 .BB.LABEL.6_13
+00000244                      401  _VssSetVSN:
+00000244                      402  	.stack _VssSetVSN = 24
+00000244                      403  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 387
+00000244 8207A170             404  	prepare 0x00000385, 0x00000004
+00000248                      405  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 392
+00000248 402E0000             406  	movhi HIGHW1(#_gVssCtx.1), r0, r5
+0000024C 252F0100             407  	ld.w LOWW(#_gVssCtx.1)[r5], r5
+00000250 612A                 408  	cmp 0x00000001, r5
+00000252 07C8                 409  	mov r7, r25
+00000254 06D0                 410  	mov r6, r26
+00000256 8205                 411  	bz9 .BB.LABEL.7_2
+00000258                      412  .BB.LABEL.7_1:	; entry.bb50_crit_edge
+00000258                      413  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 0
+00000258 20561B00             414  	movea 0x0000001B, r0, r10
+0000025C 8505                 415  	br9 .BB.LABEL.7_9
+0000025E                      416  .BB.LABEL.7_2:	; if_break_bb
+0000025E                      417  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 398
+0000025E 1906E0FF             418  	addi 0xFFFFFFE0, r25, r0
+00000262 402E0000             419  	movhi HIGHW1(#_gVssCtx.1+0x000000CC), r0, r5
+00000266 252F0100             420  	ld.w LOWW(#_gVssCtx.1+0x000000CC)[r5], r5
+0000026A 8A05                 421  	bnz9 .BB.LABEL.7_5
+0000026C                      422  .BB.LABEL.7_3:	; if_break_bb
+0000026C                      423  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 0
+0000026C 602A                 424  	cmp 0x00000000, r5
+0000026E 8205                 425  	bz9 .BB.LABEL.7_5
+00000270                      426  .BB.LABEL.7_4:	; if_break_bb
+00000270 60D2                 427  	cmp 0x00000000, r26
+00000272 8A05                 428  	bnz9 .BB.LABEL.7_6
+00000274                      429  .BB.LABEL.7_5:	; if_break_bb.bb50_crit_edge
+00000274 0452                 430  	mov 0x00000004, r10
+00000276 8505                 431  	br9 .BB.LABEL.7_9
+00000278                      432  .BB.LABEL.7_6:	; if_break_bb34
+00000278                      433  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 404
+00000278                      434  	mov #_gVssCtx.1, r6
+00000278 260600000000            -- mov         0x0,r6
+0000027E 4432                 435  	add 0x00000004, r6
+00000280 1A38                 436  	mov r26, r7
+00000282 1940                 437  	mov r25, r8
+00000284 FF0200000000         438  	jarl32 _memcmp, r31
+0000028A 6052                 439  	cmp 0x00000000, r10
+0000028C 8A05                 440  	bnz9 .BB.LABEL.7_8
+0000028E                      441  .BB.LABEL.7_7:	; if_break_bb34.bb50_crit_edge
+0000028E                      442  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 0
+0000028E 0052                 443  	mov 0x00000000, r10
+00000290 8505                 444  	br9 .BB.LABEL.7_9
+00000292                      445  .BB.LABEL.7_8:	; if_then_bb41
+00000292                      446  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 406
+00000292                      447  	mov #_gVssCtx.1, r27
+00000292 3B0600000000            -- mov         0x0,r27
+00000298 1BE60400             448  	addi 0x00000004, r27, r28
+0000029C 1C30                 449  	mov r28, r6
+0000029E 1A38                 450  	mov r26, r7
+000002A0 1940                 451  	mov r25, r8
+000002A2 FF0200000000         452  	jarl32 _memcpy, r31
+000002A8                      453  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 407
+000002A8 3B2FCD00             454  	ld.w 0x000000CC[r27], r5
+000002AC 20362000             455  	movea 0x00000020, r0, r6
+000002B0 63370100             456  	st.w r6, 0x00000000[r3]
+000002B4 0032                 457  	mov 0x00000000, r6
+000002B6 0638                 458  	mov r6, r7
+000002B8 0640                 459  	mov r6, r8
+000002BA 1C48                 460  	mov r28, r9
+000002BC E5C760F9             461  	jarl [r5], r31
+000002C0                      462  .BB.LABEL.7_9:	; bb50
+000002C0                      463  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 411
+000002C0 4206BF70             464  	dispose 0x00000004, 0x00000385, [r31]
+000002C4                      465  _VssGetVSN:
+000002C4                      466  	.stack _VssGetVSN = 16
+000002C4                      467  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 421
+000002C4 82072160             468  	prepare 0x00000301, 0x00000004
+000002C8                      469  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 426
+000002C8 402E0000             470  	movhi HIGHW1(#_gVssCtx.1), r0, r5
+000002CC 252F0100             471  	ld.w LOWW(#_gVssCtx.1)[r5], r5
+000002D0 612A                 472  	cmp 0x00000001, r5
+000002D2 06C8                 473  	mov r6, r25
+000002D4 8205                 474  	bz9 .BB.LABEL.8_2
+000002D6                      475  .BB.LABEL.8_1:	; entry.bb48_crit_edge
+000002D6                      476  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 0
+000002D6 20561B00             477  	movea 0x0000001B, r0, r10
+000002DA 8505                 478  	br9 .BB.LABEL.8_9
+000002DC                      479  .BB.LABEL.8_2:	; if_break_bb
+000002DC                      480  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 432
+000002DC 0706E0FF             481  	addi 0xFFFFFFE0, r7, r0
+000002E0 402E0000             482  	movhi HIGHW1(#_gVssCtx.1+0x000000CC), r0, r5
+000002E4 252F0100             483  	ld.w LOWW(#_gVssCtx.1+0x000000CC)[r5], r5
+000002E8 8A05                 484  	bnz9 .BB.LABEL.8_5
+000002EA                      485  .BB.LABEL.8_3:	; if_break_bb
+000002EA                      486  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 0
+000002EA 602A                 487  	cmp 0x00000000, r5
+000002EC 8205                 488  	bz9 .BB.LABEL.8_5
+000002EE                      489  .BB.LABEL.8_4:	; if_break_bb
+000002EE 60CA                 490  	cmp 0x00000000, r25
+000002F0 8A05                 491  	bnz9 .BB.LABEL.8_6
+000002F2                      492  .BB.LABEL.8_5:	; if_break_bb.bb48_crit_edge
+000002F2 0452                 493  	mov 0x00000004, r10
+000002F4 8505                 494  	br9 .BB.LABEL.8_9
+000002F6                      495  .BB.LABEL.8_6:	; if_break_bb34
+000002F6 20362000             496  	movea 0x00000020, r0, r6
+000002FA                      497  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 438
+000002FA 63370100             498  	st.w r6, 0x00000000[r3]
+000002FE                      499  	mov #_gVssCtx.1, r9
+000002FE 290600000000            -- mov         0x0,r9
+00000304 444A                 500  	add 0x00000004, r9
+00000306 013A                 501  	mov 0x00000001, r7
+00000308 0032                 502  	mov 0x00000000, r6
+0000030A 0640                 503  	mov r6, r8
+0000030C E5C760F9             504  	jarl [r5], r31
+00000310                      505  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 439
+00000310 0AD60000             506  	addi 0x00000000, r10, r26
+00000314 8205                 507  	bz9 .BB.LABEL.8_8
+00000316                      508  .BB.LABEL.8_7:	; if_break_bb34.bb48_crit_edge
+00000316                      509  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 0
+00000316 0952                 510  	mov 0x00000009, r10
+00000318 8505                 511  	br9 .BB.LABEL.8_9
+0000031A                      512  .BB.LABEL.8_8:	; if_break_bb43
+0000031A                      513  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 445
+0000031A                      514  	mov #_gVssCtx.1, r7
+0000031A 270600000000            -- mov         0x0,r7
+00000320 443A                 515  	add 0x00000004, r7
+00000322 20462000             516  	movea 0x00000020, r0, r8
+00000326 1930                 517  	mov r25, r6
+00000328 FF0200000000         518  	jarl32 _memcpy, r31
+0000032E                      519  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 447
+0000032E 1A50                 520  	mov r26, r10
+00000330                      521  .BB.LABEL.8_9:	; bb48
+00000330                      522  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 448
+00000330 42063F60             523  	dispose 0x00000004, 0x00000301, [r31]
+00000334                      524  _VssSM4CalcByKeyId:
+00000334                      525  	.stack _VssSM4CalcByKeyId = 48
+00000334                      526  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 462
+00000334 8B07E170             527  	prepare 0x00000B87, 0x00000014
+00000338 202E1000             528  	movea 0x00000010, r0, r5
+0000033C 0052                 529  	mov 0x00000000, r10
+0000033E 235E0400             530  	movea 0x00000004, r3, r11
+00000342                      531  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 465
+00000342 CB29                 532  	add r11, r5
+00000344 8505                 533  	br9 .BB.LABEL.9_2
+00000346                      534  .BB.LABEL.9_1:	; entry
+00000346 4B570000             535  	st.b r10, 0x00000000[r11]
+0000034A 415A                 536  	add 0x00000001, r11
+0000034C                      537  .BB.LABEL.9_2:	; entry
+0000034C EB29                 538  	cmp r11, r5
+0000034E 8A05                 539  	bnz9 .BB.LABEL.9_1
+00000350                      540  .BB.LABEL.9_3:	; entry
+00000350 43070400             541  	st.b r0, 0x00000004[r3]
+00000354                      542  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 468
+00000354 402E0000             543  	movhi HIGHW1(#_gVssCtx.1), r0, r5
+00000358 252F0100             544  	ld.w LOWW(#_gVssCtx.1)[r5], r5
+0000035C 612A                 545  	cmp 0x00000001, r5
+0000035E 23CF3500             546  	ld.w 0x00000034[r3], r25
+00000362 23D73100             547  	ld.w 0x00000030[r3], r26
+00000366 09D8                 548  	mov r9, r27
+00000368 08E0                 549  	mov r8, r28
+0000036A 07E8                 550  	mov r7, r29
+0000036C 8205                 551  	bz9 .BB.LABEL.9_5
+0000036E                      552  .BB.LABEL.9_4:	; entry.bb229_crit_edge
+0000036E                      553  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 0
+0000036E 20561B00             554  	movea 0x0000001B, r0, r10
+00000372 8505                 555  	br9 .BB.LABEL.9_28
+00000374                      556  .BB.LABEL.9_5:	; if_break_bb
+00000374                      557  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 474
+00000374 61DA                 558  	cmp 0x00000001, r27
+00000376 8F05                 559  	bgt9 .BB.LABEL.9_11
+00000378                      560  .BB.LABEL.9_6:	; if_break_bb
+00000378                      561  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 0
+00000378 6832                 562  	cmp 0x00000008, r6
+0000037A 8B05                 563  	bh9 .BB.LABEL.9_11
+0000037C                      564  .BB.LABEL.9_7:	; if_break_bb
+0000037C 60EA                 565  	cmp 0x00000000, r29
+0000037E 8205                 566  	bz9 .BB.LABEL.9_11
+00000380                      567  .BB.LABEL.9_8:	; if_break_bb
+00000380 60D2                 568  	cmp 0x00000000, r26
+00000382 8205                 569  	bz9 .BB.LABEL.9_11
+00000384                      570  .BB.LABEL.9_9:	; if_break_bb
+00000384 60CA                 571  	cmp 0x00000000, r25
+00000386 8205                 572  	bz9 .BB.LABEL.9_11
+00000388                      573  .BB.LABEL.9_10:	; if_break_bb
+00000388 60E2                 574  	cmp 0x00000000, r28
+0000038A 8A05                 575  	bnz9 .BB.LABEL.9_12
+0000038C                      576  .BB.LABEL.9_11:	; if_break_bb.bb229_crit_edge
+0000038C 0452                 577  	mov 0x00000004, r10
+0000038E 8505                 578  	br9 .BB.LABEL.9_28
+00000390                      579  .BB.LABEL.9_12:	; if_break_bb81
+00000390 204E1000             580  	movea 0x00000010, r0, r9
+00000394 23460400             581  	movea 0x00000004, r3, r8
+00000398 023A                 582  	mov 0x00000002, r7
+0000039A                      583  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 480
+0000039A 80FF0000             584  	jarl _VssGetKeyByKeyId.1, r31
+0000039E                      585  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 482
+0000039E DCF60F00             586  	andi 0x0000000F, r28, r30
+000003A2 60DA                 587  	cmp 0x00000000, r27
+000003A4 8A05                 588  	bnz9 .BB.LABEL.9_18
+000003A6                      589  .BB.LABEL.9_13:	; if_then_bb89
+000003A6                      590  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 489
+000003A6 1A30                 591  	mov r26, r6
+000003A8 1D38                 592  	mov r29, r7
+000003AA 1C40                 593  	mov r28, r8
+000003AC FF0200000000         594  	jarl32 _memcpy, r31
+000003B2 20EE1000             595  	movea 0x00000010, r0, r29
+000003B6                      596  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 485
+000003B6 BEE9                 597  	sub r30, r29
+000003B8                      598  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 486
+000003B8 DDF61F00             599  	andi 0x0000001F, r29, r30
+000003BC DCF1                 600  	add r28, r30
+000003BE 002A                 601  	mov 0x00000000, r5
+000003C0 8505                 602  	br9 .BB.LABEL.9_15
+000003C2                      603  .BB.LABEL.9_14:	; bb102
+000003C2                      604  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 493
+000003C2 1C30                 605  	mov r28, r6
+000003C4 C531                 606  	add r5, r6
+000003C6 DA31                 607  	add r26, r6
+000003C8 46EF0000             608  	st.b r29, 0x00000000[r6]
+000003CC 412A                 609  	add 0x00000001, r5
+000003CE                      610  .BB.LABEL.9_15:	; bb111
+000003CE                      611  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 492
+000003CE DD361F00             612  	andi 0x0000001F, r29, r6
+000003D2 E629                 613  	cmp r6, r5
+000003D4 8105                 614  	bl9 .BB.LABEL.9_14
+000003D6                      615  .BB.LABEL.9_16:	; bb118
+000003D6                      616  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 497
+000003D6 63D70100             617  	st.w r26, 0x00000000[r3]
+000003DA 004A                 618  	mov 0x00000000, r9
+000003DC 23360400             619  	movea 0x00000004, r3, r6
+000003E0 1A38                 620  	mov r26, r7
+000003E2 1E40                 621  	mov r30, r8
+000003E4 FF0200000000         622  	jarl32 _VssAdapter_Sm4Calc, r31
+000003EA                      623  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 498
+000003EA 6052                 624  	cmp 0x00000000, r10
+000003EC 8A05                 625  	bnz9 .BB.LABEL.9_28
+000003EE                      626  .BB.LABEL.9_17:	; if_break_bb131
+000003EE                      627  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 504
+000003EE 79F70100             628  	st.w r30, 0x00000000[r25]
+000003F2 0052                 629  	mov 0x00000000, r10
+000003F4 4B06FF70             630  	dispose 0x00000014, 0x00000B87, [r31]
+000003F8                      631  .BB.LABEL.9_18:	; if_else_bb
+000003F8                      632  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 507
+000003F8 60F2                 633  	cmp 0x00000000, r30
+000003FA 8A05                 634  	bnz9 .BB.LABEL.9_11
+000003FC                      635  .BB.LABEL.9_19:	; if_break_bb141
+000003FC                      636  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 512
+000003FC 63D70100             637  	st.w r26, 0x00000000[r3]
+00000400 014A                 638  	mov 0x00000001, r9
+00000402 23360400             639  	movea 0x00000004, r3, r6
+00000406 1D38                 640  	mov r29, r7
+00000408 1C40                 641  	mov r28, r8
+0000040A FF0200000000         642  	jarl32 _VssAdapter_Sm4Calc, r31
+00000410                      643  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 513
+00000410 6052                 644  	cmp 0x00000000, r10
+00000412 8A05                 645  	bnz9 .BB.LABEL.9_28
+00000414                      646  .BB.LABEL.9_20:	; if_break_bb154
+00000414                      647  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 519
+00000414 1C28                 648  	mov r28, r5
+00000416 DA29                 649  	add r26, r5
+00000418                      650  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 522
+00000418 A52FFFFF             651  	ld.bu 0xFFFFFFFF[r5], r5
+0000041C 602A                 652  	cmp 0x00000000, r5
+0000041E 8205                 653  	bz9 .BB.LABEL.9_27
+00000420                      654  .BB.LABEL.9_21:	; bb164
+00000420                      655  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 0
+00000420 0506F0FF             656  	addi 0xFFFFFFF0, r5, r0
+00000424 8F05                 657  	bgt9 .BB.LABEL.9_27
+00000426                      658  .BB.LABEL.9_22:	; bb164.bb198_crit_edge
+00000426 0032                 659  	mov 0x00000000, r6
+00000428 8505                 660  	br9 .BB.LABEL.9_25
+0000042A                      661  .BB.LABEL.9_23:	; bb178
+0000042A                      662  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 526
+0000042A 1C3EFFFF             663  	addi 0xFFFFFFFF, r28, r7
+0000042E C646FF00             664  	andi 0x000000FF, r6, r8
+00000432 A839                 665  	sub r8, r7
+00000434 DA39                 666  	add r26, r7
+00000436 873F0100             667  	ld.bu 0x00000000[r7], r7
+0000043A E729                 668  	cmp r7, r5
+0000043C 8A05                 669  	bnz9 .BB.LABEL.9_27
+0000043E                      670  .BB.LABEL.9_24:	; if_break_bb195
+0000043E                      671  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 0
+0000043E 4132                 672  	add 0x00000001, r6
+00000440                      673  .BB.LABEL.9_25:	; bb198
+00000440                      674  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 525
+00000440 C63EFF00             675  	andi 0x000000FF, r6, r7
+00000444 E539                 676  	cmp r5, r7
+00000446 8105                 677  	bl9 .BB.LABEL.9_23
+00000448                      678  .BB.LABEL.9_26:	; if_then_bb213.critedge
+00000448                      679  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 533
+00000448 A5E1                 680  	sub r5, r28
+0000044A                      681  .BB.LABEL.9_27:	; if_else_bb223
+0000044A                      682  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 0
+0000044A 79E70100             683  	st.w r28, 0x00000000[r25]
+0000044E 0052                 684  	mov 0x00000000, r10
+00000450                      685  .BB.LABEL.9_28:	; bb229
+00000450                      686  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 545
+00000450 4B06FF70             687  	dispose 0x00000014, 0x00000B87, [r31]
+00000454                      688  _VssSM4CMacByKeyId:
+00000454                      689  	.stack _VssSM4CMacByKeyId = 36
+00000454                      690  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 557
+00000454 8807A170             691  	prepare 0x00000385, 0x00000010
+00000458 202E1000             692  	movea 0x00000010, r0, r5
+0000045C 0052                 693  	mov 0x00000000, r10
+0000045E 0358                 694  	mov r3, r11
+00000460                      695  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 560
+00000460 CB29                 696  	add r11, r5
+00000462 8505                 697  	br9 .BB.LABEL.10_2
+00000464                      698  .BB.LABEL.10_1:	; entry
+00000464 4B570000             699  	st.b r10, 0x00000000[r11]
+00000468 415A                 700  	add 0x00000001, r11
+0000046A                      701  .BB.LABEL.10_2:	; entry
+0000046A EB29                 702  	cmp r11, r5
+0000046C 8A05                 703  	bnz9 .BB.LABEL.10_1
+0000046E                      704  .BB.LABEL.10_3:	; entry
+0000046E 43070000             705  	st.b r0, 0x00000000[r3]
+00000472                      706  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 563
+00000472 402E0000             707  	movhi HIGHW1(#_gVssCtx.1), r0, r5
+00000476 252F0100             708  	ld.w LOWW(#_gVssCtx.1)[r5], r5
+0000047A 612A                 709  	cmp 0x00000001, r5
+0000047C 09C8                 710  	mov r9, r25
+0000047E 08D0                 711  	mov r8, r26
+00000480 07D8                 712  	mov r7, r27
+00000482 8205                 713  	bz9 .BB.LABEL.10_5
+00000484                      714  .BB.LABEL.10_4:	; entry.bb68_crit_edge
+00000484                      715  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 0
+00000484 20561B00             716  	movea 0x0000001B, r0, r10
+00000488 8505                 717  	br9 .BB.LABEL.10_11
+0000048A                      718  .BB.LABEL.10_5:	; if_break_bb
+0000048A                      719  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 569
+0000048A 6832                 720  	cmp 0x00000008, r6
+0000048C 8B05                 721  	bh9 .BB.LABEL.10_9
+0000048E                      722  .BB.LABEL.10_6:	; if_break_bb
+0000048E                      723  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 0
+0000048E 60DA                 724  	cmp 0x00000000, r27
+00000490 8205                 725  	bz9 .BB.LABEL.10_9
+00000492                      726  .BB.LABEL.10_7:	; if_break_bb
+00000492 60CA                 727  	cmp 0x00000000, r25
+00000494 8205                 728  	bz9 .BB.LABEL.10_9
+00000496                      729  .BB.LABEL.10_8:	; if_break_bb
+00000496 60D2                 730  	cmp 0x00000000, r26
+00000498 8A05                 731  	bnz9 .BB.LABEL.10_10
+0000049A                      732  .BB.LABEL.10_9:	; if_break_bb.bb68_crit_edge
+0000049A 0452                 733  	mov 0x00000004, r10
+0000049C 8505                 734  	br9 .BB.LABEL.10_11
+0000049E                      735  .BB.LABEL.10_10:	; if_break_bb50
+0000049E 03E0                 736  	mov r3, r28
+000004A0 204E1000             737  	movea 0x00000010, r0, r9
+000004A4 023A                 738  	mov 0x00000002, r7
+000004A6                      739  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 575
+000004A6 1C40                 740  	mov r28, r8
+000004A8 80FF0000             741  	jarl _VssGetKeyByKeyId.1, r31
+000004AC                      742  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 578
+000004AC 1C30                 743  	mov r28, r6
+000004AE 1B38                 744  	mov r27, r7
+000004B0 1A40                 745  	mov r26, r8
+000004B2 1948                 746  	mov r25, r9
+000004B4 FF0200000000         747  	jarl32 _VssAdapter_Sm4CMac, r31
+000004BA                      748  .BB.LABEL.10_11:	; bb68
+000004BA                      749  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 584
+000004BA 4806BF70             750  	dispose 0x00000010, 0x00000385, [r31]
+000004BE                      751  _VssSM3Init:
+000004BE                      752  	.stack _VssSM3Init = 4
+000004BE                      753  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 594
+000004BE 80072100             754  	prepare 0x00000001, 0x00000000
+000004C2                      755  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 597
+000004C2 6032                 756  	cmp 0x00000000, r6
+000004C4 8205                 757  	bz9 .BB.LABEL.11_2
+000004C6                      758  .BB.LABEL.11_1:	; if_break_bb
+000004C6                      759  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 603
+000004C6 FF0200000000         760  	jarl32 _VssAdapter_Sm3Init, r31
+000004CC 0052                 761  	mov 0x00000000, r10
+000004CE                      762  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 604
+000004CE 40063F00             763  	dispose 0x00000000, 0x00000001, [r31]
+000004D2                      764  .BB.LABEL.11_2:	; bb7
+000004D2                      765  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 0
+000004D2 0452                 766  	mov 0x00000004, r10
+000004D4                      767  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 605
+000004D4 40063F00             768  	dispose 0x00000000, 0x00000001, [r31]
+000004D8                      769  _VssSM3Update:
+000004D8                      770  	.stack _VssSM3Update = 4
+000004D8                      771  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 617
+000004D8 80072100             772  	prepare 0x00000001, 0x00000000
+000004DC                      773  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 620
+000004DC 6032                 774  	cmp 0x00000000, r6
+000004DE 8205                 775  	bz9 .BB.LABEL.12_4
+000004E0                      776  .BB.LABEL.12_1:	; entry
+000004E0                      777  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 0
+000004E0 603A                 778  	cmp 0x00000000, r7
+000004E2 8205                 779  	bz9 .BB.LABEL.12_4
+000004E4                      780  .BB.LABEL.12_2:	; entry
+000004E4 6042                 781  	cmp 0x00000000, r8
+000004E6 8205                 782  	bz9 .BB.LABEL.12_4
+000004E8                      783  .BB.LABEL.12_3:	; if_break_bb
+000004E8                      784  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 626
+000004E8 FF0200000000         785  	jarl32 _VssAdapter_Sm3Update, r31
+000004EE 0052                 786  	mov 0x00000000, r10
+000004F0                      787  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 627
+000004F0 40063F00             788  	dispose 0x00000000, 0x00000001, [r31]
+000004F4                      789  .BB.LABEL.12_4:	; bb32
+000004F4                      790  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 0
+000004F4 0452                 791  	mov 0x00000004, r10
+000004F6                      792  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 628
+000004F6 40063F00             793  	dispose 0x00000000, 0x00000001, [r31]
+000004FA                      794  _VssSM3Final:
+000004FA                      795  	.stack _VssSM3Final = 4
+000004FA                      796  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 638
+000004FA 80072100             797  	prepare 0x00000001, 0x00000000
+000004FE                      798  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 641
+000004FE 6032                 799  	cmp 0x00000000, r6
+00000500 8205                 800  	bz9 .BB.LABEL.13_3
+00000502                      801  .BB.LABEL.13_1:	; entry
+00000502                      802  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 0
+00000502 603A                 803  	cmp 0x00000000, r7
+00000504 8205                 804  	bz9 .BB.LABEL.13_3
+00000506                      805  .BB.LABEL.13_2:	; if_break_bb
+00000506                      806  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 647
+00000506 FF0200000000         807  	jarl32 _Crypto_SM3_Final, r31
+0000050C 0052                 808  	mov 0x00000000, r10
+0000050E                      809  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 648
+0000050E 40063F00             810  	dispose 0x00000000, 0x00000001, [r31]
+00000512                      811  .BB.LABEL.13_3:	; bb19
+00000512                      812  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 0
+00000512 0452                 813  	mov 0x00000004, r10
+00000514                      814  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 649
+00000514 40063F00             815  	dispose 0x00000000, 0x00000001, [r31]
+00000518                      816  _VssSM3Calc:
+00000518                      817  	.stack _VssSM3Calc = 4
+00000518                      818  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 660
+00000518 80072100             819  	prepare 0x00000001, 0x00000000
+0000051C                      820  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 663
+0000051C 6042                 821  	cmp 0x00000000, r8
+0000051E 8205                 822  	bz9 .BB.LABEL.14_3
+00000520                      823  .BB.LABEL.14_1:	; entry
+00000520                      824  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 0
+00000520 603A                 825  	cmp 0x00000000, r7
+00000522 8205                 826  	bz9 .BB.LABEL.14_3
+00000524                      827  .BB.LABEL.14_2:	; if_break_bb
+00000524                      828  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 669
+00000524 FF0200000000         829  	jarl32 _VssAdapter_Sm3Calc, r31
+0000052A 40063F00             830  	dispose 0x00000000, 0x00000001, [r31]
+0000052E                      831  .BB.LABEL.14_3:	; bb22
+0000052E                      832  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 0
+0000052E 0452                 833  	mov 0x00000004, r10
+00000530                      834  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 670
+00000530 40063F00             835  	dispose 0x00000000, 0x00000001, [r31]
+00000534                      836  _VssSHA256Calc:
+00000534                      837  	.stack _VssSHA256Calc = 128
+00000534                      838  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 681
+00000534 B607A170             839  	prepare 0x00000385, 0x0000006C
+00000538 08C8                 840  	mov r8, r25
+0000053A 07D0                 841  	mov r7, r26
+0000053C 06DE0000             842  	addi 0x00000000, r6, r27
+00000540                      843  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 684
+00000540 8205                 844  	bz9 .BB.LABEL.15_4
+00000542                      845  .BB.LABEL.15_1:	; entry
+00000542                      846  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 0
+00000542 60CA                 847  	cmp 0x00000000, r25
+00000544 8205                 848  	bz9 .BB.LABEL.15_4
+00000546                      849  .BB.LABEL.15_2:	; entry
+00000546 60D2                 850  	cmp 0x00000000, r26
+00000548 8205                 851  	bz9 .BB.LABEL.15_4
+0000054A                      852  .BB.LABEL.15_3:	; if_break_bb
+0000054A 03E0                 853  	mov r3, r28
+0000054C                      854  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 693
+0000054C 1C30                 855  	mov r28, r6
+0000054E 80FF0000             856  	jarl _VssSHA256Init, r31
+00000552                      857  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 696
+00000552 1C30                 858  	mov r28, r6
+00000554 1B38                 859  	mov r27, r7
+00000556 1A40                 860  	mov r26, r8
+00000558 80FF0000             861  	jarl _VssSHA256Update, r31
+0000055C                      862  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 699
+0000055C 1C30                 863  	mov r28, r6
+0000055E 1938                 864  	mov r25, r7
+00000560 80FF0000             865  	jarl _VssSHA256Final, r31
+00000564 0052                 866  	mov 0x00000000, r10
+00000566                      867  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 701
+00000566 7606BF70             868  	dispose 0x0000006C, 0x00000385, [r31]
+0000056A                      869  .BB.LABEL.15_4:	; bb36
+0000056A                      870  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 0
+0000056A 0452                 871  	mov 0x00000004, r10
+0000056C                      872  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 702
+0000056C 7606BF70             873  	dispose 0x0000006C, 0x00000385, [r31]
+00000570                      874  _VssSHA256Init:
+00000570                      875  	.stack _VssSHA256Init = 4
+00000570                      876  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 712
+00000570 80072100             877  	prepare 0x00000001, 0x00000000
+00000574                      878  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 715
+00000574 6032                 879  	cmp 0x00000000, r6
+00000576 8205                 880  	bz9 .BB.LABEL.16_2
+00000578                      881  .BB.LABEL.16_1:	; if_break_bb
+00000578                      882  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 721
+00000578 FF0200000000         883  	jarl32 _VssAdapter_SHA256_Init, r31
+0000057E 0052                 884  	mov 0x00000000, r10
+00000580                      885  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 723
+00000580 40063F00             886  	dispose 0x00000000, 0x00000001, [r31]
+00000584                      887  .BB.LABEL.16_2:	; bb7
+00000584                      888  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 0
+00000584 0452                 889  	mov 0x00000004, r10
+00000586                      890  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 724
+00000586 40063F00             891  	dispose 0x00000000, 0x00000001, [r31]
+0000058A                      892  _VssSHA256Update:
+0000058A                      893  	.stack _VssSHA256Update = 4
+0000058A                      894  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 736
+0000058A 80072100             895  	prepare 0x00000001, 0x00000000
+0000058E                      896  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 739
+0000058E 6032                 897  	cmp 0x00000000, r6
+00000590 8205                 898  	bz9 .BB.LABEL.17_4
+00000592                      899  .BB.LABEL.17_1:	; entry
+00000592                      900  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 0
+00000592 603A                 901  	cmp 0x00000000, r7
+00000594 8205                 902  	bz9 .BB.LABEL.17_4
+00000596                      903  .BB.LABEL.17_2:	; entry
+00000596 6042                 904  	cmp 0x00000000, r8
+00000598 8205                 905  	bz9 .BB.LABEL.17_4
+0000059A                      906  .BB.LABEL.17_3:	; if_break_bb
+0000059A                      907  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 745
+0000059A FF0200000000         908  	jarl32 _VssAdapter_SHA256_Update, r31
+000005A0 0052                 909  	mov 0x00000000, r10
+000005A2                      910  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 746
+000005A2 40063F00             911  	dispose 0x00000000, 0x00000001, [r31]
+000005A6                      912  .BB.LABEL.17_4:	; bb32
+000005A6                      913  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 0
+000005A6 0452                 914  	mov 0x00000004, r10
+000005A8                      915  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 747
+000005A8 40063F00             916  	dispose 0x00000000, 0x00000001, [r31]
+000005AC                      917  _VssSHA256Final:
+000005AC                      918  	.stack _VssSHA256Final = 4
+000005AC                      919  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 757
+000005AC 80072100             920  	prepare 0x00000001, 0x00000000
+000005B0                      921  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 760
+000005B0 6032                 922  	cmp 0x00000000, r6
+000005B2 8205                 923  	bz9 .BB.LABEL.18_3
+000005B4                      924  .BB.LABEL.18_1:	; entry
+000005B4                      925  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 0
+000005B4 603A                 926  	cmp 0x00000000, r7
+000005B6 8205                 927  	bz9 .BB.LABEL.18_3
+000005B8                      928  .BB.LABEL.18_2:	; if_break_bb
+000005B8                      929  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 766
+000005B8 FF0200000000         930  	jarl32 _VssAdapter_SHA256_Final, r31
+000005BE 0052                 931  	mov 0x00000000, r10
+000005C0                      932  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 767
+000005C0 40063F00             933  	dispose 0x00000000, 0x00000001, [r31]
+000005C4                      934  .BB.LABEL.18_3:	; bb19
+000005C4                      935  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 0
+000005C4 0452                 936  	mov 0x00000004, r10
+000005C6                      937  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 768
+000005C6 40063F00             938  	dispose 0x00000000, 0x00000001, [r31]
+000005CA                      939  _VssSM2_Verify:
+000005CA                      940  	.stack _VssSM2_Verify = 24
+000005CA                      941  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 781
+000005CA 8207A170             942  	prepare 0x00000385, 0x00000004
+000005CE 09C8                 943  	mov r9, r25
+000005D0 08D0                 944  	mov r8, r26
+000005D2 07D8                 945  	mov r7, r27
+000005D4 06E60000             946  	addi 0x00000000, r6, r28
+000005D8                      947  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 797
+000005D8 8205                 948  	bz9 .BB.LABEL.19_2
+000005DA                      949  .BB.LABEL.19_1:	; entry
+000005DA                      950  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 0
+000005DA 60D2                 951  	cmp 0x00000000, r26
+000005DC 8A05                 952  	bnz9 .BB.LABEL.19_3
+000005DE                      953  .BB.LABEL.19_2:	; entry.bb41_crit_edge
+000005DE 0452                 954  	mov 0x00000004, r10
+000005E0 8505                 955  	br9 .BB.LABEL.19_8
+000005E2                      956  .BB.LABEL.19_3:	; if_break_bb
+000005E2                      957  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 803
+000005E2                      958  	mov #_gVssCtx.1, r5
+000005E2 250600000000            -- mov         0x0,tp
+000005E8 2557CD00             959  	ld.w 0x000000CC[r5], r10
+000005EC 20364100             960  	movea 0x00000041, r0, r6
+000005F0 63370100             961  	st.w r6, 0x00000000[r3]
+000005F4 254E4800             962  	movea 0x00000048, r5, r9
+000005F8 0042                 963  	mov 0x00000000, r8
+000005FA 013A                 964  	mov 0x00000001, r7
+000005FC 0632                 965  	mov 0x00000006, r6
+000005FE EAC760F9             966  	jarl [r10], r31
+00000602                      967  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 804
+00000602 6052                 968  	cmp 0x00000000, r10
+00000604 8205                 969  	bz9 .BB.LABEL.19_5
+00000606                      970  .BB.LABEL.19_4:	; if_break_bb.bb41_crit_edge
+00000606                      971  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 0
+00000606 0952                 972  	mov 0x00000009, r10
+00000608 8505                 973  	br9 .BB.LABEL.19_8
+0000060A                      974  .BB.LABEL.19_5:	; if_break_bb27
+0000060A                      975  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 810
+0000060A                      976  	mov #_gVssCtx.1, r5
+0000060A 250600000000            -- mov         0x0,tp
+00000610 252E4800             977  	movea 0x00000048, r5, r5
+00000614 632F0100             978  	st.w r5, 0x00000000[r3]
+00000618 1C30                 979  	mov r28, r6
+0000061A 1B38                 980  	mov r27, r7
+0000061C 1A40                 981  	mov r26, r8
+0000061E 1948                 982  	mov r25, r9
+00000620 FF0200000000         983  	jarl32 _VssAdapter_SM2_Verify, r31
+00000626                      984  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 811
+00000626 6052                 985  	cmp 0x00000000, r10
+00000628 8205                 986  	bz9 .BB.LABEL.19_7
+0000062A                      987  .BB.LABEL.19_6:	; if_break_bb27.bb41_crit_edge
+0000062A                      988  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 0
+0000062A 20568400             989  	movea 0x00000084, r0, r10
+0000062E 8505                 990  	br9 .BB.LABEL.19_8
+00000630                      991  .BB.LABEL.19_7:	; if_break_bb39
+00000630 0052                 992  	mov 0x00000000, r10
+00000632                      993  .BB.LABEL.19_8:	; bb41
+00000632                      994  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 817
+00000632 4206BF70             995  	dispose 0x00000004, 0x00000385, [r31]
+00000636                      996  _VssEcc256_Verify:
+00000636                      997  	.stack _VssEcc256_Verify = 24
+00000636                      998  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 830
+00000636 8207A170             999  	prepare 0x00000385, 0x00000004
+0000063A 09C8                1000  	mov r9, r25
+0000063C 08D0                1001  	mov r8, r26
+0000063E 07D8                1002  	mov r7, r27
+00000640 06E60000            1003  	addi 0x00000000, r6, r28
+00000644                     1004  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 835
+00000644 8205                1005  	bz9 .BB.LABEL.20_2
+00000646                     1006  .BB.LABEL.20_1:	; entry
+00000646                     1007  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 0
+00000646 60D2                1008  	cmp 0x00000000, r26
+00000648 8A05                1009  	bnz9 .BB.LABEL.20_3
+0000064A                     1010  .BB.LABEL.20_2:	; entry.bb41_crit_edge
+0000064A 0452                1011  	mov 0x00000004, r10
+0000064C 8505                1012  	br9 .BB.LABEL.20_8
+0000064E                     1013  .BB.LABEL.20_3:	; if_break_bb
+0000064E                     1014  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 841
+0000064E                     1015  	mov #_gVssCtx.1, r5
+0000064E 250600000000            -- mov         0x0,tp
+00000654 2557CD00            1016  	ld.w 0x000000CC[r5], r10
+00000658 20364100            1017  	movea 0x00000041, r0, r6
+0000065C 63370100            1018  	st.w r6, 0x00000000[r3]
+00000660 254E8900            1019  	movea 0x00000089, r5, r9
+00000664 0042                1020  	mov 0x00000000, r8
+00000666 013A                1021  	mov 0x00000001, r7
+00000668 0732                1022  	mov 0x00000007, r6
+0000066A EAC760F9            1023  	jarl [r10], r31
+0000066E                     1024  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 842
+0000066E 6052                1025  	cmp 0x00000000, r10
+00000670 8205                1026  	bz9 .BB.LABEL.20_5
+00000672                     1027  .BB.LABEL.20_4:	; if_break_bb.bb41_crit_edge
+00000672                     1028  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 0
+00000672 0952                1029  	mov 0x00000009, r10
+00000674 8505                1030  	br9 .BB.LABEL.20_8
+00000676                     1031  .BB.LABEL.20_5:	; if_break_bb27
+00000676                     1032  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 848
+00000676                     1033  	mov #_gVssCtx.1, r5
+00000676 250600000000            -- mov         0x0,tp
+0000067C 252E8900            1034  	movea 0x00000089, r5, r5
+00000680 632F0100            1035  	st.w r5, 0x00000000[r3]
+00000684 1C30                1036  	mov r28, r6
+00000686 1B38                1037  	mov r27, r7
+00000688 1A40                1038  	mov r26, r8
+0000068A 1948                1039  	mov r25, r9
+0000068C FF0200000000        1040  	jarl32 _VssAdapter_ECC_Verify, r31
+00000692                     1041  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 849
+00000692 6052                1042  	cmp 0x00000000, r10
+00000694 8205                1043  	bz9 .BB.LABEL.20_7
+00000696                     1044  .BB.LABEL.20_6:	; if_break_bb27.bb41_crit_edge
+00000696                     1045  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 0
+00000696 20568400            1046  	movea 0x00000084, r0, r10
+0000069A 8505                1047  	br9 .BB.LABEL.20_8
+0000069C                     1048  .BB.LABEL.20_7:	; if_break_bb39
+0000069C 0052                1049  	mov 0x00000000, r10
+0000069E                     1050  .BB.LABEL.20_8:	; bb41
+0000069E                     1051  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 855
+0000069E 4206BF70            1052  	dispose 0x00000004, 0x00000385, [r31]
+000006A2                     1053  _Vss_Crc32Init:
+000006A2                     1054  	.stack _Vss_Crc32Init = 8
+000006A2                     1055  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 866
+000006A2 80072140            1056  	prepare 0x00000201, 0x00000000
+000006A6                     1057  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 869
+000006A6 6032                1058  	cmp 0x00000000, r6
+000006A8 08C8                1059  	mov r8, r25
+000006AA 8205                1060  	bz9 .BB.LABEL.21_3
+000006AC                     1061  .BB.LABEL.21_1:	; entry
+000006AC                     1062  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 0
+000006AC 60CA                1063  	cmp 0x00000000, r25
+000006AE 8205                1064  	bz9 .BB.LABEL.21_3
+000006B0                     1065  .BB.LABEL.21_2:	; if_break_bb
+000006B0                     1066  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 875
+000006B0 FF0200000000        1067  	jarl32 _VssAdapter_Crc32Init, r31
+000006B6 79570100            1068  	st.w r10, 0x00000000[r25]
+000006BA 0052                1069  	mov 0x00000000, r10
+000006BC                     1070  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 877
+000006BC 40063F40            1071  	dispose 0x00000000, 0x00000201, [r31]
+000006C0                     1072  .BB.LABEL.21_3:	; bb22
+000006C0                     1073  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 0
+000006C0 0452                1074  	mov 0x00000004, r10
+000006C2                     1075  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 878
+000006C2 40063F40            1076  	dispose 0x00000000, 0x00000201, [r31]
+000006C6                     1077  _Vss_Crc32:
+000006C6                     1078  	.stack _Vss_Crc32 = 8
+000006C6                     1079  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 891
+000006C6 80072140            1080  	prepare 0x00000201, 0x00000000
+000006CA                     1081  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 894
+000006CA 6032                1082  	cmp 0x00000000, r6
+000006CC 23CF0900            1083  	ld.w 0x00000008[r3], r25
+000006D0 8205                1084  	bz9 .BB.LABEL.22_5
+000006D2                     1085  .BB.LABEL.22_1:	; entry
+000006D2                     1086  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 0
+000006D2 60CA                1087  	cmp 0x00000000, r25
+000006D4 8205                1088  	bz9 .BB.LABEL.22_5
+000006D6                     1089  .BB.LABEL.22_2:	; bb17
+000006D6 604A                1090  	cmp 0x00000000, r9
+000006D8 8205                1091  	bz9 .BB.LABEL.22_4
+000006DA                     1092  .BB.LABEL.22_3:	; bb17
+000006DA 6042                1093  	cmp 0x00000000, r8
+000006DC 8205                1094  	bz9 .BB.LABEL.22_5
+000006DE                     1095  .BB.LABEL.22_4:	; if_break_bb
+000006DE                     1096  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 900
+000006DE FF0200000000        1097  	jarl32 _VssAdapter_Crc32, r31
+000006E4 79570100            1098  	st.w r10, 0x00000000[r25]
+000006E8 0052                1099  	mov 0x00000000, r10
+000006EA                     1100  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 902
+000006EA 40063F40            1101  	dispose 0x00000000, 0x00000201, [r31]
+000006EE                     1102  .BB.LABEL.22_5:	; bb48
+000006EE                     1103  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 0
+000006EE 0452                1104  	mov 0x00000004, r10
+000006F0                     1105  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 903
+000006F0 40063F40            1106  	dispose 0x00000000, 0x00000201, [r31]
+000006F4                     1107  _Vss_Crc32FinalResult:
+000006F4                     1108  	.stack _Vss_Crc32FinalResult = 8
+000006F4                     1109  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 914
+000006F4 80072140            1110  	prepare 0x00000201, 0x00000000
+000006F8                     1111  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 917
+000006F8 6032                1112  	cmp 0x00000000, r6
+000006FA 08C8                1113  	mov r8, r25
+000006FC 8205                1114  	bz9 .BB.LABEL.23_3
+000006FE                     1115  .BB.LABEL.23_1:	; entry
+000006FE                     1116  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 0
+000006FE 60CA                1117  	cmp 0x00000000, r25
+00000700 8205                1118  	bz9 .BB.LABEL.23_3
+00000702                     1119  .BB.LABEL.23_2:	; if_break_bb
+00000702                     1120  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 923
+00000702 FF0200000000        1121  	jarl32 _VssAdapter_Crc32FinalResult, r31
+00000708 79570100            1122  	st.w r10, 0x00000000[r25]
+0000070C 0052                1123  	mov 0x00000000, r10
+0000070E                     1124  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 925
+0000070E 40063F40            1125  	dispose 0x00000000, 0x00000201, [r31]
+00000712                     1126  .BB.LABEL.23_3:	; bb22
+00000712                     1127  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 0
+00000712 0452                1128  	mov 0x00000004, r10
+00000714                     1129  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 926
+00000714 40063F40            1130  	dispose 0x00000000, 0x00000201, [r31]
+00000718                     1131  _Vss_CRC16_CCITT_False:
+00000718                     1132  	.stack _Vss_CRC16_CCITT_False = 8
+00000718                     1133  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 938
+00000718 80072140            1134  	prepare 0x00000201, 0x00000000
+0000071C 09CE0000            1135  	addi 0x00000000, r9, r25
+00000720                     1136  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 941
+00000720 8205                1137  	bz9 .BB.LABEL.24_4
+00000722                     1138  .BB.LABEL.24_1:	; bb
+00000722                     1139  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 0
+00000722 603A                1140  	cmp 0x00000000, r7
+00000724 8205                1141  	bz9 .BB.LABEL.24_3
+00000726                     1142  .BB.LABEL.24_2:	; bb
+00000726 6032                1143  	cmp 0x00000000, r6
+00000728 8205                1144  	bz9 .BB.LABEL.24_4
+0000072A                     1145  .BB.LABEL.24_3:	; if_break_bb
+0000072A                     1146  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 947
+0000072A FF0200000000        1147  	jarl32 _VssAdapter_CRC16_CCITT_False, r31
+00000730 79570000            1148  	st.h r10, 0x00000000[r25]
+00000734 0052                1149  	mov 0x00000000, r10
+00000736                     1150  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 949
+00000736 40063F40            1151  	dispose 0x00000000, 0x00000201, [r31]
+0000073A                     1152  .BB.LABEL.24_4:	; bb36
+0000073A                     1153  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 0
+0000073A 0452                1154  	mov 0x00000004, r10
+0000073C                     1155  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 950
+0000073C 40063F40            1156  	dispose 0x00000000, 0x00000201, [r31]
+00000740                     1157  _Vss_CRC32_CALC:
+00000740                     1158  	.stack _Vss_CRC32_CALC = 8
+00000740                     1159  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 962
+00000740 80072140            1160  	prepare 0x00000201, 0x00000000
+00000744 09CE0000            1161  	addi 0x00000000, r9, r25
+00000748                     1162  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 965
+00000748 8205                1163  	bz9 .BB.LABEL.25_4
+0000074A                     1164  .BB.LABEL.25_1:	; bb
+0000074A                     1165  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 0
+0000074A 603A                1166  	cmp 0x00000000, r7
+0000074C 8205                1167  	bz9 .BB.LABEL.25_3
+0000074E                     1168  .BB.LABEL.25_2:	; bb
+0000074E 6032                1169  	cmp 0x00000000, r6
+00000750 8205                1170  	bz9 .BB.LABEL.25_4
+00000752                     1171  .BB.LABEL.25_3:	; if_break_bb
+00000752                     1172  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 971
+00000752 FF0200000000        1173  	jarl32 _VssAdapter_CRC32_CALC, r31
+00000758 79570100            1174  	st.w r10, 0x00000000[r25]
+0000075C 0052                1175  	mov 0x00000000, r10
+0000075E                     1176  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 973
+0000075E 40063F40            1177  	dispose 0x00000000, 0x00000201, [r31]
+00000762                     1178  .BB.LABEL.25_4:	; bb35
+00000762                     1179  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 0
+00000762 0452                1180  	mov 0x00000004, r10
+00000764                     1181  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 974
+00000764 40063F40            1182  	dispose 0x00000000, 0x00000201, [r31]
+00000768                     1183  _Vss_CRC8:
+00000768                     1184  	.stack _Vss_CRC8 = 8
+00000768                     1185  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 987
+00000768 80072140            1186  	prepare 0x00000201, 0x00000000
+0000076C 23CF0900            1187  	ld.w 0x00000008[r3], r25
+00000770                     1188  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 990
+00000770 60CA                1189  	cmp 0x00000000, r25
+00000772 8205                1190  	bz9 .BB.LABEL.26_4
+00000774                     1191  .BB.LABEL.26_1:	; bb
+00000774                     1192  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 0
+00000774 603A                1193  	cmp 0x00000000, r7
+00000776 8205                1194  	bz9 .BB.LABEL.26_3
+00000778                     1195  .BB.LABEL.26_2:	; bb
+00000778 6032                1196  	cmp 0x00000000, r6
+0000077A 8205                1197  	bz9 .BB.LABEL.26_4
+0000077C                     1198  .BB.LABEL.26_3:	; if_break_bb
+0000077C                     1199  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 996
+0000077C FF0200000000        1200  	jarl32 _VssAdapter_CRC8, r31
+00000782 59570000            1201  	st.b r10, 0x00000000[r25]
+00000786 0052                1202  	mov 0x00000000, r10
+00000788                     1203  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 998
+00000788 40063F40            1204  	dispose 0x00000000, 0x00000201, [r31]
+0000078C                     1205  .BB.LABEL.26_4:	; bb38
+0000078C                     1206  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 0
+0000078C 0452                1207  	mov 0x00000004, r10
+0000078E                     1208  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 999
+0000078E 40063F40            1209  	dispose 0x00000000, 0x00000201, [r31]
+00000792                     1210  _VssGetKeyByKeyId.1:
+00000792                     1211  	.stack _VssGetKeyByKeyId.1 = 24
+00000792                     1212  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 1011
+00000792 8207A170            1213  	prepare 0x00000385, 0x00000004
+00000796 09C8                1214  	mov r9, r25
+00000798 08D60000            1215  	addi 0x00000000, r8, r26
+0000079C                     1216  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 1017
+0000079C 8205                1217  	bz9 .BB.LABEL.27_2
+0000079E                     1218  .BB.LABEL.27_1:	; entry
+0000079E                     1219  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 0
+0000079E 60CA                1220  	cmp 0x00000000, r25
+000007A0 8A05                1221  	bnz9 .BB.LABEL.27_3
+000007A2                     1222  .BB.LABEL.27_2:	; entry.bb62_crit_edge
+000007A2 0452                1223  	mov 0x00000004, r10
+000007A4 8505                1224  	br9 .BB.LABEL.27_9
+000007A6                     1225  .BB.LABEL.27_3:	; if_break_bb
+000007A6                     1226  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 1023
+000007A6 402E0000            1227  	movhi HIGHW1(#_gVssCtx.1+0x000000CC), r0, r5
+000007AA 252F0100            1228  	ld.w LOWW(#_gVssCtx.1+0x000000CC)[r5], r5
+000007AE 602A                1229  	cmp 0x00000000, r5
+000007B0 8A05                1230  	bnz9 .BB.LABEL.27_5
+000007B2                     1231  .BB.LABEL.27_4:	; if_break_bb.bb62_crit_edge
+000007B2                     1232  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 0
+000007B2 0952                1233  	mov 0x00000009, r10
+000007B4 8505                1234  	br9 .BB.LABEL.27_9
+000007B6                     1235  .BB.LABEL.27_5:	; if_break_bb29
+000007B6                     1236  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 1029
+000007B6 623A                1237  	cmp 0x00000002, r7
+000007B8 8205                1238  	bz9 .BB.LABEL.27_7
+000007BA                     1239  .BB.LABEL.27_6:	; if_break_bb29.bb62_crit_edge
+000007BA                     1240  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 0
+000007BA 0052                1241  	mov 0x00000000, r10
+000007BC 8505                1242  	br9 .BB.LABEL.27_9
+000007BE                     1243  .BB.LABEL.27_7:	; if_then_bb34
+000007BE                     1244  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 1032
+000007BE 63CF0100            1245  	st.w r25, 0x00000000[r3]
+000007C2 0640                1246  	mov r6, r8
+000007C4 C442                1247  	shl 0x00000004, r8
+000007C6                     1248  	mov #_gVssCtx.1, r9
+000007C6 290600000000            -- mov         0x0,r9
+000007CC C849                1249  	add r8, r9
+000007CE 29DE2600            1250  	movea 0x00000026, r9, r27
+000007D2 C646FF00            1251  	andi 0x000000FF, r6, r8
+000007D6 014A                1252  	mov 0x00000001, r9
+000007D8 0730                1253  	mov r7, r6
+000007DA 0938                1254  	mov r9, r7
+000007DC 1B48                1255  	mov r27, r9
+000007DE E5C760F9            1256  	jarl [r5], r31
+000007E2                     1257  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 1033
+000007E2 0AE60000            1258  	addi 0x00000000, r10, r28
+000007E6 8A05                1259  	bnz9 .BB.LABEL.27_4
+000007E8                     1260  .BB.LABEL.27_8:	; if_break_bb51
+000007E8                     1261  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 1038
+000007E8 1A30                1262  	mov r26, r6
+000007EA 1B38                1263  	mov r27, r7
+000007EC 1940                1264  	mov r25, r8
+000007EE FF0200000000        1265  	jarl32 _memcpy, r31
+000007F4 1C50                1266  	mov r28, r10
+000007F6                     1267  .BB.LABEL.27_9:	; bb62
+000007F6                     1268  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/vss/Vss.c", 1042
+000007F6 4206BF70            1269  	dispose 0x00000004, 0x00000385, [r31]
+00000000                     1270  	.section .bss, bss
+00000000                     1271  	.align 4
+00000000                     1272  _gVssCtx.1:
+00000000                     1273  	.ds (212)
+00000000                     1274  	.section .const, const
+00000000                     1275  .STR.1:
+00000000 01                  1276  	.db 0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0A,0x0B,0x0C,0x0D,0x0E,0x0F,0x10
+00000001 02              
+00000002 03              
+00000003 04              
+00000004 05              
+00000005 06              
+00000006 07              
+00000007 08              
+00000008 09              
+00000009 0A              
+0000000A 0B              
+0000000B 0C              
+0000000C 0D              
+0000000D 0E              
+0000000E 0F              
+0000000F 10              
+
+Section List
+Attr     Size                Name
+
+TEXT         2042 (000007FA) .text
+BSS           212 (000000D4) .bss
+CONST          16 (00000010) .const
+
+Command Line Parameter
+-Xcpu=g3kh -Xreg_mode=22 -Xep=callee -Xreserve_r2 -Xcharacter_set=none -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Cpu\uart -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\SrcCode -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\vss -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\FCL\user -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\FCL\lib -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\FCL -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\WdgIf -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\wdg\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Config\MCAL_Config\Wdg_OutPut\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\SecureProgram -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\SecureBoot -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootServices\Crc -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootServices -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Config\MCAL_Config\Gpt_OutPut\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Config\MCAL_Config\Fls_OutPut\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\gpt\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\fls\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootServices\SecurityManager -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootServices\MemoryManager -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootServices\FlsIf -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootServices\EEIf -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootServices\EcuMService -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootServices\Diag_Callout -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootServices\Dcm -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootServices\Common -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootServices\CanTp -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootServices\CanIf -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootManager -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Cpu -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\CommonInclude -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Config\BSW_Config -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Config\BSW_Config\RH850F1K -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\Os\Extend\inc -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\Os\Kernel\inc -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\Os\Portable\Mcu -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\Os\Portable\Processor -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Config\MCAL_Config\Adc_OutPut\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Config\MCAL_Config\Can_OutPut\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Config\MCAL_Config\Dio_OutPut\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Config\MCAL_Config\Mcu_OutPut\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Config\MCAL_Config\Port_OutPut\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\adc\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\can\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\dio\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\general -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\mcu\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\port\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\stubs\CanGeneral\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\stubs\Dem\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\stubs\Det\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\stubs\EcuM\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\stubs\MemIf\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\stubs\SchM\include -DRH850_F1KM_S1_2MB -Xprn_path=DefaultBuild -Xno_warning=50013 -oD:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Toolchain\CSPLUS_V81200\DefaultBuild\Vss.obj D:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Toolchain\CSPLUS_V81200\DefaultBuild\Vss.asm 
+

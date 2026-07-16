@@ -1,0 +1,562 @@
+RH850 Family Assembler V2.07.00.03 Assemble Source List
+
+OFFSET   CODE                  NO  SOURCE STATEMENT
+
+00000000                        1  #CC-RH Compiler RH850 Assembler Source
+00000000                        2  #@	CC-RH Version : V2.07.00  [06 Dec 2024]
+00000000                        3  #@	Command : ..\..\Cpu\uart\r_cg_uart.c -oDefaultBuild\r_cg_uart.obj -Xcpu=g3kh -Xreg_mode=22 -Xreserve_r2 -Xno_warning=20188,20111 -g -g_line -I..\..\Cpu\uart -I..\..\SrcCode -I..\..\Bsw\SystemServices\vss -I..\..\Bsw\SystemServices\FCL\user -I..\..\Bsw\SystemServices\FCL\lib -I..\..\Bsw\SystemServices\FCL -I..\..\Bsw\SystemServices\WdgM -I..\..\Bsw\SystemServices\WdgIf -I..\..\Bsw\Mcal\wdg\include -I..\..\Bsw\Config\MCAL_Config\Wdg_OutPut\include -I..\..\Bsw\SystemServices\SecureProgram -I..\..\Bsw\SystemServices\SecureBoot -I..\..\Bsw\Mcal\vss -I..\..\Bsw\SystemServices\BootServices\Crc -I..\..\FCL\user -I..\..\FCL\lib -I..\..\FCL -I..\..\Bsw\SystemServices\BootServices -I..\..\Bsw\Config\MCAL_Config\Gpt_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Fls_OutPut\include -I..\..\Bsw\Mcal\gpt\include -I..\..\Bsw\Mcal\fls\include -I..\..\Bsw\SystemServices\BootServices\SecurityManager -I..\..\Bsw\SystemServices\BootServices\MemoryManager -I..\..\Bsw\SystemServices\BootServices\FlsIf -I..\..\Bsw\SystemServices\BootServices\EEIf -I..\..\Bsw\SystemServices\BootServices\EcuMService -I..\..\Bsw\SystemServices\BootServices\Diag_Callout -I..\..\Bsw\SystemServices\BootServices\Dcm -I..\..\Bsw\SystemServices\BootServices\Common -I..\..\Bsw\SystemServices\BootServices\CanTp -I..\..\Bsw\SystemServices\BootServices\CanIf -I..\..\Bsw\SystemServices\BootManager -I..\..\Cpu -I..\..\Bsw\CommonInclude -I..\..\Bsw\Config\BSW_Config -I..\..\Bsw\Config\BSW_Config\RH850F1K -I..\..\Bsw\SystemServices\Os\Extend\inc -I..\..\Bsw\SystemServices\Os\Kernel\inc -I..\..\Bsw\SystemServices\Os\Portable\Mcu -I..\..\Bsw\SystemServices\Os\Portable\Processor -I..\..\Bsw\Config\MCAL_Config\Adc_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Can_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Dio_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Mcu_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Port_OutPut\include -I..\..\Bsw\Mcal\adc\include -I..\..\Bsw\Mcal\can\include -I..\..\Bsw\Mcal\dio\include -I..\..\Bsw\Mcal\general -I..\..\Bsw\Mcal\mcu\include -I..\..\Bsw\Mcal\port\include -I..\..\Bsw\Mcal\stubs\CanGeneral\include -I..\..\Bsw\Mcal\stubs\CanIf\include -I..\..\Bsw\Mcal\stubs\Dem\include -I..\..\Bsw\Mcal\stubs\Det\include -I..\..\Bsw\Mcal\stubs\EcuM\include -I..\..\Bsw\Mcal\stubs\MemIf\include -I..\..\Bsw\Mcal\stubs\SchM\include -DRH850_F1KM_S1_2MB -lang=c99 -Xdbl_size=4 -Xcall_jump=32 -Xasm_path=DefaultBuild -Xasm_option=-Xprn_path=DefaultBuild -c -MAKEUD=DefaultBuild -Xexec_time=C:\Users\xlchen\AppData\Local\Temp\CSPlusBuildTool_167190f583764b06bb3f42587350b3641eyrec5m.ecj
+00000000                        4  #@	compiled at Thu Jul 16 13:41:22 2026
+00000000                        5  
+00000000                        6  	.file "..\..\Cpu\uart\r_cg_uart.c"
+00000000                        7  
+00000000                        8  	$reg_mode 22
+00000000                        9  	.dbl_size 4
+00000000                       10  
+00000000                       11  	.public _g_cg_sync_read, 4
+00000000                       12  	.public _gp_uart1_tx_address, 4
+00000000                       13  	.public _g_uart1_tx_count, 2
+00000000                       14  	.public _gp_uart1_rx_address, 4
+00000000                       15  	.public _g_uart1_rx_count, 2
+00000000                       16  	.public _g_uart1_rx_length, 2
+00000000                       17  	.public _gp_uart4_tx_address, 4
+00000000                       18  	.public _g_uart4_tx_count, 2
+00000000                       19  	.public _gp_uart4_rx_address, 4
+00000000                       20  	.public _g_uart4_rx_count, 2
+00000000                       21  	.public _g_uart4_rx_length, 2
+00000000                       22  	.public _gp_uart5_tx_address, 4
+00000000                       23  	.public _g_uart5_tx_count, 2
+00000000                       24  	.public _gp_uart5_rx_address, 4
+00000000                       25  	.public _g_uart5_rx_count, 2
+00000000                       26  	.public _g_uart5_rx_length, 2
+00000000                       27  	.public _R_UART4_Create
+00000000                       28  	.public _R_UART4_Start
+00000000                       29  	.public _R_UART4_Stop
+00000000                       30  	.public _R_UART4_Receive
+00000000                       31  	.public _R_UART4_Send
+00000000                       32  	.public _R_UART5_Create
+00000000                       33  	.public _R_UART5_Start
+00000000                       34  	.public _R_UART5_Stop
+00000000                       35  	.public _R_UART5_Receive
+00000000                       36  	.public _R_UART5_Send
+00000000                       37  	.public _GetUart1RxCount
+00000000                       38  	.public _R_UART4_SendStatus
+00000000                       39  	.public _GetUart5RxCount
+00000000                       40  	.public _R_UART5_SendStatus
+00000000                       41  
+00000000                       42  	.section .text, text
+00000000                       43  _R_UART4_Create:
+00000000                       44  	.stack _R_UART4_Create = 0
+00000000                       45  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 80
+00000000 402ECEFF              46  	movhi 0x0000FFCE, r0, r5
+00000004 45070E21              47  	st.b r0, 0x0000210E[r5]
+00000008 20365000              48  	movea 0x00000050, r0, r6
+0000000C                       49  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 82
+0000000C 45370121              50  	st.b r6, 0x00002101[r5]
+00000010 20361C00              51  	movea 0x0000001C, r0, r6
+00000014                       52  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 83
+00000014 65370221              53  	st.h r6, 0x00002102[r5]
+00000018 0132                  54  	mov 0x00000001, r6
+0000001A                       55  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 84
+0000001A 45370821              56  	st.b r6, 0x00002108[r5]
+0000001E 0D3A                  57  	mov 0x0000000D, r7
+00000020                       58  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 85
+00000020 453F0D21              59  	st.b r7, 0x0000210D[r5]
+00000024                       60  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 86
+00000024 45070921              61  	st.b r0, 0x00002109[r5]
+00000028                       62  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 88
+00000028 45370E21              63  	st.b r6, 0x0000210E[r5]
+0000002C                       64  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 90
+0000002C 852F0F21              65  	ld.bu 0x0000210E[r5], r5
+00000030 40360000              66  	movhi HIGHW1(#_g_cg_sync_read), r0, r6
+00000034 662F0100              67  	st.w r5, LOWW(#_g_cg_sync_read)[r6]
+00000038                       68  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 91
+00000038 1F00                  69  	syncp
+0000003A                       70  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 93
+0000003A 402EC1FF              71  	movhi 0x0000FFC1, r0, r5
+0000003E E5373140              72  	ld.hu 0x00004030[r5], r6
+00000042 C636FDFF              73  	andi 0x0000FFFD, r6, r6
+00000046 65373040              74  	st.h r6, 0x00004030[r5]
+0000004A                       75  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 94
+0000004A E5373141              76  	ld.hu 0x00004130[r5], r6
+0000004E C636FDFF              77  	andi 0x0000FFFD, r6, r6
+00000052 65373041              78  	st.h r6, 0x00004130[r5]
+00000056                       79  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 95
+00000056 25373003              80  	ld.h 0x00000330[r5], r6
+0000005A 86360200              81  	ori 0x00000002, r6, r6
+0000005E 65373003              82  	st.h r6, 0x00000330[r5]
+00000062                       83  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 96
+00000062 E5373104              84  	ld.hu 0x00000430[r5], r6
+00000066 C636FDFF              85  	andi 0x0000FFFD, r6, r6
+0000006A 65373004              86  	st.h r6, 0x00000430[r5]
+0000006E                       87  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 97
+0000006E E5373105              88  	ld.hu 0x00000530[r5], r6
+00000072 C636FDFF              89  	andi 0x0000FFFD, r6, r6
+00000076 65373005              90  	st.h r6, 0x00000530[r5]
+0000007A                       91  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 98
+0000007A 25373006              92  	ld.h 0x00000630[r5], r6
+0000007E 86360200              93  	ori 0x00000002, r6, r6
+00000082 65373006              94  	st.h r6, 0x00000630[r5]
+00000086                       95  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 99
+00000086 2537300A              96  	ld.h 0x00000A30[r5], r6
+0000008A 86360200              97  	ori 0x00000002, r6, r6
+0000008E 6537300A              98  	st.h r6, 0x00000A30[r5]
+00000092                       99  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 100
+00000092 25373004             100  	ld.h 0x00000430[r5], r6
+00000096 86360200             101  	ori 0x00000002, r6, r6
+0000009A 65373004             102  	st.h r6, 0x00000430[r5]
+0000009E                      103  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 102
+0000009E E5373140             104  	ld.hu 0x00004030[r5], r6
+000000A2 C636FBFF             105  	andi 0x0000FFFB, r6, r6
+000000A6 65373040             106  	st.h r6, 0x00004030[r5]
+000000AA                      107  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 103
+000000AA E5373141             108  	ld.hu 0x00004130[r5], r6
+000000AE C636FBFF             109  	andi 0x0000FFFB, r6, r6
+000000B2 65373041             110  	st.h r6, 0x00004130[r5]
+000000B6                      111  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 104
+000000B6 25373003             112  	ld.h 0x00000330[r5], r6
+000000BA 86360400             113  	ori 0x00000004, r6, r6
+000000BE 65373003             114  	st.h r6, 0x00000330[r5]
+000000C2                      115  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 105
+000000C2 E5373104             116  	ld.hu 0x00000430[r5], r6
+000000C6 C636FBFF             117  	andi 0x0000FFFB, r6, r6
+000000CA 65373004             118  	st.h r6, 0x00000430[r5]
+000000CE                      119  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 106
+000000CE E5373105             120  	ld.hu 0x00000530[r5], r6
+000000D2 C636FBFF             121  	andi 0x0000FFFB, r6, r6
+000000D6 65373005             122  	st.h r6, 0x00000530[r5]
+000000DA                      123  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 107
+000000DA E5373106             124  	ld.hu 0x00000630[r5], r6
+000000DE C636FBFF             125  	andi 0x0000FFFB, r6, r6
+000000E2 65373006             126  	st.h r6, 0x00000630[r5]
+000000E6                      127  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 108
+000000E6 25373004             128  	ld.h 0x00000430[r5], r6
+000000EA 86360400             129  	ori 0x00000004, r6, r6
+000000EE 65373004             130  	st.h r6, 0x00000430[r5]
+000000F2                      131  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 109
+000000F2 E5373103             132  	ld.hu 0x00000330[r5], r6
+000000F6 C636FBFF             133  	andi 0x0000FFFB, r6, r6
+000000FA 65373003             134  	st.h r6, 0x00000330[r5]
+000000FE 7F00                 135  	jmp [r31]
+00000100                      136  _R_UART4_Start:
+00000100                      137  	.stack _R_UART4_Start = 0
+00000100                      138  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 120
+00000100 8007052A429C         139  	ld23.b 0xFFCE2120[r0], r5
+00000106 852E0300             140  	ori 0x00000003, r5, r5
+0000010A 80070D2A429C         141  	st23.b r5, 0xFFCE2120[r0]
+00000110 7F00                 142  	jmp [r31]
+00000112                      143  _R_UART4_Stop:
+00000112                      144  	.stack _R_UART4_Stop = 0
+00000112                      145  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 131
+00000112 C03FD2B1             146  	set1 0x00000007, 0xFFFFB1D2[r0]
+00000116                      147  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 133
+00000116 C03FD4B1             148  	set1 0x00000007, 0xFFFFB1D4[r0]
+0000011A                      149  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 135
+0000011A C03FD6B1             150  	set1 0x00000007, 0xFFFFB1D6[r0]
+0000011E                      151  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 137
+0000011E 402ECEFF             152  	movhi 0x0000FFCE, r0, r5
+00000122 85372121             153  	ld.bu 0x00002120[r5], r6
+00000126 C636FC00             154  	andi 0x000000FC, r6, r6
+0000012A 45372021             155  	st.b r6, 0x00002120[r5]
+0000012E                      156  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 139
+0000012E 85370F21             157  	ld.bu 0x0000210E[r5], r6
+00000132 403E0000             158  	movhi HIGHW1(#_g_cg_sync_read), r0, r7
+00000136 67370100             159  	st.w r6, LOWW(#_g_cg_sync_read)[r7]
+0000013A                      160  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 140
+0000013A 1F00                 161  	syncp
+0000013C                      162  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 142
+0000013C C0A7D3B1             163  	clr1 0x00000004, 0xFFFFB1D3[r0]
+00000140                      164  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 144
+00000140 C0A7D5B1             165  	clr1 0x00000004, 0xFFFFB1D5[r0]
+00000144                      166  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 146
+00000144 C0A7D7B1             167  	clr1 0x00000004, 0xFFFFB1D7[r0]
+00000148                      168  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 148
+00000148 852F0F21             169  	ld.bu 0x0000210E[r5], r5
+0000014C 672F0100             170  	st.w r5, LOWW(#_g_cg_sync_read)[r7]
+00000150                      171  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 149
+00000150 1F00                 172  	syncp
+00000152 7F00                 173  	jmp [r31]
+00000154                      174  _R_UART4_Receive:
+00000154                      175  	.stack _R_UART4_Receive = 0
+00000154                      176  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 161
+00000154 603A                 177  	cmp 0x00000000, r7
+00000156                      178  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 165
+00000156 8A05                 179  	bnz9 .BB.LABEL.4_2
+00000158                      180  .BB.LABEL.4_1:	; entry.if_break_bb16_crit_edge
+00000158                      181  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 0
+00000158 20568100             182  	movea 0x00000081, r0, r10
+0000015C 8505                 183  	br9 .BB.LABEL.4_4
+0000015E                      184  .BB.LABEL.4_2:	; if_else_bb
+0000015E 402ECEFF             185  	movhi 0x0000FFCE, r0, r5
+00000162                      186  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 171
+00000162 C5EF1221             187  	tst1 0x00000005, 0x00002112[r5]
+00000166 8205                 188  	bz9 .BB.LABEL.4_5
+00000168                      189  .BB.LABEL.4_3:	; if_else_bb.if_break_bb16_crit_edge
+00000168                      190  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 0
+00000168 0052                 191  	mov 0x00000000, r10
+0000016A                      192  .BB.LABEL.4_4:	; if_break_bb16
+0000016A                      193  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 180
+0000016A 7F00                 194  	jmp [r31]
+0000016C                      195  .BB.LABEL.4_5:	; if_then_bb13
+0000016C                      196  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 173
+0000016C 402E0000             197  	movhi HIGHW1(#_g_uart4_rx_count), r0, r5
+00000170 65070000             198  	st.h r0, LOWW(#_g_uart4_rx_count)[r5]
+00000174                      199  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 174
+00000174 402E0000             200  	movhi HIGHW1(#_g_uart4_rx_length), r0, r5
+00000178 653F0000             201  	st.h r7, LOWW(#_g_uart4_rx_length)[r5]
+0000017C                      202  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 175
+0000017C 402E0000             203  	movhi HIGHW1(#_gp_uart4_rx_address), r0, r5
+00000180 65370100             204  	st.w r6, LOWW(#_gp_uart4_rx_address)[r5]
+00000184 8505                 205  	br9 .BB.LABEL.4_3
+00000186                      206  _R_UART4_Send:
+00000186                      207  	.stack _R_UART4_Send = 0
+00000186                      208  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 191
+00000186 603A                 209  	cmp 0x00000000, r7
+00000188                      210  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 195
+00000188 8A05                 211  	bnz9 .BB.LABEL.5_2
+0000018A                      212  .BB.LABEL.5_1:	; entry.if_break_bb24_crit_edge
+0000018A                      213  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 0
+0000018A 20568100             214  	movea 0x00000081, r0, r10
+0000018E 8505                 215  	br9 .BB.LABEL.5_5
+00000190                      216  .BB.LABEL.5_2:	; if_else_bb
+00000190                      217  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 201
+00000190 402E0000             218  	movhi HIGHW1(#_gp_uart4_tx_address), r0, r5
+00000194 65370100             219  	st.w r6, LOWW(#_gp_uart4_tx_address)[r5]
+00000198                      220  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 202
+00000198 402E0000             221  	movhi HIGHW1(#_g_uart4_tx_count), r0, r5
+0000019C 653F0000             222  	st.h r7, LOWW(#_g_uart4_tx_count)[r5]
+000001A0 402ECEFF             223  	movhi 0x0000FFCE, r0, r5
+000001A4                      224  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 204
+000001A4 C5E71221             225  	tst1 0x00000004, 0x00002112[r5]
+000001A8 8205                 226  	bz9 .BB.LABEL.5_4
+000001AA                      227  .BB.LABEL.5_3:	; if_else_bb.if_break_bb24_crit_edge
+000001AA                      228  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 0
+000001AA 20568000             229  	movea 0x00000080, r0, r10
+000001AE 8505                 230  	br9 .BB.LABEL.5_5
+000001B0                      231  .BB.LABEL.5_4:	; if_then_bb15
+000001B0                      232  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 207
+000001B0 C03FD2B1             233  	set1 0x00000007, 0xFFFFB1D2[r0]
+000001B4                      234  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 208
+000001B4 C0A7D3B1             235  	clr1 0x00000004, 0xFFFFB1D3[r0]
+000001B8                      236  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 209
+000001B8 402E0000             237  	movhi HIGHW1(#_gp_uart4_tx_address), r0, r5
+000001BC 25370100             238  	ld.w LOWW(#_gp_uart4_tx_address)[r5], r6
+000001C0 86370100             239  	ld.bu 0x00000000[r6], r6
+000001C4 A0074D32429C         240  	st23.h r6, 0xFFCE2124[r0]
+000001CA                      241  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 210
+000001CA 25370100             242  	ld.w LOWW(#_gp_uart4_tx_address)[r5], r6
+000001CE 4132                 243  	add 0x00000001, r6
+000001D0 65370100             244  	st.w r6, LOWW(#_gp_uart4_tx_address)[r5]
+000001D4                      245  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 211
+000001D4 402E0000             246  	movhi HIGHW1(#_g_uart4_tx_count), r0, r5
+000001D8 25370000             247  	ld.h LOWW(#_g_uart4_tx_count)[r5], r6
+000001DC 5F32                 248  	add 0xFFFFFFFF, r6
+000001DE 65370000             249  	st.h r6, LOWW(#_g_uart4_tx_count)[r5]
+000001E2                      250  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 213
+000001E2 C0A7D3B1             251  	clr1 0x00000004, 0xFFFFB1D3[r0]
+000001E6                      252  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 214
+000001E6 C0BFD2B1             253  	clr1 0x00000007, 0xFFFFB1D2[r0]
+000001EA 0052                 254  	mov 0x00000000, r10
+000001EC                      255  .BB.LABEL.5_5:	; if_break_bb24
+000001EC                      256  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 222
+000001EC 7F00                 257  	jmp [r31]
+000001EE                      258  _R_UART5_Create:
+000001EE                      259  	.stack _R_UART5_Create = 0
+000001EE                      260  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 232
+000001EE 402ECEFF             261  	movhi 0x0000FFCE, r0, r5
+000001F2 45074E21             262  	st.b r0, 0x0000214E[r5]
+000001F6 20365200             263  	movea 0x00000052, r0, r6
+000001FA                      264  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 234
+000001FA 45374121             265  	st.b r6, 0x00002141[r5]
+000001FE 20361C00             266  	movea 0x0000001C, r0, r6
+00000202                      267  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 235
+00000202 65374221             268  	st.h r6, 0x00002142[r5]
+00000206 0132                 269  	mov 0x00000001, r6
+00000208                      270  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 236
+00000208 45374821             271  	st.b r6, 0x00002148[r5]
+0000020C 0D3A                 272  	mov 0x0000000D, r7
+0000020E                      273  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 237
+0000020E 453F4D21             274  	st.b r7, 0x0000214D[r5]
+00000212                      275  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 238
+00000212 45074921             276  	st.b r0, 0x00002149[r5]
+00000216                      277  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 240
+00000216 45374E21             278  	st.b r6, 0x0000214E[r5]
+0000021A                      279  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 242
+0000021A 852F4F21             280  	ld.bu 0x0000214E[r5], r5
+0000021E 40360000             281  	movhi HIGHW1(#_g_cg_sync_read), r0, r6
+00000222 662F0100             282  	st.w r5, LOWW(#_g_cg_sync_read)[r6]
+00000226                      283  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 243
+00000226 1F00                 284  	syncp
+00000228                      285  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 245
+00000228 402EC1FF             286  	movhi 0x0000FFC1, r0, r5
+0000022C 25370440             287  	ld.h 0x00004004[r5], r6
+00000230 86361000             288  	ori 0x00000010, r6, r6
+00000234 65370440             289  	st.h r6, 0x00004004[r5]
+00000238                      290  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 246
+00000238 E5370541             291  	ld.hu 0x00004104[r5], r6
+0000023C C636EFFF             292  	andi 0x0000FFEF, r6, r6
+00000240 65370441             293  	st.h r6, 0x00004104[r5]
+00000244                      294  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 247
+00000244 25370403             295  	ld.h 0x00000304[r5], r6
+00000248 86361000             296  	ori 0x00000010, r6, r6
+0000024C 65370403             297  	st.h r6, 0x00000304[r5]
+00000250                      298  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 248
+00000250 E5370504             299  	ld.hu 0x00000404[r5], r6
+00000254 C636EFFF             300  	andi 0x0000FFEF, r6, r6
+00000258 65370404             301  	st.h r6, 0x00000404[r5]
+0000025C                      302  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 249
+0000025C E5370505             303  	ld.hu 0x00000504[r5], r6
+00000260 C636EFFF             304  	andi 0x0000FFEF, r6, r6
+00000264 65370405             305  	st.h r6, 0x00000504[r5]
+00000268                      306  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 250
+00000268 25370406             307  	ld.h 0x00000604[r5], r6
+0000026C 86361000             308  	ori 0x00000010, r6, r6
+00000270 65370406             309  	st.h r6, 0x00000604[r5]
+00000274                      310  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 251
+00000274 2537040A             311  	ld.h 0x00000A04[r5], r6
+00000278 86361000             312  	ori 0x00000010, r6, r6
+0000027C 6537040A             313  	st.h r6, 0x00000A04[r5]
+00000280                      314  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 252
+00000280 25370404             315  	ld.h 0x00000404[r5], r6
+00000284 86361000             316  	ori 0x00000010, r6, r6
+00000288 65370404             317  	st.h r6, 0x00000404[r5]
+0000028C                      318  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 254
+0000028C E5370540             319  	ld.hu 0x00004004[r5], r6
+00000290 C636DFFF             320  	andi 0x0000FFDF, r6, r6
+00000294 65370440             321  	st.h r6, 0x00004004[r5]
+00000298                      322  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 255
+00000298 E5370541             323  	ld.hu 0x00004104[r5], r6
+0000029C C636DFFF             324  	andi 0x0000FFDF, r6, r6
+000002A0 65370441             325  	st.h r6, 0x00004104[r5]
+000002A4                      326  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 256
+000002A4 25370403             327  	ld.h 0x00000304[r5], r6
+000002A8 86362000             328  	ori 0x00000020, r6, r6
+000002AC 65370403             329  	st.h r6, 0x00000304[r5]
+000002B0                      330  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 257
+000002B0 E5370504             331  	ld.hu 0x00000404[r5], r6
+000002B4 C636DFFF             332  	andi 0x0000FFDF, r6, r6
+000002B8 65370404             333  	st.h r6, 0x00000404[r5]
+000002BC                      334  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 258
+000002BC E5370505             335  	ld.hu 0x00000504[r5], r6
+000002C0 C636DFFF             336  	andi 0x0000FFDF, r6, r6
+000002C4 65370405             337  	st.h r6, 0x00000504[r5]
+000002C8                      338  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 259
+000002C8 25370404             339  	ld.h 0x00000404[r5], r6
+000002CC 86362000             340  	ori 0x00000020, r6, r6
+000002D0 65370404             341  	st.h r6, 0x00000404[r5]
+000002D4                      342  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 260
+000002D4 E5370503             343  	ld.hu 0x00000304[r5], r6
+000002D8 C636DFFF             344  	andi 0x0000FFDF, r6, r6
+000002DC 65370403             345  	st.h r6, 0x00000304[r5]
+000002E0 7F00                 346  	jmp [r31]
+000002E2                      347  _R_UART5_Start:
+000002E2                      348  	.stack _R_UART5_Start = 0
+000002E2                      349  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 271
+000002E2 8007052E429C         350  	ld23.b 0xFFCE2160[r0], r5
+000002E8 852E0300             351  	ori 0x00000003, r5, r5
+000002EC 80070D2E429C         352  	st23.b r5, 0xFFCE2160[r0]
+000002F2 7F00                 353  	jmp [r31]
+000002F4                      354  _R_UART5_Stop:
+000002F4                      355  	.stack _R_UART5_Stop = 0
+000002F4                      356  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 282
+000002F4 C03FDAB1             357  	set1 0x00000007, 0xFFFFB1DA[r0]
+000002F8                      358  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 284
+000002F8 C03FDCB1             359  	set1 0x00000007, 0xFFFFB1DC[r0]
+000002FC                      360  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 286
+000002FC C03FDEB1             361  	set1 0x00000007, 0xFFFFB1DE[r0]
+00000300                      362  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 288
+00000300 402ECEFF             363  	movhi 0x0000FFCE, r0, r5
+00000304 85376121             364  	ld.bu 0x00002160[r5], r6
+00000308 C636FC00             365  	andi 0x000000FC, r6, r6
+0000030C 45376021             366  	st.b r6, 0x00002160[r5]
+00000310                      367  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 290
+00000310 85374F21             368  	ld.bu 0x0000214E[r5], r6
+00000314 403E0000             369  	movhi HIGHW1(#_g_cg_sync_read), r0, r7
+00000318 67370100             370  	st.w r6, LOWW(#_g_cg_sync_read)[r7]
+0000031C                      371  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 291
+0000031C 1F00                 372  	syncp
+0000031E                      373  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 293
+0000031E C0A7DBB1             374  	clr1 0x00000004, 0xFFFFB1DB[r0]
+00000322                      375  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 295
+00000322 C0A7DDB1             376  	clr1 0x00000004, 0xFFFFB1DD[r0]
+00000326                      377  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 297
+00000326 C0A7DFB1             378  	clr1 0x00000004, 0xFFFFB1DF[r0]
+0000032A                      379  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 299
+0000032A 852F4F21             380  	ld.bu 0x0000214E[r5], r5
+0000032E 672F0100             381  	st.w r5, LOWW(#_g_cg_sync_read)[r7]
+00000332                      382  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 300
+00000332 1F00                 383  	syncp
+00000334 7F00                 384  	jmp [r31]
+00000336                      385  _R_UART5_Receive:
+00000336                      386  	.stack _R_UART5_Receive = 0
+00000336                      387  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 312
+00000336 603A                 388  	cmp 0x00000000, r7
+00000338                      389  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 316
+00000338 8205                 390  	bz9 .BB.LABEL.9_3
+0000033A                      391  .BB.LABEL.9_1:	; if_else_bb
+0000033A                      392  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 0
+0000033A 402ECEFF             393  	movhi 0x0000FFCE, r0, r5
+0000033E                      394  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 322
+0000033E C5EF5221             395  	tst1 0x00000005, 0x00002152[r5]
+00000342 8A05                 396  	bnz9 .BB.LABEL.9_3
+00000344                      397  .BB.LABEL.9_2:	; if_then_bb13
+00000344                      398  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 324
+00000344 402E0000             399  	movhi HIGHW1(#_g_uart5_rx_count), r0, r5
+00000348 65070000             400  	st.h r0, LOWW(#_g_uart5_rx_count)[r5]
+0000034C                      401  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 325
+0000034C 402E0000             402  	movhi HIGHW1(#_g_uart5_rx_length), r0, r5
+00000350 653F0000             403  	st.h r7, LOWW(#_g_uart5_rx_length)[r5]
+00000354                      404  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 326
+00000354 402E0000             405  	movhi HIGHW1(#_gp_uart5_rx_address), r0, r5
+00000358 65370100             406  	st.w r6, LOWW(#_gp_uart5_rx_address)[r5]
+0000035C 0052                 407  	mov 0x00000000, r10
+0000035E 7F00                 408  	jmp [r31]
+00000360                      409  .BB.LABEL.9_3:	; if_break_bb17
+00000360                      410  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 0
+00000360 20568100             411  	movea 0x00000081, r0, r10
+00000364                      412  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 335
+00000364 7F00                 413  	jmp [r31]
+00000366                      414  _R_UART5_Send:
+00000366                      415  	.stack _R_UART5_Send = 0
+00000366                      416  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 346
+00000366 603A                 417  	cmp 0x00000000, r7
+00000368                      418  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 350
+00000368 8A05                 419  	bnz9 .BB.LABEL.10_2
+0000036A                      420  .BB.LABEL.10_1:	; entry.if_break_bb24_crit_edge
+0000036A                      421  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 0
+0000036A 20568100             422  	movea 0x00000081, r0, r10
+0000036E 8505                 423  	br9 .BB.LABEL.10_5
+00000370                      424  .BB.LABEL.10_2:	; if_else_bb
+00000370                      425  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 356
+00000370 402E0000             426  	movhi HIGHW1(#_gp_uart5_tx_address), r0, r5
+00000374 65370100             427  	st.w r6, LOWW(#_gp_uart5_tx_address)[r5]
+00000378                      428  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 357
+00000378 402E0000             429  	movhi HIGHW1(#_g_uart5_tx_count), r0, r5
+0000037C 653F0000             430  	st.h r7, LOWW(#_g_uart5_tx_count)[r5]
+00000380 402ECEFF             431  	movhi 0x0000FFCE, r0, r5
+00000384                      432  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 359
+00000384 C5E75221             433  	tst1 0x00000004, 0x00002152[r5]
+00000388 8205                 434  	bz9 .BB.LABEL.10_4
+0000038A                      435  .BB.LABEL.10_3:	; if_else_bb.if_break_bb24_crit_edge
+0000038A                      436  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 0
+0000038A 20568000             437  	movea 0x00000080, r0, r10
+0000038E 8505                 438  	br9 .BB.LABEL.10_5
+00000390                      439  .BB.LABEL.10_4:	; if_then_bb15
+00000390                      440  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 362
+00000390 C03FDAB1             441  	set1 0x00000007, 0xFFFFB1DA[r0]
+00000394                      442  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 363
+00000394 C0A7DBB1             443  	clr1 0x00000004, 0xFFFFB1DB[r0]
+00000398                      444  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 364
+00000398 402E0000             445  	movhi HIGHW1(#_gp_uart5_tx_address), r0, r5
+0000039C 25370100             446  	ld.w LOWW(#_gp_uart5_tx_address)[r5], r6
+000003A0 86370100             447  	ld.bu 0x00000000[r6], r6
+000003A4 A0074D36429C         448  	st23.h r6, 0xFFCE2164[r0]
+000003AA                      449  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 365
+000003AA 25370100             450  	ld.w LOWW(#_gp_uart5_tx_address)[r5], r6
+000003AE 4132                 451  	add 0x00000001, r6
+000003B0 65370100             452  	st.w r6, LOWW(#_gp_uart5_tx_address)[r5]
+000003B4                      453  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 366
+000003B4 402E0000             454  	movhi HIGHW1(#_g_uart5_tx_count), r0, r5
+000003B8 25370000             455  	ld.h LOWW(#_g_uart5_tx_count)[r5], r6
+000003BC 5F32                 456  	add 0xFFFFFFFF, r6
+000003BE 65370000             457  	st.h r6, LOWW(#_g_uart5_tx_count)[r5]
+000003C2                      458  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 369
+000003C2 C0BFDAB1             459  	clr1 0x00000007, 0xFFFFB1DA[r0]
+000003C6 0052                 460  	mov 0x00000000, r10
+000003C8                      461  .BB.LABEL.10_5:	; if_break_bb24
+000003C8                      462  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 377
+000003C8 7F00                 463  	jmp [r31]
+000003CA                      464  _GetUart1RxCount:
+000003CA                      465  	.stack _GetUart1RxCount = 0
+000003CA                      466  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 382
+000003CA 402E0000             467  	movhi HIGHW1(#_g_uart1_rx_count), r0, r5
+000003CE                      468  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 383
+000003CE E5570100             469  	ld.hu LOWW(#_g_uart1_rx_count)[r5], r10
+000003D2 7F00                 470  	jmp [r31]
+000003D4                      471  _R_UART4_SendStatus:
+000003D4                      472  	.stack _R_UART4_SendStatus = 0
+000003D4                      473  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 385
+000003D4 402ECEFF             474  	movhi 0x0000FFCE, r0, r5
+000003D8                      475  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 390
+000003D8 C5E71221             476  	tst1 0x00000004, 0x00002112[r5]
+000003DC 202E8000             477  	movea 0x00000080, r0, r5
+000003E0                      478  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 396
+000003E0 E02F0453             479  	cmov 0x00000002, 0x00000000, r5, r10
+000003E4                      480  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 400
+000003E4 7F00                 481  	jmp [r31]
+000003E6                      482  _GetUart5RxCount:
+000003E6                      483  	.stack _GetUart5RxCount = 0
+000003E6                      484  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 404
+000003E6 402E0000             485  	movhi HIGHW1(#_g_uart5_rx_count), r0, r5
+000003EA                      486  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 405
+000003EA E5570100             487  	ld.hu LOWW(#_g_uart5_rx_count)[r5], r10
+000003EE 7F00                 488  	jmp [r31]
+000003F0                      489  _R_UART5_SendStatus:
+000003F0                      490  	.stack _R_UART5_SendStatus = 0
+000003F0                      491  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 407
+000003F0 402ECEFF             492  	movhi 0x0000FFCE, r0, r5
+000003F4                      493  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 411
+000003F4 C5E75221             494  	tst1 0x00000004, 0x00002152[r5]
+000003F8 202E8000             495  	movea 0x00000080, r0, r5
+000003FC                      496  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 417
+000003FC E02F0453             497  	cmov 0x00000002, 0x00000000, r5, r10
+00000400                      498  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Cpu/uart/r_cg_uart.c", 421
+00000400 7F00                 499  	jmp [r31]
+00000000                      500  	.section .bss, bss
+00000000                      501  	.align 4
+00000000                      502  _g_cg_sync_read:
+00000000                      503  	.ds (4)
+00000004                      504  	.align 4
+00000004                      505  _gp_uart1_tx_address:
+00000004                      506  	.ds (4)
+00000008                      507  	.align 2
+00000008                      508  _g_uart1_tx_count:
+00000008                      509  	.ds (2)
+0000000A 0000                 510  	.align 4
+0000000C                      511  _gp_uart1_rx_address:
+0000000C                      512  	.ds (4)
+00000010                      513  	.align 2
+00000010                      514  _g_uart1_rx_count:
+00000010                      515  	.ds (2)
+00000012                      516  	.align 2
+00000012                      517  _g_uart1_rx_length:
+00000012                      518  	.ds (2)
+00000014                      519  	.align 4
+00000014                      520  _gp_uart4_tx_address:
+00000014                      521  	.ds (4)
+00000018                      522  	.align 2
+00000018                      523  _g_uart4_tx_count:
+00000018                      524  	.ds (2)
+0000001A 0000                 525  	.align 4
+0000001C                      526  _gp_uart4_rx_address:
+0000001C                      527  	.ds (4)
+00000020                      528  	.align 2
+00000020                      529  _g_uart4_rx_count:
+00000020                      530  	.ds (2)
+00000022                      531  	.align 2
+00000022                      532  _g_uart4_rx_length:
+00000022                      533  	.ds (2)
+00000024                      534  	.align 4
+00000024                      535  _gp_uart5_tx_address:
+00000024                      536  	.ds (4)
+00000028                      537  	.align 2
+00000028                      538  _g_uart5_tx_count:
+00000028                      539  	.ds (2)
+0000002A 0000                 540  	.align 4
+0000002C                      541  _gp_uart5_rx_address:
+0000002C                      542  	.ds (4)
+00000030                      543  	.align 2
+00000030                      544  _g_uart5_rx_count:
+00000030                      545  	.ds (2)
+00000032                      546  	.align 2
+00000032                      547  _g_uart5_rx_length:
+00000032                      548  	.ds (2)
+
+Section List
+Attr     Size                Name
+
+TEXT         1026 (00000402) .text
+BSS            52 (00000034) .bss
+
+Command Line Parameter
+-Xcpu=g3kh -Xreg_mode=22 -Xep=callee -Xreserve_r2 -Xcharacter_set=none -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Cpu\uart -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\SrcCode -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\vss -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\FCL\user -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\FCL\lib -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\FCL -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\WdgIf -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\wdg\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Config\MCAL_Config\Wdg_OutPut\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\SecureProgram -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\SecureBoot -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootServices\Crc -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootServices -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Config\MCAL_Config\Gpt_OutPut\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Config\MCAL_Config\Fls_OutPut\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\gpt\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\fls\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootServices\SecurityManager -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootServices\MemoryManager -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootServices\FlsIf -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootServices\EEIf -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootServices\EcuMService -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootServices\Diag_Callout -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootServices\Dcm -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootServices\Common -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootServices\CanTp -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootServices\CanIf -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootManager -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Cpu -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\CommonInclude -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Config\BSW_Config -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Config\BSW_Config\RH850F1K -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\Os\Extend\inc -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\Os\Kernel\inc -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\Os\Portable\Mcu -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\Os\Portable\Processor -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Config\MCAL_Config\Adc_OutPut\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Config\MCAL_Config\Can_OutPut\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Config\MCAL_Config\Dio_OutPut\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Config\MCAL_Config\Mcu_OutPut\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Config\MCAL_Config\Port_OutPut\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\adc\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\can\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\dio\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\general -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\mcu\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\port\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\stubs\CanGeneral\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\stubs\Dem\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\stubs\Det\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\stubs\EcuM\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\stubs\MemIf\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\stubs\SchM\include -DRH850_F1KM_S1_2MB -Xprn_path=DefaultBuild -Xno_warning=50013 -oD:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Toolchain\CSPLUS_V81200\DefaultBuild\r_cg_uart.obj D:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Toolchain\CSPLUS_V81200\DefaultBuild\r_cg_uart.asm 
+

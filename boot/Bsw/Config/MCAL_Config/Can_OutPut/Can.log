@@ -1,0 +1,58 @@
+################################################################################
+# AUTOSAR Renesas R4.0.3 & R4.2.2 CAN Driver Generation Tool for X1x
+# Run time      = [13 Jul 2026 - 01:36:21]
+#    Command line arguments = .\Config\ECUC\test_Can_Can_ecuc.arxml
+#	.\Config\ECUC\test_Mcu_Mcu0_ecuc.arxml
+#	.\modules\can\R422_CAN_F1x_BSWMDT.arxml
+#	.\stubs\4.2.2\Dem\xml\Dem_Can.arxml
+#	.\stubs\4.2.2\EcuM\xml\EcuM_can.arxml
+#	.\stubs\4.2.2\Os\xml\Os_Can.arxml
+#	.\Config\ECUC\test_EcuM_EcuM_ecuc.arxml
+#
+# Copyright(c) 2019-2021 Renesas Electronics Corporation. All rights reserved.
+################################################################################
+
+INF000001: Tool Version: MCALConfGen.exe version: 1.0.4, CanF1x.dll 
+           version: 1.0.3
+INF000002: Command line arguments: MCALConfGen.exe -m can -o  
+           .\Output\Can_OutPut .\Config\ECUC\test_Can_Can_ecuc.arxml  
+           .\Config\ECUC\test_Mcu_Mcu0_ecuc.arxml  
+           .\common_family\generator\Sample_Application_F1x.trxml  
+           .\modules\can\R422_CAN_F1x_BSWMDT.arxml  
+           .\stubs\4.2.2\Dem\xml\Dem_Can.arxml  
+           .\stubs\4.2.2\EcuM\xml\EcuM_can.arxml  
+           .\stubs\4.2.2\Os\xml\Os_Can.arxml 
+           .\Config\ECUC\test_EcuM_EcuM_ecuc.arxml
+INF080007: The channel configured <RSCANFD00> does not support the wake up.  
+           Hence Interrupt control register address is generated as  
+           'NULL_PTR'. File name: 
+           <.\Config\ECUC\test_Can_Can_ecuc.arxml>.
+INF080011: The reference clock in 'CanControllerPclkClock' parameter  
+           configured in the below 'CanConfigSet' container will be used  
+           and the configured value in  
+           'CanControllerPclkClockImmediateValue' parameter will not be  
+           used since the parameter 'CanEnableClkImmediateValue' is  
+           configured as <false>. File name:  
+           <.\Config\ECUC\test_Can_Can_ecuc.arxml>. Container path: 
+           </ActiveEcuC/Can/CanConfigSet0>.
+INF080011: The reference clock in 'CanControllerMainClock' parameter  
+           configured in the below 'CanConfigSet' container will be used  
+           and the configured value in  
+           'CanControllerMainClockImmediateValue' parameter will not be  
+           used since the parameter 'CanEnableClkImmediateValue' is  
+           configured as <false>. File name:  
+           <.\Config\ECUC\test_Can_Can_ecuc.arxml>. Container path: 
+           </ActiveEcuC/Can/CanConfigSet0>.
+INF000004: Opened file <Output\Can_OutPut\include\Can_Cbk.h> at [13 Jul 
+           2026 - 01:36:21].
+INF000004: Opened file <Output\Can_OutPut\include\Can_Cfg.h> at [13 Jul 
+           2026 - 01:36:21].
+INF000004: Opened file <Output\Can_OutPut\src\Can_PBcfg.c> at [13 Jul 2026 
+           - 01:36:21].
+INF000004: Opened file <Output\Can_OutPut\src\Can_Lcfg.c> at [13 Jul 2026 - 
+           01:36:21].
+INF000004: Opened file <Output\Can_OutPut\Can.log> at [13 Jul 2026 - 
+           01:36:21].
+INF000005: <0> Error(s) and <0> Warning(s) detected.
+INF000006: Execution completed successfully.
+

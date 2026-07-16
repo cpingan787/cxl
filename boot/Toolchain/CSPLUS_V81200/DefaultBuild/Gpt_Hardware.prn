@@ -1,0 +1,64 @@
+RH850 Family Assembler V2.07.00.03 Assemble Source List
+
+OFFSET   CODE                  NO  SOURCE STATEMENT
+
+00000000                        1  #CC-RH Compiler RH850 Assembler Source
+00000000                        2  #@	CC-RH Version : V2.07.00  [06 Dec 2024]
+00000000                        3  #@	Command : ..\..\Bsw\Config\MCAL_Config\Gpt_OutPut\src\Gpt_Hardware.c -oDefaultBuild\Gpt_Hardware.obj -Xcpu=g3kh -Xreg_mode=22 -Xreserve_r2 -Xno_warning=20188,20111 -g -g_line -I..\..\Cpu\uart -I..\..\SrcCode -I..\..\Bsw\SystemServices\vss -I..\..\Bsw\SystemServices\FCL\user -I..\..\Bsw\SystemServices\FCL\lib -I..\..\Bsw\SystemServices\FCL -I..\..\Bsw\SystemServices\WdgM -I..\..\Bsw\SystemServices\WdgIf -I..\..\Bsw\Mcal\wdg\include -I..\..\Bsw\Config\MCAL_Config\Wdg_OutPut\include -I..\..\Bsw\SystemServices\SecureProgram -I..\..\Bsw\SystemServices\SecureBoot -I..\..\Bsw\Mcal\vss -I..\..\Bsw\SystemServices\BootServices\Crc -I..\..\FCL\user -I..\..\FCL\lib -I..\..\FCL -I..\..\Bsw\SystemServices\BootServices -I..\..\Bsw\Config\MCAL_Config\Gpt_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Fls_OutPut\include -I..\..\Bsw\Mcal\gpt\include -I..\..\Bsw\Mcal\fls\include -I..\..\Bsw\SystemServices\BootServices\SecurityManager -I..\..\Bsw\SystemServices\BootServices\MemoryManager -I..\..\Bsw\SystemServices\BootServices\FlsIf -I..\..\Bsw\SystemServices\BootServices\EEIf -I..\..\Bsw\SystemServices\BootServices\EcuMService -I..\..\Bsw\SystemServices\BootServices\Diag_Callout -I..\..\Bsw\SystemServices\BootServices\Dcm -I..\..\Bsw\SystemServices\BootServices\Common -I..\..\Bsw\SystemServices\BootServices\CanTp -I..\..\Bsw\SystemServices\BootServices\CanIf -I..\..\Bsw\SystemServices\BootManager -I..\..\Cpu -I..\..\Bsw\CommonInclude -I..\..\Bsw\Config\BSW_Config -I..\..\Bsw\Config\BSW_Config\RH850F1K -I..\..\Bsw\SystemServices\Os\Extend\inc -I..\..\Bsw\SystemServices\Os\Kernel\inc -I..\..\Bsw\SystemServices\Os\Portable\Mcu -I..\..\Bsw\SystemServices\Os\Portable\Processor -I..\..\Bsw\Config\MCAL_Config\Adc_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Can_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Dio_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Mcu_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Port_OutPut\include -I..\..\Bsw\Mcal\adc\include -I..\..\Bsw\Mcal\can\include -I..\..\Bsw\Mcal\dio\include -I..\..\Bsw\Mcal\general -I..\..\Bsw\Mcal\mcu\include -I..\..\Bsw\Mcal\port\include -I..\..\Bsw\Mcal\stubs\CanGeneral\include -I..\..\Bsw\Mcal\stubs\CanIf\include -I..\..\Bsw\Mcal\stubs\Dem\include -I..\..\Bsw\Mcal\stubs\Det\include -I..\..\Bsw\Mcal\stubs\EcuM\include -I..\..\Bsw\Mcal\stubs\MemIf\include -I..\..\Bsw\Mcal\stubs\SchM\include -DRH850_F1KM_S1_2MB -lang=c99 -Xdbl_size=4 -Xcall_jump=32 -Xasm_path=DefaultBuild -Xasm_option=-Xprn_path=DefaultBuild -c -MAKEUD=DefaultBuild -Xexec_time=C:\Users\xlchen\AppData\Local\Temp\CSPlusBuildTool_c1e11f80301c43a8aaa1a01fb1d198fakbvprv1c.rew
+00000000                        4  #@	compiled at Thu Jul 16 13:41:36 2026
+00000000                        5  
+00000000                        6  	.file "..\..\Bsw\Config\MCAL_Config\Gpt_OutPut\src\Gpt_Hardware.c"
+00000000                        7  
+00000000                        8  	$reg_mode 22
+00000000                        9  	.dbl_size 4
+00000000                       10  
+00000000                       11  	.public _Gpt_GaaTAUDBUserReg_BaseAddress, 8
+00000000                       12  	.public _Gpt_GaaTAUJUserReg_BaseAddress, 4
+00000000                       13  	.public _Gpt_GaaTAUDBOsReg_BaseAddress, 8
+00000000                       14  	.public _Gpt_GaaTAUJOsReg_BaseAddress, 4
+00000000                       15  	.public _Gpt_GaaTAUDBChReg_BaseAddress, 12
+00000000                       16  	.public _Gpt_GaaTAUJChReg_BaseAddress, 4
+00000000                       17  	.public _Gpt_GaaOSTMReg_BaseAddress, 16
+00000000                       18  	.public _Gpt_GpOSTMRegPredefTimer_BaseAddress, 4
+00000000                       19  
+00000000                       20  	.section .const, const
+00000000                       21  	.align 4
+00000000                       22  _Gpt_GaaTAUDBUserReg_BaseAddress:
+00000000 4000E2FF              23  	.dw 0xFFE20040,0xFFE30040
+00000004 4000E3FF        
+00000008                       24  	.align 4
+00000008                       25  _Gpt_GaaTAUJUserReg_BaseAddress:
+00000008 5000E5FF              26  	.dw 0xFFE50050
+0000000C                       27  	.align 4
+0000000C                       28  _Gpt_GaaTAUDBOsReg_BaseAddress:
+0000000C 4002E2FF              29  	.dw 0xFFE20240,0xFFE30240
+00000010 4002E3FF        
+00000014                       30  	.align 4
+00000014                       31  _Gpt_GaaTAUJOsReg_BaseAddress:
+00000014 9000E5FF              32  	.dw 0xFFE50090
+00000018                       33  	.align 4
+00000018                       34  _Gpt_GaaTAUDBChReg_BaseAddress:
+00000018 2400E2FF              35  	.dw 0xFFE20024,0xFFE20020,0xFFE30030
+0000001C 2000E2FF        
+00000020 3000E3FF        
+00000024                       36  	.align 4
+00000024                       37  _Gpt_GaaTAUJChReg_BaseAddress:
+00000024 0000E5FF              38  	.dw 0xFFE50000
+00000028                       39  	.align 4
+00000028                       40  _Gpt_GaaOSTMReg_BaseAddress:
+00000028 0000D7FF              41  	.dw 0xFFD70000,0xFFD70100,0xFFD70200,0xFFD70300
+0000002C 0001D7FF        
+00000030 0002D7FF        
+00000034 0003D7FF        
+00000038                       42  	.align 4
+00000038                       43  _Gpt_GpOSTMRegPredefTimer_BaseAddress:
+00000038 0004D7FF              44  	.dw 0xFFD70400
+
+Section List
+Attr     Size                Name
+
+CONST          60 (0000003C) .const
+
+Command Line Parameter
+-Xcpu=g3kh -Xreg_mode=22 -Xep=callee -Xreserve_r2 -Xcharacter_set=none -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Cpu\uart -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\SrcCode -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\vss -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\FCL\user -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\FCL\lib -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\FCL -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\WdgIf -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\wdg\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Config\MCAL_Config\Wdg_OutPut\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\SecureProgram -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\SecureBoot -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootServices\Crc -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootServices -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Config\MCAL_Config\Gpt_OutPut\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Config\MCAL_Config\Fls_OutPut\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\gpt\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\fls\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootServices\SecurityManager -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootServices\MemoryManager -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootServices\FlsIf -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootServices\EEIf -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootServices\EcuMService -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootServices\Diag_Callout -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootServices\Dcm -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootServices\Common -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootServices\CanTp -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootServices\CanIf -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootManager -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Cpu -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\CommonInclude -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Config\BSW_Config -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Config\BSW_Config\RH850F1K -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\Os\Extend\inc -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\Os\Kernel\inc -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\Os\Portable\Mcu -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\Os\Portable\Processor -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Config\MCAL_Config\Adc_OutPut\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Config\MCAL_Config\Can_OutPut\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Config\MCAL_Config\Dio_OutPut\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Config\MCAL_Config\Mcu_OutPut\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Config\MCAL_Config\Port_OutPut\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\adc\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\can\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\dio\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\general -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\mcu\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\port\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\stubs\CanGeneral\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\stubs\Dem\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\stubs\Det\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\stubs\EcuM\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\stubs\MemIf\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\stubs\SchM\include -DRH850_F1KM_S1_2MB -Xprn_path=DefaultBuild -Xno_warning=50013 -oD:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Toolchain\CSPLUS_V81200\DefaultBuild\Gpt_Hardware.obj D:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Toolchain\CSPLUS_V81200\DefaultBuild\Gpt_Hardware.asm 
+

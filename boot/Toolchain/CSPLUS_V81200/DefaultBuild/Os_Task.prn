@@ -1,0 +1,964 @@
+RH850 Family Assembler V2.07.00.03 Assemble Source List
+
+OFFSET   CODE                  NO  SOURCE STATEMENT
+
+00000000                        1  #CC-RH Compiler RH850 Assembler Source
+00000000                        2  #@	CC-RH Version : V2.07.00  [06 Dec 2024]
+00000000                        3  #@	Command : ..\..\Bsw\SystemServices\Os\Kernel\src\Os_Task.c -oDefaultBuild\Os_Task.obj -Xcpu=g3kh -Xreg_mode=22 -Xreserve_r2 -Xno_warning=20188,20111 -g -g_line -I..\..\Cpu\uart -I..\..\SrcCode -I..\..\Bsw\SystemServices\vss -I..\..\Bsw\SystemServices\FCL\user -I..\..\Bsw\SystemServices\FCL\lib -I..\..\Bsw\SystemServices\FCL -I..\..\Bsw\SystemServices\WdgM -I..\..\Bsw\SystemServices\WdgIf -I..\..\Bsw\Mcal\wdg\include -I..\..\Bsw\Config\MCAL_Config\Wdg_OutPut\include -I..\..\Bsw\SystemServices\SecureProgram -I..\..\Bsw\SystemServices\SecureBoot -I..\..\Bsw\Mcal\vss -I..\..\Bsw\SystemServices\BootServices\Crc -I..\..\FCL\user -I..\..\FCL\lib -I..\..\FCL -I..\..\Bsw\SystemServices\BootServices -I..\..\Bsw\Config\MCAL_Config\Gpt_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Fls_OutPut\include -I..\..\Bsw\Mcal\gpt\include -I..\..\Bsw\Mcal\fls\include -I..\..\Bsw\SystemServices\BootServices\SecurityManager -I..\..\Bsw\SystemServices\BootServices\MemoryManager -I..\..\Bsw\SystemServices\BootServices\FlsIf -I..\..\Bsw\SystemServices\BootServices\EEIf -I..\..\Bsw\SystemServices\BootServices\EcuMService -I..\..\Bsw\SystemServices\BootServices\Diag_Callout -I..\..\Bsw\SystemServices\BootServices\Dcm -I..\..\Bsw\SystemServices\BootServices\Common -I..\..\Bsw\SystemServices\BootServices\CanTp -I..\..\Bsw\SystemServices\BootServices\CanIf -I..\..\Bsw\SystemServices\BootManager -I..\..\Cpu -I..\..\Bsw\CommonInclude -I..\..\Bsw\Config\BSW_Config -I..\..\Bsw\Config\BSW_Config\RH850F1K -I..\..\Bsw\SystemServices\Os\Extend\inc -I..\..\Bsw\SystemServices\Os\Kernel\inc -I..\..\Bsw\SystemServices\Os\Portable\Mcu -I..\..\Bsw\SystemServices\Os\Portable\Processor -I..\..\Bsw\Config\MCAL_Config\Adc_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Can_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Dio_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Mcu_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Port_OutPut\include -I..\..\Bsw\Mcal\adc\include -I..\..\Bsw\Mcal\can\include -I..\..\Bsw\Mcal\dio\include -I..\..\Bsw\Mcal\general -I..\..\Bsw\Mcal\mcu\include -I..\..\Bsw\Mcal\port\include -I..\..\Bsw\Mcal\stubs\CanGeneral\include -I..\..\Bsw\Mcal\stubs\CanIf\include -I..\..\Bsw\Mcal\stubs\Dem\include -I..\..\Bsw\Mcal\stubs\Det\include -I..\..\Bsw\Mcal\stubs\EcuM\include -I..\..\Bsw\Mcal\stubs\MemIf\include -I..\..\Bsw\Mcal\stubs\SchM\include -DRH850_F1KM_S1_2MB -lang=c99 -Xdbl_size=4 -Xcall_jump=32 -Xasm_path=DefaultBuild -Xasm_option=-Xprn_path=DefaultBuild -c -MAKEUD=DefaultBuild -Xexec_time=C:\Users\xlchen\AppData\Local\Temp\CSPlusBuildTool_2cfbda4567c642c69970f1230b8be648qfvz2112.pwt
+00000000                        4  #@	compiled at Thu Jul 16 13:41:55 2026
+00000000                        5  
+00000000                        6  	.file "..\..\Bsw\SystemServices\Os\Kernel\src\Os_Task.c"
+00000000                        7  
+00000000                        8  	$reg_mode 22
+00000000                        9  	.dbl_size 4
+00000000                       10  
+00000000                       11  	.extern _Os_SCB_FA_Inf
+00000000                       12  	.extern _Os_ObjectIDMaxTable
+00000000                       13  	.extern _Os_TCB
+00000000                       14  	.extern _Os_TASK_IDLE_Inf
+00000000                       15  	.extern _Os_TaskIdRange
+00000000                       16  	.extern _Os_TaskCfg
+00000000                       17  	.extern _Os_TaskStack
+00000000                       18  	.extern _Os_CfgStdResourceMax_Inf
+00000000                       19  	.extern _Os_TCBTaskResourceStack
+00000000                       20  	.extern _Os_ReadyQueueInsert
+00000000                       21  	.extern _Os_FillStack
+00000000                       22  	.public _Os_InitTask
+00000000                       23  	.extern _Os_Panic
+00000000                       24  	.public _Os_ActivateTask
+00000000                       25  	.extern _Os_Hal_SuspendInt
+00000000                       26  	.extern _Os_Hal_RestoreInt
+00000000                       27  	.extern _Os_ReadyQueueRemove
+00000000                       28  	.public _GetTaskState
+00000000                       29  	.public _ActivateTask
+00000000                       30  	.public _ActivateTaskAsyn
+00000000                       31  	.public _TerminateTask
+00000000                       32  	.public _GetTaskID
+00000000                       33  	.public _Schedule
+00000000                       34  	.public _ChainTask
+00000000                       35  	.public _Os_SetTaskToReady
+00000000                       36  	.public _Os_SwitchTask
+00000000                       37  	.public _Os_UpdateHighPrioTask
+00000000                       38  	.extern _Os_StackMonitor
+00000000                       39  	.extern _Os_Hal_FirstEnterTask
+00000000                       40  	.extern _Os_GetHighPrio
+00000000                       41  	.extern _Os_ReadyQueueGetFirst
+00000000                       42  
+00000000                       43  	.section .text, text
+00000000                       44  _Os_GetCoreIdLocal.1:
+00000000                       45  	.stack _Os_GetCoreIdLocal.1 = 0
+00000000                       46  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/inc/Os_Kernel.h", 89
+00000000 402E0000              47  	movhi HIGHW1(#_Os_SCB_FA_Inf+0x00000026), r0, r5
+00000004                       48  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/inc/Os_Kernel.h", 91
+00000004 E5570100              49  	ld.hu LOWW(#_Os_SCB_FA_Inf+0x00000026)[r5], r10
+00000008 7F00                  50  	jmp [r31]
+0000000A                       51  _Os_GetSystemContext.1:
+0000000A                       52  	.stack _Os_GetSystemContext.1 = 0
+0000000A                       53  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/inc/Os_Kernel.h", 101
+0000000A                       54  	mov #_Os_SCB_FA_Inf, r10
+0000000A 2A0600000000            -- mov         0x0,r10
+00000010                       55  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/inc/Os_Kernel.h", 113
+00000010 7F00                  56  	jmp [r31]
+00000012                       57  _Os_GetCurrentContext.1:
+00000012                       58  	.stack _Os_GetCurrentContext.1 = 0
+00000012                       59  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/inc/Os_Kernel.h", 135
+00000012                       60  	mov #_Os_SCB_FA_Inf, r10
+00000012 2A0600000000            -- mov         0x0,r10
+00000018 7F00                  61  	jmp [r31]
+0000001A                       62  _Os_ObjectIDCheck.1:
+0000001A                       63  	.stack _Os_ObjectIDCheck.1 = 0
+0000001A                       64  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/inc/Os_Kernel.h", 146
+0000001A C739                  65  	add r7, r7
+0000001C                       66  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/inc/Os_Kernel.h", 149
+0000001C                       67  	mov #_Os_ObjectIDMaxTable, r5
+0000001C 250600000000            -- mov         0x0,tp
+00000022 C729                  68  	add r7, r5
+00000024 E52F0100              69  	ld.hu 0x00000000[r5], r5
+00000028 E531                  70  	cmp r5, r6
+0000002A E1570000              71  	setf 0x00000001, r10
+0000002E                       72  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/inc/Os_Kernel.h", 155
+0000002E 7F00                  73  	jmp [r31]
+00000030                       74  _Os_InitTaskTCB.1:
+00000030                       75  	.stack _Os_InitTaskTCB.1 = 20
+00000030                       76  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 155
+00000030 8007A170              77  	prepare 0x00000385, 0x00000000
+00000034                       78  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 157
+00000034 0728                  79  	mov r7, r5
+00000036 C22A                  80  	shl 0x00000002, r5
+00000038                       81  	mov #_Os_TCB, r8
+00000038 280600000000            -- mov         0x0,r8
+0000003E C541                  82  	add r5, r8
+00000040 28CF0100              83  	ld.w 0x00000000[r8], r25
+00000044                       84  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 160
+00000044 0728                  85  	mov r7, r5
+00000046 C52A                  86  	shl 0x00000005, r5
+00000048                       87  	mov #_Os_TaskCfg, r26
+00000048 3A0600000000            -- mov         0x0,r26
+0000004E C5D1                  88  	add r5, r26
+00000050 3A2F0D00              89  	ld.w 0x0000000C[r26], r5
+00000054 792F0100              90  	st.w r5, 0x00000000[r25]
+00000058                       91  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 161
+00000058 3A2F1100              92  	ld.w 0x00000010[r26], r5
+0000005C 792F0500              93  	st.w r5, 0x00000004[r25]
+00000060                       94  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 164
+00000060 59072000              95  	st.b r0, 0x00000020[r25]
+00000064                       96  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 167
+00000064 FA4F1700              97  	ld.hu 0x00000016[r26], r9
+00000068 794F1A00              98  	st.h r9, 0x0000001A[r25]
+0000006C                       99  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 183
+0000006C 3A2F1800             100  	ld.h 0x00000018[r26], r5
+00000070                      101  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 160
+00000070 4CD2                 102  	add 0x0000000C, r26
+00000072                      103  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 183
+00000072 26472000             104  	ld.h 0x00000020[r6], r8
+00000076 4829                 105  	and r8, r5
+00000078 C506FFFF             106  	andi 0x0000FFFF, r5, r0
+0000007C 07D8                 107  	mov r7, r27
+0000007E 06E0                 108  	mov r6, r28
+00000080 8205                 109  	bz9 .BB.LABEL.5_4
+00000082                      110  .BB.LABEL.5_1:	; if_then_bb
+00000082                      111  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 0
+00000082 012A                 112  	mov 0x00000001, r5
+00000084                      113  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 186
+00000084 592F2000             114  	st.b r5, 0x00000020[r25]
+00000088 042A                 115  	mov 0x00000004, r5
+0000008A                      116  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 189
+0000008A 792F1D00             117  	st.w r5, 0x0000001C[r25]
+0000008E                      118  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 197
+0000008E 3C370100             119  	ld.w 0x00000000[r28], r6
+00000092 0A42                 120  	mov 0x0000000A, r8
+00000094 1B38                 121  	mov r27, r7
+00000096 FF0200000000         122  	jarl32 _Os_ReadyQueueInsert, r31
+0000009C                      123  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 199
+0000009C FC2F2300             124  	ld.hu 0x00000022[r28], r5
+000000A0 8036FFFF             125  	ori 0x0000FFFF, r0, r6
+000000A4 E629                 126  	cmp r6, r5
+000000A6 8205                 127  	bz9 .BB.LABEL.5_3
+000000A8                      128  .BB.LABEL.5_2:	; bb
+000000A8                      129  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 0
+000000A8 F9371B00             130  	ld.hu 0x0000001A[r25], r6
+000000AC E629                 131  	cmp r6, r5
+000000AE 8905                 132  	bnc9 .BB.LABEL.5_5
+000000B0                      133  .BB.LABEL.5_3:	; if_then_bb79
+000000B0                      134  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 201
+000000B0 7CDF3900             135  	st.w r27, 0x00000038[r28]
+000000B4                      136  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 202
+000000B4 39CF1A00             137  	ld.h 0x0000001A[r25], r25
+000000B8 7CCF2200             138  	st.h r25, 0x00000022[r28]
+000000BC 8505                 139  	br9 .BB.LABEL.5_5
+000000BE                      140  .BB.LABEL.5_4:	; if_else_bb
+000000BE                      141  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 0
+000000BE 022A                 142  	mov 0x00000002, r5
+000000C0                      143  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 207
+000000C0 792F1D00             144  	st.w r5, 0x0000001C[r25]
+000000C4                      145  .BB.LABEL.5_5:	; if_break_bb90
+000000C4                      146  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 224
+000000C4 1A30                 147  	mov r26, r6
+000000C6 FF0200000000         148  	jarl32 _Os_FillStack, r31
+000000CC                      149  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 227
+000000CC 4006BF70             150  	dispose 0x00000000, 0x00000385, [r31]
+000000D0                      151  _Os_InitTask:
+000000D0                      152  	.stack _Os_InitTask = 20
+000000D0                      153  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 238
+000000D0 8007A170             154  	prepare 0x00000385, 0x00000000
+000000D4                      155  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 241
+000000D4 80FF0000             156  	jarl _Os_GetCoreIdLocal.1, r31
+000000D8 0AC8                 157  	mov r10, r25
+000000DA                      158  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 242
+000000DA 1930                 159  	mov r25, r6
+000000DC 80FF0000             160  	jarl _Os_GetSystemContext.1, r31
+000000E0                      161  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 244
+000000E0 1928                 162  	mov r25, r5
+000000E2 C22A                 163  	shl 0x00000002, r5
+000000E4                      164  	mov #_Os_TASK_IDLE_Inf, r6
+000000E4 260600000000            -- mov         0x0,r6
+000000EA C531                 165  	add r5, r6
+000000EC 262F0100             166  	ld.w 0x00000000[r6], r5
+000000F0 6A2F3600             167  	st.h r5, 0x00000036[r10]
+000000F4                      168  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 245
+000000F4 1928                 169  	mov r25, r5
+000000F6 F82F4002             170  	mul 0x00000018, r5, r0
+000000FA                      171  	mov #_Os_TaskIdRange, r6
+000000FA 260600000000            -- mov         0x0,r6
+00000100 C531                 172  	add r5, r6
+00000102                      173  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 246
+00000102 26D70500             174  	ld.w 0x00000004[r6], r26
+00000106                      175  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 245
+00000106 26DF0100             176  	ld.w 0x00000000[r6], r27
+0000010A                      177  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 248
+0000010A 1A28                 178  	mov r26, r5
+0000010C BB29                 179  	sub r27, r5
+0000010E 6A2F2400             180  	st.h r5, 0x00000024[r10]
+00000112                      181  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 250
+00000112 FAD9                 182  	cmp r26, r27
+00000114 0AE0                 183  	mov r10, r28
+00000116 8705                 184  	ble9 .BB.LABEL.6_2
+00000118                      185  .BB.LABEL.6_1:	; if_then_bb
+00000118                      186  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 252
+00000118 FF0200000000         187  	jarl32 _Os_Panic, r31
+0000011E                      188  .BB.LABEL.6_2:	; if_break_bb
+0000011E                      189  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 256
+0000011E D9C9                 190  	add r25, r25
+00000120                      191  	mov #_Os_CfgStdResourceMax_Inf, r5
+00000120 250600000000            -- mov         0x0,tp
+00000126 D929                 192  	add r25, r5
+00000128 E52F0100             193  	ld.hu 0x00000000[r5], r5
+0000012C                      194  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 257
+0000012C 602A                 195  	cmp 0x00000000, r5
+0000012E 8205                 196  	bz9 .BB.LABEL.6_7
+00000130                      197  .BB.LABEL.6_3:	; if_then_bb53
+00000130                      198  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 0
+00000130 1B28                 199  	mov r27, r5
+00000132 8505                 200  	br9 .BB.LABEL.6_5
+00000134                      201  .BB.LABEL.6_4:	; bb
+00000134                      202  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 261
+00000134 C536FFFF             203  	andi 0x0000FFFF, r5, r6
+00000138 C232                 204  	shl 0x00000002, r6
+0000013A                      205  	mov #_Os_TCBTaskResourceStack, r7
+0000013A 270600000000            -- mov         0x0,r7
+00000140 C639                 206  	add r6, r7
+00000142                      207  	mov #_Os_TCB, r8
+00000142 280600000000            -- mov         0x0,r8
+00000148 C831                 208  	add r8, r6
+0000014A 26470100             209  	ld.w 0x00000000[r6], r8
+0000014E 683F1500             210  	st.w r7, 0x00000014[r8]
+00000152                      211  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 262
+00000152 26370100             212  	ld.w 0x00000000[r6], r6
+00000156 46071800             213  	st.b r0, 0x00000018[r6]
+0000015A 412A                 214  	add 0x00000001, r5
+0000015C                      215  .BB.LABEL.6_5:	; bb72
+0000015C                      216  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 259
+0000015C C536FFFF             217  	andi 0x0000FFFF, r5, r6
+00000160 DA3EFFFF             218  	andi 0x0000FFFF, r26, r7
+00000164 E731                 219  	cmp r7, r6
+00000166 8105                 220  	bl9 .BB.LABEL.6_4
+00000168 8505                 221  	br9 .BB.LABEL.6_7
+0000016A                      222  .BB.LABEL.6_6:	; bb85
+0000016A                      223  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 269
+0000016A DB3EFFFF             224  	andi 0x0000FFFF, r27, r7
+0000016E 1C30                 225  	mov r28, r6
+00000170 80FF0000             226  	jarl _Os_InitTaskTCB.1, r31
+00000174 41DA                 227  	add 0x00000001, r27
+00000176                      228  .BB.LABEL.6_7:	; bb91
+00000176                      229  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 267
+00000176 DB2EFFFF             230  	andi 0x0000FFFF, r27, r5
+0000017A DA36FFFF             231  	andi 0x0000FFFF, r26, r6
+0000017E E629                 232  	cmp r6, r5
+00000180 8105                 233  	bl9 .BB.LABEL.6_6
+00000182                      234  .BB.LABEL.6_8:	; return
+00000182                      235  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 273
+00000182 4006BF70             236  	dispose 0x00000000, 0x00000385, [r31]
+00000186                      237  _Os_ActivateTask:
+00000186                      238  	.stack _Os_ActivateTask = 24
+00000186                      239  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 283
+00000186 8007E170             240  	prepare 0x00000387, 0x00000000
+0000018A 06C8                 241  	mov r6, r25
+0000018C                      242  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 289
+0000018C FF0200000000         243  	jarl32 _Os_Hal_SuspendInt, r31
+00000192                      244  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 305
+00000192 1928                 245  	mov r25, r5
+00000194 C52A                 246  	shl 0x00000005, r5
+00000196                      247  	mov #_Os_TaskCfg, r6
+00000196 260600000000            -- mov         0x0,r6
+0000019C C531                 248  	add r5, r6
+0000019E E62F1500             249  	ld.hu 0x00000014[r6], r5
+000001A2 1930                 250  	mov r25, r6
+000001A4 C232                 251  	shl 0x00000002, r6
+000001A6                      252  	mov #_Os_TCB, r26
+000001A6 3A0600000000            -- mov         0x0,r26
+000001AC C6D1                 253  	add r6, r26
+000001AE 3A370100             254  	ld.w 0x00000000[r26], r6
+000001B2 86372100             255  	ld.bu 0x00000020[r6], r6
+000001B6 E531                 256  	cmp r5, r6
+000001B8 0AD8                 257  	mov r10, r27
+000001BA 8E05                 258  	bge9 .BB.LABEL.7_2
+000001BC                      259  .BB.LABEL.7_1:	; entry.if_break_bb_crit_edge
+000001BC                      260  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 0
+000001BC 00E2                 261  	mov 0x00000000, r28
+000001BE 8505                 262  	br9 .BB.LABEL.7_3
+000001C0                      263  .BB.LABEL.7_2:	; if_then_bb
+000001C0                      264  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 308
+000001C0 1B30                 265  	mov r27, r6
+000001C2 FF0200000000         266  	jarl32 _Os_Hal_RestoreInt, r31
+000001C8 04E2                 267  	mov 0x00000004, r28
+000001CA                      268  .BB.LABEL.7_3:	; if_break_bb
+000001CA                      269  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 314
+000001CA 60E2                 270  	cmp 0x00000000, r28
+000001CC 8205                 271  	bz9 .BB.LABEL.7_4
+000001CE E00200000000         272  	jr32 .BB.LABEL.7_10
+000001D4                      273  .BB.LABEL.7_4:	; if_then_bb24
+000001D4                      274  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 317
+000001D4 3A2F0100             275  	ld.w 0x00000000[r26], r5
+000001D8 05372000             276  	ld.b 0x00000020[r5], r6
+000001DC 4132                 277  	add 0x00000001, r6
+000001DE 45372000             278  	st.b r6, 0x00000020[r5]
+000001E2                      279  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 320
+000001E2 3A2F0100             280  	ld.w 0x00000000[r26], r5
+000001E6 25371D00             281  	ld.w 0x0000001C[r5], r6
+000001EA 6232                 282  	cmp 0x00000002, r6
+000001EC 8A05                 283  	bnz9 .BB.LABEL.7_6
+000001EE                      284  .BB.LABEL.7_5:	; if_then_bb45
+000001EE                      285  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 0
+000001EE 0432                 286  	mov 0x00000004, r6
+000001F0                      287  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 322
+000001F0 65371D00             288  	st.w r6, 0x0000001C[r5]
+000001F4                      289  .BB.LABEL.7_6:	; if_break_bb50
+000001F4                      290  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 332
+000001F4 1928                 291  	mov r25, r5
+000001F6 C52A                 292  	shl 0x00000005, r5
+000001F8                      293  	mov #_Os_TaskCfg, r26
+000001F8 3A0600000000            -- mov         0x0,r26
+000001FE C5D1                 294  	add r5, r26
+00000200 FA4F1700             295  	ld.hu 0x00000016[r26], r9
+00000204                      296  	mov #_Os_SCB_FA_Inf, r29
+00000204 3D0600000000            -- mov         0x0,r29
+0000020A 3D370100             297  	ld.w 0x00000000[r29], r6
+0000020E 0A42                 298  	mov 0x0000000A, r8
+00000210 1938                 299  	mov r25, r7
+00000212 FF0200000000         300  	jarl32 _Os_ReadyQueueInsert, r31
+00000218                      301  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 334
+00000218 FA2F1700             302  	ld.hu 0x00000016[r26], r5
+0000021C FD372300             303  	ld.hu 0x00000022[r29], r6
+00000220 E629                 304  	cmp r6, r5
+00000222 8B05                 305  	bh9 .BB.LABEL.7_7
+00000224 E00200000000         306  	jr32 .BB.LABEL.7_9
+0000022A                      307  .BB.LABEL.7_7:	; if_then_bb71
+0000022A                      308  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 336
+0000022A                      309  	mov #_Os_SCB_FA_Inf, r6
+0000022A 260600000000            -- mov         0x0,r6
+00000230 66CF3900             310  	st.w r25, 0x00000038[r6]
+00000234                      311  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 337
+00000234 662F2200             312  	st.h r5, 0x00000022[r6]
+00000238                      313  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 340
+00000238 A62F4D00             314  	ld.bu 0x0000004D[r6], r5
+0000023C 602A                 315  	cmp 0x00000000, r5
+0000023E 8205                 316  	bz9 .BB.LABEL.7_8
+00000240 E00200000000         317  	jr32 .BB.LABEL.7_9
+00000246                      318  .BB.LABEL.7_8:	; if_then_bb88
+00000246                      319  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 342
+00000246                      320  	._line_top inline_asm
+00000246 E0070001             321      trap 0x00;
+0000024A                      322  	._line_end inline_asm
+0000024A                      323  .BB.LABEL.7_9:	; if_break_bb90
+0000024A                      324  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 346
+0000024A 1B30                 325  	mov r27, r6
+0000024C FF0200000000         326  	jarl32 _Os_Hal_RestoreInt, r31
+00000252                      327  .BB.LABEL.7_10:	; if_break_bb92
+00000252                      328  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 0
+00000252 DC56FF00             329  	andi 0x000000FF, r28, r10
+00000256                      330  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 350
+00000256 4006FF70             331  	dispose 0x00000000, 0x00000387, [r31]
+0000025A                      332  _Os_TerminateTaskInternal.1:
+0000025A                      333  	.stack _Os_TerminateTaskInternal.1 = 12
+0000025A                      334  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 388
+0000025A 80072160             335  	prepare 0x00000301, 0x00000000
+0000025E                      336  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 410
+0000025E 882F2100             337  	ld.bu 0x00000020[r8], r5
+00000262 602A                 338  	cmp 0x00000000, r5
+00000264 08C8                 339  	mov r8, r25
+00000266 07D0                 340  	mov r7, r26
+00000268 8205                 341  	bz9 .BB.LABEL.8_2
+0000026A                      342  .BB.LABEL.8_1:	; if_then_bb
+0000026A                      343  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 412
+0000026A 5F2A                 344  	add 0xFFFFFFFF, r5
+0000026C 592F2000             345  	st.b r5, 0x00000020[r25]
+00000270                      346  .BB.LABEL.8_2:	; if_break_bb
+00000270                      347  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 415
+00000270 C506FF00             348  	andi 0x000000FF, r5, r0
+00000274 042A                 349  	mov 0x00000004, r5
+00000276                      350  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 428
+00000276 E22F042B             351  	cmov 0x00000002, 0x00000002, r5, r5
+0000027A 792F1D00             352  	st.w r5, 0x0000001C[r25]
+0000027E                      353  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 432
+0000027E 1A28                 354  	mov r26, r5
+00000280 C22A                 355  	shl 0x00000002, r5
+00000282                      356  	mov #_Os_TCB, r7
+00000282 270600000000            -- mov         0x0,r7
+00000288 C539                 357  	add r5, r7
+0000028A 272F0100             358  	ld.w 0x00000000[r7], r5
+0000028E E53F1B00             359  	ld.hu 0x0000001A[r5], r7
+00000292 26370100             360  	ld.w 0x00000000[r6], r6
+00000296 FF0200000000         361  	jarl32 _Os_ReadyQueueRemove, r31
+0000029C                      362  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 435
+0000029C 59071800             363  	st.b r0, 0x00000018[r25]
+000002A0                      364  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 438
+000002A0 C5D2                 365  	shl 0x00000005, r26
+000002A2                      366  	mov #_Os_TaskCfg, r5
+000002A2 250600000000            -- mov         0x0,tp
+000002A8 DA29                 367  	add r26, r5
+000002AA 252F1600             368  	ld.h 0x00000016[r5], r5
+000002AE 792F1A00             369  	st.h r5, 0x0000001A[r25]
+000002B2 40063F60             370  	dispose 0x00000000, 0x00000301, [r31]
+000002B6                      371  _Os_TerminateTask.1:
+000002B6                      372  	.stack _Os_TerminateTask.1 = 16
+000002B6                      373  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 460
+000002B6 80072170             374  	prepare 0x00000381, 0x00000000
+000002BA 06C8                 375  	mov r6, r25
+000002BC                      376  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 465
+000002BC FF0200000000         377  	jarl32 _Os_Hal_SuspendInt, r31
+000002C2 0AD0                 378  	mov r10, r26
+000002C4                      379  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 467
+000002C4                      380  	mov #_Os_SCB_FA_Inf, r27
+000002C4 3B0600000000            -- mov         0x0,r27
+000002CA 3B470500             381  	ld.w 0x00000004[r27], r8
+000002CE 1B30                 382  	mov r27, r6
+000002D0 1938                 383  	mov r25, r7
+000002D2 80FF0000             384  	jarl _Os_TerminateTaskInternal.1, r31
+000002D6                      385  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 469
+000002D6 3B2F3900             386  	ld.w 0x00000038[r27], r5
+000002DA E5C9                 387  	cmp r5, r25
+000002DC 8A05                 388  	bnz9 .BB.LABEL.9_2
+000002DE                      389  .BB.LABEL.9_1:	; if_then_bb
+000002DE                      390  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 471
+000002DE                      391  	mov #_Os_SCB_FA_Inf, r6
+000002DE 260600000000            -- mov         0x0,r6
+000002E4 FF0200000000         392  	jarl32 _Os_UpdateHighPrioTask, r31
+000002EA                      393  .BB.LABEL.9_2:	; if_break_bb
+000002EA                      394  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 474
+000002EA 402E0000             395  	movhi HIGHW1(#_Os_SCB_FA_Inf+0x0000004D), r0, r5
+000002EE 45070000             396  	st.b r0, LOWW(#_Os_SCB_FA_Inf+0x0000004D)[r5]
+000002F2                      397  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 480
+000002F2                      398  	._line_top inline_asm
+000002F2 E0070001             399      trap 0x00;
+000002F6                      400  	._line_end inline_asm
+000002F6                      401  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 481
+000002F6 1A30                 402  	mov r26, r6
+000002F8 FF0200000000         403  	jarl32 _Os_Hal_RestoreInt, r31
+000002FE                      404  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 483
+000002FE 40063F70             405  	dispose 0x00000000, 0x00000381, [r31]
+00000302                      406  _Os_ChainTask.1:
+00000302                      407  	.stack _Os_ChainTask.1 = 24
+00000302                      408  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 495
+00000302 8007E170             409  	prepare 0x00000387, 0x00000000
+00000306 06C8                 410  	mov r6, r25
+00000308                      411  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 502
+00000308 402E0000             412  	movhi HIGHW1(#_Os_SCB_FA_Inf+0x0000003C), r0, r5
+0000030C 25D70100             413  	ld.w LOWW(#_Os_SCB_FA_Inf+0x0000003C)[r5], r26
+00000310                      414  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 505
+00000310 FF0200000000         415  	jarl32 _Os_Hal_SuspendInt, r31
+00000316                      416  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 507
+00000316 1928                 417  	mov r25, r5
+00000318 C52A                 418  	shl 0x00000005, r5
+0000031A                      419  	mov #_Os_TaskCfg, r6
+0000031A 260600000000            -- mov         0x0,r6
+00000320 C531                 420  	add r5, r6
+00000322 E62F1500             421  	ld.hu 0x00000014[r6], r5
+00000326 1930                 422  	mov r25, r6
+00000328 C232                 423  	shl 0x00000002, r6
+0000032A                      424  	mov #_Os_TCB, r27
+0000032A 3B0600000000            -- mov         0x0,r27
+00000330 C6D9                 425  	add r6, r27
+00000332 3B370100             426  	ld.w 0x00000000[r27], r6
+00000336 86372100             427  	ld.bu 0x00000020[r6], r6
+0000033A E531                 428  	cmp r5, r6
+0000033C 0AE0                 429  	mov r10, r28
+0000033E 8605                 430  	blt9 .BB.LABEL.10_2
+00000340                      431  .BB.LABEL.10_1:	; entry
+00000340                      432  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 0
+00000340 F9D1                 433  	cmp r25, r26
+00000342 8A05                 434  	bnz9 .BB.LABEL.10_3
+00000344                      435  .BB.LABEL.10_2:	; entry.if_break_bb_crit_edge
+00000344 00EA                 436  	mov 0x00000000, r29
+00000346 8505                 437  	br9 .BB.LABEL.10_4
+00000348                      438  .BB.LABEL.10_3:	; if_then_bb
+00000348                      439  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 513
+00000348 1C30                 440  	mov r28, r6
+0000034A FF0200000000         441  	jarl32 _Os_Hal_RestoreInt, r31
+00000350 04EA                 442  	mov 0x00000004, r29
+00000352                      443  .BB.LABEL.10_4:	; if_break_bb
+00000352                      444  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 517
+00000352 60EA                 445  	cmp 0x00000000, r29
+00000354 8205                 446  	bz9 .BB.LABEL.10_5
+00000356 E00200000000         447  	jr32 .BB.LABEL.10_10
+0000035C                      448  .BB.LABEL.10_5:	; if_then_bb38
+0000035C                      449  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 519
+0000035C                      450  	mov #_Os_SCB_FA_Inf, r6
+0000035C 260600000000            -- mov         0x0,r6
+00000362 26470500             451  	ld.w 0x00000004[r6], r8
+00000366 1A38                 452  	mov r26, r7
+00000368 FF0200000000         453  	jarl32 _Os_TerminateTaskInternal.1, r31
+0000036E                      454  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 533
+0000036E 3B2F0100             455  	ld.w 0x00000000[r27], r5
+00000372 05372000             456  	ld.b 0x00000020[r5], r6
+00000376 4132                 457  	add 0x00000001, r6
+00000378 45372000             458  	st.b r6, 0x00000020[r5]
+0000037C                      459  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 535
+0000037C 3B2F0100             460  	ld.w 0x00000000[r27], r5
+00000380 25371D00             461  	ld.w 0x0000001C[r5], r6
+00000384 6232                 462  	cmp 0x00000002, r6
+00000386 8A05                 463  	bnz9 .BB.LABEL.10_7
+00000388                      464  .BB.LABEL.10_6:	; if_then_bb64
+00000388                      465  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 0
+00000388 0432                 466  	mov 0x00000004, r6
+0000038A                      467  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 537
+0000038A 65371D00             468  	st.w r6, 0x0000001C[r5]
+0000038E                      469  .BB.LABEL.10_7:	; if_break_bb69
+0000038E                      470  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 557
+0000038E 1928                 471  	mov r25, r5
+00000390 C52A                 472  	shl 0x00000005, r5
+00000392                      473  	mov #_Os_TaskCfg, r6
+00000392 260600000000            -- mov         0x0,r6
+00000398 C531                 474  	add r5, r6
+0000039A E64F1700             475  	ld.hu 0x00000016[r6], r9
+0000039E                      476  	mov #_Os_SCB_FA_Inf, r27
+0000039E 3B0600000000            -- mov         0x0,r27
+000003A4 3B370100             477  	ld.w 0x00000000[r27], r6
+000003A8 0A42                 478  	mov 0x0000000A, r8
+000003AA 1938                 479  	mov r25, r7
+000003AC FF0200000000         480  	jarl32 _Os_ReadyQueueInsert, r31
+000003B2                      481  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 559
+000003B2 3B2F3900             482  	ld.w 0x00000038[r27], r5
+000003B6 E5D1                 483  	cmp r5, r26
+000003B8 8A05                 484  	bnz9 .BB.LABEL.10_9
+000003BA                      485  .BB.LABEL.10_8:	; if_then_bb85
+000003BA                      486  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 561
+000003BA                      487  	mov #_Os_SCB_FA_Inf, r6
+000003BA 260600000000            -- mov         0x0,r6
+000003C0 FF0200000000         488  	jarl32 _Os_UpdateHighPrioTask, r31
+000003C6                      489  .BB.LABEL.10_9:	; if_break_bb87
+000003C6                      490  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 564
+000003C6 402E0000             491  	movhi HIGHW1(#_Os_SCB_FA_Inf+0x0000004D), r0, r5
+000003CA 45070000             492  	st.b r0, LOWW(#_Os_SCB_FA_Inf+0x0000004D)[r5]
+000003CE                      493  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 570
+000003CE                      494  	._line_top inline_asm
+000003CE E0070001             495      trap 0x00;
+000003D2                      496  	._line_end inline_asm
+000003D2                      497  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 572
+000003D2 1C30                 498  	mov r28, r6
+000003D4 FF0200000000         499  	jarl32 _Os_Hal_RestoreInt, r31
+000003DA                      500  .BB.LABEL.10_10:	; if_break_bb91
+000003DA                      501  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 0
+000003DA DD56FF00             502  	andi 0x000000FF, r29, r10
+000003DE                      503  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 577
+000003DE 4006FF70             504  	dispose 0x00000000, 0x00000387, [r31]
+000003E2                      505  _Os_GetTaskState.1:
+000003E2                      506  	.stack _Os_GetTaskState.1 = 12
+000003E2                      507  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 587
+000003E2 80072160             508  	prepare 0x00000301, 0x00000000
+000003E6 06C8                 509  	mov r6, r25
+000003E8 07D0                 510  	mov r7, r26
+000003EA                      511  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 591
+000003EA FF0200000000         512  	jarl32 _Os_Hal_SuspendInt, r31
+000003F0                      513  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 592
+000003F0 C2CA                 514  	shl 0x00000002, r25
+000003F2                      515  	mov #_Os_TCB, r5
+000003F2 250600000000            -- mov         0x0,tp
+000003F8 D929                 516  	add r25, r5
+000003FA 252F0100             517  	ld.w 0x00000000[r5], r5
+000003FE 252F1D00             518  	ld.w 0x0000001C[r5], r5
+00000402 642A                 519  	cmp 0x00000004, r5
+00000404                      520  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 598
+00000404 E12F042B             521  	cmov 0x00000002, 0x00000001, r5, r5
+00000408 7A2F0100             522  	st.w r5, 0x00000000[r26]
+0000040C                      523  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 600
+0000040C 0A30                 524  	mov r10, r6
+0000040E FF0200000000         525  	jarl32 _Os_Hal_RestoreInt, r31
+00000414 40063F60             526  	dispose 0x00000000, 0x00000301, [r31]
+00000418                      527  _GetTaskState:
+00000418                      528  	.stack _GetTaskState = 12
+00000418                      529  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 612
+00000418 80072160             530  	prepare 0x00000301, 0x00000000
+0000041C 06C8                 531  	mov r6, r25
+0000041E 07D0                 532  	mov r7, r26
+00000420                      533  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 623
+00000420 FF0200000000         534  	jarl32 _Os_GetCurrentContext.1, r31
+00000426                      535  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 642
+00000426 D936FFFF             536  	andi 0x0000FFFF, r25, r6
+0000042A 003A                 537  	mov 0x00000000, r7
+0000042C FF0200000000         538  	jarl32 _Os_ObjectIDCheck.1, r31
+00000432 6152                 539  	cmp 0x00000001, r10
+00000434 8A05                 540  	bnz9 .BB.LABEL.12_2
+00000436                      541  .BB.LABEL.12_1:	; if_else_bb
+00000436                      542  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 653
+00000436 1930                 543  	mov r25, r6
+00000438 1A38                 544  	mov r26, r7
+0000043A 80FF0000             545  	jarl _Os_GetTaskState.1, r31
+0000043E 0052                 546  	mov 0x00000000, r10
+00000440 40063F60             547  	dispose 0x00000000, 0x00000301, [r31]
+00000444                      548  .BB.LABEL.12_2:	; if_break_bb
+00000444                      549  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 0
+00000444 0352                 550  	mov 0x00000003, r10
+00000446                      551  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 675
+00000446 40063F60             552  	dispose 0x00000000, 0x00000301, [r31]
+0000044A                      553  _ActivateTask:
+0000044A                      554  	.stack _ActivateTask = 8
+0000044A                      555  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 685
+0000044A 80072140             556  	prepare 0x00000201, 0x00000000
+0000044E 06C8                 557  	mov r6, r25
+00000450                      558  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 695
+00000450 FF0200000000         559  	jarl32 _Os_GetCurrentContext.1, r31
+00000456                      560  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 714
+00000456 D936FFFF             561  	andi 0x0000FFFF, r25, r6
+0000045A 003A                 562  	mov 0x00000000, r7
+0000045C FF0200000000         563  	jarl32 _Os_ObjectIDCheck.1, r31
+00000462 6152                 564  	cmp 0x00000001, r10
+00000464 8A05                 565  	bnz9 .BB.LABEL.13_2
+00000466                      566  .BB.LABEL.13_1:	; if_else_bb
+00000466                      567  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 738
+00000466 1930                 568  	mov r25, r6
+00000468 FF0200000000         569  	jarl32 _Os_ActivateTask, r31
+0000046E 40063F40             570  	dispose 0x00000000, 0x00000201, [r31]
+00000472                      571  .BB.LABEL.13_2:	; if_break_bb
+00000472                      572  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 0
+00000472 0352                 573  	mov 0x00000003, r10
+00000474                      574  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 761
+00000474 40063F40             575  	dispose 0x00000000, 0x00000201, [r31]
+00000478                      576  _ActivateTaskAsyn:
+00000478                      577  	.stack _ActivateTaskAsyn = 8
+00000478                      578  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 771
+00000478 80072140             579  	prepare 0x00000201, 0x00000000
+0000047C 06C8                 580  	mov r6, r25
+0000047E                      581  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 781
+0000047E FF0200000000         582  	jarl32 _Os_GetCurrentContext.1, r31
+00000484                      583  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 800
+00000484 D936FFFF             584  	andi 0x0000FFFF, r25, r6
+00000488 003A                 585  	mov 0x00000000, r7
+0000048A FF0200000000         586  	jarl32 _Os_ObjectIDCheck.1, r31
+00000490 6152                 587  	cmp 0x00000001, r10
+00000492 8A05                 588  	bnz9 .BB.LABEL.14_2
+00000494                      589  .BB.LABEL.14_1:	; if_else_bb
+00000494                      590  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 824
+00000494 1930                 591  	mov r25, r6
+00000496 FF0200000000         592  	jarl32 _Os_ActivateTask, r31
+0000049C                      593  .BB.LABEL.14_2:	; if_break_bb
+0000049C                      594  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 845
+0000049C 40063F40             595  	dispose 0x00000000, 0x00000201, [r31]
+000004A0                      596  _TerminateTask:
+000004A0                      597  	.stack _TerminateTask = 8
+000004A0                      598  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 855
+000004A0 80072140             599  	prepare 0x00000201, 0x00000000
+000004A4                      600  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 865
+000004A4 FF0200000000         601  	jarl32 _Os_GetCurrentContext.1, r31
+000004AA                      602  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 884
+000004AA 2A2F5100             603  	ld.w 0x00000050[r10], r5
+000004AE 6A2A                 604  	cmp 0x0000000A, r5
+000004B0 8205                 605  	bz9 .BB.LABEL.15_2
+000004B2                      606  .BB.LABEL.15_1:	; entry.if_break_bb40_crit_edge
+000004B2                      607  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 0
+000004B2 02CA                 608  	mov 0x00000002, r25
+000004B4 8505                 609  	br9 .BB.LABEL.15_4
+000004B6                      610  .BB.LABEL.15_2:	; if_else_bb15
+000004B6                      611  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 904
+000004B6 2A373D00             612  	ld.w 0x0000003C[r10], r6
+000004BA 06C8                 613  	mov r6, r25
+000004BC C2CA                 614  	shl 0x00000002, r25
+000004BE                      615  	mov #_Os_TCB, r5
+000004BE 250600000000            -- mov         0x0,tp
+000004C4 D929                 616  	add r25, r5
+000004C6 25CF0100             617  	ld.w 0x00000000[r5], r25
+000004CA 99CF1900             618  	ld.bu 0x00000018[r25], r25
+000004CE 60CA                 619  	cmp 0x00000000, r25
+000004D0                      620  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 906
+000004D0 E6CF14CB             621  	cmov 0x0000000A, 0x00000006, r25, r25
+000004D4                      622  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 916
+000004D4 60CA                 623  	cmp 0x00000000, r25
+000004D6 8A05                 624  	bnz9 .BB.LABEL.15_4
+000004D8                      625  .BB.LABEL.15_3:	; if_then_bb34
+000004D8                      626  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 918
+000004D8 FF0200000000         627  	jarl32 _Os_TerminateTask.1, r31
+000004DE                      628  .BB.LABEL.15_4:	; if_break_bb40
+000004DE                      629  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 0
+000004DE 1950                 630  	mov r25, r10
+000004E0                      631  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 939
+000004E0 40063F40             632  	dispose 0x00000000, 0x00000201, [r31]
+000004E4                      633  _GetTaskID:
+000004E4                      634  	.stack _GetTaskID = 8
+000004E4                      635  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 951
+000004E4 80072140             636  	prepare 0x00000201, 0x00000000
+000004E8 06C8                 637  	mov r6, r25
+000004EA                      638  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 961
+000004EA FF0200000000         639  	jarl32 _Os_GetCurrentContext.1, r31
+000004F0                      640  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 980
+000004F0 2A2F3D00             641  	ld.w 0x0000003C[r10], r5
+000004F4 792F0100             642  	st.w r5, 0x00000000[r25]
+000004F8 0052                 643  	mov 0x00000000, r10
+000004FA                      644  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 1001
+000004FA 40063F40             645  	dispose 0x00000000, 0x00000201, [r31]
+000004FE                      646  _Os_Schedule.1:
+000004FE                      647  	.stack _Os_Schedule.1 = 12
+000004FE                      648  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 1014
+000004FE 80072160             649  	prepare 0x00000301, 0x00000000
+00000502 06C8                 650  	mov r6, r25
+00000504                      651  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 1018
+00000504 FF0200000000         652  	jarl32 _Os_Hal_SuspendInt, r31
+0000050A 0AD0                 653  	mov r10, r26
+0000050C                      654  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 1028
+0000050C 1930                 655  	mov r25, r6
+0000050E FF0200000000         656  	jarl32 _Os_UpdateHighPrioTask, r31
+00000514                      657  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 1030
+00000514 392F3900             658  	ld.w 0x00000038[r25], r5
+00000518 39373D00             659  	ld.w 0x0000003C[r25], r6
+0000051C E629                 660  	cmp r6, r5
+0000051E 8A05                 661  	bnz9 .BB.LABEL.17_1
+00000520 E00200000000         662  	jr32 .BB.LABEL.17_2
+00000526                      663  .BB.LABEL.17_1:	; if_then_bb
+00000526                      664  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 1032
+00000526 59074D00             665  	st.b r0, 0x0000004D[r25]
+0000052A                      666  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 1034
+0000052A                      667  	._line_top inline_asm
+0000052A E0070001             668      trap 0x00;
+0000052E                      669  	._line_end inline_asm
+0000052E                      670  .BB.LABEL.17_2:	; if_break_bb
+0000052E                      671  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 1041
+0000052E 1A30                 672  	mov r26, r6
+00000530 FF0200000000         673  	jarl32 _Os_Hal_RestoreInt, r31
+00000536 40063F60             674  	dispose 0x00000000, 0x00000301, [r31]
+0000053A                      675  _Schedule:
+0000053A                      676  	.stack _Schedule = 8
+0000053A                      677  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 1056
+0000053A 80072140             678  	prepare 0x00000201, 0x00000000
+0000053E                      679  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 1065
+0000053E FF0200000000         680  	jarl32 _Os_GetCurrentContext.1, r31
+00000544                      681  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 1083
+00000544 2A2F5100             682  	ld.w 0x00000050[r10], r5
+00000548 682A                 683  	cmp 0x00000008, r5
+0000054A 8A05                 684  	bnz9 .BB.LABEL.18_2
+0000054C                      685  .BB.LABEL.18_1:	; entry.if_break_bb38_crit_edge
+0000054C                      686  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 0
+0000054C 02CA                 687  	mov 0x00000002, r25
+0000054E 8505                 688  	br9 .BB.LABEL.18_9
+00000550                      689  .BB.LABEL.18_2:	; if_else_bb
+00000550                      690  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 1102
+00000550 6A2A                 691  	cmp 0x0000000A, r5
+00000552 8205                 692  	bz9 .BB.LABEL.18_4
+00000554                      693  .BB.LABEL.18_3:	; if_else_bb.if_break_bb29_crit_edge
+00000554                      694  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 0
+00000554 02CA                 695  	mov 0x00000002, r25
+00000556 8505                 696  	br9 .BB.LABEL.18_7
+00000558                      697  .BB.LABEL.18_4:	; if_else_bb15
+00000558                      698  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 1110
+00000558 2ACF3D00             699  	ld.w 0x0000003C[r10], r25
+0000055C C2CA                 700  	shl 0x00000002, r25
+0000055E                      701  	mov #_Os_TCB, r5
+0000055E 250600000000            -- mov         0x0,tp
+00000564 D929                 702  	add r25, r5
+00000566 25CF0100             703  	ld.w 0x00000000[r5], r25
+0000056A 99CF1900             704  	ld.bu 0x00000018[r25], r25
+0000056E 60CA                 705  	cmp 0x00000000, r25
+00000570 8A05                 706  	bnz9 .BB.LABEL.18_6
+00000572                      707  .BB.LABEL.18_5:	; if_else_bb15.if_break_bb29_crit_edge
+00000572                      708  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 0
+00000572 00CA                 709  	mov 0x00000000, r25
+00000574 8505                 710  	br9 .BB.LABEL.18_7
+00000576                      711  .BB.LABEL.18_6:	; if_then_bb27
+00000576 06CA                 712  	mov 0x00000006, r25
+00000578                      713  .BB.LABEL.18_7:	; if_break_bb29
+00000578                      714  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 1124
+00000578 60CA                 715  	cmp 0x00000000, r25
+0000057A 8A05                 716  	bnz9 .BB.LABEL.18_9
+0000057C                      717  .BB.LABEL.18_8:	; if_then_bb35
+0000057C                      718  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 1126
+0000057C 0A30                 719  	mov r10, r6
+0000057E FF0200000000         720  	jarl32 _Os_Schedule.1, r31
+00000584                      721  .BB.LABEL.18_9:	; if_break_bb38
+00000584                      722  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 0
+00000584 D956FF00             723  	andi 0x000000FF, r25, r10
+00000588                      724  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 1147
+00000588 40063F40             725  	dispose 0x00000000, 0x00000201, [r31]
+0000058C                      726  _ChainTask:
+0000058C                      727  	.stack _ChainTask = 12
+0000058C                      728  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 1158
+0000058C 80072160             729  	prepare 0x00000301, 0x00000000
+00000590 06C8                 730  	mov r6, r25
+00000592                      731  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 1169
+00000592 FF0200000000         732  	jarl32 _Os_GetCurrentContext.1, r31
+00000598 0AD0                 733  	mov r10, r26
+0000059A                      734  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 1188
+0000059A D936FFFF             735  	andi 0x0000FFFF, r25, r6
+0000059E 003A                 736  	mov 0x00000000, r7
+000005A0 FF0200000000         737  	jarl32 _Os_ObjectIDCheck.1, r31
+000005A6 6152                 738  	cmp 0x00000001, r10
+000005A8 8205                 739  	bz9 .BB.LABEL.19_2
+000005AA                      740  .BB.LABEL.19_1:	; entry.if_break_bb51_crit_edge
+000005AA                      741  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 0
+000005AA 0352                 742  	mov 0x00000003, r10
+000005AC 8505                 743  	br9 .BB.LABEL.19_6
+000005AE                      744  .BB.LABEL.19_2:	; if_else_bb
+000005AE                      745  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 1192
+000005AE 3A2F5100             746  	ld.w 0x00000050[r26], r5
+000005B2 6A2A                 747  	cmp 0x0000000A, r5
+000005B4 8205                 748  	bz9 .BB.LABEL.19_4
+000005B6                      749  .BB.LABEL.19_3:	; if_else_bb.if_break_bb51_crit_edge
+000005B6                      750  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 0
+000005B6 0252                 751  	mov 0x00000002, r10
+000005B8 8505                 752  	br9 .BB.LABEL.19_6
+000005BA                      753  .BB.LABEL.19_4:	; if_else_bb25
+000005BA                      754  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 1212
+000005BA 3A2F3D00             755  	ld.w 0x0000003C[r26], r5
+000005BE C22A                 756  	shl 0x00000002, r5
+000005C0                      757  	mov #_Os_TCB, r6
+000005C0 260600000000            -- mov         0x0,r6
+000005C6 C531                 758  	add r5, r6
+000005C8 262F0100             759  	ld.w 0x00000000[r6], r5
+000005CC 852F1900             760  	ld.bu 0x00000018[r5], r5
+000005D0 602A                 761  	cmp 0x00000000, r5
+000005D2                      762  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 1214
+000005D2 E62F1453             763  	cmov 0x0000000A, 0x00000006, r5, r10
+000005D6                      764  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 1225
+000005D6 6052                 765  	cmp 0x00000000, r10
+000005D8 8A05                 766  	bnz9 .BB.LABEL.19_6
+000005DA                      767  .BB.LABEL.19_5:	; if_then_bb44
+000005DA                      768  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 1240
+000005DA 1930                 769  	mov r25, r6
+000005DC FF0200000000         770  	jarl32 _Os_ChainTask.1, r31
+000005E2                      771  .BB.LABEL.19_6:	; if_break_bb51
+000005E2                      772  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 1262
+000005E2 40063F60             773  	dispose 0x00000000, 0x00000301, [r31]
+000005E6                      774  _Os_SetTaskToReady:
+000005E6                      775  	.stack _Os_SetTaskToReady = 16
+000005E6                      776  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 1272
+000005E6 80072170             777  	prepare 0x00000381, 0x00000000
+000005EA 06C8                 778  	mov r6, r25
+000005EC                      779  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 1276
+000005EC 1928                 780  	mov r25, r5
+000005EE C22A                 781  	shl 0x00000002, r5
+000005F0                      782  	mov #_Os_TCB, r26
+000005F0 3A0600000000            -- mov         0x0,r26
+000005F6 C5D1                 783  	add r5, r26
+000005F8 3A2F0100             784  	ld.w 0x00000000[r26], r5
+000005FC 0132                 785  	mov 0x00000001, r6
+000005FE 65371D00             786  	st.w r6, 0x0000001C[r5]
+00000602                      787  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 1285
+00000602 3A2F0100             788  	ld.w 0x00000000[r26], r5
+00000606 E54F1B00             789  	ld.hu 0x0000001A[r5], r9
+0000060A                      790  	mov #_Os_SCB_FA_Inf, r27
+0000060A 3B0600000000            -- mov         0x0,r27
+00000610 3B370100             791  	ld.w 0x00000000[r27], r6
+00000614 0A42                 792  	mov 0x0000000A, r8
+00000616 1938                 793  	mov r25, r7
+00000618 FF0200000000         794  	jarl32 _Os_ReadyQueueInsert, r31
+0000061E                      795  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 1288
+0000061E 3A2F0100             796  	ld.w 0x00000000[r26], r5
+00000622 E5371B00             797  	ld.hu 0x0000001A[r5], r6
+00000626 FB3F2300             798  	ld.hu 0x00000022[r27], r7
+0000062A E731                 799  	cmp r7, r6
+0000062C 8B05                 800  	bh9 .BB.LABEL.20_1
+0000062E E00200000000         801  	jr32 .BB.LABEL.20_3
+00000634                      802  .BB.LABEL.20_1:	; if_then_bb
+00000634                      803  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 1290
+00000634                      804  	mov #_Os_SCB_FA_Inf, r6
+00000634 260600000000            -- mov         0x0,r6
+0000063A 66CF3900             805  	st.w r25, 0x00000038[r6]
+0000063E                      806  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 1291
+0000063E 252F1A00             807  	ld.h 0x0000001A[r5], r5
+00000642 662F2200             808  	st.h r5, 0x00000022[r6]
+00000646                      809  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 1294
+00000646 A62F4D00             810  	ld.bu 0x0000004D[r6], r5
+0000064A 602A                 811  	cmp 0x00000000, r5
+0000064C 8205                 812  	bz9 .BB.LABEL.20_2
+0000064E E00200000000         813  	jr32 .BB.LABEL.20_3
+00000654                      814  .BB.LABEL.20_2:	; if_then_bb44
+00000654                      815  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 1296
+00000654                      816  	._line_top inline_asm
+00000654 E0070001             817      trap 0x00;
+00000658                      818  	._line_end inline_asm
+00000658                      819  .BB.LABEL.20_3:	; return
+00000658                      820  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 1300
+00000658 40063F70             821  	dispose 0x00000000, 0x00000381, [r31]
+0000065C                      822  _Os_SwitchTask:
+0000065C                      823  	.stack _Os_SwitchTask = 8
+0000065C                      824  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 1334
+0000065C 80072140             825  	prepare 0x00000201, 0x00000000
+00000660                      826  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 1337
+00000660 FF0200000000         827  	jarl32 _Os_GetSystemContext.1, r31
+00000666                      828  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 1341
+00000666 2A2F3D00             829  	ld.w 0x0000003C[r10], r5
+0000066A 6A2F4100             830  	st.w r5, 0x00000040[r10]
+0000066E                      831  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 1346
+0000066E 2A370500             832  	ld.w 0x00000004[r10], r6
+00000672 6032                 833  	cmp 0x00000000, r6
+00000674 0AC8                 834  	mov r10, r25
+00000676 8205                 835  	bz9 .BB.LABEL.21_3
+00000678                      836  .BB.LABEL.21_1:	; if_then_bb
+00000678                      837  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 1350
+00000678 C32A                 838  	shl 0x00000003, r5
+0000067A                      839  	mov #_Os_TaskStack, r6
+0000067A 260600000000            -- mov         0x0,r6
+00000680 C531                 840  	add r5, r6
+00000682                      841  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 1351
+00000682 FF0200000000         842  	jarl32 _Os_StackMonitor, r31
+00000688                      843  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 1354
+00000688 392F0500             844  	ld.w 0x00000004[r25], r5
+0000068C 25371D00             845  	ld.w 0x0000001C[r5], r6
+00000690 6332                 846  	cmp 0x00000003, r6
+00000692 8A05                 847  	bnz9 .BB.LABEL.21_3
+00000694                      848  .BB.LABEL.21_2:	; if_then_bb29
+00000694                      849  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 0
+00000694 0132                 850  	mov 0x00000001, r6
+00000696                      851  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 1359
+00000696 65371D00             852  	st.w r6, 0x0000001C[r5]
+0000069A                      853  .BB.LABEL.21_3:	; if_break_bb34
+0000069A                      854  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 1371
+0000069A 392F3900             855  	ld.w 0x00000038[r25], r5
+0000069E 792F3D00             856  	st.w r5, 0x0000003C[r25]
+000006A2                      857  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 1372
+000006A2 C22A                 858  	shl 0x00000002, r5
+000006A4                      859  	mov #_Os_TCB, r6
+000006A4 260600000000            -- mov         0x0,r6
+000006AA C531                 860  	add r5, r6
+000006AC 262F0100             861  	ld.w 0x00000000[r6], r5
+000006B0 792F0500             862  	st.w r5, 0x00000004[r25]
+000006B4                      863  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 1391
+000006B4 392F3D00             864  	ld.w 0x0000003C[r25], r5
+000006B8 C52A                 865  	shl 0x00000005, r5
+000006BA                      866  	mov #_Os_TaskCfg, r6
+000006BA 260600000000            -- mov         0x0,r6
+000006C0 C531                 867  	add r5, r6
+000006C2 862F1B00             868  	ld.bu 0x0000001A[r6], r5
+000006C6 602A                 869  	cmp 0x00000000, r5
+000006C8 8A05                 870  	bnz9 .BB.LABEL.21_5
+000006CA                      871  .BB.LABEL.21_4:	; if_then_bb57
+000006CA                      872  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 0
+000006CA 012A                 873  	mov 0x00000001, r5
+000006CC                      874  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 1393
+000006CC 592F4D00             875  	st.b r5, 0x0000004D[r25]
+000006D0                      876  .BB.LABEL.21_5:	; if_break_bb60
+000006D0                      877  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 1401
+000006D0 392F0500             878  	ld.w 0x00000004[r25], r5
+000006D4 25371D00             879  	ld.w 0x0000001C[r5], r6
+000006D8 033A                 880  	mov 0x00000003, r7
+000006DA                      881  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 1403
+000006DA 653F1D00             882  	st.w r7, 0x0000001C[r5]
+000006DE                      883  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 1414
+000006DE 6432                 884  	cmp 0x00000004, r6
+000006E0 8A05                 885  	bnz9 .BB.LABEL.21_7
+000006E2                      886  .BB.LABEL.21_6:	; if_then_bb74
+000006E2                      887  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 1416
+000006E2 392F3D00             888  	ld.w 0x0000003C[r25], r5
+000006E6 C52A                 889  	shl 0x00000005, r5
+000006E8                      890  	mov #_Os_TaskCfg, r6
+000006E8 260600000000            -- mov         0x0,r6
+000006EE C531                 891  	add r5, r6
+000006F0 262F0D00             892  	ld.w 0x0000000C[r6], r5
+000006F4 39370500             893  	ld.w 0x00000004[r25], r6
+000006F8 662F0100             894  	st.w r5, 0x00000000[r6]
+000006FC                      895  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 1427
+000006FC 39373D00             896  	ld.w 0x0000003C[r25], r6
+00000700 FF0200000000         897  	jarl32 _Os_Hal_FirstEnterTask, r31
+00000706                      898  .BB.LABEL.21_7:	; return
+00000706                      899  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 1447
+00000706 40063F40             900  	dispose 0x00000000, 0x00000201, [r31]
+0000070A                      901  _Os_UpdateHighPrioTask:
+0000070A                      902  	.stack _Os_UpdateHighPrioTask = 8
+0000070A                      903  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 1453
+0000070A 80072140             904  	prepare 0x00000201, 0x00000000
+0000070E 06C8                 905  	mov r6, r25
+00000710                      906  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 1455
+00000710 39370100             907  	ld.w 0x00000000[r25], r6
+00000714 FF0200000000         908  	jarl32 _Os_GetHighPrio, r31
+0000071A 79572200             909  	st.h r10, 0x00000022[r25]
+0000071E                      910  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/Os/Kernel/src/Os_Task.c", 1456
+0000071E F93F2300             911  	ld.hu 0x00000022[r25], r7
+00000722 39370100             912  	ld.w 0x00000000[r25], r6
+00000726 FF0200000000         913  	jarl32 _Os_ReadyQueueGetFirst, r31
+0000072C 79573900             914  	st.w r10, 0x00000038[r25]
+00000730 40063F40             915  	dispose 0x00000000, 0x00000201, [r31]
+
+Section List
+Attr     Size                Name
+
+TEXT         1844 (00000734) .text
+
+Command Line Parameter
+-Xcpu=g3kh -Xreg_mode=22 -Xep=callee -Xreserve_r2 -Xcharacter_set=none -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Cpu\uart -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\SrcCode -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\vss -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\FCL\user -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\FCL\lib -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\FCL -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\WdgIf -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\wdg\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Config\MCAL_Config\Wdg_OutPut\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\SecureProgram -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\SecureBoot -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootServices\Crc -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootServices -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Config\MCAL_Config\Gpt_OutPut\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Config\MCAL_Config\Fls_OutPut\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\gpt\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\fls\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootServices\SecurityManager -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootServices\MemoryManager -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootServices\FlsIf -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootServices\EEIf -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootServices\EcuMService -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootServices\Diag_Callout -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootServices\Dcm -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootServices\Common -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootServices\CanTp -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootServices\CanIf -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootManager -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Cpu -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\CommonInclude -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Config\BSW_Config -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Config\BSW_Config\RH850F1K -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\Os\Extend\inc -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\Os\Kernel\inc -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\Os\Portable\Mcu -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\Os\Portable\Processor -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Config\MCAL_Config\Adc_OutPut\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Config\MCAL_Config\Can_OutPut\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Config\MCAL_Config\Dio_OutPut\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Config\MCAL_Config\Mcu_OutPut\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Config\MCAL_Config\Port_OutPut\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\adc\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\can\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\dio\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\general -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\mcu\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\port\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\stubs\CanGeneral\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\stubs\Dem\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\stubs\Det\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\stubs\EcuM\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\stubs\MemIf\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\stubs\SchM\include -DRH850_F1KM_S1_2MB -Xprn_path=DefaultBuild -Xno_warning=50013 -oD:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Toolchain\CSPLUS_V81200\DefaultBuild\Os_Task.obj D:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Toolchain\CSPLUS_V81200\DefaultBuild\Os_Task.asm 
+

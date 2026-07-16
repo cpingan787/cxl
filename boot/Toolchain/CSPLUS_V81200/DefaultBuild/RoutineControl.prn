@@ -1,0 +1,600 @@
+RH850 Family Assembler V2.07.00.03 Assemble Source List
+
+OFFSET   CODE                  NO  SOURCE STATEMENT
+
+00000000                        1  #CC-RH Compiler RH850 Assembler Source
+00000000                        2  #@	CC-RH Version : V2.07.00  [06 Dec 2024]
+00000000                        3  #@	Command : ..\..\Bsw\SystemServices\BootServices\Diag_Callout\RoutineControl.c -oDefaultBuild\RoutineControl.obj -Xcpu=g3kh -Xreg_mode=22 -Xreserve_r2 -Xno_warning=20188,20111 -g -g_line -I..\..\Cpu\uart -I..\..\SrcCode -I..\..\Bsw\SystemServices\vss -I..\..\Bsw\SystemServices\FCL\user -I..\..\Bsw\SystemServices\FCL\lib -I..\..\Bsw\SystemServices\FCL -I..\..\Bsw\SystemServices\WdgM -I..\..\Bsw\SystemServices\WdgIf -I..\..\Bsw\Mcal\wdg\include -I..\..\Bsw\Config\MCAL_Config\Wdg_OutPut\include -I..\..\Bsw\SystemServices\SecureProgram -I..\..\Bsw\SystemServices\SecureBoot -I..\..\Bsw\Mcal\vss -I..\..\Bsw\SystemServices\BootServices\Crc -I..\..\FCL\user -I..\..\FCL\lib -I..\..\FCL -I..\..\Bsw\SystemServices\BootServices -I..\..\Bsw\Config\MCAL_Config\Gpt_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Fls_OutPut\include -I..\..\Bsw\Mcal\gpt\include -I..\..\Bsw\Mcal\fls\include -I..\..\Bsw\SystemServices\BootServices\SecurityManager -I..\..\Bsw\SystemServices\BootServices\MemoryManager -I..\..\Bsw\SystemServices\BootServices\FlsIf -I..\..\Bsw\SystemServices\BootServices\EEIf -I..\..\Bsw\SystemServices\BootServices\EcuMService -I..\..\Bsw\SystemServices\BootServices\Diag_Callout -I..\..\Bsw\SystemServices\BootServices\Dcm -I..\..\Bsw\SystemServices\BootServices\Common -I..\..\Bsw\SystemServices\BootServices\CanTp -I..\..\Bsw\SystemServices\BootServices\CanIf -I..\..\Bsw\SystemServices\BootManager -I..\..\Cpu -I..\..\Bsw\CommonInclude -I..\..\Bsw\Config\BSW_Config -I..\..\Bsw\Config\BSW_Config\RH850F1K -I..\..\Bsw\SystemServices\Os\Extend\inc -I..\..\Bsw\SystemServices\Os\Kernel\inc -I..\..\Bsw\SystemServices\Os\Portable\Mcu -I..\..\Bsw\SystemServices\Os\Portable\Processor -I..\..\Bsw\Config\MCAL_Config\Adc_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Can_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Dio_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Mcu_OutPut\include -I..\..\Bsw\Config\MCAL_Config\Port_OutPut\include -I..\..\Bsw\Mcal\adc\include -I..\..\Bsw\Mcal\can\include -I..\..\Bsw\Mcal\dio\include -I..\..\Bsw\Mcal\general -I..\..\Bsw\Mcal\mcu\include -I..\..\Bsw\Mcal\port\include -I..\..\Bsw\Mcal\stubs\CanGeneral\include -I..\..\Bsw\Mcal\stubs\CanIf\include -I..\..\Bsw\Mcal\stubs\Dem\include -I..\..\Bsw\Mcal\stubs\Det\include -I..\..\Bsw\Mcal\stubs\EcuM\include -I..\..\Bsw\Mcal\stubs\MemIf\include -I..\..\Bsw\Mcal\stubs\SchM\include -DRH850_F1KM_S1_2MB -lang=c99 -Xdbl_size=4 -Xcall_jump=32 -Xasm_path=DefaultBuild -Xasm_option=-Xprn_path=DefaultBuild -c -MAKEUD=DefaultBuild -Xexec_time=C:\Users\xlchen\AppData\Local\Temp\CSPlusBuildTool_e3d93be98edf40da986d001aaf24b330ufgtzapv.bu0
+00000000                        4  #@	compiled at Thu Jul 16 13:41:47 2026
+00000000                        5  
+00000000                        6  	.file "..\..\Bsw\SystemServices\BootServices\Diag_Callout\RoutineControl.c"
+00000000                        7  
+00000000                        8  	$reg_mode 22
+00000000                        9  	.dbl_size 4
+00000000                       10  
+00000000                       11  	.extern _DcmState
+00000000                       12  	.extern _g_DownSegIdx
+00000000                       13  	.extern _g_CurLogicalBlockId
+00000000                       14  	.extern _g_DownSeg
+00000000                       15  	.extern _g_logicalBlocks
+00000000                       16  	.extern _g_FlagsInfo
+00000000                       17  	.public _g_CrcAddr, 8
+00000000                       18  	.public _g_CrcAddrEnd, 8
+00000000                       19  	.public _g_DownBlockStart, 2
+00000000                       20  	.public _g_DownBlockEnd, 2
+00000000                       21  	.public _g_DownBlockIdx, 1
+00000000                       22  	.extern _FlsIf_Read
+00000000                       23  	.extern _CommF_DataCopy
+00000000                       24  	.extern _SecM_Crc32Process
+00000000                       25  	.extern _Diag_NRC78Send
+00000000                       26  	.extern _Diag_WdgFeed
+00000000                       27  	.public _RC_ChecksumVerify
+00000000                       28  	.extern _SecM_Crc32Preprocess
+00000000                       29  	.extern _SecM_Crc32Finish
+00000000                       30  	.extern _CommF_DataCompare
+00000000                       31  	.extern _FlsIf_Init
+00000000                       32  	.extern _CommF_DataSet
+00000000                       33  	.public _RC_CheckDependency
+00000000                       34  	.extern _Diag_FlagWrite
+00000000                       35  	.extern _FlsIf_DeInit
+00000000                       36  	.public _RC_EraseMem_Preprocess
+00000000                       37  	.extern _CommF_GetUint32DataValue
+00000000                       38  	.extern _MemM_LBIdGet
+00000000                       39  	.public _RC_EraseMemory
+00000000                       40  	.extern _FlsIf_Erase
+00000000                       41  	.public _RC_ActivationAndRollback
+00000000                       42  	.public _RC_CheckSVN
+00000000                       43  
+00000000                       44  	.section .text, text
+00000000                       45  _ChecksumCompute.1:
+00000000                       46  	.stack _ChecksumCompute.1 = 152
+00000000                       47  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 84
+00000000 BE07E170              48  	prepare 0x00000387, 0x0000007C
+00000004 5C1A                  49  	add 0xFFFFFFFC, r3
+00000006                       50  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 95
+00000006 07C8                  51  	mov r7, r25
+00000008 87CA                  52  	shr 0x00000007, r25
+0000000A 00D2                  53  	mov 0x00000000, r26
+0000000C 09D8                  54  	mov r9, r27
+0000000E 07E0                  55  	mov r7, r28
+00000010 06E8                  56  	mov r6, r29
+00000012 8505                  57  	br9 .BB.LABEL.1_7
+00000014                       58  .BB.LABEL.1_1:	; bb
+00000014                       59  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 97
+00000014 61DA                  60  	cmp 0x00000001, r27
+00000016 8A05                  61  	bnz9 .BB.LABEL.1_3
+00000018                       62  .BB.LABEL.1_2:	; if_then_bb
+00000018                       63  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 0
+00000018 0340                  64  	mov r3, r8
+0000001A 203E8000              65  	movea 0x00000080, r0, r7
+0000001E                       66  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 100
+0000001E 1D30                  67  	mov r29, r6
+00000020 FF0200000000          68  	jarl32 _FlsIf_Read, r31
+00000026 8505                  69  	br9 .BB.LABEL.1_5
+00000028                       70  .BB.LABEL.1_3:	; if_else_bb
+00000028                       71  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 102
+00000028 60DA                  72  	cmp 0x00000000, r27
+0000002A 8A05                  73  	bnz9 .BB.LABEL.1_8
+0000002C                       74  .BB.LABEL.1_4:	; if_then_bb25
+0000002C                       75  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 0
+0000002C 20468000              76  	movea 0x00000080, r0, r8
+00000030 0330                  77  	mov r3, r6
+00000032                       78  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 104
+00000032 1D38                  79  	mov r29, r7
+00000034 FF0200000000          80  	jarl32 _CommF_DataCopy, r31
+0000003A 0052                  81  	mov 0x00000000, r10
+0000003C                       82  .BB.LABEL.1_5:	; if_break_bb31
+0000003C                       83  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 0
+0000003C 0AD0                  84  	mov r10, r26
+0000003E                       85  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 113
+0000003E 60D2                  86  	cmp 0x00000000, r26
+00000040 8A05                  87  	bnz9 .BB.LABEL.1_9
+00000042                       88  .BB.LABEL.1_6:	; if_then_bb37
+00000042                       89  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 0
+00000042 203E8000              90  	movea 0x00000080, r0, r7
+00000046 0330                  91  	mov r3, r6
+00000048                       92  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 116
+00000048 FF0200000000          93  	jarl32 _SecM_Crc32Process, r31
+0000004E                       94  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 125
+0000004E FF0200000000          95  	jarl32 _Diag_NRC78Send, r31
+00000054                       96  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 127
+00000054 FF0200000000          97  	jarl32 _Diag_WdgFeed, r31
+0000005A 5FCA                  98  	add 0xFFFFFFFF, r25
+0000005C                       99  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 123
+0000005C 3DEE8000             100  	movea 0x00000080, r29, r29
+00000060                      101  .BB.LABEL.1_7:	; bb46
+00000060                      102  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 95
+00000060 60CA                 103  	cmp 0x00000000, r25
+00000062 8A05                 104  	bnz9 .BB.LABEL.1_1
+00000064 8505                 105  	br9 .BB.LABEL.1_9
+00000066                      106  .BB.LABEL.1_8:	; if_else_bb.bb52_crit_edge
+00000066                      107  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 0
+00000066 01D2                 108  	mov 0x00000001, r26
+00000068                      109  .BB.LABEL.1_9:	; bb52
+00000068                      110  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 130
+00000068 DA06FF00             111  	andi 0x000000FF, r26, r0
+0000006C 8A05                 112  	bnz9 .BB.LABEL.1_16
+0000006E                      113  .BB.LABEL.1_10:	; if_then_bb58
+0000006E                      114  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 132
+0000006E DCCE7F00             115  	andi 0x0000007F, r28, r25
+00000072                      116  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 133
+00000072 60CA                 117  	cmp 0x00000000, r25
+00000074 8205                 118  	bz9 .BB.LABEL.1_16
+00000076                      119  .BB.LABEL.1_11:	; if_then_bb65
+00000076                      120  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 135
+00000076 61DA                 121  	cmp 0x00000001, r27
+00000078 8A05                 122  	bnz9 .BB.LABEL.1_13
+0000007A                      123  .BB.LABEL.1_12:	; if_then_bb71
+0000007A                      124  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 0
+0000007A 0340                 125  	mov r3, r8
+0000007C                      126  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 138
+0000007C 1D30                 127  	mov r29, r6
+0000007E 1938                 128  	mov r25, r7
+00000080 FF0200000000         129  	jarl32 _FlsIf_Read, r31
+00000086 8505                 130  	br9 .BB.LABEL.1_14
+00000088                      131  .BB.LABEL.1_13:	; if_else_bb76
+00000088                      132  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 0
+00000088 0330                 133  	mov r3, r6
+0000008A                      134  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 142
+0000008A 1D38                 135  	mov r29, r7
+0000008C 1940                 136  	mov r25, r8
+0000008E FF0200000000         137  	jarl32 _CommF_DataCopy, r31
+00000094 1A50                 138  	mov r26, r10
+00000096                      139  .BB.LABEL.1_14:	; if_break_bb81
+00000096                      140  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 145
+00000096 CA06FF00             141  	andi 0x000000FF, r10, r0
+0000009A 8A05                 142  	bnz9 .BB.LABEL.1_16
+0000009C                      143  .BB.LABEL.1_15:	; if_then_bb87
+0000009C                      144  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 0
+0000009C 0330                 145  	mov r3, r6
+0000009E                      146  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 147
+0000009E 1938                 147  	mov r25, r7
+000000A0 FF0200000000         148  	jarl32 _SecM_Crc32Process, r31
+000000A6                      149  .BB.LABEL.1_16:	; if_break_bb92
+000000A6                      150  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 152
+000000A6 FF0200000000         151  	jarl32 _Diag_NRC78Send, r31
+000000AC                      152  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 154
+000000AC FF0200000000         153  	jarl32 _Diag_WdgFeed, r31
+000000B2 441A                 154  	add 0x00000004, r3
+000000B4 7E06FF70             155  	dispose 0x0000007C, 0x00000387, [r31]
+000000B8                      156  _RC_ChecksumVerify:
+000000B8                      157  	.stack _RC_ChecksumVerify = 28
+000000B8                      158  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 174
+000000B8 8207E170             159  	prepare 0x00000387, 0x00000004
+000000BC                      160  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 182
+000000BC 43070300             161  	st.b r0, 0x00000003[r3]
+000000C0 43070200             162  	st.b r0, 0x00000002[r3]
+000000C4 43070100             163  	st.b r0, 0x00000001[r3]
+000000C8 43070000             164  	st.b r0, 0x00000000[r3]
+000000CC 43070000             165  	st.b r0, 0x00000000[r3]
+000000D0                      166  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 184
+000000D0 402E0000             167  	movhi HIGHW1(#_g_DownSegIdx), r0, r5
+000000D4 852F0100             168  	ld.bu LOWW(#_g_DownSegIdx)[r5], r5
+000000D8 0506ECFF             169  	addi 0xFFFFFFEC, r5, r0
+000000DC 06C8                 170  	mov r6, r25
+000000DE 8605                 171  	blt9 .BB.LABEL.2_2
+000000E0                      172  .BB.LABEL.2_1:	; entry.bb110_crit_edge
+000000E0                      173  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 0
+000000E0 0152                 174  	mov 0x00000001, r10
+000000E2 8505                 175  	br9 .BB.LABEL.2_15
+000000E4                      176  .BB.LABEL.2_2:	; bb
+000000E4 402E0000             177  	movhi HIGHW1(#_g_CurLogicalBlockId), r0, r5
+000000E8 852F0100             178  	ld.bu LOWW(#_g_CurLogicalBlockId)[r5], r5
+000000EC 050601FF             179  	addi 0xFFFFFF01, r5, r0
+000000F0 8205                 180  	bz9 .BB.LABEL.2_1
+000000F2                      181  .BB.LABEL.2_3:	; if_break_bb
+000000F2                      182  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 191
+000000F2 622A                 183  	cmp 0x00000002, r5
+000000F4 8105                 184  	bl9 .BB.LABEL.2_5
+000000F6                      185  .BB.LABEL.2_4:	; if_break_bb.bb40_crit_edge
+000000F6                      186  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 0
+000000F6 20D6FF00             187  	movea 0x000000FF, r0, r26
+000000FA 8505                 188  	br9 .BB.LABEL.2_6
+000000FC                      189  .BB.LABEL.2_5:	; bb31
+000000FC C42A                 190  	shl 0x00000004, r5
+000000FE                      191  	mov #_g_logicalBlocks, r26
+000000FE 3A0600000000            -- mov         0x0,r26
+00000104 C5D1                 192  	add r5, r26
+00000106 9AD70100             193  	ld.bu 0x00000000[r26], r26
+0000010A                      194  .BB.LABEL.2_6:	; bb40
+0000010A                      195  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 194
+0000010A FF0200000000         196  	jarl32 _SecM_Crc32Preprocess, r31
+00000110                      197  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 196
+00000110 60D2                 198  	cmp 0x00000000, r26
+00000112 8A05                 199  	bnz9 .BB.LABEL.2_8
+00000114                      200  .BB.LABEL.2_7:	; bb40.if_break_bb63_crit_edge
+00000114                      201  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 0
+00000114 00DA                 202  	mov 0x00000000, r27
+00000116 01E2                 203  	mov 0x00000001, r28
+00000118 1BE8                 204  	mov r27, r29
+0000011A 8505                 205  	br9 .BB.LABEL.2_10
+0000011C                      206  .BB.LABEL.2_8:	; if_else_bb
+0000011C                      207  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 204
+0000011C 40DE0000             208  	movhi HIGHW1(#_g_DownBlockIdx), r0, r27
+00000120 9BE70100             209  	ld.bu LOWW(#_g_DownBlockIdx)[r27], r28
+00000124 5FE2                 210  	add 0xFFFFFFFF, r28
+00000126                      211  	mov #_g_DownBlockStart, r27
+00000126 3B0600000000            -- mov         0x0,r27
+0000012C DCD9                 212  	add r28, r27
+0000012E                      213  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 206
+0000012E 9BDF0100             214  	ld.bu 0x00000000[r27], r27
+00000132                      215  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 205
+00000132                      216  	mov #_g_DownBlockEnd, r29
+00000132 3D0600000000            -- mov         0x0,r29
+00000138 DCE9                 217  	add r28, r29
+0000013A 1DE70000             218  	ld.b 0x00000000[r29], r28
+0000013E 41E2                 219  	add 0x00000001, r28
+00000140 01EA                 220  	mov 0x00000001, r29
+00000142 8505                 221  	br9 .BB.LABEL.2_10
+00000144                      222  .BB.LABEL.2_9:	; bb65
+00000144                      223  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 211
+00000144 DB2EFF00             224  	andi 0x000000FF, r27, r5
+00000148 C32A                 225  	shl 0x00000003, r5
+0000014A                      226  	mov #_g_DownSeg, r6
+0000014A 260600000000            -- mov         0x0,r6
+00000150 C531                 227  	add r5, r6
+00000152 263F0500             228  	ld.w 0x00000004[r6], r7
+00000156 26370100             229  	ld.w 0x00000000[r6], r6
+0000015A 0142                 230  	mov 0x00000001, r8
+0000015C 1D48                 231  	mov r29, r9
+0000015E 80FF0000             232  	jarl _ChecksumCompute.1, r31
+00000162 41DA                 233  	add 0x00000001, r27
+00000164                      234  .BB.LABEL.2_10:	; bb79
+00000164                      235  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 209
+00000164 DB2EFF00             236  	andi 0x000000FF, r27, r5
+00000168 DC36FF00             237  	andi 0x000000FF, r28, r6
+0000016C E629                 238  	cmp r6, r5
+0000016E 8105                 239  	bl9 .BB.LABEL.2_9
+00000170                      240  .BB.LABEL.2_11:	; bb87
+00000170                      241  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 0
+00000170 03D8                 242  	mov r3, r27
+00000172                      243  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 214
+00000172 1B30                 244  	mov r27, r6
+00000174 FF0200000000         245  	jarl32 _SecM_Crc32Finish, r31
+0000017A 0442                 246  	mov 0x00000004, r8
+0000017C                      247  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 216
+0000017C 1930                 248  	mov r25, r6
+0000017E 1B38                 249  	mov r27, r7
+00000180 FF0200000000         250  	jarl32 _CommF_DataCompare, r31
+00000186 6052                 251  	cmp 0x00000000, r10
+00000188 8A05                 252  	bnz9 .BB.LABEL.2_1
+0000018A                      253  .BB.LABEL.2_12:	; if_then_bb97
+0000018A                      254  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 218
+0000018A 60D2                 255  	cmp 0x00000000, r26
+0000018C 8205                 256  	bz9 .BB.LABEL.2_14
+0000018E                      257  .BB.LABEL.2_13:	; if_then_bb97.bb110_crit_edge
+0000018E                      258  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 0
+0000018E 0052                 259  	mov 0x00000000, r10
+00000190 8505                 260  	br9 .BB.LABEL.2_15
+00000192                      261  .BB.LABEL.2_14:	; if_then_bb103
+00000192                      262  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 220
+00000192 FF0200000000         263  	jarl32 _FlsIf_Init, r31
+00000198                      264  .BB.LABEL.2_15:	; bb110
+00000198                      265  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 229
+00000198 4206FF70             266  	dispose 0x00000004, 0x00000387, [r31]
+0000019C                      267  _ChecksumVerifyDependencies.1:
+0000019C                      268  	.stack _ChecksumVerifyDependencies.1 = 28
+0000019C                      269  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 248
+0000019C 8407A170             270  	prepare 0x00000385, 0x00000008
+000001A0                      271  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 257
+000001A0 43070700             272  	st.b r0, 0x00000007[r3]
+000001A4 43070600             273  	st.b r0, 0x00000006[r3]
+000001A8 43070500             274  	st.b r0, 0x00000005[r3]
+000001AC 43070400             275  	st.b r0, 0x00000004[r3]
+000001B0 43070400             276  	st.b r0, 0x00000004[r3]
+000001B4                      277  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 258
+000001B4 43070300             278  	st.b r0, 0x00000003[r3]
+000001B8 43070200             279  	st.b r0, 0x00000002[r3]
+000001BC 43070100             280  	st.b r0, 0x00000001[r3]
+000001C0 43070000             281  	st.b r0, 0x00000000[r3]
+000001C4 43070000             282  	st.b r0, 0x00000000[r3]
+000001C8                      283  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 260
+000001C8 402E0000             284  	movhi HIGHW1(#_g_DownBlockIdx), r0, r5
+000001CC                      285  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 262
+000001CC 85CF0100             286  	ld.bu LOWW(#_g_DownBlockIdx)[r5], r25
+000001D0 00D2                 287  	mov 0x00000000, r26
+000001D2 8505                 288  	br9 .BB.LABEL.3_5
+000001D4                      289  .BB.LABEL.3_1:	; bb38
+000001D4                      290  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 275
+000001D4 DC2EFF00             291  	andi 0x000000FF, r28, r5
+000001D8 C32A                 292  	shl 0x00000003, r5
+000001DA                      293  	mov #_g_DownSeg, r6
+000001DA 260600000000            -- mov         0x0,r6
+000001E0 C531                 294  	add r5, r6
+000001E2                      295  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 276
+000001E2 262F0500             296  	ld.w 0x00000004[r6], r5
+000001E6                      297  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 275
+000001E6 26370100             298  	ld.w 0x00000000[r6], r6
+000001EA                      299  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 277
+000001EA DA3EFF00             300  	andi 0x000000FF, r26, r7
+000001EE C23A                 301  	shl 0x00000002, r7
+000001F0                      302  	mov #_g_CrcAddrEnd, r8
+000001F0 280600000000            -- mov         0x0,r8
+000001F6 C839                 303  	add r8, r7
+000001F8 273F0100             304  	ld.w 0x00000000[r7], r7
+000001FC 0546FCFF             305  	addi 0xFFFFFFFC, r5, r8
+00000200                      306  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 279
+00000200 E731                 307  	cmp r7, r6
+00000202 E547343B             308  	cmov 0x0000000A, r5, r8, r7
+00000206 014A                 309  	mov 0x00000001, r9
+00000208 0042                 310  	mov 0x00000000, r8
+0000020A                      311  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 281
+0000020A 80FF0000             312  	jarl _ChecksumCompute.1, r31
+0000020E 41E2                 313  	add 0x00000001, r28
+00000210                      314  .BB.LABEL.3_2:	; bb62
+00000210                      315  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 273
+00000210 DC2EFF00             316  	andi 0x000000FF, r28, r5
+00000214 DB36FF00             317  	andi 0x000000FF, r27, r6
+00000218 E629                 318  	cmp r6, r5
+0000021A 8105                 319  	bl9 .BB.LABEL.3_1
+0000021C                      320  .BB.LABEL.3_3:	; bb70
+0000021C                      321  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 0
+0000021C 03D8                 322  	mov r3, r27
+0000021E                      323  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 284
+0000021E 1B30                 324  	mov r27, r6
+00000220 FF0200000000         325  	jarl32 _SecM_Crc32Finish, r31
+00000226 0442                 326  	mov 0x00000004, r8
+00000228 233E0400             327  	movea 0x00000004, r3, r7
+0000022C                      328  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 286
+0000022C 1B30                 329  	mov r27, r6
+0000022E FF0200000000         330  	jarl32 _CommF_DataCompare, r31
+00000234 6052                 331  	cmp 0x00000000, r10
+00000236 8A05                 332  	bnz9 .BB.LABEL.3_7
+00000238                      333  .BB.LABEL.3_4:	; if_break_bb82
+00000238                      334  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 0
+00000238 41D2                 335  	add 0x00000001, r26
+0000023A                      336  .BB.LABEL.3_5:	; bb85
+0000023A                      337  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 262
+0000023A DA2EFF00             338  	andi 0x000000FF, r26, r5
+0000023E F929                 339  	cmp r25, r5
+00000240 8905                 340  	bnc9 .BB.LABEL.3_8
+00000242                      341  .BB.LABEL.3_6:	; bb
+00000242                      342  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 265
+00000242 DADEFF00             343  	andi 0x000000FF, r26, r27
+00000246 1B28                 344  	mov r27, r5
+00000248 C22A                 345  	shl 0x00000002, r5
+0000024A                      346  	mov #_g_CrcAddr, r6
+0000024A 260600000000            -- mov         0x0,r6
+00000250 C629                 347  	add r6, r5
+00000252 25370100             348  	ld.w 0x00000000[r5], r6
+00000256 04E2                 349  	mov 0x00000004, r28
+00000258 23460400             350  	movea 0x00000004, r3, r8
+0000025C 1C38                 351  	mov r28, r7
+0000025E FF0200000000         352  	jarl32 _FlsIf_Read, r31
+00000264                      353  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 267
+00000264 1A2E0100             354  	addi 0x00000001, r26, r5
+00000268 40360000             355  	movhi HIGHW1(#_g_DownBlockIdx), r0, r6
+0000026C 462F0000             356  	st.b r5, LOWW(#_g_DownBlockIdx)[r6]
+00000270 003A                 357  	mov 0x00000000, r7
+00000272 0330                 358  	mov r3, r6
+00000274                      359  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 268
+00000274 1C40                 360  	mov r28, r8
+00000276 FF0200000000         361  	jarl32 _CommF_DataSet, r31
+0000027C                      362  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 269
+0000027C FF0200000000         363  	jarl32 _SecM_Crc32Preprocess, r31
+00000282                      364  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 271
+00000282                      365  	mov #_g_DownBlockStart, r5
+00000282 250600000000            -- mov         0x0,tp
+00000288 DB29                 366  	add r27, r5
+0000028A                      367  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 273
+0000028A 85E70100             368  	ld.bu 0x00000000[r5], r28
+0000028E                      369  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 272
+0000028E                      370  	mov #_g_DownBlockEnd, r5
+0000028E 250600000000            -- mov         0x0,tp
+00000294 C5D9                 371  	add r5, r27
+00000296 1BDF0000             372  	ld.b 0x00000000[r27], r27
+0000029A 41DA                 373  	add 0x00000001, r27
+0000029C 8505                 374  	br9 .BB.LABEL.3_2
+0000029E                      375  .BB.LABEL.3_7:	; bb70.bb94_crit_edge
+0000029E                      376  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 0
+0000029E 0152                 377  	mov 0x00000001, r10
+000002A0 8505                 378  	br9 .BB.LABEL.3_9
+000002A2                      379  .BB.LABEL.3_8:	; bb85.bb94_crit_edge
+000002A2 0052                 380  	mov 0x00000000, r10
+000002A4                      381  .BB.LABEL.3_9:	; bb94
+000002A4                      382  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 294
+000002A4 4406BF70             383  	dispose 0x00000008, 0x00000385, [r31]
+000002A8                      384  _RC_CheckDependency:
+000002A8                      385  	.stack _RC_CheckDependency = 4
+000002A8                      386  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 313
+000002A8 80072100             387  	prepare 0x00000001, 0x00000000
+000002AC                      388  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 317
+000002AC FF0200000000         389  	jarl32 _Diag_NRC78Send, r31
+000002B2                      390  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 319
+000002B2 80FF0000             391  	jarl _ChecksumVerifyDependencies.1, r31
+000002B6                      392  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 321
+000002B6 6052                 393  	cmp 0x00000000, r10
+000002B8 8A05                 394  	bnz9 .BB.LABEL.4_4
+000002BA                      395  .BB.LABEL.4_1:	; if_then_bb
+000002BA                      396  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 323
+000002BA 402E0000             397  	movhi HIGHW1(#_DcmState+0x00000002), r0, r5
+000002BE C5FF0000             398  	tst1 0x00000007, LOWW(#_DcmState+0x00000002)[r5]
+000002C2 8205                 399  	bz9 .BB.LABEL.4_3
+000002C4                      400  .BB.LABEL.4_2:	; if_then_bb12
+000002C4                      401  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 325
+000002C4                      402  	mov #_g_FlagsInfo, r5
+000002C4 250600000000            -- mov         0x0,tp
+000002CA 253E4C00             403  	movea 0x0000004C, r5, r7
+000002CE 0432                 404  	mov 0x00000004, r6
+000002D0 FF0200000000         405  	jarl32 _Diag_FlagWrite, r31
+000002D6                      406  .BB.LABEL.4_3:	; if_break_bb
+000002D6                      407  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 338
+000002D6 FF0200000000         408  	jarl32 _FlsIf_DeInit, r31
+000002DC 1F2A                 409  	mov 0xFFFFFFFF, r5
+000002DE                      410  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 340
+000002DE 40360000             411  	movhi HIGHW1(#_g_DownSegIdx), r0, r6
+000002E2 462F0000             412  	st.b r5, LOWW(#_g_DownSegIdx)[r6]
+000002E6                      413  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 341
+000002E6 40360000             414  	movhi HIGHW1(#_g_CurLogicalBlockId), r0, r6
+000002EA 462F0000             415  	st.b r5, LOWW(#_g_CurLogicalBlockId)[r6]
+000002EE                      416  .BB.LABEL.4_4:	; if_break_bb32
+000002EE                      417  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 345
+000002EE 40063F00             418  	dispose 0x00000000, 0x00000001, [r31]
+000002F2                      419  _RC_EraseMem_Preprocess:
+000002F2                      420  	.stack _RC_EraseMem_Preprocess = 16
+000002F2                      421  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 367
+000002F2 80072170             422  	prepare 0x00000381, 0x00000000
+000002F6                      423  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 382
+000002F6 6D3A                 424  	cmp 0x0000000D, r7
+000002F8 862F0100             425  	ld.bu 0x00000000[r6], r5
+000002FC 06C8                 426  	mov r6, r25
+000002FE 8205                 427  	bz9 .BB.LABEL.5_3
+00000300                      428  .BB.LABEL.5_1:	; entry.if_break_bb79_crit_edge
+00000300                      429  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 0
+00000300 0152                 430  	mov 0x00000001, r10
+00000302                      431  .BB.LABEL.5_2:	; if_break_bb79
+00000302                      432  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 411
+00000302 8A00                 433  	zxb r10
+00000304 40063F70             434  	dispose 0x00000000, 0x00000381, [r31]
+00000308                      435  .BB.LABEL.5_3:	; bb
+00000308                      436  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 0
+00000308 C5360F00             437  	andi 0x0000000F, r5, r6
+0000030C 6432                 438  	cmp 0x00000004, r6
+0000030E 8A05                 439  	bnz9 .BB.LABEL.5_1
+00000310                      440  .BB.LABEL.5_4:	; bb33
+00000310 C52EF000             441  	andi 0x000000F0, r5, r5
+00000314 0506C0FF             442  	addi 0xFFFFFFC0, r5, r0
+00000318 8A05                 443  	bnz9 .BB.LABEL.5_1
+0000031A                      444  .BB.LABEL.5_5:	; if_else_bb
+0000031A                      445  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 391
+0000031A 19360100             446  	addi 0x00000001, r25, r6
+0000031E 04D2                 447  	mov 0x00000004, r26
+00000320 1A38                 448  	mov r26, r7
+00000322 FF0200000000         449  	jarl32 _CommF_GetUint32DataValue, r31
+00000328 0AD8                 450  	mov r10, r27
+0000032A                      451  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 393
+0000032A 19360500             452  	addi 0x00000005, r25, r6
+0000032E 1A38                 453  	mov r26, r7
+00000330 FF0200000000         454  	jarl32 _CommF_GetUint32DataValue, r31
+00000336 0AC8                 455  	mov r10, r25
+00000338                      456  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 395
+00000338 1B30                 457  	mov r27, r6
+0000033A 1938                 458  	mov r25, r7
+0000033C FF0200000000         459  	jarl32 _MemM_LBIdGet, r31
+00000342                      460  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 397
+00000342 0A0601FF             461  	addi 0xFFFFFF01, r10, r0
+00000346 8A05                 462  	bnz9 .BB.LABEL.5_7
+00000348                      463  .BB.LABEL.5_6:	; if_else_bb.if_break_bb79_crit_edge
+00000348                      464  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 0
+00000348 0252                 465  	mov 0x00000002, r10
+0000034A 8505                 466  	br9 .BB.LABEL.5_2
+0000034C                      467  .BB.LABEL.5_7:	; if_then_bb60
+0000034C                      468  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 399
+0000034C 402E0000             469  	movhi HIGHW1(#_g_CurLogicalBlockId), r0, r5
+00000350 45570000             470  	st.b r10, LOWW(#_g_CurLogicalBlockId)[r5]
+00000354                      471  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 400
+00000354 402E0000             472  	movhi HIGHW1(#_g_DownBlockIdx), r0, r5
+00000358 85370100             473  	ld.bu LOWW(#_g_DownBlockIdx)[r5], r6
+0000035C C232                 474  	shl 0x00000002, r6
+0000035E                      475  	mov #_g_CrcAddr, r7
+0000035E 270600000000            -- mov         0x0,r7
+00000364 C639                 476  	add r6, r7
+00000366 D9D9                 477  	add r25, r27
+00000368 5CDA                 478  	add 0xFFFFFFFC, r27
+0000036A 67DF0100             479  	st.w r27, 0x00000000[r7]
+0000036E                      480  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 401
+0000036E 85370100             481  	ld.bu LOWW(#_g_DownBlockIdx)[r5], r6
+00000372                      482  	mov #_g_DownBlockStart, r7
+00000372 270600000000            -- mov         0x0,r7
+00000378 C639                 483  	add r6, r7
+0000037A 40360000             484  	movhi HIGHW1(#_g_DownSegIdx), r0, r6
+0000037E 06370000             485  	ld.b LOWW(#_g_DownSegIdx)[r6], r6
+00000382 4132                 486  	add 0x00000001, r6
+00000384 47370000             487  	st.b r6, 0x00000000[r7]
+00000388                      488  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 402
+00000388 05370000             489  	ld.b LOWW(#_g_DownBlockIdx)[r5], r6
+0000038C 4132                 490  	add 0x00000001, r6
+0000038E 45370000             491  	st.b r6, LOWW(#_g_DownBlockIdx)[r5]
+00000392 0052                 492  	mov 0x00000000, r10
+00000394 40063F70             493  	dispose 0x00000000, 0x00000381, [r31]
+00000398                      494  _RC_EraseMemory:
+00000398                      495  	.stack _RC_EraseMemory = 4
+00000398                      496  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 430
+00000398 80072100             497  	prepare 0x00000001, 0x00000000
+0000039C                      498  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 437
+0000039C FF0200000000         499  	jarl32 _Diag_NRC78Send, r31
+000003A2                      500  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 439
+000003A2 402E0000             501  	movhi HIGHW1(#_g_CurLogicalBlockId), r0, r5
+000003A6 852F0100             502  	ld.bu LOWW(#_g_CurLogicalBlockId)[r5], r5
+000003AA 622A                 503  	cmp 0x00000002, r5
+000003AC 8105                 504  	bl9 .BB.LABEL.6_2
+000003AE                      505  .BB.LABEL.6_1:	; entry.bb13_crit_edge
+000003AE                      506  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 0
+000003AE 2036FFFD             507  	movea 0xFFFFFDFF, r0, r6
+000003B2 8505                 508  	br9 .BB.LABEL.6_3
+000003B4                      509  .BB.LABEL.6_2:	; bb
+000003B4 C42A                 510  	shl 0x00000004, r5
+000003B6                      511  	mov #_g_logicalBlocks, r6
+000003B6 260600000000            -- mov         0x0,r6
+000003BC C531                 512  	add r5, r6
+000003BE 262F0500             513  	ld.w 0x00000004[r6], r5
+000003C2 253600FE             514  	movea 0xFFFFFE00, r5, r6
+000003C6                      515  .BB.LABEL.6_3:	; bb13
+000003C6                      516  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 440
+000003C6 402E0000             517  	movhi HIGHW1(#_g_CurLogicalBlockId), r0, r5
+000003CA 852F0100             518  	ld.bu LOWW(#_g_CurLogicalBlockId)[r5], r5
+000003CE 622A                 519  	cmp 0x00000002, r5
+000003D0 8105                 520  	bl9 .BB.LABEL.6_5
+000003D2                      521  .BB.LABEL.6_4:	; bb13.bb28_crit_edge
+000003D2                      522  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 0
+000003D2 1F3A                 523  	mov 0xFFFFFFFF, r7
+000003D4 8505                 524  	br9 .BB.LABEL.6_6
+000003D6                      525  .BB.LABEL.6_5:	; bb20
+000003D6 C42A                 526  	shl 0x00000004, r5
+000003D8                      527  	mov #_g_logicalBlocks, r7
+000003D8 270600000000            -- mov         0x0,r7
+000003DE C539                 528  	add r5, r7
+000003E0 273F0D00             529  	ld.w 0x0000000C[r7], r7
+000003E4                      530  .BB.LABEL.6_6:	; bb28
+000003E4                      531  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 443
+000003E4 FF0200000000         532  	jarl32 _FlsIf_Erase, r31
+000003EA                      533  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 445
+000003EA 6152                 534  	cmp 0x00000001, r10
+000003EC 8A05                 535  	bnz9 .BB.LABEL.6_8
+000003EE                      536  .BB.LABEL.6_7:	; if_then_bb
+000003EE                      537  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 0
+000003EE 1F2A                 538  	mov 0xFFFFFFFF, r5
+000003F0                      539  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 448
+000003F0 40360000             540  	movhi HIGHW1(#_g_CurLogicalBlockId), r0, r6
+000003F4 462F0000             541  	st.b r5, LOWW(#_g_CurLogicalBlockId)[r6]
+000003F8                      542  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 449
+000003F8 40360000             543  	movhi HIGHW1(#_g_DownSegIdx), r0, r6
+000003FC 462F0000             544  	st.b r5, LOWW(#_g_DownSegIdx)[r6]
+00000400                      545  .BB.LABEL.6_8:	; if_break_bb
+00000400                      546  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 453
+00000400 40063F00             547  	dispose 0x00000000, 0x00000001, [r31]
+00000404                      548  _RC_ActivationAndRollback:
+00000404                      549  	.stack _RC_ActivationAndRollback = 0
+00000404                      550  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 474
+00000404 0052                 551  	mov 0x00000000, r10
+00000406                      552  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 480
+00000406 7F00                 553  	jmp [r31]
+00000408                      554  _RC_CheckSVN:
+00000408                      555  	.stack _RC_CheckSVN = 0
+00000408                      556  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 500
+00000408 0052                 557  	mov 0x00000000, r10
+0000040A                      558  	.line "D:/wk/sirun/project/dazhong/A/svw_vehicle_a_rh850/boot/Bsw/SystemServices/BootServices/Diag_Callout/RoutineControl.c", 506
+0000040A 7F00                 559  	jmp [r31]
+00000000                      560  	.section .data, data
+00000000                      561  	.align 4
+00000000                      562  _g_CrcAddr:
+00000000 0000000000000000     563  	.ds (8)
+00000008                      564  	.align 4
+00000008                      565  _g_CrcAddrEnd:
+00000008 0000000000000000     566  	.ds (8)
+00000010                      567  _g_DownBlockStart:
+00000010 0000                 568  	.ds (2)
+00000012                      569  _g_DownBlockEnd:
+00000012 0000                 570  	.ds (2)
+00000014                      571  _g_DownBlockIdx:
+00000014 00                   572  	.ds (1)
+
+Section List
+Attr     Size                Name
+
+TEXT         1036 (0000040C) .text
+DATA           21 (00000015) .data
+
+Command Line Parameter
+-Xcpu=g3kh -Xreg_mode=22 -Xep=callee -Xreserve_r2 -Xcharacter_set=none -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Cpu\uart -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\SrcCode -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\vss -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\FCL\user -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\FCL\lib -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\FCL -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\WdgIf -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\wdg\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Config\MCAL_Config\Wdg_OutPut\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\SecureProgram -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\SecureBoot -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootServices\Crc -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootServices -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Config\MCAL_Config\Gpt_OutPut\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Config\MCAL_Config\Fls_OutPut\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\gpt\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\fls\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootServices\SecurityManager -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootServices\MemoryManager -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootServices\FlsIf -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootServices\EEIf -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootServices\EcuMService -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootServices\Diag_Callout -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootServices\Dcm -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootServices\Common -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootServices\CanTp -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootServices\CanIf -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\BootManager -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Cpu -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\CommonInclude -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Config\BSW_Config -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Config\BSW_Config\RH850F1K -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\Os\Extend\inc -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\Os\Kernel\inc -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\Os\Portable\Mcu -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\SystemServices\Os\Portable\Processor -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Config\MCAL_Config\Adc_OutPut\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Config\MCAL_Config\Can_OutPut\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Config\MCAL_Config\Dio_OutPut\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Config\MCAL_Config\Mcu_OutPut\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Config\MCAL_Config\Port_OutPut\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\adc\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\can\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\dio\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\general -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\mcu\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\port\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\stubs\CanGeneral\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\stubs\Dem\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\stubs\Det\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\stubs\EcuM\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\stubs\MemIf\include -ID:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Bsw\Mcal\stubs\SchM\include -DRH850_F1KM_S1_2MB -Xprn_path=DefaultBuild -Xno_warning=50013 -oD:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Toolchain\CSPLUS_V81200\DefaultBuild\RoutineControl.obj D:\wk\sirun\project\dazhong\A\svw_vehicle_a_rh850\boot\Toolchain\CSPLUS_V81200\DefaultBuild\RoutineControl.asm 
+
