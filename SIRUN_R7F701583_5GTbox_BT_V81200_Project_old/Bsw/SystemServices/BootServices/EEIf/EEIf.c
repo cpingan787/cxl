@@ -114,136 +114,6 @@ static uint8 DataCompare(uint8 * des, uint8 * src, uint8 size)
     return retValue;
 }
 
-/* BEGIN_FUNCTION_HDR
-************************************************************************************************
-* Function Name : EEIf_CheckNeedWrite
-*
-* Description   : 校验待写入的buf数据与当前存储的数据是否存在差异，用于避免重复写入，减少FLASH磨损。
-*                 妥善处理单BLOCK与跨多BLOCK两种场景。
-*
-* Inputs        : sAddr       - 写入的起始逻辑地址
-*                 size        - 写入的数据长度
-*                 buf         - 待写入数据缓冲区
-*                 newStartAddr - 当前写入slot的DFLASH物理起始地址
-*                 blockBuffer - 临时BLOCK缓冲区（调用方提供，避免栈重复分配）
-*                 blockCount  - 总BLOCK数量
-*
-* Outputs       : needWrite   - 1=存在差异需要写入，0=数据完全一致无需写入
-*
-* Returns       : E_OK / E_NOT_OK
-*
-* Limitations   : Only for HiBoot
-************************************************************************************************
-END_FUNCTION_HDR */
-static uint8 EEIf_CheckNeedWrite(uint32 sAddr, uint32 size, uint8* buf,
-                                  uint32 newStartAddr, uint8* blockBuffer,
-                                  uint32 blockCount, uint8* needWrite)
-{
-    uint8  tem     = E_NOT_OK;
-    uint32 i;
-    uint32 dataBlockCount = sAddr / BLOCK_DATA_SIZE;
-    uint32 dataInBlcokIndex = (sAddr % BLOCK_DATA_SIZE) + USER_DATA_START;
-    uint32 logicStartOff     = sAddr % BLOCK_DATA_SIZE;
-
-    *needWrite = 0u;
-
-    //处理数据跨BLOCK的情况
-    if(sAddr + size >= (dataBlockCount + 1u) * BLOCK_DATA_SIZE)
-    {
-        uint32 currentBlockCnt = dataBlockCount;
-        do{
-            uint32 loopStartIdx;
-            uint32 loopEndIdx;
-            uint32 bufStartIdx;
-
-            //获取当前BLOCK的数据到blockBuffer
-            tem = EEIf_CopyPreviousData(blockBuffer, newStartAddr, currentBlockCnt);
-            if(tem != E_OK)
-            {
-                return E_NOT_OK;
-            }
-
-            /*
-            判断当前block需要遍历的部分：
-            1.开头，从dataInBlcokIndex开始遍历，直到BLOCK_DATA_SIZE（物理到BLOCKSIZE）
-            2.中间，从0开始遍历，直到BLOCK_DATA_SIZE（物理=2到BLOCKSIZE，比较全部用户数据）
-            3.结尾，从0开始遍历，直到size + dataInBlcokIndex - (currentBlockCnt - dataBlockCount) * BLOCK_DATA_SIZE
-            */
-            if(currentBlockCnt == dataBlockCount)
-            {
-                // 1. 开头block
-                loopStartIdx = dataInBlcokIndex;
-                loopEndIdx   = BLOCKSIZE;
-                bufStartIdx  = 0u;
-            }
-            else if(sAddr + size >= (currentBlockCnt + 1u) * BLOCK_DATA_SIZE)
-            {
-                // 2. 中间block
-                loopStartIdx = USER_DATA_START;
-                loopEndIdx   = BLOCKSIZE;
-                bufStartIdx  = (currentBlockCnt - dataBlockCount) * BLOCK_DATA_SIZE - logicStartOff;
-            }
-            else
-            {
-                // 3. 结尾block
-                loopStartIdx = USER_DATA_START;
-                loopEndIdx   = size + dataInBlcokIndex - (currentBlockCnt - dataBlockCount) * BLOCK_DATA_SIZE;
-                bufStartIdx  = (currentBlockCnt - dataBlockCount) * BLOCK_DATA_SIZE - logicStartOff;
-            }
-
-            // 按block段比较blockBuffer与buf对应区间
-            for(i = loopStartIdx; i < loopEndIdx; i++)
-            {
-                if(blockBuffer[i] != buf[bufStartIdx + (i - loopStartIdx)])
-                {
-                    *needWrite = 1u;
-                    break;
-                }
-            }
-
-            // 发现差异立即退出整个跨block遍历
-            if(*needWrite != 0u)
-            {
-                break;
-            }
-
-            // 已到达结尾block则退出do-while，否则继续下一个block
-            if(sAddr + size < (currentBlockCnt + 1u) * BLOCK_DATA_SIZE)
-            {
-                break;
-            }
-
-            // 防越界保护：不超过blockCount上限
-            if(currentBlockCnt + 1u >= blockCount)
-            {
-                break;
-            }
-
-            currentBlockCnt++;
-
-        }while(1u);
-    }
-    //处理常规非跨BLOCK的情况
-    else
-    {
-        tem = EEIf_CopyPreviousData(blockBuffer, newStartAddr, dataBlockCount);
-        if(tem != E_OK)
-        {
-            return E_NOT_OK;
-        }
-        for(i = dataInBlcokIndex; i < dataInBlcokIndex + size; i++)
-        {
-            if(blockBuffer[i] != buf[i - dataInBlcokIndex])
-            {
-                *needWrite = 1u;
-                break;
-            }
-        }
-    }
-
-    return E_OK;
-}
-
 
 
 /* BEGIN_FUNCTION_HDR
@@ -296,7 +166,6 @@ static uint8 DataWriteProcess(uint32 TargetAddress, const uint8 * SourceAddressP
     tem = Fls_Write(TargetAddress , SourceAddressPtr, Length);
     do
     {
-        Wdg_59_DriverB_TriggerFunc(WDG_59_DRIVERB_INCLUDE_CRITICAL_SECTION);
         Fls_MainFunction();
         fls_status = Fls_GetStatus();
     } while (fls_status != MEMIF_IDLE);
@@ -368,10 +237,11 @@ uint8 EEIf_Write(uint32 sAddr, uint32 size, uint8* buf)
     uint32 i, j;
     uint8 tem = E_NOT_OK;
     uint32 startData = 0;
+    uint32 endData = 0;
+    uint32 startAddr = FEE_SECTOR0_STARTADDRESS;
     uint32 newStartAddr = 0;
     uint8 blockBuffer[BLOCKSIZE]; 
-    uint32 blockCount = ACTUAL_DATALEN_SIZE / BLOCKSIZE;
-    uint8  iSWrite = 0u;
+    uint32 blockCount = ACTUAL_DATALEN_SIZE / BLOCK_DATA_SIZE;
     
     // 查找最新的可写入地址
     newStartAddr = EEIf_FindLatestAddress(FIND_LATEST_WRITE_ADDRESS);
@@ -383,153 +253,132 @@ uint8 EEIf_Write(uint32 sAddr, uint32 size, uint8* buf)
         return E_NOT_OK;
     }
 
-    // 参数验证：空指针 + 地址边界（安全写法，避免sAddr+size溢出）
-    if(buf == NULL_PTR || sAddr >= DATALEN || size > DATALEN - sAddr)
+    // 初始化数据缓冲区
+    for(i = 0; i < blockCount; i++)
     {
-        return E_NOT_OK;
-    }
-
-    // 调用封装函数：校验当前写入是否为重复数据，是则跳过后续擦写
-    tem = EEIf_CheckNeedWrite(sAddr, size, buf, newStartAddr, blockBuffer, blockCount, &iSWrite);
-    if(tem != E_OK)
-    {
-        return E_NOT_OK;
-    }
-    
-    if(iSWrite == 1u)
-    {
-        // 初始化数据缓冲区
-        for(i = 0; i < blockCount; i++)
+        // 复制上一次的数据到blockBuffer
+        tem = EEIf_CopyPreviousData(blockBuffer, newStartAddr, i);
+        if(tem != E_OK)
         {
-            // 复制上一次的数据到blockBuffer
-            tem = EEIf_CopyPreviousData(blockBuffer, newStartAddr, i);
-            if(tem != E_OK)
+            return E_NOT_OK;
+        }
+
+        // 计算当前block对应的用户逻辑地址范围
+        uint32 blockLogicStart = i * BLOCK_DATA_SIZE;
+        uint32 blockLogicEnd = blockLogicStart + BLOCK_DATA_SIZE - 1;
+        
+        // 计算用户数据在当前block中的偏移
+        int dataOffset = (int)sAddr - (int)blockLogicStart;
+        
+        // 处理数据在当前block中的情况
+        if(dataOffset >= 0 && dataOffset < BLOCK_DATA_SIZE)
+        {
+            // 计算实际的buffer偏移（加上校验位占用的字节）
+            uint32 bufferOffset = USER_DATA_START + dataOffset;
+            
+            // 计算可复制的数据大小
+            uint32 copySize = size;
+            if(copySize > BLOCK_DATA_SIZE - dataOffset)
             {
-                return E_NOT_OK;
+                copySize = BLOCK_DATA_SIZE - dataOffset;
             }
-
-            // 计算当前block对应的用户逻辑地址范围
-            uint32 blockLogicStart = i * BLOCK_DATA_SIZE;
-            uint32 blockLogicEnd = blockLogicStart + BLOCK_DATA_SIZE - 1;
             
-            // 计算用户数据在当前block中的偏移
-            int dataOffset = (int)sAddr - (int)blockLogicStart;
+            // 复制数据到当前block
+            CommF_DataCopy(&blockBuffer[bufferOffset], buf, copySize);
             
-            // 处理数据在当前block中的情况
-            if(dataOffset >= 0 && dataOffset < BLOCK_DATA_SIZE)
+            // 检查新存储区域的当前起始位置是否有数据
+            startData = DataReadByAddr(newStartAddr + i * BLOCKSIZE);
+            if(startData != 0xFFFF)
             {
-                // 计算实际的buffer偏移（加上校验位占用的字节）
-                uint32 bufferOffset = USER_DATA_START + dataOffset;
-                
-                // 计算可复制的数据大小
-                uint32 copySize = size;
-                if(copySize > BLOCK_DATA_SIZE - dataOffset)
-                {
-                    copySize = BLOCK_DATA_SIZE - dataOffset;
-                }
-                
-                // 复制数据到当前block
-                CommF_DataCopy(&blockBuffer[bufferOffset], buf, copySize);
-                
-                // 检查新存储区域的当前起始位置是否有数据
-                startData = DataReadByAddr(newStartAddr + i * BLOCKSIZE);
-                if(startData != 0xFFFF)
-                {
-                    // 如果有数据，先擦除该扇区
-                    tem = DataEraseProcess(((newStartAddr - FEE_SECTOR0_STARTADDRESS) / SECTORLEN * SECTORLEN),  SECTORLEN);
-                    if(tem != E_OK)
-                    {
-                        return tem;
-                    }
-                }
-
-                // 分块写入数据
-                tem = DataWriteProcess(newStartAddr - FEE_SECTOR0_STARTADDRESS + i * BLOCKSIZE, blockBuffer, BLOCKSIZE);
+                // 如果有数据，先擦除该扇区
+                tem = DataEraseProcess(newStartAddr - FEE_SECTOR0_STARTADDRESS, SECTORLEN);
                 if(tem != E_OK)
                 {
                     return tem;
                 }
-                // 处理跨block的数据
-                if(copySize < size)
+            }
+
+            // 分块写入数据
+            tem = DataWriteProcess(newStartAddr - FEE_SECTOR0_STARTADDRESS + i * BLOCKSIZE, blockBuffer, BLOCKSIZE);
+            if(tem != E_OK)
+            {
+                return tem;
+            }
+            // 处理跨block的数据
+            if(copySize < size)
+            {
+                uint32 remainingSize = size - copySize;
+                uint32 nextBlockIndex = i + 1;
+                
+                // 遍历后续的block，处理跨block的数据
+                while(remainingSize > 0 && nextBlockIndex < blockCount)
                 {
-                    uint32 remainingSize = size - copySize;
-                    uint32 nextBlockIndex = i + 1;
-                    
-                    // 遍历后续的block，处理跨block的数据
-                    while(remainingSize > 0 && nextBlockIndex < blockCount)
+
+                    // 复制上一次的数据到blockBuffer
+                    tem = EEIf_CopyPreviousData(blockBuffer, newStartAddr, nextBlockIndex);
+                    if(tem != E_OK)
                     {
+                        return E_NOT_OK;
+                    }
 
-                        // 复制上一次的数据到blockBuffer
-                        tem = EEIf_CopyPreviousData(blockBuffer, newStartAddr, nextBlockIndex);
-                        if(tem != E_OK)
-                        {
-                            return E_NOT_OK;
-                        }
-
-                        // 计算可复制到下一个block的数据大小
-                        uint32 nextCopySize = remainingSize;
-                        if(nextCopySize > BLOCK_DATA_SIZE)
-                        {
-                            nextCopySize = BLOCK_DATA_SIZE;
-                        }
-                        
-                        // 复制数据到下一个block
-                        CommF_DataCopy(&blockBuffer[USER_DATA_START], &buf[copySize], nextCopySize);
-                        
-                        // 检查下一个block的存储位置是否有数据
-                        startData = DataReadByAddr(newStartAddr + nextBlockIndex * BLOCKSIZE);
-                        if(startData != 0xFFFF)
-                        {
-                            // 如果有数据，先擦除该扇区
-                            tem = DataEraseProcess(((newStartAddr - FEE_SECTOR0_STARTADDRESS) / SECTORLEN * SECTORLEN),  SECTORLEN);
-                            if(tem != E_OK)
-                            {
-                                return tem;
-                            }
-                        }
-                        
-                        // 写入下一个block
-                        tem = DataWriteProcess(newStartAddr - FEE_SECTOR0_STARTADDRESS + nextBlockIndex * BLOCKSIZE, blockBuffer, BLOCKSIZE);
+                    // 计算可复制到下一个block的数据大小
+                    uint32 nextCopySize = remainingSize;
+                    if(nextCopySize > BLOCK_DATA_SIZE)
+                    {
+                        nextCopySize = BLOCK_DATA_SIZE;
+                    }
+                    
+                    // 复制数据到下一个block
+                    CommF_DataCopy(&blockBuffer[USER_DATA_START], &buf[copySize], nextCopySize);
+                    
+                    // 检查下一个block的存储位置是否有数据
+                    startData = DataReadByAddr(newStartAddr + nextBlockIndex * BLOCKSIZE);
+                    if(startData != 0xFFFF)
+                    {
+                        // 如果有数据，先擦除该扇区
+                        tem = DataEraseProcess(newStartAddr - FEE_SECTOR0_STARTADDRESS, SECTORLEN);
                         if(tem != E_OK)
                         {
                             return tem;
                         }
-                        
-                        // 更新剩余数据大小和已复制数据大小
-                        remainingSize -= nextCopySize;
-                        copySize += nextCopySize;
-                        nextBlockIndex++;
-                        i++;
                     }
-                }
-            }
-            else
-            {
-                // 检查新存储区域的当前起始位置是否有数据
-                startData = DataReadByAddr(newStartAddr + i * BLOCKSIZE);
-                if(startData != 0xFFFF)
-                {
-                    // 如果有数据，先擦除该扇区
-                    tem = DataEraseProcess(((newStartAddr - FEE_SECTOR0_STARTADDRESS) / SECTORLEN * SECTORLEN),  SECTORLEN);
+                    
+                    // 写入下一个block
+                    tem = DataWriteProcess(newStartAddr - FEE_SECTOR0_STARTADDRESS + nextBlockIndex * BLOCKSIZE, blockBuffer, BLOCKSIZE);
                     if(tem != E_OK)
                     {
                         return tem;
                     }
+                    
+                    // 更新剩余数据大小和已复制数据大小
+                    remainingSize -= nextCopySize;
+                    copySize += nextCopySize;
+                    nextBlockIndex++;
+                    i++;
                 }
-
-                // 分块写入数据
-                tem = DataWriteProcess(newStartAddr - FEE_SECTOR0_STARTADDRESS + i * BLOCKSIZE, blockBuffer, BLOCKSIZE);
+            }
+        }
+        else
+        {
+            // 检查新存储区域的当前起始位置是否有数据
+            startData = DataReadByAddr(newStartAddr + i * BLOCKSIZE);
+            if(startData != 0xFFFF)
+            {
+                // 如果有数据，先擦除该扇区
+                tem = DataEraseProcess(newStartAddr - FEE_SECTOR0_STARTADDRESS, SECTORLEN);
                 if(tem != E_OK)
                 {
                     return tem;
                 }
             }
+
+            // 分块写入数据
+            tem = DataWriteProcess(newStartAddr - FEE_SECTOR0_STARTADDRESS + i * BLOCKSIZE, blockBuffer, BLOCKSIZE);
+            if(tem != E_OK)
+            {
+                return tem;
+            }
         }
-        
-    }
-    else
-    {
-        tem = E_OK;
     }
     return tem;
 }
@@ -553,7 +402,7 @@ static uint8 DataReadBlockProcess(uint8* buf)
     uint32 i, j;
     uint8 tem = E_NOT_OK;
     uint32 startAddr = FEE_NEW_SECTOR0_STARTADDRESS; // 新存储区域起始地址
-    uint32 blockCount = ACTUAL_DATALEN_SIZE / BLOCKSIZE;
+    uint32 blockCount = ACTUAL_DATALEN_SIZE / BLOCK_DATA_SIZE;
     uint8 blockBuffer[BLOCKSIZE]; // 局部变量，用于分块读取
 
     // 检查新存储区域是否有数据
@@ -609,7 +458,7 @@ uint8 EEIf_Read(uint32 sAddr, uint32 size, uint8* buf)
     uint32 i, j;
     uint8 tem = E_NOT_OK;
     uint32 startAddr = FEE_SECTOR0_STARTADDRESS;
-    uint32 blockCount = ACTUAL_DATALEN_SIZE / BLOCKSIZE;
+    uint32 blockCount = ACTUAL_DATALEN_SIZE / BLOCK_DATA_SIZE;
     uint8 blockBuffer[BLOCKSIZE]; // 局部变量，用于分块读取
 
     // 查找最新的可读取地址
