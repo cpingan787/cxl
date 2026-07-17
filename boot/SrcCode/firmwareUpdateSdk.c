@@ -386,36 +386,6 @@ void FirmwareUpdateSdkCycleProcess(int16_t handle, MpuHalDataPack_t *pRxMsg)
 
         if (s_UpdateMid == E_FirmwareUpdateSdkCmd_SoftwareResetMcu)
         {
-            uint8_t canSendStatus = TstSendRestartCanMsg();
-
-            uint8_t restartMpuData[1];
-            uint32_t loop;
-            MpuHalDataPack_t restartMpuPack;
-            restartMpuPack.aid = 0x05;
-            restartMpuPack.mid = 0x10;
-            restartMpuPack.subcommand = 25;
-            restartMpuPack.pDataBuffer = restartMpuData;
-            restartMpuPack.dataBufferSize = sizeof(restartMpuData);
-            restartMpuPack.dataLength = 1;
-            if (canSendStatus == E_OK)
-            {
-                restartMpuData[0] = 0x01;
-            }
-            else
-            {
-                restartMpuData[0] = 0x02;
-            }
-            MpuHalTransmit(handle, &restartMpuPack);
-            for (loop = 0; loop < 10; loop++)
-            {
-                MpuHalTxTask();
-
-                if ( MpuHalIsTxEmpty() == 1 ) 
-                {
-                    break;
-                }
-                for (volatile uint32_t delay = 0; delay < 2000; delay++);
-            }
             Mcu_PerformReset();
             Mcu_PerformReset();
             Mcu_PerformReset();

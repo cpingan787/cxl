@@ -25,10 +25,10 @@
 /***********************************************************************************************************************
 * File Name    : r_cg_port.c
 * Version      : Code Generator for RH850/F1K V1.01.02.02 [08 May 2018]
-* Device(s)    : R7F701583(LQFP144pin)
+* Device(s)    : R7F701581(LQFP100pin)
 * Tool-Chain   : CCRH
 * Description  : This file implements device driver for Port module.
-* Creation Date: 2025/12/23
+* Creation Date: 2026/7/3
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -61,66 +61,28 @@ extern volatile uint32_t g_cg_sync_read      /* Synchronization processing */;
 ***********************************************************************************************************************/
 void R_PORT_Create(void)
 {
-    PORT.APBDC1 &= (uint16_t) ~_PORT_APMn1_MODE_UNUSED;
-    PORT.APBDC1 |= _PORT_APBDCn1_APBDC_MODE_DISABLED;
-    PORT.AP1 &= (uint16_t) ~_PORT_APMn1_MODE_UNUSED;
-    PORT.AP1 |= _PORT_APn1_OUTPUT_LOW;
-    PORT.APM1 &= (uint16_t) ~_PORT_APMn1_MODE_UNUSED;
-    PORT.APM1 |= _PORT_APMn1_MODE_OUTPUT;
-    
-#if(0)
-    PORT.PPCMD1 = _WRITE_PROTECT_COMMAND;
-    PORT.PDSC1 &= (uint32_t) ~_PORT_PMn7_MODE_UNUSED;
-    PORT.PDSC1 |= _PORT_PDSCn7_SLOW_MODE_SELECT;
-    PORT.PPCMD1 = _WRITE_PROTECT_COMMAND;
-    PORT.PODC1 &= (uint32_t) ~_PORT_PMn7_MODE_UNUSED;
-    PORT.PODC1 |= _PORT_PODCn7_PUSH_PULL;
-    PORT.PBDC1 &= (uint16_t)_PORT_PMn7_MODE_UNUSED;
-    PORT.PBDC1 |= _PORT_PBDCn7_PBDC_MODE_DISABLED;
-    PORT.P1 &= (uint16_t) ~_PORT_PMn7_MODE_UNUSED;
-    PORT.P1 |= _PORT_Pn7_OUTPUT_LOW;
-    PORT.PM1 &= (uint16_t) ~_PORT_PMn7_MODE_UNUSED;
-    PORT.PM1 |= _PORT_PMn7_MODE_OUTPUT;
-
-    PORT.PPCMD18 = _WRITE_PROTECT_COMMAND;
-    PORT.PDSC18 &= (uint32_t) ~_PORT_PMn3_MODE_UNUSED;
-    PORT.PDSC18 |= _PORT_PDSCn3_SLOW_MODE_SELECT;
-    PORT.PPCMD18 = _WRITE_PROTECT_COMMAND;
-    PORT.PODC18 &= (uint32_t) ~_PORT_PMn3_MODE_UNUSED;
-    PORT.PODC18 |= _PORT_PODCn3_PUSH_PULL;
-    PORT.PBDC18 &= (uint16_t) ~_PORT_PMn3_MODE_UNUSED;
-    PORT.PBDC18 |= _PORT_PBDCn3_PBDC_MODE_DISABLED;
-    PORT.P18 &= (uint16_t) ~_PORT_PMn3_MODE_UNUSED;
-    PORT.P18 |= _PORT_Pn3_OUTPUT_LOW;
-    PORT.PM18 &= (uint16_t) ~_PORT_PMn3_MODE_UNUSED;
-    PORT.PM18 |= _PORT_PMn3_MODE_OUTPUT;
-
-    PORT.PPCMD18 = _WRITE_PROTECT_COMMAND;
-    PORT.PDSC18 &= (uint32_t) ~_PORT_PMn1_MODE_UNUSED;
-    PORT.PDSC18 |= _PORT_PDSCn1_SLOW_MODE_SELECT;
-    PORT.PPCMD18 = _WRITE_PROTECT_COMMAND;
-    PORT.PODC18 &= (uint32_t) ~_PORT_PMn1_MODE_UNUSED;
-    PORT.PODC18 |= _PORT_PODCn1_PUSH_PULL;
-    PORT.PBDC18 &= (uint16_t) ~_PORT_PMn1_MODE_UNUSED;
-    PORT.PBDC18 |= _PORT_PBDCn1_PBDC_MODE_DISABLED;
-    PORT.P18 &= (uint16_t) ~_PORT_PMn1_MODE_UNUSED;
-    PORT.P18 |= _PORT_Pn1_OUTPUT_LOW;
-    PORT.PM18 &= (uint16_t) ~_PORT_PMn1_MODE_UNUSED;
-    PORT.PM18 |= _PORT_PMn1_MODE_OUTPUT;
-
-    PORT.PPCMD18 = _WRITE_PROTECT_COMMAND;
-    PORT.PDSC18 &= (uint32_t) ~_PORT_PMn0_MODE_UNUSED;
-    PORT.PDSC18 |= _PORT_PDSCn0_SLOW_MODE_SELECT;
-    PORT.PPCMD18 = _WRITE_PROTECT_COMMAND;
-    PORT.PODC18 &= (uint32_t) ~_PORT_PMn0_MODE_UNUSED;
-    PORT.PODC18 |= _PORT_PODCn0_PUSH_PULL;
-    PORT.PBDC18 &= (uint16_t) ~_PORT_PMn0_MODE_UNUSED;
-    PORT.PBDC18 |= _PORT_PBDCn0_PBDC_MODE_DISABLED;
-    PORT.P18 &= (uint16_t) ~_PORT_PMn0_MODE_UNUSED;
-    PORT.P18 |= _PORT_Pn0_OUTPUT_LOW;
-    PORT.PM18 &= (uint16_t) ~_PORT_PMn0_MODE_UNUSED;
-    PORT.PM18 |= _PORT_PMn0_MODE_OUTPUT;
-#endif
+    /* PORT initialization */
+    PORT.PIBC0 = _PORT_PIBC_INIT;
+    PORT.PBDC0 = _PORT_PBDC_INIT;
+    PORT.PM0 = _PORT_PM_INIT;
+    PORT.PMC0 = _PORT_PMC_INIT;
+    PORT.PIPC0= _PORT_PIPC_INIT;
+    /* Port0 setting */
+    PORT.PU0 = _PORT_PUn14_PULLUP_OFF | _PORT_PUn13_PULLUP_OFF | _PORT_PUn12_PULLUP_OFF | _PORT_PUn11_PULLUP_OFF | 
+               _PORT_PUn10_PULLUP_OFF | _PORT_PUn9_PULLUP_OFF | _PORT_PUn8_PULLUP_OFF | _PORT_PUn7_PULLUP_OFF | 
+               _PORT_PUn6_PULLUP_OFF | _PORT_PUn4_PULLUP_OFF | _PORT_PUn3_PULLUP_OFF | _PORT_PUn2_PULLUP_OFF | 
+               _PORT_PUn1_PULLUP_OFF | _PORT_PUn0_PULLUP_OFF;
+    PORT.PD0 = _PORT_PDn12_PULLDOWN_OFF | _PORT_PDn11_PULLDOWN_OFF | _PORT_PDn10_PULLDOWN_OFF | 
+               _PORT_PDn9_PULLDOWN_OFF | _PORT_PDn8_PULLDOWN_OFF | _PORT_PDn7_PULLDOWN_OFF | _PORT_PDn6_PULLDOWN_OFF | 
+               _PORT_PDn5_PULLDOWN_ON | _PORT_PDn4_PULLDOWN_OFF | _PORT_PDn3_PULLDOWN_OFF | _PORT_PDn2_PULLDOWN_OFF | 
+               _PORT_PDn1_PULLDOWN_OFF | _PORT_PDn0_PULLDOWN_OFF;
+    PORT.PM0 = _PORT_PM0_DEFAULT_VALUE | _PORT_PMn14_MODE_UNUSED | _PORT_PMn13_MODE_UNUSED | _PORT_PMn12_MODE_UNUSED | 
+               _PORT_PMn11_MODE_UNUSED | _PORT_PMn10_MODE_UNUSED | _PORT_PMn9_MODE_UNUSED | _PORT_PMn8_MODE_UNUSED | 
+               _PORT_PMn7_MODE_UNUSED | _PORT_PMn6_MODE_UNUSED | _PORT_PMn5_MODE_UNUSED | _PORT_PMn4_MODE_UNUSED | 
+               _PORT_PMn3_MODE_UNUSED | _PORT_PMn2_MODE_UNUSED | _PORT_PMn1_MODE_UNUSED | _PORT_PMn0_MODE_UNUSED;
+    /* Synchronization processing */
+    g_cg_sync_read = PORT.PM0;
+    __syncp();
 }
 
 /* Start user code for adding. Do not edit comment generated here */

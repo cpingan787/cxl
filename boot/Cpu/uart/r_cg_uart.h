@@ -25,16 +25,14 @@
 /***********************************************************************************************************************
 * File Name    : r_cg_uart.h
 * Version      : Code Generator for RH850/F1K V1.01.02.02 [08 May 2018]
-* Device(s)    : R7F701583(LQFP144pin)
+* Device(s)    : R7F701581(LQFP100pin)
 * Tool-Chain   : CCRH
 * Description  : This file implements device driver for UART module.
-* Creation Date: 2025/12/18
+* Creation Date: 2026/7/2
 ***********************************************************************************************************************/
 #ifndef UART_H
 #define UART_H
-
 #include "r_cg_macrodriver.h"
-
 /***********************************************************************************************************************
 Macro definitions (Register bit)
 ***********************************************************************************************************************/
@@ -176,12 +174,9 @@ Macro definitions
 #define _UART1_BUFFER_ADDRESS                     (0xFFCE2040UL)
 #define _UART2_BUFFER_ADDRESS                     (0xFFCE2080UL)
 #define _UART3_BUFFER_ADDRESS                     (0xFFCE20C0UL)
-#define _UART4_BUFFER_ADDRESS                     (0xFFCE2100UL)
-#define _UART5_BUFFER_ADDRESS                     (0xFFCE2140UL)
 #define _UART_CLEAR_ERROR_FLAG                    (0x7DU)
-#define _UART1_BAUD_RATE_PRESCALER                (0x0000U)
-#define _UART4_BAUD_RATE_PRESCALER                (0x001CU)
-#define _UART5_BAUD_RATE_PRESCALER                (0x001CU)
+#define _UART0_BAUD_RATE_PRESCALER                (0x001CU)
+#define _UART2_BAUD_RATE_PRESCALER                (0x001CU)
 
 /***********************************************************************************************************************
 Typedef definitions
@@ -190,35 +185,32 @@ Typedef definitions
 /***********************************************************************************************************************
 Global functions
 ***********************************************************************************************************************/
-void R_UART4_Create(void);
-void R_UART4_Start(void);
-void R_UART4_Stop(void);
-MD_STATUS R_UART4_Send(uint8_t * const tx_buf, uint16_t tx_num);
-MD_STATUS R_UART4_Receive(uint8_t * const rx_buf, uint16_t rx_num);
-void R_UART5_Create(void);
-void R_UART5_Start(void);
-void R_UART5_Stop(void);
-MD_STATUS R_UART5_Send(uint8_t * const tx_buf, uint16_t tx_num);
-MD_STATUS R_UART5_Receive(uint8_t * const rx_buf, uint16_t rx_num);
-
-static void r_uart4_callback_sendend(void);
-static void r_uart4_callback_error(uint8_t err_type);
-static void r_uart5_callback_sendend(void);
-static void r_uart5_callback_error(uint8_t err_type);
+void R_UART0_Create(void);
+void R_UART0_Start(void);
+void R_UART0_Stop(void);
+MD_STATUS R_UART0_Send(uint8_t * const tx_buf, uint16_t tx_num);
+MD_STATUS R_UART0_Receive(uint8_t * const rx_buf, uint16_t rx_num);
+void R_UART2_Create(void);
+void R_UART2_Start(void);
+void R_UART2_Stop(void);
+MD_STATUS R_UART2_Send(uint8_t * const tx_buf, uint16_t tx_num);
+MD_STATUS R_UART2_Receive(uint8_t * const rx_buf, uint16_t rx_num);
+void r_uart0_callback_receiveend(void);
+void r_uart0_callback_sendend(void);
+void r_uart0_callback_error(uint8_t err_type);
+void r_uart2_callback_receiveend(void);
+void r_uart2_callback_sendend(void);
+void r_uart2_callback_error(uint8_t err_type);
 
 /* Start user code for function. Do not edit comment generated here */
-uint16_t GetUart1RxCount(void);
-MD_STATUS R_UART4_SendStatus(void);
-uint16_t GetUart5RxCount(void);
-MD_STATUS R_UART5_SendStatus(void);
+MD_STATUS R_UART2_SendStatus(void);
 
-void r_uart4_interrupt_receive(void);
-void r_uart4_interrupt_error(void);
-void r_uart4_interrupt_send(void);
+void r_uart0_interrupt_receive(void);
+void r_uart0_interrupt_error(void);
+void r_uart0_interrupt_send(void);
 
-void r_uart5_interrupt_receive(void);
-void r_uart5_interrupt_error(void);
-void r_uart5_interrupt_send(void);
-
+void r_uart2_interrupt_receive(void);
+void r_uart2_interrupt_error(void);
+void r_uart2_interrupt_send(void);
 /* End user code. Do not edit comment generated here */
 #endif

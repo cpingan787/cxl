@@ -25,10 +25,10 @@
 /***********************************************************************************************************************
 * File Name    : r_cg_userdefine.h
 * Version      : Code Generator for RH850/F1K V1.01.02.02 [08 May 2018]
-* Device(s)    : R7F701583(LQFP144pin)
+* Device(s)    : R7F701581(LQFP100pin)
 * Tool-Chain   : CCRH
 * Description  : This file includes user definition.
-* Creation Date: 2025/12/4
+* Creation Date: 2026/7/1
 ***********************************************************************************************************************/
 #ifndef _USER_DEF_H
 #define _USER_DEF_H

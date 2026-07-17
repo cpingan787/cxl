@@ -1,323 +1,695 @@
 /*===========================================================================*/
-/* Project:  F1x StarterKit V3 Sample Software                               */
 /* Module :  r_port.c                                                        */
-/* Version:  V1.00                                                           */
-/*===========================================================================*/
-/*                                  COPYRIGHT                                */
-/*===========================================================================*/
-/* Copyright (c) 2016 by Renesas Electronics Europe GmbH,                    */
-/*               a company of the Renesas Electronics Corporation            */
-/*===========================================================================*/
-/* In case of any question please do not hesitate to contact:                */
-/*                                                                           */
-/*        ABG Software Tool Support                                          */
-/*                                                                           */
-/*        Renesas Electronics Europe GmbH                                    */
-/*        Arcadiastrasse 10                                                  */
-/*        D-40472 Duesseldorf, Germany                                       */
-/*                                                                           */
-/*        e-mail: software_support-eu@lm.renesas.com                         */
-/*        FAX:   +49 - (0)211 / 65 03 - 11 31                                */
-/*                                                                           */
-/*===========================================================================*/
-/* Warranty Disclaimer                                                       */
-/*                                                                           */
-/* Because the Product(s) is licensed free of charge, there is no warranty   */
-/* of any kind whatsoever and expressly disclaimed and excluded by Renesas,  */
-/* either expressed or implied, including but not limited to those for       */
-/* non-infringement of intellectual property, merchantability and/or         */
-/* fitness for the particular purpose.                                       */
-/* Renesas shall not have any obligation to maintain, service or provide bug */
-/* fixes for the supplied Product(s) and/or the Application.                 */
-/*                                                                           */
-/* Each User is solely responsible for determining the appropriateness of    */
-/* using the Product(s) and assumes all risks associated with its exercise   */
-/* of rights under this Agreement, including, but not limited to the risks   */
-/* and costs of program errors, compliance with applicable laws, damage to   */
-/* or loss of data, programs or equipment, and unavailability or             */
-/* interruption of operations.                                               */
-/*                                                                           */
-/* Limitation of Liability                                                   */
-/*                                                                           */
-/* In no event shall Renesas be liable to the User for any incidental,       */
-/* consequential, indirect, or punitive damage (including but not limited    */
-/* to lost profits) regardless of whether such liability is based on breach  */
-/* of contract, tort, strict liability, breach of warranties, failure of     */
-/* essential purpose or otherwise and even if advised of the possibility of  */
-/* such damages. Renesas shall not be liable for any services or products    */
-/* provided by third party vendors, developers or consultants identified or  */
-/* referred to the User by Renesas in connection with the Product(s) and/or  */
-/* the Application.                                                          */
-/*                                                                           */
-/*===========================================================================*/
-/*                                                                           */
-/* Source code for the port configuration functions.                         */
-/*                                                                           */
+/* Target :  RH850/F1K R7F701581                                             */
+/* Adapted against iodefine.h V1.20 / Device File R7F701581                  */
 /*===========================================================================*/
 
 /*===========================================================================*/
-/* Includes */
+/* Includes                                                                  */
 /*===========================================================================*/
 #include "iodefine.h"
 #include "r_port.h"
 
 /*===========================================================================*/
-/* Functions */
+/* Port register map                                                         */
 /*===========================================================================*/
-/*****************************************************************************
-** Function:    R_PORT_SetGpioOutput
-** Description: Set Port_Pin to GPIO Output. Initial output level is low.
-** Parameter:   Port: Portgroup
-**              Pin: Pin Number
-**              Level: Output level High or Low
-** Return:      None
-******************************************************************************/
-
-
-
-void R_PORT_SetGpioOutput(enum port_t Port, uint32_t Pin, enum level_t Level)
+/*
+ * Register members below are restricted to members that exist in the supplied
+ * R7F701581 iodefine.h.
+ *
+ * Unsupported legacy ports are retained as zero-filled rows so existing source
+ * using enum port_t still compiles. Every public API validates the row before
+ * dereferencing a register pointer.
+ */
+const struct pregs_t PortList[PortCount] =
 {
-    if(Level == Low)
-        {
-            *PortList[Port].P_Reg &= ~(1u<<Pin);
-        }
-    else /* Level = High */
-        {
-            *PortList[Port].P_Reg |= (1u<<Pin);
-        }
-    *PortList[Port].PM_Reg &= ~(1u<<Pin);
-    *PortList[Port].PMC_Reg &= ~(1u<<Pin);
-}
-
-/*****************************************************************************
-** Function:    R_PORT_ToggleGpioOutput
-** Description: Toggles the output level of Port_Pin.
-** Parameter:   Port: Portgroup
-**              Pin: Pin Number
-** Return:      None
-******************************************************************************/
-void R_PORT_ToggleGpioOutput(enum port_t Port, uint32_t Pin)
-{
-    *PortList[Port].PNOT_Reg |= 1<<Pin;
-}
-
-/*****************************************************************************
-** Function:    R_PORT_SetGpioInput
-** Description: Set Port_Pin to GPIO Input with Port Input Buffer enabled.
-** Parameter:   Port: Portgroup
-**              Pin: Pin Number
-** Return:      None
-******************************************************************************/
-void R_PORT_SetGpioInput(enum port_t Port, uint32_t Pin)
-{
-    *PortList[Port].PM_Reg |= 1<<Pin;
-    *PortList[Port].PIBC_Reg |= 1<<Pin;
-    *PortList[Port].PMC_Reg &= ~(1u<<Pin);
-}
-
-/*****************************************************************************
-** Function:    R_PORT_SetGpioHighZ
-** Description: Set Port_Pin to GPIO High Impedant Input (Port Input Buffer disabled).
-** Parameter:   Port: Portgroup
-**              Pin: Pin Number
-** Return:      None
-******************************************************************************/
-void R_PORT_SetGpioHighZ(enum port_t Port, uint32_t Pin)
-{
-    *PortList[Port].PIBC_Reg &= ~(1<<Pin);
-    *PortList[Port].PM_Reg |= 1<<Pin;
-}
-
-/*****************************************************************************
-** Function:    R_PORT_SetAltFunc
-** Description: Configures Port_Pin to the chosen alternative function.
-** Parameter:   Port: Portgroup
-**              Pin: Pin Number
-**              Alt: Alternative Function (Alt1-Alt7)
-**              IO: Input/Output direction
-** Return:      None
-******************************************************************************/
-void R_PORT_SetAltFunc(enum port_t Port, uint32_t Pin, enum alt_t Alt, enum io_t IO)
-{   
-    switch(Alt)
+    /* Port0 */
     {
-        case Alt1:
-            *PortList[Port].PFCAE_Reg &= ~(1<<Pin);
-            *PortList[Port].PFCE_Reg &= ~(1<<Pin);
-            *PortList[Port].PFC_Reg &= ~(1<<Pin);
-        break;
-        
-        case Alt2:
-            *PortList[Port].PFCAE_Reg &= ~(1<<Pin);
-            *PortList[Port].PFCE_Reg &= ~(1<<Pin);
-            *PortList[Port].PFC_Reg |= 1<<Pin;
-        break;
-        
-        case Alt3:
-            *PortList[Port].PFCAE_Reg &= ~(1<<Pin);
-            *PortList[Port].PFCE_Reg |= 1<<Pin;
-            *PortList[Port].PFC_Reg &= ~(1<<Pin);
-        break;
-        
-        case Alt4:
-            *PortList[Port].PFCAE_Reg &= ~(1<<Pin);
-            *PortList[Port].PFCE_Reg |= 1<<Pin;
-            *PortList[Port].PFC_Reg |= 1<<Pin;
-        break;
-        
-        case Alt5:
-            *PortList[Port].PFCAE_Reg |= 1<<Pin;
-            *PortList[Port].PFCE_Reg &= ~(1<<Pin);
-            *PortList[Port].PFC_Reg &= ~(1<<Pin);
-        break;
-        
-        case Alt6:
-            *PortList[Port].PFCAE_Reg |= 1<<Pin;
-            *PortList[Port].PFCE_Reg &= ~(1<<Pin);
-            *PortList[Port].PFC_Reg |= 1<<Pin;
-        break;
-        
-        case Alt7:
-            *PortList[Port].PFCAE_Reg |= 1<<Pin;
-            *PortList[Port].PFCE_Reg |= 1<<Pin;
-            *PortList[Port].PFC_Reg &= ~(1<<Pin);
-        break;
-        
-        default:
-        break;
-    }
-    
-    switch(IO)
+        (volatile uint16_t *)&PORT.P0,
+        (volatile uint16_t *)&PORT.PNOT0,
+        (volatile uint16_t *)&PORT.PM0,
+        (volatile uint16_t *)&PORT.PMC0,
+        (volatile uint16_t *)&PORT.PFC0,
+        (volatile uint16_t *)&PORT.PFCE0,
+        (volatile uint16_t *)&PORT.PFCAE0,
+        (volatile uint16_t *)&PORT.PIPC0,
+        (volatile uint16_t *)&PORT.PIBC0,
+        (volatile const uint16_t *)&PORT.PPR0,
+        (volatile uint16_t *)&PORT.PD0,
+        (volatile uint16_t *)&PORT.PU0,
+        (volatile uint32_t *)&PORT.PODC0,
+        (volatile uint32_t *)&PORT.PDSC0,
+        (volatile uint32_t *)&PORT.PPROTS0,
+        (volatile uint32_t *)&PORT.PPCMD0
+    },
+
+    /* Port1: not present in the supplied R7F701581 iodefine.h */
+    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+
+    /* Port8 */
     {
-        case Input:
-            *PortList[Port].PM_Reg |= 1<<Pin;
-        break;
-        
-        case Output:
-            *PortList[Port].PM_Reg &= ~(1<<Pin);
-        break;
-        
-        default:
-        break;
-        
+        (volatile uint16_t *)&PORT.P8,
+        (volatile uint16_t *)&PORT.PNOT8,
+        (volatile uint16_t *)&PORT.PM8,
+        (volatile uint16_t *)&PORT.PMC8,
+        (volatile uint16_t *)&PORT.PFC8,
+        (volatile uint16_t *)&PORT.PFCE8,
+        0,
+        0,
+        (volatile uint16_t *)&PORT.PIBC8,
+        (volatile const uint16_t *)&PORT.PPR8,
+        (volatile uint16_t *)&PORT.PD8,
+        (volatile uint16_t *)&PORT.PU8,
+        (volatile uint32_t *)&PORT.PODC8,
+        0,
+        (volatile uint32_t *)&PORT.PPROTS8,
+        (volatile uint32_t *)&PORT.PPCMD8
+    },
+
+    /* Port9 */
+    {
+        (volatile uint16_t *)&PORT.P9,
+        (volatile uint16_t *)&PORT.PNOT9,
+        (volatile uint16_t *)&PORT.PM9,
+        (volatile uint16_t *)&PORT.PMC9,
+        (volatile uint16_t *)&PORT.PFC9,
+        (volatile uint16_t *)&PORT.PFCE9,
+        0,
+        0,
+        (volatile uint16_t *)&PORT.PIBC9,
+        (volatile const uint16_t *)&PORT.PPR9,
+        (volatile uint16_t *)&PORT.PD9,
+        (volatile uint16_t *)&PORT.PU9,
+        (volatile uint32_t *)&PORT.PODC9,
+        0,
+        (volatile uint32_t *)&PORT.PPROTS9,
+        (volatile uint32_t *)&PORT.PPCMD9
+    },
+
+    /* Port10 */
+    {
+        (volatile uint16_t *)&PORT.P10,
+        (volatile uint16_t *)&PORT.PNOT10,
+        (volatile uint16_t *)&PORT.PM10,
+        (volatile uint16_t *)&PORT.PMC10,
+        (volatile uint16_t *)&PORT.PFC10,
+        (volatile uint16_t *)&PORT.PFCE10,
+        (volatile uint16_t *)&PORT.PFCAE10,
+        (volatile uint16_t *)&PORT.PIPC10,
+        (volatile uint16_t *)&PORT.PIBC10,
+        (volatile const uint16_t *)&PORT.PPR10,
+        (volatile uint16_t *)&PORT.PD10,
+        (volatile uint16_t *)&PORT.PU10,
+        (volatile uint32_t *)&PORT.PODC10,
+        (volatile uint32_t *)&PORT.PDSC10,
+        (volatile uint32_t *)&PORT.PPROTS10,
+        (volatile uint32_t *)&PORT.PPCMD10
+    },
+
+    /* Port11 */
+    {
+        (volatile uint16_t *)&PORT.P11,
+        (volatile uint16_t *)&PORT.PNOT11,
+        (volatile uint16_t *)&PORT.PM11,
+        (volatile uint16_t *)&PORT.PMC11,
+        (volatile uint16_t *)&PORT.PFC11,
+        (volatile uint16_t *)&PORT.PFCE11,
+        (volatile uint16_t *)&PORT.PFCAE11,
+        (volatile uint16_t *)&PORT.PIPC11,
+        (volatile uint16_t *)&PORT.PIBC11,
+        (volatile const uint16_t *)&PORT.PPR11,
+        (volatile uint16_t *)&PORT.PD11,
+        (volatile uint16_t *)&PORT.PU11,
+        (volatile uint32_t *)&PORT.PODC11,
+        (volatile uint32_t *)&PORT.PDSC11,
+        (volatile uint32_t *)&PORT.PPROTS11,
+        (volatile uint32_t *)&PORT.PPCMD11
+    },
+
+    /* Port12: not present in the supplied R7F701581 iodefine.h */
+    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+
+    /* Port18: not present in the supplied R7F701581 iodefine.h */
+    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+
+    /* Port20: not present in the supplied R7F701581 iodefine.h */
+    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+
+    /* Analog Port0 */
+    {
+        (volatile uint16_t *)&PORT.AP0,
+        (volatile uint16_t *)&PORT.APNOT0,
+        (volatile uint16_t *)&PORT.APM0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        (volatile uint16_t *)&PORT.APIBC0,
+        (volatile const uint16_t *)&PORT.APPR0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+    },
+
+    /* Analog Port1: not present in the supplied R7F701581 iodefine.h */
+    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
+};
+
+/*===========================================================================*/
+/* Local helpers                                                             */
+/*===========================================================================*/
+static uint8_t R_PORT_IsPortPinValid(enum port_t port, uint32_t pin)
+{
+    uint8_t isValid = 0U;
+
+    if (((uint32_t)port < (uint32_t)PortCount) &&
+        (pin < R_PORT_PIN_COUNT) &&
+        (PortList[(uint32_t)port].P_Reg != 0))
+    {
+        isValid = 1U;
     }
-    
-    *PortList[Port].PMC_Reg |= 1u<<Pin;
+
+    return isValid;
 }
 
-
-/*****************************************************************************
-** Function:    R_PORT_GetLevel
-** Description: Gets the state of a Pin.
-** Parameter:   Port: Portgroup
-**              Pin: Pin Number
-** Return:      0 - Pin is low
-**              1 - Pin is high
-******************************************************************************/
-uint32_t R_PORT_GetLevel(enum port_t Port, uint32_t Pin)
+static void R_PORT_ModifyBit16(volatile uint16_t *reg, uint32_t pin, uint8_t setBit)
 {
-    uint16_t PortLevel;
-    
-    PortLevel = *PortList[Port].PPR_Reg;
-    PortLevel &= 1<<Pin;
-    
-    if(PortLevel == 0)
-        {
-            return 0;
-        }
+    uint16_t mask;
+
+    if ((reg == 0) || (pin >= R_PORT_PIN_COUNT))
+    {
+        return;
+    }
+
+    mask = (uint16_t)(1U << pin);
+
+    if (setBit != 0U)
+    {
+        *reg |= mask;
+    }
     else
-        {
-            return 1;
-        }
-}
-/*****************************************************************************
-** Function:    R_PORT_GetPort
-** Description: Gets the state of a Port.
-** Parameter:   Port: Portgroup
-** Return:      0 - Pin is low
-**              1 - Pin is high
-******************************************************************************/
-uint16_t R_PORT_GetPort(enum port_t Port)
-{
-    uint16_t PortLevel;
-    
-    PortLevel = *PortList[Port].PPR_Reg;
-    return PortLevel;
-}
-/*****************************************************************************
-** Function:    R_PORT_SetOpenDrain
-** Description: Sets pin characteristics to open-drain.
-** Parameter:   Port: Portgroup
-**              Pin: Pin Number
-** Return:      None
-******************************************************************************/
-void R_PORT_SetOpenDrain(enum port_t Port, uint32_t Pin)
-{
-  uint32_t loc_podcValue;
-  loc_podcValue = *PortList[Port].PODC_Reg;
-  loc_podcValue |= 1<<Pin;
-  protected_write(*PortList[Port].PPCMD_Reg, *PortList[Port].PPROTS_Reg, *PortList[Port].PODC_Reg, loc_podcValue);
-}  
-
-/*****************************************************************************
-** Function:    R_PORT_SetPushPull
-** Description: Sets pin characteristics to push-pull.
-** Parameter:   Port: Portgroup
-**              Pin: Pin Number
-** Return:      None
-******************************************************************************/ 
-void R_PORT_SetPushPull(enum port_t Port, uint32_t Pin)
-{
-  uint32_t loc_podcValue;
-  loc_podcValue = *PortList[Port].PODC_Reg;
-  loc_podcValue &= ~(1<<Pin);
-  protected_write(*PortList[Port].PPCMD_Reg, *PortList[Port].PPROTS_Reg, *PortList[Port].PODC_Reg, loc_podcValue);
+    {
+        *reg &= (uint16_t)(~mask);
+    }
 }
 
-/*****************************************************************************
-** Function:    R_PORT_ConnectPullUp
-** Description: Connects internal pull up
-** Parameter:   Port: Portgroup
-**              Pin: Pin Number
-** Return:      None
-******************************************************************************/ 
-void R_PORT_ConnectPullUp(enum port_t Port, uint32_t Pin)
+static volatile uint8_t *R_PORT_GetAnalogFilterRegister(enum fcla_signal_t inputSignal)
 {
-	*PortList[Port].PU_Reg |= (1<<Pin);
+    volatile uint8_t *filterReg = 0;
+
+    switch (inputSignal)
+    {
+        case R_FCLA_INTP0:
+            filterReg = &FCLA0.CTL0_INTPL;
+            break;
+
+        case R_FCLA_INTP1:
+            filterReg = &FCLA0.CTL1_INTPL;
+            break;
+
+        case R_FCLA_INTP2:
+            filterReg = &FCLA0.CTL2_INTPL;
+            break;
+
+        case R_FCLA_INTP3:
+            filterReg = &FCLA0.CTL3_INTPL;
+            break;
+
+        case R_FCLA_INTP4:
+            filterReg = &FCLA0.CTL4_INTPL;
+            break;
+
+        case R_FCLA_INTP5:
+            filterReg = &FCLA0.CTL5_INTPL;
+            break;
+
+        case R_FCLA_INTP6:
+            filterReg = &FCLA0.CTL6_INTPL;
+            break;
+
+        case R_FCLA_INTP7:
+            filterReg = &FCLA0.CTL7_INTPL;
+            break;
+
+        case R_FCLA_INTP8:
+            filterReg = &FCLA0.CTL0_INTPH;
+            break;
+
+        case R_FCLA_INTP10:
+            filterReg = &FCLA0.CTL2_INTPH;
+            break;
+
+        case R_FCLA_INTP11:
+            filterReg = &FCLA0.CTL3_INTPH;
+            break;
+
+        case R_FCLA_INTP12:
+            filterReg = &FCLA0.CTL4_INTPH;
+            break;
+
+        case R_FCLA_INTP13:
+            filterReg = &FCLA0.CTL5_INTPH;
+            break;
+
+        case R_FCLA_NMI:
+            filterReg = &FCLA0.CTL0_NMI;
+            break;
+
+        default:
+            /* INTP9, INTP14 and INTP15 have no register member. */
+            break;
+    }
+
+    return filterReg;
 }
 
-/*****************************************************************************
-** Function:    R_PORT_DisconnectPullUp
-** Description: Disconnects internal pull up
-** Parameter:   Port: Portgroup
-**              Pin: Pin Number
-** Return:      None
-******************************************************************************/ 
-void R_PORT_DisconnectPullUp(enum port_t Port, uint32_t Pin)
+static uint8_t R_PORT_GetDigitalFilterRegisters(enum dnfa_signal_t inputSignal,
+                                                volatile uint8_t **controlReg,
+                                                volatile uint16_t **enableReg,
+                                                uint32_t *enableBit)
 {
-	*PortList[Port].PU_Reg &= ~(1<<Pin);
-}
-/*****************************************************************************
-** Function:    R_PORT_ConnectPullDown
-** Description: Connects internal pull down
-** Parameter:   Port: Portgroup
-**              Pin: Pin Number
-** Return:      None
-******************************************************************************/ 
-void R_PORT_ConnectPullDown(enum port_t Port, uint32_t Pin)
-{
-	*PortList[Port].PD_Reg |= (1<<Pin);
+    uint32_t signalValue;
+    uint8_t isSupported = 0U;
+
+    signalValue = (uint32_t)inputSignal;
+    *controlReg = 0;
+    *enableReg = 0;
+    *enableBit = 0U;
+
+    if (signalValue <= (uint32_t)R_DNFA_TAUD0I15)
+    {
+        *controlReg = &DNF.ATAUD0ICTL;
+        *enableReg = &DNF.ATAUD0IEN;
+        *enableBit = signalValue;
+        isSupported = 1U;
+    }
+    else if ((signalValue >= (uint32_t)R_DNFA_TAUB0I0) &&
+             (signalValue <= (uint32_t)R_DNFA_TAUB0I15))
+    {
+        *controlReg = &DNF.ATAUB0ICTL;
+        *enableReg = &DNF.ATAUB0IEN;
+        *enableBit = signalValue - (uint32_t)R_DNFA_TAUB0I0;
+        isSupported = 1U;
+    }
+    else if ((signalValue >= (uint32_t)R_DNFA_ENCA0TIN0) &&
+             (signalValue <= (uint32_t)R_DNFA_ENCEC))
+    {
+        *controlReg = &DNF.AENCA0ICTL;
+        *enableReg = &DNF.AENCA0IEN;
+        *enableBit = signalValue - (uint32_t)R_DNFA_ENCA0TIN0;
+        isSupported = 1U;
+    }
+    else
+    {
+        /* SENT DNF registers are not present in this iodefine.h. */
+    }
+
+    return isSupported;
 }
 
-/*****************************************************************************
-** Function:    R_PORT_DisconnectPullDown
-** Description: Connects internal pull down
-** Parameter:   Port: Portgroup
-**              Pin: Pin Number
-** Return:      None
-******************************************************************************/ 
-void R_PORT_DisconnectPullDown(enum port_t Port, uint32_t Pin)
+/*===========================================================================*/
+/* Public functions                                                          */
+/*===========================================================================*/
+void R_PORT_SetGpioOutput(enum port_t port, uint32_t pin, enum level_t level)
 {
-	*PortList[Port].PD_Reg |= (1<<Pin);
+    const struct pregs_t *portRegs;
+
+    if (R_PORT_IsPortPinValid(port, pin) == 0U)
+    {
+        return;
+    }
+
+    portRegs = &PortList[(uint32_t)port];
+
+    R_PORT_ModifyBit16(portRegs->P_Reg, pin, (uint8_t)(level == High));
+    R_PORT_ModifyBit16(portRegs->PM_Reg, pin, 0U);
+
+    if (portRegs->PMC_Reg != 0)
+    {
+        R_PORT_ModifyBit16(portRegs->PMC_Reg, pin, 0U);
+    }
 }
 
+void R_PORT_ToggleGpioOutput(enum port_t port, uint32_t pin)
+{
+    const struct pregs_t *portRegs;
+
+    if (R_PORT_IsPortPinValid(port, pin) == 0U)
+    {
+        return;
+    }
+
+    portRegs = &PortList[(uint32_t)port];
+    R_PORT_ModifyBit16(portRegs->PNOT_Reg, pin, 1U);
+}
+
+void R_PORT_SetGpioInput(enum port_t port, uint32_t pin)
+{
+    const struct pregs_t *portRegs;
+
+    if (R_PORT_IsPortPinValid(port, pin) == 0U)
+    {
+        return;
+    }
+
+    portRegs = &PortList[(uint32_t)port];
+
+    R_PORT_ModifyBit16(portRegs->PM_Reg, pin, 1U);
+    R_PORT_ModifyBit16(portRegs->PIBC_Reg, pin, 1U);
+
+    if (portRegs->PMC_Reg != 0)
+    {
+        R_PORT_ModifyBit16(portRegs->PMC_Reg, pin, 0U);
+    }
+}
+
+void R_PORT_SetGpioHighZ(enum port_t port, uint32_t pin)
+{
+    const struct pregs_t *portRegs;
+
+    if (R_PORT_IsPortPinValid(port, pin) == 0U)
+    {
+        return;
+    }
+
+    portRegs = &PortList[(uint32_t)port];
+
+    R_PORT_ModifyBit16(portRegs->PIBC_Reg, pin, 0U);
+    R_PORT_ModifyBit16(portRegs->PM_Reg, pin, 1U);
+
+    if (portRegs->PMC_Reg != 0)
+    {
+        R_PORT_ModifyBit16(portRegs->PMC_Reg, pin, 0U);
+    }
+}
+
+void R_PORT_SetAltFunc(enum port_t port, uint32_t pin, enum alt_t alt, enum io_t io)
+{
+    const struct pregs_t *portRegs;
+    uint32_t altValue;
+
+    if (R_PORT_IsPortPinValid(port, pin) == 0U)
+    {
+        return;
+    }
+
+    portRegs = &PortList[(uint32_t)port];
+    altValue = (uint32_t)alt;
+
+    if ((altValue > (uint32_t)Alt7) ||
+        (portRegs->PM_Reg == 0) ||
+        (portRegs->PMC_Reg == 0) ||
+        (portRegs->PFC_Reg == 0) ||
+        (portRegs->PFCE_Reg == 0))
+    {
+        return;
+    }
+
+    /*
+     * Ports without PFCAE only support selections whose PFCAE bit is zero
+     * through this legacy 3-bit Alt1..Alt7 interface.
+     */
+    if (((altValue & 0x04U) != 0U) && (portRegs->PFCAE_Reg == 0))
+    {
+        return;
+    }
+
+    R_PORT_ModifyBit16(portRegs->PFC_Reg, pin, (uint8_t)(altValue & 0x01U));
+    R_PORT_ModifyBit16(portRegs->PFCE_Reg, pin, (uint8_t)((altValue >> 1U) & 0x01U));
+
+    if (portRegs->PFCAE_Reg != 0)
+    {
+        R_PORT_ModifyBit16(portRegs->PFCAE_Reg, pin,
+                           (uint8_t)((altValue >> 2U) & 0x01U));
+    }
+
+    if (io == Input)
+    {
+        R_PORT_ModifyBit16(portRegs->PM_Reg, pin, 1U);
+    }
+    else if (io == Output)
+    {
+        R_PORT_ModifyBit16(portRegs->PM_Reg, pin, 0U);
+    }
+    else
+    {
+        return;
+    }
+
+    R_PORT_ModifyBit16(portRegs->PMC_Reg, pin, 1U);
+}
+
+uint32_t R_PORT_GetLevel(enum port_t port, uint32_t pin)
+{
+    const struct pregs_t *portRegs;
+    uint16_t mask;
+
+    if (R_PORT_IsPortPinValid(port, pin) == 0U)
+    {
+        return 0U;
+    }
+
+    portRegs = &PortList[(uint32_t)port];
+
+    if (portRegs->PPR_Reg == 0)
+    {
+        return 0U;
+    }
+
+    mask = (uint16_t)(1U << pin);
+
+    return (((*portRegs->PPR_Reg) & mask) != 0U) ? 1U : 0U;
+}
+
+uint16_t R_PORT_GetPort(enum port_t port)
+{
+    if (((uint32_t)port >= (uint32_t)PortCount) ||
+        (PortList[(uint32_t)port].PPR_Reg == 0))
+    {
+        return 0U;
+    }
+
+    return *PortList[(uint32_t)port].PPR_Reg;
+}
+
+void R_PORT_SetOpenDrain(enum port_t port, uint32_t pin)
+{
+    const struct pregs_t *portRegs;
+    uint32_t podcValue;
+
+    if (R_PORT_IsPortPinValid(port, pin) == 0U)
+    {
+        return;
+    }
+
+    portRegs = &PortList[(uint32_t)port];
+
+    if ((portRegs->PODC_Reg == 0) ||
+        (portRegs->PPROTS_Reg == 0) ||
+        (portRegs->PPCMD_Reg == 0))
+    {
+        return;
+    }
+
+    podcValue = *portRegs->PODC_Reg;
+    podcValue |= (uint32_t)(1UL << pin);
+
+    protected_write(*portRegs->PPCMD_Reg,
+                    *portRegs->PPROTS_Reg,
+                    *portRegs->PODC_Reg,
+                    podcValue);
+}
+
+void R_PORT_SetPushPull(enum port_t port, uint32_t pin)
+{
+    const struct pregs_t *portRegs;
+    uint32_t podcValue;
+
+    if (R_PORT_IsPortPinValid(port, pin) == 0U)
+    {
+        return;
+    }
+
+    portRegs = &PortList[(uint32_t)port];
+
+    if ((portRegs->PODC_Reg == 0) ||
+        (portRegs->PPROTS_Reg == 0) ||
+        (portRegs->PPCMD_Reg == 0))
+    {
+        return;
+    }
+
+    podcValue = *portRegs->PODC_Reg;
+    podcValue &= (uint32_t)(~(uint32_t)(1UL << pin));
+
+    protected_write(*portRegs->PPCMD_Reg,
+                    *portRegs->PPROTS_Reg,
+                    *portRegs->PODC_Reg,
+                    podcValue);
+}
+
+void R_PORT_ConnectPullUp(enum port_t port, uint32_t pin)
+{
+    if (R_PORT_IsPortPinValid(port, pin) == 0U)
+    {
+        return;
+    }
+
+    R_PORT_ModifyBit16(PortList[(uint32_t)port].PU_Reg, pin, 1U);
+}
+
+void R_PORT_DisconnectPullUp(enum port_t port, uint32_t pin)
+{
+    if (R_PORT_IsPortPinValid(port, pin) == 0U)
+    {
+        return;
+    }
+
+    R_PORT_ModifyBit16(PortList[(uint32_t)port].PU_Reg, pin, 0U);
+}
+
+void R_PORT_ConnectPullDown(enum port_t port, uint32_t pin)
+{
+    if (R_PORT_IsPortPinValid(port, pin) == 0U)
+    {
+        return;
+    }
+
+    R_PORT_ModifyBit16(PortList[(uint32_t)port].PD_Reg, pin, 1U);
+}
+
+void R_PORT_DisconnectPullDown(enum port_t port, uint32_t pin)
+{
+    if (R_PORT_IsPortPinValid(port, pin) == 0U)
+    {
+        return;
+    }
+
+    /* Legacy source used '|=' here; disconnect must clear the PD bit. */
+    R_PORT_ModifyBit16(PortList[(uint32_t)port].PD_Reg, pin, 0U);
+}
+
+void R_PORT_SetAnalogFilter(enum fcla_signal_t inputSignal, uint8_t filterSetting)
+{
+    volatile uint8_t *filterReg;
+
+    filterReg = R_PORT_GetAnalogFilterRegister(inputSignal);
+
+    if (filterReg != 0)
+    {
+        *filterReg = filterSetting;
+    }
+}
+
+void R_PORT_SetDigitalFilter(enum dnfa_signal_t inputSignal, uint8_t filterSetting)
+{
+    volatile uint8_t *controlReg;
+    volatile uint16_t *enableReg;
+    uint32_t enableBit;
+
+    if (R_PORT_GetDigitalFilterRegisters(inputSignal,
+                                         &controlReg,
+                                         &enableReg,
+                                         &enableBit) == 0U)
+    {
+        return;
+    }
+
+    *controlReg = filterSetting;
+    *enableReg |= (uint16_t)(1U << enableBit);
+}
+
+void R_PORT_ResetDigitalFilter(enum port_t port, uint32_t pin)
+{
+    /*
+     * The legacy declaration identifies a DNF channel by port/pin, while the
+     * R7F701581 DNF registers identify channels by peripheral input signal.
+     * There is no unambiguous port/pin-to-DNF-channel mapping in iodefine.h.
+     *
+     * Keep this compatibility symbol as a deliberate no-op. Disable a DNF
+     * channel through the corresponding DNF.*IEN bit when a signal-based API
+     * is added by the application.
+     */
+    (void)port;
+    (void)pin;
+}
+
+void R_PORT_EnableIpControl(enum port_t port, uint32_t pin)
+{
+    if (R_PORT_IsPortPinValid(port, pin) == 0U)
+    {
+        return;
+    }
+
+    R_PORT_ModifyBit16(PortList[(uint32_t)port].PIPC_Reg, pin, 1U);
+}
+
+void R_PORT_DisableIpControl(enum port_t port, uint32_t pin)
+{
+    if (R_PORT_IsPortPinValid(port, pin) == 0U)
+    {
+        return;
+    }
+
+    R_PORT_ModifyBit16(PortList[(uint32_t)port].PIPC_Reg, pin, 0U);
+}
+
+void R_PORT_EnableFastMode(enum port_t port, uint32_t pin)
+{
+    const struct pregs_t *portRegs;
+    uint32_t pdscValue;
+
+    if (R_PORT_IsPortPinValid(port, pin) == 0U)
+    {
+        return;
+    }
+
+    portRegs = &PortList[(uint32_t)port];
+
+    if ((portRegs->PDSC_Reg == 0) ||
+        (portRegs->PPROTS_Reg == 0) ||
+        (portRegs->PPCMD_Reg == 0))
+    {
+        return;
+    }
+
+    pdscValue = *portRegs->PDSC_Reg;
+    pdscValue |= (uint32_t)(1UL << pin);
+
+    protected_write(*portRegs->PPCMD_Reg,
+                    *portRegs->PPROTS_Reg,
+                    *portRegs->PDSC_Reg,
+                    pdscValue);
+}
+
+void R_PORT_DisableFastMode(enum port_t port, uint32_t pin)
+{
+    const struct pregs_t *portRegs;
+    uint32_t pdscValue;
+
+    if (R_PORT_IsPortPinValid(port, pin) == 0U)
+    {
+        return;
+    }
+
+    portRegs = &PortList[(uint32_t)port];
+
+    if ((portRegs->PDSC_Reg == 0) ||
+        (portRegs->PPROTS_Reg == 0) ||
+        (portRegs->PPCMD_Reg == 0))
+    {
+        return;
+    }
+
+    pdscValue = *portRegs->PDSC_Reg;
+    pdscValue &= (uint32_t)(~(uint32_t)(1UL << pin));
+
+    protected_write(*portRegs->PPCMD_Reg,
+                    *portRegs->PPROTS_Reg,
+                    *portRegs->PDSC_Reg,
+                    pdscValue);
+}

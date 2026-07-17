@@ -25,10 +25,10 @@
 /***********************************************************************************************************************
 * File Name    : r_cg_port.h
 * Version      : Code Generator for RH850/F1K V1.01.02.02 [08 May 2018]
-* Device(s)    : R7F701583(LQFP144pin)
+* Device(s)    : R7F701581(LQFP100pin)
 * Tool-Chain   : CCRH
 * Description  : This file implements device driver for Port module.
-* Creation Date: 2025/12/4
+* Creation Date: 2026/7/3
 ***********************************************************************************************************************/
 #ifndef PORT_H
 #define PORT_H
@@ -339,58 +339,6 @@ Macro definitions (Register bit)
 /* JPIBCn7 enable and disable the input buffer in input port mode. (JPIBCn7) */
 #define _PORT_JPIBCn7_INPUT_BUFFER_DISABLE        (0x00U) /* Input buffer is disabled. */
 #define _PORT_JPIBCn7_INPUT_BUFFER_ENABLE         (0x80U) /* Input buffer is enabled. */
-
-/*
-    Input port input buffer control register (IPIBCn)
-*/
-/* IPIBCn0 enable and disable the input buffer in input port mode. (IPIBCn0) */
-#define _PORT_IPIBCn0_INPUT_BUFFER_DISABLE        (0x0000U) /* Input buffer is disabled. */
-#define _PORT_IPIBCn0_INPUT_BUFFER_ENABLE         (0x0001U) /* Input buffer is enabled. */
-/* IPIBCn1 enable and disable the input buffer in input port mode. (IPIBCn1) */
-#define _PORT_IPIBCn1_INPUT_BUFFER_DISABLE        (0x0000U) /* Input buffer is disabled. */
-#define _PORT_IPIBCn1_INPUT_BUFFER_ENABLE         (0x0002U) /* Input buffer is enabled. */
-/* IPIBCn2 enable and disable the input buffer in input port mode. (IPIBCn2) */
-#define _PORT_IPIBCn2_INPUT_BUFFER_DISABLE        (0x0000U) /* Input buffer is disabled. */
-#define _PORT_IPIBCn2_INPUT_BUFFER_ENABLE         (0x0004U) /* Input buffer is enabled. */
-/* IPIBCn3 enable and disable the input buffer in input port mode. (IPIBCn3) */
-#define _PORT_IPIBCn3_INPUT_BUFFER_DISABLE        (0x0000U) /* Input buffer is disabled. */
-#define _PORT_IPIBCn3_INPUT_BUFFER_ENABLE         (0x0008U) /* Input buffer is enabled. */
-/* IPIBCn4 enable and disable the input buffer in input port mode. (IPIBCn4) */
-#define _PORT_IPIBCn4_INPUT_BUFFER_DISABLE        (0x0000U) /* Input buffer is disabled. */
-#define _PORT_IPIBCn4_INPUT_BUFFER_ENABLE         (0x0010U) /* Input buffer is enabled. */
-/* IPIBCn5 enable and disable the input buffer in input port mode. (IPIBCn5) */
-#define _PORT_IPIBCn5_INPUT_BUFFER_DISABLE        (0x0000U) /* Input buffer is disabled. */
-#define _PORT_IPIBCn5_INPUT_BUFFER_ENABLE         (0x0020U) /* Input buffer is enabled. */
-/* IPIBCn6 enable and disable the input buffer in input port mode. (IPIBCn6) */
-#define _PORT_IPIBCn6_INPUT_BUFFER_DISABLE        (0x0000U) /* Input buffer is disabled. */
-#define _PORT_IPIBCn6_INPUT_BUFFER_ENABLE         (0x0040U) /* Input buffer is enabled. */
-/* IPIBCn7 enable and disable the input buffer in input port mode. (IPIBCn7) */
-#define _PORT_IPIBCn7_INPUT_BUFFER_DISABLE        (0x0000U) /* Input buffer is disabled. */
-#define _PORT_IPIBCn7_INPUT_BUFFER_ENABLE         (0x0080U) /* Input buffer is enabled. */
-/* IPIBCn8 enable and disable the input buffer in input port mode. (IPIBCn8) */
-#define _PORT_IPIBCn8_INPUT_BUFFER_DISABLE        (0x0000U) /* Input buffer is disabled. */
-#define _PORT_IPIBCn8_INPUT_BUFFER_ENABLE         (0x0100U) /* Input buffer is enabled. */
-/* IPIBCn9 enable and disable the input buffer in input port mode. (IPIBCn9) */
-#define _PORT_IPIBCn9_INPUT_BUFFER_DISABLE        (0x0000U) /* Input buffer is disabled. */
-#define _PORT_IPIBCn9_INPUT_BUFFER_ENABLE         (0x0200U) /* Input buffer is enabled. */
-/* IPIBCn10 enable and disable the input buffer in input port mode. (IPIBCn10) */
-#define _PORT_IPIBCn10_INPUT_BUFFER_DISABLE       (0x0000U) /* Input buffer is disabled. */
-#define _PORT_IPIBCn10_INPUT_BUFFER_ENABLE        (0x0400U) /* Input buffer is enabled. */
-/* IPIBCn11 enable and disable the input buffer in input port mode. (IPIBCn11) */
-#define _PORT_IPIBCn11_INPUT_BUFFER_DISABLE       (0x0000U) /* Input buffer is disabled. */
-#define _PORT_IPIBCn11_INPUT_BUFFER_ENABLE        (0x0800U) /* Input buffer is enabled. */
-/* IPIBCn12 enable and disable the input buffer in input port mode. (IPIBCn12) */
-#define _PORT_IPIBCn12_INPUT_BUFFER_DISABLE       (0x0000U) /* Input buffer is disabled. */
-#define _PORT_IPIBCn12_INPUT_BUFFER_ENABLE        (0x1000U) /* Input buffer is enabled. */
-/* IPIBCn13 enable and disable the input buffer in input port mode. (IPIBCn13) */
-#define _PORT_IPIBCn13_INPUT_BUFFER_DISABLE       (0x0000U) /* Input buffer is disabled. */
-#define _PORT_IPIBCn13_INPUT_BUFFER_ENABLE        (0x2000U) /* Input buffer is enabled. */
-/* IPIBCn14 enable and disable the input buffer in input port mode. (IPIBCn14) */
-#define _PORT_IPIBCn14_INPUT_BUFFER_DISABLE       (0x0000U) /* Input buffer is disabled. */
-#define _PORT_IPIBCn14_INPUT_BUFFER_ENABLE        (0x4000U) /* Input buffer is enabled. */
-/* IPIBCn15 enable and disable the input buffer in input port mode. (IPIBCn15) */
-#define _PORT_IPIBCn15_INPUT_BUFFER_DISABLE       (0x0000U) /* Input buffer is disabled. */
-#define _PORT_IPIBCn15_INPUT_BUFFER_ENABLE        (0x8000U) /* Input buffer is enabled. */
 
 /*
     Port bidirection control register (PBDCn)
@@ -1208,22 +1156,15 @@ Macro definitions (Register bit)
 Macro definitions
 ***********************************************************************************************************************/
 #define _PORT_PM0_DEFAULT_VALUE                   (0x8000U) /* PM0 default value */
-#define _PORT_PM1_DEFAULT_VALUE                   (0xF000U) /* PM1 default value */
 #define _PORT_PM8_DEFAULT_VALUE                   (0xE000U) /* PM8 default value */
 #define _PORT_PM9_DEFAULT_VALUE                   (0xFF80U) /* PM9 default value */
-#define _PORT_PM12_DEFAULT_VALUE                  (0xFFF8U) /* PM12 default value */
-#define _PORT_PM18_DEFAULT_VALUE                  (0xFFF0U) /* PM18 default value */
-#define _PORT_PM20_DEFAULT_VALUE                  (0xFFCFU) /* PM20 default value */
-#define _PORT_APM1_DEFAULT_VALUE                  (0xFF00U) /* APM1 default value */
-#define _PORT_JPM0_DEFAULT_VALUE                  (0x80U) /* JPM0 default value */
+#define _PORT_PM11_DEFAULT_VALUE                  (0xFF00U) /* PM11 default value */
+#define _PORT_JPM0_DEFAULT_VALUE                  (0xC0U) /* JPM0 default value */
 #define _PORT_PIS0_DEFAULT_VALUE                  (0x8000U) /* PIS0 default value */
-#define _PORT_PIS1_DEFAULT_VALUE                  (0xF000U) /* PIS1 default value */
 #define _PORT_PIS8_DEFAULT_VALUE                  (0xE000U) /* PIS8 default value */
 #define _PORT_PIS9_DEFAULT_VALUE                  (0xFF80U) /* PIS9 default value */
-#define _PORT_PIS12_DEFAULT_VALUE                 (0xFFF8U) /* PIS12 default value */
-#define _PORT_PIS18_DEFAULT_VALUE                 (0xFFF0U) /* PIS18 default value */
-#define _PORT_PIS20_DEFAULT_VALUE                 (0xFFCFU) /* PIS20 default value */
-#define _PORT_JPIS0_DEFAULT_VALUE                 (0x0090U) /* JPIS0 default value */
+#define _PORT_PIS11_DEFAULT_VALUE                 (0xFF00U) /* PIS11 default value */
+#define _PORT_JPIS0_DEFAULT_VALUE                 (0x00D0U) /* JPIS0 default value */
 #define _PORT_PM_INIT                             (0xFFFFU) /* Port mode init */
 #define _PORT_JPM_INIT                            (0xFFU)   /* JTAG Port mode init */
 #define _PORT_APM_INIT                            (0xFFFFU) /* Analog Port mode init */

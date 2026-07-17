@@ -29,7 +29,7 @@ typedef void* SemaphoreHandle_t;
 
 // 队列配置：最大队列数和每个队列的最大长度
 #ifndef MY_QUEUE_MAX_NUM
-#define MY_QUEUE_MAX_NUM    5        // 最多支持8个队列
+#define MY_QUEUE_MAX_NUM    15        // 最多支持8个队列
 #endif
 
 #ifndef MY_QUEUE_MAX_LENGTH

@@ -25,10 +25,10 @@
 /***********************************************************************************************************************
 * File Name    : r_cg_macrodriver.h
 * Version      : Code Generator for RH850/F1K V1.01.02.02 [08 May 2018]
-* Device(s)    : R7F701583(LQFP144pin)
+* Device(s)    : R7F701581(LQFP100pin)
 * Tool-Chain   : CCRH
 * Description  : This file implements general head file.
-* Creation Date: 2025/12/4
+* Creation Date: 2026/7/1
 ***********************************************************************************************************************/
 #ifndef COMMON_DEF_H
 #define COMMON_DEF_H
