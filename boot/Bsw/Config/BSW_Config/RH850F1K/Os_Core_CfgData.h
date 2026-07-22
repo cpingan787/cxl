@@ -50,6 +50,12 @@ extern void Os_ISR_RCAN0ERR_IRQ_Handler(void);
 extern void Os_ISR_RCAN0TRX_IRQ_Handler(void);
 extern void Os_ISR_RCANGRECC0_IRQ_Handler(void);
 extern void Os_ISR_WDTA1_IRQ_Handler(void);
+extern void Os_ISR_RLIN30UR0_IRQ_Handler(void);
+extern void Os_ISR_RLIN30UR1_IRQ_Handler(void);
+extern void Os_ISR_RLIN30UR2_IRQ_Handler(void);
+extern void Os_ISR_RLIN32UR0_IRQ_Handler(void);
+extern void Os_ISR_RLIN32UR1_IRQ_Handler(void);
+extern void Os_ISR_RLIN32UR2_IRQ_Handler(void);
 extern const Os_IntInstallType Os_IntInstall[CFG_ISR_MAX];
 
 #endif /* OS_CORECFG_H */

@@ -61,6 +61,12 @@ DeclareISR(ISR_RCAN0ERR_IRQ_Handler);
 DeclareISR(ISR_RCAN0TRX_IRQ_Handler);
 DeclareISR(ISR_RCANGRECC0_IRQ_Handler);
 DeclareISR(ISR_WDTA1_IRQ_Handler);
+DeclareISR(ISR_RLIN30UR0_IRQ_Handler);
+DeclareISR(ISR_RLIN30UR1_IRQ_Handler);
+DeclareISR(ISR_RLIN30UR2_IRQ_Handler);
+DeclareISR(ISR_RLIN32UR0_IRQ_Handler);
+DeclareISR(ISR_RLIN32UR1_IRQ_Handler);
+DeclareISR(ISR_RLIN32UR2_IRQ_Handler);
 /* PRQA S 1753 -- */
 
 #endif /* OS_INTERRUPT_CFGDATA_H */

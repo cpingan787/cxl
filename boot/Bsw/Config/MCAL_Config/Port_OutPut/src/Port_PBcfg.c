@@ -443,7 +443,7 @@ CONST(Port_NumRegs, PORT_CONST)
     0xE7F32B42UL,
 
     /* ulInitModePMCSRRegVal */
-    0x00007E0CUL,
+    0x00001E0CUL,
 
     /* ulInitModePODCRegVal */
     0x00000000UL,
@@ -503,7 +503,7 @@ CONST(Port_NumRegs, PORT_CONST)
     0xFFFFFF32UL,
 
     /* ulInitModePMCSRRegVal */
-    0x000000FCUL,
+    0x000000F0UL,
 
     /* ulInitModePODCRegVal */
     0x00000000UL,

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * COPYRIGHT
  * ---------------------------------------------------------------------------------------------------------------------
  * Copyright (c) iSOFT INFRASTRUCTURE SOFTWARE CO., LTD. This software is proprietary to
@@ -38,6 +38,12 @@
 #include "Can.h"
 #include "BootM.h"
 #include "Common.h"
+#include "logHal.h"
+#include "mpuHal.h"
+#include "mcuMpuSyncTask.h"
+#include "firmwareUpdateSdk.h"
+#include "SecureBoot.h"
+#include "logHal.h"
 /** DO NOT CHANGE THIS COMMENT!
 * </USERBLOCK>
 */
@@ -65,7 +71,12 @@ TASK(OsTask_Init)
     */
     /* custom code.... */
     EcuMService_Init();
+    LogHalInit(1);
+    MpuHalInit();
 
+    MpuHalStart();
+
+    TBOX_PRINT("BOOT INIT\r\n");
     SetRelAlarm(OsAlarm_1ms, 1, 1);
     /** DO NOT CHANGE THIS COMMENT!
     * </USERBLOCK>
@@ -79,7 +90,9 @@ TASK(OsTask_Init)
         }
     }
 }
-/*OsTask_1ms: Core0(CPU),Type = BASIC, Priority = 6*/
+/*OsTask_0: Core0(CPU),Type = BASIC, Priority = 1*/
+uint32 task_cnt = 0;
+extern void TstCanSendMessage(void);
 TASK(OsTask_1ms)
 {
     /* please insert your code here ... */
@@ -87,10 +100,57 @@ TASK(OsTask_1ms)
     * <USERBLOCK OsTask_1ms>
     */
     Comm_MainTick++;
+
+    static uint16 init_cnt = 0;
+    static uint32 run_time = 0;
+    static uint32 dataRead = 0;
+    static uint32 sys_cnt = 0;
+
+    
+    if (init_cnt == 0) 
+    {
+        FlsIf_Read(0x80000, 4, (uint8*)&dataRead);
+        if (dataRead != 0xfe)
+        {
+            MpuHal_TriggerPowerOnSequence();
+        }
+
+        McuMpuSyncTaskInit();
+        DID_Init();
+        FirmwareUpdate_UnlockMcuFlashAck();
+        TBOX_PRINT("boot start SecBoot: %d\n", SecureBootCurrentStatus);
+        
+        init_cnt = 1;
+    }
+
+    sys_cnt++;
+    if (sys_cnt % 5 == 0)
+    {
+        MpuHalTxTask();
+    }
+
+    if (sys_cnt == 1000) // 1s
+    {
+        TBOX_PRINT("BOOT RUN\r\n");
+        // TBOX_PRINT("boot1 cycle %ds\n", run_time);
+        sys_cnt = 0;
+        run_time++;
+    }
+    
+    MpuHalCycleProcess(5);
     CanTp_MainFunction();
     Dcm_TimerFunction();
     Dcm_MainFunction_Post();
     Dcm_MainFunction();
+    MpuHalUartTimerCallback();
+    McuMpuSyncTaskMain();
+	
+	// task_cnt++;
+    // if (task_cnt >= 100)
+    // {
+    //     task_cnt = 0;
+    //     Wdg_59_DriverB_TriggerFunc(WDG_59_DRIVERB_INCLUDE_CRITICAL_SECTION); // 100ms trigger一次22
+    // }
     /** DO NOT CHANGE THIS COMMENT!
     * </USERBLOCK>
     */
@@ -213,6 +273,120 @@ ISR(ISR_WDTA1_IRQ_Handler)
 #define OS_STOP_SEC_CODE
 #include "Os_MemMap.h"
 
+/*
+ *ISR(ISR_RLIN30UR0_IRQ_Handler: Core0(CPU))
+ */
+#define OS_START_SEC_CODE
+#include "Os_MemMap.h"
+ISR(ISR_RLIN30UR0_IRQ_Handler)
+{
+    /* please insert your code here ... */
+    /** DO NOT CHANGE THIS COMMENT!
+    * <USERBLOCK RLIN30UR0_IRQ>
+    */
+    /* UART0 TX ISR */
+    r_uart0_interrupt_send();
+    /** DO NOT CHANGE THIS COMMENT!
+    * </USERBLOCK>
+    */
+}
+#define OS_STOP_SEC_CODE
+#include "Os_MemMap.h"
+/*
+ *ISR(ISR_RLIN30UR1_IRQ_Handler: Core0(CPU))
+ */
+#define OS_START_SEC_CODE
+#include "Os_MemMap.h"
+ISR(ISR_RLIN30UR1_IRQ_Handler)
+{
+    /* please insert your code here ... */
+    /** DO NOT CHANGE THIS COMMENT!
+    * <USERBLOCK RLIN30UR1_IRQ>
+    */
+    /* UART0 RX ISR */
+    r_uart0_interrupt_receive();
+    /** DO NOT CHANGE THIS COMMENT!
+    * </USERBLOCK>
+    */
+}
+#define OS_STOP_SEC_CODE
+#include "Os_MemMap.h"
+/*
+ *ISR(ISR_RLIN30UR2_IRQ_Handler: Core0(CPU))
+ */
+#define OS_START_SEC_CODE
+#include "Os_MemMap.h"
+ISR(ISR_RLIN30UR2_IRQ_Handler)
+{
+    /* please insert your code here ... */
+    /** DO NOT CHANGE THIS COMMENT!
+    * <USERBLOCK RLIN30UR2_IRQ>
+    */
+    /* UART0 ERR ISR */
+    r_uart0_interrupt_error();
+    /** DO NOT CHANGE THIS COMMENT!
+    * </USERBLOCK>
+    */
+}
+#define OS_STOP_SEC_CODE
+#include "Os_MemMap.h"
+/*
+ *ISR(ISR_RLIN32UR0_IRQ_Handler: Core0(CPU))
+ */
+#define OS_START_SEC_CODE
+#include "Os_MemMap.h"
+ISR(ISR_RLIN32UR0_IRQ_Handler)
+{
+    /* please insert your code here ... */
+    /** DO NOT CHANGE THIS COMMENT!
+    * <USERBLOCK RLIN32UR0_IRQ>
+    */
+    /* UART2 TX ISR */
+    r_uart2_interrupt_send();
+    /** DO NOT CHANGE THIS COMMENT!
+    * </USERBLOCK>
+    */
+}
+#define OS_STOP_SEC_CODE
+#include "Os_MemMap.h"
+/*
+ *ISR(ISR_RLIN32UR1_IRQ_Handler: Core0(CPU))
+ */
+#define OS_START_SEC_CODE
+#include "Os_MemMap.h"
+ISR(ISR_RLIN32UR1_IRQ_Handler)
+{
+    /* please insert your code here ... */
+    /** DO NOT CHANGE THIS COMMENT!
+    * <USERBLOCK RLIN32UR1_IRQ>
+    */
+    /* UART2 RX ISR */
+    r_uart2_interrupt_receive();
+    /** DO NOT CHANGE THIS COMMENT!
+    * </USERBLOCK>
+    */
+}
+#define OS_STOP_SEC_CODE
+#include "Os_MemMap.h"
+/*
+ *ISR(ISR_RLIN32UR2_IRQ_Handler: Core0(CPU))
+ */
+#define OS_START_SEC_CODE
+#include "Os_MemMap.h"
+ISR(ISR_RLIN32UR2_IRQ_Handler)
+{
+    /* please insert your code here ... */
+    /** DO NOT CHANGE THIS COMMENT!
+    * <USERBLOCK RLIN32UR2_IRQ>
+    */
+    /* UART2 ERR ISR */
+    r_uart2_interrupt_error();
+    /** DO NOT CHANGE THIS COMMENT!
+    * </USERBLOCK>
+    */
+}
+#define OS_STOP_SEC_CODE
+#include "Os_MemMap.h"
 
 /* PRQA S 1532-- */ /* MISRA Rule 8.7 */
 /*=======[E N D   O F   F I L E]==============================================*/

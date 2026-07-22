@@ -10,7 +10,7 @@
 #include "mpuHal.h"
 #include "logHal.h"
 #include "mcuMpuSyncTask.h"
-#include "firmwareUpdateSdk.h"
+// #include "firmwareUpdateSdk.h"
 
 /****************************** Type Definitions ******************************/
 /****************************** Global Variables ******************************/
@@ -59,7 +59,7 @@ int16_t FirmwareUpdateSdkInit(void)
 *************************************************/
 void McuMpuSyncTaskInit(void)
 {    
-    FirmwareUpdateSdkInit();
+    FirmwareUpdateSdkInit(); //待适配FirmwareUpdateSdk
     g_dataPack.pDataBuffer = g_dataBuffer;
     g_dataPack.dataBufferSize = sizeof(g_dataBuffer);
 }
@@ -80,6 +80,6 @@ void McuMpuSyncTaskMain(void)
     if (ret == MPU_HAL_STATUS_OK)
     {
         TBOX_PRINT("sync: aid %d, mid 0x%02X, subcommond %d\r\n", g_dataPack.aid, g_dataPack.mid, (g_dataPack.subcommand & 0x7F));
-        FirmwareUpdateSdkCycleProcess(g_mpuHandle, &g_dataPack);
+        FirmwareUpdateSdkCycleProcess(g_mpuHandle, &g_dataPack); //待适配FirmwareUpdateSdk
     }
 }

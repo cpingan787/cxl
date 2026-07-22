@@ -78,6 +78,42 @@ const Os_IntInstallType Os_IntInstall[CFG_ISR_MAX] =
         OS_ID_WDTA1_IRQ,/*IntNumber*/
         INVALID_SELECTION_BIT, /*intc2SelectionBit*/
     },
+    {
+        3U,  /*IntPrio*/
+        Os_ISR_RLIN30UR0_IRQ_Handler,  /*cat2 ISR*/
+        OS_ID_RLIN30UR0_IRQ,/*IntNumber*/
+        INVALID_SELECTION_BIT, /*intc2SelectionBit*/
+    },
+    {
+        3U,  /*IntPrio*/
+        Os_ISR_RLIN30UR1_IRQ_Handler,  /*cat2 ISR*/
+        OS_ID_RLIN30UR1_IRQ,/*IntNumber*/
+        INVALID_SELECTION_BIT, /*intc2SelectionBit*/
+    },
+    {
+        3U,  /*IntPrio*/
+        Os_ISR_RLIN30UR2_IRQ_Handler,  /*cat2 ISR*/
+        OS_ID_RLIN30UR2_IRQ,/*IntNumber*/
+        INVALID_SELECTION_BIT, /*intc2SelectionBit*/
+    },
+    {
+        3U,  /*IntPrio*/
+        Os_ISR_RLIN32UR0_IRQ_Handler,  /*cat2 ISR*/
+        OS_ID_RLIN32UR0_IRQ,/*IntNumber*/
+        INVALID_SELECTION_BIT, /*intc2SelectionBit*/
+    },
+    {
+        3U,  /*IntPrio*/
+        Os_ISR_RLIN32UR1_IRQ_Handler,  /*cat2 ISR*/
+        OS_ID_RLIN32UR1_IRQ,/*IntNumber*/
+        INVALID_SELECTION_BIT, /*intc2SelectionBit*/
+    },
+    {
+        3U,  /*IntPrio*/
+        Os_ISR_RLIN32UR2_IRQ_Handler,  /*cat2 ISR*/
+        OS_ID_RLIN32UR2_IRQ,/*IntNumber*/
+        INVALID_SELECTION_BIT, /*intc2SelectionBit*/
+    },
 };
 #define OS_STOP_SEC_CONST_UNSPECIFIED
 #include "Os_MemMap.h"

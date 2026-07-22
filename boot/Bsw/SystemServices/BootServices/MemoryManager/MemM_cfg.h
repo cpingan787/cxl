@@ -43,7 +43,7 @@
 //#define MEMM_APPB_FLAG_ADDR                      0x00150000U //不需要Application B
 //#define MEMM_CAL_FLAG_ADDR                       0x001F0000U //无标定数据
 #define PROGRAM_CNT_MAX                          0x3E8U //程序最大刷写次数
-#define MEMM_FLAG_NUM                            0x0AU
+#define MEMM_FLAG_NUM                            0x0BU
 
 #define MEMM_FLAG_REPROGRAM_ID                   0x00u
 #define MEMM_FLAG_REPROGRAM_SIZE                 0x04u
@@ -79,6 +79,10 @@
 
 #define ALLOW_F190_WRITE_ID                      0x09u
 #define ALLOW_F190_WRITE_SIZE                    0x01u
+
+#define MEMM_FLAG_MPU_REPROGRAM_ID                 10u
+#define MEMM_FLAG_MPU_REPROGRAM_SIZE             0x04u
+#define MEMM_FLAG_MPU_REPROGRAM_DATA             0xC5u
 
 
 

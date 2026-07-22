@@ -1,0 +1,51 @@
+# ============================================
+# CS+ / CC-RH 编译中间产物 (仅限编译输出目录, 避免误伤源码 .asm)
+# ============================================
+Toolchain/**/DefaultBuild/*.i
+Toolchain/**/DefaultBuild/*.obj
+Toolchain/**/DefaultBuild/*.prn
+Toolchain/**/DefaultBuild/*.asm
+Toolchain/**/DefaultBuild/*.lst
+Toolchain/**/DefaultBuild/*.map
+Toolchain/**/DefaultBuild/*.clnk
+Toolchain/**/DefaultBuild/*.d
+Toolchain/**/DefaultBuild/*.abs
+# Toolchain/**/DefaultBuild/*.hex
+# Toolchain/**/DefaultBuild/*.mot
+
+# MCAL 生成器输出的日志 (Config generator logs, 保留 Can_OutPut/Can.log 等入库配置)
+# 如需忽略某些自动生成日志, 在具体路径下加规则
+
+# ============================================
+# CS+ IDE 用户数据 (CS+ IDE user-specific files)
+# ============================================
+*.mtud
+*.rcpe
+*.tps
+
+# ============================================
+# 质量报告 (Quality report auto-generated)
+# ============================================
+QualityReport*.txt
+
+# ============================================
+# 常见临时文件 (Common temp files)
+# ============================================
+*.bak
+*.tmp
+*.log
+*.swp
+*~
+
+# ============================================
+# 操作系统 (OS)
+# ============================================
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# ============================================
+# 编辑器 (Editor)
+# ============================================
+.vscode/
+.idea/

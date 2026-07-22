@@ -133,6 +133,102 @@ void Os_ISR_WDTA1_IRQ_Handler(void)
 }
 #define OS_STOP_SEC_CODE_FAST
 #include "Os_MemMap.h"
+#define OS_START_SEC_CODE_FAST
+#include "Os_MemMap.h"
+void Os_ISR_RLIN30UR0_IRQ_Handler(void) 
+{
+    /* PRQA S 0306, 1006, 2991 ++ */ /* VL_Os_0306, VL_Os_1006, VL_Os_2991 */
+    OS_ARCH_ISR2_PROLOGUE(CFG_ISR_RLIN30UR0_IRQ_ID);
+    /* PRQA S 0306, 1006, 2991 -- */
+    ISR_RLIN30UR0_IRQ_Handler();
+    /* PRQA S 0310, 0306, 1006 ++ */ /* VL_Os_0310, VL_Os_0306, VL_Os_1006 */
+    /* PRQA S 0404, 3415 ++ */ /* VL_Os_VolatileAccess, VL_Os_3415 */
+    OS_ARCH_ISR2_EPILOGUE(CFG_ISR_RLIN30UR0_IRQ_ID);
+    /* PRQA S 0404, 3415 -- */
+    /* PRQA S 0310, 0306, 1006 -- */
+}
+#define OS_STOP_SEC_CODE_FAST
+#include "Os_MemMap.h"
+#define OS_START_SEC_CODE_FAST
+#include "Os_MemMap.h"
+void Os_ISR_RLIN30UR1_IRQ_Handler(void) 
+{
+    /* PRQA S 0306, 1006, 2991 ++ */ /* VL_Os_0306, VL_Os_1006, VL_Os_2991 */
+    OS_ARCH_ISR2_PROLOGUE(CFG_ISR_RLIN30UR1_IRQ_ID);
+    /* PRQA S 0306, 1006, 2991 -- */
+    ISR_RLIN30UR1_IRQ_Handler();
+    /* PRQA S 0310, 0306, 1006 ++ */ /* VL_Os_0310, VL_Os_0306, VL_Os_1006 */
+    /* PRQA S 0404, 3415 ++ */ /* VL_Os_VolatileAccess, VL_Os_3415 */
+    OS_ARCH_ISR2_EPILOGUE(CFG_ISR_RLIN30UR1_IRQ_ID);
+    /* PRQA S 0404, 3415 -- */
+    /* PRQA S 0310, 0306, 1006 -- */
+}
+#define OS_STOP_SEC_CODE_FAST
+#include "Os_MemMap.h"
+#define OS_START_SEC_CODE_FAST
+#include "Os_MemMap.h"
+void Os_ISR_RLIN30UR2_IRQ_Handler(void) 
+{
+    /* PRQA S 0306, 1006, 2991 ++ */ /* VL_Os_0306, VL_Os_1006, VL_Os_2991 */
+    OS_ARCH_ISR2_PROLOGUE(CFG_ISR_RLIN30UR2_IRQ_ID);
+    /* PRQA S 0306, 1006, 2991 -- */
+    ISR_RLIN30UR2_IRQ_Handler();
+    /* PRQA S 0310, 0306, 1006 ++ */ /* VL_Os_0310, VL_Os_0306, VL_Os_1006 */
+    /* PRQA S 0404, 3415 ++ */ /* VL_Os_VolatileAccess, VL_Os_3415 */
+    OS_ARCH_ISR2_EPILOGUE(CFG_ISR_RLIN30UR2_IRQ_ID);
+    /* PRQA S 0404, 3415 -- */
+    /* PRQA S 0310, 0306, 1006 -- */
+}
+#define OS_STOP_SEC_CODE_FAST
+#include "Os_MemMap.h"
+#define OS_START_SEC_CODE_FAST
+#include "Os_MemMap.h"
+void Os_ISR_RLIN32UR0_IRQ_Handler(void) 
+{
+    /* PRQA S 0306, 1006, 2991 ++ */ /* VL_Os_0306, VL_Os_1006, VL_Os_2991 */
+    OS_ARCH_ISR2_PROLOGUE(CFG_ISR_RLIN32UR0_IRQ_ID);
+    /* PRQA S 0306, 1006, 2991 -- */
+    ISR_RLIN32UR0_IRQ_Handler();
+    /* PRQA S 0310, 0306, 1006 ++ */ /* VL_Os_0310, VL_Os_0306, VL_Os_1006 */
+    /* PRQA S 0404, 3415 ++ */ /* VL_Os_VolatileAccess, VL_Os_3415 */
+    OS_ARCH_ISR2_EPILOGUE(CFG_ISR_RLIN32UR0_IRQ_ID);
+    /* PRQA S 0404, 3415 -- */
+    /* PRQA S 0310, 0306, 1006 -- */
+}
+#define OS_STOP_SEC_CODE_FAST
+#include "Os_MemMap.h"
+#define OS_START_SEC_CODE_FAST
+#include "Os_MemMap.h"
+void Os_ISR_RLIN32UR1_IRQ_Handler(void) 
+{
+    /* PRQA S 0306, 1006, 2991 ++ */ /* VL_Os_0306, VL_Os_1006, VL_Os_2991 */
+    OS_ARCH_ISR2_PROLOGUE(CFG_ISR_RLIN32UR1_IRQ_ID);
+    /* PRQA S 0306, 1006, 2991 -- */
+    ISR_RLIN32UR1_IRQ_Handler();
+    /* PRQA S 0310, 0306, 1006 ++ */ /* VL_Os_0310, VL_Os_0306, VL_Os_1006 */
+    /* PRQA S 0404, 3415 ++ */ /* VL_Os_VolatileAccess, VL_Os_3415 */
+    OS_ARCH_ISR2_EPILOGUE(CFG_ISR_RLIN32UR1_IRQ_ID);
+    /* PRQA S 0404, 3415 -- */
+    /* PRQA S 0310, 0306, 1006 -- */
+}
+#define OS_STOP_SEC_CODE_FAST
+#include "Os_MemMap.h"
+#define OS_START_SEC_CODE_FAST
+#include "Os_MemMap.h"
+void Os_ISR_RLIN32UR2_IRQ_Handler(void) 
+{
+    /* PRQA S 0306, 1006, 2991 ++ */ /* VL_Os_0306, VL_Os_1006, VL_Os_2991 */
+    OS_ARCH_ISR2_PROLOGUE(CFG_ISR_RLIN32UR2_IRQ_ID);
+    /* PRQA S 0306, 1006, 2991 -- */
+    ISR_RLIN32UR2_IRQ_Handler();
+    /* PRQA S 0310, 0306, 1006 ++ */ /* VL_Os_0310, VL_Os_0306, VL_Os_1006 */
+    /* PRQA S 0404, 3415 ++ */ /* VL_Os_VolatileAccess, VL_Os_3415 */
+    OS_ARCH_ISR2_EPILOGUE(CFG_ISR_RLIN32UR2_IRQ_ID);
+    /* PRQA S 0404, 3415 -- */
+    /* PRQA S 0310, 0306, 1006 -- */
+}
+#define OS_STOP_SEC_CODE_FAST
+#include "Os_MemMap.h"
 /* PRQA S 1532, 3006, 0306, 2743, 3138, 3141, 3442, 6070, 3408, 1252, 1512, 3200, 3209 -- */
 /*=======[E N D   O F   F I L E]==============================================*/
 /* PRQA S 0553, 6510, 6520 EOF */ /* VL_QAC_UnUsedFiles, VL_MTR_Os_CONF, VL_MTR_Os_STVAR */

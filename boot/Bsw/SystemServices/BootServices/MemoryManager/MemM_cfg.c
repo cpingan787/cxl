@@ -115,4 +115,10 @@ MemM_FlagInfo_t g_FlagsInfo[MEMM_FLAG_NUM] =
         ALLOW_F190_WRITE_SIZE,
         COMMF_INVALID_U8    //0表示不允许写入，1表示允许写入
     },
+    { // 10
+        MEMM_DRV_EE,
+        REPROGRAM_ADDR_IDX,
+        MEMM_FLAG_MPU_REPROGRAM_SIZE,
+        MEMM_FLAG_MPU_REPROGRAM_DATA
+    },
 };

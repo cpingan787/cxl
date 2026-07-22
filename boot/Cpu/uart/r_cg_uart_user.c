@@ -45,6 +45,7 @@ Includes
 /* Start user code for include. Do not edit comment generated here */
 /* End user code. Do not edit comment generated here */
 #include "r_cg_userdefine.h"
+#include "mpuHal.h"
 
 /***********************************************************************************************************************
 Global variables and functions
@@ -69,6 +70,7 @@ extern volatile uint16_t g_mpuUartReciveCount;
 extern volatile uint8_t g_mpuUartErrorType;
 extern volatile uint8_t g_mpuUartErrorFlag;
 extern volatile uint8_t g_mpuSetRecvErrorFlag;
+extern volatile uint8_t g_MpuEndFlag;
 /* End user code. Do not edit comment generated here */
 
 /***********************************************************************************************************************
@@ -186,9 +188,8 @@ static void r_uart0_callback_error(uint8_t err_type)
 void r_uart2_interrupt_receive(void)
 {
     uint8_t rx_data_8;
-    uint16_t temp; 
 
-    rx_data_8 = RLN32.LURDR.UINT16; 
+    rx_data_8 = RLN32.LURDR.UINT16;
     MpuHalUartInterruptCallback(rx_data_8);
 }
 /***********************************************************************************************************************
@@ -248,6 +249,7 @@ static void r_uart2_callback_receiveend(void)
 static void r_uart2_callback_sendend(void)
 {
     /* Start user code. Do not edit comment generated here */
+    g_MpuEndFlag = 0;
     /* End user code. Do not edit comment generated here */
 }
 /***********************************************************************************************************************
