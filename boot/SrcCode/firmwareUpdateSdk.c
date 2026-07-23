@@ -204,7 +204,10 @@ static uint8_t FirmwareUpdateSdkCodeCheck(volatile uint8_t *dataPack)
         if (FLASH_APP_BANKA_ID == flashAppFlag)  
         {
             uint32_t WriteData = 0xFE;
+            TBOX_PRINT("WriteData = %08x\r\n", WriteData);
             uint32_t retValue = FlsIf_Write(FLASH_APP_BANKA_ACTIVE_ADDRESS, 4, (uint8*)&WriteData);
+            TBOX_PRINT("FlsIf_Write retValue = %02x\r\n", retValue);
+
             retValue = FlsIf_Read(FLASH_APP_BANKA_ACTIVE_ADDRESS, 4, (uint8*)&dataRead);
             if(dataRead != WriteData)
             {

@@ -129,13 +129,13 @@ TASK(OsTask_1ms)
         MpuHalTxTask();
     }
 
-    if (sys_cnt == 1000) // 1s
-    {
-        TBOX_PRINT("BOOT RUN\r\n");
-        // TBOX_PRINT("boot1 cycle %ds\n", run_time);
-        sys_cnt = 0;
-        run_time++;
-    }
+    // if (sys_cnt == 1000) // 1s
+    // {
+    //     TBOX_PRINT("BOOT RUN\r\n");
+    //     // TBOX_PRINT("boot1 cycle %ds\n", run_time);
+    //     sys_cnt = 0;
+    //     run_time++;
+    // }
     
     MpuHalCycleProcess(5);
     CanTp_MainFunction();

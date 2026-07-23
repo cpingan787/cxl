@@ -46,6 +46,7 @@
 #include "DIDReadWrite.h"
 #include "RequestTransferExit.h"
 #include "SignatureHeader.h"
+#include "logHal.h"
 #if(DCM_SERVICE_27_ENABLED==STD_ON)
 #include "SecurityAccess.h"
 #endif
@@ -1695,8 +1696,10 @@ static void Dsp_RC_CheckProgrammingDependencies(void)
         if((RC_CheckDependency()!= E_OK) || \
            (SecureProgram_CheckProgrammingIntegrity() != SECURE_PROGRAM_SUCCESS))
         {
+            TBOX_PRINT("Dsp_RC_CheckProgrammingDependencies: %d\n", SecureProgram_CheckProgrammingIntegrity());
              Dcm_SduBuffer[DCM_RoutineParam_Idx] = DCM_Routine_IncorrectResult;
         }
+        
         else
         {
              Dcm_SduBuffer[DCM_RoutineParam_Idx] = DCM_Routine_CorrectResult;
